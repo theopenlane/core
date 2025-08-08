@@ -134,7 +134,7 @@ func (*Subprocessor) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Subprocessor fields.
-func (s *Subprocessor) assignValues(columns []string, values []any) error {
+func (_m *Subprocessor) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -144,49 +144,49 @@ func (s *Subprocessor) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				s.ID = value.String
+				_m.ID = value.String
 			}
 		case subprocessor.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				s.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case subprocessor.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				s.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case subprocessor.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				s.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case subprocessor.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				s.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case subprocessor.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				s.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case subprocessor.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				s.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case subprocessor.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -194,42 +194,42 @@ func (s *Subprocessor) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				s.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case subprocessor.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
 			} else if value.Valid {
-				s.SystemOwned = value.Bool
+				_m.SystemOwned = value.Bool
 			}
 		case subprocessor.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				s.Name = value.String
+				_m.Name = value.String
 			}
 		case subprocessor.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				s.Description = value.String
+				_m.Description = value.String
 			}
 		case subprocessor.FieldLogoRemoteURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field logo_remote_url", values[i])
 			} else if value.Valid {
-				s.LogoRemoteURL = new(string)
-				*s.LogoRemoteURL = value.String
+				_m.LogoRemoteURL = new(string)
+				*_m.LogoRemoteURL = value.String
 			}
 		case subprocessor.FieldLogoLocalFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field logo_local_file_id", values[i])
 			} else if value.Valid {
-				s.LogoLocalFileID = new(string)
-				*s.LogoLocalFileID = value.String
+				_m.LogoLocalFileID = new(string)
+				*_m.LogoLocalFileID = value.String
 			}
 		default:
-			s.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -237,92 +237,92 @@ func (s *Subprocessor) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Subprocessor.
 // This includes values selected through modifiers, order, etc.
-func (s *Subprocessor) Value(name string) (ent.Value, error) {
-	return s.selectValues.Get(name)
+func (_m *Subprocessor) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Subprocessor entity.
-func (s *Subprocessor) QueryOwner() *OrganizationQuery {
-	return NewSubprocessorClient(s.config).QueryOwner(s)
+func (_m *Subprocessor) QueryOwner() *OrganizationQuery {
+	return NewSubprocessorClient(_m.config).QueryOwner(_m)
 }
 
 // QueryFiles queries the "files" edge of the Subprocessor entity.
-func (s *Subprocessor) QueryFiles() *FileQuery {
-	return NewSubprocessorClient(s.config).QueryFiles(s)
+func (_m *Subprocessor) QueryFiles() *FileQuery {
+	return NewSubprocessorClient(_m.config).QueryFiles(_m)
 }
 
 // QueryLogoFile queries the "logo_file" edge of the Subprocessor entity.
-func (s *Subprocessor) QueryLogoFile() *FileQuery {
-	return NewSubprocessorClient(s.config).QueryLogoFile(s)
+func (_m *Subprocessor) QueryLogoFile() *FileQuery {
+	return NewSubprocessorClient(_m.config).QueryLogoFile(_m)
 }
 
 // QueryTrustCenterSubprocessors queries the "trust_center_subprocessors" edge of the Subprocessor entity.
-func (s *Subprocessor) QueryTrustCenterSubprocessors() *TrustCenterSubprocessorQuery {
-	return NewSubprocessorClient(s.config).QueryTrustCenterSubprocessors(s)
+func (_m *Subprocessor) QueryTrustCenterSubprocessors() *TrustCenterSubprocessorQuery {
+	return NewSubprocessorClient(_m.config).QueryTrustCenterSubprocessors(_m)
 }
 
 // Update returns a builder for updating this Subprocessor.
 // Note that you need to call Subprocessor.Unwrap() before calling this method if this Subprocessor
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (s *Subprocessor) Update() *SubprocessorUpdateOne {
-	return NewSubprocessorClient(s.config).UpdateOne(s)
+func (_m *Subprocessor) Update() *SubprocessorUpdateOne {
+	return NewSubprocessorClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Subprocessor entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (s *Subprocessor) Unwrap() *Subprocessor {
-	_tx, ok := s.config.driver.(*txDriver)
+func (_m *Subprocessor) Unwrap() *Subprocessor {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Subprocessor is not a transactional entity")
 	}
-	s.config.driver = _tx.drv
-	return s
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (s *Subprocessor) String() string {
+func (_m *Subprocessor) String() string {
 	var builder strings.Builder
 	builder.WriteString("Subprocessor(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(s.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(s.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(s.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(s.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(s.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", s.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(s.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
-	builder.WriteString(fmt.Sprintf("%v", s.SystemOwned))
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(s.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(s.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
-	if v := s.LogoRemoteURL; v != nil {
+	if v := _m.LogoRemoteURL; v != nil {
 		builder.WriteString("logo_remote_url=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := s.LogoLocalFileID; v != nil {
+	if v := _m.LogoLocalFileID; v != nil {
 		builder.WriteString("logo_local_file_id=")
 		builder.WriteString(*v)
 	}
@@ -332,49 +332,49 @@ func (s *Subprocessor) String() string {
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subprocessor) NamedFiles(name string) ([]*File, error) {
-	if s.Edges.namedFiles == nil {
+func (_m *Subprocessor) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subprocessor) appendNamedFiles(name string, edges ...*File) {
-	if s.Edges.namedFiles == nil {
-		s.Edges.namedFiles = make(map[string][]*File)
+func (_m *Subprocessor) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		s.Edges.namedFiles[name] = append(s.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 
 // NamedTrustCenterSubprocessors returns the TrustCenterSubprocessors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subprocessor) NamedTrustCenterSubprocessors(name string) ([]*TrustCenterSubprocessor, error) {
-	if s.Edges.namedTrustCenterSubprocessors == nil {
+func (_m *Subprocessor) NamedTrustCenterSubprocessors(name string) ([]*TrustCenterSubprocessor, error) {
+	if _m.Edges.namedTrustCenterSubprocessors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedTrustCenterSubprocessors[name]
+	nodes, ok := _m.Edges.namedTrustCenterSubprocessors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subprocessor) appendNamedTrustCenterSubprocessors(name string, edges ...*TrustCenterSubprocessor) {
-	if s.Edges.namedTrustCenterSubprocessors == nil {
-		s.Edges.namedTrustCenterSubprocessors = make(map[string][]*TrustCenterSubprocessor)
+func (_m *Subprocessor) appendNamedTrustCenterSubprocessors(name string, edges ...*TrustCenterSubprocessor) {
+	if _m.Edges.namedTrustCenterSubprocessors == nil {
+		_m.Edges.namedTrustCenterSubprocessors = make(map[string][]*TrustCenterSubprocessor)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedTrustCenterSubprocessors[name] = []*TrustCenterSubprocessor{}
+		_m.Edges.namedTrustCenterSubprocessors[name] = []*TrustCenterSubprocessor{}
 	} else {
-		s.Edges.namedTrustCenterSubprocessors[name] = append(s.Edges.namedTrustCenterSubprocessors[name], edges...)
+		_m.Edges.namedTrustCenterSubprocessors[name] = append(_m.Edges.namedTrustCenterSubprocessors[name], edges...)
 	}
 }
 

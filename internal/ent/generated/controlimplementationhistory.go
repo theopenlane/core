@@ -79,7 +79,7 @@ func (*ControlImplementationHistory) scanValues(columns []string) ([]any, error)
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ControlImplementationHistory fields.
-func (cih *ControlImplementationHistory) assignValues(columns []string, values []any) error {
+func (_m *ControlImplementationHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -89,67 +89,67 @@ func (cih *ControlImplementationHistory) assignValues(columns []string, values [
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				cih.ID = value.String
+				_m.ID = value.String
 			}
 		case controlimplementationhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				cih.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case controlimplementationhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				cih.Ref = value.String
+				_m.Ref = value.String
 			}
 		case controlimplementationhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				cih.Operation = *value
+				_m.Operation = *value
 			}
 		case controlimplementationhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				cih.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case controlimplementationhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				cih.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case controlimplementationhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				cih.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case controlimplementationhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				cih.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case controlimplementationhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				cih.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case controlimplementationhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				cih.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case controlimplementationhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &cih.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -157,40 +157,40 @@ func (cih *ControlImplementationHistory) assignValues(columns []string, values [
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				cih.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case controlimplementationhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				cih.Status = enums.DocumentStatus(value.String)
+				_m.Status = enums.DocumentStatus(value.String)
 			}
 		case controlimplementationhistory.FieldImplementationDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field implementation_date", values[i])
 			} else if value.Valid {
-				cih.ImplementationDate = value.Time
+				_m.ImplementationDate = value.Time
 			}
 		case controlimplementationhistory.FieldVerified:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field verified", values[i])
 			} else if value.Valid {
-				cih.Verified = value.Bool
+				_m.Verified = value.Bool
 			}
 		case controlimplementationhistory.FieldVerificationDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field verification_date", values[i])
 			} else if value.Valid {
-				cih.VerificationDate = value.Time
+				_m.VerificationDate = value.Time
 			}
 		case controlimplementationhistory.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				cih.Details = value.String
+				_m.Details = value.String
 			}
 		default:
-			cih.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -198,80 +198,80 @@ func (cih *ControlImplementationHistory) assignValues(columns []string, values [
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ControlImplementationHistory.
 // This includes values selected through modifiers, order, etc.
-func (cih *ControlImplementationHistory) Value(name string) (ent.Value, error) {
-	return cih.selectValues.Get(name)
+func (_m *ControlImplementationHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this ControlImplementationHistory.
 // Note that you need to call ControlImplementationHistory.Unwrap() before calling this method if this ControlImplementationHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (cih *ControlImplementationHistory) Update() *ControlImplementationHistoryUpdateOne {
-	return NewControlImplementationHistoryClient(cih.config).UpdateOne(cih)
+func (_m *ControlImplementationHistory) Update() *ControlImplementationHistoryUpdateOne {
+	return NewControlImplementationHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ControlImplementationHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (cih *ControlImplementationHistory) Unwrap() *ControlImplementationHistory {
-	_tx, ok := cih.config.driver.(*txDriver)
+func (_m *ControlImplementationHistory) Unwrap() *ControlImplementationHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ControlImplementationHistory is not a transactional entity")
 	}
-	cih.config.driver = _tx.drv
-	return cih
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (cih *ControlImplementationHistory) String() string {
+func (_m *ControlImplementationHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("ControlImplementationHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", cih.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(cih.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(cih.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", cih.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(cih.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(cih.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(cih.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(cih.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(cih.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(cih.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", cih.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(cih.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", cih.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("implementation_date=")
-	builder.WriteString(cih.ImplementationDate.Format(time.ANSIC))
+	builder.WriteString(_m.ImplementationDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("verified=")
-	builder.WriteString(fmt.Sprintf("%v", cih.Verified))
+	builder.WriteString(fmt.Sprintf("%v", _m.Verified))
 	builder.WriteString(", ")
 	builder.WriteString("verification_date=")
-	builder.WriteString(cih.VerificationDate.Format(time.ANSIC))
+	builder.WriteString(_m.VerificationDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(cih.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -33,40 +33,40 @@ type RiskHistoryQuery struct {
 }
 
 // Where adds a new predicate for the RiskHistoryQuery builder.
-func (rhq *RiskHistoryQuery) Where(ps ...predicate.RiskHistory) *RiskHistoryQuery {
-	rhq.predicates = append(rhq.predicates, ps...)
-	return rhq
+func (_q *RiskHistoryQuery) Where(ps ...predicate.RiskHistory) *RiskHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (rhq *RiskHistoryQuery) Limit(limit int) *RiskHistoryQuery {
-	rhq.ctx.Limit = &limit
-	return rhq
+func (_q *RiskHistoryQuery) Limit(limit int) *RiskHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (rhq *RiskHistoryQuery) Offset(offset int) *RiskHistoryQuery {
-	rhq.ctx.Offset = &offset
-	return rhq
+func (_q *RiskHistoryQuery) Offset(offset int) *RiskHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (rhq *RiskHistoryQuery) Unique(unique bool) *RiskHistoryQuery {
-	rhq.ctx.Unique = &unique
-	return rhq
+func (_q *RiskHistoryQuery) Unique(unique bool) *RiskHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (rhq *RiskHistoryQuery) Order(o ...riskhistory.OrderOption) *RiskHistoryQuery {
-	rhq.order = append(rhq.order, o...)
-	return rhq
+func (_q *RiskHistoryQuery) Order(o ...riskhistory.OrderOption) *RiskHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first RiskHistory entity from the query.
 // Returns a *NotFoundError when no RiskHistory was found.
-func (rhq *RiskHistoryQuery) First(ctx context.Context) (*RiskHistory, error) {
-	nodes, err := rhq.Limit(1).All(setContextOp(ctx, rhq.ctx, ent.OpQueryFirst))
+func (_q *RiskHistoryQuery) First(ctx context.Context) (*RiskHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (rhq *RiskHistoryQuery) First(ctx context.Context) (*RiskHistory, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (rhq *RiskHistoryQuery) FirstX(ctx context.Context) *RiskHistory {
-	node, err := rhq.First(ctx)
+func (_q *RiskHistoryQuery) FirstX(ctx context.Context) *RiskHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (rhq *RiskHistoryQuery) FirstX(ctx context.Context) *RiskHistory {
 
 // FirstID returns the first RiskHistory ID from the query.
 // Returns a *NotFoundError when no RiskHistory ID was found.
-func (rhq *RiskHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *RiskHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = rhq.Limit(1).IDs(setContextOp(ctx, rhq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (rhq *RiskHistoryQuery) FirstID(ctx context.Context) (id string, err error)
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (rhq *RiskHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := rhq.FirstID(ctx)
+func (_q *RiskHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (rhq *RiskHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single RiskHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one RiskHistory entity is found.
 // Returns a *NotFoundError when no RiskHistory entities are found.
-func (rhq *RiskHistoryQuery) Only(ctx context.Context) (*RiskHistory, error) {
-	nodes, err := rhq.Limit(2).All(setContextOp(ctx, rhq.ctx, ent.OpQueryOnly))
+func (_q *RiskHistoryQuery) Only(ctx context.Context) (*RiskHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (rhq *RiskHistoryQuery) Only(ctx context.Context) (*RiskHistory, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (rhq *RiskHistoryQuery) OnlyX(ctx context.Context) *RiskHistory {
-	node, err := rhq.Only(ctx)
+func (_q *RiskHistoryQuery) OnlyX(ctx context.Context) *RiskHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (rhq *RiskHistoryQuery) OnlyX(ctx context.Context) *RiskHistory {
 // OnlyID is like Only, but returns the only RiskHistory ID in the query.
 // Returns a *NotSingularError when more than one RiskHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (rhq *RiskHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *RiskHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = rhq.Limit(2).IDs(setContextOp(ctx, rhq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (rhq *RiskHistoryQuery) OnlyID(ctx context.Context) (id string, err error) 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (rhq *RiskHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := rhq.OnlyID(ctx)
+func (_q *RiskHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (rhq *RiskHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of RiskHistories.
-func (rhq *RiskHistoryQuery) All(ctx context.Context) ([]*RiskHistory, error) {
-	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryAll)
-	if err := rhq.prepareQuery(ctx); err != nil {
+func (_q *RiskHistoryQuery) All(ctx context.Context) ([]*RiskHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*RiskHistory, *RiskHistoryQuery]()
-	return withInterceptors[[]*RiskHistory](ctx, rhq, qr, rhq.inters)
+	return withInterceptors[[]*RiskHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (rhq *RiskHistoryQuery) AllX(ctx context.Context) []*RiskHistory {
-	nodes, err := rhq.All(ctx)
+func (_q *RiskHistoryQuery) AllX(ctx context.Context) []*RiskHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (rhq *RiskHistoryQuery) AllX(ctx context.Context) []*RiskHistory {
 }
 
 // IDs executes the query and returns a list of RiskHistory IDs.
-func (rhq *RiskHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if rhq.ctx.Unique == nil && rhq.path != nil {
-		rhq.Unique(true)
+func (_q *RiskHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryIDs)
-	if err = rhq.Select(riskhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(riskhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (rhq *RiskHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := rhq.IDs(ctx)
+func (_q *RiskHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (rhq *RiskHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (rhq *RiskHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryCount)
-	if err := rhq.prepareQuery(ctx); err != nil {
+func (_q *RiskHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, rhq, querierCount[*RiskHistoryQuery](), rhq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*RiskHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (rhq *RiskHistoryQuery) CountX(ctx context.Context) int {
-	count, err := rhq.Count(ctx)
+func (_q *RiskHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (rhq *RiskHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (rhq *RiskHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryExist)
-	switch _, err := rhq.FirstID(ctx); {
+func (_q *RiskHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (rhq *RiskHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (rhq *RiskHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := rhq.Exist(ctx)
+func (_q *RiskHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (rhq *RiskHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the RiskHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (rhq *RiskHistoryQuery) Clone() *RiskHistoryQuery {
-	if rhq == nil {
+func (_q *RiskHistoryQuery) Clone() *RiskHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &RiskHistoryQuery{
-		config:     rhq.config,
-		ctx:        rhq.ctx.Clone(),
-		order:      append([]riskhistory.OrderOption{}, rhq.order...),
-		inters:     append([]Interceptor{}, rhq.inters...),
-		predicates: append([]predicate.RiskHistory{}, rhq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]riskhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.RiskHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       rhq.sql.Clone(),
-		path:      rhq.path,
-		modifiers: append([]func(*sql.Selector){}, rhq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (rhq *RiskHistoryQuery) Clone() *RiskHistoryQuery {
 //		GroupBy(riskhistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (rhq *RiskHistoryQuery) GroupBy(field string, fields ...string) *RiskHistoryGroupBy {
-	rhq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &RiskHistoryGroupBy{build: rhq}
-	grbuild.flds = &rhq.ctx.Fields
+func (_q *RiskHistoryQuery) GroupBy(field string, fields ...string) *RiskHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &RiskHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = riskhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (rhq *RiskHistoryQuery) GroupBy(field string, fields ...string) *RiskHistor
 //	client.RiskHistory.Query().
 //		Select(riskhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (rhq *RiskHistoryQuery) Select(fields ...string) *RiskHistorySelect {
-	rhq.ctx.Fields = append(rhq.ctx.Fields, fields...)
-	sbuild := &RiskHistorySelect{RiskHistoryQuery: rhq}
+func (_q *RiskHistoryQuery) Select(fields ...string) *RiskHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &RiskHistorySelect{RiskHistoryQuery: _q}
 	sbuild.label = riskhistory.Label
-	sbuild.flds, sbuild.scan = &rhq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a RiskHistorySelect configured with the given aggregations.
-func (rhq *RiskHistoryQuery) Aggregate(fns ...AggregateFunc) *RiskHistorySelect {
-	return rhq.Select().Aggregate(fns...)
+func (_q *RiskHistoryQuery) Aggregate(fns ...AggregateFunc) *RiskHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (rhq *RiskHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range rhq.inters {
+func (_q *RiskHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, rhq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range rhq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !riskhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if rhq.path != nil {
-		prev, err := rhq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		rhq.sql = prev
+		_q.sql = prev
 	}
 	if riskhistory.Policy == nil {
 		return errors.New("generated: uninitialized riskhistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := riskhistory.Policy.EvalQuery(ctx, rhq); err != nil {
+	if err := riskhistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (rhq *RiskHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*RiskHistory, error) {
+func (_q *RiskHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*RiskHistory, error) {
 	var (
 		nodes = []*RiskHistory{}
-		_spec = rhq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*RiskHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &RiskHistory{config: rhq.config}
+		node := &RiskHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = rhq.schemaConfig.RiskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, rhq.schemaConfig)
-	if len(rhq.modifiers) > 0 {
-		_spec.Modifiers = rhq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.RiskHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, rhq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range rhq.loadTotal {
-		if err := rhq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (rhq *RiskHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := rhq.querySpec()
-	_spec.Node.Schema = rhq.schemaConfig.RiskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, rhq.schemaConfig)
-	if len(rhq.modifiers) > 0 {
-		_spec.Modifiers = rhq.modifiers
+func (_q *RiskHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.RiskHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = rhq.ctx.Fields
-	if len(rhq.ctx.Fields) > 0 {
-		_spec.Unique = rhq.ctx.Unique != nil && *rhq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, rhq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (rhq *RiskHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *RiskHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(riskhistory.Table, riskhistory.Columns, sqlgraph.NewFieldSpec(riskhistory.FieldID, field.TypeString))
-	_spec.From = rhq.sql
-	if unique := rhq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if rhq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := rhq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, riskhistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (rhq *RiskHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := rhq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := rhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := rhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := rhq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (rhq *RiskHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (rhq *RiskHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(rhq.driver.Dialect())
+func (_q *RiskHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(riskhistory.Table)
-	columns := rhq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = riskhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if rhq.sql != nil {
-		selector = rhq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if rhq.ctx.Unique != nil && *rhq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(rhq.schemaConfig.RiskHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, rhq.schemaConfig)
+	t1.Schema(_q.schemaConfig.RiskHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range rhq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range rhq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range rhq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := rhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := rhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (rhq *RiskHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *RiskHistorySelect {
-	rhq.modifiers = append(rhq.modifiers, modifiers...)
-	return rhq.Select()
+func (_q *RiskHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *RiskHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type RiskHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (rhgb *RiskHistoryGroupBy) Aggregate(fns ...AggregateFunc) *RiskHistoryGroupBy {
-	rhgb.fns = append(rhgb.fns, fns...)
-	return rhgb
+func (_g *RiskHistoryGroupBy) Aggregate(fns ...AggregateFunc) *RiskHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (rhgb *RiskHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rhgb.build.ctx, ent.OpQueryGroupBy)
-	if err := rhgb.build.prepareQuery(ctx); err != nil {
+func (_g *RiskHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*RiskHistoryQuery, *RiskHistoryGroupBy](ctx, rhgb.build, rhgb, rhgb.build.inters, v)
+	return scanWithInterceptors[*RiskHistoryQuery, *RiskHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (rhgb *RiskHistoryGroupBy) sqlScan(ctx context.Context, root *RiskHistoryQuery, v any) error {
+func (_g *RiskHistoryGroupBy) sqlScan(ctx context.Context, root *RiskHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(rhgb.fns))
-	for _, fn := range rhgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*rhgb.flds)+len(rhgb.fns))
-		for _, f := range *rhgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*rhgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := rhgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type RiskHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (rhs *RiskHistorySelect) Aggregate(fns ...AggregateFunc) *RiskHistorySelect {
-	rhs.fns = append(rhs.fns, fns...)
-	return rhs
+func (_s *RiskHistorySelect) Aggregate(fns ...AggregateFunc) *RiskHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (rhs *RiskHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rhs.ctx, ent.OpQuerySelect)
-	if err := rhs.prepareQuery(ctx); err != nil {
+func (_s *RiskHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*RiskHistoryQuery, *RiskHistorySelect](ctx, rhs.RiskHistoryQuery, rhs, rhs.inters, v)
+	return scanWithInterceptors[*RiskHistoryQuery, *RiskHistorySelect](ctx, _s.RiskHistoryQuery, _s, _s.inters, v)
 }
 
-func (rhs *RiskHistorySelect) sqlScan(ctx context.Context, root *RiskHistoryQuery, v any) error {
+func (_s *RiskHistorySelect) sqlScan(ctx context.Context, root *RiskHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(rhs.fns))
-	for _, fn := range rhs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*rhs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (rhs *RiskHistorySelect) sqlScan(ctx context.Context, root *RiskHistoryQuer
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := rhs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (rhs *RiskHistorySelect) sqlScan(ctx context.Context, root *RiskHistoryQuer
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (rhs *RiskHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *RiskHistorySelect {
-	rhs.modifiers = append(rhs.modifiers, modifiers...)
-	return rhs
+func (_s *RiskHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *RiskHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

@@ -390,7 +390,7 @@ steps:
           - cluster-secrets#v1.0.0:
               variables:
                 ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-          - theopenlane/atlas#v1.2.0:
+          - theopenlane/atlas#v1.2.1:
               project: core
               atlas-env: dev
               config: "file://db/atlas.hcl"
@@ -542,7 +542,7 @@ steps:
           - cluster-secrets#v1.0.0:
               variables:
                 ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-          - theopenlane/atlas#v1.2.0:
+          - theopenlane/atlas#v1.2.1:
               project: core
               dir: "file://db/migrations"
               step: migrate

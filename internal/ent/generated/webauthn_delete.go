@@ -22,58 +22,58 @@ type WebauthnDelete struct {
 }
 
 // Where appends a list predicates to the WebauthnDelete builder.
-func (wd *WebauthnDelete) Where(ps ...predicate.Webauthn) *WebauthnDelete {
-	wd.mutation.Where(ps...)
-	return wd
+func (_d *WebauthnDelete) Where(ps ...predicate.Webauthn) *WebauthnDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (wd *WebauthnDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, wd.sqlExec, wd.mutation, wd.hooks)
+func (_d *WebauthnDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (wd *WebauthnDelete) ExecX(ctx context.Context) int {
-	n, err := wd.Exec(ctx)
+func (_d *WebauthnDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (wd *WebauthnDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *WebauthnDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(webauthn.Table, sqlgraph.NewFieldSpec(webauthn.FieldID, field.TypeString))
-	_spec.Node.Schema = wd.schemaConfig.Webauthn
-	ctx = internal.NewSchemaConfigContext(ctx, wd.schemaConfig)
-	if ps := wd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Webauthn
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, wd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	wd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // WebauthnDeleteOne is the builder for deleting a single Webauthn entity.
 type WebauthnDeleteOne struct {
-	wd *WebauthnDelete
+	_d *WebauthnDelete
 }
 
 // Where appends a list predicates to the WebauthnDelete builder.
-func (wdo *WebauthnDeleteOne) Where(ps ...predicate.Webauthn) *WebauthnDeleteOne {
-	wdo.wd.mutation.Where(ps...)
-	return wdo
+func (_d *WebauthnDeleteOne) Where(ps ...predicate.Webauthn) *WebauthnDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (wdo *WebauthnDeleteOne) Exec(ctx context.Context) error {
-	n, err := wdo.wd.Exec(ctx)
+func (_d *WebauthnDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (wdo *WebauthnDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (wdo *WebauthnDeleteOne) ExecX(ctx context.Context) {
-	if err := wdo.Exec(ctx); err != nil {
+func (_d *WebauthnDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

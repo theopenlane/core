@@ -113,7 +113,7 @@ func (*Hush) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Hush fields.
-func (h *Hush) assignValues(columns []string, values []any) error {
+func (_m *Hush) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -123,82 +123,82 @@ func (h *Hush) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				h.ID = value.String
+				_m.ID = value.String
 			}
 		case hush.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				h.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case hush.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				h.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case hush.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				h.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case hush.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				h.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case hush.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				h.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case hush.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				h.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case hush.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				h.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case hush.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				h.Name = value.String
+				_m.Name = value.String
 			}
 		case hush.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				h.Description = value.String
+				_m.Description = value.String
 			}
 		case hush.FieldKind:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field kind", values[i])
 			} else if value.Valid {
-				h.Kind = value.String
+				_m.Kind = value.String
 			}
 		case hush.FieldSecretName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field secret_name", values[i])
 			} else if value.Valid {
-				h.SecretName = value.String
+				_m.SecretName = value.String
 			}
 		case hush.FieldSecretValue:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field secret_value", values[i])
 			} else if value.Valid {
-				h.SecretValue = value.String
+				_m.SecretValue = value.String
 			}
 		default:
-			h.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -206,80 +206,80 @@ func (h *Hush) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Hush.
 // This includes values selected through modifiers, order, etc.
-func (h *Hush) Value(name string) (ent.Value, error) {
-	return h.selectValues.Get(name)
+func (_m *Hush) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Hush entity.
-func (h *Hush) QueryOwner() *OrganizationQuery {
-	return NewHushClient(h.config).QueryOwner(h)
+func (_m *Hush) QueryOwner() *OrganizationQuery {
+	return NewHushClient(_m.config).QueryOwner(_m)
 }
 
 // QueryIntegrations queries the "integrations" edge of the Hush entity.
-func (h *Hush) QueryIntegrations() *IntegrationQuery {
-	return NewHushClient(h.config).QueryIntegrations(h)
+func (_m *Hush) QueryIntegrations() *IntegrationQuery {
+	return NewHushClient(_m.config).QueryIntegrations(_m)
 }
 
 // QueryEvents queries the "events" edge of the Hush entity.
-func (h *Hush) QueryEvents() *EventQuery {
-	return NewHushClient(h.config).QueryEvents(h)
+func (_m *Hush) QueryEvents() *EventQuery {
+	return NewHushClient(_m.config).QueryEvents(_m)
 }
 
 // Update returns a builder for updating this Hush.
 // Note that you need to call Hush.Unwrap() before calling this method if this Hush
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (h *Hush) Update() *HushUpdateOne {
-	return NewHushClient(h.config).UpdateOne(h)
+func (_m *Hush) Update() *HushUpdateOne {
+	return NewHushClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Hush entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (h *Hush) Unwrap() *Hush {
-	_tx, ok := h.config.driver.(*txDriver)
+func (_m *Hush) Unwrap() *Hush {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Hush is not a transactional entity")
 	}
-	h.config.driver = _tx.drv
-	return h
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (h *Hush) String() string {
+func (_m *Hush) String() string {
 	var builder strings.Builder
 	builder.WriteString("Hush(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", h.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(h.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(h.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(h.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(h.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(h.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(h.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(h.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(h.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(h.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("kind=")
-	builder.WriteString(h.Kind)
+	builder.WriteString(_m.Kind)
 	builder.WriteString(", ")
 	builder.WriteString("secret_name=")
-	builder.WriteString(h.SecretName)
+	builder.WriteString(_m.SecretName)
 	builder.WriteString(", ")
 	builder.WriteString("secret_value=<sensitive>")
 	builder.WriteByte(')')
@@ -288,49 +288,49 @@ func (h *Hush) String() string {
 
 // NamedIntegrations returns the Integrations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (h *Hush) NamedIntegrations(name string) ([]*Integration, error) {
-	if h.Edges.namedIntegrations == nil {
+func (_m *Hush) NamedIntegrations(name string) ([]*Integration, error) {
+	if _m.Edges.namedIntegrations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := h.Edges.namedIntegrations[name]
+	nodes, ok := _m.Edges.namedIntegrations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (h *Hush) appendNamedIntegrations(name string, edges ...*Integration) {
-	if h.Edges.namedIntegrations == nil {
-		h.Edges.namedIntegrations = make(map[string][]*Integration)
+func (_m *Hush) appendNamedIntegrations(name string, edges ...*Integration) {
+	if _m.Edges.namedIntegrations == nil {
+		_m.Edges.namedIntegrations = make(map[string][]*Integration)
 	}
 	if len(edges) == 0 {
-		h.Edges.namedIntegrations[name] = []*Integration{}
+		_m.Edges.namedIntegrations[name] = []*Integration{}
 	} else {
-		h.Edges.namedIntegrations[name] = append(h.Edges.namedIntegrations[name], edges...)
+		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
 	}
 }
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (h *Hush) NamedEvents(name string) ([]*Event, error) {
-	if h.Edges.namedEvents == nil {
+func (_m *Hush) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := h.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (h *Hush) appendNamedEvents(name string, edges ...*Event) {
-	if h.Edges.namedEvents == nil {
-		h.Edges.namedEvents = make(map[string][]*Event)
+func (_m *Hush) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		h.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		h.Edges.namedEvents[name] = append(h.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 

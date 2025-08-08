@@ -133,7 +133,7 @@ func (*PersonalAccessToken) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the PersonalAccessToken fields.
-func (pat *PersonalAccessToken) assignValues(columns []string, values []any) error {
+func (_m *PersonalAccessToken) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -143,49 +143,49 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				pat.ID = value.String
+				_m.ID = value.String
 			}
 		case personalaccesstoken.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				pat.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case personalaccesstoken.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				pat.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case personalaccesstoken.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				pat.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case personalaccesstoken.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				pat.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case personalaccesstoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				pat.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case personalaccesstoken.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				pat.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case personalaccesstoken.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pat.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -193,39 +193,39 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				pat.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case personalaccesstoken.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				pat.Name = value.String
+				_m.Name = value.String
 			}
 		case personalaccesstoken.FieldToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field token", values[i])
 			} else if value.Valid {
-				pat.Token = value.String
+				_m.Token = value.String
 			}
 		case personalaccesstoken.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
 			} else if value.Valid {
-				pat.ExpiresAt = new(time.Time)
-				*pat.ExpiresAt = value.Time
+				_m.ExpiresAt = new(time.Time)
+				*_m.ExpiresAt = value.Time
 			}
 		case personalaccesstoken.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				pat.Description = new(string)
-				*pat.Description = value.String
+				_m.Description = new(string)
+				*_m.Description = value.String
 			}
 		case personalaccesstoken.FieldScopes:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field scopes", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pat.Scopes); err != nil {
+				if err := json.Unmarshal(*value, &_m.Scopes); err != nil {
 					return fmt.Errorf("unmarshal field scopes: %w", err)
 				}
 			}
@@ -233,7 +233,7 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field sso_authorizations", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pat.SSOAuthorizations); err != nil {
+				if err := json.Unmarshal(*value, &_m.SSOAuthorizations); err != nil {
 					return fmt.Errorf("unmarshal field sso_authorizations: %w", err)
 				}
 			}
@@ -241,38 +241,38 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_used_at", values[i])
 			} else if value.Valid {
-				pat.LastUsedAt = new(time.Time)
-				*pat.LastUsedAt = value.Time
+				_m.LastUsedAt = new(time.Time)
+				*_m.LastUsedAt = value.Time
 			}
 		case personalaccesstoken.FieldIsActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_active", values[i])
 			} else if value.Valid {
-				pat.IsActive = value.Bool
+				_m.IsActive = value.Bool
 			}
 		case personalaccesstoken.FieldRevokedReason:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revoked_reason", values[i])
 			} else if value.Valid {
-				pat.RevokedReason = new(string)
-				*pat.RevokedReason = value.String
+				_m.RevokedReason = new(string)
+				*_m.RevokedReason = value.String
 			}
 		case personalaccesstoken.FieldRevokedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revoked_by", values[i])
 			} else if value.Valid {
-				pat.RevokedBy = new(string)
-				*pat.RevokedBy = value.String
+				_m.RevokedBy = new(string)
+				*_m.RevokedBy = value.String
 			}
 		case personalaccesstoken.FieldRevokedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field revoked_at", values[i])
 			} else if value.Valid {
-				pat.RevokedAt = new(time.Time)
-				*pat.RevokedAt = value.Time
+				_m.RevokedAt = new(time.Time)
+				*_m.RevokedAt = value.Time
 			}
 		default:
-			pat.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -280,113 +280,113 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 
 // Value returns the ent.Value that was dynamically selected and assigned to the PersonalAccessToken.
 // This includes values selected through modifiers, order, etc.
-func (pat *PersonalAccessToken) Value(name string) (ent.Value, error) {
-	return pat.selectValues.Get(name)
+func (_m *PersonalAccessToken) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the PersonalAccessToken entity.
-func (pat *PersonalAccessToken) QueryOwner() *UserQuery {
-	return NewPersonalAccessTokenClient(pat.config).QueryOwner(pat)
+func (_m *PersonalAccessToken) QueryOwner() *UserQuery {
+	return NewPersonalAccessTokenClient(_m.config).QueryOwner(_m)
 }
 
 // QueryOrganizations queries the "organizations" edge of the PersonalAccessToken entity.
-func (pat *PersonalAccessToken) QueryOrganizations() *OrganizationQuery {
-	return NewPersonalAccessTokenClient(pat.config).QueryOrganizations(pat)
+func (_m *PersonalAccessToken) QueryOrganizations() *OrganizationQuery {
+	return NewPersonalAccessTokenClient(_m.config).QueryOrganizations(_m)
 }
 
 // QueryEvents queries the "events" edge of the PersonalAccessToken entity.
-func (pat *PersonalAccessToken) QueryEvents() *EventQuery {
-	return NewPersonalAccessTokenClient(pat.config).QueryEvents(pat)
+func (_m *PersonalAccessToken) QueryEvents() *EventQuery {
+	return NewPersonalAccessTokenClient(_m.config).QueryEvents(_m)
 }
 
 // Update returns a builder for updating this PersonalAccessToken.
 // Note that you need to call PersonalAccessToken.Unwrap() before calling this method if this PersonalAccessToken
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (pat *PersonalAccessToken) Update() *PersonalAccessTokenUpdateOne {
-	return NewPersonalAccessTokenClient(pat.config).UpdateOne(pat)
+func (_m *PersonalAccessToken) Update() *PersonalAccessTokenUpdateOne {
+	return NewPersonalAccessTokenClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the PersonalAccessToken entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (pat *PersonalAccessToken) Unwrap() *PersonalAccessToken {
-	_tx, ok := pat.config.driver.(*txDriver)
+func (_m *PersonalAccessToken) Unwrap() *PersonalAccessToken {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: PersonalAccessToken is not a transactional entity")
 	}
-	pat.config.driver = _tx.drv
-	return pat
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (pat *PersonalAccessToken) String() string {
+func (_m *PersonalAccessToken) String() string {
 	var builder strings.Builder
 	builder.WriteString("PersonalAccessToken(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", pat.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(pat.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(pat.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(pat.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(pat.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(pat.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(pat.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", pat.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(pat.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(pat.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("token=")
-	builder.WriteString(pat.Token)
+	builder.WriteString(_m.Token)
 	builder.WriteString(", ")
-	if v := pat.ExpiresAt; v != nil {
+	if v := _m.ExpiresAt; v != nil {
 		builder.WriteString("expires_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := pat.Description; v != nil {
+	if v := _m.Description; v != nil {
 		builder.WriteString("description=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("scopes=")
-	builder.WriteString(fmt.Sprintf("%v", pat.Scopes))
+	builder.WriteString(fmt.Sprintf("%v", _m.Scopes))
 	builder.WriteString(", ")
 	builder.WriteString("sso_authorizations=")
-	builder.WriteString(fmt.Sprintf("%v", pat.SSOAuthorizations))
+	builder.WriteString(fmt.Sprintf("%v", _m.SSOAuthorizations))
 	builder.WriteString(", ")
-	if v := pat.LastUsedAt; v != nil {
+	if v := _m.LastUsedAt; v != nil {
 		builder.WriteString("last_used_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("is_active=")
-	builder.WriteString(fmt.Sprintf("%v", pat.IsActive))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsActive))
 	builder.WriteString(", ")
-	if v := pat.RevokedReason; v != nil {
+	if v := _m.RevokedReason; v != nil {
 		builder.WriteString("revoked_reason=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := pat.RevokedBy; v != nil {
+	if v := _m.RevokedBy; v != nil {
 		builder.WriteString("revoked_by=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := pat.RevokedAt; v != nil {
+	if v := _m.RevokedAt; v != nil {
 		builder.WriteString("revoked_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
@@ -396,49 +396,49 @@ func (pat *PersonalAccessToken) String() string {
 
 // NamedOrganizations returns the Organizations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pat *PersonalAccessToken) NamedOrganizations(name string) ([]*Organization, error) {
-	if pat.Edges.namedOrganizations == nil {
+func (_m *PersonalAccessToken) NamedOrganizations(name string) ([]*Organization, error) {
+	if _m.Edges.namedOrganizations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pat.Edges.namedOrganizations[name]
+	nodes, ok := _m.Edges.namedOrganizations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pat *PersonalAccessToken) appendNamedOrganizations(name string, edges ...*Organization) {
-	if pat.Edges.namedOrganizations == nil {
-		pat.Edges.namedOrganizations = make(map[string][]*Organization)
+func (_m *PersonalAccessToken) appendNamedOrganizations(name string, edges ...*Organization) {
+	if _m.Edges.namedOrganizations == nil {
+		_m.Edges.namedOrganizations = make(map[string][]*Organization)
 	}
 	if len(edges) == 0 {
-		pat.Edges.namedOrganizations[name] = []*Organization{}
+		_m.Edges.namedOrganizations[name] = []*Organization{}
 	} else {
-		pat.Edges.namedOrganizations[name] = append(pat.Edges.namedOrganizations[name], edges...)
+		_m.Edges.namedOrganizations[name] = append(_m.Edges.namedOrganizations[name], edges...)
 	}
 }
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pat *PersonalAccessToken) NamedEvents(name string) ([]*Event, error) {
-	if pat.Edges.namedEvents == nil {
+func (_m *PersonalAccessToken) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pat.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pat *PersonalAccessToken) appendNamedEvents(name string, edges ...*Event) {
-	if pat.Edges.namedEvents == nil {
-		pat.Edges.namedEvents = make(map[string][]*Event)
+func (_m *PersonalAccessToken) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		pat.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		pat.Edges.namedEvents[name] = append(pat.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 

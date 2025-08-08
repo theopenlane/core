@@ -22,179 +22,179 @@ type EntityTypeHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (ethc *EntityTypeHistoryCreate) SetHistoryTime(t time.Time) *EntityTypeHistoryCreate {
-	ethc.mutation.SetHistoryTime(t)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetHistoryTime(v time.Time) *EntityTypeHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (ethc *EntityTypeHistoryCreate) SetNillableHistoryTime(t *time.Time) *EntityTypeHistoryCreate {
-	if t != nil {
-		ethc.SetHistoryTime(*t)
+func (_c *EntityTypeHistoryCreate) SetNillableHistoryTime(v *time.Time) *EntityTypeHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return ethc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (ethc *EntityTypeHistoryCreate) SetRef(s string) *EntityTypeHistoryCreate {
-	ethc.mutation.SetRef(s)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetRef(v string) *EntityTypeHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (ethc *EntityTypeHistoryCreate) SetNillableRef(s *string) *EntityTypeHistoryCreate {
-	if s != nil {
-		ethc.SetRef(*s)
+func (_c *EntityTypeHistoryCreate) SetNillableRef(v *string) *EntityTypeHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return ethc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (ethc *EntityTypeHistoryCreate) SetOperation(ht history.OpType) *EntityTypeHistoryCreate {
-	ethc.mutation.SetOperation(ht)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetOperation(v history.OpType) *EntityTypeHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ethc *EntityTypeHistoryCreate) SetCreatedAt(t time.Time) *EntityTypeHistoryCreate {
-	ethc.mutation.SetCreatedAt(t)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetCreatedAt(v time.Time) *EntityTypeHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ethc *EntityTypeHistoryCreate) SetNillableCreatedAt(t *time.Time) *EntityTypeHistoryCreate {
-	if t != nil {
-		ethc.SetCreatedAt(*t)
+func (_c *EntityTypeHistoryCreate) SetNillableCreatedAt(v *time.Time) *EntityTypeHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ethc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ethc *EntityTypeHistoryCreate) SetUpdatedAt(t time.Time) *EntityTypeHistoryCreate {
-	ethc.mutation.SetUpdatedAt(t)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetUpdatedAt(v time.Time) *EntityTypeHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ethc *EntityTypeHistoryCreate) SetNillableUpdatedAt(t *time.Time) *EntityTypeHistoryCreate {
-	if t != nil {
-		ethc.SetUpdatedAt(*t)
+func (_c *EntityTypeHistoryCreate) SetNillableUpdatedAt(v *time.Time) *EntityTypeHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ethc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (ethc *EntityTypeHistoryCreate) SetCreatedBy(s string) *EntityTypeHistoryCreate {
-	ethc.mutation.SetCreatedBy(s)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetCreatedBy(v string) *EntityTypeHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ethc *EntityTypeHistoryCreate) SetNillableCreatedBy(s *string) *EntityTypeHistoryCreate {
-	if s != nil {
-		ethc.SetCreatedBy(*s)
+func (_c *EntityTypeHistoryCreate) SetNillableCreatedBy(v *string) *EntityTypeHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return ethc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ethc *EntityTypeHistoryCreate) SetUpdatedBy(s string) *EntityTypeHistoryCreate {
-	ethc.mutation.SetUpdatedBy(s)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetUpdatedBy(v string) *EntityTypeHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ethc *EntityTypeHistoryCreate) SetNillableUpdatedBy(s *string) *EntityTypeHistoryCreate {
-	if s != nil {
-		ethc.SetUpdatedBy(*s)
+func (_c *EntityTypeHistoryCreate) SetNillableUpdatedBy(v *string) *EntityTypeHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return ethc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ethc *EntityTypeHistoryCreate) SetDeletedAt(t time.Time) *EntityTypeHistoryCreate {
-	ethc.mutation.SetDeletedAt(t)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetDeletedAt(v time.Time) *EntityTypeHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ethc *EntityTypeHistoryCreate) SetNillableDeletedAt(t *time.Time) *EntityTypeHistoryCreate {
-	if t != nil {
-		ethc.SetDeletedAt(*t)
+func (_c *EntityTypeHistoryCreate) SetNillableDeletedAt(v *time.Time) *EntityTypeHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return ethc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ethc *EntityTypeHistoryCreate) SetDeletedBy(s string) *EntityTypeHistoryCreate {
-	ethc.mutation.SetDeletedBy(s)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetDeletedBy(v string) *EntityTypeHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ethc *EntityTypeHistoryCreate) SetNillableDeletedBy(s *string) *EntityTypeHistoryCreate {
-	if s != nil {
-		ethc.SetDeletedBy(*s)
+func (_c *EntityTypeHistoryCreate) SetNillableDeletedBy(v *string) *EntityTypeHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return ethc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (ethc *EntityTypeHistoryCreate) SetTags(s []string) *EntityTypeHistoryCreate {
-	ethc.mutation.SetTags(s)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetTags(v []string) *EntityTypeHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ethc *EntityTypeHistoryCreate) SetOwnerID(s string) *EntityTypeHistoryCreate {
-	ethc.mutation.SetOwnerID(s)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetOwnerID(v string) *EntityTypeHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ethc *EntityTypeHistoryCreate) SetNillableOwnerID(s *string) *EntityTypeHistoryCreate {
-	if s != nil {
-		ethc.SetOwnerID(*s)
+func (_c *EntityTypeHistoryCreate) SetNillableOwnerID(v *string) *EntityTypeHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return ethc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (ethc *EntityTypeHistoryCreate) SetName(s string) *EntityTypeHistoryCreate {
-	ethc.mutation.SetName(s)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetName(v string) *EntityTypeHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ethc *EntityTypeHistoryCreate) SetID(s string) *EntityTypeHistoryCreate {
-	ethc.mutation.SetID(s)
-	return ethc
+func (_c *EntityTypeHistoryCreate) SetID(v string) *EntityTypeHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (ethc *EntityTypeHistoryCreate) SetNillableID(s *string) *EntityTypeHistoryCreate {
-	if s != nil {
-		ethc.SetID(*s)
+func (_c *EntityTypeHistoryCreate) SetNillableID(v *string) *EntityTypeHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return ethc
+	return _c
 }
 
 // Mutation returns the EntityTypeHistoryMutation object of the builder.
-func (ethc *EntityTypeHistoryCreate) Mutation() *EntityTypeHistoryMutation {
-	return ethc.mutation
+func (_c *EntityTypeHistoryCreate) Mutation() *EntityTypeHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the EntityTypeHistory in the database.
-func (ethc *EntityTypeHistoryCreate) Save(ctx context.Context) (*EntityTypeHistory, error) {
-	if err := ethc.defaults(); err != nil {
+func (_c *EntityTypeHistoryCreate) Save(ctx context.Context) (*EntityTypeHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ethc.sqlSave, ethc.mutation, ethc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ethc *EntityTypeHistoryCreate) SaveX(ctx context.Context) *EntityTypeHistory {
-	v, err := ethc.Save(ctx)
+func (_c *EntityTypeHistoryCreate) SaveX(ctx context.Context) *EntityTypeHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -202,80 +202,80 @@ func (ethc *EntityTypeHistoryCreate) SaveX(ctx context.Context) *EntityTypeHisto
 }
 
 // Exec executes the query.
-func (ethc *EntityTypeHistoryCreate) Exec(ctx context.Context) error {
-	_, err := ethc.Save(ctx)
+func (_c *EntityTypeHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ethc *EntityTypeHistoryCreate) ExecX(ctx context.Context) {
-	if err := ethc.Exec(ctx); err != nil {
+func (_c *EntityTypeHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ethc *EntityTypeHistoryCreate) defaults() error {
-	if _, ok := ethc.mutation.HistoryTime(); !ok {
+func (_c *EntityTypeHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if entitytypehistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized entitytypehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := entitytypehistory.DefaultHistoryTime()
-		ethc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := ethc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if entitytypehistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized entitytypehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := entitytypehistory.DefaultCreatedAt()
-		ethc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ethc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if entitytypehistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized entitytypehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := entitytypehistory.DefaultUpdatedAt()
-		ethc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ethc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := entitytypehistory.DefaultTags
-		ethc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := ethc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if entitytypehistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized entitytypehistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := entitytypehistory.DefaultID()
-		ethc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ethc *EntityTypeHistoryCreate) check() error {
-	if _, ok := ethc.mutation.HistoryTime(); !ok {
+func (_c *EntityTypeHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "EntityTypeHistory.history_time"`)}
 	}
-	if _, ok := ethc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "EntityTypeHistory.operation"`)}
 	}
-	if v, ok := ethc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := entitytypehistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "EntityTypeHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := ethc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "EntityTypeHistory.name"`)}
 	}
 	return nil
 }
 
-func (ethc *EntityTypeHistoryCreate) sqlSave(ctx context.Context) (*EntityTypeHistory, error) {
-	if err := ethc.check(); err != nil {
+func (_c *EntityTypeHistoryCreate) sqlSave(ctx context.Context) (*EntityTypeHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ethc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ethc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -288,66 +288,66 @@ func (ethc *EntityTypeHistoryCreate) sqlSave(ctx context.Context) (*EntityTypeHi
 			return nil, fmt.Errorf("unexpected EntityTypeHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	ethc.mutation.id = &_node.ID
-	ethc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ethc *EntityTypeHistoryCreate) createSpec() (*EntityTypeHistory, *sqlgraph.CreateSpec) {
+func (_c *EntityTypeHistoryCreate) createSpec() (*EntityTypeHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &EntityTypeHistory{config: ethc.config}
+		_node = &EntityTypeHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(entitytypehistory.Table, sqlgraph.NewFieldSpec(entitytypehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = ethc.schemaConfig.EntityTypeHistory
-	if id, ok := ethc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.EntityTypeHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ethc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(entitytypehistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := ethc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(entitytypehistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := ethc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(entitytypehistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := ethc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(entitytypehistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ethc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(entitytypehistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ethc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(entitytypehistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := ethc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(entitytypehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ethc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(entitytypehistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ethc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(entitytypehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := ethc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(entitytypehistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := ethc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(entitytypehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := ethc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(entitytypehistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
@@ -362,16 +362,16 @@ type EntityTypeHistoryCreateBulk struct {
 }
 
 // Save creates the EntityTypeHistory entities in the database.
-func (ethcb *EntityTypeHistoryCreateBulk) Save(ctx context.Context) ([]*EntityTypeHistory, error) {
-	if ethcb.err != nil {
-		return nil, ethcb.err
+func (_c *EntityTypeHistoryCreateBulk) Save(ctx context.Context) ([]*EntityTypeHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ethcb.builders))
-	nodes := make([]*EntityTypeHistory, len(ethcb.builders))
-	mutators := make([]Mutator, len(ethcb.builders))
-	for i := range ethcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*EntityTypeHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ethcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*EntityTypeHistoryMutation)
@@ -385,11 +385,11 @@ func (ethcb *EntityTypeHistoryCreateBulk) Save(ctx context.Context) ([]*EntityTy
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ethcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ethcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -409,7 +409,7 @@ func (ethcb *EntityTypeHistoryCreateBulk) Save(ctx context.Context) ([]*EntityTy
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ethcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -417,8 +417,8 @@ func (ethcb *EntityTypeHistoryCreateBulk) Save(ctx context.Context) ([]*EntityTy
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ethcb *EntityTypeHistoryCreateBulk) SaveX(ctx context.Context) []*EntityTypeHistory {
-	v, err := ethcb.Save(ctx)
+func (_c *EntityTypeHistoryCreateBulk) SaveX(ctx context.Context) []*EntityTypeHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -426,14 +426,14 @@ func (ethcb *EntityTypeHistoryCreateBulk) SaveX(ctx context.Context) []*EntityTy
 }
 
 // Exec executes the query.
-func (ethcb *EntityTypeHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := ethcb.Save(ctx)
+func (_c *EntityTypeHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ethcb *EntityTypeHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := ethcb.Exec(ctx); err != nil {
+func (_c *EntityTypeHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

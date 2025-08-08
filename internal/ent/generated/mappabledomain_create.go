@@ -22,152 +22,152 @@ type MappableDomainCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (mdc *MappableDomainCreate) SetCreatedAt(t time.Time) *MappableDomainCreate {
-	mdc.mutation.SetCreatedAt(t)
-	return mdc
+func (_c *MappableDomainCreate) SetCreatedAt(v time.Time) *MappableDomainCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (mdc *MappableDomainCreate) SetNillableCreatedAt(t *time.Time) *MappableDomainCreate {
-	if t != nil {
-		mdc.SetCreatedAt(*t)
+func (_c *MappableDomainCreate) SetNillableCreatedAt(v *time.Time) *MappableDomainCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return mdc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mdc *MappableDomainCreate) SetUpdatedAt(t time.Time) *MappableDomainCreate {
-	mdc.mutation.SetUpdatedAt(t)
-	return mdc
+func (_c *MappableDomainCreate) SetUpdatedAt(v time.Time) *MappableDomainCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (mdc *MappableDomainCreate) SetNillableUpdatedAt(t *time.Time) *MappableDomainCreate {
-	if t != nil {
-		mdc.SetUpdatedAt(*t)
+func (_c *MappableDomainCreate) SetNillableUpdatedAt(v *time.Time) *MappableDomainCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return mdc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (mdc *MappableDomainCreate) SetCreatedBy(s string) *MappableDomainCreate {
-	mdc.mutation.SetCreatedBy(s)
-	return mdc
+func (_c *MappableDomainCreate) SetCreatedBy(v string) *MappableDomainCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (mdc *MappableDomainCreate) SetNillableCreatedBy(s *string) *MappableDomainCreate {
-	if s != nil {
-		mdc.SetCreatedBy(*s)
+func (_c *MappableDomainCreate) SetNillableCreatedBy(v *string) *MappableDomainCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return mdc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (mdc *MappableDomainCreate) SetUpdatedBy(s string) *MappableDomainCreate {
-	mdc.mutation.SetUpdatedBy(s)
-	return mdc
+func (_c *MappableDomainCreate) SetUpdatedBy(v string) *MappableDomainCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (mdc *MappableDomainCreate) SetNillableUpdatedBy(s *string) *MappableDomainCreate {
-	if s != nil {
-		mdc.SetUpdatedBy(*s)
+func (_c *MappableDomainCreate) SetNillableUpdatedBy(v *string) *MappableDomainCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return mdc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (mdc *MappableDomainCreate) SetDeletedAt(t time.Time) *MappableDomainCreate {
-	mdc.mutation.SetDeletedAt(t)
-	return mdc
+func (_c *MappableDomainCreate) SetDeletedAt(v time.Time) *MappableDomainCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (mdc *MappableDomainCreate) SetNillableDeletedAt(t *time.Time) *MappableDomainCreate {
-	if t != nil {
-		mdc.SetDeletedAt(*t)
+func (_c *MappableDomainCreate) SetNillableDeletedAt(v *time.Time) *MappableDomainCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return mdc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (mdc *MappableDomainCreate) SetDeletedBy(s string) *MappableDomainCreate {
-	mdc.mutation.SetDeletedBy(s)
-	return mdc
+func (_c *MappableDomainCreate) SetDeletedBy(v string) *MappableDomainCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (mdc *MappableDomainCreate) SetNillableDeletedBy(s *string) *MappableDomainCreate {
-	if s != nil {
-		mdc.SetDeletedBy(*s)
+func (_c *MappableDomainCreate) SetNillableDeletedBy(v *string) *MappableDomainCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return mdc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (mdc *MappableDomainCreate) SetTags(s []string) *MappableDomainCreate {
-	mdc.mutation.SetTags(s)
-	return mdc
+func (_c *MappableDomainCreate) SetTags(v []string) *MappableDomainCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (mdc *MappableDomainCreate) SetName(s string) *MappableDomainCreate {
-	mdc.mutation.SetName(s)
-	return mdc
+func (_c *MappableDomainCreate) SetName(v string) *MappableDomainCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetZoneID sets the "zone_id" field.
-func (mdc *MappableDomainCreate) SetZoneID(s string) *MappableDomainCreate {
-	mdc.mutation.SetZoneID(s)
-	return mdc
+func (_c *MappableDomainCreate) SetZoneID(v string) *MappableDomainCreate {
+	_c.mutation.SetZoneID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (mdc *MappableDomainCreate) SetID(s string) *MappableDomainCreate {
-	mdc.mutation.SetID(s)
-	return mdc
+func (_c *MappableDomainCreate) SetID(v string) *MappableDomainCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (mdc *MappableDomainCreate) SetNillableID(s *string) *MappableDomainCreate {
-	if s != nil {
-		mdc.SetID(*s)
+func (_c *MappableDomainCreate) SetNillableID(v *string) *MappableDomainCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return mdc
+	return _c
 }
 
 // AddCustomDomainIDs adds the "custom_domains" edge to the CustomDomain entity by IDs.
-func (mdc *MappableDomainCreate) AddCustomDomainIDs(ids ...string) *MappableDomainCreate {
-	mdc.mutation.AddCustomDomainIDs(ids...)
-	return mdc
+func (_c *MappableDomainCreate) AddCustomDomainIDs(ids ...string) *MappableDomainCreate {
+	_c.mutation.AddCustomDomainIDs(ids...)
+	return _c
 }
 
 // AddCustomDomains adds the "custom_domains" edges to the CustomDomain entity.
-func (mdc *MappableDomainCreate) AddCustomDomains(c ...*CustomDomain) *MappableDomainCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *MappableDomainCreate) AddCustomDomains(v ...*CustomDomain) *MappableDomainCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mdc.AddCustomDomainIDs(ids...)
+	return _c.AddCustomDomainIDs(ids...)
 }
 
 // Mutation returns the MappableDomainMutation object of the builder.
-func (mdc *MappableDomainCreate) Mutation() *MappableDomainMutation {
-	return mdc.mutation
+func (_c *MappableDomainCreate) Mutation() *MappableDomainMutation {
+	return _c.mutation
 }
 
 // Save creates the MappableDomain in the database.
-func (mdc *MappableDomainCreate) Save(ctx context.Context) (*MappableDomain, error) {
-	if err := mdc.defaults(); err != nil {
+func (_c *MappableDomainCreate) Save(ctx context.Context) (*MappableDomain, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, mdc.sqlSave, mdc.mutation, mdc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (mdc *MappableDomainCreate) SaveX(ctx context.Context) *MappableDomain {
-	v, err := mdc.Save(ctx)
+func (_c *MappableDomainCreate) SaveX(ctx context.Context) *MappableDomain {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -175,62 +175,62 @@ func (mdc *MappableDomainCreate) SaveX(ctx context.Context) *MappableDomain {
 }
 
 // Exec executes the query.
-func (mdc *MappableDomainCreate) Exec(ctx context.Context) error {
-	_, err := mdc.Save(ctx)
+func (_c *MappableDomainCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mdc *MappableDomainCreate) ExecX(ctx context.Context) {
-	if err := mdc.Exec(ctx); err != nil {
+func (_c *MappableDomainCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mdc *MappableDomainCreate) defaults() error {
-	if _, ok := mdc.mutation.CreatedAt(); !ok {
+func (_c *MappableDomainCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if mappabledomain.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized mappabledomain.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := mappabledomain.DefaultCreatedAt()
-		mdc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := mdc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if mappabledomain.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized mappabledomain.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := mappabledomain.DefaultUpdatedAt()
-		mdc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := mdc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := mappabledomain.DefaultTags
-		mdc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := mdc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if mappabledomain.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized mappabledomain.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := mappabledomain.DefaultID()
-		mdc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (mdc *MappableDomainCreate) check() error {
-	if _, ok := mdc.mutation.Name(); !ok {
+func (_c *MappableDomainCreate) check() error {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "MappableDomain.name"`)}
 	}
-	if v, ok := mdc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := mappabledomain.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "MappableDomain.name": %w`, err)}
 		}
 	}
-	if _, ok := mdc.mutation.ZoneID(); !ok {
+	if _, ok := _c.mutation.ZoneID(); !ok {
 		return &ValidationError{Name: "zone_id", err: errors.New(`generated: missing required field "MappableDomain.zone_id"`)}
 	}
-	if v, ok := mdc.mutation.ZoneID(); ok {
+	if v, ok := _c.mutation.ZoneID(); ok {
 		if err := mappabledomain.ZoneIDValidator(v); err != nil {
 			return &ValidationError{Name: "zone_id", err: fmt.Errorf(`generated: validator failed for field "MappableDomain.zone_id": %w`, err)}
 		}
@@ -238,12 +238,12 @@ func (mdc *MappableDomainCreate) check() error {
 	return nil
 }
 
-func (mdc *MappableDomainCreate) sqlSave(ctx context.Context) (*MappableDomain, error) {
-	if err := mdc.check(); err != nil {
+func (_c *MappableDomainCreate) sqlSave(ctx context.Context) (*MappableDomain, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := mdc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, mdc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -256,58 +256,58 @@ func (mdc *MappableDomainCreate) sqlSave(ctx context.Context) (*MappableDomain, 
 			return nil, fmt.Errorf("unexpected MappableDomain.ID type: %T", _spec.ID.Value)
 		}
 	}
-	mdc.mutation.id = &_node.ID
-	mdc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (mdc *MappableDomainCreate) createSpec() (*MappableDomain, *sqlgraph.CreateSpec) {
+func (_c *MappableDomainCreate) createSpec() (*MappableDomain, *sqlgraph.CreateSpec) {
 	var (
-		_node = &MappableDomain{config: mdc.config}
+		_node = &MappableDomain{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(mappabledomain.Table, sqlgraph.NewFieldSpec(mappabledomain.FieldID, field.TypeString))
 	)
-	_spec.Schema = mdc.schemaConfig.MappableDomain
-	if id, ok := mdc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.MappableDomain
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := mdc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(mappabledomain.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := mdc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(mappabledomain.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mdc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(mappabledomain.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := mdc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(mappabledomain.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := mdc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(mappabledomain.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := mdc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(mappabledomain.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := mdc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(mappabledomain.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := mdc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(mappabledomain.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := mdc.mutation.ZoneID(); ok {
+	if value, ok := _c.mutation.ZoneID(); ok {
 		_spec.SetField(mappabledomain.FieldZoneID, field.TypeString, value)
 		_node.ZoneID = value
 	}
-	if nodes := mdc.mutation.CustomDomainsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CustomDomainsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -318,7 +318,7 @@ func (mdc *MappableDomainCreate) createSpec() (*MappableDomain, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mdc.schemaConfig.CustomDomain
+		edge.Schema = _c.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -335,16 +335,16 @@ type MappableDomainCreateBulk struct {
 }
 
 // Save creates the MappableDomain entities in the database.
-func (mdcb *MappableDomainCreateBulk) Save(ctx context.Context) ([]*MappableDomain, error) {
-	if mdcb.err != nil {
-		return nil, mdcb.err
+func (_c *MappableDomainCreateBulk) Save(ctx context.Context) ([]*MappableDomain, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(mdcb.builders))
-	nodes := make([]*MappableDomain, len(mdcb.builders))
-	mutators := make([]Mutator, len(mdcb.builders))
-	for i := range mdcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*MappableDomain, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := mdcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*MappableDomainMutation)
@@ -358,11 +358,11 @@ func (mdcb *MappableDomainCreateBulk) Save(ctx context.Context) ([]*MappableDoma
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, mdcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, mdcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -382,7 +382,7 @@ func (mdcb *MappableDomainCreateBulk) Save(ctx context.Context) ([]*MappableDoma
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, mdcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -390,8 +390,8 @@ func (mdcb *MappableDomainCreateBulk) Save(ctx context.Context) ([]*MappableDoma
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mdcb *MappableDomainCreateBulk) SaveX(ctx context.Context) []*MappableDomain {
-	v, err := mdcb.Save(ctx)
+func (_c *MappableDomainCreateBulk) SaveX(ctx context.Context) []*MappableDomain {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -399,14 +399,14 @@ func (mdcb *MappableDomainCreateBulk) SaveX(ctx context.Context) []*MappableDoma
 }
 
 // Exec executes the query.
-func (mdcb *MappableDomainCreateBulk) Exec(ctx context.Context) error {
-	_, err := mdcb.Save(ctx)
+func (_c *MappableDomainCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mdcb *MappableDomainCreateBulk) ExecX(ctx context.Context) {
-	if err := mdcb.Exec(ctx); err != nil {
+func (_c *MappableDomainCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

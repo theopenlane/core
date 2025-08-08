@@ -77,2585 +77,2585 @@ type OrganizationUpdate struct {
 }
 
 // Where appends a list predicates to the OrganizationUpdate builder.
-func (ou *OrganizationUpdate) Where(ps ...predicate.Organization) *OrganizationUpdate {
-	ou.mutation.Where(ps...)
-	return ou
+func (_u *OrganizationUpdate) Where(ps ...predicate.Organization) *OrganizationUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ou *OrganizationUpdate) SetUpdatedAt(t time.Time) *OrganizationUpdate {
-	ou.mutation.SetUpdatedAt(t)
-	return ou
+func (_u *OrganizationUpdate) SetUpdatedAt(v time.Time) *OrganizationUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ou *OrganizationUpdate) ClearUpdatedAt() *OrganizationUpdate {
-	ou.mutation.ClearUpdatedAt()
-	return ou
+func (_u *OrganizationUpdate) ClearUpdatedAt() *OrganizationUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ou *OrganizationUpdate) SetUpdatedBy(s string) *OrganizationUpdate {
-	ou.mutation.SetUpdatedBy(s)
-	return ou
+func (_u *OrganizationUpdate) SetUpdatedBy(v string) *OrganizationUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableUpdatedBy(s *string) *OrganizationUpdate {
-	if s != nil {
-		ou.SetUpdatedBy(*s)
+func (_u *OrganizationUpdate) SetNillableUpdatedBy(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ou
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ou *OrganizationUpdate) ClearUpdatedBy() *OrganizationUpdate {
-	ou.mutation.ClearUpdatedBy()
-	return ou
+func (_u *OrganizationUpdate) ClearUpdatedBy() *OrganizationUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ou *OrganizationUpdate) SetDeletedAt(t time.Time) *OrganizationUpdate {
-	ou.mutation.SetDeletedAt(t)
-	return ou
+func (_u *OrganizationUpdate) SetDeletedAt(v time.Time) *OrganizationUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableDeletedAt(t *time.Time) *OrganizationUpdate {
-	if t != nil {
-		ou.SetDeletedAt(*t)
+func (_u *OrganizationUpdate) SetNillableDeletedAt(v *time.Time) *OrganizationUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ou
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ou *OrganizationUpdate) ClearDeletedAt() *OrganizationUpdate {
-	ou.mutation.ClearDeletedAt()
-	return ou
+func (_u *OrganizationUpdate) ClearDeletedAt() *OrganizationUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ou *OrganizationUpdate) SetDeletedBy(s string) *OrganizationUpdate {
-	ou.mutation.SetDeletedBy(s)
-	return ou
+func (_u *OrganizationUpdate) SetDeletedBy(v string) *OrganizationUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableDeletedBy(s *string) *OrganizationUpdate {
-	if s != nil {
-		ou.SetDeletedBy(*s)
+func (_u *OrganizationUpdate) SetNillableDeletedBy(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ou
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ou *OrganizationUpdate) ClearDeletedBy() *OrganizationUpdate {
-	ou.mutation.ClearDeletedBy()
-	return ou
+func (_u *OrganizationUpdate) ClearDeletedBy() *OrganizationUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ou *OrganizationUpdate) SetTags(s []string) *OrganizationUpdate {
-	ou.mutation.SetTags(s)
-	return ou
+func (_u *OrganizationUpdate) SetTags(v []string) *OrganizationUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ou *OrganizationUpdate) AppendTags(s []string) *OrganizationUpdate {
-	ou.mutation.AppendTags(s)
-	return ou
+// AppendTags appends value to the "tags" field.
+func (_u *OrganizationUpdate) AppendTags(v []string) *OrganizationUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ou *OrganizationUpdate) ClearTags() *OrganizationUpdate {
-	ou.mutation.ClearTags()
-	return ou
+func (_u *OrganizationUpdate) ClearTags() *OrganizationUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ou *OrganizationUpdate) SetName(s string) *OrganizationUpdate {
-	ou.mutation.SetName(s)
-	return ou
+func (_u *OrganizationUpdate) SetName(v string) *OrganizationUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableName(s *string) *OrganizationUpdate {
-	if s != nil {
-		ou.SetName(*s)
+func (_u *OrganizationUpdate) SetNillableName(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ou
+	return _u
 }
 
 // SetDisplayName sets the "display_name" field.
-func (ou *OrganizationUpdate) SetDisplayName(s string) *OrganizationUpdate {
-	ou.mutation.SetDisplayName(s)
-	return ou
+func (_u *OrganizationUpdate) SetDisplayName(v string) *OrganizationUpdate {
+	_u.mutation.SetDisplayName(v)
+	return _u
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableDisplayName(s *string) *OrganizationUpdate {
-	if s != nil {
-		ou.SetDisplayName(*s)
+func (_u *OrganizationUpdate) SetNillableDisplayName(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetDisplayName(*v)
 	}
-	return ou
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ou *OrganizationUpdate) SetDescription(s string) *OrganizationUpdate {
-	ou.mutation.SetDescription(s)
-	return ou
+func (_u *OrganizationUpdate) SetDescription(v string) *OrganizationUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableDescription(s *string) *OrganizationUpdate {
-	if s != nil {
-		ou.SetDescription(*s)
+func (_u *OrganizationUpdate) SetNillableDescription(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ou
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ou *OrganizationUpdate) ClearDescription() *OrganizationUpdate {
-	ou.mutation.ClearDescription()
-	return ou
+func (_u *OrganizationUpdate) ClearDescription() *OrganizationUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetAvatarRemoteURL sets the "avatar_remote_url" field.
-func (ou *OrganizationUpdate) SetAvatarRemoteURL(s string) *OrganizationUpdate {
-	ou.mutation.SetAvatarRemoteURL(s)
-	return ou
+func (_u *OrganizationUpdate) SetAvatarRemoteURL(v string) *OrganizationUpdate {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
 }
 
 // SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableAvatarRemoteURL(s *string) *OrganizationUpdate {
-	if s != nil {
-		ou.SetAvatarRemoteURL(*s)
+func (_u *OrganizationUpdate) SetNillableAvatarRemoteURL(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
 	}
-	return ou
+	return _u
 }
 
 // ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
-func (ou *OrganizationUpdate) ClearAvatarRemoteURL() *OrganizationUpdate {
-	ou.mutation.ClearAvatarRemoteURL()
-	return ou
+func (_u *OrganizationUpdate) ClearAvatarRemoteURL() *OrganizationUpdate {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
 }
 
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
-func (ou *OrganizationUpdate) SetAvatarLocalFileID(s string) *OrganizationUpdate {
-	ou.mutation.SetAvatarLocalFileID(s)
-	return ou
+func (_u *OrganizationUpdate) SetAvatarLocalFileID(v string) *OrganizationUpdate {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
 }
 
 // SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableAvatarLocalFileID(s *string) *OrganizationUpdate {
-	if s != nil {
-		ou.SetAvatarLocalFileID(*s)
+func (_u *OrganizationUpdate) SetNillableAvatarLocalFileID(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
 	}
-	return ou
+	return _u
 }
 
 // ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
-func (ou *OrganizationUpdate) ClearAvatarLocalFileID() *OrganizationUpdate {
-	ou.mutation.ClearAvatarLocalFileID()
-	return ou
+func (_u *OrganizationUpdate) ClearAvatarLocalFileID() *OrganizationUpdate {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
 }
 
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
-func (ou *OrganizationUpdate) SetAvatarUpdatedAt(t time.Time) *OrganizationUpdate {
-	ou.mutation.SetAvatarUpdatedAt(t)
-	return ou
+func (_u *OrganizationUpdate) SetAvatarUpdatedAt(v time.Time) *OrganizationUpdate {
+	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
 }
 
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
-func (ou *OrganizationUpdate) ClearAvatarUpdatedAt() *OrganizationUpdate {
-	ou.mutation.ClearAvatarUpdatedAt()
-	return ou
+func (_u *OrganizationUpdate) ClearAvatarUpdatedAt() *OrganizationUpdate {
+	_u.mutation.ClearAvatarUpdatedAt()
+	return _u
 }
 
 // SetDedicatedDb sets the "dedicated_db" field.
-func (ou *OrganizationUpdate) SetDedicatedDb(b bool) *OrganizationUpdate {
-	ou.mutation.SetDedicatedDb(b)
-	return ou
+func (_u *OrganizationUpdate) SetDedicatedDb(v bool) *OrganizationUpdate {
+	_u.mutation.SetDedicatedDb(v)
+	return _u
 }
 
 // SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableDedicatedDb(b *bool) *OrganizationUpdate {
-	if b != nil {
-		ou.SetDedicatedDb(*b)
+func (_u *OrganizationUpdate) SetNillableDedicatedDb(v *bool) *OrganizationUpdate {
+	if v != nil {
+		_u.SetDedicatedDb(*v)
 	}
-	return ou
+	return _u
 }
 
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddControlCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddControlCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddControlCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddControlCreatorIDs(ids...)
+	return _u
 }
 
 // AddControlCreators adds the "control_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddControlCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddControlCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddControlCreatorIDs(ids...)
+	return _u.AddControlCreatorIDs(ids...)
 }
 
 // AddControlImplementationCreatorIDs adds the "control_implementation_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddControlImplementationCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddControlImplementationCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddControlImplementationCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddControlImplementationCreatorIDs(ids...)
+	return _u
 }
 
 // AddControlImplementationCreators adds the "control_implementation_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddControlImplementationCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddControlImplementationCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddControlImplementationCreatorIDs(ids...)
+	return _u.AddControlImplementationCreatorIDs(ids...)
 }
 
 // AddControlObjectiveCreatorIDs adds the "control_objective_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddControlObjectiveCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddControlObjectiveCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddControlObjectiveCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddControlObjectiveCreatorIDs(ids...)
+	return _u
 }
 
 // AddControlObjectiveCreators adds the "control_objective_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddControlObjectiveCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddControlObjectiveCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddControlObjectiveCreatorIDs(ids...)
+	return _u.AddControlObjectiveCreatorIDs(ids...)
 }
 
 // AddEvidenceCreatorIDs adds the "evidence_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddEvidenceCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddEvidenceCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddEvidenceCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddEvidenceCreatorIDs(ids...)
+	return _u
 }
 
 // AddEvidenceCreators adds the "evidence_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddEvidenceCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddEvidenceCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddEvidenceCreatorIDs(ids...)
+	return _u.AddEvidenceCreatorIDs(ids...)
 }
 
 // AddGroupCreatorIDs adds the "group_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddGroupCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddGroupCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddGroupCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddGroupCreatorIDs(ids...)
+	return _u
 }
 
 // AddGroupCreators adds the "group_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddGroupCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddGroupCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddGroupCreatorIDs(ids...)
+	return _u.AddGroupCreatorIDs(ids...)
 }
 
 // AddInternalPolicyCreatorIDs adds the "internal_policy_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddInternalPolicyCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddInternalPolicyCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddInternalPolicyCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddInternalPolicyCreatorIDs(ids...)
+	return _u
 }
 
 // AddInternalPolicyCreators adds the "internal_policy_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddInternalPolicyCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddInternalPolicyCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddInternalPolicyCreatorIDs(ids...)
+	return _u.AddInternalPolicyCreatorIDs(ids...)
 }
 
 // AddMappedControlCreatorIDs adds the "mapped_control_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddMappedControlCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddMappedControlCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddMappedControlCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddMappedControlCreatorIDs(ids...)
+	return _u
 }
 
 // AddMappedControlCreators adds the "mapped_control_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddMappedControlCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddMappedControlCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddMappedControlCreatorIDs(ids...)
+	return _u.AddMappedControlCreatorIDs(ids...)
 }
 
 // AddNarrativeCreatorIDs adds the "narrative_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddNarrativeCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddNarrativeCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddNarrativeCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddNarrativeCreatorIDs(ids...)
+	return _u
 }
 
 // AddNarrativeCreators adds the "narrative_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddNarrativeCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddNarrativeCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddNarrativeCreatorIDs(ids...)
+	return _u.AddNarrativeCreatorIDs(ids...)
 }
 
 // AddProcedureCreatorIDs adds the "procedure_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddProcedureCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddProcedureCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddProcedureCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddProcedureCreatorIDs(ids...)
+	return _u
 }
 
 // AddProcedureCreators adds the "procedure_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddProcedureCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddProcedureCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddProcedureCreatorIDs(ids...)
+	return _u.AddProcedureCreatorIDs(ids...)
 }
 
 // AddProgramCreatorIDs adds the "program_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddProgramCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddProgramCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddProgramCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddProgramCreatorIDs(ids...)
+	return _u
 }
 
 // AddProgramCreators adds the "program_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddProgramCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddProgramCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddProgramCreatorIDs(ids...)
+	return _u.AddProgramCreatorIDs(ids...)
 }
 
 // AddRiskCreatorIDs adds the "risk_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddRiskCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddRiskCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddRiskCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddRiskCreatorIDs(ids...)
+	return _u
 }
 
 // AddRiskCreators adds the "risk_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddRiskCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddRiskCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddRiskCreatorIDs(ids...)
+	return _u.AddRiskCreatorIDs(ids...)
 }
 
 // AddScheduledJobCreatorIDs adds the "scheduled_job_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddScheduledJobCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddScheduledJobCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddScheduledJobCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddScheduledJobCreatorIDs(ids...)
+	return _u
 }
 
 // AddScheduledJobCreators adds the "scheduled_job_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddScheduledJobCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddScheduledJobCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddScheduledJobCreatorIDs(ids...)
+	return _u.AddScheduledJobCreatorIDs(ids...)
 }
 
 // AddStandardCreatorIDs adds the "standard_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddStandardCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddStandardCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddStandardCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddStandardCreatorIDs(ids...)
+	return _u
 }
 
 // AddStandardCreators adds the "standard_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddStandardCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddStandardCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddStandardCreatorIDs(ids...)
+	return _u.AddStandardCreatorIDs(ids...)
 }
 
 // AddTemplateCreatorIDs adds the "template_creators" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddTemplateCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddTemplateCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddTemplateCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddTemplateCreatorIDs(ids...)
+	return _u
 }
 
 // AddTemplateCreators adds the "template_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) AddTemplateCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddTemplateCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddTemplateCreatorIDs(ids...)
+	return _u.AddTemplateCreatorIDs(ids...)
 }
 
 // AddChildIDs adds the "children" edge to the Organization entity by IDs.
-func (ou *OrganizationUpdate) AddChildIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddChildIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddChildIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddChildIDs(ids...)
+	return _u
 }
 
 // AddChildren adds the "children" edges to the Organization entity.
-func (ou *OrganizationUpdate) AddChildren(o ...*Organization) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) AddChildren(v ...*Organization) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddChildIDs(ids...)
+	return _u.AddChildIDs(ids...)
 }
 
 // SetSettingID sets the "setting" edge to the OrganizationSetting entity by ID.
-func (ou *OrganizationUpdate) SetSettingID(id string) *OrganizationUpdate {
-	ou.mutation.SetSettingID(id)
-	return ou
+func (_u *OrganizationUpdate) SetSettingID(id string) *OrganizationUpdate {
+	_u.mutation.SetSettingID(id)
+	return _u
 }
 
 // SetNillableSettingID sets the "setting" edge to the OrganizationSetting entity by ID if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableSettingID(id *string) *OrganizationUpdate {
+func (_u *OrganizationUpdate) SetNillableSettingID(id *string) *OrganizationUpdate {
 	if id != nil {
-		ou = ou.SetSettingID(*id)
+		_u = _u.SetSettingID(*id)
 	}
-	return ou
+	return _u
 }
 
 // SetSetting sets the "setting" edge to the OrganizationSetting entity.
-func (ou *OrganizationUpdate) SetSetting(o *OrganizationSetting) *OrganizationUpdate {
-	return ou.SetSettingID(o.ID)
+func (_u *OrganizationUpdate) SetSetting(v *OrganizationSetting) *OrganizationUpdate {
+	return _u.SetSettingID(v.ID)
 }
 
 // AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by IDs.
-func (ou *OrganizationUpdate) AddPersonalAccessTokenIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddPersonalAccessTokenIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddPersonalAccessTokenIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddPersonalAccessTokenIDs(ids...)
+	return _u
 }
 
 // AddPersonalAccessTokens adds the "personal_access_tokens" edges to the PersonalAccessToken entity.
-func (ou *OrganizationUpdate) AddPersonalAccessTokens(p ...*PersonalAccessToken) *OrganizationUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdate) AddPersonalAccessTokens(v ...*PersonalAccessToken) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddPersonalAccessTokenIDs(ids...)
+	return _u.AddPersonalAccessTokenIDs(ids...)
 }
 
 // AddAPITokenIDs adds the "api_tokens" edge to the APIToken entity by IDs.
-func (ou *OrganizationUpdate) AddAPITokenIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddAPITokenIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddAPITokenIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddAPITokenIDs(ids...)
+	return _u
 }
 
 // AddAPITokens adds the "api_tokens" edges to the APIToken entity.
-func (ou *OrganizationUpdate) AddAPITokens(a ...*APIToken) *OrganizationUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdate) AddAPITokens(v ...*APIToken) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddAPITokenIDs(ids...)
+	return _u.AddAPITokenIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (ou *OrganizationUpdate) AddUserIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddUserIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddUserIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddUserIDs(ids...)
+	return _u
 }
 
 // AddUsers adds the "users" edges to the User entity.
-func (ou *OrganizationUpdate) AddUsers(u ...*User) *OrganizationUpdate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *OrganizationUpdate) AddUsers(v ...*User) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddUserIDs(ids...)
+	return _u.AddUserIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (ou *OrganizationUpdate) AddFileIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddFileIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddFileIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (ou *OrganizationUpdate) AddFiles(f ...*File) *OrganizationUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *OrganizationUpdate) AddFiles(v ...*File) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (ou *OrganizationUpdate) AddEventIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddEventIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddEventIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (ou *OrganizationUpdate) AddEvents(e ...*Event) *OrganizationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdate) AddEvents(v ...*Event) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
-func (ou *OrganizationUpdate) AddSecretIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddSecretIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddSecretIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddSecretIDs(ids...)
+	return _u
 }
 
 // AddSecrets adds the "secrets" edges to the Hush entity.
-func (ou *OrganizationUpdate) AddSecrets(h ...*Hush) *OrganizationUpdate {
-	ids := make([]string, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
+func (_u *OrganizationUpdate) AddSecrets(v ...*Hush) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddSecretIDs(ids...)
+	return _u.AddSecretIDs(ids...)
 }
 
 // SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
-func (ou *OrganizationUpdate) SetAvatarFileID(id string) *OrganizationUpdate {
-	ou.mutation.SetAvatarFileID(id)
-	return ou
+func (_u *OrganizationUpdate) SetAvatarFileID(id string) *OrganizationUpdate {
+	_u.mutation.SetAvatarFileID(id)
+	return _u
 }
 
 // SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableAvatarFileID(id *string) *OrganizationUpdate {
+func (_u *OrganizationUpdate) SetNillableAvatarFileID(id *string) *OrganizationUpdate {
 	if id != nil {
-		ou = ou.SetAvatarFileID(*id)
+		_u = _u.SetAvatarFileID(*id)
 	}
-	return ou
+	return _u
 }
 
 // SetAvatarFile sets the "avatar_file" edge to the File entity.
-func (ou *OrganizationUpdate) SetAvatarFile(f *File) *OrganizationUpdate {
-	return ou.SetAvatarFileID(f.ID)
+func (_u *OrganizationUpdate) SetAvatarFile(v *File) *OrganizationUpdate {
+	return _u.SetAvatarFileID(v.ID)
 }
 
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
-func (ou *OrganizationUpdate) AddGroupIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddGroupIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddGroupIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddGroupIDs(ids...)
+	return _u
 }
 
 // AddGroups adds the "groups" edges to the Group entity.
-func (ou *OrganizationUpdate) AddGroups(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) AddGroups(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddGroupIDs(ids...)
+	return _u.AddGroupIDs(ids...)
 }
 
 // AddTemplateIDs adds the "templates" edge to the Template entity by IDs.
-func (ou *OrganizationUpdate) AddTemplateIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddTemplateIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddTemplateIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddTemplateIDs(ids...)
+	return _u
 }
 
 // AddTemplates adds the "templates" edges to the Template entity.
-func (ou *OrganizationUpdate) AddTemplates(t ...*Template) *OrganizationUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdate) AddTemplates(v ...*Template) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddTemplateIDs(ids...)
+	return _u.AddTemplateIDs(ids...)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
-func (ou *OrganizationUpdate) AddIntegrationIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddIntegrationIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddIntegrationIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
 }
 
 // AddIntegrations adds the "integrations" edges to the Integration entity.
-func (ou *OrganizationUpdate) AddIntegrations(i ...*Integration) *OrganizationUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdate) AddIntegrations(v ...*Integration) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddIntegrationIDs(ids...)
+	return _u.AddIntegrationIDs(ids...)
 }
 
 // AddDocumentIDs adds the "documents" edge to the DocumentData entity by IDs.
-func (ou *OrganizationUpdate) AddDocumentIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddDocumentIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddDocumentIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddDocumentIDs(ids...)
+	return _u
 }
 
 // AddDocuments adds the "documents" edges to the DocumentData entity.
-func (ou *OrganizationUpdate) AddDocuments(d ...*DocumentData) *OrganizationUpdate {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *OrganizationUpdate) AddDocuments(v ...*DocumentData) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddDocumentIDs(ids...)
+	return _u.AddDocumentIDs(ids...)
 }
 
 // AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
-func (ou *OrganizationUpdate) AddOrgSubscriptionIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddOrgSubscriptionIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddOrgSubscriptionIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddOrgSubscriptionIDs(ids...)
+	return _u
 }
 
 // AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
-func (ou *OrganizationUpdate) AddOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) AddOrgSubscriptions(v ...*OrgSubscription) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddOrgSubscriptionIDs(ids...)
+	return _u.AddOrgSubscriptionIDs(ids...)
 }
 
 // AddOrgProductIDs adds the "org_products" edge to the OrgProduct entity by IDs.
-func (ou *OrganizationUpdate) AddOrgProductIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddOrgProductIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddOrgProductIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddOrgProductIDs(ids...)
+	return _u
 }
 
 // AddOrgProducts adds the "org_products" edges to the OrgProduct entity.
-func (ou *OrganizationUpdate) AddOrgProducts(o ...*OrgProduct) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) AddOrgProducts(v ...*OrgProduct) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddOrgProductIDs(ids...)
+	return _u.AddOrgProductIDs(ids...)
 }
 
 // AddOrgPriceIDs adds the "org_prices" edge to the OrgPrice entity by IDs.
-func (ou *OrganizationUpdate) AddOrgPriceIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddOrgPriceIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddOrgPriceIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddOrgPriceIDs(ids...)
+	return _u
 }
 
 // AddOrgPrices adds the "org_prices" edges to the OrgPrice entity.
-func (ou *OrganizationUpdate) AddOrgPrices(o ...*OrgPrice) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) AddOrgPrices(v ...*OrgPrice) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddOrgPriceIDs(ids...)
+	return _u.AddOrgPriceIDs(ids...)
 }
 
 // AddOrgModuleIDs adds the "org_modules" edge to the OrgModule entity by IDs.
-func (ou *OrganizationUpdate) AddOrgModuleIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddOrgModuleIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddOrgModuleIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddOrgModuleIDs(ids...)
+	return _u
 }
 
 // AddOrgModules adds the "org_modules" edges to the OrgModule entity.
-func (ou *OrganizationUpdate) AddOrgModules(o ...*OrgModule) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) AddOrgModules(v ...*OrgModule) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddOrgModuleIDs(ids...)
+	return _u.AddOrgModuleIDs(ids...)
 }
 
 // AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
-func (ou *OrganizationUpdate) AddInviteIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddInviteIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddInviteIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddInviteIDs(ids...)
+	return _u
 }
 
 // AddInvites adds the "invites" edges to the Invite entity.
-func (ou *OrganizationUpdate) AddInvites(i ...*Invite) *OrganizationUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdate) AddInvites(v ...*Invite) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddInviteIDs(ids...)
+	return _u.AddInviteIDs(ids...)
 }
 
 // AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
-func (ou *OrganizationUpdate) AddSubscriberIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddSubscriberIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddSubscriberIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddSubscriberIDs(ids...)
+	return _u
 }
 
 // AddSubscribers adds the "subscribers" edges to the Subscriber entity.
-func (ou *OrganizationUpdate) AddSubscribers(s ...*Subscriber) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) AddSubscribers(v ...*Subscriber) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddSubscriberIDs(ids...)
+	return _u.AddSubscriberIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (ou *OrganizationUpdate) AddEntityIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddEntityIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddEntityIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (ou *OrganizationUpdate) AddEntities(e ...*Entity) *OrganizationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdate) AddEntities(v ...*Entity) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // AddEntityTypeIDs adds the "entity_types" edge to the EntityType entity by IDs.
-func (ou *OrganizationUpdate) AddEntityTypeIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddEntityTypeIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddEntityTypeIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddEntityTypeIDs(ids...)
+	return _u
 }
 
 // AddEntityTypes adds the "entity_types" edges to the EntityType entity.
-func (ou *OrganizationUpdate) AddEntityTypes(e ...*EntityType) *OrganizationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdate) AddEntityTypes(v ...*EntityType) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddEntityTypeIDs(ids...)
+	return _u.AddEntityTypeIDs(ids...)
 }
 
 // AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
-func (ou *OrganizationUpdate) AddContactIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddContactIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddContactIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddContactIDs(ids...)
+	return _u
 }
 
 // AddContacts adds the "contacts" edges to the Contact entity.
-func (ou *OrganizationUpdate) AddContacts(c ...*Contact) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdate) AddContacts(v ...*Contact) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddContactIDs(ids...)
+	return _u.AddContactIDs(ids...)
 }
 
 // AddNoteIDs adds the "notes" edge to the Note entity by IDs.
-func (ou *OrganizationUpdate) AddNoteIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddNoteIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddNoteIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddNoteIDs(ids...)
+	return _u
 }
 
 // AddNotes adds the "notes" edges to the Note entity.
-func (ou *OrganizationUpdate) AddNotes(n ...*Note) *OrganizationUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *OrganizationUpdate) AddNotes(v ...*Note) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddNoteIDs(ids...)
+	return _u.AddNoteIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (ou *OrganizationUpdate) AddTaskIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddTaskIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddTaskIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (ou *OrganizationUpdate) AddTasks(t ...*Task) *OrganizationUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdate) AddTasks(v ...*Task) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddTaskIDs(ids...)
+	return _u.AddTaskIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (ou *OrganizationUpdate) AddProgramIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddProgramIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddProgramIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (ou *OrganizationUpdate) AddPrograms(p ...*Program) *OrganizationUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdate) AddPrograms(v ...*Program) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (ou *OrganizationUpdate) AddProcedureIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddProcedureIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddProcedureIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (ou *OrganizationUpdate) AddProcedures(p ...*Procedure) *OrganizationUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdate) AddProcedures(v ...*Procedure) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddProcedureIDs(ids...)
+	return _u.AddProcedureIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (ou *OrganizationUpdate) AddInternalPolicyIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddInternalPolicyIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddInternalPolicyIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (ou *OrganizationUpdate) AddInternalPolicies(i ...*InternalPolicy) *OrganizationUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdate) AddInternalPolicies(v ...*InternalPolicy) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddInternalPolicyIDs(ids...)
+	return _u.AddInternalPolicyIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (ou *OrganizationUpdate) AddRiskIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddRiskIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddRiskIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (ou *OrganizationUpdate) AddRisks(r ...*Risk) *OrganizationUpdate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *OrganizationUpdate) AddRisks(v ...*Risk) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddRiskIDs(ids...)
+	return _u.AddRiskIDs(ids...)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (ou *OrganizationUpdate) AddControlObjectiveIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddControlObjectiveIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddControlObjectiveIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddControlObjectiveIDs(ids...)
+	return _u
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (ou *OrganizationUpdate) AddControlObjectives(c ...*ControlObjective) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdate) AddControlObjectives(v ...*ControlObjective) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddControlObjectiveIDs(ids...)
+	return _u.AddControlObjectiveIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
-func (ou *OrganizationUpdate) AddNarrativeIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddNarrativeIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddNarrativeIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddNarrativeIDs(ids...)
+	return _u
 }
 
 // AddNarratives adds the "narratives" edges to the Narrative entity.
-func (ou *OrganizationUpdate) AddNarratives(n ...*Narrative) *OrganizationUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *OrganizationUpdate) AddNarratives(v ...*Narrative) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddNarrativeIDs(ids...)
+	return _u.AddNarrativeIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (ou *OrganizationUpdate) AddControlIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddControlIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddControlIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (ou *OrganizationUpdate) AddControls(c ...*Control) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdate) AddControls(v ...*Control) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (ou *OrganizationUpdate) AddSubcontrolIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddSubcontrolIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddSubcontrolIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (ou *OrganizationUpdate) AddSubcontrols(s ...*Subcontrol) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) AddSubcontrols(v ...*Subcontrol) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
-func (ou *OrganizationUpdate) AddControlImplementationIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddControlImplementationIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddControlImplementationIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddControlImplementationIDs(ids...)
+	return _u
 }
 
 // AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
-func (ou *OrganizationUpdate) AddControlImplementations(c ...*ControlImplementation) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdate) AddControlImplementations(v ...*ControlImplementation) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddControlImplementationIDs(ids...)
+	return _u.AddControlImplementationIDs(ids...)
 }
 
 // AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
-func (ou *OrganizationUpdate) AddMappedControlIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddMappedControlIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddMappedControlIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddMappedControlIDs(ids...)
+	return _u
 }
 
 // AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
-func (ou *OrganizationUpdate) AddMappedControls(m ...*MappedControl) *OrganizationUpdate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *OrganizationUpdate) AddMappedControls(v ...*MappedControl) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddMappedControlIDs(ids...)
+	return _u.AddMappedControlIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (ou *OrganizationUpdate) AddEvidenceIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddEvidenceIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddEvidenceIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddEvidenceIDs(ids...)
+	return _u
 }
 
 // AddEvidence adds the "evidence" edges to the Evidence entity.
-func (ou *OrganizationUpdate) AddEvidence(e ...*Evidence) *OrganizationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdate) AddEvidence(v ...*Evidence) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddEvidenceIDs(ids...)
+	return _u.AddEvidenceIDs(ids...)
 }
 
 // AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
-func (ou *OrganizationUpdate) AddStandardIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddStandardIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddStandardIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddStandardIDs(ids...)
+	return _u
 }
 
 // AddStandards adds the "standards" edges to the Standard entity.
-func (ou *OrganizationUpdate) AddStandards(s ...*Standard) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) AddStandards(v ...*Standard) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddStandardIDs(ids...)
+	return _u.AddStandardIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (ou *OrganizationUpdate) AddActionPlanIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddActionPlanIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddActionPlanIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
 }
 
 // AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (ou *OrganizationUpdate) AddActionPlans(a ...*ActionPlan) *OrganizationUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdate) AddActionPlans(v ...*ActionPlan) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddActionPlanIDs(ids...)
+	return _u.AddActionPlanIDs(ids...)
 }
 
 // AddCustomDomainIDs adds the "custom_domains" edge to the CustomDomain entity by IDs.
-func (ou *OrganizationUpdate) AddCustomDomainIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddCustomDomainIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddCustomDomainIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddCustomDomainIDs(ids...)
+	return _u
 }
 
 // AddCustomDomains adds the "custom_domains" edges to the CustomDomain entity.
-func (ou *OrganizationUpdate) AddCustomDomains(c ...*CustomDomain) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdate) AddCustomDomains(v ...*CustomDomain) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddCustomDomainIDs(ids...)
+	return _u.AddCustomDomainIDs(ids...)
 }
 
 // AddJobRunnerIDs adds the "job_runners" edge to the JobRunner entity by IDs.
-func (ou *OrganizationUpdate) AddJobRunnerIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddJobRunnerIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddJobRunnerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddJobRunnerIDs(ids...)
+	return _u
 }
 
 // AddJobRunners adds the "job_runners" edges to the JobRunner entity.
-func (ou *OrganizationUpdate) AddJobRunners(j ...*JobRunner) *OrganizationUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdate) AddJobRunners(v ...*JobRunner) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddJobRunnerIDs(ids...)
+	return _u.AddJobRunnerIDs(ids...)
 }
 
 // AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
-func (ou *OrganizationUpdate) AddJobRunnerTokenIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddJobRunnerTokenIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddJobRunnerTokenIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddJobRunnerTokenIDs(ids...)
+	return _u
 }
 
 // AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
-func (ou *OrganizationUpdate) AddJobRunnerTokens(j ...*JobRunnerToken) *OrganizationUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdate) AddJobRunnerTokens(v ...*JobRunnerToken) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddJobRunnerTokenIDs(ids...)
+	return _u.AddJobRunnerTokenIDs(ids...)
 }
 
 // AddJobRunnerRegistrationTokenIDs adds the "job_runner_registration_tokens" edge to the JobRunnerRegistrationToken entity by IDs.
-func (ou *OrganizationUpdate) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
+	return _u
 }
 
 // AddJobRunnerRegistrationTokens adds the "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
-func (ou *OrganizationUpdate) AddJobRunnerRegistrationTokens(j ...*JobRunnerRegistrationToken) *OrganizationUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdate) AddJobRunnerRegistrationTokens(v ...*JobRunnerRegistrationToken) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddJobRunnerRegistrationTokenIDs(ids...)
+	return _u.AddJobRunnerRegistrationTokenIDs(ids...)
 }
 
 // AddDNSVerificationIDs adds the "dns_verifications" edge to the DNSVerification entity by IDs.
-func (ou *OrganizationUpdate) AddDNSVerificationIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddDNSVerificationIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddDNSVerificationIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddDNSVerificationIDs(ids...)
+	return _u
 }
 
 // AddDNSVerifications adds the "dns_verifications" edges to the DNSVerification entity.
-func (ou *OrganizationUpdate) AddDNSVerifications(d ...*DNSVerification) *OrganizationUpdate {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *OrganizationUpdate) AddDNSVerifications(v ...*DNSVerification) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddDNSVerificationIDs(ids...)
+	return _u.AddDNSVerificationIDs(ids...)
 }
 
 // AddJobTemplateIDs adds the "job_templates" edge to the JobTemplate entity by IDs.
-func (ou *OrganizationUpdate) AddJobTemplateIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddJobTemplateIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddJobTemplateIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddJobTemplateIDs(ids...)
+	return _u
 }
 
 // AddJobTemplates adds the "job_templates" edges to the JobTemplate entity.
-func (ou *OrganizationUpdate) AddJobTemplates(j ...*JobTemplate) *OrganizationUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdate) AddJobTemplates(v ...*JobTemplate) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddJobTemplateIDs(ids...)
+	return _u.AddJobTemplateIDs(ids...)
 }
 
 // AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (ou *OrganizationUpdate) AddScheduledJobIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddScheduledJobIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddScheduledJobIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddScheduledJobIDs(ids...)
+	return _u
 }
 
 // AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (ou *OrganizationUpdate) AddScheduledJobs(s ...*ScheduledJob) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) AddScheduledJobs(v ...*ScheduledJob) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddScheduledJobIDs(ids...)
+	return _u.AddScheduledJobIDs(ids...)
 }
 
 // AddJobResultIDs adds the "job_results" edge to the JobResult entity by IDs.
-func (ou *OrganizationUpdate) AddJobResultIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddJobResultIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddJobResultIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddJobResultIDs(ids...)
+	return _u
 }
 
 // AddJobResults adds the "job_results" edges to the JobResult entity.
-func (ou *OrganizationUpdate) AddJobResults(j ...*JobResult) *OrganizationUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdate) AddJobResults(v ...*JobResult) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddJobResultIDs(ids...)
+	return _u.AddJobResultIDs(ids...)
 }
 
 // AddScheduledJobRunIDs adds the "scheduled_job_runs" edge to the ScheduledJobRun entity by IDs.
-func (ou *OrganizationUpdate) AddScheduledJobRunIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddScheduledJobRunIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddScheduledJobRunIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddScheduledJobRunIDs(ids...)
+	return _u
 }
 
 // AddScheduledJobRuns adds the "scheduled_job_runs" edges to the ScheduledJobRun entity.
-func (ou *OrganizationUpdate) AddScheduledJobRuns(s ...*ScheduledJobRun) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) AddScheduledJobRuns(v ...*ScheduledJobRun) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddScheduledJobRunIDs(ids...)
+	return _u.AddScheduledJobRunIDs(ids...)
 }
 
 // AddTrustCenterIDs adds the "trust_centers" edge to the TrustCenter entity by IDs.
-func (ou *OrganizationUpdate) AddTrustCenterIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddTrustCenterIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddTrustCenterIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddTrustCenterIDs(ids...)
+	return _u
 }
 
 // AddTrustCenters adds the "trust_centers" edges to the TrustCenter entity.
-func (ou *OrganizationUpdate) AddTrustCenters(t ...*TrustCenter) *OrganizationUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdate) AddTrustCenters(v ...*TrustCenter) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddTrustCenterIDs(ids...)
+	return _u.AddTrustCenterIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
-func (ou *OrganizationUpdate) AddAssetIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddAssetIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddAssetIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
 }
 
 // AddAssets adds the "assets" edges to the Asset entity.
-func (ou *OrganizationUpdate) AddAssets(a ...*Asset) *OrganizationUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdate) AddAssets(v ...*Asset) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddAssetIDs(ids...)
+	return _u.AddAssetIDs(ids...)
 }
 
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (ou *OrganizationUpdate) AddScanIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddScanIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddScanIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
 }
 
 // AddScans adds the "scans" edges to the Scan entity.
-func (ou *OrganizationUpdate) AddScans(s ...*Scan) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) AddScans(v ...*Scan) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddScanIDs(ids...)
+	return _u.AddScanIDs(ids...)
 }
 
 // AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
-func (ou *OrganizationUpdate) AddSubprocessorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddSubprocessorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddSubprocessorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddSubprocessorIDs(ids...)
+	return _u
 }
 
 // AddSubprocessors adds the "subprocessors" edges to the Subprocessor entity.
-func (ou *OrganizationUpdate) AddSubprocessors(s ...*Subprocessor) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) AddSubprocessors(v ...*Subprocessor) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddSubprocessorIDs(ids...)
+	return _u.AddSubprocessorIDs(ids...)
 }
 
 // AddExportIDs adds the "exports" edge to the Export entity by IDs.
-func (ou *OrganizationUpdate) AddExportIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddExportIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddExportIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddExportIDs(ids...)
+	return _u
 }
 
 // AddExports adds the "exports" edges to the Export entity.
-func (ou *OrganizationUpdate) AddExports(e ...*Export) *OrganizationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdate) AddExports(v ...*Export) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddExportIDs(ids...)
+	return _u.AddExportIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
-func (ou *OrganizationUpdate) AddMemberIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.AddMemberIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) AddMemberIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddMemberIDs(ids...)
+	return _u
 }
 
 // AddMembers adds the "members" edges to the OrgMembership entity.
-func (ou *OrganizationUpdate) AddMembers(o ...*OrgMembership) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) AddMembers(v ...*OrgMembership) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.AddMemberIDs(ids...)
+	return _u.AddMemberIDs(ids...)
 }
 
 // Mutation returns the OrganizationMutation object of the builder.
-func (ou *OrganizationUpdate) Mutation() *OrganizationMutation {
-	return ou.mutation
+func (_u *OrganizationUpdate) Mutation() *OrganizationMutation {
+	return _u.mutation
 }
 
 // ClearControlCreators clears all "control_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearControlCreators() *OrganizationUpdate {
-	ou.mutation.ClearControlCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearControlCreators() *OrganizationUpdate {
+	_u.mutation.ClearControlCreators()
+	return _u
 }
 
 // RemoveControlCreatorIDs removes the "control_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveControlCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveControlCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveControlCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveControlCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveControlCreators removes "control_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveControlCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveControlCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveControlCreatorIDs(ids...)
+	return _u.RemoveControlCreatorIDs(ids...)
 }
 
 // ClearControlImplementationCreators clears all "control_implementation_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearControlImplementationCreators() *OrganizationUpdate {
-	ou.mutation.ClearControlImplementationCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearControlImplementationCreators() *OrganizationUpdate {
+	_u.mutation.ClearControlImplementationCreators()
+	return _u
 }
 
 // RemoveControlImplementationCreatorIDs removes the "control_implementation_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveControlImplementationCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveControlImplementationCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveControlImplementationCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveControlImplementationCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveControlImplementationCreators removes "control_implementation_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveControlImplementationCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveControlImplementationCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveControlImplementationCreatorIDs(ids...)
+	return _u.RemoveControlImplementationCreatorIDs(ids...)
 }
 
 // ClearControlObjectiveCreators clears all "control_objective_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearControlObjectiveCreators() *OrganizationUpdate {
-	ou.mutation.ClearControlObjectiveCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearControlObjectiveCreators() *OrganizationUpdate {
+	_u.mutation.ClearControlObjectiveCreators()
+	return _u
 }
 
 // RemoveControlObjectiveCreatorIDs removes the "control_objective_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveControlObjectiveCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveControlObjectiveCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveControlObjectiveCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveControlObjectiveCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveControlObjectiveCreators removes "control_objective_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveControlObjectiveCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveControlObjectiveCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveControlObjectiveCreatorIDs(ids...)
+	return _u.RemoveControlObjectiveCreatorIDs(ids...)
 }
 
 // ClearEvidenceCreators clears all "evidence_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearEvidenceCreators() *OrganizationUpdate {
-	ou.mutation.ClearEvidenceCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearEvidenceCreators() *OrganizationUpdate {
+	_u.mutation.ClearEvidenceCreators()
+	return _u
 }
 
 // RemoveEvidenceCreatorIDs removes the "evidence_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveEvidenceCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveEvidenceCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveEvidenceCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveEvidenceCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveEvidenceCreators removes "evidence_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveEvidenceCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveEvidenceCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveEvidenceCreatorIDs(ids...)
+	return _u.RemoveEvidenceCreatorIDs(ids...)
 }
 
 // ClearGroupCreators clears all "group_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearGroupCreators() *OrganizationUpdate {
-	ou.mutation.ClearGroupCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearGroupCreators() *OrganizationUpdate {
+	_u.mutation.ClearGroupCreators()
+	return _u
 }
 
 // RemoveGroupCreatorIDs removes the "group_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveGroupCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveGroupCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveGroupCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveGroupCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveGroupCreators removes "group_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveGroupCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveGroupCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveGroupCreatorIDs(ids...)
+	return _u.RemoveGroupCreatorIDs(ids...)
 }
 
 // ClearInternalPolicyCreators clears all "internal_policy_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearInternalPolicyCreators() *OrganizationUpdate {
-	ou.mutation.ClearInternalPolicyCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearInternalPolicyCreators() *OrganizationUpdate {
+	_u.mutation.ClearInternalPolicyCreators()
+	return _u
 }
 
 // RemoveInternalPolicyCreatorIDs removes the "internal_policy_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveInternalPolicyCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveInternalPolicyCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveInternalPolicyCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveInternalPolicyCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveInternalPolicyCreators removes "internal_policy_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveInternalPolicyCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveInternalPolicyCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveInternalPolicyCreatorIDs(ids...)
+	return _u.RemoveInternalPolicyCreatorIDs(ids...)
 }
 
 // ClearMappedControlCreators clears all "mapped_control_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearMappedControlCreators() *OrganizationUpdate {
-	ou.mutation.ClearMappedControlCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearMappedControlCreators() *OrganizationUpdate {
+	_u.mutation.ClearMappedControlCreators()
+	return _u
 }
 
 // RemoveMappedControlCreatorIDs removes the "mapped_control_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveMappedControlCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveMappedControlCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveMappedControlCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveMappedControlCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveMappedControlCreators removes "mapped_control_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveMappedControlCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveMappedControlCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveMappedControlCreatorIDs(ids...)
+	return _u.RemoveMappedControlCreatorIDs(ids...)
 }
 
 // ClearNarrativeCreators clears all "narrative_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearNarrativeCreators() *OrganizationUpdate {
-	ou.mutation.ClearNarrativeCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearNarrativeCreators() *OrganizationUpdate {
+	_u.mutation.ClearNarrativeCreators()
+	return _u
 }
 
 // RemoveNarrativeCreatorIDs removes the "narrative_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveNarrativeCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveNarrativeCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveNarrativeCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveNarrativeCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveNarrativeCreators removes "narrative_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveNarrativeCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveNarrativeCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveNarrativeCreatorIDs(ids...)
+	return _u.RemoveNarrativeCreatorIDs(ids...)
 }
 
 // ClearProcedureCreators clears all "procedure_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearProcedureCreators() *OrganizationUpdate {
-	ou.mutation.ClearProcedureCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearProcedureCreators() *OrganizationUpdate {
+	_u.mutation.ClearProcedureCreators()
+	return _u
 }
 
 // RemoveProcedureCreatorIDs removes the "procedure_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveProcedureCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveProcedureCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveProcedureCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveProcedureCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveProcedureCreators removes "procedure_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveProcedureCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveProcedureCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveProcedureCreatorIDs(ids...)
+	return _u.RemoveProcedureCreatorIDs(ids...)
 }
 
 // ClearProgramCreators clears all "program_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearProgramCreators() *OrganizationUpdate {
-	ou.mutation.ClearProgramCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearProgramCreators() *OrganizationUpdate {
+	_u.mutation.ClearProgramCreators()
+	return _u
 }
 
 // RemoveProgramCreatorIDs removes the "program_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveProgramCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveProgramCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveProgramCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveProgramCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveProgramCreators removes "program_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveProgramCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveProgramCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveProgramCreatorIDs(ids...)
+	return _u.RemoveProgramCreatorIDs(ids...)
 }
 
 // ClearRiskCreators clears all "risk_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearRiskCreators() *OrganizationUpdate {
-	ou.mutation.ClearRiskCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearRiskCreators() *OrganizationUpdate {
+	_u.mutation.ClearRiskCreators()
+	return _u
 }
 
 // RemoveRiskCreatorIDs removes the "risk_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveRiskCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveRiskCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveRiskCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveRiskCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveRiskCreators removes "risk_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveRiskCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveRiskCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveRiskCreatorIDs(ids...)
+	return _u.RemoveRiskCreatorIDs(ids...)
 }
 
 // ClearScheduledJobCreators clears all "scheduled_job_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearScheduledJobCreators() *OrganizationUpdate {
-	ou.mutation.ClearScheduledJobCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearScheduledJobCreators() *OrganizationUpdate {
+	_u.mutation.ClearScheduledJobCreators()
+	return _u
 }
 
 // RemoveScheduledJobCreatorIDs removes the "scheduled_job_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveScheduledJobCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveScheduledJobCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveScheduledJobCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveScheduledJobCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveScheduledJobCreators removes "scheduled_job_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveScheduledJobCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveScheduledJobCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveScheduledJobCreatorIDs(ids...)
+	return _u.RemoveScheduledJobCreatorIDs(ids...)
 }
 
 // ClearStandardCreators clears all "standard_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearStandardCreators() *OrganizationUpdate {
-	ou.mutation.ClearStandardCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearStandardCreators() *OrganizationUpdate {
+	_u.mutation.ClearStandardCreators()
+	return _u
 }
 
 // RemoveStandardCreatorIDs removes the "standard_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveStandardCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveStandardCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveStandardCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveStandardCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveStandardCreators removes "standard_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveStandardCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveStandardCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveStandardCreatorIDs(ids...)
+	return _u.RemoveStandardCreatorIDs(ids...)
 }
 
 // ClearTemplateCreators clears all "template_creators" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearTemplateCreators() *OrganizationUpdate {
-	ou.mutation.ClearTemplateCreators()
-	return ou
+func (_u *OrganizationUpdate) ClearTemplateCreators() *OrganizationUpdate {
+	_u.mutation.ClearTemplateCreators()
+	return _u
 }
 
 // RemoveTemplateCreatorIDs removes the "template_creators" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveTemplateCreatorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveTemplateCreatorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveTemplateCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveTemplateCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveTemplateCreators removes "template_creators" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveTemplateCreators(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveTemplateCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveTemplateCreatorIDs(ids...)
+	return _u.RemoveTemplateCreatorIDs(ids...)
 }
 
 // ClearChildren clears all "children" edges to the Organization entity.
-func (ou *OrganizationUpdate) ClearChildren() *OrganizationUpdate {
-	ou.mutation.ClearChildren()
-	return ou
+func (_u *OrganizationUpdate) ClearChildren() *OrganizationUpdate {
+	_u.mutation.ClearChildren()
+	return _u
 }
 
 // RemoveChildIDs removes the "children" edge to Organization entities by IDs.
-func (ou *OrganizationUpdate) RemoveChildIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveChildIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveChildIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveChildIDs(ids...)
+	return _u
 }
 
 // RemoveChildren removes "children" edges to Organization entities.
-func (ou *OrganizationUpdate) RemoveChildren(o ...*Organization) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) RemoveChildren(v ...*Organization) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveChildIDs(ids...)
+	return _u.RemoveChildIDs(ids...)
 }
 
 // ClearSetting clears the "setting" edge to the OrganizationSetting entity.
-func (ou *OrganizationUpdate) ClearSetting() *OrganizationUpdate {
-	ou.mutation.ClearSetting()
-	return ou
+func (_u *OrganizationUpdate) ClearSetting() *OrganizationUpdate {
+	_u.mutation.ClearSetting()
+	return _u
 }
 
 // ClearPersonalAccessTokens clears all "personal_access_tokens" edges to the PersonalAccessToken entity.
-func (ou *OrganizationUpdate) ClearPersonalAccessTokens() *OrganizationUpdate {
-	ou.mutation.ClearPersonalAccessTokens()
-	return ou
+func (_u *OrganizationUpdate) ClearPersonalAccessTokens() *OrganizationUpdate {
+	_u.mutation.ClearPersonalAccessTokens()
+	return _u
 }
 
 // RemovePersonalAccessTokenIDs removes the "personal_access_tokens" edge to PersonalAccessToken entities by IDs.
-func (ou *OrganizationUpdate) RemovePersonalAccessTokenIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemovePersonalAccessTokenIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemovePersonalAccessTokenIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemovePersonalAccessTokenIDs(ids...)
+	return _u
 }
 
 // RemovePersonalAccessTokens removes "personal_access_tokens" edges to PersonalAccessToken entities.
-func (ou *OrganizationUpdate) RemovePersonalAccessTokens(p ...*PersonalAccessToken) *OrganizationUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdate) RemovePersonalAccessTokens(v ...*PersonalAccessToken) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemovePersonalAccessTokenIDs(ids...)
+	return _u.RemovePersonalAccessTokenIDs(ids...)
 }
 
 // ClearAPITokens clears all "api_tokens" edges to the APIToken entity.
-func (ou *OrganizationUpdate) ClearAPITokens() *OrganizationUpdate {
-	ou.mutation.ClearAPITokens()
-	return ou
+func (_u *OrganizationUpdate) ClearAPITokens() *OrganizationUpdate {
+	_u.mutation.ClearAPITokens()
+	return _u
 }
 
 // RemoveAPITokenIDs removes the "api_tokens" edge to APIToken entities by IDs.
-func (ou *OrganizationUpdate) RemoveAPITokenIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveAPITokenIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveAPITokenIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveAPITokenIDs(ids...)
+	return _u
 }
 
 // RemoveAPITokens removes "api_tokens" edges to APIToken entities.
-func (ou *OrganizationUpdate) RemoveAPITokens(a ...*APIToken) *OrganizationUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdate) RemoveAPITokens(v ...*APIToken) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveAPITokenIDs(ids...)
+	return _u.RemoveAPITokenIDs(ids...)
 }
 
 // ClearUsers clears all "users" edges to the User entity.
-func (ou *OrganizationUpdate) ClearUsers() *OrganizationUpdate {
-	ou.mutation.ClearUsers()
-	return ou
+func (_u *OrganizationUpdate) ClearUsers() *OrganizationUpdate {
+	_u.mutation.ClearUsers()
+	return _u
 }
 
 // RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (ou *OrganizationUpdate) RemoveUserIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveUserIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveUserIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveUserIDs(ids...)
+	return _u
 }
 
 // RemoveUsers removes "users" edges to User entities.
-func (ou *OrganizationUpdate) RemoveUsers(u ...*User) *OrganizationUpdate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *OrganizationUpdate) RemoveUsers(v ...*User) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveUserIDs(ids...)
+	return _u.RemoveUserIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (ou *OrganizationUpdate) ClearFiles() *OrganizationUpdate {
-	ou.mutation.ClearFiles()
-	return ou
+func (_u *OrganizationUpdate) ClearFiles() *OrganizationUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (ou *OrganizationUpdate) RemoveFileIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveFileIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveFileIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (ou *OrganizationUpdate) RemoveFiles(f ...*File) *OrganizationUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *OrganizationUpdate) RemoveFiles(v ...*File) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (ou *OrganizationUpdate) ClearEvents() *OrganizationUpdate {
-	ou.mutation.ClearEvents()
-	return ou
+func (_u *OrganizationUpdate) ClearEvents() *OrganizationUpdate {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (ou *OrganizationUpdate) RemoveEventIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveEventIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveEventIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (ou *OrganizationUpdate) RemoveEvents(e ...*Event) *OrganizationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdate) RemoveEvents(v ...*Event) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // ClearSecrets clears all "secrets" edges to the Hush entity.
-func (ou *OrganizationUpdate) ClearSecrets() *OrganizationUpdate {
-	ou.mutation.ClearSecrets()
-	return ou
+func (_u *OrganizationUpdate) ClearSecrets() *OrganizationUpdate {
+	_u.mutation.ClearSecrets()
+	return _u
 }
 
 // RemoveSecretIDs removes the "secrets" edge to Hush entities by IDs.
-func (ou *OrganizationUpdate) RemoveSecretIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveSecretIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveSecretIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveSecretIDs(ids...)
+	return _u
 }
 
 // RemoveSecrets removes "secrets" edges to Hush entities.
-func (ou *OrganizationUpdate) RemoveSecrets(h ...*Hush) *OrganizationUpdate {
-	ids := make([]string, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
+func (_u *OrganizationUpdate) RemoveSecrets(v ...*Hush) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveSecretIDs(ids...)
+	return _u.RemoveSecretIDs(ids...)
 }
 
 // ClearAvatarFile clears the "avatar_file" edge to the File entity.
-func (ou *OrganizationUpdate) ClearAvatarFile() *OrganizationUpdate {
-	ou.mutation.ClearAvatarFile()
-	return ou
+func (_u *OrganizationUpdate) ClearAvatarFile() *OrganizationUpdate {
+	_u.mutation.ClearAvatarFile()
+	return _u
 }
 
 // ClearGroups clears all "groups" edges to the Group entity.
-func (ou *OrganizationUpdate) ClearGroups() *OrganizationUpdate {
-	ou.mutation.ClearGroups()
-	return ou
+func (_u *OrganizationUpdate) ClearGroups() *OrganizationUpdate {
+	_u.mutation.ClearGroups()
+	return _u
 }
 
 // RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
-func (ou *OrganizationUpdate) RemoveGroupIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveGroupIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveGroupIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveGroupIDs(ids...)
+	return _u
 }
 
 // RemoveGroups removes "groups" edges to Group entities.
-func (ou *OrganizationUpdate) RemoveGroups(g ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdate) RemoveGroups(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveGroupIDs(ids...)
+	return _u.RemoveGroupIDs(ids...)
 }
 
 // ClearTemplates clears all "templates" edges to the Template entity.
-func (ou *OrganizationUpdate) ClearTemplates() *OrganizationUpdate {
-	ou.mutation.ClearTemplates()
-	return ou
+func (_u *OrganizationUpdate) ClearTemplates() *OrganizationUpdate {
+	_u.mutation.ClearTemplates()
+	return _u
 }
 
 // RemoveTemplateIDs removes the "templates" edge to Template entities by IDs.
-func (ou *OrganizationUpdate) RemoveTemplateIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveTemplateIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveTemplateIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveTemplateIDs(ids...)
+	return _u
 }
 
 // RemoveTemplates removes "templates" edges to Template entities.
-func (ou *OrganizationUpdate) RemoveTemplates(t ...*Template) *OrganizationUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdate) RemoveTemplates(v ...*Template) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveTemplateIDs(ids...)
+	return _u.RemoveTemplateIDs(ids...)
 }
 
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
-func (ou *OrganizationUpdate) ClearIntegrations() *OrganizationUpdate {
-	ou.mutation.ClearIntegrations()
-	return ou
+func (_u *OrganizationUpdate) ClearIntegrations() *OrganizationUpdate {
+	_u.mutation.ClearIntegrations()
+	return _u
 }
 
 // RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
-func (ou *OrganizationUpdate) RemoveIntegrationIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveIntegrationIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveIntegrationIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
 }
 
 // RemoveIntegrations removes "integrations" edges to Integration entities.
-func (ou *OrganizationUpdate) RemoveIntegrations(i ...*Integration) *OrganizationUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdate) RemoveIntegrations(v ...*Integration) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveIntegrationIDs(ids...)
+	return _u.RemoveIntegrationIDs(ids...)
 }
 
 // ClearDocuments clears all "documents" edges to the DocumentData entity.
-func (ou *OrganizationUpdate) ClearDocuments() *OrganizationUpdate {
-	ou.mutation.ClearDocuments()
-	return ou
+func (_u *OrganizationUpdate) ClearDocuments() *OrganizationUpdate {
+	_u.mutation.ClearDocuments()
+	return _u
 }
 
 // RemoveDocumentIDs removes the "documents" edge to DocumentData entities by IDs.
-func (ou *OrganizationUpdate) RemoveDocumentIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveDocumentIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveDocumentIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveDocumentIDs(ids...)
+	return _u
 }
 
 // RemoveDocuments removes "documents" edges to DocumentData entities.
-func (ou *OrganizationUpdate) RemoveDocuments(d ...*DocumentData) *OrganizationUpdate {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *OrganizationUpdate) RemoveDocuments(v ...*DocumentData) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveDocumentIDs(ids...)
+	return _u.RemoveDocumentIDs(ids...)
 }
 
 // ClearOrgSubscriptions clears all "org_subscriptions" edges to the OrgSubscription entity.
-func (ou *OrganizationUpdate) ClearOrgSubscriptions() *OrganizationUpdate {
-	ou.mutation.ClearOrgSubscriptions()
-	return ou
+func (_u *OrganizationUpdate) ClearOrgSubscriptions() *OrganizationUpdate {
+	_u.mutation.ClearOrgSubscriptions()
+	return _u
 }
 
 // RemoveOrgSubscriptionIDs removes the "org_subscriptions" edge to OrgSubscription entities by IDs.
-func (ou *OrganizationUpdate) RemoveOrgSubscriptionIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveOrgSubscriptionIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveOrgSubscriptionIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveOrgSubscriptionIDs(ids...)
+	return _u
 }
 
 // RemoveOrgSubscriptions removes "org_subscriptions" edges to OrgSubscription entities.
-func (ou *OrganizationUpdate) RemoveOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) RemoveOrgSubscriptions(v ...*OrgSubscription) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveOrgSubscriptionIDs(ids...)
+	return _u.RemoveOrgSubscriptionIDs(ids...)
 }
 
 // ClearOrgProducts clears all "org_products" edges to the OrgProduct entity.
-func (ou *OrganizationUpdate) ClearOrgProducts() *OrganizationUpdate {
-	ou.mutation.ClearOrgProducts()
-	return ou
+func (_u *OrganizationUpdate) ClearOrgProducts() *OrganizationUpdate {
+	_u.mutation.ClearOrgProducts()
+	return _u
 }
 
 // RemoveOrgProductIDs removes the "org_products" edge to OrgProduct entities by IDs.
-func (ou *OrganizationUpdate) RemoveOrgProductIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveOrgProductIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveOrgProductIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveOrgProductIDs(ids...)
+	return _u
 }
 
 // RemoveOrgProducts removes "org_products" edges to OrgProduct entities.
-func (ou *OrganizationUpdate) RemoveOrgProducts(o ...*OrgProduct) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) RemoveOrgProducts(v ...*OrgProduct) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveOrgProductIDs(ids...)
+	return _u.RemoveOrgProductIDs(ids...)
 }
 
 // ClearOrgPrices clears all "org_prices" edges to the OrgPrice entity.
-func (ou *OrganizationUpdate) ClearOrgPrices() *OrganizationUpdate {
-	ou.mutation.ClearOrgPrices()
-	return ou
+func (_u *OrganizationUpdate) ClearOrgPrices() *OrganizationUpdate {
+	_u.mutation.ClearOrgPrices()
+	return _u
 }
 
 // RemoveOrgPriceIDs removes the "org_prices" edge to OrgPrice entities by IDs.
-func (ou *OrganizationUpdate) RemoveOrgPriceIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveOrgPriceIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveOrgPriceIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveOrgPriceIDs(ids...)
+	return _u
 }
 
 // RemoveOrgPrices removes "org_prices" edges to OrgPrice entities.
-func (ou *OrganizationUpdate) RemoveOrgPrices(o ...*OrgPrice) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) RemoveOrgPrices(v ...*OrgPrice) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveOrgPriceIDs(ids...)
+	return _u.RemoveOrgPriceIDs(ids...)
 }
 
 // ClearOrgModules clears all "org_modules" edges to the OrgModule entity.
-func (ou *OrganizationUpdate) ClearOrgModules() *OrganizationUpdate {
-	ou.mutation.ClearOrgModules()
-	return ou
+func (_u *OrganizationUpdate) ClearOrgModules() *OrganizationUpdate {
+	_u.mutation.ClearOrgModules()
+	return _u
 }
 
 // RemoveOrgModuleIDs removes the "org_modules" edge to OrgModule entities by IDs.
-func (ou *OrganizationUpdate) RemoveOrgModuleIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveOrgModuleIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveOrgModuleIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveOrgModuleIDs(ids...)
+	return _u
 }
 
 // RemoveOrgModules removes "org_modules" edges to OrgModule entities.
-func (ou *OrganizationUpdate) RemoveOrgModules(o ...*OrgModule) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) RemoveOrgModules(v ...*OrgModule) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveOrgModuleIDs(ids...)
+	return _u.RemoveOrgModuleIDs(ids...)
 }
 
 // ClearInvites clears all "invites" edges to the Invite entity.
-func (ou *OrganizationUpdate) ClearInvites() *OrganizationUpdate {
-	ou.mutation.ClearInvites()
-	return ou
+func (_u *OrganizationUpdate) ClearInvites() *OrganizationUpdate {
+	_u.mutation.ClearInvites()
+	return _u
 }
 
 // RemoveInviteIDs removes the "invites" edge to Invite entities by IDs.
-func (ou *OrganizationUpdate) RemoveInviteIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveInviteIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveInviteIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveInviteIDs(ids...)
+	return _u
 }
 
 // RemoveInvites removes "invites" edges to Invite entities.
-func (ou *OrganizationUpdate) RemoveInvites(i ...*Invite) *OrganizationUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdate) RemoveInvites(v ...*Invite) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveInviteIDs(ids...)
+	return _u.RemoveInviteIDs(ids...)
 }
 
 // ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
-func (ou *OrganizationUpdate) ClearSubscribers() *OrganizationUpdate {
-	ou.mutation.ClearSubscribers()
-	return ou
+func (_u *OrganizationUpdate) ClearSubscribers() *OrganizationUpdate {
+	_u.mutation.ClearSubscribers()
+	return _u
 }
 
 // RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
-func (ou *OrganizationUpdate) RemoveSubscriberIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveSubscriberIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveSubscriberIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveSubscriberIDs(ids...)
+	return _u
 }
 
 // RemoveSubscribers removes "subscribers" edges to Subscriber entities.
-func (ou *OrganizationUpdate) RemoveSubscribers(s ...*Subscriber) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) RemoveSubscribers(v ...*Subscriber) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveSubscriberIDs(ids...)
+	return _u.RemoveSubscriberIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (ou *OrganizationUpdate) ClearEntities() *OrganizationUpdate {
-	ou.mutation.ClearEntities()
-	return ou
+func (_u *OrganizationUpdate) ClearEntities() *OrganizationUpdate {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (ou *OrganizationUpdate) RemoveEntityIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveEntityIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveEntityIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (ou *OrganizationUpdate) RemoveEntities(e ...*Entity) *OrganizationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdate) RemoveEntities(v ...*Entity) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // ClearEntityTypes clears all "entity_types" edges to the EntityType entity.
-func (ou *OrganizationUpdate) ClearEntityTypes() *OrganizationUpdate {
-	ou.mutation.ClearEntityTypes()
-	return ou
+func (_u *OrganizationUpdate) ClearEntityTypes() *OrganizationUpdate {
+	_u.mutation.ClearEntityTypes()
+	return _u
 }
 
 // RemoveEntityTypeIDs removes the "entity_types" edge to EntityType entities by IDs.
-func (ou *OrganizationUpdate) RemoveEntityTypeIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveEntityTypeIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveEntityTypeIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveEntityTypeIDs(ids...)
+	return _u
 }
 
 // RemoveEntityTypes removes "entity_types" edges to EntityType entities.
-func (ou *OrganizationUpdate) RemoveEntityTypes(e ...*EntityType) *OrganizationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdate) RemoveEntityTypes(v ...*EntityType) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveEntityTypeIDs(ids...)
+	return _u.RemoveEntityTypeIDs(ids...)
 }
 
 // ClearContacts clears all "contacts" edges to the Contact entity.
-func (ou *OrganizationUpdate) ClearContacts() *OrganizationUpdate {
-	ou.mutation.ClearContacts()
-	return ou
+func (_u *OrganizationUpdate) ClearContacts() *OrganizationUpdate {
+	_u.mutation.ClearContacts()
+	return _u
 }
 
 // RemoveContactIDs removes the "contacts" edge to Contact entities by IDs.
-func (ou *OrganizationUpdate) RemoveContactIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveContactIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveContactIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveContactIDs(ids...)
+	return _u
 }
 
 // RemoveContacts removes "contacts" edges to Contact entities.
-func (ou *OrganizationUpdate) RemoveContacts(c ...*Contact) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdate) RemoveContacts(v ...*Contact) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveContactIDs(ids...)
+	return _u.RemoveContactIDs(ids...)
 }
 
 // ClearNotes clears all "notes" edges to the Note entity.
-func (ou *OrganizationUpdate) ClearNotes() *OrganizationUpdate {
-	ou.mutation.ClearNotes()
-	return ou
+func (_u *OrganizationUpdate) ClearNotes() *OrganizationUpdate {
+	_u.mutation.ClearNotes()
+	return _u
 }
 
 // RemoveNoteIDs removes the "notes" edge to Note entities by IDs.
-func (ou *OrganizationUpdate) RemoveNoteIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveNoteIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveNoteIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveNoteIDs(ids...)
+	return _u
 }
 
 // RemoveNotes removes "notes" edges to Note entities.
-func (ou *OrganizationUpdate) RemoveNotes(n ...*Note) *OrganizationUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *OrganizationUpdate) RemoveNotes(v ...*Note) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveNoteIDs(ids...)
+	return _u.RemoveNoteIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
-func (ou *OrganizationUpdate) ClearTasks() *OrganizationUpdate {
-	ou.mutation.ClearTasks()
-	return ou
+func (_u *OrganizationUpdate) ClearTasks() *OrganizationUpdate {
+	_u.mutation.ClearTasks()
+	return _u
 }
 
 // RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
-func (ou *OrganizationUpdate) RemoveTaskIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveTaskIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveTaskIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
 }
 
 // RemoveTasks removes "tasks" edges to Task entities.
-func (ou *OrganizationUpdate) RemoveTasks(t ...*Task) *OrganizationUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdate) RemoveTasks(v ...*Task) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveTaskIDs(ids...)
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (ou *OrganizationUpdate) ClearPrograms() *OrganizationUpdate {
-	ou.mutation.ClearPrograms()
-	return ou
+func (_u *OrganizationUpdate) ClearPrograms() *OrganizationUpdate {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (ou *OrganizationUpdate) RemoveProgramIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveProgramIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveProgramIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (ou *OrganizationUpdate) RemovePrograms(p ...*Program) *OrganizationUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdate) RemovePrograms(v ...*Program) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (ou *OrganizationUpdate) ClearProcedures() *OrganizationUpdate {
-	ou.mutation.ClearProcedures()
-	return ou
+func (_u *OrganizationUpdate) ClearProcedures() *OrganizationUpdate {
+	_u.mutation.ClearProcedures()
+	return _u
 }
 
 // RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (ou *OrganizationUpdate) RemoveProcedureIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveProcedureIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveProcedureIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
 }
 
 // RemoveProcedures removes "procedures" edges to Procedure entities.
-func (ou *OrganizationUpdate) RemoveProcedures(p ...*Procedure) *OrganizationUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdate) RemoveProcedures(v ...*Procedure) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveProcedureIDs(ids...)
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
-func (ou *OrganizationUpdate) ClearInternalPolicies() *OrganizationUpdate {
-	ou.mutation.ClearInternalPolicies()
-	return ou
+func (_u *OrganizationUpdate) ClearInternalPolicies() *OrganizationUpdate {
+	_u.mutation.ClearInternalPolicies()
+	return _u
 }
 
 // RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
-func (ou *OrganizationUpdate) RemoveInternalPolicyIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveInternalPolicyIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveInternalPolicyIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
 }
 
 // RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
-func (ou *OrganizationUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *OrganizationUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdate) RemoveInternalPolicies(v ...*InternalPolicy) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveInternalPolicyIDs(ids...)
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearRisks clears all "risks" edges to the Risk entity.
-func (ou *OrganizationUpdate) ClearRisks() *OrganizationUpdate {
-	ou.mutation.ClearRisks()
-	return ou
+func (_u *OrganizationUpdate) ClearRisks() *OrganizationUpdate {
+	_u.mutation.ClearRisks()
+	return _u
 }
 
 // RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
-func (ou *OrganizationUpdate) RemoveRiskIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveRiskIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveRiskIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
 }
 
 // RemoveRisks removes "risks" edges to Risk entities.
-func (ou *OrganizationUpdate) RemoveRisks(r ...*Risk) *OrganizationUpdate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *OrganizationUpdate) RemoveRisks(v ...*Risk) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveRiskIDs(ids...)
+	return _u.RemoveRiskIDs(ids...)
 }
 
 // ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
-func (ou *OrganizationUpdate) ClearControlObjectives() *OrganizationUpdate {
-	ou.mutation.ClearControlObjectives()
-	return ou
+func (_u *OrganizationUpdate) ClearControlObjectives() *OrganizationUpdate {
+	_u.mutation.ClearControlObjectives()
+	return _u
 }
 
 // RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
-func (ou *OrganizationUpdate) RemoveControlObjectiveIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveControlObjectiveIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveControlObjectiveIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveControlObjectiveIDs(ids...)
+	return _u
 }
 
 // RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
-func (ou *OrganizationUpdate) RemoveControlObjectives(c ...*ControlObjective) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdate) RemoveControlObjectives(v ...*ControlObjective) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveControlObjectiveIDs(ids...)
+	return _u.RemoveControlObjectiveIDs(ids...)
 }
 
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
-func (ou *OrganizationUpdate) ClearNarratives() *OrganizationUpdate {
-	ou.mutation.ClearNarratives()
-	return ou
+func (_u *OrganizationUpdate) ClearNarratives() *OrganizationUpdate {
+	_u.mutation.ClearNarratives()
+	return _u
 }
 
 // RemoveNarrativeIDs removes the "narratives" edge to Narrative entities by IDs.
-func (ou *OrganizationUpdate) RemoveNarrativeIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveNarrativeIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveNarrativeIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveNarrativeIDs(ids...)
+	return _u
 }
 
 // RemoveNarratives removes "narratives" edges to Narrative entities.
-func (ou *OrganizationUpdate) RemoveNarratives(n ...*Narrative) *OrganizationUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *OrganizationUpdate) RemoveNarratives(v ...*Narrative) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveNarrativeIDs(ids...)
+	return _u.RemoveNarrativeIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (ou *OrganizationUpdate) ClearControls() *OrganizationUpdate {
-	ou.mutation.ClearControls()
-	return ou
+func (_u *OrganizationUpdate) ClearControls() *OrganizationUpdate {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (ou *OrganizationUpdate) RemoveControlIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveControlIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveControlIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (ou *OrganizationUpdate) RemoveControls(c ...*Control) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdate) RemoveControls(v ...*Control) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (ou *OrganizationUpdate) ClearSubcontrols() *OrganizationUpdate {
-	ou.mutation.ClearSubcontrols()
-	return ou
+func (_u *OrganizationUpdate) ClearSubcontrols() *OrganizationUpdate {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (ou *OrganizationUpdate) RemoveSubcontrolIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveSubcontrolIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveSubcontrolIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (ou *OrganizationUpdate) RemoveSubcontrols(s ...*Subcontrol) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) RemoveSubcontrols(v ...*Subcontrol) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
-func (ou *OrganizationUpdate) ClearControlImplementations() *OrganizationUpdate {
-	ou.mutation.ClearControlImplementations()
-	return ou
+func (_u *OrganizationUpdate) ClearControlImplementations() *OrganizationUpdate {
+	_u.mutation.ClearControlImplementations()
+	return _u
 }
 
 // RemoveControlImplementationIDs removes the "control_implementations" edge to ControlImplementation entities by IDs.
-func (ou *OrganizationUpdate) RemoveControlImplementationIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveControlImplementationIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveControlImplementationIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveControlImplementationIDs(ids...)
+	return _u
 }
 
 // RemoveControlImplementations removes "control_implementations" edges to ControlImplementation entities.
-func (ou *OrganizationUpdate) RemoveControlImplementations(c ...*ControlImplementation) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdate) RemoveControlImplementations(v ...*ControlImplementation) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveControlImplementationIDs(ids...)
+	return _u.RemoveControlImplementationIDs(ids...)
 }
 
 // ClearMappedControls clears all "mapped_controls" edges to the MappedControl entity.
-func (ou *OrganizationUpdate) ClearMappedControls() *OrganizationUpdate {
-	ou.mutation.ClearMappedControls()
-	return ou
+func (_u *OrganizationUpdate) ClearMappedControls() *OrganizationUpdate {
+	_u.mutation.ClearMappedControls()
+	return _u
 }
 
 // RemoveMappedControlIDs removes the "mapped_controls" edge to MappedControl entities by IDs.
-func (ou *OrganizationUpdate) RemoveMappedControlIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveMappedControlIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveMappedControlIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveMappedControlIDs(ids...)
+	return _u
 }
 
 // RemoveMappedControls removes "mapped_controls" edges to MappedControl entities.
-func (ou *OrganizationUpdate) RemoveMappedControls(m ...*MappedControl) *OrganizationUpdate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *OrganizationUpdate) RemoveMappedControls(v ...*MappedControl) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveMappedControlIDs(ids...)
+	return _u.RemoveMappedControlIDs(ids...)
 }
 
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
-func (ou *OrganizationUpdate) ClearEvidence() *OrganizationUpdate {
-	ou.mutation.ClearEvidence()
-	return ou
+func (_u *OrganizationUpdate) ClearEvidence() *OrganizationUpdate {
+	_u.mutation.ClearEvidence()
+	return _u
 }
 
 // RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
-func (ou *OrganizationUpdate) RemoveEvidenceIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveEvidenceIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveEvidenceIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveEvidenceIDs(ids...)
+	return _u
 }
 
 // RemoveEvidence removes "evidence" edges to Evidence entities.
-func (ou *OrganizationUpdate) RemoveEvidence(e ...*Evidence) *OrganizationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdate) RemoveEvidence(v ...*Evidence) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveEvidenceIDs(ids...)
+	return _u.RemoveEvidenceIDs(ids...)
 }
 
 // ClearStandards clears all "standards" edges to the Standard entity.
-func (ou *OrganizationUpdate) ClearStandards() *OrganizationUpdate {
-	ou.mutation.ClearStandards()
-	return ou
+func (_u *OrganizationUpdate) ClearStandards() *OrganizationUpdate {
+	_u.mutation.ClearStandards()
+	return _u
 }
 
 // RemoveStandardIDs removes the "standards" edge to Standard entities by IDs.
-func (ou *OrganizationUpdate) RemoveStandardIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveStandardIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveStandardIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveStandardIDs(ids...)
+	return _u
 }
 
 // RemoveStandards removes "standards" edges to Standard entities.
-func (ou *OrganizationUpdate) RemoveStandards(s ...*Standard) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) RemoveStandards(v ...*Standard) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveStandardIDs(ids...)
+	return _u.RemoveStandardIDs(ids...)
 }
 
 // ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
-func (ou *OrganizationUpdate) ClearActionPlans() *OrganizationUpdate {
-	ou.mutation.ClearActionPlans()
-	return ou
+func (_u *OrganizationUpdate) ClearActionPlans() *OrganizationUpdate {
+	_u.mutation.ClearActionPlans()
+	return _u
 }
 
 // RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
-func (ou *OrganizationUpdate) RemoveActionPlanIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveActionPlanIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveActionPlanIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveActionPlanIDs(ids...)
+	return _u
 }
 
 // RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
-func (ou *OrganizationUpdate) RemoveActionPlans(a ...*ActionPlan) *OrganizationUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdate) RemoveActionPlans(v ...*ActionPlan) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveActionPlanIDs(ids...)
+	return _u.RemoveActionPlanIDs(ids...)
 }
 
 // ClearCustomDomains clears all "custom_domains" edges to the CustomDomain entity.
-func (ou *OrganizationUpdate) ClearCustomDomains() *OrganizationUpdate {
-	ou.mutation.ClearCustomDomains()
-	return ou
+func (_u *OrganizationUpdate) ClearCustomDomains() *OrganizationUpdate {
+	_u.mutation.ClearCustomDomains()
+	return _u
 }
 
 // RemoveCustomDomainIDs removes the "custom_domains" edge to CustomDomain entities by IDs.
-func (ou *OrganizationUpdate) RemoveCustomDomainIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveCustomDomainIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveCustomDomainIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveCustomDomainIDs(ids...)
+	return _u
 }
 
 // RemoveCustomDomains removes "custom_domains" edges to CustomDomain entities.
-func (ou *OrganizationUpdate) RemoveCustomDomains(c ...*CustomDomain) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdate) RemoveCustomDomains(v ...*CustomDomain) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveCustomDomainIDs(ids...)
+	return _u.RemoveCustomDomainIDs(ids...)
 }
 
 // ClearJobRunners clears all "job_runners" edges to the JobRunner entity.
-func (ou *OrganizationUpdate) ClearJobRunners() *OrganizationUpdate {
-	ou.mutation.ClearJobRunners()
-	return ou
+func (_u *OrganizationUpdate) ClearJobRunners() *OrganizationUpdate {
+	_u.mutation.ClearJobRunners()
+	return _u
 }
 
 // RemoveJobRunnerIDs removes the "job_runners" edge to JobRunner entities by IDs.
-func (ou *OrganizationUpdate) RemoveJobRunnerIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveJobRunnerIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveJobRunnerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveJobRunnerIDs(ids...)
+	return _u
 }
 
 // RemoveJobRunners removes "job_runners" edges to JobRunner entities.
-func (ou *OrganizationUpdate) RemoveJobRunners(j ...*JobRunner) *OrganizationUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdate) RemoveJobRunners(v ...*JobRunner) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveJobRunnerIDs(ids...)
+	return _u.RemoveJobRunnerIDs(ids...)
 }
 
 // ClearJobRunnerTokens clears all "job_runner_tokens" edges to the JobRunnerToken entity.
-func (ou *OrganizationUpdate) ClearJobRunnerTokens() *OrganizationUpdate {
-	ou.mutation.ClearJobRunnerTokens()
-	return ou
+func (_u *OrganizationUpdate) ClearJobRunnerTokens() *OrganizationUpdate {
+	_u.mutation.ClearJobRunnerTokens()
+	return _u
 }
 
 // RemoveJobRunnerTokenIDs removes the "job_runner_tokens" edge to JobRunnerToken entities by IDs.
-func (ou *OrganizationUpdate) RemoveJobRunnerTokenIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveJobRunnerTokenIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveJobRunnerTokenIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveJobRunnerTokenIDs(ids...)
+	return _u
 }
 
 // RemoveJobRunnerTokens removes "job_runner_tokens" edges to JobRunnerToken entities.
-func (ou *OrganizationUpdate) RemoveJobRunnerTokens(j ...*JobRunnerToken) *OrganizationUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdate) RemoveJobRunnerTokens(v ...*JobRunnerToken) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveJobRunnerTokenIDs(ids...)
+	return _u.RemoveJobRunnerTokenIDs(ids...)
 }
 
 // ClearJobRunnerRegistrationTokens clears all "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
-func (ou *OrganizationUpdate) ClearJobRunnerRegistrationTokens() *OrganizationUpdate {
-	ou.mutation.ClearJobRunnerRegistrationTokens()
-	return ou
+func (_u *OrganizationUpdate) ClearJobRunnerRegistrationTokens() *OrganizationUpdate {
+	_u.mutation.ClearJobRunnerRegistrationTokens()
+	return _u
 }
 
 // RemoveJobRunnerRegistrationTokenIDs removes the "job_runner_registration_tokens" edge to JobRunnerRegistrationToken entities by IDs.
-func (ou *OrganizationUpdate) RemoveJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveJobRunnerRegistrationTokenIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveJobRunnerRegistrationTokenIDs(ids...)
+	return _u
 }
 
 // RemoveJobRunnerRegistrationTokens removes "job_runner_registration_tokens" edges to JobRunnerRegistrationToken entities.
-func (ou *OrganizationUpdate) RemoveJobRunnerRegistrationTokens(j ...*JobRunnerRegistrationToken) *OrganizationUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdate) RemoveJobRunnerRegistrationTokens(v ...*JobRunnerRegistrationToken) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveJobRunnerRegistrationTokenIDs(ids...)
+	return _u.RemoveJobRunnerRegistrationTokenIDs(ids...)
 }
 
 // ClearDNSVerifications clears all "dns_verifications" edges to the DNSVerification entity.
-func (ou *OrganizationUpdate) ClearDNSVerifications() *OrganizationUpdate {
-	ou.mutation.ClearDNSVerifications()
-	return ou
+func (_u *OrganizationUpdate) ClearDNSVerifications() *OrganizationUpdate {
+	_u.mutation.ClearDNSVerifications()
+	return _u
 }
 
 // RemoveDNSVerificationIDs removes the "dns_verifications" edge to DNSVerification entities by IDs.
-func (ou *OrganizationUpdate) RemoveDNSVerificationIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveDNSVerificationIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveDNSVerificationIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveDNSVerificationIDs(ids...)
+	return _u
 }
 
 // RemoveDNSVerifications removes "dns_verifications" edges to DNSVerification entities.
-func (ou *OrganizationUpdate) RemoveDNSVerifications(d ...*DNSVerification) *OrganizationUpdate {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *OrganizationUpdate) RemoveDNSVerifications(v ...*DNSVerification) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveDNSVerificationIDs(ids...)
+	return _u.RemoveDNSVerificationIDs(ids...)
 }
 
 // ClearJobTemplates clears all "job_templates" edges to the JobTemplate entity.
-func (ou *OrganizationUpdate) ClearJobTemplates() *OrganizationUpdate {
-	ou.mutation.ClearJobTemplates()
-	return ou
+func (_u *OrganizationUpdate) ClearJobTemplates() *OrganizationUpdate {
+	_u.mutation.ClearJobTemplates()
+	return _u
 }
 
 // RemoveJobTemplateIDs removes the "job_templates" edge to JobTemplate entities by IDs.
-func (ou *OrganizationUpdate) RemoveJobTemplateIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveJobTemplateIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveJobTemplateIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveJobTemplateIDs(ids...)
+	return _u
 }
 
 // RemoveJobTemplates removes "job_templates" edges to JobTemplate entities.
-func (ou *OrganizationUpdate) RemoveJobTemplates(j ...*JobTemplate) *OrganizationUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdate) RemoveJobTemplates(v ...*JobTemplate) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveJobTemplateIDs(ids...)
+	return _u.RemoveJobTemplateIDs(ids...)
 }
 
 // ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
-func (ou *OrganizationUpdate) ClearScheduledJobs() *OrganizationUpdate {
-	ou.mutation.ClearScheduledJobs()
-	return ou
+func (_u *OrganizationUpdate) ClearScheduledJobs() *OrganizationUpdate {
+	_u.mutation.ClearScheduledJobs()
+	return _u
 }
 
 // RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
-func (ou *OrganizationUpdate) RemoveScheduledJobIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveScheduledJobIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveScheduledJobIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveScheduledJobIDs(ids...)
+	return _u
 }
 
 // RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
-func (ou *OrganizationUpdate) RemoveScheduledJobs(s ...*ScheduledJob) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) RemoveScheduledJobs(v ...*ScheduledJob) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveScheduledJobIDs(ids...)
+	return _u.RemoveScheduledJobIDs(ids...)
 }
 
 // ClearJobResults clears all "job_results" edges to the JobResult entity.
-func (ou *OrganizationUpdate) ClearJobResults() *OrganizationUpdate {
-	ou.mutation.ClearJobResults()
-	return ou
+func (_u *OrganizationUpdate) ClearJobResults() *OrganizationUpdate {
+	_u.mutation.ClearJobResults()
+	return _u
 }
 
 // RemoveJobResultIDs removes the "job_results" edge to JobResult entities by IDs.
-func (ou *OrganizationUpdate) RemoveJobResultIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveJobResultIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveJobResultIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveJobResultIDs(ids...)
+	return _u
 }
 
 // RemoveJobResults removes "job_results" edges to JobResult entities.
-func (ou *OrganizationUpdate) RemoveJobResults(j ...*JobResult) *OrganizationUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdate) RemoveJobResults(v ...*JobResult) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveJobResultIDs(ids...)
+	return _u.RemoveJobResultIDs(ids...)
 }
 
 // ClearScheduledJobRuns clears all "scheduled_job_runs" edges to the ScheduledJobRun entity.
-func (ou *OrganizationUpdate) ClearScheduledJobRuns() *OrganizationUpdate {
-	ou.mutation.ClearScheduledJobRuns()
-	return ou
+func (_u *OrganizationUpdate) ClearScheduledJobRuns() *OrganizationUpdate {
+	_u.mutation.ClearScheduledJobRuns()
+	return _u
 }
 
 // RemoveScheduledJobRunIDs removes the "scheduled_job_runs" edge to ScheduledJobRun entities by IDs.
-func (ou *OrganizationUpdate) RemoveScheduledJobRunIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveScheduledJobRunIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveScheduledJobRunIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveScheduledJobRunIDs(ids...)
+	return _u
 }
 
 // RemoveScheduledJobRuns removes "scheduled_job_runs" edges to ScheduledJobRun entities.
-func (ou *OrganizationUpdate) RemoveScheduledJobRuns(s ...*ScheduledJobRun) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) RemoveScheduledJobRuns(v ...*ScheduledJobRun) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveScheduledJobRunIDs(ids...)
+	return _u.RemoveScheduledJobRunIDs(ids...)
 }
 
 // ClearTrustCenters clears all "trust_centers" edges to the TrustCenter entity.
-func (ou *OrganizationUpdate) ClearTrustCenters() *OrganizationUpdate {
-	ou.mutation.ClearTrustCenters()
-	return ou
+func (_u *OrganizationUpdate) ClearTrustCenters() *OrganizationUpdate {
+	_u.mutation.ClearTrustCenters()
+	return _u
 }
 
 // RemoveTrustCenterIDs removes the "trust_centers" edge to TrustCenter entities by IDs.
-func (ou *OrganizationUpdate) RemoveTrustCenterIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveTrustCenterIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveTrustCenterIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveTrustCenterIDs(ids...)
+	return _u
 }
 
 // RemoveTrustCenters removes "trust_centers" edges to TrustCenter entities.
-func (ou *OrganizationUpdate) RemoveTrustCenters(t ...*TrustCenter) *OrganizationUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdate) RemoveTrustCenters(v ...*TrustCenter) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveTrustCenterIDs(ids...)
+	return _u.RemoveTrustCenterIDs(ids...)
 }
 
 // ClearAssets clears all "assets" edges to the Asset entity.
-func (ou *OrganizationUpdate) ClearAssets() *OrganizationUpdate {
-	ou.mutation.ClearAssets()
-	return ou
+func (_u *OrganizationUpdate) ClearAssets() *OrganizationUpdate {
+	_u.mutation.ClearAssets()
+	return _u
 }
 
 // RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
-func (ou *OrganizationUpdate) RemoveAssetIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveAssetIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveAssetIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
 }
 
 // RemoveAssets removes "assets" edges to Asset entities.
-func (ou *OrganizationUpdate) RemoveAssets(a ...*Asset) *OrganizationUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdate) RemoveAssets(v ...*Asset) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveAssetIDs(ids...)
+	return _u.RemoveAssetIDs(ids...)
 }
 
 // ClearScans clears all "scans" edges to the Scan entity.
-func (ou *OrganizationUpdate) ClearScans() *OrganizationUpdate {
-	ou.mutation.ClearScans()
-	return ou
+func (_u *OrganizationUpdate) ClearScans() *OrganizationUpdate {
+	_u.mutation.ClearScans()
+	return _u
 }
 
 // RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
-func (ou *OrganizationUpdate) RemoveScanIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveScanIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveScanIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
 }
 
 // RemoveScans removes "scans" edges to Scan entities.
-func (ou *OrganizationUpdate) RemoveScans(s ...*Scan) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) RemoveScans(v ...*Scan) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveScanIDs(ids...)
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearSubprocessors clears all "subprocessors" edges to the Subprocessor entity.
-func (ou *OrganizationUpdate) ClearSubprocessors() *OrganizationUpdate {
-	ou.mutation.ClearSubprocessors()
-	return ou
+func (_u *OrganizationUpdate) ClearSubprocessors() *OrganizationUpdate {
+	_u.mutation.ClearSubprocessors()
+	return _u
 }
 
 // RemoveSubprocessorIDs removes the "subprocessors" edge to Subprocessor entities by IDs.
-func (ou *OrganizationUpdate) RemoveSubprocessorIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveSubprocessorIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveSubprocessorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveSubprocessorIDs(ids...)
+	return _u
 }
 
 // RemoveSubprocessors removes "subprocessors" edges to Subprocessor entities.
-func (ou *OrganizationUpdate) RemoveSubprocessors(s ...*Subprocessor) *OrganizationUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdate) RemoveSubprocessors(v ...*Subprocessor) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveSubprocessorIDs(ids...)
+	return _u.RemoveSubprocessorIDs(ids...)
 }
 
 // ClearExports clears all "exports" edges to the Export entity.
-func (ou *OrganizationUpdate) ClearExports() *OrganizationUpdate {
-	ou.mutation.ClearExports()
-	return ou
+func (_u *OrganizationUpdate) ClearExports() *OrganizationUpdate {
+	_u.mutation.ClearExports()
+	return _u
 }
 
 // RemoveExportIDs removes the "exports" edge to Export entities by IDs.
-func (ou *OrganizationUpdate) RemoveExportIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveExportIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveExportIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveExportIDs(ids...)
+	return _u
 }
 
 // RemoveExports removes "exports" edges to Export entities.
-func (ou *OrganizationUpdate) RemoveExports(e ...*Export) *OrganizationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdate) RemoveExports(v ...*Export) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveExportIDs(ids...)
+	return _u.RemoveExportIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
-func (ou *OrganizationUpdate) ClearMembers() *OrganizationUpdate {
-	ou.mutation.ClearMembers()
-	return ou
+func (_u *OrganizationUpdate) ClearMembers() *OrganizationUpdate {
+	_u.mutation.ClearMembers()
+	return _u
 }
 
 // RemoveMemberIDs removes the "members" edge to OrgMembership entities by IDs.
-func (ou *OrganizationUpdate) RemoveMemberIDs(ids ...string) *OrganizationUpdate {
-	ou.mutation.RemoveMemberIDs(ids...)
-	return ou
+func (_u *OrganizationUpdate) RemoveMemberIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveMemberIDs(ids...)
+	return _u
 }
 
 // RemoveMembers removes "members" edges to OrgMembership entities.
-func (ou *OrganizationUpdate) RemoveMembers(o ...*OrgMembership) *OrganizationUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdate) RemoveMembers(v ...*OrgMembership) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ou.RemoveMemberIDs(ids...)
+	return _u.RemoveMemberIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ou *OrganizationUpdate) Save(ctx context.Context) (int, error) {
-	if err := ou.defaults(); err != nil {
+func (_u *OrganizationUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, ou.sqlSave, ou.mutation, ou.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ou *OrganizationUpdate) SaveX(ctx context.Context) int {
-	affected, err := ou.Save(ctx)
+func (_u *OrganizationUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -2663,50 +2663,50 @@ func (ou *OrganizationUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ou *OrganizationUpdate) Exec(ctx context.Context) error {
-	_, err := ou.Save(ctx)
+func (_u *OrganizationUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ou *OrganizationUpdate) ExecX(ctx context.Context) {
-	if err := ou.Exec(ctx); err != nil {
+func (_u *OrganizationUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ou *OrganizationUpdate) defaults() error {
-	if _, ok := ou.mutation.UpdatedAt(); !ok && !ou.mutation.UpdatedAtCleared() {
+func (_u *OrganizationUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if organization.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organization.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organization.UpdateDefaultUpdatedAt()
-		ou.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ou.mutation.AvatarUpdatedAt(); !ok && !ou.mutation.AvatarUpdatedAtCleared() {
+	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
 		if organization.UpdateDefaultAvatarUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organization.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organization.UpdateDefaultAvatarUpdatedAt()
-		ou.mutation.SetAvatarUpdatedAt(v)
+		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ou *OrganizationUpdate) check() error {
-	if v, ok := ou.mutation.Name(); ok {
+func (_u *OrganizationUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := organization.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Organization.name": %w`, err)}
 		}
 	}
-	if v, ok := ou.mutation.DisplayName(); ok {
+	if v, ok := _u.mutation.DisplayName(); ok {
 		if err := organization.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Organization.display_name": %w`, err)}
 		}
 	}
-	if v, ok := ou.mutation.AvatarRemoteURL(); ok {
+	if v, ok := _u.mutation.AvatarRemoteURL(); ok {
 		if err := organization.AvatarRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
@@ -2715,95 +2715,95 @@ func (ou *OrganizationUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ou *OrganizationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationUpdate {
-	ou.modifiers = append(ou.modifiers, modifiers...)
-	return ou
+func (_u *OrganizationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := ou.check(); err != nil {
-		return n, err
+func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(organization.Table, organization.Columns, sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString))
-	if ps := ou.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ou.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(organization.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ou.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(organization.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ou.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organization.FieldUpdatedAt, field.TypeTime)
 	}
-	if ou.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(organization.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ou.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ou.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ou.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ou.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(organization.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ou.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(organization.FieldDeletedBy, field.TypeString, value)
 	}
-	if ou.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(organization.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ou.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ou.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organization.FieldTags, value)
 		})
 	}
-	if ou.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organization.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ou.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(organization.FieldName, field.TypeString, value)
 	}
-	if value, ok := ou.mutation.DisplayName(); ok {
+	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
 	}
-	if value, ok := ou.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(organization.FieldDescription, field.TypeString, value)
 	}
-	if ou.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(organization.FieldDescription, field.TypeString)
 	}
-	if ou.mutation.PersonalOrgCleared() {
+	if _u.mutation.PersonalOrgCleared() {
 		_spec.ClearField(organization.FieldPersonalOrg, field.TypeBool)
 	}
-	if value, ok := ou.mutation.AvatarRemoteURL(); ok {
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(organization.FieldAvatarRemoteURL, field.TypeString, value)
 	}
-	if ou.mutation.AvatarRemoteURLCleared() {
+	if _u.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organization.FieldAvatarRemoteURL, field.TypeString)
 	}
-	if value, ok := ou.mutation.AvatarUpdatedAt(); ok {
+	if value, ok := _u.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(organization.FieldAvatarUpdatedAt, field.TypeTime, value)
 	}
-	if ou.mutation.AvatarUpdatedAtCleared() {
+	if _u.mutation.AvatarUpdatedAtCleared() {
 		_spec.ClearField(organization.FieldAvatarUpdatedAt, field.TypeTime)
 	}
-	if value, ok := ou.mutation.DedicatedDb(); ok {
+	if value, ok := _u.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
 	}
-	if ou.mutation.ControlCreatorsCleared() {
+	if _u.mutation.ControlCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2814,10 +2814,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedControlCreatorsIDs(); len(nodes) > 0 && !ou.mutation.ControlCreatorsCleared() {
+	if nodes := _u.mutation.RemovedControlCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2828,13 +2828,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ControlCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2845,13 +2845,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ControlImplementationCreatorsCleared() {
+	if _u.mutation.ControlImplementationCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2862,10 +2862,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedControlImplementationCreatorsIDs(); len(nodes) > 0 && !ou.mutation.ControlImplementationCreatorsCleared() {
+	if nodes := _u.mutation.RemovedControlImplementationCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2876,13 +2876,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ControlImplementationCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlImplementationCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2893,13 +2893,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ControlObjectiveCreatorsCleared() {
+	if _u.mutation.ControlObjectiveCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2910,10 +2910,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedControlObjectiveCreatorsIDs(); len(nodes) > 0 && !ou.mutation.ControlObjectiveCreatorsCleared() {
+	if nodes := _u.mutation.RemovedControlObjectiveCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectiveCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2924,13 +2924,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ControlObjectiveCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlObjectiveCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2941,13 +2941,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.EvidenceCreatorsCleared() {
+	if _u.mutation.EvidenceCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2958,10 +2958,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedEvidenceCreatorsIDs(); len(nodes) > 0 && !ou.mutation.EvidenceCreatorsCleared() {
+	if nodes := _u.mutation.RemovedEvidenceCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2972,13 +2972,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.EvidenceCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EvidenceCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2989,13 +2989,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.GroupCreatorsCleared() {
+	if _u.mutation.GroupCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3006,10 +3006,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedGroupCreatorsIDs(); len(nodes) > 0 && !ou.mutation.GroupCreatorsCleared() {
+	if nodes := _u.mutation.RemovedGroupCreatorsIDs(); len(nodes) > 0 && !_u.mutation.GroupCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3020,13 +3020,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.GroupCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.GroupCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3037,13 +3037,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.InternalPolicyCreatorsCleared() {
+	if _u.mutation.InternalPolicyCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3054,10 +3054,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedInternalPolicyCreatorsIDs(); len(nodes) > 0 && !ou.mutation.InternalPolicyCreatorsCleared() {
+	if nodes := _u.mutation.RemovedInternalPolicyCreatorsIDs(); len(nodes) > 0 && !_u.mutation.InternalPolicyCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3068,13 +3068,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.InternalPolicyCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InternalPolicyCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3085,13 +3085,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.MappedControlCreatorsCleared() {
+	if _u.mutation.MappedControlCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3102,10 +3102,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedMappedControlCreatorsIDs(); len(nodes) > 0 && !ou.mutation.MappedControlCreatorsCleared() {
+	if nodes := _u.mutation.RemovedMappedControlCreatorsIDs(); len(nodes) > 0 && !_u.mutation.MappedControlCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3116,13 +3116,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.MappedControlCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.MappedControlCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3133,13 +3133,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.NarrativeCreatorsCleared() {
+	if _u.mutation.NarrativeCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3150,10 +3150,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedNarrativeCreatorsIDs(); len(nodes) > 0 && !ou.mutation.NarrativeCreatorsCleared() {
+	if nodes := _u.mutation.RemovedNarrativeCreatorsIDs(); len(nodes) > 0 && !_u.mutation.NarrativeCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3164,13 +3164,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.NarrativeCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NarrativeCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3181,13 +3181,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ProcedureCreatorsCleared() {
+	if _u.mutation.ProcedureCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3198,10 +3198,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedProcedureCreatorsIDs(); len(nodes) > 0 && !ou.mutation.ProcedureCreatorsCleared() {
+	if nodes := _u.mutation.RemovedProcedureCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ProcedureCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3212,13 +3212,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ProcedureCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProcedureCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3229,13 +3229,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ProgramCreatorsCleared() {
+	if _u.mutation.ProgramCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3246,10 +3246,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedProgramCreatorsIDs(); len(nodes) > 0 && !ou.mutation.ProgramCreatorsCleared() {
+	if nodes := _u.mutation.RemovedProgramCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ProgramCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3260,13 +3260,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ProgramCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3277,13 +3277,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.RiskCreatorsCleared() {
+	if _u.mutation.RiskCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3294,10 +3294,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedRiskCreatorsIDs(); len(nodes) > 0 && !ou.mutation.RiskCreatorsCleared() {
+	if nodes := _u.mutation.RemovedRiskCreatorsIDs(); len(nodes) > 0 && !_u.mutation.RiskCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3308,13 +3308,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RiskCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RiskCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3325,13 +3325,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ScheduledJobCreatorsCleared() {
+	if _u.mutation.ScheduledJobCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3342,10 +3342,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedScheduledJobCreatorsIDs(); len(nodes) > 0 && !ou.mutation.ScheduledJobCreatorsCleared() {
+	if nodes := _u.mutation.RemovedScheduledJobCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3356,13 +3356,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ScheduledJobCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScheduledJobCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3373,13 +3373,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.StandardCreatorsCleared() {
+	if _u.mutation.StandardCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3390,10 +3390,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedStandardCreatorsIDs(); len(nodes) > 0 && !ou.mutation.StandardCreatorsCleared() {
+	if nodes := _u.mutation.RemovedStandardCreatorsIDs(); len(nodes) > 0 && !_u.mutation.StandardCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3404,13 +3404,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.StandardCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.StandardCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3421,13 +3421,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.TemplateCreatorsCleared() {
+	if _u.mutation.TemplateCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3438,10 +3438,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedTemplateCreatorsIDs(); len(nodes) > 0 && !ou.mutation.TemplateCreatorsCleared() {
+	if nodes := _u.mutation.RemovedTemplateCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TemplateCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3452,13 +3452,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.TemplateCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TemplateCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3469,13 +3469,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ChildrenCleared() {
+	if _u.mutation.ChildrenCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3486,10 +3486,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Organization
+		edge.Schema = _u.schemaConfig.Organization
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedChildrenIDs(); len(nodes) > 0 && !ou.mutation.ChildrenCleared() {
+	if nodes := _u.mutation.RemovedChildrenIDs(); len(nodes) > 0 && !_u.mutation.ChildrenCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3500,13 +3500,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Organization
+		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ChildrenIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ChildrenIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3517,13 +3517,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Organization
+		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.SettingCleared() {
+	if _u.mutation.SettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
@@ -3534,10 +3534,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationSetting
+		edge.Schema = _u.schemaConfig.OrganizationSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.SettingIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
@@ -3548,13 +3548,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationSetting
+		edge.Schema = _u.schemaConfig.OrganizationSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.PersonalAccessTokensCleared() {
+	if _u.mutation.PersonalAccessTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3565,10 +3565,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedPersonalAccessTokensIDs(); len(nodes) > 0 && !ou.mutation.PersonalAccessTokensCleared() {
+	if nodes := _u.mutation.RemovedPersonalAccessTokensIDs(); len(nodes) > 0 && !_u.mutation.PersonalAccessTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3579,13 +3579,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.PersonalAccessTokensIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PersonalAccessTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3596,13 +3596,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.APITokensCleared() {
+	if _u.mutation.APITokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3613,10 +3613,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.APIToken
+		edge.Schema = _u.schemaConfig.APIToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedAPITokensIDs(); len(nodes) > 0 && !ou.mutation.APITokensCleared() {
+	if nodes := _u.mutation.RemovedAPITokensIDs(); len(nodes) > 0 && !_u.mutation.APITokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3627,13 +3627,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.APIToken
+		edge.Schema = _u.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.APITokensIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.APITokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3644,13 +3644,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.APIToken
+		edge.Schema = _u.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.UsersCleared() {
+	if _u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3661,8 +3661,8 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgMembership
-		createE := &OrgMembershipCreate{config: ou.config, mutation: newOrgMembershipMutation(ou.config, OpCreate)}
+		edge.Schema = _u.schemaConfig.OrgMembership
+		createE := &OrgMembershipCreate{config: _u.config, mutation: newOrgMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -3671,7 +3671,7 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedUsersIDs(); len(nodes) > 0 && !ou.mutation.UsersCleared() {
+	if nodes := _u.mutation.RemovedUsersIDs(); len(nodes) > 0 && !_u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3682,11 +3682,11 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgMembership
+		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &OrgMembershipCreate{config: ou.config, mutation: newOrgMembershipMutation(ou.config, OpCreate)}
+		createE := &OrgMembershipCreate{config: _u.config, mutation: newOrgMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -3695,7 +3695,7 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3706,11 +3706,11 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgMembership
+		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &OrgMembershipCreate{config: ou.config, mutation: newOrgMembershipMutation(ou.config, OpCreate)}
+		createE := &OrgMembershipCreate{config: _u.config, mutation: newOrgMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -3719,7 +3719,7 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3730,10 +3730,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationFiles
+		edge.Schema = _u.schemaConfig.OrganizationFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedFilesIDs(); len(nodes) > 0 && !ou.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3744,13 +3744,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationFiles
+		edge.Schema = _u.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3761,13 +3761,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationFiles
+		edge.Schema = _u.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3778,10 +3778,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationEvents
+		edge.Schema = _u.schemaConfig.OrganizationEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedEventsIDs(); len(nodes) > 0 && !ou.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3792,13 +3792,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationEvents
+		edge.Schema = _u.schemaConfig.OrganizationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3809,13 +3809,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationEvents
+		edge.Schema = _u.schemaConfig.OrganizationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.SecretsCleared() {
+	if _u.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3826,10 +3826,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Hush
+		edge.Schema = _u.schemaConfig.Hush
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !ou.mutation.SecretsCleared() {
+	if nodes := _u.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !_u.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3840,13 +3840,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Hush
+		edge.Schema = _u.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.SecretsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SecretsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3857,13 +3857,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Hush
+		edge.Schema = _u.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.AvatarFileCleared() {
+	if _u.mutation.AvatarFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -3874,10 +3874,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Organization
+		edge.Schema = _u.schemaConfig.Organization
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.AvatarFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AvatarFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -3888,13 +3888,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Organization
+		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.GroupsCleared() {
+	if _u.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3905,10 +3905,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !ou.mutation.GroupsCleared() {
+	if nodes := _u.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !_u.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3919,13 +3919,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.GroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3936,13 +3936,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.TemplatesCleared() {
+	if _u.mutation.TemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3953,10 +3953,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Template
+		edge.Schema = _u.schemaConfig.Template
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !ou.mutation.TemplatesCleared() {
+	if nodes := _u.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !_u.mutation.TemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3967,13 +3967,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Template
+		edge.Schema = _u.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.TemplatesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TemplatesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3984,13 +3984,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Template
+		edge.Schema = _u.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.IntegrationsCleared() {
+	if _u.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4001,10 +4001,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Integration
+		edge.Schema = _u.schemaConfig.Integration
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !ou.mutation.IntegrationsCleared() {
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4015,13 +4015,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Integration
+		edge.Schema = _u.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.IntegrationsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4032,13 +4032,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Integration
+		edge.Schema = _u.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.DocumentsCleared() {
+	if _u.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4049,10 +4049,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.DocumentData
+		edge.Schema = _u.schemaConfig.DocumentData
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !ou.mutation.DocumentsCleared() {
+	if nodes := _u.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !_u.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4063,13 +4063,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.DocumentData
+		edge.Schema = _u.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.DocumentsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DocumentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4080,13 +4080,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.DocumentData
+		edge.Schema = _u.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.OrgSubscriptionsCleared() {
+	if _u.mutation.OrgSubscriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4097,10 +4097,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgSubscription
+		edge.Schema = _u.schemaConfig.OrgSubscription
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !ou.mutation.OrgSubscriptionsCleared() {
+	if nodes := _u.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !_u.mutation.OrgSubscriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4111,13 +4111,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgSubscription
+		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4128,13 +4128,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgSubscription
+		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.OrgProductsCleared() {
+	if _u.mutation.OrgProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4145,10 +4145,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedOrgProductsIDs(); len(nodes) > 0 && !ou.mutation.OrgProductsCleared() {
+	if nodes := _u.mutation.RemovedOrgProductsIDs(); len(nodes) > 0 && !_u.mutation.OrgProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4159,13 +4159,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.OrgProductsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4176,13 +4176,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.OrgPricesCleared() {
+	if _u.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4193,10 +4193,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !ou.mutation.OrgPricesCleared() {
+	if nodes := _u.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !_u.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4207,13 +4207,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.OrgPricesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgPricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4224,13 +4224,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.OrgModulesCleared() {
+	if _u.mutation.OrgModulesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4241,10 +4241,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedOrgModulesIDs(); len(nodes) > 0 && !ou.mutation.OrgModulesCleared() {
+	if nodes := _u.mutation.RemovedOrgModulesIDs(); len(nodes) > 0 && !_u.mutation.OrgModulesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4255,13 +4255,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.OrgModulesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgModulesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4272,13 +4272,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.InvitesCleared() {
+	if _u.mutation.InvitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4289,10 +4289,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Invite
+		edge.Schema = _u.schemaConfig.Invite
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !ou.mutation.InvitesCleared() {
+	if nodes := _u.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !_u.mutation.InvitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4303,13 +4303,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Invite
+		edge.Schema = _u.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.InvitesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InvitesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4320,13 +4320,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Invite
+		edge.Schema = _u.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.SubscribersCleared() {
+	if _u.mutation.SubscribersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4337,10 +4337,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Subscriber
+		edge.Schema = _u.schemaConfig.Subscriber
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !ou.mutation.SubscribersCleared() {
+	if nodes := _u.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !_u.mutation.SubscribersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4351,13 +4351,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Subscriber
+		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.SubscribersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubscribersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4368,13 +4368,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Subscriber
+		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4385,10 +4385,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !ou.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4399,13 +4399,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4416,13 +4416,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.EntityTypesCleared() {
+	if _u.mutation.EntityTypesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4433,10 +4433,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.EntityType
+		edge.Schema = _u.schemaConfig.EntityType
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedEntityTypesIDs(); len(nodes) > 0 && !ou.mutation.EntityTypesCleared() {
+	if nodes := _u.mutation.RemovedEntityTypesIDs(); len(nodes) > 0 && !_u.mutation.EntityTypesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4447,13 +4447,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.EntityType
+		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.EntityTypesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntityTypesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4464,13 +4464,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.EntityType
+		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ContactsCleared() {
+	if _u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4481,10 +4481,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Contact
+		edge.Schema = _u.schemaConfig.Contact
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedContactsIDs(); len(nodes) > 0 && !ou.mutation.ContactsCleared() {
+	if nodes := _u.mutation.RemovedContactsIDs(); len(nodes) > 0 && !_u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4495,13 +4495,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Contact
+		edge.Schema = _u.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ContactsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ContactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4512,13 +4512,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Contact
+		edge.Schema = _u.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.NotesCleared() {
+	if _u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4529,10 +4529,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedNotesIDs(); len(nodes) > 0 && !ou.mutation.NotesCleared() {
+	if nodes := _u.mutation.RemovedNotesIDs(); len(nodes) > 0 && !_u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4543,13 +4543,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.NotesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NotesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4560,13 +4560,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.TasksCleared() {
+	if _u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4577,10 +4577,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Task
+		edge.Schema = _u.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ou.mutation.TasksCleared() {
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4591,13 +4591,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Task
+		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4608,13 +4608,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Task
+		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4625,10 +4625,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Program
+		edge.Schema = _u.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !ou.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4639,13 +4639,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Program
+		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4656,13 +4656,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Program
+		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ProceduresCleared() {
+	if _u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4673,10 +4673,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Procedure
+		edge.Schema = _u.schemaConfig.Procedure
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !ou.mutation.ProceduresCleared() {
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4687,13 +4687,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Procedure
+		edge.Schema = _u.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4704,13 +4704,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Procedure
+		edge.Schema = _u.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.InternalPoliciesCleared() {
+	if _u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4721,10 +4721,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !ou.mutation.InternalPoliciesCleared() {
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4735,13 +4735,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4752,13 +4752,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.RisksCleared() {
+	if _u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4769,10 +4769,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedRisksIDs(); len(nodes) > 0 && !ou.mutation.RisksCleared() {
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4783,13 +4783,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4800,13 +4800,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ControlObjectivesCleared() {
+	if _u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4817,10 +4817,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ControlObjective
+		edge.Schema = _u.schemaConfig.ControlObjective
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !ou.mutation.ControlObjectivesCleared() {
+	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4831,13 +4831,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ControlObjective
+		edge.Schema = _u.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4848,13 +4848,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ControlObjective
+		edge.Schema = _u.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.NarrativesCleared() {
+	if _u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4865,10 +4865,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Narrative
+		edge.Schema = _u.schemaConfig.Narrative
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !ou.mutation.NarrativesCleared() {
+	if nodes := _u.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !_u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4879,13 +4879,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Narrative
+		edge.Schema = _u.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.NarrativesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4896,13 +4896,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Narrative
+		edge.Schema = _u.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4913,10 +4913,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ou.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4927,13 +4927,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4944,13 +4944,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4961,10 +4961,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ou.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4975,13 +4975,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -4992,13 +4992,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ControlImplementationsCleared() {
+	if _u.mutation.ControlImplementationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5009,10 +5009,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ControlImplementation
+		edge.Schema = _u.schemaConfig.ControlImplementation
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !ou.mutation.ControlImplementationsCleared() {
+	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5023,13 +5023,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ControlImplementation
+		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5040,13 +5040,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ControlImplementation
+		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.MappedControlsCleared() {
+	if _u.mutation.MappedControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5057,10 +5057,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.MappedControl
+		edge.Schema = _u.schemaConfig.MappedControl
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedMappedControlsIDs(); len(nodes) > 0 && !ou.mutation.MappedControlsCleared() {
+	if nodes := _u.mutation.RemovedMappedControlsIDs(); len(nodes) > 0 && !_u.mutation.MappedControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5071,13 +5071,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.MappedControl
+		edge.Schema = _u.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.MappedControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.MappedControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5088,13 +5088,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.MappedControl
+		edge.Schema = _u.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.EvidenceCleared() {
+	if _u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5105,10 +5105,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Evidence
+		edge.Schema = _u.schemaConfig.Evidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !ou.mutation.EvidenceCleared() {
+	if nodes := _u.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5119,13 +5119,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Evidence
+		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.EvidenceIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5136,13 +5136,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Evidence
+		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.StandardsCleared() {
+	if _u.mutation.StandardsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5153,10 +5153,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Standard
+		edge.Schema = _u.schemaConfig.Standard
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !ou.mutation.StandardsCleared() {
+	if nodes := _u.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !_u.mutation.StandardsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5167,13 +5167,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Standard
+		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.StandardsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.StandardsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5184,13 +5184,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Standard
+		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ActionPlansCleared() {
+	if _u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5201,10 +5201,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !ou.mutation.ActionPlansCleared() {
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5215,13 +5215,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ActionPlansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5232,13 +5232,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.CustomDomainsCleared() {
+	if _u.mutation.CustomDomainsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5249,10 +5249,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedCustomDomainsIDs(); len(nodes) > 0 && !ou.mutation.CustomDomainsCleared() {
+	if nodes := _u.mutation.RemovedCustomDomainsIDs(); len(nodes) > 0 && !_u.mutation.CustomDomainsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5263,13 +5263,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.CustomDomainsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.CustomDomainsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5280,13 +5280,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.JobRunnersCleared() {
+	if _u.mutation.JobRunnersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5297,10 +5297,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobRunner
+		edge.Schema = _u.schemaConfig.JobRunner
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedJobRunnersIDs(); len(nodes) > 0 && !ou.mutation.JobRunnersCleared() {
+	if nodes := _u.mutation.RemovedJobRunnersIDs(); len(nodes) > 0 && !_u.mutation.JobRunnersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5311,13 +5311,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobRunner
+		edge.Schema = _u.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.JobRunnersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5328,13 +5328,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobRunner
+		edge.Schema = _u.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.JobRunnerTokensCleared() {
+	if _u.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5345,10 +5345,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobRunnerToken
+		edge.Schema = _u.schemaConfig.JobRunnerToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !ou.mutation.JobRunnerTokensCleared() {
+	if nodes := _u.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5359,13 +5359,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobRunnerToken
+		edge.Schema = _u.schemaConfig.JobRunnerToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5376,13 +5376,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobRunnerToken
+		edge.Schema = _u.schemaConfig.JobRunnerToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.JobRunnerRegistrationTokensCleared() {
+	if _u.mutation.JobRunnerRegistrationTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5393,10 +5393,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedJobRunnerRegistrationTokensIDs(); len(nodes) > 0 && !ou.mutation.JobRunnerRegistrationTokensCleared() {
+	if nodes := _u.mutation.RemovedJobRunnerRegistrationTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerRegistrationTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5407,13 +5407,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5424,13 +5424,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.DNSVerificationsCleared() {
+	if _u.mutation.DNSVerificationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5441,10 +5441,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.DNSVerification
+		edge.Schema = _u.schemaConfig.DNSVerification
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedDNSVerificationsIDs(); len(nodes) > 0 && !ou.mutation.DNSVerificationsCleared() {
+	if nodes := _u.mutation.RemovedDNSVerificationsIDs(); len(nodes) > 0 && !_u.mutation.DNSVerificationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5455,13 +5455,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.DNSVerification
+		edge.Schema = _u.schemaConfig.DNSVerification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.DNSVerificationsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DNSVerificationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5472,13 +5472,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.DNSVerification
+		edge.Schema = _u.schemaConfig.DNSVerification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.JobTemplatesCleared() {
+	if _u.mutation.JobTemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5489,10 +5489,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobTemplate
+		edge.Schema = _u.schemaConfig.JobTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedJobTemplatesIDs(); len(nodes) > 0 && !ou.mutation.JobTemplatesCleared() {
+	if nodes := _u.mutation.RemovedJobTemplatesIDs(); len(nodes) > 0 && !_u.mutation.JobTemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5503,13 +5503,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobTemplate
+		edge.Schema = _u.schemaConfig.JobTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.JobTemplatesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobTemplatesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5520,13 +5520,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobTemplate
+		edge.Schema = _u.schemaConfig.JobTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ScheduledJobsCleared() {
+	if _u.mutation.ScheduledJobsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5537,10 +5537,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !ou.mutation.ScheduledJobsCleared() {
+	if nodes := _u.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5551,13 +5551,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5568,13 +5568,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.JobResultsCleared() {
+	if _u.mutation.JobResultsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5585,10 +5585,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedJobResultsIDs(); len(nodes) > 0 && !ou.mutation.JobResultsCleared() {
+	if nodes := _u.mutation.RemovedJobResultsIDs(); len(nodes) > 0 && !_u.mutation.JobResultsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5599,13 +5599,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.JobResultsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobResultsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5616,13 +5616,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ScheduledJobRunsCleared() {
+	if _u.mutation.ScheduledJobRunsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5633,10 +5633,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ScheduledJobRun
+		edge.Schema = _u.schemaConfig.ScheduledJobRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedScheduledJobRunsIDs(); len(nodes) > 0 && !ou.mutation.ScheduledJobRunsCleared() {
+	if nodes := _u.mutation.RemovedScheduledJobRunsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobRunsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5647,13 +5647,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ScheduledJobRun
+		edge.Schema = _u.schemaConfig.ScheduledJobRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ScheduledJobRunsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScheduledJobRunsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5664,13 +5664,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ScheduledJobRun
+		edge.Schema = _u.schemaConfig.ScheduledJobRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.TrustCentersCleared() {
+	if _u.mutation.TrustCentersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5681,10 +5681,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedTrustCentersIDs(); len(nodes) > 0 && !ou.mutation.TrustCentersCleared() {
+	if nodes := _u.mutation.RemovedTrustCentersIDs(); len(nodes) > 0 && !_u.mutation.TrustCentersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5695,13 +5695,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.TrustCentersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TrustCentersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5712,13 +5712,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.AssetsCleared() {
+	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5729,10 +5729,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !ou.mutation.AssetsCleared() {
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5743,13 +5743,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.AssetsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5760,13 +5760,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ScansCleared() {
+	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5777,10 +5777,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedScansIDs(); len(nodes) > 0 && !ou.mutation.ScansCleared() {
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5791,13 +5791,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ScansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5808,13 +5808,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.SubprocessorsCleared() {
+	if _u.mutation.SubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5825,10 +5825,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedSubprocessorsIDs(); len(nodes) > 0 && !ou.mutation.SubprocessorsCleared() {
+	if nodes := _u.mutation.RemovedSubprocessorsIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5839,13 +5839,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.SubprocessorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubprocessorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5856,13 +5856,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.ExportsCleared() {
+	if _u.mutation.ExportsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5873,10 +5873,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Export
+		edge.Schema = _u.schemaConfig.Export
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedExportsIDs(); len(nodes) > 0 && !ou.mutation.ExportsCleared() {
+	if nodes := _u.mutation.RemovedExportsIDs(); len(nodes) > 0 && !_u.mutation.ExportsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5887,13 +5887,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Export
+		edge.Schema = _u.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.ExportsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ExportsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -5904,13 +5904,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.Export
+		edge.Schema = _u.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ou.mutation.MembersCleared() {
+	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -5921,10 +5921,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgMembership
+		edge.Schema = _u.schemaConfig.OrgMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.RemovedMembersIDs(); len(nodes) > 0 && !ou.mutation.MembersCleared() {
+	if nodes := _u.mutation.RemovedMembersIDs(); len(nodes) > 0 && !_u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -5935,13 +5935,13 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgMembership
+		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.MembersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -5952,16 +5952,16 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrgMembership
+		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = ou.schemaConfig.Organization
-	ctx = internal.NewSchemaConfigContext(ctx, ou.schemaConfig)
-	_spec.AddModifiers(ou.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, ou.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Organization
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organization.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -5969,8 +5969,8 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	ou.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OrganizationUpdateOne is the builder for updating a single Organization entity.
@@ -5983,2592 +5983,2592 @@ type OrganizationUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ouo *OrganizationUpdateOne) SetUpdatedAt(t time.Time) *OrganizationUpdateOne {
-	ouo.mutation.SetUpdatedAt(t)
-	return ouo
+func (_u *OrganizationUpdateOne) SetUpdatedAt(v time.Time) *OrganizationUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ouo *OrganizationUpdateOne) ClearUpdatedAt() *OrganizationUpdateOne {
-	ouo.mutation.ClearUpdatedAt()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearUpdatedAt() *OrganizationUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ouo *OrganizationUpdateOne) SetUpdatedBy(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetUpdatedBy(s)
-	return ouo
+func (_u *OrganizationUpdateOne) SetUpdatedBy(v string) *OrganizationUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableUpdatedBy(s *string) *OrganizationUpdateOne {
-	if s != nil {
-		ouo.SetUpdatedBy(*s)
+func (_u *OrganizationUpdateOne) SetNillableUpdatedBy(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ouo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ouo *OrganizationUpdateOne) ClearUpdatedBy() *OrganizationUpdateOne {
-	ouo.mutation.ClearUpdatedBy()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearUpdatedBy() *OrganizationUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ouo *OrganizationUpdateOne) SetDeletedAt(t time.Time) *OrganizationUpdateOne {
-	ouo.mutation.SetDeletedAt(t)
-	return ouo
+func (_u *OrganizationUpdateOne) SetDeletedAt(v time.Time) *OrganizationUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableDeletedAt(t *time.Time) *OrganizationUpdateOne {
-	if t != nil {
-		ouo.SetDeletedAt(*t)
+func (_u *OrganizationUpdateOne) SetNillableDeletedAt(v *time.Time) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ouo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ouo *OrganizationUpdateOne) ClearDeletedAt() *OrganizationUpdateOne {
-	ouo.mutation.ClearDeletedAt()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearDeletedAt() *OrganizationUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ouo *OrganizationUpdateOne) SetDeletedBy(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetDeletedBy(s)
-	return ouo
+func (_u *OrganizationUpdateOne) SetDeletedBy(v string) *OrganizationUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableDeletedBy(s *string) *OrganizationUpdateOne {
-	if s != nil {
-		ouo.SetDeletedBy(*s)
+func (_u *OrganizationUpdateOne) SetNillableDeletedBy(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ouo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ouo *OrganizationUpdateOne) ClearDeletedBy() *OrganizationUpdateOne {
-	ouo.mutation.ClearDeletedBy()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearDeletedBy() *OrganizationUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ouo *OrganizationUpdateOne) SetTags(s []string) *OrganizationUpdateOne {
-	ouo.mutation.SetTags(s)
-	return ouo
+func (_u *OrganizationUpdateOne) SetTags(v []string) *OrganizationUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ouo *OrganizationUpdateOne) AppendTags(s []string) *OrganizationUpdateOne {
-	ouo.mutation.AppendTags(s)
-	return ouo
+// AppendTags appends value to the "tags" field.
+func (_u *OrganizationUpdateOne) AppendTags(v []string) *OrganizationUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ouo *OrganizationUpdateOne) ClearTags() *OrganizationUpdateOne {
-	ouo.mutation.ClearTags()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearTags() *OrganizationUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ouo *OrganizationUpdateOne) SetName(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetName(s)
-	return ouo
+func (_u *OrganizationUpdateOne) SetName(v string) *OrganizationUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableName(s *string) *OrganizationUpdateOne {
-	if s != nil {
-		ouo.SetName(*s)
+func (_u *OrganizationUpdateOne) SetNillableName(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ouo
+	return _u
 }
 
 // SetDisplayName sets the "display_name" field.
-func (ouo *OrganizationUpdateOne) SetDisplayName(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetDisplayName(s)
-	return ouo
+func (_u *OrganizationUpdateOne) SetDisplayName(v string) *OrganizationUpdateOne {
+	_u.mutation.SetDisplayName(v)
+	return _u
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableDisplayName(s *string) *OrganizationUpdateOne {
-	if s != nil {
-		ouo.SetDisplayName(*s)
+func (_u *OrganizationUpdateOne) SetNillableDisplayName(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetDisplayName(*v)
 	}
-	return ouo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ouo *OrganizationUpdateOne) SetDescription(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetDescription(s)
-	return ouo
+func (_u *OrganizationUpdateOne) SetDescription(v string) *OrganizationUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableDescription(s *string) *OrganizationUpdateOne {
-	if s != nil {
-		ouo.SetDescription(*s)
+func (_u *OrganizationUpdateOne) SetNillableDescription(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ouo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ouo *OrganizationUpdateOne) ClearDescription() *OrganizationUpdateOne {
-	ouo.mutation.ClearDescription()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearDescription() *OrganizationUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetAvatarRemoteURL sets the "avatar_remote_url" field.
-func (ouo *OrganizationUpdateOne) SetAvatarRemoteURL(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetAvatarRemoteURL(s)
-	return ouo
+func (_u *OrganizationUpdateOne) SetAvatarRemoteURL(v string) *OrganizationUpdateOne {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
 }
 
 // SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableAvatarRemoteURL(s *string) *OrganizationUpdateOne {
-	if s != nil {
-		ouo.SetAvatarRemoteURL(*s)
+func (_u *OrganizationUpdateOne) SetNillableAvatarRemoteURL(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
 	}
-	return ouo
+	return _u
 }
 
 // ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
-func (ouo *OrganizationUpdateOne) ClearAvatarRemoteURL() *OrganizationUpdateOne {
-	ouo.mutation.ClearAvatarRemoteURL()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearAvatarRemoteURL() *OrganizationUpdateOne {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
 }
 
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
-func (ouo *OrganizationUpdateOne) SetAvatarLocalFileID(s string) *OrganizationUpdateOne {
-	ouo.mutation.SetAvatarLocalFileID(s)
-	return ouo
+func (_u *OrganizationUpdateOne) SetAvatarLocalFileID(v string) *OrganizationUpdateOne {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
 }
 
 // SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableAvatarLocalFileID(s *string) *OrganizationUpdateOne {
-	if s != nil {
-		ouo.SetAvatarLocalFileID(*s)
+func (_u *OrganizationUpdateOne) SetNillableAvatarLocalFileID(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
 	}
-	return ouo
+	return _u
 }
 
 // ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
-func (ouo *OrganizationUpdateOne) ClearAvatarLocalFileID() *OrganizationUpdateOne {
-	ouo.mutation.ClearAvatarLocalFileID()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearAvatarLocalFileID() *OrganizationUpdateOne {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
 }
 
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
-func (ouo *OrganizationUpdateOne) SetAvatarUpdatedAt(t time.Time) *OrganizationUpdateOne {
-	ouo.mutation.SetAvatarUpdatedAt(t)
-	return ouo
+func (_u *OrganizationUpdateOne) SetAvatarUpdatedAt(v time.Time) *OrganizationUpdateOne {
+	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
 }
 
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
-func (ouo *OrganizationUpdateOne) ClearAvatarUpdatedAt() *OrganizationUpdateOne {
-	ouo.mutation.ClearAvatarUpdatedAt()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearAvatarUpdatedAt() *OrganizationUpdateOne {
+	_u.mutation.ClearAvatarUpdatedAt()
+	return _u
 }
 
 // SetDedicatedDb sets the "dedicated_db" field.
-func (ouo *OrganizationUpdateOne) SetDedicatedDb(b bool) *OrganizationUpdateOne {
-	ouo.mutation.SetDedicatedDb(b)
-	return ouo
+func (_u *OrganizationUpdateOne) SetDedicatedDb(v bool) *OrganizationUpdateOne {
+	_u.mutation.SetDedicatedDb(v)
+	return _u
 }
 
 // SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableDedicatedDb(b *bool) *OrganizationUpdateOne {
-	if b != nil {
-		ouo.SetDedicatedDb(*b)
+func (_u *OrganizationUpdateOne) SetNillableDedicatedDb(v *bool) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetDedicatedDb(*v)
 	}
-	return ouo
+	return _u
 }
 
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddControlCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddControlCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddControlCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddControlCreatorIDs(ids...)
+	return _u
 }
 
 // AddControlCreators adds the "control_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddControlCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddControlCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddControlCreatorIDs(ids...)
+	return _u.AddControlCreatorIDs(ids...)
 }
 
 // AddControlImplementationCreatorIDs adds the "control_implementation_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddControlImplementationCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddControlImplementationCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddControlImplementationCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddControlImplementationCreatorIDs(ids...)
+	return _u
 }
 
 // AddControlImplementationCreators adds the "control_implementation_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddControlImplementationCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddControlImplementationCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddControlImplementationCreatorIDs(ids...)
+	return _u.AddControlImplementationCreatorIDs(ids...)
 }
 
 // AddControlObjectiveCreatorIDs adds the "control_objective_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddControlObjectiveCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddControlObjectiveCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddControlObjectiveCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddControlObjectiveCreatorIDs(ids...)
+	return _u
 }
 
 // AddControlObjectiveCreators adds the "control_objective_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddControlObjectiveCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddControlObjectiveCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddControlObjectiveCreatorIDs(ids...)
+	return _u.AddControlObjectiveCreatorIDs(ids...)
 }
 
 // AddEvidenceCreatorIDs adds the "evidence_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddEvidenceCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddEvidenceCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddEvidenceCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddEvidenceCreatorIDs(ids...)
+	return _u
 }
 
 // AddEvidenceCreators adds the "evidence_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddEvidenceCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddEvidenceCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddEvidenceCreatorIDs(ids...)
+	return _u.AddEvidenceCreatorIDs(ids...)
 }
 
 // AddGroupCreatorIDs adds the "group_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddGroupCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddGroupCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddGroupCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddGroupCreatorIDs(ids...)
+	return _u
 }
 
 // AddGroupCreators adds the "group_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddGroupCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddGroupCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddGroupCreatorIDs(ids...)
+	return _u.AddGroupCreatorIDs(ids...)
 }
 
 // AddInternalPolicyCreatorIDs adds the "internal_policy_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddInternalPolicyCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddInternalPolicyCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddInternalPolicyCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddInternalPolicyCreatorIDs(ids...)
+	return _u
 }
 
 // AddInternalPolicyCreators adds the "internal_policy_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddInternalPolicyCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddInternalPolicyCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddInternalPolicyCreatorIDs(ids...)
+	return _u.AddInternalPolicyCreatorIDs(ids...)
 }
 
 // AddMappedControlCreatorIDs adds the "mapped_control_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddMappedControlCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddMappedControlCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddMappedControlCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddMappedControlCreatorIDs(ids...)
+	return _u
 }
 
 // AddMappedControlCreators adds the "mapped_control_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddMappedControlCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddMappedControlCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddMappedControlCreatorIDs(ids...)
+	return _u.AddMappedControlCreatorIDs(ids...)
 }
 
 // AddNarrativeCreatorIDs adds the "narrative_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddNarrativeCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddNarrativeCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddNarrativeCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddNarrativeCreatorIDs(ids...)
+	return _u
 }
 
 // AddNarrativeCreators adds the "narrative_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddNarrativeCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddNarrativeCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddNarrativeCreatorIDs(ids...)
+	return _u.AddNarrativeCreatorIDs(ids...)
 }
 
 // AddProcedureCreatorIDs adds the "procedure_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddProcedureCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddProcedureCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddProcedureCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddProcedureCreatorIDs(ids...)
+	return _u
 }
 
 // AddProcedureCreators adds the "procedure_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddProcedureCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddProcedureCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddProcedureCreatorIDs(ids...)
+	return _u.AddProcedureCreatorIDs(ids...)
 }
 
 // AddProgramCreatorIDs adds the "program_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddProgramCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddProgramCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddProgramCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddProgramCreatorIDs(ids...)
+	return _u
 }
 
 // AddProgramCreators adds the "program_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddProgramCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddProgramCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddProgramCreatorIDs(ids...)
+	return _u.AddProgramCreatorIDs(ids...)
 }
 
 // AddRiskCreatorIDs adds the "risk_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddRiskCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddRiskCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddRiskCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddRiskCreatorIDs(ids...)
+	return _u
 }
 
 // AddRiskCreators adds the "risk_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddRiskCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddRiskCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddRiskCreatorIDs(ids...)
+	return _u.AddRiskCreatorIDs(ids...)
 }
 
 // AddScheduledJobCreatorIDs adds the "scheduled_job_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddScheduledJobCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddScheduledJobCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddScheduledJobCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddScheduledJobCreatorIDs(ids...)
+	return _u
 }
 
 // AddScheduledJobCreators adds the "scheduled_job_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddScheduledJobCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddScheduledJobCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddScheduledJobCreatorIDs(ids...)
+	return _u.AddScheduledJobCreatorIDs(ids...)
 }
 
 // AddStandardCreatorIDs adds the "standard_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddStandardCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddStandardCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddStandardCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddStandardCreatorIDs(ids...)
+	return _u
 }
 
 // AddStandardCreators adds the "standard_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddStandardCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddStandardCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddStandardCreatorIDs(ids...)
+	return _u.AddStandardCreatorIDs(ids...)
 }
 
 // AddTemplateCreatorIDs adds the "template_creators" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddTemplateCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddTemplateCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddTemplateCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddTemplateCreatorIDs(ids...)
+	return _u
 }
 
 // AddTemplateCreators adds the "template_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddTemplateCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddTemplateCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddTemplateCreatorIDs(ids...)
+	return _u.AddTemplateCreatorIDs(ids...)
 }
 
 // AddChildIDs adds the "children" edge to the Organization entity by IDs.
-func (ouo *OrganizationUpdateOne) AddChildIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddChildIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddChildIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddChildIDs(ids...)
+	return _u
 }
 
 // AddChildren adds the "children" edges to the Organization entity.
-func (ouo *OrganizationUpdateOne) AddChildren(o ...*Organization) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) AddChildren(v ...*Organization) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddChildIDs(ids...)
+	return _u.AddChildIDs(ids...)
 }
 
 // SetSettingID sets the "setting" edge to the OrganizationSetting entity by ID.
-func (ouo *OrganizationUpdateOne) SetSettingID(id string) *OrganizationUpdateOne {
-	ouo.mutation.SetSettingID(id)
-	return ouo
+func (_u *OrganizationUpdateOne) SetSettingID(id string) *OrganizationUpdateOne {
+	_u.mutation.SetSettingID(id)
+	return _u
 }
 
 // SetNillableSettingID sets the "setting" edge to the OrganizationSetting entity by ID if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableSettingID(id *string) *OrganizationUpdateOne {
+func (_u *OrganizationUpdateOne) SetNillableSettingID(id *string) *OrganizationUpdateOne {
 	if id != nil {
-		ouo = ouo.SetSettingID(*id)
+		_u = _u.SetSettingID(*id)
 	}
-	return ouo
+	return _u
 }
 
 // SetSetting sets the "setting" edge to the OrganizationSetting entity.
-func (ouo *OrganizationUpdateOne) SetSetting(o *OrganizationSetting) *OrganizationUpdateOne {
-	return ouo.SetSettingID(o.ID)
+func (_u *OrganizationUpdateOne) SetSetting(v *OrganizationSetting) *OrganizationUpdateOne {
+	return _u.SetSettingID(v.ID)
 }
 
 // AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by IDs.
-func (ouo *OrganizationUpdateOne) AddPersonalAccessTokenIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddPersonalAccessTokenIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddPersonalAccessTokenIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddPersonalAccessTokenIDs(ids...)
+	return _u
 }
 
 // AddPersonalAccessTokens adds the "personal_access_tokens" edges to the PersonalAccessToken entity.
-func (ouo *OrganizationUpdateOne) AddPersonalAccessTokens(p ...*PersonalAccessToken) *OrganizationUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdateOne) AddPersonalAccessTokens(v ...*PersonalAccessToken) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddPersonalAccessTokenIDs(ids...)
+	return _u.AddPersonalAccessTokenIDs(ids...)
 }
 
 // AddAPITokenIDs adds the "api_tokens" edge to the APIToken entity by IDs.
-func (ouo *OrganizationUpdateOne) AddAPITokenIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddAPITokenIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddAPITokenIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddAPITokenIDs(ids...)
+	return _u
 }
 
 // AddAPITokens adds the "api_tokens" edges to the APIToken entity.
-func (ouo *OrganizationUpdateOne) AddAPITokens(a ...*APIToken) *OrganizationUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdateOne) AddAPITokens(v ...*APIToken) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddAPITokenIDs(ids...)
+	return _u.AddAPITokenIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (ouo *OrganizationUpdateOne) AddUserIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddUserIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddUserIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddUserIDs(ids...)
+	return _u
 }
 
 // AddUsers adds the "users" edges to the User entity.
-func (ouo *OrganizationUpdateOne) AddUsers(u ...*User) *OrganizationUpdateOne {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *OrganizationUpdateOne) AddUsers(v ...*User) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddUserIDs(ids...)
+	return _u.AddUserIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (ouo *OrganizationUpdateOne) AddFileIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddFileIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddFileIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (ouo *OrganizationUpdateOne) AddFiles(f ...*File) *OrganizationUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *OrganizationUpdateOne) AddFiles(v ...*File) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (ouo *OrganizationUpdateOne) AddEventIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddEventIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddEventIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (ouo *OrganizationUpdateOne) AddEvents(e ...*Event) *OrganizationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdateOne) AddEvents(v ...*Event) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
-func (ouo *OrganizationUpdateOne) AddSecretIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddSecretIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddSecretIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddSecretIDs(ids...)
+	return _u
 }
 
 // AddSecrets adds the "secrets" edges to the Hush entity.
-func (ouo *OrganizationUpdateOne) AddSecrets(h ...*Hush) *OrganizationUpdateOne {
-	ids := make([]string, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
+func (_u *OrganizationUpdateOne) AddSecrets(v ...*Hush) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddSecretIDs(ids...)
+	return _u.AddSecretIDs(ids...)
 }
 
 // SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
-func (ouo *OrganizationUpdateOne) SetAvatarFileID(id string) *OrganizationUpdateOne {
-	ouo.mutation.SetAvatarFileID(id)
-	return ouo
+func (_u *OrganizationUpdateOne) SetAvatarFileID(id string) *OrganizationUpdateOne {
+	_u.mutation.SetAvatarFileID(id)
+	return _u
 }
 
 // SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableAvatarFileID(id *string) *OrganizationUpdateOne {
+func (_u *OrganizationUpdateOne) SetNillableAvatarFileID(id *string) *OrganizationUpdateOne {
 	if id != nil {
-		ouo = ouo.SetAvatarFileID(*id)
+		_u = _u.SetAvatarFileID(*id)
 	}
-	return ouo
+	return _u
 }
 
 // SetAvatarFile sets the "avatar_file" edge to the File entity.
-func (ouo *OrganizationUpdateOne) SetAvatarFile(f *File) *OrganizationUpdateOne {
-	return ouo.SetAvatarFileID(f.ID)
+func (_u *OrganizationUpdateOne) SetAvatarFile(v *File) *OrganizationUpdateOne {
+	return _u.SetAvatarFileID(v.ID)
 }
 
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
-func (ouo *OrganizationUpdateOne) AddGroupIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddGroupIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddGroupIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddGroupIDs(ids...)
+	return _u
 }
 
 // AddGroups adds the "groups" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) AddGroups(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) AddGroups(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddGroupIDs(ids...)
+	return _u.AddGroupIDs(ids...)
 }
 
 // AddTemplateIDs adds the "templates" edge to the Template entity by IDs.
-func (ouo *OrganizationUpdateOne) AddTemplateIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddTemplateIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddTemplateIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddTemplateIDs(ids...)
+	return _u
 }
 
 // AddTemplates adds the "templates" edges to the Template entity.
-func (ouo *OrganizationUpdateOne) AddTemplates(t ...*Template) *OrganizationUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdateOne) AddTemplates(v ...*Template) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddTemplateIDs(ids...)
+	return _u.AddTemplateIDs(ids...)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
-func (ouo *OrganizationUpdateOne) AddIntegrationIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddIntegrationIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddIntegrationIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
 }
 
 // AddIntegrations adds the "integrations" edges to the Integration entity.
-func (ouo *OrganizationUpdateOne) AddIntegrations(i ...*Integration) *OrganizationUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdateOne) AddIntegrations(v ...*Integration) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddIntegrationIDs(ids...)
+	return _u.AddIntegrationIDs(ids...)
 }
 
 // AddDocumentIDs adds the "documents" edge to the DocumentData entity by IDs.
-func (ouo *OrganizationUpdateOne) AddDocumentIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddDocumentIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddDocumentIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddDocumentIDs(ids...)
+	return _u
 }
 
 // AddDocuments adds the "documents" edges to the DocumentData entity.
-func (ouo *OrganizationUpdateOne) AddDocuments(d ...*DocumentData) *OrganizationUpdateOne {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *OrganizationUpdateOne) AddDocuments(v ...*DocumentData) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddDocumentIDs(ids...)
+	return _u.AddDocumentIDs(ids...)
 }
 
 // AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
-func (ouo *OrganizationUpdateOne) AddOrgSubscriptionIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddOrgSubscriptionIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddOrgSubscriptionIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddOrgSubscriptionIDs(ids...)
+	return _u
 }
 
 // AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
-func (ouo *OrganizationUpdateOne) AddOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) AddOrgSubscriptions(v ...*OrgSubscription) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddOrgSubscriptionIDs(ids...)
+	return _u.AddOrgSubscriptionIDs(ids...)
 }
 
 // AddOrgProductIDs adds the "org_products" edge to the OrgProduct entity by IDs.
-func (ouo *OrganizationUpdateOne) AddOrgProductIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddOrgProductIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddOrgProductIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddOrgProductIDs(ids...)
+	return _u
 }
 
 // AddOrgProducts adds the "org_products" edges to the OrgProduct entity.
-func (ouo *OrganizationUpdateOne) AddOrgProducts(o ...*OrgProduct) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) AddOrgProducts(v ...*OrgProduct) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddOrgProductIDs(ids...)
+	return _u.AddOrgProductIDs(ids...)
 }
 
 // AddOrgPriceIDs adds the "org_prices" edge to the OrgPrice entity by IDs.
-func (ouo *OrganizationUpdateOne) AddOrgPriceIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddOrgPriceIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddOrgPriceIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddOrgPriceIDs(ids...)
+	return _u
 }
 
 // AddOrgPrices adds the "org_prices" edges to the OrgPrice entity.
-func (ouo *OrganizationUpdateOne) AddOrgPrices(o ...*OrgPrice) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) AddOrgPrices(v ...*OrgPrice) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddOrgPriceIDs(ids...)
+	return _u.AddOrgPriceIDs(ids...)
 }
 
 // AddOrgModuleIDs adds the "org_modules" edge to the OrgModule entity by IDs.
-func (ouo *OrganizationUpdateOne) AddOrgModuleIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddOrgModuleIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddOrgModuleIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddOrgModuleIDs(ids...)
+	return _u
 }
 
 // AddOrgModules adds the "org_modules" edges to the OrgModule entity.
-func (ouo *OrganizationUpdateOne) AddOrgModules(o ...*OrgModule) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) AddOrgModules(v ...*OrgModule) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddOrgModuleIDs(ids...)
+	return _u.AddOrgModuleIDs(ids...)
 }
 
 // AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
-func (ouo *OrganizationUpdateOne) AddInviteIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddInviteIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddInviteIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddInviteIDs(ids...)
+	return _u
 }
 
 // AddInvites adds the "invites" edges to the Invite entity.
-func (ouo *OrganizationUpdateOne) AddInvites(i ...*Invite) *OrganizationUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdateOne) AddInvites(v ...*Invite) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddInviteIDs(ids...)
+	return _u.AddInviteIDs(ids...)
 }
 
 // AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
-func (ouo *OrganizationUpdateOne) AddSubscriberIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddSubscriberIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddSubscriberIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddSubscriberIDs(ids...)
+	return _u
 }
 
 // AddSubscribers adds the "subscribers" edges to the Subscriber entity.
-func (ouo *OrganizationUpdateOne) AddSubscribers(s ...*Subscriber) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) AddSubscribers(v ...*Subscriber) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddSubscriberIDs(ids...)
+	return _u.AddSubscriberIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (ouo *OrganizationUpdateOne) AddEntityIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddEntityIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddEntityIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (ouo *OrganizationUpdateOne) AddEntities(e ...*Entity) *OrganizationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdateOne) AddEntities(v ...*Entity) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // AddEntityTypeIDs adds the "entity_types" edge to the EntityType entity by IDs.
-func (ouo *OrganizationUpdateOne) AddEntityTypeIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddEntityTypeIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddEntityTypeIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddEntityTypeIDs(ids...)
+	return _u
 }
 
 // AddEntityTypes adds the "entity_types" edges to the EntityType entity.
-func (ouo *OrganizationUpdateOne) AddEntityTypes(e ...*EntityType) *OrganizationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdateOne) AddEntityTypes(v ...*EntityType) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddEntityTypeIDs(ids...)
+	return _u.AddEntityTypeIDs(ids...)
 }
 
 // AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
-func (ouo *OrganizationUpdateOne) AddContactIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddContactIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddContactIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddContactIDs(ids...)
+	return _u
 }
 
 // AddContacts adds the "contacts" edges to the Contact entity.
-func (ouo *OrganizationUpdateOne) AddContacts(c ...*Contact) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdateOne) AddContacts(v ...*Contact) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddContactIDs(ids...)
+	return _u.AddContactIDs(ids...)
 }
 
 // AddNoteIDs adds the "notes" edge to the Note entity by IDs.
-func (ouo *OrganizationUpdateOne) AddNoteIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddNoteIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddNoteIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddNoteIDs(ids...)
+	return _u
 }
 
 // AddNotes adds the "notes" edges to the Note entity.
-func (ouo *OrganizationUpdateOne) AddNotes(n ...*Note) *OrganizationUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *OrganizationUpdateOne) AddNotes(v ...*Note) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddNoteIDs(ids...)
+	return _u.AddNoteIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (ouo *OrganizationUpdateOne) AddTaskIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddTaskIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddTaskIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (ouo *OrganizationUpdateOne) AddTasks(t ...*Task) *OrganizationUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdateOne) AddTasks(v ...*Task) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddTaskIDs(ids...)
+	return _u.AddTaskIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (ouo *OrganizationUpdateOne) AddProgramIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddProgramIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddProgramIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (ouo *OrganizationUpdateOne) AddPrograms(p ...*Program) *OrganizationUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdateOne) AddPrograms(v ...*Program) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (ouo *OrganizationUpdateOne) AddProcedureIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddProcedureIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddProcedureIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (ouo *OrganizationUpdateOne) AddProcedures(p ...*Procedure) *OrganizationUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdateOne) AddProcedures(v ...*Procedure) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddProcedureIDs(ids...)
+	return _u.AddProcedureIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (ouo *OrganizationUpdateOne) AddInternalPolicyIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddInternalPolicyIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddInternalPolicyIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (ouo *OrganizationUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *OrganizationUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdateOne) AddInternalPolicies(v ...*InternalPolicy) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddInternalPolicyIDs(ids...)
+	return _u.AddInternalPolicyIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (ouo *OrganizationUpdateOne) AddRiskIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddRiskIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddRiskIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (ouo *OrganizationUpdateOne) AddRisks(r ...*Risk) *OrganizationUpdateOne {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *OrganizationUpdateOne) AddRisks(v ...*Risk) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddRiskIDs(ids...)
+	return _u.AddRiskIDs(ids...)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (ouo *OrganizationUpdateOne) AddControlObjectiveIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddControlObjectiveIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddControlObjectiveIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddControlObjectiveIDs(ids...)
+	return _u
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (ouo *OrganizationUpdateOne) AddControlObjectives(c ...*ControlObjective) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdateOne) AddControlObjectives(v ...*ControlObjective) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddControlObjectiveIDs(ids...)
+	return _u.AddControlObjectiveIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
-func (ouo *OrganizationUpdateOne) AddNarrativeIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddNarrativeIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddNarrativeIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddNarrativeIDs(ids...)
+	return _u
 }
 
 // AddNarratives adds the "narratives" edges to the Narrative entity.
-func (ouo *OrganizationUpdateOne) AddNarratives(n ...*Narrative) *OrganizationUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *OrganizationUpdateOne) AddNarratives(v ...*Narrative) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddNarrativeIDs(ids...)
+	return _u.AddNarrativeIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (ouo *OrganizationUpdateOne) AddControlIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddControlIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddControlIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (ouo *OrganizationUpdateOne) AddControls(c ...*Control) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdateOne) AddControls(v ...*Control) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (ouo *OrganizationUpdateOne) AddSubcontrolIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddSubcontrolIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddSubcontrolIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (ouo *OrganizationUpdateOne) AddSubcontrols(s ...*Subcontrol) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) AddSubcontrols(v ...*Subcontrol) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
-func (ouo *OrganizationUpdateOne) AddControlImplementationIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddControlImplementationIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddControlImplementationIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddControlImplementationIDs(ids...)
+	return _u
 }
 
 // AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
-func (ouo *OrganizationUpdateOne) AddControlImplementations(c ...*ControlImplementation) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdateOne) AddControlImplementations(v ...*ControlImplementation) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddControlImplementationIDs(ids...)
+	return _u.AddControlImplementationIDs(ids...)
 }
 
 // AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
-func (ouo *OrganizationUpdateOne) AddMappedControlIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddMappedControlIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddMappedControlIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddMappedControlIDs(ids...)
+	return _u
 }
 
 // AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
-func (ouo *OrganizationUpdateOne) AddMappedControls(m ...*MappedControl) *OrganizationUpdateOne {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *OrganizationUpdateOne) AddMappedControls(v ...*MappedControl) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddMappedControlIDs(ids...)
+	return _u.AddMappedControlIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (ouo *OrganizationUpdateOne) AddEvidenceIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddEvidenceIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddEvidenceIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddEvidenceIDs(ids...)
+	return _u
 }
 
 // AddEvidence adds the "evidence" edges to the Evidence entity.
-func (ouo *OrganizationUpdateOne) AddEvidence(e ...*Evidence) *OrganizationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdateOne) AddEvidence(v ...*Evidence) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddEvidenceIDs(ids...)
+	return _u.AddEvidenceIDs(ids...)
 }
 
 // AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
-func (ouo *OrganizationUpdateOne) AddStandardIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddStandardIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddStandardIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddStandardIDs(ids...)
+	return _u
 }
 
 // AddStandards adds the "standards" edges to the Standard entity.
-func (ouo *OrganizationUpdateOne) AddStandards(s ...*Standard) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) AddStandards(v ...*Standard) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddStandardIDs(ids...)
+	return _u.AddStandardIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (ouo *OrganizationUpdateOne) AddActionPlanIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddActionPlanIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddActionPlanIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
 }
 
 // AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (ouo *OrganizationUpdateOne) AddActionPlans(a ...*ActionPlan) *OrganizationUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdateOne) AddActionPlans(v ...*ActionPlan) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddActionPlanIDs(ids...)
+	return _u.AddActionPlanIDs(ids...)
 }
 
 // AddCustomDomainIDs adds the "custom_domains" edge to the CustomDomain entity by IDs.
-func (ouo *OrganizationUpdateOne) AddCustomDomainIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddCustomDomainIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddCustomDomainIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddCustomDomainIDs(ids...)
+	return _u
 }
 
 // AddCustomDomains adds the "custom_domains" edges to the CustomDomain entity.
-func (ouo *OrganizationUpdateOne) AddCustomDomains(c ...*CustomDomain) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdateOne) AddCustomDomains(v ...*CustomDomain) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddCustomDomainIDs(ids...)
+	return _u.AddCustomDomainIDs(ids...)
 }
 
 // AddJobRunnerIDs adds the "job_runners" edge to the JobRunner entity by IDs.
-func (ouo *OrganizationUpdateOne) AddJobRunnerIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddJobRunnerIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddJobRunnerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddJobRunnerIDs(ids...)
+	return _u
 }
 
 // AddJobRunners adds the "job_runners" edges to the JobRunner entity.
-func (ouo *OrganizationUpdateOne) AddJobRunners(j ...*JobRunner) *OrganizationUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdateOne) AddJobRunners(v ...*JobRunner) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddJobRunnerIDs(ids...)
+	return _u.AddJobRunnerIDs(ids...)
 }
 
 // AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
-func (ouo *OrganizationUpdateOne) AddJobRunnerTokenIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddJobRunnerTokenIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddJobRunnerTokenIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddJobRunnerTokenIDs(ids...)
+	return _u
 }
 
 // AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
-func (ouo *OrganizationUpdateOne) AddJobRunnerTokens(j ...*JobRunnerToken) *OrganizationUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdateOne) AddJobRunnerTokens(v ...*JobRunnerToken) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddJobRunnerTokenIDs(ids...)
+	return _u.AddJobRunnerTokenIDs(ids...)
 }
 
 // AddJobRunnerRegistrationTokenIDs adds the "job_runner_registration_tokens" edge to the JobRunnerRegistrationToken entity by IDs.
-func (ouo *OrganizationUpdateOne) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
+	return _u
 }
 
 // AddJobRunnerRegistrationTokens adds the "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
-func (ouo *OrganizationUpdateOne) AddJobRunnerRegistrationTokens(j ...*JobRunnerRegistrationToken) *OrganizationUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdateOne) AddJobRunnerRegistrationTokens(v ...*JobRunnerRegistrationToken) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddJobRunnerRegistrationTokenIDs(ids...)
+	return _u.AddJobRunnerRegistrationTokenIDs(ids...)
 }
 
 // AddDNSVerificationIDs adds the "dns_verifications" edge to the DNSVerification entity by IDs.
-func (ouo *OrganizationUpdateOne) AddDNSVerificationIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddDNSVerificationIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddDNSVerificationIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddDNSVerificationIDs(ids...)
+	return _u
 }
 
 // AddDNSVerifications adds the "dns_verifications" edges to the DNSVerification entity.
-func (ouo *OrganizationUpdateOne) AddDNSVerifications(d ...*DNSVerification) *OrganizationUpdateOne {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *OrganizationUpdateOne) AddDNSVerifications(v ...*DNSVerification) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddDNSVerificationIDs(ids...)
+	return _u.AddDNSVerificationIDs(ids...)
 }
 
 // AddJobTemplateIDs adds the "job_templates" edge to the JobTemplate entity by IDs.
-func (ouo *OrganizationUpdateOne) AddJobTemplateIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddJobTemplateIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddJobTemplateIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddJobTemplateIDs(ids...)
+	return _u
 }
 
 // AddJobTemplates adds the "job_templates" edges to the JobTemplate entity.
-func (ouo *OrganizationUpdateOne) AddJobTemplates(j ...*JobTemplate) *OrganizationUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdateOne) AddJobTemplates(v ...*JobTemplate) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddJobTemplateIDs(ids...)
+	return _u.AddJobTemplateIDs(ids...)
 }
 
 // AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (ouo *OrganizationUpdateOne) AddScheduledJobIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddScheduledJobIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddScheduledJobIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddScheduledJobIDs(ids...)
+	return _u
 }
 
 // AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (ouo *OrganizationUpdateOne) AddScheduledJobs(s ...*ScheduledJob) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) AddScheduledJobs(v ...*ScheduledJob) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddScheduledJobIDs(ids...)
+	return _u.AddScheduledJobIDs(ids...)
 }
 
 // AddJobResultIDs adds the "job_results" edge to the JobResult entity by IDs.
-func (ouo *OrganizationUpdateOne) AddJobResultIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddJobResultIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddJobResultIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddJobResultIDs(ids...)
+	return _u
 }
 
 // AddJobResults adds the "job_results" edges to the JobResult entity.
-func (ouo *OrganizationUpdateOne) AddJobResults(j ...*JobResult) *OrganizationUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdateOne) AddJobResults(v ...*JobResult) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddJobResultIDs(ids...)
+	return _u.AddJobResultIDs(ids...)
 }
 
 // AddScheduledJobRunIDs adds the "scheduled_job_runs" edge to the ScheduledJobRun entity by IDs.
-func (ouo *OrganizationUpdateOne) AddScheduledJobRunIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddScheduledJobRunIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddScheduledJobRunIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddScheduledJobRunIDs(ids...)
+	return _u
 }
 
 // AddScheduledJobRuns adds the "scheduled_job_runs" edges to the ScheduledJobRun entity.
-func (ouo *OrganizationUpdateOne) AddScheduledJobRuns(s ...*ScheduledJobRun) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) AddScheduledJobRuns(v ...*ScheduledJobRun) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddScheduledJobRunIDs(ids...)
+	return _u.AddScheduledJobRunIDs(ids...)
 }
 
 // AddTrustCenterIDs adds the "trust_centers" edge to the TrustCenter entity by IDs.
-func (ouo *OrganizationUpdateOne) AddTrustCenterIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddTrustCenterIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddTrustCenterIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddTrustCenterIDs(ids...)
+	return _u
 }
 
 // AddTrustCenters adds the "trust_centers" edges to the TrustCenter entity.
-func (ouo *OrganizationUpdateOne) AddTrustCenters(t ...*TrustCenter) *OrganizationUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdateOne) AddTrustCenters(v ...*TrustCenter) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddTrustCenterIDs(ids...)
+	return _u.AddTrustCenterIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
-func (ouo *OrganizationUpdateOne) AddAssetIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddAssetIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddAssetIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
 }
 
 // AddAssets adds the "assets" edges to the Asset entity.
-func (ouo *OrganizationUpdateOne) AddAssets(a ...*Asset) *OrganizationUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdateOne) AddAssets(v ...*Asset) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddAssetIDs(ids...)
+	return _u.AddAssetIDs(ids...)
 }
 
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (ouo *OrganizationUpdateOne) AddScanIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddScanIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddScanIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
 }
 
 // AddScans adds the "scans" edges to the Scan entity.
-func (ouo *OrganizationUpdateOne) AddScans(s ...*Scan) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) AddScans(v ...*Scan) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddScanIDs(ids...)
+	return _u.AddScanIDs(ids...)
 }
 
 // AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
-func (ouo *OrganizationUpdateOne) AddSubprocessorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddSubprocessorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddSubprocessorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddSubprocessorIDs(ids...)
+	return _u
 }
 
 // AddSubprocessors adds the "subprocessors" edges to the Subprocessor entity.
-func (ouo *OrganizationUpdateOne) AddSubprocessors(s ...*Subprocessor) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) AddSubprocessors(v ...*Subprocessor) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddSubprocessorIDs(ids...)
+	return _u.AddSubprocessorIDs(ids...)
 }
 
 // AddExportIDs adds the "exports" edge to the Export entity by IDs.
-func (ouo *OrganizationUpdateOne) AddExportIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddExportIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddExportIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddExportIDs(ids...)
+	return _u
 }
 
 // AddExports adds the "exports" edges to the Export entity.
-func (ouo *OrganizationUpdateOne) AddExports(e ...*Export) *OrganizationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdateOne) AddExports(v ...*Export) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddExportIDs(ids...)
+	return _u.AddExportIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
-func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.AddMemberIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddMemberIDs(ids...)
+	return _u
 }
 
 // AddMembers adds the "members" edges to the OrgMembership entity.
-func (ouo *OrganizationUpdateOne) AddMembers(o ...*OrgMembership) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) AddMembers(v ...*OrgMembership) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.AddMemberIDs(ids...)
+	return _u.AddMemberIDs(ids...)
 }
 
 // Mutation returns the OrganizationMutation object of the builder.
-func (ouo *OrganizationUpdateOne) Mutation() *OrganizationMutation {
-	return ouo.mutation
+func (_u *OrganizationUpdateOne) Mutation() *OrganizationMutation {
+	return _u.mutation
 }
 
 // ClearControlCreators clears all "control_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearControlCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearControlCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearControlCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearControlCreators()
+	return _u
 }
 
 // RemoveControlCreatorIDs removes the "control_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveControlCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveControlCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveControlCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveControlCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveControlCreators removes "control_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveControlCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveControlCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveControlCreatorIDs(ids...)
+	return _u.RemoveControlCreatorIDs(ids...)
 }
 
 // ClearControlImplementationCreators clears all "control_implementation_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearControlImplementationCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearControlImplementationCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearControlImplementationCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearControlImplementationCreators()
+	return _u
 }
 
 // RemoveControlImplementationCreatorIDs removes the "control_implementation_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveControlImplementationCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveControlImplementationCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveControlImplementationCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveControlImplementationCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveControlImplementationCreators removes "control_implementation_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveControlImplementationCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveControlImplementationCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveControlImplementationCreatorIDs(ids...)
+	return _u.RemoveControlImplementationCreatorIDs(ids...)
 }
 
 // ClearControlObjectiveCreators clears all "control_objective_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearControlObjectiveCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearControlObjectiveCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearControlObjectiveCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearControlObjectiveCreators()
+	return _u
 }
 
 // RemoveControlObjectiveCreatorIDs removes the "control_objective_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveControlObjectiveCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveControlObjectiveCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveControlObjectiveCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveControlObjectiveCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveControlObjectiveCreators removes "control_objective_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveControlObjectiveCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveControlObjectiveCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveControlObjectiveCreatorIDs(ids...)
+	return _u.RemoveControlObjectiveCreatorIDs(ids...)
 }
 
 // ClearEvidenceCreators clears all "evidence_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearEvidenceCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearEvidenceCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearEvidenceCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearEvidenceCreators()
+	return _u
 }
 
 // RemoveEvidenceCreatorIDs removes the "evidence_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveEvidenceCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveEvidenceCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveEvidenceCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveEvidenceCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveEvidenceCreators removes "evidence_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveEvidenceCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveEvidenceCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveEvidenceCreatorIDs(ids...)
+	return _u.RemoveEvidenceCreatorIDs(ids...)
 }
 
 // ClearGroupCreators clears all "group_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearGroupCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearGroupCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearGroupCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearGroupCreators()
+	return _u
 }
 
 // RemoveGroupCreatorIDs removes the "group_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveGroupCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveGroupCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveGroupCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveGroupCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveGroupCreators removes "group_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveGroupCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveGroupCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveGroupCreatorIDs(ids...)
+	return _u.RemoveGroupCreatorIDs(ids...)
 }
 
 // ClearInternalPolicyCreators clears all "internal_policy_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearInternalPolicyCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearInternalPolicyCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearInternalPolicyCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearInternalPolicyCreators()
+	return _u
 }
 
 // RemoveInternalPolicyCreatorIDs removes the "internal_policy_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveInternalPolicyCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveInternalPolicyCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveInternalPolicyCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveInternalPolicyCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveInternalPolicyCreators removes "internal_policy_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveInternalPolicyCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveInternalPolicyCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveInternalPolicyCreatorIDs(ids...)
+	return _u.RemoveInternalPolicyCreatorIDs(ids...)
 }
 
 // ClearMappedControlCreators clears all "mapped_control_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearMappedControlCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearMappedControlCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearMappedControlCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearMappedControlCreators()
+	return _u
 }
 
 // RemoveMappedControlCreatorIDs removes the "mapped_control_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveMappedControlCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveMappedControlCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveMappedControlCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveMappedControlCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveMappedControlCreators removes "mapped_control_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveMappedControlCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveMappedControlCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveMappedControlCreatorIDs(ids...)
+	return _u.RemoveMappedControlCreatorIDs(ids...)
 }
 
 // ClearNarrativeCreators clears all "narrative_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearNarrativeCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearNarrativeCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearNarrativeCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearNarrativeCreators()
+	return _u
 }
 
 // RemoveNarrativeCreatorIDs removes the "narrative_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveNarrativeCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveNarrativeCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveNarrativeCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveNarrativeCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveNarrativeCreators removes "narrative_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveNarrativeCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveNarrativeCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveNarrativeCreatorIDs(ids...)
+	return _u.RemoveNarrativeCreatorIDs(ids...)
 }
 
 // ClearProcedureCreators clears all "procedure_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearProcedureCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearProcedureCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearProcedureCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearProcedureCreators()
+	return _u
 }
 
 // RemoveProcedureCreatorIDs removes the "procedure_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveProcedureCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveProcedureCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveProcedureCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveProcedureCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveProcedureCreators removes "procedure_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveProcedureCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveProcedureCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveProcedureCreatorIDs(ids...)
+	return _u.RemoveProcedureCreatorIDs(ids...)
 }
 
 // ClearProgramCreators clears all "program_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearProgramCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearProgramCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearProgramCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearProgramCreators()
+	return _u
 }
 
 // RemoveProgramCreatorIDs removes the "program_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveProgramCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveProgramCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveProgramCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveProgramCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveProgramCreators removes "program_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveProgramCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveProgramCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveProgramCreatorIDs(ids...)
+	return _u.RemoveProgramCreatorIDs(ids...)
 }
 
 // ClearRiskCreators clears all "risk_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearRiskCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearRiskCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearRiskCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearRiskCreators()
+	return _u
 }
 
 // RemoveRiskCreatorIDs removes the "risk_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveRiskCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveRiskCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveRiskCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveRiskCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveRiskCreators removes "risk_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveRiskCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveRiskCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveRiskCreatorIDs(ids...)
+	return _u.RemoveRiskCreatorIDs(ids...)
 }
 
 // ClearScheduledJobCreators clears all "scheduled_job_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearScheduledJobCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearScheduledJobCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearScheduledJobCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearScheduledJobCreators()
+	return _u
 }
 
 // RemoveScheduledJobCreatorIDs removes the "scheduled_job_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveScheduledJobCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveScheduledJobCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveScheduledJobCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveScheduledJobCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveScheduledJobCreators removes "scheduled_job_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveScheduledJobCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveScheduledJobCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveScheduledJobCreatorIDs(ids...)
+	return _u.RemoveScheduledJobCreatorIDs(ids...)
 }
 
 // ClearStandardCreators clears all "standard_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearStandardCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearStandardCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearStandardCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearStandardCreators()
+	return _u
 }
 
 // RemoveStandardCreatorIDs removes the "standard_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveStandardCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveStandardCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveStandardCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveStandardCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveStandardCreators removes "standard_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveStandardCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveStandardCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveStandardCreatorIDs(ids...)
+	return _u.RemoveStandardCreatorIDs(ids...)
 }
 
 // ClearTemplateCreators clears all "template_creators" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearTemplateCreators() *OrganizationUpdateOne {
-	ouo.mutation.ClearTemplateCreators()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearTemplateCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearTemplateCreators()
+	return _u
 }
 
 // RemoveTemplateCreatorIDs removes the "template_creators" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveTemplateCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveTemplateCreatorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveTemplateCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveTemplateCreatorIDs(ids...)
+	return _u
 }
 
 // RemoveTemplateCreators removes "template_creators" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveTemplateCreators(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveTemplateCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveTemplateCreatorIDs(ids...)
+	return _u.RemoveTemplateCreatorIDs(ids...)
 }
 
 // ClearChildren clears all "children" edges to the Organization entity.
-func (ouo *OrganizationUpdateOne) ClearChildren() *OrganizationUpdateOne {
-	ouo.mutation.ClearChildren()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearChildren() *OrganizationUpdateOne {
+	_u.mutation.ClearChildren()
+	return _u
 }
 
 // RemoveChildIDs removes the "children" edge to Organization entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveChildIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveChildIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveChildIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveChildIDs(ids...)
+	return _u
 }
 
 // RemoveChildren removes "children" edges to Organization entities.
-func (ouo *OrganizationUpdateOne) RemoveChildren(o ...*Organization) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) RemoveChildren(v ...*Organization) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveChildIDs(ids...)
+	return _u.RemoveChildIDs(ids...)
 }
 
 // ClearSetting clears the "setting" edge to the OrganizationSetting entity.
-func (ouo *OrganizationUpdateOne) ClearSetting() *OrganizationUpdateOne {
-	ouo.mutation.ClearSetting()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearSetting() *OrganizationUpdateOne {
+	_u.mutation.ClearSetting()
+	return _u
 }
 
 // ClearPersonalAccessTokens clears all "personal_access_tokens" edges to the PersonalAccessToken entity.
-func (ouo *OrganizationUpdateOne) ClearPersonalAccessTokens() *OrganizationUpdateOne {
-	ouo.mutation.ClearPersonalAccessTokens()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearPersonalAccessTokens() *OrganizationUpdateOne {
+	_u.mutation.ClearPersonalAccessTokens()
+	return _u
 }
 
 // RemovePersonalAccessTokenIDs removes the "personal_access_tokens" edge to PersonalAccessToken entities by IDs.
-func (ouo *OrganizationUpdateOne) RemovePersonalAccessTokenIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemovePersonalAccessTokenIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemovePersonalAccessTokenIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemovePersonalAccessTokenIDs(ids...)
+	return _u
 }
 
 // RemovePersonalAccessTokens removes "personal_access_tokens" edges to PersonalAccessToken entities.
-func (ouo *OrganizationUpdateOne) RemovePersonalAccessTokens(p ...*PersonalAccessToken) *OrganizationUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdateOne) RemovePersonalAccessTokens(v ...*PersonalAccessToken) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemovePersonalAccessTokenIDs(ids...)
+	return _u.RemovePersonalAccessTokenIDs(ids...)
 }
 
 // ClearAPITokens clears all "api_tokens" edges to the APIToken entity.
-func (ouo *OrganizationUpdateOne) ClearAPITokens() *OrganizationUpdateOne {
-	ouo.mutation.ClearAPITokens()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearAPITokens() *OrganizationUpdateOne {
+	_u.mutation.ClearAPITokens()
+	return _u
 }
 
 // RemoveAPITokenIDs removes the "api_tokens" edge to APIToken entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveAPITokenIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveAPITokenIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveAPITokenIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveAPITokenIDs(ids...)
+	return _u
 }
 
 // RemoveAPITokens removes "api_tokens" edges to APIToken entities.
-func (ouo *OrganizationUpdateOne) RemoveAPITokens(a ...*APIToken) *OrganizationUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdateOne) RemoveAPITokens(v ...*APIToken) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveAPITokenIDs(ids...)
+	return _u.RemoveAPITokenIDs(ids...)
 }
 
 // ClearUsers clears all "users" edges to the User entity.
-func (ouo *OrganizationUpdateOne) ClearUsers() *OrganizationUpdateOne {
-	ouo.mutation.ClearUsers()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearUsers() *OrganizationUpdateOne {
+	_u.mutation.ClearUsers()
+	return _u
 }
 
 // RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveUserIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveUserIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveUserIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveUserIDs(ids...)
+	return _u
 }
 
 // RemoveUsers removes "users" edges to User entities.
-func (ouo *OrganizationUpdateOne) RemoveUsers(u ...*User) *OrganizationUpdateOne {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *OrganizationUpdateOne) RemoveUsers(v ...*User) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveUserIDs(ids...)
+	return _u.RemoveUserIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (ouo *OrganizationUpdateOne) ClearFiles() *OrganizationUpdateOne {
-	ouo.mutation.ClearFiles()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearFiles() *OrganizationUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveFileIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveFileIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveFileIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (ouo *OrganizationUpdateOne) RemoveFiles(f ...*File) *OrganizationUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *OrganizationUpdateOne) RemoveFiles(v ...*File) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (ouo *OrganizationUpdateOne) ClearEvents() *OrganizationUpdateOne {
-	ouo.mutation.ClearEvents()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearEvents() *OrganizationUpdateOne {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveEventIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveEventIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveEventIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (ouo *OrganizationUpdateOne) RemoveEvents(e ...*Event) *OrganizationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdateOne) RemoveEvents(v ...*Event) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // ClearSecrets clears all "secrets" edges to the Hush entity.
-func (ouo *OrganizationUpdateOne) ClearSecrets() *OrganizationUpdateOne {
-	ouo.mutation.ClearSecrets()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearSecrets() *OrganizationUpdateOne {
+	_u.mutation.ClearSecrets()
+	return _u
 }
 
 // RemoveSecretIDs removes the "secrets" edge to Hush entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveSecretIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveSecretIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveSecretIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveSecretIDs(ids...)
+	return _u
 }
 
 // RemoveSecrets removes "secrets" edges to Hush entities.
-func (ouo *OrganizationUpdateOne) RemoveSecrets(h ...*Hush) *OrganizationUpdateOne {
-	ids := make([]string, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
+func (_u *OrganizationUpdateOne) RemoveSecrets(v ...*Hush) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveSecretIDs(ids...)
+	return _u.RemoveSecretIDs(ids...)
 }
 
 // ClearAvatarFile clears the "avatar_file" edge to the File entity.
-func (ouo *OrganizationUpdateOne) ClearAvatarFile() *OrganizationUpdateOne {
-	ouo.mutation.ClearAvatarFile()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearAvatarFile() *OrganizationUpdateOne {
+	_u.mutation.ClearAvatarFile()
+	return _u
 }
 
 // ClearGroups clears all "groups" edges to the Group entity.
-func (ouo *OrganizationUpdateOne) ClearGroups() *OrganizationUpdateOne {
-	ouo.mutation.ClearGroups()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearGroups() *OrganizationUpdateOne {
+	_u.mutation.ClearGroups()
+	return _u
 }
 
 // RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveGroupIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveGroupIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveGroupIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveGroupIDs(ids...)
+	return _u
 }
 
 // RemoveGroups removes "groups" edges to Group entities.
-func (ouo *OrganizationUpdateOne) RemoveGroups(g ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *OrganizationUpdateOne) RemoveGroups(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveGroupIDs(ids...)
+	return _u.RemoveGroupIDs(ids...)
 }
 
 // ClearTemplates clears all "templates" edges to the Template entity.
-func (ouo *OrganizationUpdateOne) ClearTemplates() *OrganizationUpdateOne {
-	ouo.mutation.ClearTemplates()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearTemplates() *OrganizationUpdateOne {
+	_u.mutation.ClearTemplates()
+	return _u
 }
 
 // RemoveTemplateIDs removes the "templates" edge to Template entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveTemplateIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveTemplateIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveTemplateIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveTemplateIDs(ids...)
+	return _u
 }
 
 // RemoveTemplates removes "templates" edges to Template entities.
-func (ouo *OrganizationUpdateOne) RemoveTemplates(t ...*Template) *OrganizationUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdateOne) RemoveTemplates(v ...*Template) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveTemplateIDs(ids...)
+	return _u.RemoveTemplateIDs(ids...)
 }
 
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
-func (ouo *OrganizationUpdateOne) ClearIntegrations() *OrganizationUpdateOne {
-	ouo.mutation.ClearIntegrations()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearIntegrations() *OrganizationUpdateOne {
+	_u.mutation.ClearIntegrations()
+	return _u
 }
 
 // RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveIntegrationIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveIntegrationIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveIntegrationIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
 }
 
 // RemoveIntegrations removes "integrations" edges to Integration entities.
-func (ouo *OrganizationUpdateOne) RemoveIntegrations(i ...*Integration) *OrganizationUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdateOne) RemoveIntegrations(v ...*Integration) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveIntegrationIDs(ids...)
+	return _u.RemoveIntegrationIDs(ids...)
 }
 
 // ClearDocuments clears all "documents" edges to the DocumentData entity.
-func (ouo *OrganizationUpdateOne) ClearDocuments() *OrganizationUpdateOne {
-	ouo.mutation.ClearDocuments()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearDocuments() *OrganizationUpdateOne {
+	_u.mutation.ClearDocuments()
+	return _u
 }
 
 // RemoveDocumentIDs removes the "documents" edge to DocumentData entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveDocumentIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveDocumentIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveDocumentIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveDocumentIDs(ids...)
+	return _u
 }
 
 // RemoveDocuments removes "documents" edges to DocumentData entities.
-func (ouo *OrganizationUpdateOne) RemoveDocuments(d ...*DocumentData) *OrganizationUpdateOne {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *OrganizationUpdateOne) RemoveDocuments(v ...*DocumentData) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveDocumentIDs(ids...)
+	return _u.RemoveDocumentIDs(ids...)
 }
 
 // ClearOrgSubscriptions clears all "org_subscriptions" edges to the OrgSubscription entity.
-func (ouo *OrganizationUpdateOne) ClearOrgSubscriptions() *OrganizationUpdateOne {
-	ouo.mutation.ClearOrgSubscriptions()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearOrgSubscriptions() *OrganizationUpdateOne {
+	_u.mutation.ClearOrgSubscriptions()
+	return _u
 }
 
 // RemoveOrgSubscriptionIDs removes the "org_subscriptions" edge to OrgSubscription entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveOrgSubscriptionIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveOrgSubscriptionIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveOrgSubscriptionIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveOrgSubscriptionIDs(ids...)
+	return _u
 }
 
 // RemoveOrgSubscriptions removes "org_subscriptions" edges to OrgSubscription entities.
-func (ouo *OrganizationUpdateOne) RemoveOrgSubscriptions(o ...*OrgSubscription) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) RemoveOrgSubscriptions(v ...*OrgSubscription) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveOrgSubscriptionIDs(ids...)
+	return _u.RemoveOrgSubscriptionIDs(ids...)
 }
 
 // ClearOrgProducts clears all "org_products" edges to the OrgProduct entity.
-func (ouo *OrganizationUpdateOne) ClearOrgProducts() *OrganizationUpdateOne {
-	ouo.mutation.ClearOrgProducts()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearOrgProducts() *OrganizationUpdateOne {
+	_u.mutation.ClearOrgProducts()
+	return _u
 }
 
 // RemoveOrgProductIDs removes the "org_products" edge to OrgProduct entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveOrgProductIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveOrgProductIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveOrgProductIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveOrgProductIDs(ids...)
+	return _u
 }
 
 // RemoveOrgProducts removes "org_products" edges to OrgProduct entities.
-func (ouo *OrganizationUpdateOne) RemoveOrgProducts(o ...*OrgProduct) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) RemoveOrgProducts(v ...*OrgProduct) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveOrgProductIDs(ids...)
+	return _u.RemoveOrgProductIDs(ids...)
 }
 
 // ClearOrgPrices clears all "org_prices" edges to the OrgPrice entity.
-func (ouo *OrganizationUpdateOne) ClearOrgPrices() *OrganizationUpdateOne {
-	ouo.mutation.ClearOrgPrices()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearOrgPrices() *OrganizationUpdateOne {
+	_u.mutation.ClearOrgPrices()
+	return _u
 }
 
 // RemoveOrgPriceIDs removes the "org_prices" edge to OrgPrice entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveOrgPriceIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveOrgPriceIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveOrgPriceIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveOrgPriceIDs(ids...)
+	return _u
 }
 
 // RemoveOrgPrices removes "org_prices" edges to OrgPrice entities.
-func (ouo *OrganizationUpdateOne) RemoveOrgPrices(o ...*OrgPrice) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) RemoveOrgPrices(v ...*OrgPrice) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveOrgPriceIDs(ids...)
+	return _u.RemoveOrgPriceIDs(ids...)
 }
 
 // ClearOrgModules clears all "org_modules" edges to the OrgModule entity.
-func (ouo *OrganizationUpdateOne) ClearOrgModules() *OrganizationUpdateOne {
-	ouo.mutation.ClearOrgModules()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearOrgModules() *OrganizationUpdateOne {
+	_u.mutation.ClearOrgModules()
+	return _u
 }
 
 // RemoveOrgModuleIDs removes the "org_modules" edge to OrgModule entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveOrgModuleIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveOrgModuleIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveOrgModuleIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveOrgModuleIDs(ids...)
+	return _u
 }
 
 // RemoveOrgModules removes "org_modules" edges to OrgModule entities.
-func (ouo *OrganizationUpdateOne) RemoveOrgModules(o ...*OrgModule) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) RemoveOrgModules(v ...*OrgModule) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveOrgModuleIDs(ids...)
+	return _u.RemoveOrgModuleIDs(ids...)
 }
 
 // ClearInvites clears all "invites" edges to the Invite entity.
-func (ouo *OrganizationUpdateOne) ClearInvites() *OrganizationUpdateOne {
-	ouo.mutation.ClearInvites()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearInvites() *OrganizationUpdateOne {
+	_u.mutation.ClearInvites()
+	return _u
 }
 
 // RemoveInviteIDs removes the "invites" edge to Invite entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveInviteIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveInviteIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveInviteIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveInviteIDs(ids...)
+	return _u
 }
 
 // RemoveInvites removes "invites" edges to Invite entities.
-func (ouo *OrganizationUpdateOne) RemoveInvites(i ...*Invite) *OrganizationUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdateOne) RemoveInvites(v ...*Invite) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveInviteIDs(ids...)
+	return _u.RemoveInviteIDs(ids...)
 }
 
 // ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
-func (ouo *OrganizationUpdateOne) ClearSubscribers() *OrganizationUpdateOne {
-	ouo.mutation.ClearSubscribers()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearSubscribers() *OrganizationUpdateOne {
+	_u.mutation.ClearSubscribers()
+	return _u
 }
 
 // RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveSubscriberIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveSubscriberIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveSubscriberIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveSubscriberIDs(ids...)
+	return _u
 }
 
 // RemoveSubscribers removes "subscribers" edges to Subscriber entities.
-func (ouo *OrganizationUpdateOne) RemoveSubscribers(s ...*Subscriber) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) RemoveSubscribers(v ...*Subscriber) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveSubscriberIDs(ids...)
+	return _u.RemoveSubscriberIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (ouo *OrganizationUpdateOne) ClearEntities() *OrganizationUpdateOne {
-	ouo.mutation.ClearEntities()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearEntities() *OrganizationUpdateOne {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveEntityIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveEntityIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveEntityIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (ouo *OrganizationUpdateOne) RemoveEntities(e ...*Entity) *OrganizationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdateOne) RemoveEntities(v ...*Entity) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // ClearEntityTypes clears all "entity_types" edges to the EntityType entity.
-func (ouo *OrganizationUpdateOne) ClearEntityTypes() *OrganizationUpdateOne {
-	ouo.mutation.ClearEntityTypes()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearEntityTypes() *OrganizationUpdateOne {
+	_u.mutation.ClearEntityTypes()
+	return _u
 }
 
 // RemoveEntityTypeIDs removes the "entity_types" edge to EntityType entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveEntityTypeIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveEntityTypeIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveEntityTypeIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveEntityTypeIDs(ids...)
+	return _u
 }
 
 // RemoveEntityTypes removes "entity_types" edges to EntityType entities.
-func (ouo *OrganizationUpdateOne) RemoveEntityTypes(e ...*EntityType) *OrganizationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdateOne) RemoveEntityTypes(v ...*EntityType) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveEntityTypeIDs(ids...)
+	return _u.RemoveEntityTypeIDs(ids...)
 }
 
 // ClearContacts clears all "contacts" edges to the Contact entity.
-func (ouo *OrganizationUpdateOne) ClearContacts() *OrganizationUpdateOne {
-	ouo.mutation.ClearContacts()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearContacts() *OrganizationUpdateOne {
+	_u.mutation.ClearContacts()
+	return _u
 }
 
 // RemoveContactIDs removes the "contacts" edge to Contact entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveContactIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveContactIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveContactIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveContactIDs(ids...)
+	return _u
 }
 
 // RemoveContacts removes "contacts" edges to Contact entities.
-func (ouo *OrganizationUpdateOne) RemoveContacts(c ...*Contact) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdateOne) RemoveContacts(v ...*Contact) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveContactIDs(ids...)
+	return _u.RemoveContactIDs(ids...)
 }
 
 // ClearNotes clears all "notes" edges to the Note entity.
-func (ouo *OrganizationUpdateOne) ClearNotes() *OrganizationUpdateOne {
-	ouo.mutation.ClearNotes()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearNotes() *OrganizationUpdateOne {
+	_u.mutation.ClearNotes()
+	return _u
 }
 
 // RemoveNoteIDs removes the "notes" edge to Note entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveNoteIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveNoteIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveNoteIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveNoteIDs(ids...)
+	return _u
 }
 
 // RemoveNotes removes "notes" edges to Note entities.
-func (ouo *OrganizationUpdateOne) RemoveNotes(n ...*Note) *OrganizationUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *OrganizationUpdateOne) RemoveNotes(v ...*Note) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveNoteIDs(ids...)
+	return _u.RemoveNoteIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
-func (ouo *OrganizationUpdateOne) ClearTasks() *OrganizationUpdateOne {
-	ouo.mutation.ClearTasks()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearTasks() *OrganizationUpdateOne {
+	_u.mutation.ClearTasks()
+	return _u
 }
 
 // RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveTaskIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveTaskIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveTaskIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
 }
 
 // RemoveTasks removes "tasks" edges to Task entities.
-func (ouo *OrganizationUpdateOne) RemoveTasks(t ...*Task) *OrganizationUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdateOne) RemoveTasks(v ...*Task) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveTaskIDs(ids...)
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (ouo *OrganizationUpdateOne) ClearPrograms() *OrganizationUpdateOne {
-	ouo.mutation.ClearPrograms()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearPrograms() *OrganizationUpdateOne {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveProgramIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveProgramIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveProgramIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (ouo *OrganizationUpdateOne) RemovePrograms(p ...*Program) *OrganizationUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdateOne) RemovePrograms(v ...*Program) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (ouo *OrganizationUpdateOne) ClearProcedures() *OrganizationUpdateOne {
-	ouo.mutation.ClearProcedures()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearProcedures() *OrganizationUpdateOne {
+	_u.mutation.ClearProcedures()
+	return _u
 }
 
 // RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveProcedureIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveProcedureIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveProcedureIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
 }
 
 // RemoveProcedures removes "procedures" edges to Procedure entities.
-func (ouo *OrganizationUpdateOne) RemoveProcedures(p ...*Procedure) *OrganizationUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *OrganizationUpdateOne) RemoveProcedures(v ...*Procedure) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveProcedureIDs(ids...)
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
-func (ouo *OrganizationUpdateOne) ClearInternalPolicies() *OrganizationUpdateOne {
-	ouo.mutation.ClearInternalPolicies()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearInternalPolicies() *OrganizationUpdateOne {
+	_u.mutation.ClearInternalPolicies()
+	return _u
 }
 
 // RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveInternalPolicyIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveInternalPolicyIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveInternalPolicyIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
 }
 
 // RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
-func (ouo *OrganizationUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *OrganizationUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *OrganizationUpdateOne) RemoveInternalPolicies(v ...*InternalPolicy) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveInternalPolicyIDs(ids...)
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearRisks clears all "risks" edges to the Risk entity.
-func (ouo *OrganizationUpdateOne) ClearRisks() *OrganizationUpdateOne {
-	ouo.mutation.ClearRisks()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearRisks() *OrganizationUpdateOne {
+	_u.mutation.ClearRisks()
+	return _u
 }
 
 // RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveRiskIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveRiskIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveRiskIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
 }
 
 // RemoveRisks removes "risks" edges to Risk entities.
-func (ouo *OrganizationUpdateOne) RemoveRisks(r ...*Risk) *OrganizationUpdateOne {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *OrganizationUpdateOne) RemoveRisks(v ...*Risk) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveRiskIDs(ids...)
+	return _u.RemoveRiskIDs(ids...)
 }
 
 // ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
-func (ouo *OrganizationUpdateOne) ClearControlObjectives() *OrganizationUpdateOne {
-	ouo.mutation.ClearControlObjectives()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearControlObjectives() *OrganizationUpdateOne {
+	_u.mutation.ClearControlObjectives()
+	return _u
 }
 
 // RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveControlObjectiveIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveControlObjectiveIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveControlObjectiveIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveControlObjectiveIDs(ids...)
+	return _u
 }
 
 // RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
-func (ouo *OrganizationUpdateOne) RemoveControlObjectives(c ...*ControlObjective) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdateOne) RemoveControlObjectives(v ...*ControlObjective) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveControlObjectiveIDs(ids...)
+	return _u.RemoveControlObjectiveIDs(ids...)
 }
 
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
-func (ouo *OrganizationUpdateOne) ClearNarratives() *OrganizationUpdateOne {
-	ouo.mutation.ClearNarratives()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearNarratives() *OrganizationUpdateOne {
+	_u.mutation.ClearNarratives()
+	return _u
 }
 
 // RemoveNarrativeIDs removes the "narratives" edge to Narrative entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveNarrativeIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveNarrativeIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveNarrativeIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveNarrativeIDs(ids...)
+	return _u
 }
 
 // RemoveNarratives removes "narratives" edges to Narrative entities.
-func (ouo *OrganizationUpdateOne) RemoveNarratives(n ...*Narrative) *OrganizationUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *OrganizationUpdateOne) RemoveNarratives(v ...*Narrative) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveNarrativeIDs(ids...)
+	return _u.RemoveNarrativeIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (ouo *OrganizationUpdateOne) ClearControls() *OrganizationUpdateOne {
-	ouo.mutation.ClearControls()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearControls() *OrganizationUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveControlIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveControlIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveControlIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (ouo *OrganizationUpdateOne) RemoveControls(c ...*Control) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdateOne) RemoveControls(v ...*Control) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (ouo *OrganizationUpdateOne) ClearSubcontrols() *OrganizationUpdateOne {
-	ouo.mutation.ClearSubcontrols()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearSubcontrols() *OrganizationUpdateOne {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveSubcontrolIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveSubcontrolIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveSubcontrolIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (ouo *OrganizationUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
-func (ouo *OrganizationUpdateOne) ClearControlImplementations() *OrganizationUpdateOne {
-	ouo.mutation.ClearControlImplementations()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearControlImplementations() *OrganizationUpdateOne {
+	_u.mutation.ClearControlImplementations()
+	return _u
 }
 
 // RemoveControlImplementationIDs removes the "control_implementations" edge to ControlImplementation entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveControlImplementationIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveControlImplementationIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveControlImplementationIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveControlImplementationIDs(ids...)
+	return _u
 }
 
 // RemoveControlImplementations removes "control_implementations" edges to ControlImplementation entities.
-func (ouo *OrganizationUpdateOne) RemoveControlImplementations(c ...*ControlImplementation) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdateOne) RemoveControlImplementations(v ...*ControlImplementation) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveControlImplementationIDs(ids...)
+	return _u.RemoveControlImplementationIDs(ids...)
 }
 
 // ClearMappedControls clears all "mapped_controls" edges to the MappedControl entity.
-func (ouo *OrganizationUpdateOne) ClearMappedControls() *OrganizationUpdateOne {
-	ouo.mutation.ClearMappedControls()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearMappedControls() *OrganizationUpdateOne {
+	_u.mutation.ClearMappedControls()
+	return _u
 }
 
 // RemoveMappedControlIDs removes the "mapped_controls" edge to MappedControl entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveMappedControlIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveMappedControlIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveMappedControlIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveMappedControlIDs(ids...)
+	return _u
 }
 
 // RemoveMappedControls removes "mapped_controls" edges to MappedControl entities.
-func (ouo *OrganizationUpdateOne) RemoveMappedControls(m ...*MappedControl) *OrganizationUpdateOne {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *OrganizationUpdateOne) RemoveMappedControls(v ...*MappedControl) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveMappedControlIDs(ids...)
+	return _u.RemoveMappedControlIDs(ids...)
 }
 
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
-func (ouo *OrganizationUpdateOne) ClearEvidence() *OrganizationUpdateOne {
-	ouo.mutation.ClearEvidence()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearEvidence() *OrganizationUpdateOne {
+	_u.mutation.ClearEvidence()
+	return _u
 }
 
 // RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveEvidenceIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveEvidenceIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveEvidenceIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveEvidenceIDs(ids...)
+	return _u
 }
 
 // RemoveEvidence removes "evidence" edges to Evidence entities.
-func (ouo *OrganizationUpdateOne) RemoveEvidence(e ...*Evidence) *OrganizationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdateOne) RemoveEvidence(v ...*Evidence) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveEvidenceIDs(ids...)
+	return _u.RemoveEvidenceIDs(ids...)
 }
 
 // ClearStandards clears all "standards" edges to the Standard entity.
-func (ouo *OrganizationUpdateOne) ClearStandards() *OrganizationUpdateOne {
-	ouo.mutation.ClearStandards()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearStandards() *OrganizationUpdateOne {
+	_u.mutation.ClearStandards()
+	return _u
 }
 
 // RemoveStandardIDs removes the "standards" edge to Standard entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveStandardIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveStandardIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveStandardIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveStandardIDs(ids...)
+	return _u
 }
 
 // RemoveStandards removes "standards" edges to Standard entities.
-func (ouo *OrganizationUpdateOne) RemoveStandards(s ...*Standard) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) RemoveStandards(v ...*Standard) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveStandardIDs(ids...)
+	return _u.RemoveStandardIDs(ids...)
 }
 
 // ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
-func (ouo *OrganizationUpdateOne) ClearActionPlans() *OrganizationUpdateOne {
-	ouo.mutation.ClearActionPlans()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearActionPlans() *OrganizationUpdateOne {
+	_u.mutation.ClearActionPlans()
+	return _u
 }
 
 // RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveActionPlanIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveActionPlanIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveActionPlanIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveActionPlanIDs(ids...)
+	return _u
 }
 
 // RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
-func (ouo *OrganizationUpdateOne) RemoveActionPlans(a ...*ActionPlan) *OrganizationUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdateOne) RemoveActionPlans(v ...*ActionPlan) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveActionPlanIDs(ids...)
+	return _u.RemoveActionPlanIDs(ids...)
 }
 
 // ClearCustomDomains clears all "custom_domains" edges to the CustomDomain entity.
-func (ouo *OrganizationUpdateOne) ClearCustomDomains() *OrganizationUpdateOne {
-	ouo.mutation.ClearCustomDomains()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearCustomDomains() *OrganizationUpdateOne {
+	_u.mutation.ClearCustomDomains()
+	return _u
 }
 
 // RemoveCustomDomainIDs removes the "custom_domains" edge to CustomDomain entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveCustomDomainIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveCustomDomainIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveCustomDomainIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveCustomDomainIDs(ids...)
+	return _u
 }
 
 // RemoveCustomDomains removes "custom_domains" edges to CustomDomain entities.
-func (ouo *OrganizationUpdateOne) RemoveCustomDomains(c ...*CustomDomain) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *OrganizationUpdateOne) RemoveCustomDomains(v ...*CustomDomain) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveCustomDomainIDs(ids...)
+	return _u.RemoveCustomDomainIDs(ids...)
 }
 
 // ClearJobRunners clears all "job_runners" edges to the JobRunner entity.
-func (ouo *OrganizationUpdateOne) ClearJobRunners() *OrganizationUpdateOne {
-	ouo.mutation.ClearJobRunners()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearJobRunners() *OrganizationUpdateOne {
+	_u.mutation.ClearJobRunners()
+	return _u
 }
 
 // RemoveJobRunnerIDs removes the "job_runners" edge to JobRunner entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveJobRunnerIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveJobRunnerIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveJobRunnerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveJobRunnerIDs(ids...)
+	return _u
 }
 
 // RemoveJobRunners removes "job_runners" edges to JobRunner entities.
-func (ouo *OrganizationUpdateOne) RemoveJobRunners(j ...*JobRunner) *OrganizationUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdateOne) RemoveJobRunners(v ...*JobRunner) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveJobRunnerIDs(ids...)
+	return _u.RemoveJobRunnerIDs(ids...)
 }
 
 // ClearJobRunnerTokens clears all "job_runner_tokens" edges to the JobRunnerToken entity.
-func (ouo *OrganizationUpdateOne) ClearJobRunnerTokens() *OrganizationUpdateOne {
-	ouo.mutation.ClearJobRunnerTokens()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearJobRunnerTokens() *OrganizationUpdateOne {
+	_u.mutation.ClearJobRunnerTokens()
+	return _u
 }
 
 // RemoveJobRunnerTokenIDs removes the "job_runner_tokens" edge to JobRunnerToken entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveJobRunnerTokenIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveJobRunnerTokenIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveJobRunnerTokenIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveJobRunnerTokenIDs(ids...)
+	return _u
 }
 
 // RemoveJobRunnerTokens removes "job_runner_tokens" edges to JobRunnerToken entities.
-func (ouo *OrganizationUpdateOne) RemoveJobRunnerTokens(j ...*JobRunnerToken) *OrganizationUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdateOne) RemoveJobRunnerTokens(v ...*JobRunnerToken) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveJobRunnerTokenIDs(ids...)
+	return _u.RemoveJobRunnerTokenIDs(ids...)
 }
 
 // ClearJobRunnerRegistrationTokens clears all "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
-func (ouo *OrganizationUpdateOne) ClearJobRunnerRegistrationTokens() *OrganizationUpdateOne {
-	ouo.mutation.ClearJobRunnerRegistrationTokens()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearJobRunnerRegistrationTokens() *OrganizationUpdateOne {
+	_u.mutation.ClearJobRunnerRegistrationTokens()
+	return _u
 }
 
 // RemoveJobRunnerRegistrationTokenIDs removes the "job_runner_registration_tokens" edge to JobRunnerRegistrationToken entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveJobRunnerRegistrationTokenIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveJobRunnerRegistrationTokenIDs(ids...)
+	return _u
 }
 
 // RemoveJobRunnerRegistrationTokens removes "job_runner_registration_tokens" edges to JobRunnerRegistrationToken entities.
-func (ouo *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokens(j ...*JobRunnerRegistrationToken) *OrganizationUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokens(v ...*JobRunnerRegistrationToken) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveJobRunnerRegistrationTokenIDs(ids...)
+	return _u.RemoveJobRunnerRegistrationTokenIDs(ids...)
 }
 
 // ClearDNSVerifications clears all "dns_verifications" edges to the DNSVerification entity.
-func (ouo *OrganizationUpdateOne) ClearDNSVerifications() *OrganizationUpdateOne {
-	ouo.mutation.ClearDNSVerifications()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearDNSVerifications() *OrganizationUpdateOne {
+	_u.mutation.ClearDNSVerifications()
+	return _u
 }
 
 // RemoveDNSVerificationIDs removes the "dns_verifications" edge to DNSVerification entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveDNSVerificationIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveDNSVerificationIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveDNSVerificationIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveDNSVerificationIDs(ids...)
+	return _u
 }
 
 // RemoveDNSVerifications removes "dns_verifications" edges to DNSVerification entities.
-func (ouo *OrganizationUpdateOne) RemoveDNSVerifications(d ...*DNSVerification) *OrganizationUpdateOne {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *OrganizationUpdateOne) RemoveDNSVerifications(v ...*DNSVerification) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveDNSVerificationIDs(ids...)
+	return _u.RemoveDNSVerificationIDs(ids...)
 }
 
 // ClearJobTemplates clears all "job_templates" edges to the JobTemplate entity.
-func (ouo *OrganizationUpdateOne) ClearJobTemplates() *OrganizationUpdateOne {
-	ouo.mutation.ClearJobTemplates()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearJobTemplates() *OrganizationUpdateOne {
+	_u.mutation.ClearJobTemplates()
+	return _u
 }
 
 // RemoveJobTemplateIDs removes the "job_templates" edge to JobTemplate entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveJobTemplateIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveJobTemplateIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveJobTemplateIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveJobTemplateIDs(ids...)
+	return _u
 }
 
 // RemoveJobTemplates removes "job_templates" edges to JobTemplate entities.
-func (ouo *OrganizationUpdateOne) RemoveJobTemplates(j ...*JobTemplate) *OrganizationUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdateOne) RemoveJobTemplates(v ...*JobTemplate) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveJobTemplateIDs(ids...)
+	return _u.RemoveJobTemplateIDs(ids...)
 }
 
 // ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
-func (ouo *OrganizationUpdateOne) ClearScheduledJobs() *OrganizationUpdateOne {
-	ouo.mutation.ClearScheduledJobs()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearScheduledJobs() *OrganizationUpdateOne {
+	_u.mutation.ClearScheduledJobs()
+	return _u
 }
 
 // RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveScheduledJobIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveScheduledJobIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveScheduledJobIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveScheduledJobIDs(ids...)
+	return _u
 }
 
 // RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
-func (ouo *OrganizationUpdateOne) RemoveScheduledJobs(s ...*ScheduledJob) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) RemoveScheduledJobs(v ...*ScheduledJob) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveScheduledJobIDs(ids...)
+	return _u.RemoveScheduledJobIDs(ids...)
 }
 
 // ClearJobResults clears all "job_results" edges to the JobResult entity.
-func (ouo *OrganizationUpdateOne) ClearJobResults() *OrganizationUpdateOne {
-	ouo.mutation.ClearJobResults()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearJobResults() *OrganizationUpdateOne {
+	_u.mutation.ClearJobResults()
+	return _u
 }
 
 // RemoveJobResultIDs removes the "job_results" edge to JobResult entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveJobResultIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveJobResultIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveJobResultIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveJobResultIDs(ids...)
+	return _u
 }
 
 // RemoveJobResults removes "job_results" edges to JobResult entities.
-func (ouo *OrganizationUpdateOne) RemoveJobResults(j ...*JobResult) *OrganizationUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *OrganizationUpdateOne) RemoveJobResults(v ...*JobResult) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveJobResultIDs(ids...)
+	return _u.RemoveJobResultIDs(ids...)
 }
 
 // ClearScheduledJobRuns clears all "scheduled_job_runs" edges to the ScheduledJobRun entity.
-func (ouo *OrganizationUpdateOne) ClearScheduledJobRuns() *OrganizationUpdateOne {
-	ouo.mutation.ClearScheduledJobRuns()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearScheduledJobRuns() *OrganizationUpdateOne {
+	_u.mutation.ClearScheduledJobRuns()
+	return _u
 }
 
 // RemoveScheduledJobRunIDs removes the "scheduled_job_runs" edge to ScheduledJobRun entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveScheduledJobRunIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveScheduledJobRunIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveScheduledJobRunIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveScheduledJobRunIDs(ids...)
+	return _u
 }
 
 // RemoveScheduledJobRuns removes "scheduled_job_runs" edges to ScheduledJobRun entities.
-func (ouo *OrganizationUpdateOne) RemoveScheduledJobRuns(s ...*ScheduledJobRun) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) RemoveScheduledJobRuns(v ...*ScheduledJobRun) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveScheduledJobRunIDs(ids...)
+	return _u.RemoveScheduledJobRunIDs(ids...)
 }
 
 // ClearTrustCenters clears all "trust_centers" edges to the TrustCenter entity.
-func (ouo *OrganizationUpdateOne) ClearTrustCenters() *OrganizationUpdateOne {
-	ouo.mutation.ClearTrustCenters()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearTrustCenters() *OrganizationUpdateOne {
+	_u.mutation.ClearTrustCenters()
+	return _u
 }
 
 // RemoveTrustCenterIDs removes the "trust_centers" edge to TrustCenter entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveTrustCenterIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveTrustCenterIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveTrustCenterIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveTrustCenterIDs(ids...)
+	return _u
 }
 
 // RemoveTrustCenters removes "trust_centers" edges to TrustCenter entities.
-func (ouo *OrganizationUpdateOne) RemoveTrustCenters(t ...*TrustCenter) *OrganizationUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *OrganizationUpdateOne) RemoveTrustCenters(v ...*TrustCenter) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveTrustCenterIDs(ids...)
+	return _u.RemoveTrustCenterIDs(ids...)
 }
 
 // ClearAssets clears all "assets" edges to the Asset entity.
-func (ouo *OrganizationUpdateOne) ClearAssets() *OrganizationUpdateOne {
-	ouo.mutation.ClearAssets()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearAssets() *OrganizationUpdateOne {
+	_u.mutation.ClearAssets()
+	return _u
 }
 
 // RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveAssetIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveAssetIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveAssetIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
 }
 
 // RemoveAssets removes "assets" edges to Asset entities.
-func (ouo *OrganizationUpdateOne) RemoveAssets(a ...*Asset) *OrganizationUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *OrganizationUpdateOne) RemoveAssets(v ...*Asset) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveAssetIDs(ids...)
+	return _u.RemoveAssetIDs(ids...)
 }
 
 // ClearScans clears all "scans" edges to the Scan entity.
-func (ouo *OrganizationUpdateOne) ClearScans() *OrganizationUpdateOne {
-	ouo.mutation.ClearScans()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearScans() *OrganizationUpdateOne {
+	_u.mutation.ClearScans()
+	return _u
 }
 
 // RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveScanIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveScanIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveScanIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
 }
 
 // RemoveScans removes "scans" edges to Scan entities.
-func (ouo *OrganizationUpdateOne) RemoveScans(s ...*Scan) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) RemoveScans(v ...*Scan) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveScanIDs(ids...)
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearSubprocessors clears all "subprocessors" edges to the Subprocessor entity.
-func (ouo *OrganizationUpdateOne) ClearSubprocessors() *OrganizationUpdateOne {
-	ouo.mutation.ClearSubprocessors()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearSubprocessors() *OrganizationUpdateOne {
+	_u.mutation.ClearSubprocessors()
+	return _u
 }
 
 // RemoveSubprocessorIDs removes the "subprocessors" edge to Subprocessor entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveSubprocessorIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveSubprocessorIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveSubprocessorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveSubprocessorIDs(ids...)
+	return _u
 }
 
 // RemoveSubprocessors removes "subprocessors" edges to Subprocessor entities.
-func (ouo *OrganizationUpdateOne) RemoveSubprocessors(s ...*Subprocessor) *OrganizationUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *OrganizationUpdateOne) RemoveSubprocessors(v ...*Subprocessor) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveSubprocessorIDs(ids...)
+	return _u.RemoveSubprocessorIDs(ids...)
 }
 
 // ClearExports clears all "exports" edges to the Export entity.
-func (ouo *OrganizationUpdateOne) ClearExports() *OrganizationUpdateOne {
-	ouo.mutation.ClearExports()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearExports() *OrganizationUpdateOne {
+	_u.mutation.ClearExports()
+	return _u
 }
 
 // RemoveExportIDs removes the "exports" edge to Export entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveExportIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveExportIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveExportIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveExportIDs(ids...)
+	return _u
 }
 
 // RemoveExports removes "exports" edges to Export entities.
-func (ouo *OrganizationUpdateOne) RemoveExports(e ...*Export) *OrganizationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrganizationUpdateOne) RemoveExports(v ...*Export) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveExportIDs(ids...)
+	return _u.RemoveExportIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
-func (ouo *OrganizationUpdateOne) ClearMembers() *OrganizationUpdateOne {
-	ouo.mutation.ClearMembers()
-	return ouo
+func (_u *OrganizationUpdateOne) ClearMembers() *OrganizationUpdateOne {
+	_u.mutation.ClearMembers()
+	return _u
 }
 
 // RemoveMemberIDs removes the "members" edge to OrgMembership entities by IDs.
-func (ouo *OrganizationUpdateOne) RemoveMemberIDs(ids ...string) *OrganizationUpdateOne {
-	ouo.mutation.RemoveMemberIDs(ids...)
-	return ouo
+func (_u *OrganizationUpdateOne) RemoveMemberIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveMemberIDs(ids...)
+	return _u
 }
 
 // RemoveMembers removes "members" edges to OrgMembership entities.
-func (ouo *OrganizationUpdateOne) RemoveMembers(o ...*OrgMembership) *OrganizationUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrganizationUpdateOne) RemoveMembers(v ...*OrgMembership) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ouo.RemoveMemberIDs(ids...)
+	return _u.RemoveMemberIDs(ids...)
 }
 
 // Where appends a list predicates to the OrganizationUpdate builder.
-func (ouo *OrganizationUpdateOne) Where(ps ...predicate.Organization) *OrganizationUpdateOne {
-	ouo.mutation.Where(ps...)
-	return ouo
+func (_u *OrganizationUpdateOne) Where(ps ...predicate.Organization) *OrganizationUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ouo *OrganizationUpdateOne) Select(field string, fields ...string) *OrganizationUpdateOne {
-	ouo.fields = append([]string{field}, fields...)
-	return ouo
+func (_u *OrganizationUpdateOne) Select(field string, fields ...string) *OrganizationUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Organization entity.
-func (ouo *OrganizationUpdateOne) Save(ctx context.Context) (*Organization, error) {
-	if err := ouo.defaults(); err != nil {
+func (_u *OrganizationUpdateOne) Save(ctx context.Context) (*Organization, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ouo.sqlSave, ouo.mutation, ouo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ouo *OrganizationUpdateOne) SaveX(ctx context.Context) *Organization {
-	node, err := ouo.Save(ctx)
+func (_u *OrganizationUpdateOne) SaveX(ctx context.Context) *Organization {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -8576,50 +8576,50 @@ func (ouo *OrganizationUpdateOne) SaveX(ctx context.Context) *Organization {
 }
 
 // Exec executes the query on the entity.
-func (ouo *OrganizationUpdateOne) Exec(ctx context.Context) error {
-	_, err := ouo.Save(ctx)
+func (_u *OrganizationUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ouo *OrganizationUpdateOne) ExecX(ctx context.Context) {
-	if err := ouo.Exec(ctx); err != nil {
+func (_u *OrganizationUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ouo *OrganizationUpdateOne) defaults() error {
-	if _, ok := ouo.mutation.UpdatedAt(); !ok && !ouo.mutation.UpdatedAtCleared() {
+func (_u *OrganizationUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if organization.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organization.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organization.UpdateDefaultUpdatedAt()
-		ouo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ouo.mutation.AvatarUpdatedAt(); !ok && !ouo.mutation.AvatarUpdatedAtCleared() {
+	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
 		if organization.UpdateDefaultAvatarUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organization.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organization.UpdateDefaultAvatarUpdatedAt()
-		ouo.mutation.SetAvatarUpdatedAt(v)
+		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ouo *OrganizationUpdateOne) check() error {
-	if v, ok := ouo.mutation.Name(); ok {
+func (_u *OrganizationUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := organization.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Organization.name": %w`, err)}
 		}
 	}
-	if v, ok := ouo.mutation.DisplayName(); ok {
+	if v, ok := _u.mutation.DisplayName(); ok {
 		if err := organization.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Organization.display_name": %w`, err)}
 		}
 	}
-	if v, ok := ouo.mutation.AvatarRemoteURL(); ok {
+	if v, ok := _u.mutation.AvatarRemoteURL(); ok {
 		if err := organization.AvatarRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
@@ -8628,22 +8628,22 @@ func (ouo *OrganizationUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ouo *OrganizationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationUpdateOne {
-	ouo.modifiers = append(ouo.modifiers, modifiers...)
-	return ouo
+func (_u *OrganizationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organization, err error) {
-	if err := ouo.check(); err != nil {
+func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organization, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(organization.Table, organization.Columns, sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString))
-	id, ok := ouo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Organization.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ouo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, organization.FieldID)
 		for _, f := range fields {
@@ -8655,85 +8655,85 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			}
 		}
 	}
-	if ps := ouo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ouo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(organization.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ouo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(organization.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ouo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organization.FieldUpdatedAt, field.TypeTime)
 	}
-	if ouo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(organization.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ouo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ouo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ouo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ouo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(organization.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ouo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(organization.FieldDeletedBy, field.TypeString, value)
 	}
-	if ouo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(organization.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ouo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ouo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organization.FieldTags, value)
 		})
 	}
-	if ouo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organization.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ouo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(organization.FieldName, field.TypeString, value)
 	}
-	if value, ok := ouo.mutation.DisplayName(); ok {
+	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
 	}
-	if value, ok := ouo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(organization.FieldDescription, field.TypeString, value)
 	}
-	if ouo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(organization.FieldDescription, field.TypeString)
 	}
-	if ouo.mutation.PersonalOrgCleared() {
+	if _u.mutation.PersonalOrgCleared() {
 		_spec.ClearField(organization.FieldPersonalOrg, field.TypeBool)
 	}
-	if value, ok := ouo.mutation.AvatarRemoteURL(); ok {
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(organization.FieldAvatarRemoteURL, field.TypeString, value)
 	}
-	if ouo.mutation.AvatarRemoteURLCleared() {
+	if _u.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organization.FieldAvatarRemoteURL, field.TypeString)
 	}
-	if value, ok := ouo.mutation.AvatarUpdatedAt(); ok {
+	if value, ok := _u.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(organization.FieldAvatarUpdatedAt, field.TypeTime, value)
 	}
-	if ouo.mutation.AvatarUpdatedAtCleared() {
+	if _u.mutation.AvatarUpdatedAtCleared() {
 		_spec.ClearField(organization.FieldAvatarUpdatedAt, field.TypeTime)
 	}
-	if value, ok := ouo.mutation.DedicatedDb(); ok {
+	if value, ok := _u.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
 	}
-	if ouo.mutation.ControlCreatorsCleared() {
+	if _u.mutation.ControlCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8744,10 +8744,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedControlCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.ControlCreatorsCleared() {
+	if nodes := _u.mutation.RemovedControlCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8758,13 +8758,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ControlCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8775,13 +8775,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ControlImplementationCreatorsCleared() {
+	if _u.mutation.ControlImplementationCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8792,10 +8792,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedControlImplementationCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.ControlImplementationCreatorsCleared() {
+	if nodes := _u.mutation.RemovedControlImplementationCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8806,13 +8806,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ControlImplementationCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlImplementationCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8823,13 +8823,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ControlObjectiveCreatorsCleared() {
+	if _u.mutation.ControlObjectiveCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8840,10 +8840,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedControlObjectiveCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.ControlObjectiveCreatorsCleared() {
+	if nodes := _u.mutation.RemovedControlObjectiveCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectiveCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8854,13 +8854,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ControlObjectiveCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlObjectiveCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8871,13 +8871,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.EvidenceCreatorsCleared() {
+	if _u.mutation.EvidenceCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8888,10 +8888,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedEvidenceCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.EvidenceCreatorsCleared() {
+	if nodes := _u.mutation.RemovedEvidenceCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8902,13 +8902,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.EvidenceCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EvidenceCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8919,13 +8919,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.GroupCreatorsCleared() {
+	if _u.mutation.GroupCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8936,10 +8936,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedGroupCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.GroupCreatorsCleared() {
+	if nodes := _u.mutation.RemovedGroupCreatorsIDs(); len(nodes) > 0 && !_u.mutation.GroupCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8950,13 +8950,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.GroupCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.GroupCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8967,13 +8967,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.InternalPolicyCreatorsCleared() {
+	if _u.mutation.InternalPolicyCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8984,10 +8984,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedInternalPolicyCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.InternalPolicyCreatorsCleared() {
+	if nodes := _u.mutation.RemovedInternalPolicyCreatorsIDs(); len(nodes) > 0 && !_u.mutation.InternalPolicyCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -8998,13 +8998,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.InternalPolicyCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InternalPolicyCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9015,13 +9015,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.MappedControlCreatorsCleared() {
+	if _u.mutation.MappedControlCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9032,10 +9032,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedMappedControlCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.MappedControlCreatorsCleared() {
+	if nodes := _u.mutation.RemovedMappedControlCreatorsIDs(); len(nodes) > 0 && !_u.mutation.MappedControlCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9046,13 +9046,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.MappedControlCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.MappedControlCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9063,13 +9063,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.NarrativeCreatorsCleared() {
+	if _u.mutation.NarrativeCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9080,10 +9080,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedNarrativeCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.NarrativeCreatorsCleared() {
+	if nodes := _u.mutation.RemovedNarrativeCreatorsIDs(); len(nodes) > 0 && !_u.mutation.NarrativeCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9094,13 +9094,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.NarrativeCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NarrativeCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9111,13 +9111,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ProcedureCreatorsCleared() {
+	if _u.mutation.ProcedureCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9128,10 +9128,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedProcedureCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.ProcedureCreatorsCleared() {
+	if nodes := _u.mutation.RemovedProcedureCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ProcedureCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9142,13 +9142,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ProcedureCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProcedureCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9159,13 +9159,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ProgramCreatorsCleared() {
+	if _u.mutation.ProgramCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9176,10 +9176,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedProgramCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.ProgramCreatorsCleared() {
+	if nodes := _u.mutation.RemovedProgramCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ProgramCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9190,13 +9190,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ProgramCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9207,13 +9207,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.RiskCreatorsCleared() {
+	if _u.mutation.RiskCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9224,10 +9224,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedRiskCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.RiskCreatorsCleared() {
+	if nodes := _u.mutation.RemovedRiskCreatorsIDs(); len(nodes) > 0 && !_u.mutation.RiskCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9238,13 +9238,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RiskCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RiskCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9255,13 +9255,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ScheduledJobCreatorsCleared() {
+	if _u.mutation.ScheduledJobCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9272,10 +9272,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedScheduledJobCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.ScheduledJobCreatorsCleared() {
+	if nodes := _u.mutation.RemovedScheduledJobCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9286,13 +9286,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ScheduledJobCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScheduledJobCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9303,13 +9303,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.StandardCreatorsCleared() {
+	if _u.mutation.StandardCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9320,10 +9320,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedStandardCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.StandardCreatorsCleared() {
+	if nodes := _u.mutation.RemovedStandardCreatorsIDs(); len(nodes) > 0 && !_u.mutation.StandardCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9334,13 +9334,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.StandardCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.StandardCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9351,13 +9351,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.TemplateCreatorsCleared() {
+	if _u.mutation.TemplateCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9368,10 +9368,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedTemplateCreatorsIDs(); len(nodes) > 0 && !ouo.mutation.TemplateCreatorsCleared() {
+	if nodes := _u.mutation.RemovedTemplateCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TemplateCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9382,13 +9382,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.TemplateCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TemplateCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9399,13 +9399,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ChildrenCleared() {
+	if _u.mutation.ChildrenCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9416,10 +9416,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Organization
+		edge.Schema = _u.schemaConfig.Organization
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedChildrenIDs(); len(nodes) > 0 && !ouo.mutation.ChildrenCleared() {
+	if nodes := _u.mutation.RemovedChildrenIDs(); len(nodes) > 0 && !_u.mutation.ChildrenCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9430,13 +9430,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Organization
+		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ChildrenIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ChildrenIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9447,13 +9447,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Organization
+		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.SettingCleared() {
+	if _u.mutation.SettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
@@ -9464,10 +9464,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationSetting
+		edge.Schema = _u.schemaConfig.OrganizationSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.SettingIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
@@ -9478,13 +9478,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationSetting
+		edge.Schema = _u.schemaConfig.OrganizationSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.PersonalAccessTokensCleared() {
+	if _u.mutation.PersonalAccessTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -9495,10 +9495,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedPersonalAccessTokensIDs(); len(nodes) > 0 && !ouo.mutation.PersonalAccessTokensCleared() {
+	if nodes := _u.mutation.RemovedPersonalAccessTokensIDs(); len(nodes) > 0 && !_u.mutation.PersonalAccessTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -9509,13 +9509,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.PersonalAccessTokensIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PersonalAccessTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -9526,13 +9526,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.APITokensCleared() {
+	if _u.mutation.APITokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9543,10 +9543,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.APIToken
+		edge.Schema = _u.schemaConfig.APIToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedAPITokensIDs(); len(nodes) > 0 && !ouo.mutation.APITokensCleared() {
+	if nodes := _u.mutation.RemovedAPITokensIDs(); len(nodes) > 0 && !_u.mutation.APITokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9557,13 +9557,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.APIToken
+		edge.Schema = _u.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.APITokensIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.APITokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9574,13 +9574,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.APIToken
+		edge.Schema = _u.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.UsersCleared() {
+	if _u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -9591,8 +9591,8 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgMembership
-		createE := &OrgMembershipCreate{config: ouo.config, mutation: newOrgMembershipMutation(ouo.config, OpCreate)}
+		edge.Schema = _u.schemaConfig.OrgMembership
+		createE := &OrgMembershipCreate{config: _u.config, mutation: newOrgMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -9601,7 +9601,7 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !ouo.mutation.UsersCleared() {
+	if nodes := _u.mutation.RemovedUsersIDs(); len(nodes) > 0 && !_u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -9612,11 +9612,11 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgMembership
+		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &OrgMembershipCreate{config: ouo.config, mutation: newOrgMembershipMutation(ouo.config, OpCreate)}
+		createE := &OrgMembershipCreate{config: _u.config, mutation: newOrgMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -9625,7 +9625,7 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -9636,11 +9636,11 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgMembership
+		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &OrgMembershipCreate{config: ouo.config, mutation: newOrgMembershipMutation(ouo.config, OpCreate)}
+		createE := &OrgMembershipCreate{config: _u.config, mutation: newOrgMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -9649,7 +9649,7 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -9660,10 +9660,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationFiles
+		edge.Schema = _u.schemaConfig.OrganizationFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !ouo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -9674,13 +9674,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationFiles
+		edge.Schema = _u.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -9691,13 +9691,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationFiles
+		edge.Schema = _u.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -9708,10 +9708,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationEvents
+		edge.Schema = _u.schemaConfig.OrganizationEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !ouo.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -9722,13 +9722,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationEvents
+		edge.Schema = _u.schemaConfig.OrganizationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -9739,13 +9739,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationEvents
+		edge.Schema = _u.schemaConfig.OrganizationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.SecretsCleared() {
+	if _u.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9756,10 +9756,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Hush
+		edge.Schema = _u.schemaConfig.Hush
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !ouo.mutation.SecretsCleared() {
+	if nodes := _u.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !_u.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9770,13 +9770,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Hush
+		edge.Schema = _u.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.SecretsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SecretsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9787,13 +9787,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Hush
+		edge.Schema = _u.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.AvatarFileCleared() {
+	if _u.mutation.AvatarFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -9804,10 +9804,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Organization
+		edge.Schema = _u.schemaConfig.Organization
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.AvatarFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AvatarFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -9818,13 +9818,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Organization
+		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.GroupsCleared() {
+	if _u.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9835,10 +9835,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !ouo.mutation.GroupsCleared() {
+	if nodes := _u.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !_u.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9849,13 +9849,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.GroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9866,13 +9866,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.TemplatesCleared() {
+	if _u.mutation.TemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9883,10 +9883,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Template
+		edge.Schema = _u.schemaConfig.Template
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !ouo.mutation.TemplatesCleared() {
+	if nodes := _u.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !_u.mutation.TemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9897,13 +9897,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Template
+		edge.Schema = _u.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.TemplatesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TemplatesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9914,13 +9914,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Template
+		edge.Schema = _u.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.IntegrationsCleared() {
+	if _u.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9931,10 +9931,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Integration
+		edge.Schema = _u.schemaConfig.Integration
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !ouo.mutation.IntegrationsCleared() {
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9945,13 +9945,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Integration
+		edge.Schema = _u.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.IntegrationsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9962,13 +9962,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Integration
+		edge.Schema = _u.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.DocumentsCleared() {
+	if _u.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9979,10 +9979,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.DocumentData
+		edge.Schema = _u.schemaConfig.DocumentData
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !ouo.mutation.DocumentsCleared() {
+	if nodes := _u.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !_u.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -9993,13 +9993,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.DocumentData
+		edge.Schema = _u.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.DocumentsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DocumentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10010,13 +10010,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.DocumentData
+		edge.Schema = _u.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.OrgSubscriptionsCleared() {
+	if _u.mutation.OrgSubscriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10027,10 +10027,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgSubscription
+		edge.Schema = _u.schemaConfig.OrgSubscription
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !ouo.mutation.OrgSubscriptionsCleared() {
+	if nodes := _u.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !_u.mutation.OrgSubscriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10041,13 +10041,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgSubscription
+		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10058,13 +10058,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgSubscription
+		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.OrgProductsCleared() {
+	if _u.mutation.OrgProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10075,10 +10075,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedOrgProductsIDs(); len(nodes) > 0 && !ouo.mutation.OrgProductsCleared() {
+	if nodes := _u.mutation.RemovedOrgProductsIDs(); len(nodes) > 0 && !_u.mutation.OrgProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10089,13 +10089,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.OrgProductsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10106,13 +10106,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.OrgPricesCleared() {
+	if _u.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10123,10 +10123,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !ouo.mutation.OrgPricesCleared() {
+	if nodes := _u.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !_u.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10137,13 +10137,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.OrgPricesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgPricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10154,13 +10154,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.OrgModulesCleared() {
+	if _u.mutation.OrgModulesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10171,10 +10171,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedOrgModulesIDs(); len(nodes) > 0 && !ouo.mutation.OrgModulesCleared() {
+	if nodes := _u.mutation.RemovedOrgModulesIDs(); len(nodes) > 0 && !_u.mutation.OrgModulesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10185,13 +10185,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.OrgModulesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgModulesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10202,13 +10202,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.InvitesCleared() {
+	if _u.mutation.InvitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10219,10 +10219,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Invite
+		edge.Schema = _u.schemaConfig.Invite
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !ouo.mutation.InvitesCleared() {
+	if nodes := _u.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !_u.mutation.InvitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10233,13 +10233,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Invite
+		edge.Schema = _u.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.InvitesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InvitesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10250,13 +10250,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Invite
+		edge.Schema = _u.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.SubscribersCleared() {
+	if _u.mutation.SubscribersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10267,10 +10267,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Subscriber
+		edge.Schema = _u.schemaConfig.Subscriber
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !ouo.mutation.SubscribersCleared() {
+	if nodes := _u.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !_u.mutation.SubscribersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10281,13 +10281,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Subscriber
+		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.SubscribersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubscribersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10298,13 +10298,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Subscriber
+		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10315,10 +10315,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !ouo.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10329,13 +10329,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10346,13 +10346,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.EntityTypesCleared() {
+	if _u.mutation.EntityTypesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10363,10 +10363,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.EntityType
+		edge.Schema = _u.schemaConfig.EntityType
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedEntityTypesIDs(); len(nodes) > 0 && !ouo.mutation.EntityTypesCleared() {
+	if nodes := _u.mutation.RemovedEntityTypesIDs(); len(nodes) > 0 && !_u.mutation.EntityTypesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10377,13 +10377,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.EntityType
+		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.EntityTypesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntityTypesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10394,13 +10394,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.EntityType
+		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ContactsCleared() {
+	if _u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10411,10 +10411,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Contact
+		edge.Schema = _u.schemaConfig.Contact
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedContactsIDs(); len(nodes) > 0 && !ouo.mutation.ContactsCleared() {
+	if nodes := _u.mutation.RemovedContactsIDs(); len(nodes) > 0 && !_u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10425,13 +10425,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Contact
+		edge.Schema = _u.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ContactsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ContactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10442,13 +10442,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Contact
+		edge.Schema = _u.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.NotesCleared() {
+	if _u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10459,10 +10459,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedNotesIDs(); len(nodes) > 0 && !ouo.mutation.NotesCleared() {
+	if nodes := _u.mutation.RemovedNotesIDs(); len(nodes) > 0 && !_u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10473,13 +10473,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.NotesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NotesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10490,13 +10490,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.TasksCleared() {
+	if _u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10507,10 +10507,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Task
+		edge.Schema = _u.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ouo.mutation.TasksCleared() {
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10521,13 +10521,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Task
+		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10538,13 +10538,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Task
+		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10555,10 +10555,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Program
+		edge.Schema = _u.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !ouo.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10569,13 +10569,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Program
+		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10586,13 +10586,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Program
+		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ProceduresCleared() {
+	if _u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10603,10 +10603,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Procedure
+		edge.Schema = _u.schemaConfig.Procedure
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !ouo.mutation.ProceduresCleared() {
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10617,13 +10617,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Procedure
+		edge.Schema = _u.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10634,13 +10634,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Procedure
+		edge.Schema = _u.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.InternalPoliciesCleared() {
+	if _u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10651,10 +10651,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !ouo.mutation.InternalPoliciesCleared() {
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10665,13 +10665,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10682,13 +10682,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.RisksCleared() {
+	if _u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10699,10 +10699,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedRisksIDs(); len(nodes) > 0 && !ouo.mutation.RisksCleared() {
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10713,13 +10713,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10730,13 +10730,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ControlObjectivesCleared() {
+	if _u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10747,10 +10747,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ControlObjective
+		edge.Schema = _u.schemaConfig.ControlObjective
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !ouo.mutation.ControlObjectivesCleared() {
+	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10761,13 +10761,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ControlObjective
+		edge.Schema = _u.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10778,13 +10778,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ControlObjective
+		edge.Schema = _u.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.NarrativesCleared() {
+	if _u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10795,10 +10795,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Narrative
+		edge.Schema = _u.schemaConfig.Narrative
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !ouo.mutation.NarrativesCleared() {
+	if nodes := _u.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !_u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10809,13 +10809,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Narrative
+		edge.Schema = _u.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.NarrativesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10826,13 +10826,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Narrative
+		edge.Schema = _u.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10843,10 +10843,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ouo.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10857,13 +10857,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10874,13 +10874,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10891,10 +10891,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ouo.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10905,13 +10905,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10922,13 +10922,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ControlImplementationsCleared() {
+	if _u.mutation.ControlImplementationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10939,10 +10939,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ControlImplementation
+		edge.Schema = _u.schemaConfig.ControlImplementation
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !ouo.mutation.ControlImplementationsCleared() {
+	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10953,13 +10953,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ControlImplementation
+		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10970,13 +10970,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ControlImplementation
+		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.MappedControlsCleared() {
+	if _u.mutation.MappedControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -10987,10 +10987,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.MappedControl
+		edge.Schema = _u.schemaConfig.MappedControl
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedMappedControlsIDs(); len(nodes) > 0 && !ouo.mutation.MappedControlsCleared() {
+	if nodes := _u.mutation.RemovedMappedControlsIDs(); len(nodes) > 0 && !_u.mutation.MappedControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11001,13 +11001,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.MappedControl
+		edge.Schema = _u.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.MappedControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.MappedControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11018,13 +11018,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.MappedControl
+		edge.Schema = _u.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.EvidenceCleared() {
+	if _u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11035,10 +11035,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Evidence
+		edge.Schema = _u.schemaConfig.Evidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !ouo.mutation.EvidenceCleared() {
+	if nodes := _u.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11049,13 +11049,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Evidence
+		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.EvidenceIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11066,13 +11066,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Evidence
+		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.StandardsCleared() {
+	if _u.mutation.StandardsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11083,10 +11083,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Standard
+		edge.Schema = _u.schemaConfig.Standard
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !ouo.mutation.StandardsCleared() {
+	if nodes := _u.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !_u.mutation.StandardsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11097,13 +11097,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Standard
+		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.StandardsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.StandardsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11114,13 +11114,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Standard
+		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ActionPlansCleared() {
+	if _u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11131,10 +11131,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !ouo.mutation.ActionPlansCleared() {
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11145,13 +11145,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ActionPlansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11162,13 +11162,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.CustomDomainsCleared() {
+	if _u.mutation.CustomDomainsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11179,10 +11179,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedCustomDomainsIDs(); len(nodes) > 0 && !ouo.mutation.CustomDomainsCleared() {
+	if nodes := _u.mutation.RemovedCustomDomainsIDs(); len(nodes) > 0 && !_u.mutation.CustomDomainsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11193,13 +11193,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.CustomDomainsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.CustomDomainsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11210,13 +11210,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.JobRunnersCleared() {
+	if _u.mutation.JobRunnersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11227,10 +11227,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobRunner
+		edge.Schema = _u.schemaConfig.JobRunner
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedJobRunnersIDs(); len(nodes) > 0 && !ouo.mutation.JobRunnersCleared() {
+	if nodes := _u.mutation.RemovedJobRunnersIDs(); len(nodes) > 0 && !_u.mutation.JobRunnersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11241,13 +11241,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobRunner
+		edge.Schema = _u.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.JobRunnersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11258,13 +11258,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobRunner
+		edge.Schema = _u.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.JobRunnerTokensCleared() {
+	if _u.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11275,10 +11275,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobRunnerToken
+		edge.Schema = _u.schemaConfig.JobRunnerToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !ouo.mutation.JobRunnerTokensCleared() {
+	if nodes := _u.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11289,13 +11289,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobRunnerToken
+		edge.Schema = _u.schemaConfig.JobRunnerToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11306,13 +11306,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobRunnerToken
+		edge.Schema = _u.schemaConfig.JobRunnerToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.JobRunnerRegistrationTokensCleared() {
+	if _u.mutation.JobRunnerRegistrationTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11323,10 +11323,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedJobRunnerRegistrationTokensIDs(); len(nodes) > 0 && !ouo.mutation.JobRunnerRegistrationTokensCleared() {
+	if nodes := _u.mutation.RemovedJobRunnerRegistrationTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerRegistrationTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11337,13 +11337,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11354,13 +11354,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.DNSVerificationsCleared() {
+	if _u.mutation.DNSVerificationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11371,10 +11371,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.DNSVerification
+		edge.Schema = _u.schemaConfig.DNSVerification
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedDNSVerificationsIDs(); len(nodes) > 0 && !ouo.mutation.DNSVerificationsCleared() {
+	if nodes := _u.mutation.RemovedDNSVerificationsIDs(); len(nodes) > 0 && !_u.mutation.DNSVerificationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11385,13 +11385,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.DNSVerification
+		edge.Schema = _u.schemaConfig.DNSVerification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.DNSVerificationsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DNSVerificationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11402,13 +11402,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.DNSVerification
+		edge.Schema = _u.schemaConfig.DNSVerification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.JobTemplatesCleared() {
+	if _u.mutation.JobTemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11419,10 +11419,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobTemplate
+		edge.Schema = _u.schemaConfig.JobTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedJobTemplatesIDs(); len(nodes) > 0 && !ouo.mutation.JobTemplatesCleared() {
+	if nodes := _u.mutation.RemovedJobTemplatesIDs(); len(nodes) > 0 && !_u.mutation.JobTemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11433,13 +11433,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobTemplate
+		edge.Schema = _u.schemaConfig.JobTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.JobTemplatesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobTemplatesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11450,13 +11450,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobTemplate
+		edge.Schema = _u.schemaConfig.JobTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ScheduledJobsCleared() {
+	if _u.mutation.ScheduledJobsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11467,10 +11467,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !ouo.mutation.ScheduledJobsCleared() {
+	if nodes := _u.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11481,13 +11481,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11498,13 +11498,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.JobResultsCleared() {
+	if _u.mutation.JobResultsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11515,10 +11515,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedJobResultsIDs(); len(nodes) > 0 && !ouo.mutation.JobResultsCleared() {
+	if nodes := _u.mutation.RemovedJobResultsIDs(); len(nodes) > 0 && !_u.mutation.JobResultsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11529,13 +11529,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.JobResultsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobResultsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11546,13 +11546,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ScheduledJobRunsCleared() {
+	if _u.mutation.ScheduledJobRunsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11563,10 +11563,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ScheduledJobRun
+		edge.Schema = _u.schemaConfig.ScheduledJobRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedScheduledJobRunsIDs(); len(nodes) > 0 && !ouo.mutation.ScheduledJobRunsCleared() {
+	if nodes := _u.mutation.RemovedScheduledJobRunsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobRunsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11577,13 +11577,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ScheduledJobRun
+		edge.Schema = _u.schemaConfig.ScheduledJobRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ScheduledJobRunsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScheduledJobRunsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11594,13 +11594,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ScheduledJobRun
+		edge.Schema = _u.schemaConfig.ScheduledJobRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.TrustCentersCleared() {
+	if _u.mutation.TrustCentersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11611,10 +11611,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedTrustCentersIDs(); len(nodes) > 0 && !ouo.mutation.TrustCentersCleared() {
+	if nodes := _u.mutation.RemovedTrustCentersIDs(); len(nodes) > 0 && !_u.mutation.TrustCentersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11625,13 +11625,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.TrustCentersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TrustCentersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11642,13 +11642,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.AssetsCleared() {
+	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11659,10 +11659,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !ouo.mutation.AssetsCleared() {
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11673,13 +11673,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.AssetsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11690,13 +11690,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ScansCleared() {
+	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11707,10 +11707,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedScansIDs(); len(nodes) > 0 && !ouo.mutation.ScansCleared() {
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11721,13 +11721,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ScansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11738,13 +11738,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.SubprocessorsCleared() {
+	if _u.mutation.SubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11755,10 +11755,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedSubprocessorsIDs(); len(nodes) > 0 && !ouo.mutation.SubprocessorsCleared() {
+	if nodes := _u.mutation.RemovedSubprocessorsIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11769,13 +11769,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.SubprocessorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubprocessorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11786,13 +11786,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.ExportsCleared() {
+	if _u.mutation.ExportsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11803,10 +11803,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Export
+		edge.Schema = _u.schemaConfig.Export
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedExportsIDs(); len(nodes) > 0 && !ouo.mutation.ExportsCleared() {
+	if nodes := _u.mutation.RemovedExportsIDs(); len(nodes) > 0 && !_u.mutation.ExportsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11817,13 +11817,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Export
+		edge.Schema = _u.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.ExportsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ExportsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -11834,13 +11834,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.Export
+		edge.Schema = _u.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ouo.mutation.MembersCleared() {
+	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -11851,10 +11851,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgMembership
+		edge.Schema = _u.schemaConfig.OrgMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.RemovedMembersIDs(); len(nodes) > 0 && !ouo.mutation.MembersCleared() {
+	if nodes := _u.mutation.RemovedMembersIDs(); len(nodes) > 0 && !_u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -11865,13 +11865,13 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgMembership
+		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.MembersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -11882,19 +11882,19 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrgMembership
+		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = ouo.schemaConfig.Organization
-	ctx = internal.NewSchemaConfigContext(ctx, ouo.schemaConfig)
-	_spec.AddModifiers(ouo.modifiers...)
-	_node = &Organization{config: ouo.config}
+	_spec.Node.Schema = _u.schemaConfig.Organization
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Organization{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ouo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organization.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -11902,6 +11902,6 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 		}
 		return nil, err
 	}
-	ouo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -33,40 +33,40 @@ type JobTemplateHistoryQuery struct {
 }
 
 // Where adds a new predicate for the JobTemplateHistoryQuery builder.
-func (jthq *JobTemplateHistoryQuery) Where(ps ...predicate.JobTemplateHistory) *JobTemplateHistoryQuery {
-	jthq.predicates = append(jthq.predicates, ps...)
-	return jthq
+func (_q *JobTemplateHistoryQuery) Where(ps ...predicate.JobTemplateHistory) *JobTemplateHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (jthq *JobTemplateHistoryQuery) Limit(limit int) *JobTemplateHistoryQuery {
-	jthq.ctx.Limit = &limit
-	return jthq
+func (_q *JobTemplateHistoryQuery) Limit(limit int) *JobTemplateHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (jthq *JobTemplateHistoryQuery) Offset(offset int) *JobTemplateHistoryQuery {
-	jthq.ctx.Offset = &offset
-	return jthq
+func (_q *JobTemplateHistoryQuery) Offset(offset int) *JobTemplateHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (jthq *JobTemplateHistoryQuery) Unique(unique bool) *JobTemplateHistoryQuery {
-	jthq.ctx.Unique = &unique
-	return jthq
+func (_q *JobTemplateHistoryQuery) Unique(unique bool) *JobTemplateHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (jthq *JobTemplateHistoryQuery) Order(o ...jobtemplatehistory.OrderOption) *JobTemplateHistoryQuery {
-	jthq.order = append(jthq.order, o...)
-	return jthq
+func (_q *JobTemplateHistoryQuery) Order(o ...jobtemplatehistory.OrderOption) *JobTemplateHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first JobTemplateHistory entity from the query.
 // Returns a *NotFoundError when no JobTemplateHistory was found.
-func (jthq *JobTemplateHistoryQuery) First(ctx context.Context) (*JobTemplateHistory, error) {
-	nodes, err := jthq.Limit(1).All(setContextOp(ctx, jthq.ctx, ent.OpQueryFirst))
+func (_q *JobTemplateHistoryQuery) First(ctx context.Context) (*JobTemplateHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (jthq *JobTemplateHistoryQuery) First(ctx context.Context) (*JobTemplateHis
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (jthq *JobTemplateHistoryQuery) FirstX(ctx context.Context) *JobTemplateHistory {
-	node, err := jthq.First(ctx)
+func (_q *JobTemplateHistoryQuery) FirstX(ctx context.Context) *JobTemplateHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (jthq *JobTemplateHistoryQuery) FirstX(ctx context.Context) *JobTemplateHis
 
 // FirstID returns the first JobTemplateHistory ID from the query.
 // Returns a *NotFoundError when no JobTemplateHistory ID was found.
-func (jthq *JobTemplateHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *JobTemplateHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = jthq.Limit(1).IDs(setContextOp(ctx, jthq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (jthq *JobTemplateHistoryQuery) FirstID(ctx context.Context) (id string, er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (jthq *JobTemplateHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := jthq.FirstID(ctx)
+func (_q *JobTemplateHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (jthq *JobTemplateHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single JobTemplateHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one JobTemplateHistory entity is found.
 // Returns a *NotFoundError when no JobTemplateHistory entities are found.
-func (jthq *JobTemplateHistoryQuery) Only(ctx context.Context) (*JobTemplateHistory, error) {
-	nodes, err := jthq.Limit(2).All(setContextOp(ctx, jthq.ctx, ent.OpQueryOnly))
+func (_q *JobTemplateHistoryQuery) Only(ctx context.Context) (*JobTemplateHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (jthq *JobTemplateHistoryQuery) Only(ctx context.Context) (*JobTemplateHist
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (jthq *JobTemplateHistoryQuery) OnlyX(ctx context.Context) *JobTemplateHistory {
-	node, err := jthq.Only(ctx)
+func (_q *JobTemplateHistoryQuery) OnlyX(ctx context.Context) *JobTemplateHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (jthq *JobTemplateHistoryQuery) OnlyX(ctx context.Context) *JobTemplateHist
 // OnlyID is like Only, but returns the only JobTemplateHistory ID in the query.
 // Returns a *NotSingularError when more than one JobTemplateHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (jthq *JobTemplateHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *JobTemplateHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = jthq.Limit(2).IDs(setContextOp(ctx, jthq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (jthq *JobTemplateHistoryQuery) OnlyID(ctx context.Context) (id string, err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (jthq *JobTemplateHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := jthq.OnlyID(ctx)
+func (_q *JobTemplateHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (jthq *JobTemplateHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of JobTemplateHistories.
-func (jthq *JobTemplateHistoryQuery) All(ctx context.Context) ([]*JobTemplateHistory, error) {
-	ctx = setContextOp(ctx, jthq.ctx, ent.OpQueryAll)
-	if err := jthq.prepareQuery(ctx); err != nil {
+func (_q *JobTemplateHistoryQuery) All(ctx context.Context) ([]*JobTemplateHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*JobTemplateHistory, *JobTemplateHistoryQuery]()
-	return withInterceptors[[]*JobTemplateHistory](ctx, jthq, qr, jthq.inters)
+	return withInterceptors[[]*JobTemplateHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (jthq *JobTemplateHistoryQuery) AllX(ctx context.Context) []*JobTemplateHistory {
-	nodes, err := jthq.All(ctx)
+func (_q *JobTemplateHistoryQuery) AllX(ctx context.Context) []*JobTemplateHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (jthq *JobTemplateHistoryQuery) AllX(ctx context.Context) []*JobTemplateHis
 }
 
 // IDs executes the query and returns a list of JobTemplateHistory IDs.
-func (jthq *JobTemplateHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if jthq.ctx.Unique == nil && jthq.path != nil {
-		jthq.Unique(true)
+func (_q *JobTemplateHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, jthq.ctx, ent.OpQueryIDs)
-	if err = jthq.Select(jobtemplatehistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(jobtemplatehistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (jthq *JobTemplateHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := jthq.IDs(ctx)
+func (_q *JobTemplateHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (jthq *JobTemplateHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (jthq *JobTemplateHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, jthq.ctx, ent.OpQueryCount)
-	if err := jthq.prepareQuery(ctx); err != nil {
+func (_q *JobTemplateHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, jthq, querierCount[*JobTemplateHistoryQuery](), jthq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*JobTemplateHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (jthq *JobTemplateHistoryQuery) CountX(ctx context.Context) int {
-	count, err := jthq.Count(ctx)
+func (_q *JobTemplateHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (jthq *JobTemplateHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (jthq *JobTemplateHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, jthq.ctx, ent.OpQueryExist)
-	switch _, err := jthq.FirstID(ctx); {
+func (_q *JobTemplateHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (jthq *JobTemplateHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (jthq *JobTemplateHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := jthq.Exist(ctx)
+func (_q *JobTemplateHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (jthq *JobTemplateHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the JobTemplateHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (jthq *JobTemplateHistoryQuery) Clone() *JobTemplateHistoryQuery {
-	if jthq == nil {
+func (_q *JobTemplateHistoryQuery) Clone() *JobTemplateHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &JobTemplateHistoryQuery{
-		config:     jthq.config,
-		ctx:        jthq.ctx.Clone(),
-		order:      append([]jobtemplatehistory.OrderOption{}, jthq.order...),
-		inters:     append([]Interceptor{}, jthq.inters...),
-		predicates: append([]predicate.JobTemplateHistory{}, jthq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]jobtemplatehistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.JobTemplateHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       jthq.sql.Clone(),
-		path:      jthq.path,
-		modifiers: append([]func(*sql.Selector){}, jthq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (jthq *JobTemplateHistoryQuery) Clone() *JobTemplateHistoryQuery {
 //		GroupBy(jobtemplatehistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (jthq *JobTemplateHistoryQuery) GroupBy(field string, fields ...string) *JobTemplateHistoryGroupBy {
-	jthq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &JobTemplateHistoryGroupBy{build: jthq}
-	grbuild.flds = &jthq.ctx.Fields
+func (_q *JobTemplateHistoryQuery) GroupBy(field string, fields ...string) *JobTemplateHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &JobTemplateHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = jobtemplatehistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (jthq *JobTemplateHistoryQuery) GroupBy(field string, fields ...string) *Jo
 //	client.JobTemplateHistory.Query().
 //		Select(jobtemplatehistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (jthq *JobTemplateHistoryQuery) Select(fields ...string) *JobTemplateHistorySelect {
-	jthq.ctx.Fields = append(jthq.ctx.Fields, fields...)
-	sbuild := &JobTemplateHistorySelect{JobTemplateHistoryQuery: jthq}
+func (_q *JobTemplateHistoryQuery) Select(fields ...string) *JobTemplateHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &JobTemplateHistorySelect{JobTemplateHistoryQuery: _q}
 	sbuild.label = jobtemplatehistory.Label
-	sbuild.flds, sbuild.scan = &jthq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a JobTemplateHistorySelect configured with the given aggregations.
-func (jthq *JobTemplateHistoryQuery) Aggregate(fns ...AggregateFunc) *JobTemplateHistorySelect {
-	return jthq.Select().Aggregate(fns...)
+func (_q *JobTemplateHistoryQuery) Aggregate(fns ...AggregateFunc) *JobTemplateHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (jthq *JobTemplateHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range jthq.inters {
+func (_q *JobTemplateHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, jthq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range jthq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !jobtemplatehistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if jthq.path != nil {
-		prev, err := jthq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		jthq.sql = prev
+		_q.sql = prev
 	}
 	if jobtemplatehistory.Policy == nil {
 		return errors.New("generated: uninitialized jobtemplatehistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := jobtemplatehistory.Policy.EvalQuery(ctx, jthq); err != nil {
+	if err := jobtemplatehistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (jthq *JobTemplateHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*JobTemplateHistory, error) {
+func (_q *JobTemplateHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*JobTemplateHistory, error) {
 	var (
 		nodes = []*JobTemplateHistory{}
-		_spec = jthq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*JobTemplateHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &JobTemplateHistory{config: jthq.config}
+		node := &JobTemplateHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = jthq.schemaConfig.JobTemplateHistory
-	ctx = internal.NewSchemaConfigContext(ctx, jthq.schemaConfig)
-	if len(jthq.modifiers) > 0 {
-		_spec.Modifiers = jthq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.JobTemplateHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, jthq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range jthq.loadTotal {
-		if err := jthq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (jthq *JobTemplateHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := jthq.querySpec()
-	_spec.Node.Schema = jthq.schemaConfig.JobTemplateHistory
-	ctx = internal.NewSchemaConfigContext(ctx, jthq.schemaConfig)
-	if len(jthq.modifiers) > 0 {
-		_spec.Modifiers = jthq.modifiers
+func (_q *JobTemplateHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.JobTemplateHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = jthq.ctx.Fields
-	if len(jthq.ctx.Fields) > 0 {
-		_spec.Unique = jthq.ctx.Unique != nil && *jthq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, jthq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (jthq *JobTemplateHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *JobTemplateHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(jobtemplatehistory.Table, jobtemplatehistory.Columns, sqlgraph.NewFieldSpec(jobtemplatehistory.FieldID, field.TypeString))
-	_spec.From = jthq.sql
-	if unique := jthq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if jthq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := jthq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, jobtemplatehistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (jthq *JobTemplateHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := jthq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := jthq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := jthq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := jthq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (jthq *JobTemplateHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (jthq *JobTemplateHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(jthq.driver.Dialect())
+func (_q *JobTemplateHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(jobtemplatehistory.Table)
-	columns := jthq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = jobtemplatehistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if jthq.sql != nil {
-		selector = jthq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if jthq.ctx.Unique != nil && *jthq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(jthq.schemaConfig.JobTemplateHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, jthq.schemaConfig)
+	t1.Schema(_q.schemaConfig.JobTemplateHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range jthq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range jthq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range jthq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := jthq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := jthq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (jthq *JobTemplateHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *JobTemplateHistorySelect {
-	jthq.modifiers = append(jthq.modifiers, modifiers...)
-	return jthq.Select()
+func (_q *JobTemplateHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *JobTemplateHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type JobTemplateHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (jthgb *JobTemplateHistoryGroupBy) Aggregate(fns ...AggregateFunc) *JobTemplateHistoryGroupBy {
-	jthgb.fns = append(jthgb.fns, fns...)
-	return jthgb
+func (_g *JobTemplateHistoryGroupBy) Aggregate(fns ...AggregateFunc) *JobTemplateHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (jthgb *JobTemplateHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, jthgb.build.ctx, ent.OpQueryGroupBy)
-	if err := jthgb.build.prepareQuery(ctx); err != nil {
+func (_g *JobTemplateHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*JobTemplateHistoryQuery, *JobTemplateHistoryGroupBy](ctx, jthgb.build, jthgb, jthgb.build.inters, v)
+	return scanWithInterceptors[*JobTemplateHistoryQuery, *JobTemplateHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (jthgb *JobTemplateHistoryGroupBy) sqlScan(ctx context.Context, root *JobTemplateHistoryQuery, v any) error {
+func (_g *JobTemplateHistoryGroupBy) sqlScan(ctx context.Context, root *JobTemplateHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(jthgb.fns))
-	for _, fn := range jthgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*jthgb.flds)+len(jthgb.fns))
-		for _, f := range *jthgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*jthgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := jthgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type JobTemplateHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (jths *JobTemplateHistorySelect) Aggregate(fns ...AggregateFunc) *JobTemplateHistorySelect {
-	jths.fns = append(jths.fns, fns...)
-	return jths
+func (_s *JobTemplateHistorySelect) Aggregate(fns ...AggregateFunc) *JobTemplateHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (jths *JobTemplateHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, jths.ctx, ent.OpQuerySelect)
-	if err := jths.prepareQuery(ctx); err != nil {
+func (_s *JobTemplateHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*JobTemplateHistoryQuery, *JobTemplateHistorySelect](ctx, jths.JobTemplateHistoryQuery, jths, jths.inters, v)
+	return scanWithInterceptors[*JobTemplateHistoryQuery, *JobTemplateHistorySelect](ctx, _s.JobTemplateHistoryQuery, _s, _s.inters, v)
 }
 
-func (jths *JobTemplateHistorySelect) sqlScan(ctx context.Context, root *JobTemplateHistoryQuery, v any) error {
+func (_s *JobTemplateHistorySelect) sqlScan(ctx context.Context, root *JobTemplateHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(jths.fns))
-	for _, fn := range jths.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*jths.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (jths *JobTemplateHistorySelect) sqlScan(ctx context.Context, root *JobTemp
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := jths.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (jths *JobTemplateHistorySelect) sqlScan(ctx context.Context, root *JobTemp
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (jths *JobTemplateHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *JobTemplateHistorySelect {
-	jths.modifiers = append(jths.modifiers, modifiers...)
-	return jths
+func (_s *JobTemplateHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *JobTemplateHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

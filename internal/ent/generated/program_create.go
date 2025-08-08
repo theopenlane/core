@@ -38,579 +38,579 @@ type ProgramCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (pc *ProgramCreate) SetCreatedAt(t time.Time) *ProgramCreate {
-	pc.mutation.SetCreatedAt(t)
-	return pc
+func (_c *ProgramCreate) SetCreatedAt(v time.Time) *ProgramCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableCreatedAt(t *time.Time) *ProgramCreate {
-	if t != nil {
-		pc.SetCreatedAt(*t)
+func (_c *ProgramCreate) SetNillableCreatedAt(v *time.Time) *ProgramCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (pc *ProgramCreate) SetUpdatedAt(t time.Time) *ProgramCreate {
-	pc.mutation.SetUpdatedAt(t)
-	return pc
+func (_c *ProgramCreate) SetUpdatedAt(v time.Time) *ProgramCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableUpdatedAt(t *time.Time) *ProgramCreate {
-	if t != nil {
-		pc.SetUpdatedAt(*t)
+func (_c *ProgramCreate) SetNillableUpdatedAt(v *time.Time) *ProgramCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (pc *ProgramCreate) SetCreatedBy(s string) *ProgramCreate {
-	pc.mutation.SetCreatedBy(s)
-	return pc
+func (_c *ProgramCreate) SetCreatedBy(v string) *ProgramCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableCreatedBy(s *string) *ProgramCreate {
-	if s != nil {
-		pc.SetCreatedBy(*s)
+func (_c *ProgramCreate) SetNillableCreatedBy(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (pc *ProgramCreate) SetUpdatedBy(s string) *ProgramCreate {
-	pc.mutation.SetUpdatedBy(s)
-	return pc
+func (_c *ProgramCreate) SetUpdatedBy(v string) *ProgramCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableUpdatedBy(s *string) *ProgramCreate {
-	if s != nil {
-		pc.SetUpdatedBy(*s)
+func (_c *ProgramCreate) SetNillableUpdatedBy(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (pc *ProgramCreate) SetDeletedAt(t time.Time) *ProgramCreate {
-	pc.mutation.SetDeletedAt(t)
-	return pc
+func (_c *ProgramCreate) SetDeletedAt(v time.Time) *ProgramCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableDeletedAt(t *time.Time) *ProgramCreate {
-	if t != nil {
-		pc.SetDeletedAt(*t)
+func (_c *ProgramCreate) SetNillableDeletedAt(v *time.Time) *ProgramCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (pc *ProgramCreate) SetDeletedBy(s string) *ProgramCreate {
-	pc.mutation.SetDeletedBy(s)
-	return pc
+func (_c *ProgramCreate) SetDeletedBy(v string) *ProgramCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableDeletedBy(s *string) *ProgramCreate {
-	if s != nil {
-		pc.SetDeletedBy(*s)
+func (_c *ProgramCreate) SetNillableDeletedBy(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (pc *ProgramCreate) SetDisplayID(s string) *ProgramCreate {
-	pc.mutation.SetDisplayID(s)
-	return pc
+func (_c *ProgramCreate) SetDisplayID(v string) *ProgramCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (pc *ProgramCreate) SetTags(s []string) *ProgramCreate {
-	pc.mutation.SetTags(s)
-	return pc
+func (_c *ProgramCreate) SetTags(v []string) *ProgramCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (pc *ProgramCreate) SetOwnerID(s string) *ProgramCreate {
-	pc.mutation.SetOwnerID(s)
-	return pc
+func (_c *ProgramCreate) SetOwnerID(v string) *ProgramCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableOwnerID(s *string) *ProgramCreate {
-	if s != nil {
-		pc.SetOwnerID(*s)
+func (_c *ProgramCreate) SetNillableOwnerID(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (pc *ProgramCreate) SetName(s string) *ProgramCreate {
-	pc.mutation.SetName(s)
-	return pc
+func (_c *ProgramCreate) SetName(v string) *ProgramCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (pc *ProgramCreate) SetDescription(s string) *ProgramCreate {
-	pc.mutation.SetDescription(s)
-	return pc
+func (_c *ProgramCreate) SetDescription(v string) *ProgramCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableDescription(s *string) *ProgramCreate {
-	if s != nil {
-		pc.SetDescription(*s)
+func (_c *ProgramCreate) SetNillableDescription(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (pc *ProgramCreate) SetStatus(es enums.ProgramStatus) *ProgramCreate {
-	pc.mutation.SetStatus(es)
-	return pc
+func (_c *ProgramCreate) SetStatus(v enums.ProgramStatus) *ProgramCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableStatus(es *enums.ProgramStatus) *ProgramCreate {
-	if es != nil {
-		pc.SetStatus(*es)
+func (_c *ProgramCreate) SetNillableStatus(v *enums.ProgramStatus) *ProgramCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetProgramType sets the "program_type" field.
-func (pc *ProgramCreate) SetProgramType(et enums.ProgramType) *ProgramCreate {
-	pc.mutation.SetProgramType(et)
-	return pc
+func (_c *ProgramCreate) SetProgramType(v enums.ProgramType) *ProgramCreate {
+	_c.mutation.SetProgramType(v)
+	return _c
 }
 
 // SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableProgramType(et *enums.ProgramType) *ProgramCreate {
-	if et != nil {
-		pc.SetProgramType(*et)
+func (_c *ProgramCreate) SetNillableProgramType(v *enums.ProgramType) *ProgramCreate {
+	if v != nil {
+		_c.SetProgramType(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetFrameworkName sets the "framework_name" field.
-func (pc *ProgramCreate) SetFrameworkName(s string) *ProgramCreate {
-	pc.mutation.SetFrameworkName(s)
-	return pc
+func (_c *ProgramCreate) SetFrameworkName(v string) *ProgramCreate {
+	_c.mutation.SetFrameworkName(v)
+	return _c
 }
 
 // SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableFrameworkName(s *string) *ProgramCreate {
-	if s != nil {
-		pc.SetFrameworkName(*s)
+func (_c *ProgramCreate) SetNillableFrameworkName(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetFrameworkName(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetStartDate sets the "start_date" field.
-func (pc *ProgramCreate) SetStartDate(t time.Time) *ProgramCreate {
-	pc.mutation.SetStartDate(t)
-	return pc
+func (_c *ProgramCreate) SetStartDate(v time.Time) *ProgramCreate {
+	_c.mutation.SetStartDate(v)
+	return _c
 }
 
 // SetNillableStartDate sets the "start_date" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableStartDate(t *time.Time) *ProgramCreate {
-	if t != nil {
-		pc.SetStartDate(*t)
+func (_c *ProgramCreate) SetNillableStartDate(v *time.Time) *ProgramCreate {
+	if v != nil {
+		_c.SetStartDate(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetEndDate sets the "end_date" field.
-func (pc *ProgramCreate) SetEndDate(t time.Time) *ProgramCreate {
-	pc.mutation.SetEndDate(t)
-	return pc
+func (_c *ProgramCreate) SetEndDate(v time.Time) *ProgramCreate {
+	_c.mutation.SetEndDate(v)
+	return _c
 }
 
 // SetNillableEndDate sets the "end_date" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableEndDate(t *time.Time) *ProgramCreate {
-	if t != nil {
-		pc.SetEndDate(*t)
+func (_c *ProgramCreate) SetNillableEndDate(v *time.Time) *ProgramCreate {
+	if v != nil {
+		_c.SetEndDate(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetAuditorReady sets the "auditor_ready" field.
-func (pc *ProgramCreate) SetAuditorReady(b bool) *ProgramCreate {
-	pc.mutation.SetAuditorReady(b)
-	return pc
+func (_c *ProgramCreate) SetAuditorReady(v bool) *ProgramCreate {
+	_c.mutation.SetAuditorReady(v)
+	return _c
 }
 
 // SetNillableAuditorReady sets the "auditor_ready" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableAuditorReady(b *bool) *ProgramCreate {
-	if b != nil {
-		pc.SetAuditorReady(*b)
+func (_c *ProgramCreate) SetNillableAuditorReady(v *bool) *ProgramCreate {
+	if v != nil {
+		_c.SetAuditorReady(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetAuditorWriteComments sets the "auditor_write_comments" field.
-func (pc *ProgramCreate) SetAuditorWriteComments(b bool) *ProgramCreate {
-	pc.mutation.SetAuditorWriteComments(b)
-	return pc
+func (_c *ProgramCreate) SetAuditorWriteComments(v bool) *ProgramCreate {
+	_c.mutation.SetAuditorWriteComments(v)
+	return _c
 }
 
 // SetNillableAuditorWriteComments sets the "auditor_write_comments" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableAuditorWriteComments(b *bool) *ProgramCreate {
-	if b != nil {
-		pc.SetAuditorWriteComments(*b)
+func (_c *ProgramCreate) SetNillableAuditorWriteComments(v *bool) *ProgramCreate {
+	if v != nil {
+		_c.SetAuditorWriteComments(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetAuditorReadComments sets the "auditor_read_comments" field.
-func (pc *ProgramCreate) SetAuditorReadComments(b bool) *ProgramCreate {
-	pc.mutation.SetAuditorReadComments(b)
-	return pc
+func (_c *ProgramCreate) SetAuditorReadComments(v bool) *ProgramCreate {
+	_c.mutation.SetAuditorReadComments(v)
+	return _c
 }
 
 // SetNillableAuditorReadComments sets the "auditor_read_comments" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableAuditorReadComments(b *bool) *ProgramCreate {
-	if b != nil {
-		pc.SetAuditorReadComments(*b)
+func (_c *ProgramCreate) SetNillableAuditorReadComments(v *bool) *ProgramCreate {
+	if v != nil {
+		_c.SetAuditorReadComments(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetAuditFirm sets the "audit_firm" field.
-func (pc *ProgramCreate) SetAuditFirm(s string) *ProgramCreate {
-	pc.mutation.SetAuditFirm(s)
-	return pc
+func (_c *ProgramCreate) SetAuditFirm(v string) *ProgramCreate {
+	_c.mutation.SetAuditFirm(v)
+	return _c
 }
 
 // SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableAuditFirm(s *string) *ProgramCreate {
-	if s != nil {
-		pc.SetAuditFirm(*s)
+func (_c *ProgramCreate) SetNillableAuditFirm(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetAuditFirm(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetAuditor sets the "auditor" field.
-func (pc *ProgramCreate) SetAuditor(s string) *ProgramCreate {
-	pc.mutation.SetAuditor(s)
-	return pc
+func (_c *ProgramCreate) SetAuditor(v string) *ProgramCreate {
+	_c.mutation.SetAuditor(v)
+	return _c
 }
 
 // SetNillableAuditor sets the "auditor" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableAuditor(s *string) *ProgramCreate {
-	if s != nil {
-		pc.SetAuditor(*s)
+func (_c *ProgramCreate) SetNillableAuditor(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetAuditor(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetAuditorEmail sets the "auditor_email" field.
-func (pc *ProgramCreate) SetAuditorEmail(s string) *ProgramCreate {
-	pc.mutation.SetAuditorEmail(s)
-	return pc
+func (_c *ProgramCreate) SetAuditorEmail(v string) *ProgramCreate {
+	_c.mutation.SetAuditorEmail(v)
+	return _c
 }
 
 // SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableAuditorEmail(s *string) *ProgramCreate {
-	if s != nil {
-		pc.SetAuditorEmail(*s)
+func (_c *ProgramCreate) SetNillableAuditorEmail(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetAuditorEmail(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (pc *ProgramCreate) SetID(s string) *ProgramCreate {
-	pc.mutation.SetID(s)
-	return pc
+func (_c *ProgramCreate) SetID(v string) *ProgramCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (pc *ProgramCreate) SetNillableID(s *string) *ProgramCreate {
-	if s != nil {
-		pc.SetID(*s)
+func (_c *ProgramCreate) SetNillableID(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (pc *ProgramCreate) SetOwner(o *Organization) *ProgramCreate {
-	return pc.SetOwnerID(o.ID)
+func (_c *ProgramCreate) SetOwner(v *Organization) *ProgramCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (pc *ProgramCreate) AddBlockedGroupIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddBlockedGroupIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddBlockedGroupIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (pc *ProgramCreate) AddBlockedGroups(g ...*Group) *ProgramCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ProgramCreate) AddBlockedGroups(v ...*Group) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddBlockedGroupIDs(ids...)
+	return _c.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (pc *ProgramCreate) AddEditorIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddEditorIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddEditorIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (pc *ProgramCreate) AddEditors(g ...*Group) *ProgramCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ProgramCreate) AddEditors(v ...*Group) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddEditorIDs(ids...)
+	return _c.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (pc *ProgramCreate) AddViewerIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddViewerIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddViewerIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddViewerIDs(ids...)
+	return _c
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (pc *ProgramCreate) AddViewers(g ...*Group) *ProgramCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ProgramCreate) AddViewers(v ...*Group) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddViewerIDs(ids...)
+	return _c.AddViewerIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (pc *ProgramCreate) AddControlIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddControlIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddControlIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (pc *ProgramCreate) AddControls(c ...*Control) *ProgramCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *ProgramCreate) AddControls(v ...*Control) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddControlIDs(ids...)
+	return _c.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (pc *ProgramCreate) AddSubcontrolIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddSubcontrolIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddSubcontrolIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddSubcontrolIDs(ids...)
+	return _c
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (pc *ProgramCreate) AddSubcontrols(s ...*Subcontrol) *ProgramCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *ProgramCreate) AddSubcontrols(v ...*Subcontrol) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddSubcontrolIDs(ids...)
+	return _c.AddSubcontrolIDs(ids...)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (pc *ProgramCreate) AddControlObjectiveIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddControlObjectiveIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddControlObjectiveIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddControlObjectiveIDs(ids...)
+	return _c
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (pc *ProgramCreate) AddControlObjectives(c ...*ControlObjective) *ProgramCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *ProgramCreate) AddControlObjectives(v ...*ControlObjective) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddControlObjectiveIDs(ids...)
+	return _c.AddControlObjectiveIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (pc *ProgramCreate) AddInternalPolicyIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddInternalPolicyIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddInternalPolicyIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (pc *ProgramCreate) AddInternalPolicies(i ...*InternalPolicy) *ProgramCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *ProgramCreate) AddInternalPolicies(v ...*InternalPolicy) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddInternalPolicyIDs(ids...)
+	return _c.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (pc *ProgramCreate) AddProcedureIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddProcedureIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddProcedureIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddProcedureIDs(ids...)
+	return _c
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (pc *ProgramCreate) AddProcedures(p ...*Procedure) *ProgramCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *ProgramCreate) AddProcedures(v ...*Procedure) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddProcedureIDs(ids...)
+	return _c.AddProcedureIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (pc *ProgramCreate) AddRiskIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddRiskIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddRiskIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddRiskIDs(ids...)
+	return _c
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (pc *ProgramCreate) AddRisks(r ...*Risk) *ProgramCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_c *ProgramCreate) AddRisks(v ...*Risk) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddRiskIDs(ids...)
+	return _c.AddRiskIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (pc *ProgramCreate) AddTaskIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddTaskIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddTaskIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (pc *ProgramCreate) AddTasks(t ...*Task) *ProgramCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *ProgramCreate) AddTasks(v ...*Task) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddTaskIDs(ids...)
+	return _c.AddTaskIDs(ids...)
 }
 
 // AddNoteIDs adds the "notes" edge to the Note entity by IDs.
-func (pc *ProgramCreate) AddNoteIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddNoteIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddNoteIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddNoteIDs(ids...)
+	return _c
 }
 
 // AddNotes adds the "notes" edges to the Note entity.
-func (pc *ProgramCreate) AddNotes(n ...*Note) *ProgramCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_c *ProgramCreate) AddNotes(v ...*Note) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddNoteIDs(ids...)
+	return _c.AddNoteIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (pc *ProgramCreate) AddFileIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddFileIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddFileIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (pc *ProgramCreate) AddFiles(f ...*File) *ProgramCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *ProgramCreate) AddFiles(v ...*File) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (pc *ProgramCreate) AddEvidenceIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddEvidenceIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddEvidenceIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddEvidenceIDs(ids...)
+	return _c
 }
 
 // AddEvidence adds the "evidence" edges to the Evidence entity.
-func (pc *ProgramCreate) AddEvidence(e ...*Evidence) *ProgramCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *ProgramCreate) AddEvidence(v ...*Evidence) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddEvidenceIDs(ids...)
+	return _c.AddEvidenceIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
-func (pc *ProgramCreate) AddNarrativeIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddNarrativeIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddNarrativeIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddNarrativeIDs(ids...)
+	return _c
 }
 
 // AddNarratives adds the "narratives" edges to the Narrative entity.
-func (pc *ProgramCreate) AddNarratives(n ...*Narrative) *ProgramCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_c *ProgramCreate) AddNarratives(v ...*Narrative) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddNarrativeIDs(ids...)
+	return _c.AddNarrativeIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (pc *ProgramCreate) AddActionPlanIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddActionPlanIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddActionPlanIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddActionPlanIDs(ids...)
+	return _c
 }
 
 // AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (pc *ProgramCreate) AddActionPlans(a ...*ActionPlan) *ProgramCreate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_c *ProgramCreate) AddActionPlans(v ...*ActionPlan) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddActionPlanIDs(ids...)
+	return _c.AddActionPlanIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (pc *ProgramCreate) AddUserIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddUserIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddUserIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddUserIDs(ids...)
+	return _c
 }
 
 // AddUsers adds the "users" edges to the User entity.
-func (pc *ProgramCreate) AddUsers(u ...*User) *ProgramCreate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_c *ProgramCreate) AddUsers(v ...*User) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddUserIDs(ids...)
+	return _c.AddUserIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
-func (pc *ProgramCreate) AddMemberIDs(ids ...string) *ProgramCreate {
-	pc.mutation.AddMemberIDs(ids...)
-	return pc
+func (_c *ProgramCreate) AddMemberIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddMemberIDs(ids...)
+	return _c
 }
 
 // AddMembers adds the "members" edges to the ProgramMembership entity.
-func (pc *ProgramCreate) AddMembers(p ...*ProgramMembership) *ProgramCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *ProgramCreate) AddMembers(v ...*ProgramMembership) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddMemberIDs(ids...)
+	return _c.AddMemberIDs(ids...)
 }
 
 // Mutation returns the ProgramMutation object of the builder.
-func (pc *ProgramCreate) Mutation() *ProgramMutation {
-	return pc.mutation
+func (_c *ProgramCreate) Mutation() *ProgramMutation {
+	return _c.mutation
 }
 
 // Save creates the Program in the database.
-func (pc *ProgramCreate) Save(ctx context.Context) (*Program, error) {
-	if err := pc.defaults(); err != nil {
+func (_c *ProgramCreate) Save(ctx context.Context) (*Program, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, pc.sqlSave, pc.mutation, pc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (pc *ProgramCreate) SaveX(ctx context.Context) *Program {
-	v, err := pc.Save(ctx)
+func (_c *ProgramCreate) SaveX(ctx context.Context) *Program {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -618,117 +618,117 @@ func (pc *ProgramCreate) SaveX(ctx context.Context) *Program {
 }
 
 // Exec executes the query.
-func (pc *ProgramCreate) Exec(ctx context.Context) error {
-	_, err := pc.Save(ctx)
+func (_c *ProgramCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pc *ProgramCreate) ExecX(ctx context.Context) {
-	if err := pc.Exec(ctx); err != nil {
+func (_c *ProgramCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (pc *ProgramCreate) defaults() error {
-	if _, ok := pc.mutation.CreatedAt(); !ok {
+func (_c *ProgramCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if program.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized program.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := program.DefaultCreatedAt()
-		pc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := pc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if program.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized program.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := program.DefaultUpdatedAt()
-		pc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := pc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := program.DefaultTags
-		pc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := pc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := program.DefaultStatus
-		pc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := pc.mutation.ProgramType(); !ok {
+	if _, ok := _c.mutation.ProgramType(); !ok {
 		v := program.DefaultProgramType
-		pc.mutation.SetProgramType(v)
+		_c.mutation.SetProgramType(v)
 	}
-	if _, ok := pc.mutation.AuditorReady(); !ok {
+	if _, ok := _c.mutation.AuditorReady(); !ok {
 		v := program.DefaultAuditorReady
-		pc.mutation.SetAuditorReady(v)
+		_c.mutation.SetAuditorReady(v)
 	}
-	if _, ok := pc.mutation.AuditorWriteComments(); !ok {
+	if _, ok := _c.mutation.AuditorWriteComments(); !ok {
 		v := program.DefaultAuditorWriteComments
-		pc.mutation.SetAuditorWriteComments(v)
+		_c.mutation.SetAuditorWriteComments(v)
 	}
-	if _, ok := pc.mutation.AuditorReadComments(); !ok {
+	if _, ok := _c.mutation.AuditorReadComments(); !ok {
 		v := program.DefaultAuditorReadComments
-		pc.mutation.SetAuditorReadComments(v)
+		_c.mutation.SetAuditorReadComments(v)
 	}
-	if _, ok := pc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if program.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized program.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := program.DefaultID()
-		pc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (pc *ProgramCreate) check() error {
-	if _, ok := pc.mutation.DisplayID(); !ok {
+func (_c *ProgramCreate) check() error {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Program.display_id"`)}
 	}
-	if v, ok := pc.mutation.DisplayID(); ok {
+	if v, ok := _c.mutation.DisplayID(); ok {
 		if err := program.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Program.display_id": %w`, err)}
 		}
 	}
-	if v, ok := pc.mutation.OwnerID(); ok {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := program.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Program.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := pc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Program.name"`)}
 	}
-	if v, ok := pc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := program.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Program.name": %w`, err)}
 		}
 	}
-	if _, ok := pc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "Program.status"`)}
 	}
-	if v, ok := pc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := program.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
 		}
 	}
-	if _, ok := pc.mutation.ProgramType(); !ok {
+	if _, ok := _c.mutation.ProgramType(); !ok {
 		return &ValidationError{Name: "program_type", err: errors.New(`generated: missing required field "Program.program_type"`)}
 	}
-	if v, ok := pc.mutation.ProgramType(); ok {
+	if v, ok := _c.mutation.ProgramType(); ok {
 		if err := program.ProgramTypeValidator(v); err != nil {
 			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
 		}
 	}
-	if _, ok := pc.mutation.AuditorReady(); !ok {
+	if _, ok := _c.mutation.AuditorReady(); !ok {
 		return &ValidationError{Name: "auditor_ready", err: errors.New(`generated: missing required field "Program.auditor_ready"`)}
 	}
-	if _, ok := pc.mutation.AuditorWriteComments(); !ok {
+	if _, ok := _c.mutation.AuditorWriteComments(); !ok {
 		return &ValidationError{Name: "auditor_write_comments", err: errors.New(`generated: missing required field "Program.auditor_write_comments"`)}
 	}
-	if _, ok := pc.mutation.AuditorReadComments(); !ok {
+	if _, ok := _c.mutation.AuditorReadComments(); !ok {
 		return &ValidationError{Name: "auditor_read_comments", err: errors.New(`generated: missing required field "Program.auditor_read_comments"`)}
 	}
-	if v, ok := pc.mutation.AuditorEmail(); ok {
+	if v, ok := _c.mutation.AuditorEmail(); ok {
 		if err := program.AuditorEmailValidator(v); err != nil {
 			return &ValidationError{Name: "auditor_email", err: fmt.Errorf(`generated: validator failed for field "Program.auditor_email": %w`, err)}
 		}
@@ -736,12 +736,12 @@ func (pc *ProgramCreate) check() error {
 	return nil
 }
 
-func (pc *ProgramCreate) sqlSave(ctx context.Context) (*Program, error) {
-	if err := pc.check(); err != nil {
+func (_c *ProgramCreate) sqlSave(ctx context.Context) (*Program, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := pc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, pc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -754,106 +754,106 @@ func (pc *ProgramCreate) sqlSave(ctx context.Context) (*Program, error) {
 			return nil, fmt.Errorf("unexpected Program.ID type: %T", _spec.ID.Value)
 		}
 	}
-	pc.mutation.id = &_node.ID
-	pc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
+func (_c *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Program{config: pc.config}
+		_node = &Program{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(program.Table, sqlgraph.NewFieldSpec(program.FieldID, field.TypeString))
 	)
-	_spec.Schema = pc.schemaConfig.Program
-	if id, ok := pc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Program
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := pc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(program.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := pc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(program.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := pc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(program.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := pc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(program.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := pc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(program.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := pc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(program.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := pc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(program.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := pc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(program.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := pc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(program.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := pc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(program.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := pc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(program.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := pc.mutation.ProgramType(); ok {
+	if value, ok := _c.mutation.ProgramType(); ok {
 		_spec.SetField(program.FieldProgramType, field.TypeEnum, value)
 		_node.ProgramType = value
 	}
-	if value, ok := pc.mutation.FrameworkName(); ok {
+	if value, ok := _c.mutation.FrameworkName(); ok {
 		_spec.SetField(program.FieldFrameworkName, field.TypeString, value)
 		_node.FrameworkName = value
 	}
-	if value, ok := pc.mutation.StartDate(); ok {
+	if value, ok := _c.mutation.StartDate(); ok {
 		_spec.SetField(program.FieldStartDate, field.TypeTime, value)
 		_node.StartDate = value
 	}
-	if value, ok := pc.mutation.EndDate(); ok {
+	if value, ok := _c.mutation.EndDate(); ok {
 		_spec.SetField(program.FieldEndDate, field.TypeTime, value)
 		_node.EndDate = value
 	}
-	if value, ok := pc.mutation.AuditorReady(); ok {
+	if value, ok := _c.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)
 		_node.AuditorReady = value
 	}
-	if value, ok := pc.mutation.AuditorWriteComments(); ok {
+	if value, ok := _c.mutation.AuditorWriteComments(); ok {
 		_spec.SetField(program.FieldAuditorWriteComments, field.TypeBool, value)
 		_node.AuditorWriteComments = value
 	}
-	if value, ok := pc.mutation.AuditorReadComments(); ok {
+	if value, ok := _c.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 		_node.AuditorReadComments = value
 	}
-	if value, ok := pc.mutation.AuditFirm(); ok {
+	if value, ok := _c.mutation.AuditFirm(); ok {
 		_spec.SetField(program.FieldAuditFirm, field.TypeString, value)
 		_node.AuditFirm = value
 	}
-	if value, ok := pc.mutation.Auditor(); ok {
+	if value, ok := _c.mutation.Auditor(); ok {
 		_spec.SetField(program.FieldAuditor, field.TypeString, value)
 		_node.Auditor = value
 	}
-	if value, ok := pc.mutation.AuditorEmail(); ok {
+	if value, ok := _c.mutation.AuditorEmail(); ok {
 		_spec.SetField(program.FieldAuditorEmail, field.TypeString, value)
 		_node.AuditorEmail = value
 	}
-	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -864,14 +864,14 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.Program
+		edge.Schema = _c.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -882,13 +882,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramBlockedGroups
+		edge.Schema = _c.schemaConfig.ProgramBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -899,13 +899,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramEditors
+		edge.Schema = _c.schemaConfig.ProgramEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -916,13 +916,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramViewers
+		edge.Schema = _c.schemaConfig.ProgramViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -933,13 +933,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramControls
+		edge.Schema = _c.schemaConfig.ProgramControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -950,13 +950,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.Subcontrol
+		edge.Schema = _c.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -967,13 +967,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramControlObjectives
+		edge.Schema = _c.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -984,13 +984,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _c.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1001,13 +1001,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramProcedures
+		edge.Schema = _c.schemaConfig.ProgramProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1018,13 +1018,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramRisks
+		edge.Schema = _c.schemaConfig.ProgramRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1035,13 +1035,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramTasks
+		edge.Schema = _c.schemaConfig.ProgramTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.NotesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NotesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1052,13 +1052,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.Note
+		edge.Schema = _c.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1069,13 +1069,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramFiles
+		edge.Schema = _c.schemaConfig.ProgramFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.EvidenceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1086,13 +1086,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramEvidence
+		edge.Schema = _c.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.NarrativesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1103,13 +1103,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramNarratives
+		edge.Schema = _c.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.ActionPlansIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1120,13 +1120,13 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramActionPlans
+		edge.Schema = _c.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1137,11 +1137,11 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramMembership
+		edge.Schema = _c.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &ProgramMembershipCreate{config: pc.config, mutation: newProgramMembershipMutation(pc.config, OpCreate)}
+		createE := &ProgramMembershipCreate{config: _c.config, mutation: newProgramMembershipMutation(_c.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -1150,7 +1150,7 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.MembersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1161,7 +1161,7 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.ProgramMembership
+		edge.Schema = _c.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1178,16 +1178,16 @@ type ProgramCreateBulk struct {
 }
 
 // Save creates the Program entities in the database.
-func (pcb *ProgramCreateBulk) Save(ctx context.Context) ([]*Program, error) {
-	if pcb.err != nil {
-		return nil, pcb.err
+func (_c *ProgramCreateBulk) Save(ctx context.Context) ([]*Program, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(pcb.builders))
-	nodes := make([]*Program, len(pcb.builders))
-	mutators := make([]Mutator, len(pcb.builders))
-	for i := range pcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Program, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := pcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProgramMutation)
@@ -1201,11 +1201,11 @@ func (pcb *ProgramCreateBulk) Save(ctx context.Context) ([]*Program, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, pcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, pcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -1225,7 +1225,7 @@ func (pcb *ProgramCreateBulk) Save(ctx context.Context) ([]*Program, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, pcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -1233,8 +1233,8 @@ func (pcb *ProgramCreateBulk) Save(ctx context.Context) ([]*Program, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (pcb *ProgramCreateBulk) SaveX(ctx context.Context) []*Program {
-	v, err := pcb.Save(ctx)
+func (_c *ProgramCreateBulk) SaveX(ctx context.Context) []*Program {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1242,14 +1242,14 @@ func (pcb *ProgramCreateBulk) SaveX(ctx context.Context) []*Program {
 }
 
 // Exec executes the query.
-func (pcb *ProgramCreateBulk) Exec(ctx context.Context) error {
-	_, err := pcb.Save(ctx)
+func (_c *ProgramCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pcb *ProgramCreateBulk) ExecX(ctx context.Context) {
-	if err := pcb.Exec(ctx); err != nil {
+func (_c *ProgramCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

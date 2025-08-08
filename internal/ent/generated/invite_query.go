@@ -42,44 +42,44 @@ type InviteQuery struct {
 }
 
 // Where adds a new predicate for the InviteQuery builder.
-func (iq *InviteQuery) Where(ps ...predicate.Invite) *InviteQuery {
-	iq.predicates = append(iq.predicates, ps...)
-	return iq
+func (_q *InviteQuery) Where(ps ...predicate.Invite) *InviteQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (iq *InviteQuery) Limit(limit int) *InviteQuery {
-	iq.ctx.Limit = &limit
-	return iq
+func (_q *InviteQuery) Limit(limit int) *InviteQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (iq *InviteQuery) Offset(offset int) *InviteQuery {
-	iq.ctx.Offset = &offset
-	return iq
+func (_q *InviteQuery) Offset(offset int) *InviteQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (iq *InviteQuery) Unique(unique bool) *InviteQuery {
-	iq.ctx.Unique = &unique
-	return iq
+func (_q *InviteQuery) Unique(unique bool) *InviteQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (iq *InviteQuery) Order(o ...invite.OrderOption) *InviteQuery {
-	iq.order = append(iq.order, o...)
-	return iq
+func (_q *InviteQuery) Order(o ...invite.OrderOption) *InviteQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (iq *InviteQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: iq.config}).Query()
+func (_q *InviteQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := iq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := iq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -88,23 +88,23 @@ func (iq *InviteQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, invite.OwnerTable, invite.OwnerColumn),
 		)
-		schemaConfig := iq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Invite
-		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEvents chains the current query on the "events" edge.
-func (iq *InviteQuery) QueryEvents() *EventQuery {
-	query := (&EventClient{config: iq.config}).Query()
+func (_q *InviteQuery) QueryEvents() *EventQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := iq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := iq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -113,23 +113,23 @@ func (iq *InviteQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, invite.EventsTable, invite.EventsPrimaryKey...),
 		)
-		schemaConfig := iq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.InviteEvents
-		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryGroups chains the current query on the "groups" edge.
-func (iq *InviteQuery) QueryGroups() *GroupQuery {
-	query := (&GroupClient{config: iq.config}).Query()
+func (_q *InviteQuery) QueryGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := iq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := iq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -138,10 +138,10 @@ func (iq *InviteQuery) QueryGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, invite.GroupsTable, invite.GroupsPrimaryKey...),
 		)
-		schemaConfig := iq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.InviteGroups
-		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -149,8 +149,8 @@ func (iq *InviteQuery) QueryGroups() *GroupQuery {
 
 // First returns the first Invite entity from the query.
 // Returns a *NotFoundError when no Invite was found.
-func (iq *InviteQuery) First(ctx context.Context) (*Invite, error) {
-	nodes, err := iq.Limit(1).All(setContextOp(ctx, iq.ctx, ent.OpQueryFirst))
+func (_q *InviteQuery) First(ctx context.Context) (*Invite, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -161,8 +161,8 @@ func (iq *InviteQuery) First(ctx context.Context) (*Invite, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (iq *InviteQuery) FirstX(ctx context.Context) *Invite {
-	node, err := iq.First(ctx)
+func (_q *InviteQuery) FirstX(ctx context.Context) *Invite {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -171,9 +171,9 @@ func (iq *InviteQuery) FirstX(ctx context.Context) *Invite {
 
 // FirstID returns the first Invite ID from the query.
 // Returns a *NotFoundError when no Invite ID was found.
-func (iq *InviteQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *InviteQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = iq.Limit(1).IDs(setContextOp(ctx, iq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -184,8 +184,8 @@ func (iq *InviteQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (iq *InviteQuery) FirstIDX(ctx context.Context) string {
-	id, err := iq.FirstID(ctx)
+func (_q *InviteQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -195,8 +195,8 @@ func (iq *InviteQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Invite entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Invite entity is found.
 // Returns a *NotFoundError when no Invite entities are found.
-func (iq *InviteQuery) Only(ctx context.Context) (*Invite, error) {
-	nodes, err := iq.Limit(2).All(setContextOp(ctx, iq.ctx, ent.OpQueryOnly))
+func (_q *InviteQuery) Only(ctx context.Context) (*Invite, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -211,8 +211,8 @@ func (iq *InviteQuery) Only(ctx context.Context) (*Invite, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (iq *InviteQuery) OnlyX(ctx context.Context) *Invite {
-	node, err := iq.Only(ctx)
+func (_q *InviteQuery) OnlyX(ctx context.Context) *Invite {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (iq *InviteQuery) OnlyX(ctx context.Context) *Invite {
 // OnlyID is like Only, but returns the only Invite ID in the query.
 // Returns a *NotSingularError when more than one Invite ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (iq *InviteQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *InviteQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = iq.Limit(2).IDs(setContextOp(ctx, iq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -239,8 +239,8 @@ func (iq *InviteQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (iq *InviteQuery) OnlyIDX(ctx context.Context) string {
-	id, err := iq.OnlyID(ctx)
+func (_q *InviteQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -248,18 +248,18 @@ func (iq *InviteQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Invites.
-func (iq *InviteQuery) All(ctx context.Context) ([]*Invite, error) {
-	ctx = setContextOp(ctx, iq.ctx, ent.OpQueryAll)
-	if err := iq.prepareQuery(ctx); err != nil {
+func (_q *InviteQuery) All(ctx context.Context) ([]*Invite, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Invite, *InviteQuery]()
-	return withInterceptors[[]*Invite](ctx, iq, qr, iq.inters)
+	return withInterceptors[[]*Invite](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (iq *InviteQuery) AllX(ctx context.Context) []*Invite {
-	nodes, err := iq.All(ctx)
+func (_q *InviteQuery) AllX(ctx context.Context) []*Invite {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -267,20 +267,20 @@ func (iq *InviteQuery) AllX(ctx context.Context) []*Invite {
 }
 
 // IDs executes the query and returns a list of Invite IDs.
-func (iq *InviteQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if iq.ctx.Unique == nil && iq.path != nil {
-		iq.Unique(true)
+func (_q *InviteQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, iq.ctx, ent.OpQueryIDs)
-	if err = iq.Select(invite.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(invite.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (iq *InviteQuery) IDsX(ctx context.Context) []string {
-	ids, err := iq.IDs(ctx)
+func (_q *InviteQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -288,17 +288,17 @@ func (iq *InviteQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (iq *InviteQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, iq.ctx, ent.OpQueryCount)
-	if err := iq.prepareQuery(ctx); err != nil {
+func (_q *InviteQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, iq, querierCount[*InviteQuery](), iq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*InviteQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (iq *InviteQuery) CountX(ctx context.Context) int {
-	count, err := iq.Count(ctx)
+func (_q *InviteQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -306,9 +306,9 @@ func (iq *InviteQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (iq *InviteQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, iq.ctx, ent.OpQueryExist)
-	switch _, err := iq.FirstID(ctx); {
+func (_q *InviteQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -319,8 +319,8 @@ func (iq *InviteQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (iq *InviteQuery) ExistX(ctx context.Context) bool {
-	exist, err := iq.Exist(ctx)
+func (_q *InviteQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -329,57 +329,57 @@ func (iq *InviteQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the InviteQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (iq *InviteQuery) Clone() *InviteQuery {
-	if iq == nil {
+func (_q *InviteQuery) Clone() *InviteQuery {
+	if _q == nil {
 		return nil
 	}
 	return &InviteQuery{
-		config:     iq.config,
-		ctx:        iq.ctx.Clone(),
-		order:      append([]invite.OrderOption{}, iq.order...),
-		inters:     append([]Interceptor{}, iq.inters...),
-		predicates: append([]predicate.Invite{}, iq.predicates...),
-		withOwner:  iq.withOwner.Clone(),
-		withEvents: iq.withEvents.Clone(),
-		withGroups: iq.withGroups.Clone(),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]invite.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.Invite{}, _q.predicates...),
+		withOwner:  _q.withOwner.Clone(),
+		withEvents: _q.withEvents.Clone(),
+		withGroups: _q.withGroups.Clone(),
 		// clone intermediate query.
-		sql:       iq.sql.Clone(),
-		path:      iq.path,
-		modifiers: append([]func(*sql.Selector){}, iq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (iq *InviteQuery) WithOwner(opts ...func(*OrganizationQuery)) *InviteQuery {
-	query := (&OrganizationClient{config: iq.config}).Query()
+func (_q *InviteQuery) WithOwner(opts ...func(*OrganizationQuery)) *InviteQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	iq.withOwner = query
-	return iq
+	_q.withOwner = query
+	return _q
 }
 
 // WithEvents tells the query-builder to eager-load the nodes that are connected to
 // the "events" edge. The optional arguments are used to configure the query builder of the edge.
-func (iq *InviteQuery) WithEvents(opts ...func(*EventQuery)) *InviteQuery {
-	query := (&EventClient{config: iq.config}).Query()
+func (_q *InviteQuery) WithEvents(opts ...func(*EventQuery)) *InviteQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	iq.withEvents = query
-	return iq
+	_q.withEvents = query
+	return _q
 }
 
 // WithGroups tells the query-builder to eager-load the nodes that are connected to
 // the "groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (iq *InviteQuery) WithGroups(opts ...func(*GroupQuery)) *InviteQuery {
-	query := (&GroupClient{config: iq.config}).Query()
+func (_q *InviteQuery) WithGroups(opts ...func(*GroupQuery)) *InviteQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	iq.withGroups = query
-	return iq
+	_q.withGroups = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -396,10 +396,10 @@ func (iq *InviteQuery) WithGroups(opts ...func(*GroupQuery)) *InviteQuery {
 //		GroupBy(invite.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (iq *InviteQuery) GroupBy(field string, fields ...string) *InviteGroupBy {
-	iq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &InviteGroupBy{build: iq}
-	grbuild.flds = &iq.ctx.Fields
+func (_q *InviteQuery) GroupBy(field string, fields ...string) *InviteGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &InviteGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = invite.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -417,127 +417,127 @@ func (iq *InviteQuery) GroupBy(field string, fields ...string) *InviteGroupBy {
 //	client.Invite.Query().
 //		Select(invite.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (iq *InviteQuery) Select(fields ...string) *InviteSelect {
-	iq.ctx.Fields = append(iq.ctx.Fields, fields...)
-	sbuild := &InviteSelect{InviteQuery: iq}
+func (_q *InviteQuery) Select(fields ...string) *InviteSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &InviteSelect{InviteQuery: _q}
 	sbuild.label = invite.Label
-	sbuild.flds, sbuild.scan = &iq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a InviteSelect configured with the given aggregations.
-func (iq *InviteQuery) Aggregate(fns ...AggregateFunc) *InviteSelect {
-	return iq.Select().Aggregate(fns...)
+func (_q *InviteQuery) Aggregate(fns ...AggregateFunc) *InviteSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (iq *InviteQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range iq.inters {
+func (_q *InviteQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, iq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range iq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !invite.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if iq.path != nil {
-		prev, err := iq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		iq.sql = prev
+		_q.sql = prev
 	}
 	if invite.Policy == nil {
 		return errors.New("generated: uninitialized invite.Policy (forgotten import generated/runtime?)")
 	}
-	if err := invite.Policy.EvalQuery(ctx, iq); err != nil {
+	if err := invite.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (iq *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invite, error) {
+func (_q *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invite, error) {
 	var (
 		nodes       = []*Invite{}
-		_spec       = iq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			iq.withOwner != nil,
-			iq.withEvents != nil,
-			iq.withGroups != nil,
+			_q.withOwner != nil,
+			_q.withEvents != nil,
+			_q.withGroups != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Invite).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Invite{config: iq.config}
+		node := &Invite{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = iq.schemaConfig.Invite
-	ctx = internal.NewSchemaConfigContext(ctx, iq.schemaConfig)
-	if len(iq.modifiers) > 0 {
-		_spec.Modifiers = iq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Invite
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, iq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := iq.withOwner; query != nil {
-		if err := iq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Invite, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := iq.withEvents; query != nil {
-		if err := iq.loadEvents(ctx, query, nodes,
+	if query := _q.withEvents; query != nil {
+		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *Invite) { n.Edges.Events = []*Event{} },
 			func(n *Invite, e *Event) { n.Edges.Events = append(n.Edges.Events, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := iq.withGroups; query != nil {
-		if err := iq.loadGroups(ctx, query, nodes,
+	if query := _q.withGroups; query != nil {
+		if err := _q.loadGroups(ctx, query, nodes,
 			func(n *Invite) { n.Edges.Groups = []*Group{} },
 			func(n *Invite, e *Group) { n.Edges.Groups = append(n.Edges.Groups, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range iq.withNamedEvents {
-		if err := iq.loadEvents(ctx, query, nodes,
+	for name, query := range _q.withNamedEvents {
+		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *Invite) { n.appendNamedEvents(name) },
 			func(n *Invite, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range iq.withNamedGroups {
-		if err := iq.loadGroups(ctx, query, nodes,
+	for name, query := range _q.withNamedGroups {
+		if err := _q.loadGroups(ctx, query, nodes,
 			func(n *Invite) { n.appendNamedGroups(name) },
 			func(n *Invite, e *Group) { n.appendNamedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range iq.loadTotal {
-		if err := iq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (iq *InviteQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *Organization)) error {
+func (_q *InviteQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Invite)
 	for i := range nodes {
@@ -566,7 +566,7 @@ func (iq *InviteQuery) loadOwner(ctx context.Context, query *OrganizationQuery, 
 	}
 	return nil
 }
-func (iq *InviteQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *Event)) error {
+func (_q *InviteQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *Event)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Invite)
 	nids := make(map[string]map[*Invite]struct{})
@@ -579,7 +579,7 @@ func (iq *InviteQuery) loadEvents(ctx context.Context, query *EventQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(invite.EventsTable)
-		joinT.Schema(iq.schemaConfig.InviteEvents)
+		joinT.Schema(_q.schemaConfig.InviteEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(invite.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(invite.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -628,7 +628,7 @@ func (iq *InviteQuery) loadEvents(ctx context.Context, query *EventQuery, nodes 
 	}
 	return nil
 }
-func (iq *InviteQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *Group)) error {
+func (_q *InviteQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Invite)
 	nids := make(map[string]map[*Invite]struct{})
@@ -641,7 +641,7 @@ func (iq *InviteQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(invite.GroupsTable)
-		joinT.Schema(iq.schemaConfig.InviteGroups)
+		joinT.Schema(_q.schemaConfig.InviteGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(invite.GroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(invite.GroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -691,29 +691,29 @@ func (iq *InviteQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes 
 	return nil
 }
 
-func (iq *InviteQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := iq.querySpec()
-	_spec.Node.Schema = iq.schemaConfig.Invite
-	ctx = internal.NewSchemaConfigContext(ctx, iq.schemaConfig)
-	if len(iq.modifiers) > 0 {
-		_spec.Modifiers = iq.modifiers
+func (_q *InviteQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Invite
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = iq.ctx.Fields
-	if len(iq.ctx.Fields) > 0 {
-		_spec.Unique = iq.ctx.Unique != nil && *iq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, iq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (iq *InviteQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *InviteQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString))
-	_spec.From = iq.sql
-	if unique := iq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if iq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := iq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, invite.FieldID)
 		for i := range fields {
@@ -721,24 +721,24 @@ func (iq *InviteQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if iq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(invite.FieldOwnerID)
 		}
 	}
-	if ps := iq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := iq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := iq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := iq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -748,76 +748,76 @@ func (iq *InviteQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (iq *InviteQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(iq.driver.Dialect())
+func (_q *InviteQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(invite.Table)
-	columns := iq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = invite.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if iq.sql != nil {
-		selector = iq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if iq.ctx.Unique != nil && *iq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(iq.schemaConfig.Invite)
-	ctx = internal.NewSchemaConfigContext(ctx, iq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Invite)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range iq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range iq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range iq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := iq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := iq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (iq *InviteQuery) Modify(modifiers ...func(s *sql.Selector)) *InviteSelect {
-	iq.modifiers = append(iq.modifiers, modifiers...)
-	return iq.Select()
+func (_q *InviteQuery) Modify(modifiers ...func(s *sql.Selector)) *InviteSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (iq *InviteQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *InviteQuery {
-	query := (&EventClient{config: iq.config}).Query()
+func (_q *InviteQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *InviteQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if iq.withNamedEvents == nil {
-		iq.withNamedEvents = make(map[string]*EventQuery)
+	if _q.withNamedEvents == nil {
+		_q.withNamedEvents = make(map[string]*EventQuery)
 	}
-	iq.withNamedEvents[name] = query
-	return iq
+	_q.withNamedEvents[name] = query
+	return _q
 }
 
 // WithNamedGroups tells the query-builder to eager-load the nodes that are connected to the "groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (iq *InviteQuery) WithNamedGroups(name string, opts ...func(*GroupQuery)) *InviteQuery {
-	query := (&GroupClient{config: iq.config}).Query()
+func (_q *InviteQuery) WithNamedGroups(name string, opts ...func(*GroupQuery)) *InviteQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if iq.withNamedGroups == nil {
-		iq.withNamedGroups = make(map[string]*GroupQuery)
+	if _q.withNamedGroups == nil {
+		_q.withNamedGroups = make(map[string]*GroupQuery)
 	}
-	iq.withNamedGroups[name] = query
-	return iq
+	_q.withNamedGroups[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -846,41 +846,41 @@ type InviteGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (igb *InviteGroupBy) Aggregate(fns ...AggregateFunc) *InviteGroupBy {
-	igb.fns = append(igb.fns, fns...)
-	return igb
+func (_g *InviteGroupBy) Aggregate(fns ...AggregateFunc) *InviteGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (igb *InviteGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, igb.build.ctx, ent.OpQueryGroupBy)
-	if err := igb.build.prepareQuery(ctx); err != nil {
+func (_g *InviteGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*InviteQuery, *InviteGroupBy](ctx, igb.build, igb, igb.build.inters, v)
+	return scanWithInterceptors[*InviteQuery, *InviteGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (igb *InviteGroupBy) sqlScan(ctx context.Context, root *InviteQuery, v any) error {
+func (_g *InviteGroupBy) sqlScan(ctx context.Context, root *InviteQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(igb.fns))
-	for _, fn := range igb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*igb.flds)+len(igb.fns))
-		for _, f := range *igb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*igb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := igb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -894,27 +894,27 @@ type InviteSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (is *InviteSelect) Aggregate(fns ...AggregateFunc) *InviteSelect {
-	is.fns = append(is.fns, fns...)
-	return is
+func (_s *InviteSelect) Aggregate(fns ...AggregateFunc) *InviteSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (is *InviteSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, is.ctx, ent.OpQuerySelect)
-	if err := is.prepareQuery(ctx); err != nil {
+func (_s *InviteSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*InviteQuery, *InviteSelect](ctx, is.InviteQuery, is, is.inters, v)
+	return scanWithInterceptors[*InviteQuery, *InviteSelect](ctx, _s.InviteQuery, _s, _s.inters, v)
 }
 
-func (is *InviteSelect) sqlScan(ctx context.Context, root *InviteQuery, v any) error {
+func (_s *InviteSelect) sqlScan(ctx context.Context, root *InviteQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(is.fns))
-	for _, fn := range is.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*is.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -922,7 +922,7 @@ func (is *InviteSelect) sqlScan(ctx context.Context, root *InviteQuery, v any) e
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := is.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -930,7 +930,7 @@ func (is *InviteSelect) sqlScan(ctx context.Context, root *InviteQuery, v any) e
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (is *InviteSelect) Modify(modifiers ...func(s *sql.Selector)) *InviteSelect {
-	is.modifiers = append(is.modifiers, modifiers...)
-	return is
+func (_s *InviteSelect) Modify(modifiers ...func(s *sql.Selector)) *InviteSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

@@ -30,214 +30,214 @@ type JobResultUpdate struct {
 }
 
 // Where appends a list predicates to the JobResultUpdate builder.
-func (jru *JobResultUpdate) Where(ps ...predicate.JobResult) *JobResultUpdate {
-	jru.mutation.Where(ps...)
-	return jru
+func (_u *JobResultUpdate) Where(ps ...predicate.JobResult) *JobResultUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jru *JobResultUpdate) SetUpdatedAt(t time.Time) *JobResultUpdate {
-	jru.mutation.SetUpdatedAt(t)
-	return jru
+func (_u *JobResultUpdate) SetUpdatedAt(v time.Time) *JobResultUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (jru *JobResultUpdate) ClearUpdatedAt() *JobResultUpdate {
-	jru.mutation.ClearUpdatedAt()
-	return jru
+func (_u *JobResultUpdate) ClearUpdatedAt() *JobResultUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jru *JobResultUpdate) SetUpdatedBy(s string) *JobResultUpdate {
-	jru.mutation.SetUpdatedBy(s)
-	return jru
+func (_u *JobResultUpdate) SetUpdatedBy(v string) *JobResultUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jru *JobResultUpdate) SetNillableUpdatedBy(s *string) *JobResultUpdate {
-	if s != nil {
-		jru.SetUpdatedBy(*s)
+func (_u *JobResultUpdate) SetNillableUpdatedBy(v *string) *JobResultUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (jru *JobResultUpdate) ClearUpdatedBy() *JobResultUpdate {
-	jru.mutation.ClearUpdatedBy()
-	return jru
+func (_u *JobResultUpdate) ClearUpdatedBy() *JobResultUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jru *JobResultUpdate) SetDeletedAt(t time.Time) *JobResultUpdate {
-	jru.mutation.SetDeletedAt(t)
-	return jru
+func (_u *JobResultUpdate) SetDeletedAt(v time.Time) *JobResultUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jru *JobResultUpdate) SetNillableDeletedAt(t *time.Time) *JobResultUpdate {
-	if t != nil {
-		jru.SetDeletedAt(*t)
+func (_u *JobResultUpdate) SetNillableDeletedAt(v *time.Time) *JobResultUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (jru *JobResultUpdate) ClearDeletedAt() *JobResultUpdate {
-	jru.mutation.ClearDeletedAt()
-	return jru
+func (_u *JobResultUpdate) ClearDeletedAt() *JobResultUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jru *JobResultUpdate) SetDeletedBy(s string) *JobResultUpdate {
-	jru.mutation.SetDeletedBy(s)
-	return jru
+func (_u *JobResultUpdate) SetDeletedBy(v string) *JobResultUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jru *JobResultUpdate) SetNillableDeletedBy(s *string) *JobResultUpdate {
-	if s != nil {
-		jru.SetDeletedBy(*s)
+func (_u *JobResultUpdate) SetNillableDeletedBy(v *string) *JobResultUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (jru *JobResultUpdate) ClearDeletedBy() *JobResultUpdate {
-	jru.mutation.ClearDeletedBy()
-	return jru
+func (_u *JobResultUpdate) ClearDeletedBy() *JobResultUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jru *JobResultUpdate) SetOwnerID(s string) *JobResultUpdate {
-	jru.mutation.SetOwnerID(s)
-	return jru
+func (_u *JobResultUpdate) SetOwnerID(v string) *JobResultUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jru *JobResultUpdate) SetNillableOwnerID(s *string) *JobResultUpdate {
-	if s != nil {
-		jru.SetOwnerID(*s)
+func (_u *JobResultUpdate) SetNillableOwnerID(v *string) *JobResultUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (jru *JobResultUpdate) ClearOwnerID() *JobResultUpdate {
-	jru.mutation.ClearOwnerID()
-	return jru
+func (_u *JobResultUpdate) ClearOwnerID() *JobResultUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetScheduledJobID sets the "scheduled_job_id" field.
-func (jru *JobResultUpdate) SetScheduledJobID(s string) *JobResultUpdate {
-	jru.mutation.SetScheduledJobID(s)
-	return jru
+func (_u *JobResultUpdate) SetScheduledJobID(v string) *JobResultUpdate {
+	_u.mutation.SetScheduledJobID(v)
+	return _u
 }
 
 // SetNillableScheduledJobID sets the "scheduled_job_id" field if the given value is not nil.
-func (jru *JobResultUpdate) SetNillableScheduledJobID(s *string) *JobResultUpdate {
-	if s != nil {
-		jru.SetScheduledJobID(*s)
+func (_u *JobResultUpdate) SetNillableScheduledJobID(v *string) *JobResultUpdate {
+	if v != nil {
+		_u.SetScheduledJobID(*v)
 	}
-	return jru
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (jru *JobResultUpdate) SetStatus(ees enums.JobExecutionStatus) *JobResultUpdate {
-	jru.mutation.SetStatus(ees)
-	return jru
+func (_u *JobResultUpdate) SetStatus(v enums.JobExecutionStatus) *JobResultUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (jru *JobResultUpdate) SetNillableStatus(ees *enums.JobExecutionStatus) *JobResultUpdate {
-	if ees != nil {
-		jru.SetStatus(*ees)
+func (_u *JobResultUpdate) SetNillableStatus(v *enums.JobExecutionStatus) *JobResultUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return jru
+	return _u
 }
 
 // SetFileID sets the "file_id" field.
-func (jru *JobResultUpdate) SetFileID(s string) *JobResultUpdate {
-	jru.mutation.SetFileID(s)
-	return jru
+func (_u *JobResultUpdate) SetFileID(v string) *JobResultUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
 }
 
 // SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (jru *JobResultUpdate) SetNillableFileID(s *string) *JobResultUpdate {
-	if s != nil {
-		jru.SetFileID(*s)
+func (_u *JobResultUpdate) SetNillableFileID(v *string) *JobResultUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
 	}
-	return jru
+	return _u
 }
 
 // SetLog sets the "log" field.
-func (jru *JobResultUpdate) SetLog(s string) *JobResultUpdate {
-	jru.mutation.SetLog(s)
-	return jru
+func (_u *JobResultUpdate) SetLog(v string) *JobResultUpdate {
+	_u.mutation.SetLog(v)
+	return _u
 }
 
 // SetNillableLog sets the "log" field if the given value is not nil.
-func (jru *JobResultUpdate) SetNillableLog(s *string) *JobResultUpdate {
-	if s != nil {
-		jru.SetLog(*s)
+func (_u *JobResultUpdate) SetNillableLog(v *string) *JobResultUpdate {
+	if v != nil {
+		_u.SetLog(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearLog clears the value of the "log" field.
-func (jru *JobResultUpdate) ClearLog() *JobResultUpdate {
-	jru.mutation.ClearLog()
-	return jru
+func (_u *JobResultUpdate) ClearLog() *JobResultUpdate {
+	_u.mutation.ClearLog()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (jru *JobResultUpdate) SetOwner(o *Organization) *JobResultUpdate {
-	return jru.SetOwnerID(o.ID)
+func (_u *JobResultUpdate) SetOwner(v *Organization) *JobResultUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // SetScheduledJob sets the "scheduled_job" edge to the ScheduledJob entity.
-func (jru *JobResultUpdate) SetScheduledJob(s *ScheduledJob) *JobResultUpdate {
-	return jru.SetScheduledJobID(s.ID)
+func (_u *JobResultUpdate) SetScheduledJob(v *ScheduledJob) *JobResultUpdate {
+	return _u.SetScheduledJobID(v.ID)
 }
 
 // SetFile sets the "file" edge to the File entity.
-func (jru *JobResultUpdate) SetFile(f *File) *JobResultUpdate {
-	return jru.SetFileID(f.ID)
+func (_u *JobResultUpdate) SetFile(v *File) *JobResultUpdate {
+	return _u.SetFileID(v.ID)
 }
 
 // Mutation returns the JobResultMutation object of the builder.
-func (jru *JobResultUpdate) Mutation() *JobResultMutation {
-	return jru.mutation
+func (_u *JobResultUpdate) Mutation() *JobResultMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (jru *JobResultUpdate) ClearOwner() *JobResultUpdate {
-	jru.mutation.ClearOwner()
-	return jru
+func (_u *JobResultUpdate) ClearOwner() *JobResultUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearScheduledJob clears the "scheduled_job" edge to the ScheduledJob entity.
-func (jru *JobResultUpdate) ClearScheduledJob() *JobResultUpdate {
-	jru.mutation.ClearScheduledJob()
-	return jru
+func (_u *JobResultUpdate) ClearScheduledJob() *JobResultUpdate {
+	_u.mutation.ClearScheduledJob()
+	return _u
 }
 
 // ClearFile clears the "file" edge to the File entity.
-func (jru *JobResultUpdate) ClearFile() *JobResultUpdate {
-	jru.mutation.ClearFile()
-	return jru
+func (_u *JobResultUpdate) ClearFile() *JobResultUpdate {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (jru *JobResultUpdate) Save(ctx context.Context) (int, error) {
-	if err := jru.defaults(); err != nil {
+func (_u *JobResultUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, jru.sqlSave, jru.mutation, jru.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jru *JobResultUpdate) SaveX(ctx context.Context) int {
-	affected, err := jru.Save(ctx)
+func (_u *JobResultUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,109 +245,109 @@ func (jru *JobResultUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (jru *JobResultUpdate) Exec(ctx context.Context) error {
-	_, err := jru.Save(ctx)
+func (_u *JobResultUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jru *JobResultUpdate) ExecX(ctx context.Context) {
-	if err := jru.Exec(ctx); err != nil {
+func (_u *JobResultUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jru *JobResultUpdate) defaults() error {
-	if _, ok := jru.mutation.UpdatedAt(); !ok && !jru.mutation.UpdatedAtCleared() {
+func (_u *JobResultUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if jobresult.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobresult.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobresult.UpdateDefaultUpdatedAt()
-		jru.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (jru *JobResultUpdate) check() error {
-	if v, ok := jru.mutation.OwnerID(); ok {
+func (_u *JobResultUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := jobresult.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "JobResult.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := jru.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := jobresult.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "JobResult.status": %w`, err)}
 		}
 	}
-	if jru.mutation.ScheduledJobCleared() && len(jru.mutation.ScheduledJobIDs()) > 0 {
+	if _u.mutation.ScheduledJobCleared() && len(_u.mutation.ScheduledJobIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "JobResult.scheduled_job"`)
 	}
-	if jru.mutation.FileCleared() && len(jru.mutation.FileIDs()) > 0 {
+	if _u.mutation.FileCleared() && len(_u.mutation.FileIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "JobResult.file"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (jru *JobResultUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobResultUpdate {
-	jru.modifiers = append(jru.modifiers, modifiers...)
-	return jru
+func (_u *JobResultUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobResultUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := jru.check(); err != nil {
-		return n, err
+func (_u *JobResultUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(jobresult.Table, jobresult.Columns, sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString))
-	if ps := jru.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if jru.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(jobresult.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := jru.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobresult.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if jru.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(jobresult.FieldUpdatedAt, field.TypeTime)
 	}
-	if jru.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(jobresult.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := jru.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobresult.FieldUpdatedBy, field.TypeString, value)
 	}
-	if jru.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobresult.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := jru.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobresult.FieldDeletedAt, field.TypeTime, value)
 	}
-	if jru.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(jobresult.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := jru.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(jobresult.FieldDeletedBy, field.TypeString, value)
 	}
-	if jru.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(jobresult.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := jru.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(jobresult.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := jru.mutation.Log(); ok {
+	if value, ok := _u.mutation.Log(); ok {
 		_spec.SetField(jobresult.FieldLog, field.TypeString, value)
 	}
-	if jru.mutation.LogCleared() {
+	if _u.mutation.LogCleared() {
 		_spec.ClearField(jobresult.FieldLog, field.TypeString)
 	}
-	if jru.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -358,10 +358,10 @@ func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jru.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -372,13 +372,13 @@ func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if jru.mutation.ScheduledJobCleared() {
+	if _u.mutation.ScheduledJobCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -389,10 +389,10 @@ func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jru.mutation.ScheduledJobIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScheduledJobIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -403,13 +403,13 @@ func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if jru.mutation.FileCleared() {
+	if _u.mutation.FileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -420,10 +420,10 @@ func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jru.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -434,16 +434,16 @@ func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = jru.schemaConfig.JobResult
-	ctx = internal.NewSchemaConfigContext(ctx, jru.schemaConfig)
-	_spec.AddModifiers(jru.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, jru.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.JobResult
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{jobresult.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -451,8 +451,8 @@ func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	jru.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // JobResultUpdateOne is the builder for updating a single JobResult entity.
@@ -465,221 +465,221 @@ type JobResultUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jruo *JobResultUpdateOne) SetUpdatedAt(t time.Time) *JobResultUpdateOne {
-	jruo.mutation.SetUpdatedAt(t)
-	return jruo
+func (_u *JobResultUpdateOne) SetUpdatedAt(v time.Time) *JobResultUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (jruo *JobResultUpdateOne) ClearUpdatedAt() *JobResultUpdateOne {
-	jruo.mutation.ClearUpdatedAt()
-	return jruo
+func (_u *JobResultUpdateOne) ClearUpdatedAt() *JobResultUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jruo *JobResultUpdateOne) SetUpdatedBy(s string) *JobResultUpdateOne {
-	jruo.mutation.SetUpdatedBy(s)
-	return jruo
+func (_u *JobResultUpdateOne) SetUpdatedBy(v string) *JobResultUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jruo *JobResultUpdateOne) SetNillableUpdatedBy(s *string) *JobResultUpdateOne {
-	if s != nil {
-		jruo.SetUpdatedBy(*s)
+func (_u *JobResultUpdateOne) SetNillableUpdatedBy(v *string) *JobResultUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (jruo *JobResultUpdateOne) ClearUpdatedBy() *JobResultUpdateOne {
-	jruo.mutation.ClearUpdatedBy()
-	return jruo
+func (_u *JobResultUpdateOne) ClearUpdatedBy() *JobResultUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jruo *JobResultUpdateOne) SetDeletedAt(t time.Time) *JobResultUpdateOne {
-	jruo.mutation.SetDeletedAt(t)
-	return jruo
+func (_u *JobResultUpdateOne) SetDeletedAt(v time.Time) *JobResultUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jruo *JobResultUpdateOne) SetNillableDeletedAt(t *time.Time) *JobResultUpdateOne {
-	if t != nil {
-		jruo.SetDeletedAt(*t)
+func (_u *JobResultUpdateOne) SetNillableDeletedAt(v *time.Time) *JobResultUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (jruo *JobResultUpdateOne) ClearDeletedAt() *JobResultUpdateOne {
-	jruo.mutation.ClearDeletedAt()
-	return jruo
+func (_u *JobResultUpdateOne) ClearDeletedAt() *JobResultUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jruo *JobResultUpdateOne) SetDeletedBy(s string) *JobResultUpdateOne {
-	jruo.mutation.SetDeletedBy(s)
-	return jruo
+func (_u *JobResultUpdateOne) SetDeletedBy(v string) *JobResultUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jruo *JobResultUpdateOne) SetNillableDeletedBy(s *string) *JobResultUpdateOne {
-	if s != nil {
-		jruo.SetDeletedBy(*s)
+func (_u *JobResultUpdateOne) SetNillableDeletedBy(v *string) *JobResultUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (jruo *JobResultUpdateOne) ClearDeletedBy() *JobResultUpdateOne {
-	jruo.mutation.ClearDeletedBy()
-	return jruo
+func (_u *JobResultUpdateOne) ClearDeletedBy() *JobResultUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jruo *JobResultUpdateOne) SetOwnerID(s string) *JobResultUpdateOne {
-	jruo.mutation.SetOwnerID(s)
-	return jruo
+func (_u *JobResultUpdateOne) SetOwnerID(v string) *JobResultUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jruo *JobResultUpdateOne) SetNillableOwnerID(s *string) *JobResultUpdateOne {
-	if s != nil {
-		jruo.SetOwnerID(*s)
+func (_u *JobResultUpdateOne) SetNillableOwnerID(v *string) *JobResultUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (jruo *JobResultUpdateOne) ClearOwnerID() *JobResultUpdateOne {
-	jruo.mutation.ClearOwnerID()
-	return jruo
+func (_u *JobResultUpdateOne) ClearOwnerID() *JobResultUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetScheduledJobID sets the "scheduled_job_id" field.
-func (jruo *JobResultUpdateOne) SetScheduledJobID(s string) *JobResultUpdateOne {
-	jruo.mutation.SetScheduledJobID(s)
-	return jruo
+func (_u *JobResultUpdateOne) SetScheduledJobID(v string) *JobResultUpdateOne {
+	_u.mutation.SetScheduledJobID(v)
+	return _u
 }
 
 // SetNillableScheduledJobID sets the "scheduled_job_id" field if the given value is not nil.
-func (jruo *JobResultUpdateOne) SetNillableScheduledJobID(s *string) *JobResultUpdateOne {
-	if s != nil {
-		jruo.SetScheduledJobID(*s)
+func (_u *JobResultUpdateOne) SetNillableScheduledJobID(v *string) *JobResultUpdateOne {
+	if v != nil {
+		_u.SetScheduledJobID(*v)
 	}
-	return jruo
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (jruo *JobResultUpdateOne) SetStatus(ees enums.JobExecutionStatus) *JobResultUpdateOne {
-	jruo.mutation.SetStatus(ees)
-	return jruo
+func (_u *JobResultUpdateOne) SetStatus(v enums.JobExecutionStatus) *JobResultUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (jruo *JobResultUpdateOne) SetNillableStatus(ees *enums.JobExecutionStatus) *JobResultUpdateOne {
-	if ees != nil {
-		jruo.SetStatus(*ees)
+func (_u *JobResultUpdateOne) SetNillableStatus(v *enums.JobExecutionStatus) *JobResultUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return jruo
+	return _u
 }
 
 // SetFileID sets the "file_id" field.
-func (jruo *JobResultUpdateOne) SetFileID(s string) *JobResultUpdateOne {
-	jruo.mutation.SetFileID(s)
-	return jruo
+func (_u *JobResultUpdateOne) SetFileID(v string) *JobResultUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
 }
 
 // SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (jruo *JobResultUpdateOne) SetNillableFileID(s *string) *JobResultUpdateOne {
-	if s != nil {
-		jruo.SetFileID(*s)
+func (_u *JobResultUpdateOne) SetNillableFileID(v *string) *JobResultUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
 	}
-	return jruo
+	return _u
 }
 
 // SetLog sets the "log" field.
-func (jruo *JobResultUpdateOne) SetLog(s string) *JobResultUpdateOne {
-	jruo.mutation.SetLog(s)
-	return jruo
+func (_u *JobResultUpdateOne) SetLog(v string) *JobResultUpdateOne {
+	_u.mutation.SetLog(v)
+	return _u
 }
 
 // SetNillableLog sets the "log" field if the given value is not nil.
-func (jruo *JobResultUpdateOne) SetNillableLog(s *string) *JobResultUpdateOne {
-	if s != nil {
-		jruo.SetLog(*s)
+func (_u *JobResultUpdateOne) SetNillableLog(v *string) *JobResultUpdateOne {
+	if v != nil {
+		_u.SetLog(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearLog clears the value of the "log" field.
-func (jruo *JobResultUpdateOne) ClearLog() *JobResultUpdateOne {
-	jruo.mutation.ClearLog()
-	return jruo
+func (_u *JobResultUpdateOne) ClearLog() *JobResultUpdateOne {
+	_u.mutation.ClearLog()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (jruo *JobResultUpdateOne) SetOwner(o *Organization) *JobResultUpdateOne {
-	return jruo.SetOwnerID(o.ID)
+func (_u *JobResultUpdateOne) SetOwner(v *Organization) *JobResultUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // SetScheduledJob sets the "scheduled_job" edge to the ScheduledJob entity.
-func (jruo *JobResultUpdateOne) SetScheduledJob(s *ScheduledJob) *JobResultUpdateOne {
-	return jruo.SetScheduledJobID(s.ID)
+func (_u *JobResultUpdateOne) SetScheduledJob(v *ScheduledJob) *JobResultUpdateOne {
+	return _u.SetScheduledJobID(v.ID)
 }
 
 // SetFile sets the "file" edge to the File entity.
-func (jruo *JobResultUpdateOne) SetFile(f *File) *JobResultUpdateOne {
-	return jruo.SetFileID(f.ID)
+func (_u *JobResultUpdateOne) SetFile(v *File) *JobResultUpdateOne {
+	return _u.SetFileID(v.ID)
 }
 
 // Mutation returns the JobResultMutation object of the builder.
-func (jruo *JobResultUpdateOne) Mutation() *JobResultMutation {
-	return jruo.mutation
+func (_u *JobResultUpdateOne) Mutation() *JobResultMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (jruo *JobResultUpdateOne) ClearOwner() *JobResultUpdateOne {
-	jruo.mutation.ClearOwner()
-	return jruo
+func (_u *JobResultUpdateOne) ClearOwner() *JobResultUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearScheduledJob clears the "scheduled_job" edge to the ScheduledJob entity.
-func (jruo *JobResultUpdateOne) ClearScheduledJob() *JobResultUpdateOne {
-	jruo.mutation.ClearScheduledJob()
-	return jruo
+func (_u *JobResultUpdateOne) ClearScheduledJob() *JobResultUpdateOne {
+	_u.mutation.ClearScheduledJob()
+	return _u
 }
 
 // ClearFile clears the "file" edge to the File entity.
-func (jruo *JobResultUpdateOne) ClearFile() *JobResultUpdateOne {
-	jruo.mutation.ClearFile()
-	return jruo
+func (_u *JobResultUpdateOne) ClearFile() *JobResultUpdateOne {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // Where appends a list predicates to the JobResultUpdate builder.
-func (jruo *JobResultUpdateOne) Where(ps ...predicate.JobResult) *JobResultUpdateOne {
-	jruo.mutation.Where(ps...)
-	return jruo
+func (_u *JobResultUpdateOne) Where(ps ...predicate.JobResult) *JobResultUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (jruo *JobResultUpdateOne) Select(field string, fields ...string) *JobResultUpdateOne {
-	jruo.fields = append([]string{field}, fields...)
-	return jruo
+func (_u *JobResultUpdateOne) Select(field string, fields ...string) *JobResultUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated JobResult entity.
-func (jruo *JobResultUpdateOne) Save(ctx context.Context) (*JobResult, error) {
-	if err := jruo.defaults(); err != nil {
+func (_u *JobResultUpdateOne) Save(ctx context.Context) (*JobResult, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, jruo.sqlSave, jruo.mutation, jruo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jruo *JobResultUpdateOne) SaveX(ctx context.Context) *JobResult {
-	node, err := jruo.Save(ctx)
+func (_u *JobResultUpdateOne) SaveX(ctx context.Context) *JobResult {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -687,68 +687,68 @@ func (jruo *JobResultUpdateOne) SaveX(ctx context.Context) *JobResult {
 }
 
 // Exec executes the query on the entity.
-func (jruo *JobResultUpdateOne) Exec(ctx context.Context) error {
-	_, err := jruo.Save(ctx)
+func (_u *JobResultUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jruo *JobResultUpdateOne) ExecX(ctx context.Context) {
-	if err := jruo.Exec(ctx); err != nil {
+func (_u *JobResultUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jruo *JobResultUpdateOne) defaults() error {
-	if _, ok := jruo.mutation.UpdatedAt(); !ok && !jruo.mutation.UpdatedAtCleared() {
+func (_u *JobResultUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if jobresult.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobresult.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobresult.UpdateDefaultUpdatedAt()
-		jruo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (jruo *JobResultUpdateOne) check() error {
-	if v, ok := jruo.mutation.OwnerID(); ok {
+func (_u *JobResultUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := jobresult.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "JobResult.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := jruo.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := jobresult.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "JobResult.status": %w`, err)}
 		}
 	}
-	if jruo.mutation.ScheduledJobCleared() && len(jruo.mutation.ScheduledJobIDs()) > 0 {
+	if _u.mutation.ScheduledJobCleared() && len(_u.mutation.ScheduledJobIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "JobResult.scheduled_job"`)
 	}
-	if jruo.mutation.FileCleared() && len(jruo.mutation.FileIDs()) > 0 {
+	if _u.mutation.FileCleared() && len(_u.mutation.FileIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "JobResult.file"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (jruo *JobResultUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobResultUpdateOne {
-	jruo.modifiers = append(jruo.modifiers, modifiers...)
-	return jruo
+func (_u *JobResultUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobResultUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, err error) {
-	if err := jruo.check(); err != nil {
+func (_u *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(jobresult.Table, jobresult.Columns, sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString))
-	id, ok := jruo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "JobResult.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := jruo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, jobresult.FieldID)
 		for _, f := range fields {
@@ -760,53 +760,53 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 			}
 		}
 	}
-	if ps := jruo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if jruo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(jobresult.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := jruo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobresult.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if jruo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(jobresult.FieldUpdatedAt, field.TypeTime)
 	}
-	if jruo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(jobresult.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := jruo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobresult.FieldUpdatedBy, field.TypeString, value)
 	}
-	if jruo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobresult.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := jruo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobresult.FieldDeletedAt, field.TypeTime, value)
 	}
-	if jruo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(jobresult.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := jruo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(jobresult.FieldDeletedBy, field.TypeString, value)
 	}
-	if jruo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(jobresult.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := jruo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(jobresult.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := jruo.mutation.Log(); ok {
+	if value, ok := _u.mutation.Log(); ok {
 		_spec.SetField(jobresult.FieldLog, field.TypeString, value)
 	}
-	if jruo.mutation.LogCleared() {
+	if _u.mutation.LogCleared() {
 		_spec.ClearField(jobresult.FieldLog, field.TypeString)
 	}
-	if jruo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -817,10 +817,10 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jruo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -831,13 +831,13 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if jruo.mutation.ScheduledJobCleared() {
+	if _u.mutation.ScheduledJobCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -848,10 +848,10 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jruo.mutation.ScheduledJobIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScheduledJobIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -862,13 +862,13 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if jruo.mutation.FileCleared() {
+	if _u.mutation.FileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -879,10 +879,10 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jruo.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -893,19 +893,19 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobResult
+		edge.Schema = _u.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = jruo.schemaConfig.JobResult
-	ctx = internal.NewSchemaConfigContext(ctx, jruo.schemaConfig)
-	_spec.AddModifiers(jruo.modifiers...)
-	_node = &JobResult{config: jruo.config}
+	_spec.Node.Schema = _u.schemaConfig.JobResult
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &JobResult{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, jruo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{jobresult.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -913,6 +913,6 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 		}
 		return nil, err
 	}
-	jruo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

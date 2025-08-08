@@ -537,6 +537,8 @@ var (
 		{Name: "verified", Type: field.TypeBool, Nullable: true},
 		{Name: "verification_date", Type: field.TypeTime, Nullable: true},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "evidence_control_implementations", Type: field.TypeString, Nullable: true},
+		{Name: "internal_policy_control_implementations", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ControlImplementationsTable holds the schema information for the "control_implementations" table.
@@ -546,8 +548,20 @@ var (
 		PrimaryKey: []*schema.Column{ControlImplementationsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "control_implementations_organizations_control_implementations",
+				Symbol:     "control_implementations_evidences_control_implementations",
 				Columns:    []*schema.Column{ControlImplementationsColumns[13]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_implementations_internal_policies_control_implementations",
+				Columns:    []*schema.Column{ControlImplementationsColumns[14]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_implementations_organizations_control_implementations",
+				Columns:    []*schema.Column{ControlImplementationsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -556,7 +570,7 @@ var (
 			{
 				Name:    "controlimplementation_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlImplementationsColumns[13]},
+				Columns: []*schema.Column{ControlImplementationsColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -5388,6 +5402,31 @@ var (
 			},
 		},
 	}
+	// ControlImplementationTasksColumns holds the columns for the "control_implementation_tasks" table.
+	ControlImplementationTasksColumns = []*schema.Column{
+		{Name: "control_implementation_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// ControlImplementationTasksTable holds the schema information for the "control_implementation_tasks" table.
+	ControlImplementationTasksTable = &schema.Table{
+		Name:       "control_implementation_tasks",
+		Columns:    ControlImplementationTasksColumns,
+		PrimaryKey: []*schema.Column{ControlImplementationTasksColumns[0], ControlImplementationTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_implementation_tasks_control_implementation_id",
+				Columns:    []*schema.Column{ControlImplementationTasksColumns[0]},
+				RefColumns: []*schema.Column{ControlImplementationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_implementation_tasks_task_id",
+				Columns:    []*schema.Column{ControlImplementationTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ControlObjectiveBlockedGroupsColumns holds the columns for the "control_objective_blocked_groups" table.
 	ControlObjectiveBlockedGroupsColumns = []*schema.Column{
 		{Name: "control_objective_id", Type: field.TypeString},
@@ -7913,6 +7952,7 @@ var (
 		ControlImplementationBlockedGroupsTable,
 		ControlImplementationEditorsTable,
 		ControlImplementationViewersTable,
+		ControlImplementationTasksTable,
 		ControlObjectiveBlockedGroupsTable,
 		ControlObjectiveEditorsTable,
 		ControlObjectiveViewersTable,
@@ -8038,7 +8078,9 @@ func init() {
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
-	ControlImplementationsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ControlImplementationsTable.ForeignKeys[0].RefTable = EvidencesTable
+	ControlImplementationsTable.ForeignKeys[1].RefTable = InternalPoliciesTable
+	ControlImplementationsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	ControlImplementationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_implementation_history",
 	}
@@ -8321,6 +8363,8 @@ func init() {
 	ControlImplementationEditorsTable.ForeignKeys[1].RefTable = GroupsTable
 	ControlImplementationViewersTable.ForeignKeys[0].RefTable = ControlImplementationsTable
 	ControlImplementationViewersTable.ForeignKeys[1].RefTable = GroupsTable
+	ControlImplementationTasksTable.ForeignKeys[0].RefTable = ControlImplementationsTable
+	ControlImplementationTasksTable.ForeignKeys[1].RefTable = TasksTable
 	ControlObjectiveBlockedGroupsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ControlObjectiveBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	ControlObjectiveEditorsTable.ForeignKeys[0].RefTable = ControlObjectivesTable

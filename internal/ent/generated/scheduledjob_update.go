@@ -32,285 +32,285 @@ type ScheduledJobUpdate struct {
 }
 
 // Where appends a list predicates to the ScheduledJobUpdate builder.
-func (sju *ScheduledJobUpdate) Where(ps ...predicate.ScheduledJob) *ScheduledJobUpdate {
-	sju.mutation.Where(ps...)
-	return sju
+func (_u *ScheduledJobUpdate) Where(ps ...predicate.ScheduledJob) *ScheduledJobUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sju *ScheduledJobUpdate) SetUpdatedAt(t time.Time) *ScheduledJobUpdate {
-	sju.mutation.SetUpdatedAt(t)
-	return sju
+func (_u *ScheduledJobUpdate) SetUpdatedAt(v time.Time) *ScheduledJobUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (sju *ScheduledJobUpdate) ClearUpdatedAt() *ScheduledJobUpdate {
-	sju.mutation.ClearUpdatedAt()
-	return sju
+func (_u *ScheduledJobUpdate) ClearUpdatedAt() *ScheduledJobUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sju *ScheduledJobUpdate) SetUpdatedBy(s string) *ScheduledJobUpdate {
-	sju.mutation.SetUpdatedBy(s)
-	return sju
+func (_u *ScheduledJobUpdate) SetUpdatedBy(v string) *ScheduledJobUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableUpdatedBy(s *string) *ScheduledJobUpdate {
-	if s != nil {
-		sju.SetUpdatedBy(*s)
+func (_u *ScheduledJobUpdate) SetNillableUpdatedBy(v *string) *ScheduledJobUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return sju
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (sju *ScheduledJobUpdate) ClearUpdatedBy() *ScheduledJobUpdate {
-	sju.mutation.ClearUpdatedBy()
-	return sju
+func (_u *ScheduledJobUpdate) ClearUpdatedBy() *ScheduledJobUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (sju *ScheduledJobUpdate) SetDeletedAt(t time.Time) *ScheduledJobUpdate {
-	sju.mutation.SetDeletedAt(t)
-	return sju
+func (_u *ScheduledJobUpdate) SetDeletedAt(v time.Time) *ScheduledJobUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableDeletedAt(t *time.Time) *ScheduledJobUpdate {
-	if t != nil {
-		sju.SetDeletedAt(*t)
+func (_u *ScheduledJobUpdate) SetNillableDeletedAt(v *time.Time) *ScheduledJobUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return sju
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (sju *ScheduledJobUpdate) ClearDeletedAt() *ScheduledJobUpdate {
-	sju.mutation.ClearDeletedAt()
-	return sju
+func (_u *ScheduledJobUpdate) ClearDeletedAt() *ScheduledJobUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (sju *ScheduledJobUpdate) SetDeletedBy(s string) *ScheduledJobUpdate {
-	sju.mutation.SetDeletedBy(s)
-	return sju
+func (_u *ScheduledJobUpdate) SetDeletedBy(v string) *ScheduledJobUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableDeletedBy(s *string) *ScheduledJobUpdate {
-	if s != nil {
-		sju.SetDeletedBy(*s)
+func (_u *ScheduledJobUpdate) SetNillableDeletedBy(v *string) *ScheduledJobUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return sju
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (sju *ScheduledJobUpdate) ClearDeletedBy() *ScheduledJobUpdate {
-	sju.mutation.ClearDeletedBy()
-	return sju
+func (_u *ScheduledJobUpdate) ClearDeletedBy() *ScheduledJobUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetJobID sets the "job_id" field.
-func (sju *ScheduledJobUpdate) SetJobID(s string) *ScheduledJobUpdate {
-	sju.mutation.SetJobID(s)
-	return sju
+func (_u *ScheduledJobUpdate) SetJobID(v string) *ScheduledJobUpdate {
+	_u.mutation.SetJobID(v)
+	return _u
 }
 
 // SetNillableJobID sets the "job_id" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableJobID(s *string) *ScheduledJobUpdate {
-	if s != nil {
-		sju.SetJobID(*s)
+func (_u *ScheduledJobUpdate) SetNillableJobID(v *string) *ScheduledJobUpdate {
+	if v != nil {
+		_u.SetJobID(*v)
 	}
-	return sju
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (sju *ScheduledJobUpdate) SetActive(b bool) *ScheduledJobUpdate {
-	sju.mutation.SetActive(b)
-	return sju
+func (_u *ScheduledJobUpdate) SetActive(v bool) *ScheduledJobUpdate {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableActive(b *bool) *ScheduledJobUpdate {
-	if b != nil {
-		sju.SetActive(*b)
+func (_u *ScheduledJobUpdate) SetNillableActive(v *bool) *ScheduledJobUpdate {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return sju
+	return _u
 }
 
 // SetConfiguration sets the "configuration" field.
-func (sju *ScheduledJobUpdate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobUpdate {
-	sju.mutation.SetConfiguration(mc)
-	return sju
+func (_u *ScheduledJobUpdate) SetConfiguration(v models.JobConfiguration) *ScheduledJobUpdate {
+	_u.mutation.SetConfiguration(v)
+	return _u
 }
 
-// AppendConfiguration appends mc to the "configuration" field.
-func (sju *ScheduledJobUpdate) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobUpdate {
-	sju.mutation.AppendConfiguration(mc)
-	return sju
+// AppendConfiguration appends value to the "configuration" field.
+func (_u *ScheduledJobUpdate) AppendConfiguration(v models.JobConfiguration) *ScheduledJobUpdate {
+	_u.mutation.AppendConfiguration(v)
+	return _u
 }
 
 // ClearConfiguration clears the value of the "configuration" field.
-func (sju *ScheduledJobUpdate) ClearConfiguration() *ScheduledJobUpdate {
-	sju.mutation.ClearConfiguration()
-	return sju
+func (_u *ScheduledJobUpdate) ClearConfiguration() *ScheduledJobUpdate {
+	_u.mutation.ClearConfiguration()
+	return _u
 }
 
 // SetCron sets the "cron" field.
-func (sju *ScheduledJobUpdate) SetCron(m models.Cron) *ScheduledJobUpdate {
-	sju.mutation.SetCron(m)
-	return sju
+func (_u *ScheduledJobUpdate) SetCron(v models.Cron) *ScheduledJobUpdate {
+	_u.mutation.SetCron(v)
+	return _u
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableCron(m *models.Cron) *ScheduledJobUpdate {
-	if m != nil {
-		sju.SetCron(*m)
+func (_u *ScheduledJobUpdate) SetNillableCron(v *models.Cron) *ScheduledJobUpdate {
+	if v != nil {
+		_u.SetCron(*v)
 	}
-	return sju
+	return _u
 }
 
 // ClearCron clears the value of the "cron" field.
-func (sju *ScheduledJobUpdate) ClearCron() *ScheduledJobUpdate {
-	sju.mutation.ClearCron()
-	return sju
+func (_u *ScheduledJobUpdate) ClearCron() *ScheduledJobUpdate {
+	_u.mutation.ClearCron()
+	return _u
 }
 
 // SetJobRunnerID sets the "job_runner_id" field.
-func (sju *ScheduledJobUpdate) SetJobRunnerID(s string) *ScheduledJobUpdate {
-	sju.mutation.SetJobRunnerID(s)
-	return sju
+func (_u *ScheduledJobUpdate) SetJobRunnerID(v string) *ScheduledJobUpdate {
+	_u.mutation.SetJobRunnerID(v)
+	return _u
 }
 
 // SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableJobRunnerID(s *string) *ScheduledJobUpdate {
-	if s != nil {
-		sju.SetJobRunnerID(*s)
+func (_u *ScheduledJobUpdate) SetNillableJobRunnerID(v *string) *ScheduledJobUpdate {
+	if v != nil {
+		_u.SetJobRunnerID(*v)
 	}
-	return sju
+	return _u
 }
 
 // ClearJobRunnerID clears the value of the "job_runner_id" field.
-func (sju *ScheduledJobUpdate) ClearJobRunnerID() *ScheduledJobUpdate {
-	sju.mutation.ClearJobRunnerID()
-	return sju
+func (_u *ScheduledJobUpdate) ClearJobRunnerID() *ScheduledJobUpdate {
+	_u.mutation.ClearJobRunnerID()
+	return _u
 }
 
 // SetJobTemplateID sets the "job_template" edge to the JobTemplate entity by ID.
-func (sju *ScheduledJobUpdate) SetJobTemplateID(id string) *ScheduledJobUpdate {
-	sju.mutation.SetJobTemplateID(id)
-	return sju
+func (_u *ScheduledJobUpdate) SetJobTemplateID(id string) *ScheduledJobUpdate {
+	_u.mutation.SetJobTemplateID(id)
+	return _u
 }
 
 // SetJobTemplate sets the "job_template" edge to the JobTemplate entity.
-func (sju *ScheduledJobUpdate) SetJobTemplate(j *JobTemplate) *ScheduledJobUpdate {
-	return sju.SetJobTemplateID(j.ID)
+func (_u *ScheduledJobUpdate) SetJobTemplate(v *JobTemplate) *ScheduledJobUpdate {
+	return _u.SetJobTemplateID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (sju *ScheduledJobUpdate) AddControlIDs(ids ...string) *ScheduledJobUpdate {
-	sju.mutation.AddControlIDs(ids...)
-	return sju
+func (_u *ScheduledJobUpdate) AddControlIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (sju *ScheduledJobUpdate) AddControls(c ...*Control) *ScheduledJobUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ScheduledJobUpdate) AddControls(v ...*Control) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sju.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (sju *ScheduledJobUpdate) AddSubcontrolIDs(ids ...string) *ScheduledJobUpdate {
-	sju.mutation.AddSubcontrolIDs(ids...)
-	return sju
+func (_u *ScheduledJobUpdate) AddSubcontrolIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (sju *ScheduledJobUpdate) AddSubcontrols(s ...*Subcontrol) *ScheduledJobUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ScheduledJobUpdate) AddSubcontrols(v ...*Subcontrol) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sju.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // SetJobRunner sets the "job_runner" edge to the JobRunner entity.
-func (sju *ScheduledJobUpdate) SetJobRunner(j *JobRunner) *ScheduledJobUpdate {
-	return sju.SetJobRunnerID(j.ID)
+func (_u *ScheduledJobUpdate) SetJobRunner(v *JobRunner) *ScheduledJobUpdate {
+	return _u.SetJobRunnerID(v.ID)
 }
 
 // Mutation returns the ScheduledJobMutation object of the builder.
-func (sju *ScheduledJobUpdate) Mutation() *ScheduledJobMutation {
-	return sju.mutation
+func (_u *ScheduledJobUpdate) Mutation() *ScheduledJobMutation {
+	return _u.mutation
 }
 
 // ClearJobTemplate clears the "job_template" edge to the JobTemplate entity.
-func (sju *ScheduledJobUpdate) ClearJobTemplate() *ScheduledJobUpdate {
-	sju.mutation.ClearJobTemplate()
-	return sju
+func (_u *ScheduledJobUpdate) ClearJobTemplate() *ScheduledJobUpdate {
+	_u.mutation.ClearJobTemplate()
+	return _u
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (sju *ScheduledJobUpdate) ClearControls() *ScheduledJobUpdate {
-	sju.mutation.ClearControls()
-	return sju
+func (_u *ScheduledJobUpdate) ClearControls() *ScheduledJobUpdate {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (sju *ScheduledJobUpdate) RemoveControlIDs(ids ...string) *ScheduledJobUpdate {
-	sju.mutation.RemoveControlIDs(ids...)
-	return sju
+func (_u *ScheduledJobUpdate) RemoveControlIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (sju *ScheduledJobUpdate) RemoveControls(c ...*Control) *ScheduledJobUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ScheduledJobUpdate) RemoveControls(v ...*Control) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sju.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (sju *ScheduledJobUpdate) ClearSubcontrols() *ScheduledJobUpdate {
-	sju.mutation.ClearSubcontrols()
-	return sju
+func (_u *ScheduledJobUpdate) ClearSubcontrols() *ScheduledJobUpdate {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (sju *ScheduledJobUpdate) RemoveSubcontrolIDs(ids ...string) *ScheduledJobUpdate {
-	sju.mutation.RemoveSubcontrolIDs(ids...)
-	return sju
+func (_u *ScheduledJobUpdate) RemoveSubcontrolIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (sju *ScheduledJobUpdate) RemoveSubcontrols(s ...*Subcontrol) *ScheduledJobUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ScheduledJobUpdate) RemoveSubcontrols(v ...*Subcontrol) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sju.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearJobRunner clears the "job_runner" edge to the JobRunner entity.
-func (sju *ScheduledJobUpdate) ClearJobRunner() *ScheduledJobUpdate {
-	sju.mutation.ClearJobRunner()
-	return sju
+func (_u *ScheduledJobUpdate) ClearJobRunner() *ScheduledJobUpdate {
+	_u.mutation.ClearJobRunner()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (sju *ScheduledJobUpdate) Save(ctx context.Context) (int, error) {
-	if err := sju.defaults(); err != nil {
+func (_u *ScheduledJobUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, sju.sqlSave, sju.mutation, sju.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (sju *ScheduledJobUpdate) SaveX(ctx context.Context) int {
-	affected, err := sju.Save(ctx)
+func (_u *ScheduledJobUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -318,117 +318,117 @@ func (sju *ScheduledJobUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (sju *ScheduledJobUpdate) Exec(ctx context.Context) error {
-	_, err := sju.Save(ctx)
+func (_u *ScheduledJobUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sju *ScheduledJobUpdate) ExecX(ctx context.Context) {
-	if err := sju.Exec(ctx); err != nil {
+func (_u *ScheduledJobUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sju *ScheduledJobUpdate) defaults() error {
-	if _, ok := sju.mutation.UpdatedAt(); !ok && !sju.mutation.UpdatedAtCleared() {
+func (_u *ScheduledJobUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if scheduledjob.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjob.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := scheduledjob.UpdateDefaultUpdatedAt()
-		sju.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sju *ScheduledJobUpdate) check() error {
-	if v, ok := sju.mutation.JobID(); ok {
+func (_u *ScheduledJobUpdate) check() error {
+	if v, ok := _u.mutation.JobID(); ok {
 		if err := scheduledjob.JobIDValidator(v); err != nil {
 			return &ValidationError{Name: "job_id", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_id": %w`, err)}
 		}
 	}
-	if v, ok := sju.mutation.Cron(); ok {
+	if v, ok := _u.mutation.Cron(); ok {
 		if err := scheduledjob.CronValidator(string(v)); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cron": %w`, err)}
 		}
 	}
-	if sju.mutation.JobTemplateCleared() && len(sju.mutation.JobTemplateIDs()) > 0 {
+	if _u.mutation.JobTemplateCleared() && len(_u.mutation.JobTemplateIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ScheduledJob.job_template"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (sju *ScheduledJobUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduledJobUpdate {
-	sju.modifiers = append(sju.modifiers, modifiers...)
-	return sju
+func (_u *ScheduledJobUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduledJobUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := sju.check(); err != nil {
-		return n, err
+func (_u *ScheduledJobUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(scheduledjob.Table, scheduledjob.Columns, sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString))
-	if ps := sju.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if sju.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(scheduledjob.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := sju.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(scheduledjob.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if sju.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(scheduledjob.FieldUpdatedAt, field.TypeTime)
 	}
-	if sju.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(scheduledjob.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := sju.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(scheduledjob.FieldUpdatedBy, field.TypeString, value)
 	}
-	if sju.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(scheduledjob.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := sju.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(scheduledjob.FieldDeletedAt, field.TypeTime, value)
 	}
-	if sju.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(scheduledjob.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := sju.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(scheduledjob.FieldDeletedBy, field.TypeString, value)
 	}
-	if sju.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(scheduledjob.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := sju.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(scheduledjob.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := sju.mutation.Configuration(); ok {
+	if value, ok := _u.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := sju.mutation.AppendedConfiguration(); ok {
+	if value, ok := _u.mutation.AppendedConfiguration(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, scheduledjob.FieldConfiguration, value)
 		})
 	}
-	if sju.mutation.ConfigurationCleared() {
+	if _u.mutation.ConfigurationCleared() {
 		_spec.ClearField(scheduledjob.FieldConfiguration, field.TypeJSON)
 	}
-	if value, ok := sju.mutation.Cron(); ok {
+	if value, ok := _u.mutation.Cron(); ok {
 		_spec.SetField(scheduledjob.FieldCron, field.TypeString, value)
 	}
-	if sju.mutation.CronCleared() {
+	if _u.mutation.CronCleared() {
 		_spec.ClearField(scheduledjob.FieldCron, field.TypeString)
 	}
-	if sju.mutation.JobTemplateCleared() {
+	if _u.mutation.JobTemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -439,10 +439,10 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sju.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sju.mutation.JobTemplateIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobTemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -453,13 +453,13 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sju.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if sju.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -470,10 +470,10 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sju.schemaConfig.ScheduledJobControls
+		edge.Schema = _u.schemaConfig.ScheduledJobControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sju.mutation.RemovedControlsIDs(); len(nodes) > 0 && !sju.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -484,13 +484,13 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sju.schemaConfig.ScheduledJobControls
+		edge.Schema = _u.schemaConfig.ScheduledJobControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sju.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -501,13 +501,13 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sju.schemaConfig.ScheduledJobControls
+		edge.Schema = _u.schemaConfig.ScheduledJobControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if sju.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -518,10 +518,10 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sju.schemaConfig.ScheduledJobSubcontrols
+		edge.Schema = _u.schemaConfig.ScheduledJobSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sju.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !sju.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -532,13 +532,13 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sju.schemaConfig.ScheduledJobSubcontrols
+		edge.Schema = _u.schemaConfig.ScheduledJobSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sju.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -549,13 +549,13 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sju.schemaConfig.ScheduledJobSubcontrols
+		edge.Schema = _u.schemaConfig.ScheduledJobSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if sju.mutation.JobRunnerCleared() {
+	if _u.mutation.JobRunnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -566,10 +566,10 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sju.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sju.mutation.JobRunnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -580,16 +580,16 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sju.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = sju.schemaConfig.ScheduledJob
-	ctx = internal.NewSchemaConfigContext(ctx, sju.schemaConfig)
-	_spec.AddModifiers(sju.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, sju.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.ScheduledJob
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{scheduledjob.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -597,8 +597,8 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	sju.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ScheduledJobUpdateOne is the builder for updating a single ScheduledJob entity.
@@ -611,292 +611,292 @@ type ScheduledJobUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sjuo *ScheduledJobUpdateOne) SetUpdatedAt(t time.Time) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetUpdatedAt(t)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) SetUpdatedAt(v time.Time) *ScheduledJobUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (sjuo *ScheduledJobUpdateOne) ClearUpdatedAt() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearUpdatedAt()
-	return sjuo
+func (_u *ScheduledJobUpdateOne) ClearUpdatedAt() *ScheduledJobUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sjuo *ScheduledJobUpdateOne) SetUpdatedBy(s string) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetUpdatedBy(s)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) SetUpdatedBy(v string) *ScheduledJobUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableUpdatedBy(s *string) *ScheduledJobUpdateOne {
-	if s != nil {
-		sjuo.SetUpdatedBy(*s)
+func (_u *ScheduledJobUpdateOne) SetNillableUpdatedBy(v *string) *ScheduledJobUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return sjuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (sjuo *ScheduledJobUpdateOne) ClearUpdatedBy() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearUpdatedBy()
-	return sjuo
+func (_u *ScheduledJobUpdateOne) ClearUpdatedBy() *ScheduledJobUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (sjuo *ScheduledJobUpdateOne) SetDeletedAt(t time.Time) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetDeletedAt(t)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) SetDeletedAt(v time.Time) *ScheduledJobUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableDeletedAt(t *time.Time) *ScheduledJobUpdateOne {
-	if t != nil {
-		sjuo.SetDeletedAt(*t)
+func (_u *ScheduledJobUpdateOne) SetNillableDeletedAt(v *time.Time) *ScheduledJobUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return sjuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (sjuo *ScheduledJobUpdateOne) ClearDeletedAt() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearDeletedAt()
-	return sjuo
+func (_u *ScheduledJobUpdateOne) ClearDeletedAt() *ScheduledJobUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (sjuo *ScheduledJobUpdateOne) SetDeletedBy(s string) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetDeletedBy(s)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) SetDeletedBy(v string) *ScheduledJobUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableDeletedBy(s *string) *ScheduledJobUpdateOne {
-	if s != nil {
-		sjuo.SetDeletedBy(*s)
+func (_u *ScheduledJobUpdateOne) SetNillableDeletedBy(v *string) *ScheduledJobUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return sjuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (sjuo *ScheduledJobUpdateOne) ClearDeletedBy() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearDeletedBy()
-	return sjuo
+func (_u *ScheduledJobUpdateOne) ClearDeletedBy() *ScheduledJobUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetJobID sets the "job_id" field.
-func (sjuo *ScheduledJobUpdateOne) SetJobID(s string) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetJobID(s)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) SetJobID(v string) *ScheduledJobUpdateOne {
+	_u.mutation.SetJobID(v)
+	return _u
 }
 
 // SetNillableJobID sets the "job_id" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableJobID(s *string) *ScheduledJobUpdateOne {
-	if s != nil {
-		sjuo.SetJobID(*s)
+func (_u *ScheduledJobUpdateOne) SetNillableJobID(v *string) *ScheduledJobUpdateOne {
+	if v != nil {
+		_u.SetJobID(*v)
 	}
-	return sjuo
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (sjuo *ScheduledJobUpdateOne) SetActive(b bool) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetActive(b)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) SetActive(v bool) *ScheduledJobUpdateOne {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableActive(b *bool) *ScheduledJobUpdateOne {
-	if b != nil {
-		sjuo.SetActive(*b)
+func (_u *ScheduledJobUpdateOne) SetNillableActive(v *bool) *ScheduledJobUpdateOne {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return sjuo
+	return _u
 }
 
 // SetConfiguration sets the "configuration" field.
-func (sjuo *ScheduledJobUpdateOne) SetConfiguration(mc models.JobConfiguration) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetConfiguration(mc)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) SetConfiguration(v models.JobConfiguration) *ScheduledJobUpdateOne {
+	_u.mutation.SetConfiguration(v)
+	return _u
 }
 
-// AppendConfiguration appends mc to the "configuration" field.
-func (sjuo *ScheduledJobUpdateOne) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobUpdateOne {
-	sjuo.mutation.AppendConfiguration(mc)
-	return sjuo
+// AppendConfiguration appends value to the "configuration" field.
+func (_u *ScheduledJobUpdateOne) AppendConfiguration(v models.JobConfiguration) *ScheduledJobUpdateOne {
+	_u.mutation.AppendConfiguration(v)
+	return _u
 }
 
 // ClearConfiguration clears the value of the "configuration" field.
-func (sjuo *ScheduledJobUpdateOne) ClearConfiguration() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearConfiguration()
-	return sjuo
+func (_u *ScheduledJobUpdateOne) ClearConfiguration() *ScheduledJobUpdateOne {
+	_u.mutation.ClearConfiguration()
+	return _u
 }
 
 // SetCron sets the "cron" field.
-func (sjuo *ScheduledJobUpdateOne) SetCron(m models.Cron) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetCron(m)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) SetCron(v models.Cron) *ScheduledJobUpdateOne {
+	_u.mutation.SetCron(v)
+	return _u
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableCron(m *models.Cron) *ScheduledJobUpdateOne {
-	if m != nil {
-		sjuo.SetCron(*m)
+func (_u *ScheduledJobUpdateOne) SetNillableCron(v *models.Cron) *ScheduledJobUpdateOne {
+	if v != nil {
+		_u.SetCron(*v)
 	}
-	return sjuo
+	return _u
 }
 
 // ClearCron clears the value of the "cron" field.
-func (sjuo *ScheduledJobUpdateOne) ClearCron() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearCron()
-	return sjuo
+func (_u *ScheduledJobUpdateOne) ClearCron() *ScheduledJobUpdateOne {
+	_u.mutation.ClearCron()
+	return _u
 }
 
 // SetJobRunnerID sets the "job_runner_id" field.
-func (sjuo *ScheduledJobUpdateOne) SetJobRunnerID(s string) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetJobRunnerID(s)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) SetJobRunnerID(v string) *ScheduledJobUpdateOne {
+	_u.mutation.SetJobRunnerID(v)
+	return _u
 }
 
 // SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableJobRunnerID(s *string) *ScheduledJobUpdateOne {
-	if s != nil {
-		sjuo.SetJobRunnerID(*s)
+func (_u *ScheduledJobUpdateOne) SetNillableJobRunnerID(v *string) *ScheduledJobUpdateOne {
+	if v != nil {
+		_u.SetJobRunnerID(*v)
 	}
-	return sjuo
+	return _u
 }
 
 // ClearJobRunnerID clears the value of the "job_runner_id" field.
-func (sjuo *ScheduledJobUpdateOne) ClearJobRunnerID() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearJobRunnerID()
-	return sjuo
+func (_u *ScheduledJobUpdateOne) ClearJobRunnerID() *ScheduledJobUpdateOne {
+	_u.mutation.ClearJobRunnerID()
+	return _u
 }
 
 // SetJobTemplateID sets the "job_template" edge to the JobTemplate entity by ID.
-func (sjuo *ScheduledJobUpdateOne) SetJobTemplateID(id string) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetJobTemplateID(id)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) SetJobTemplateID(id string) *ScheduledJobUpdateOne {
+	_u.mutation.SetJobTemplateID(id)
+	return _u
 }
 
 // SetJobTemplate sets the "job_template" edge to the JobTemplate entity.
-func (sjuo *ScheduledJobUpdateOne) SetJobTemplate(j *JobTemplate) *ScheduledJobUpdateOne {
-	return sjuo.SetJobTemplateID(j.ID)
+func (_u *ScheduledJobUpdateOne) SetJobTemplate(v *JobTemplate) *ScheduledJobUpdateOne {
+	return _u.SetJobTemplateID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (sjuo *ScheduledJobUpdateOne) AddControlIDs(ids ...string) *ScheduledJobUpdateOne {
-	sjuo.mutation.AddControlIDs(ids...)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) AddControlIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (sjuo *ScheduledJobUpdateOne) AddControls(c ...*Control) *ScheduledJobUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ScheduledJobUpdateOne) AddControls(v ...*Control) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sjuo.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (sjuo *ScheduledJobUpdateOne) AddSubcontrolIDs(ids ...string) *ScheduledJobUpdateOne {
-	sjuo.mutation.AddSubcontrolIDs(ids...)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) AddSubcontrolIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (sjuo *ScheduledJobUpdateOne) AddSubcontrols(s ...*Subcontrol) *ScheduledJobUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ScheduledJobUpdateOne) AddSubcontrols(v ...*Subcontrol) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sjuo.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // SetJobRunner sets the "job_runner" edge to the JobRunner entity.
-func (sjuo *ScheduledJobUpdateOne) SetJobRunner(j *JobRunner) *ScheduledJobUpdateOne {
-	return sjuo.SetJobRunnerID(j.ID)
+func (_u *ScheduledJobUpdateOne) SetJobRunner(v *JobRunner) *ScheduledJobUpdateOne {
+	return _u.SetJobRunnerID(v.ID)
 }
 
 // Mutation returns the ScheduledJobMutation object of the builder.
-func (sjuo *ScheduledJobUpdateOne) Mutation() *ScheduledJobMutation {
-	return sjuo.mutation
+func (_u *ScheduledJobUpdateOne) Mutation() *ScheduledJobMutation {
+	return _u.mutation
 }
 
 // ClearJobTemplate clears the "job_template" edge to the JobTemplate entity.
-func (sjuo *ScheduledJobUpdateOne) ClearJobTemplate() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearJobTemplate()
-	return sjuo
+func (_u *ScheduledJobUpdateOne) ClearJobTemplate() *ScheduledJobUpdateOne {
+	_u.mutation.ClearJobTemplate()
+	return _u
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (sjuo *ScheduledJobUpdateOne) ClearControls() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearControls()
-	return sjuo
+func (_u *ScheduledJobUpdateOne) ClearControls() *ScheduledJobUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (sjuo *ScheduledJobUpdateOne) RemoveControlIDs(ids ...string) *ScheduledJobUpdateOne {
-	sjuo.mutation.RemoveControlIDs(ids...)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) RemoveControlIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (sjuo *ScheduledJobUpdateOne) RemoveControls(c ...*Control) *ScheduledJobUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ScheduledJobUpdateOne) RemoveControls(v ...*Control) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sjuo.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (sjuo *ScheduledJobUpdateOne) ClearSubcontrols() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearSubcontrols()
-	return sjuo
+func (_u *ScheduledJobUpdateOne) ClearSubcontrols() *ScheduledJobUpdateOne {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (sjuo *ScheduledJobUpdateOne) RemoveSubcontrolIDs(ids ...string) *ScheduledJobUpdateOne {
-	sjuo.mutation.RemoveSubcontrolIDs(ids...)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) RemoveSubcontrolIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (sjuo *ScheduledJobUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *ScheduledJobUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ScheduledJobUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sjuo.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearJobRunner clears the "job_runner" edge to the JobRunner entity.
-func (sjuo *ScheduledJobUpdateOne) ClearJobRunner() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearJobRunner()
-	return sjuo
+func (_u *ScheduledJobUpdateOne) ClearJobRunner() *ScheduledJobUpdateOne {
+	_u.mutation.ClearJobRunner()
+	return _u
 }
 
 // Where appends a list predicates to the ScheduledJobUpdate builder.
-func (sjuo *ScheduledJobUpdateOne) Where(ps ...predicate.ScheduledJob) *ScheduledJobUpdateOne {
-	sjuo.mutation.Where(ps...)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) Where(ps ...predicate.ScheduledJob) *ScheduledJobUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (sjuo *ScheduledJobUpdateOne) Select(field string, fields ...string) *ScheduledJobUpdateOne {
-	sjuo.fields = append([]string{field}, fields...)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) Select(field string, fields ...string) *ScheduledJobUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ScheduledJob entity.
-func (sjuo *ScheduledJobUpdateOne) Save(ctx context.Context) (*ScheduledJob, error) {
-	if err := sjuo.defaults(); err != nil {
+func (_u *ScheduledJobUpdateOne) Save(ctx context.Context) (*ScheduledJob, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, sjuo.sqlSave, sjuo.mutation, sjuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (sjuo *ScheduledJobUpdateOne) SaveX(ctx context.Context) *ScheduledJob {
-	node, err := sjuo.Save(ctx)
+func (_u *ScheduledJobUpdateOne) SaveX(ctx context.Context) *ScheduledJob {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -904,65 +904,65 @@ func (sjuo *ScheduledJobUpdateOne) SaveX(ctx context.Context) *ScheduledJob {
 }
 
 // Exec executes the query on the entity.
-func (sjuo *ScheduledJobUpdateOne) Exec(ctx context.Context) error {
-	_, err := sjuo.Save(ctx)
+func (_u *ScheduledJobUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sjuo *ScheduledJobUpdateOne) ExecX(ctx context.Context) {
-	if err := sjuo.Exec(ctx); err != nil {
+func (_u *ScheduledJobUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sjuo *ScheduledJobUpdateOne) defaults() error {
-	if _, ok := sjuo.mutation.UpdatedAt(); !ok && !sjuo.mutation.UpdatedAtCleared() {
+func (_u *ScheduledJobUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if scheduledjob.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjob.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := scheduledjob.UpdateDefaultUpdatedAt()
-		sjuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sjuo *ScheduledJobUpdateOne) check() error {
-	if v, ok := sjuo.mutation.JobID(); ok {
+func (_u *ScheduledJobUpdateOne) check() error {
+	if v, ok := _u.mutation.JobID(); ok {
 		if err := scheduledjob.JobIDValidator(v); err != nil {
 			return &ValidationError{Name: "job_id", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_id": %w`, err)}
 		}
 	}
-	if v, ok := sjuo.mutation.Cron(); ok {
+	if v, ok := _u.mutation.Cron(); ok {
 		if err := scheduledjob.CronValidator(string(v)); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cron": %w`, err)}
 		}
 	}
-	if sjuo.mutation.JobTemplateCleared() && len(sjuo.mutation.JobTemplateIDs()) > 0 {
+	if _u.mutation.JobTemplateCleared() && len(_u.mutation.JobTemplateIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ScheduledJob.job_template"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (sjuo *ScheduledJobUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduledJobUpdateOne {
-	sjuo.modifiers = append(sjuo.modifiers, modifiers...)
-	return sjuo
+func (_u *ScheduledJobUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduledJobUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *ScheduledJob, err error) {
-	if err := sjuo.check(); err != nil {
+func (_u *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *ScheduledJob, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(scheduledjob.Table, scheduledjob.Columns, sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString))
-	id, ok := sjuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "ScheduledJob.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := sjuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, scheduledjob.FieldID)
 		for _, f := range fields {
@@ -974,64 +974,64 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 			}
 		}
 	}
-	if ps := sjuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if sjuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(scheduledjob.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := sjuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(scheduledjob.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if sjuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(scheduledjob.FieldUpdatedAt, field.TypeTime)
 	}
-	if sjuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(scheduledjob.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := sjuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(scheduledjob.FieldUpdatedBy, field.TypeString, value)
 	}
-	if sjuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(scheduledjob.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := sjuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(scheduledjob.FieldDeletedAt, field.TypeTime, value)
 	}
-	if sjuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(scheduledjob.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := sjuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(scheduledjob.FieldDeletedBy, field.TypeString, value)
 	}
-	if sjuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(scheduledjob.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := sjuo.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(scheduledjob.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := sjuo.mutation.Configuration(); ok {
+	if value, ok := _u.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := sjuo.mutation.AppendedConfiguration(); ok {
+	if value, ok := _u.mutation.AppendedConfiguration(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, scheduledjob.FieldConfiguration, value)
 		})
 	}
-	if sjuo.mutation.ConfigurationCleared() {
+	if _u.mutation.ConfigurationCleared() {
 		_spec.ClearField(scheduledjob.FieldConfiguration, field.TypeJSON)
 	}
-	if value, ok := sjuo.mutation.Cron(); ok {
+	if value, ok := _u.mutation.Cron(); ok {
 		_spec.SetField(scheduledjob.FieldCron, field.TypeString, value)
 	}
-	if sjuo.mutation.CronCleared() {
+	if _u.mutation.CronCleared() {
 		_spec.ClearField(scheduledjob.FieldCron, field.TypeString)
 	}
-	if sjuo.mutation.JobTemplateCleared() {
+	if _u.mutation.JobTemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1042,10 +1042,10 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sjuo.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sjuo.mutation.JobTemplateIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobTemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1056,13 +1056,13 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sjuo.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if sjuo.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1073,10 +1073,10 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sjuo.schemaConfig.ScheduledJobControls
+		edge.Schema = _u.schemaConfig.ScheduledJobControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sjuo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !sjuo.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1087,13 +1087,13 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sjuo.schemaConfig.ScheduledJobControls
+		edge.Schema = _u.schemaConfig.ScheduledJobControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sjuo.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1104,13 +1104,13 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sjuo.schemaConfig.ScheduledJobControls
+		edge.Schema = _u.schemaConfig.ScheduledJobControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if sjuo.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1121,10 +1121,10 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sjuo.schemaConfig.ScheduledJobSubcontrols
+		edge.Schema = _u.schemaConfig.ScheduledJobSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sjuo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !sjuo.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1135,13 +1135,13 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sjuo.schemaConfig.ScheduledJobSubcontrols
+		edge.Schema = _u.schemaConfig.ScheduledJobSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sjuo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1152,13 +1152,13 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sjuo.schemaConfig.ScheduledJobSubcontrols
+		edge.Schema = _u.schemaConfig.ScheduledJobSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if sjuo.mutation.JobRunnerCleared() {
+	if _u.mutation.JobRunnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1169,10 +1169,10 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sjuo.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sjuo.mutation.JobRunnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1183,19 +1183,19 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sjuo.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = sjuo.schemaConfig.ScheduledJob
-	ctx = internal.NewSchemaConfigContext(ctx, sjuo.schemaConfig)
-	_spec.AddModifiers(sjuo.modifiers...)
-	_node = &ScheduledJob{config: sjuo.config}
+	_spec.Node.Schema = _u.schemaConfig.ScheduledJob
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &ScheduledJob{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, sjuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{scheduledjob.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1203,6 +1203,6 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 		}
 		return nil, err
 	}
-	sjuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

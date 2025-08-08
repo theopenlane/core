@@ -20,125 +20,125 @@ type TrustCenterComplianceCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tccc *TrustCenterComplianceCreate) SetCreatedAt(t time.Time) *TrustCenterComplianceCreate {
-	tccc.mutation.SetCreatedAt(t)
-	return tccc
+func (_c *TrustCenterComplianceCreate) SetCreatedAt(v time.Time) *TrustCenterComplianceCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tccc *TrustCenterComplianceCreate) SetNillableCreatedAt(t *time.Time) *TrustCenterComplianceCreate {
-	if t != nil {
-		tccc.SetCreatedAt(*t)
+func (_c *TrustCenterComplianceCreate) SetNillableCreatedAt(v *time.Time) *TrustCenterComplianceCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return tccc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tccc *TrustCenterComplianceCreate) SetUpdatedAt(t time.Time) *TrustCenterComplianceCreate {
-	tccc.mutation.SetUpdatedAt(t)
-	return tccc
+func (_c *TrustCenterComplianceCreate) SetUpdatedAt(v time.Time) *TrustCenterComplianceCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tccc *TrustCenterComplianceCreate) SetNillableUpdatedAt(t *time.Time) *TrustCenterComplianceCreate {
-	if t != nil {
-		tccc.SetUpdatedAt(*t)
+func (_c *TrustCenterComplianceCreate) SetNillableUpdatedAt(v *time.Time) *TrustCenterComplianceCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return tccc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (tccc *TrustCenterComplianceCreate) SetCreatedBy(s string) *TrustCenterComplianceCreate {
-	tccc.mutation.SetCreatedBy(s)
-	return tccc
+func (_c *TrustCenterComplianceCreate) SetCreatedBy(v string) *TrustCenterComplianceCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (tccc *TrustCenterComplianceCreate) SetNillableCreatedBy(s *string) *TrustCenterComplianceCreate {
-	if s != nil {
-		tccc.SetCreatedBy(*s)
+func (_c *TrustCenterComplianceCreate) SetNillableCreatedBy(v *string) *TrustCenterComplianceCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return tccc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tccc *TrustCenterComplianceCreate) SetUpdatedBy(s string) *TrustCenterComplianceCreate {
-	tccc.mutation.SetUpdatedBy(s)
-	return tccc
+func (_c *TrustCenterComplianceCreate) SetUpdatedBy(v string) *TrustCenterComplianceCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tccc *TrustCenterComplianceCreate) SetNillableUpdatedBy(s *string) *TrustCenterComplianceCreate {
-	if s != nil {
-		tccc.SetUpdatedBy(*s)
+func (_c *TrustCenterComplianceCreate) SetNillableUpdatedBy(v *string) *TrustCenterComplianceCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return tccc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tccc *TrustCenterComplianceCreate) SetDeletedAt(t time.Time) *TrustCenterComplianceCreate {
-	tccc.mutation.SetDeletedAt(t)
-	return tccc
+func (_c *TrustCenterComplianceCreate) SetDeletedAt(v time.Time) *TrustCenterComplianceCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tccc *TrustCenterComplianceCreate) SetNillableDeletedAt(t *time.Time) *TrustCenterComplianceCreate {
-	if t != nil {
-		tccc.SetDeletedAt(*t)
+func (_c *TrustCenterComplianceCreate) SetNillableDeletedAt(v *time.Time) *TrustCenterComplianceCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return tccc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tccc *TrustCenterComplianceCreate) SetDeletedBy(s string) *TrustCenterComplianceCreate {
-	tccc.mutation.SetDeletedBy(s)
-	return tccc
+func (_c *TrustCenterComplianceCreate) SetDeletedBy(v string) *TrustCenterComplianceCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tccc *TrustCenterComplianceCreate) SetNillableDeletedBy(s *string) *TrustCenterComplianceCreate {
-	if s != nil {
-		tccc.SetDeletedBy(*s)
+func (_c *TrustCenterComplianceCreate) SetNillableDeletedBy(v *string) *TrustCenterComplianceCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return tccc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (tccc *TrustCenterComplianceCreate) SetTags(s []string) *TrustCenterComplianceCreate {
-	tccc.mutation.SetTags(s)
-	return tccc
+func (_c *TrustCenterComplianceCreate) SetTags(v []string) *TrustCenterComplianceCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tccc *TrustCenterComplianceCreate) SetID(s string) *TrustCenterComplianceCreate {
-	tccc.mutation.SetID(s)
-	return tccc
+func (_c *TrustCenterComplianceCreate) SetID(v string) *TrustCenterComplianceCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (tccc *TrustCenterComplianceCreate) SetNillableID(s *string) *TrustCenterComplianceCreate {
-	if s != nil {
-		tccc.SetID(*s)
+func (_c *TrustCenterComplianceCreate) SetNillableID(v *string) *TrustCenterComplianceCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return tccc
+	return _c
 }
 
 // Mutation returns the TrustCenterComplianceMutation object of the builder.
-func (tccc *TrustCenterComplianceCreate) Mutation() *TrustCenterComplianceMutation {
-	return tccc.mutation
+func (_c *TrustCenterComplianceCreate) Mutation() *TrustCenterComplianceMutation {
+	return _c.mutation
 }
 
 // Save creates the TrustCenterCompliance in the database.
-func (tccc *TrustCenterComplianceCreate) Save(ctx context.Context) (*TrustCenterCompliance, error) {
-	if err := tccc.defaults(); err != nil {
+func (_c *TrustCenterComplianceCreate) Save(ctx context.Context) (*TrustCenterCompliance, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, tccc.sqlSave, tccc.mutation, tccc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tccc *TrustCenterComplianceCreate) SaveX(ctx context.Context) *TrustCenterCompliance {
-	v, err := tccc.Save(ctx)
+func (_c *TrustCenterComplianceCreate) SaveX(ctx context.Context) *TrustCenterCompliance {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -146,59 +146,59 @@ func (tccc *TrustCenterComplianceCreate) SaveX(ctx context.Context) *TrustCenter
 }
 
 // Exec executes the query.
-func (tccc *TrustCenterComplianceCreate) Exec(ctx context.Context) error {
-	_, err := tccc.Save(ctx)
+func (_c *TrustCenterComplianceCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tccc *TrustCenterComplianceCreate) ExecX(ctx context.Context) {
-	if err := tccc.Exec(ctx); err != nil {
+func (_c *TrustCenterComplianceCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tccc *TrustCenterComplianceCreate) defaults() error {
-	if _, ok := tccc.mutation.CreatedAt(); !ok {
+func (_c *TrustCenterComplianceCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if trustcentercompliance.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcentercompliance.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcentercompliance.DefaultCreatedAt()
-		tccc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := tccc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if trustcentercompliance.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcentercompliance.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcentercompliance.DefaultUpdatedAt()
-		tccc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := tccc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := trustcentercompliance.DefaultTags
-		tccc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := tccc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentercompliance.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcentercompliance.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := trustcentercompliance.DefaultID()
-		tccc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tccc *TrustCenterComplianceCreate) check() error {
+func (_c *TrustCenterComplianceCreate) check() error {
 	return nil
 }
 
-func (tccc *TrustCenterComplianceCreate) sqlSave(ctx context.Context) (*TrustCenterCompliance, error) {
-	if err := tccc.check(); err != nil {
+func (_c *TrustCenterComplianceCreate) sqlSave(ctx context.Context) (*TrustCenterCompliance, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tccc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tccc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -211,46 +211,46 @@ func (tccc *TrustCenterComplianceCreate) sqlSave(ctx context.Context) (*TrustCen
 			return nil, fmt.Errorf("unexpected TrustCenterCompliance.ID type: %T", _spec.ID.Value)
 		}
 	}
-	tccc.mutation.id = &_node.ID
-	tccc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tccc *TrustCenterComplianceCreate) createSpec() (*TrustCenterCompliance, *sqlgraph.CreateSpec) {
+func (_c *TrustCenterComplianceCreate) createSpec() (*TrustCenterCompliance, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TrustCenterCompliance{config: tccc.config}
+		_node = &TrustCenterCompliance{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcentercompliance.Table, sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString))
 	)
-	_spec.Schema = tccc.schemaConfig.TrustCenterCompliance
-	if id, ok := tccc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.TrustCenterCompliance
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := tccc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(trustcentercompliance.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := tccc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(trustcentercompliance.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := tccc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(trustcentercompliance.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := tccc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcentercompliance.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := tccc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcentercompliance.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := tccc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(trustcentercompliance.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := tccc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(trustcentercompliance.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
@@ -265,16 +265,16 @@ type TrustCenterComplianceCreateBulk struct {
 }
 
 // Save creates the TrustCenterCompliance entities in the database.
-func (tcccb *TrustCenterComplianceCreateBulk) Save(ctx context.Context) ([]*TrustCenterCompliance, error) {
-	if tcccb.err != nil {
-		return nil, tcccb.err
+func (_c *TrustCenterComplianceCreateBulk) Save(ctx context.Context) ([]*TrustCenterCompliance, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tcccb.builders))
-	nodes := make([]*TrustCenterCompliance, len(tcccb.builders))
-	mutators := make([]Mutator, len(tcccb.builders))
-	for i := range tcccb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TrustCenterCompliance, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tcccb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TrustCenterComplianceMutation)
@@ -288,11 +288,11 @@ func (tcccb *TrustCenterComplianceCreateBulk) Save(ctx context.Context) ([]*Trus
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tcccb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tcccb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -312,7 +312,7 @@ func (tcccb *TrustCenterComplianceCreateBulk) Save(ctx context.Context) ([]*Trus
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tcccb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -320,8 +320,8 @@ func (tcccb *TrustCenterComplianceCreateBulk) Save(ctx context.Context) ([]*Trus
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcccb *TrustCenterComplianceCreateBulk) SaveX(ctx context.Context) []*TrustCenterCompliance {
-	v, err := tcccb.Save(ctx)
+func (_c *TrustCenterComplianceCreateBulk) SaveX(ctx context.Context) []*TrustCenterCompliance {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -329,14 +329,14 @@ func (tcccb *TrustCenterComplianceCreateBulk) SaveX(ctx context.Context) []*Trus
 }
 
 // Exec executes the query.
-func (tcccb *TrustCenterComplianceCreateBulk) Exec(ctx context.Context) error {
-	_, err := tcccb.Save(ctx)
+func (_c *TrustCenterComplianceCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcccb *TrustCenterComplianceCreateBulk) ExecX(ctx context.Context) {
-	if err := tcccb.Exec(ctx); err != nil {
+func (_c *TrustCenterComplianceCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

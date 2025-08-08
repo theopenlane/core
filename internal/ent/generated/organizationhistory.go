@@ -84,7 +84,7 @@ func (*OrganizationHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the OrganizationHistory fields.
-func (oh *OrganizationHistory) assignValues(columns []string, values []any) error {
+func (_m *OrganizationHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -94,67 +94,67 @@ func (oh *OrganizationHistory) assignValues(columns []string, values []any) erro
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				oh.ID = value.String
+				_m.ID = value.String
 			}
 		case organizationhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				oh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case organizationhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				oh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case organizationhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				oh.Operation = *value
+				_m.Operation = *value
 			}
 		case organizationhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				oh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case organizationhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				oh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case organizationhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				oh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case organizationhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				oh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case organizationhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				oh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case organizationhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				oh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case organizationhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &oh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -162,61 +162,61 @@ func (oh *OrganizationHistory) assignValues(columns []string, values []any) erro
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				oh.Name = value.String
+				_m.Name = value.String
 			}
 		case organizationhistory.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
-				oh.DisplayName = value.String
+				_m.DisplayName = value.String
 			}
 		case organizationhistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				oh.Description = value.String
+				_m.Description = value.String
 			}
 		case organizationhistory.FieldParentOrganizationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field parent_organization_id", values[i])
 			} else if value.Valid {
-				oh.ParentOrganizationID = value.String
+				_m.ParentOrganizationID = value.String
 			}
 		case organizationhistory.FieldPersonalOrg:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field personal_org", values[i])
 			} else if value.Valid {
-				oh.PersonalOrg = value.Bool
+				_m.PersonalOrg = value.Bool
 			}
 		case organizationhistory.FieldAvatarRemoteURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_remote_url", values[i])
 			} else if value.Valid {
-				oh.AvatarRemoteURL = new(string)
-				*oh.AvatarRemoteURL = value.String
+				_m.AvatarRemoteURL = new(string)
+				*_m.AvatarRemoteURL = value.String
 			}
 		case organizationhistory.FieldAvatarLocalFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_local_file_id", values[i])
 			} else if value.Valid {
-				oh.AvatarLocalFileID = new(string)
-				*oh.AvatarLocalFileID = value.String
+				_m.AvatarLocalFileID = new(string)
+				*_m.AvatarLocalFileID = value.String
 			}
 		case organizationhistory.FieldAvatarUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_updated_at", values[i])
 			} else if value.Valid {
-				oh.AvatarUpdatedAt = new(time.Time)
-				*oh.AvatarUpdatedAt = value.Time
+				_m.AvatarUpdatedAt = new(time.Time)
+				*_m.AvatarUpdatedAt = value.Time
 			}
 		case organizationhistory.FieldDedicatedDb:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field dedicated_db", values[i])
 			} else if value.Valid {
-				oh.DedicatedDb = value.Bool
+				_m.DedicatedDb = value.Bool
 			}
 		default:
-			oh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -224,95 +224,95 @@ func (oh *OrganizationHistory) assignValues(columns []string, values []any) erro
 
 // Value returns the ent.Value that was dynamically selected and assigned to the OrganizationHistory.
 // This includes values selected through modifiers, order, etc.
-func (oh *OrganizationHistory) Value(name string) (ent.Value, error) {
-	return oh.selectValues.Get(name)
+func (_m *OrganizationHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this OrganizationHistory.
 // Note that you need to call OrganizationHistory.Unwrap() before calling this method if this OrganizationHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (oh *OrganizationHistory) Update() *OrganizationHistoryUpdateOne {
-	return NewOrganizationHistoryClient(oh.config).UpdateOne(oh)
+func (_m *OrganizationHistory) Update() *OrganizationHistoryUpdateOne {
+	return NewOrganizationHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the OrganizationHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (oh *OrganizationHistory) Unwrap() *OrganizationHistory {
-	_tx, ok := oh.config.driver.(*txDriver)
+func (_m *OrganizationHistory) Unwrap() *OrganizationHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: OrganizationHistory is not a transactional entity")
 	}
-	oh.config.driver = _tx.drv
-	return oh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (oh *OrganizationHistory) String() string {
+func (_m *OrganizationHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("OrganizationHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", oh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(oh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(oh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", oh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(oh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(oh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(oh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(oh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(oh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(oh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", oh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(oh.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
-	builder.WriteString(oh.DisplayName)
+	builder.WriteString(_m.DisplayName)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(oh.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("parent_organization_id=")
-	builder.WriteString(oh.ParentOrganizationID)
+	builder.WriteString(_m.ParentOrganizationID)
 	builder.WriteString(", ")
 	builder.WriteString("personal_org=")
-	builder.WriteString(fmt.Sprintf("%v", oh.PersonalOrg))
+	builder.WriteString(fmt.Sprintf("%v", _m.PersonalOrg))
 	builder.WriteString(", ")
-	if v := oh.AvatarRemoteURL; v != nil {
+	if v := _m.AvatarRemoteURL; v != nil {
 		builder.WriteString("avatar_remote_url=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := oh.AvatarLocalFileID; v != nil {
+	if v := _m.AvatarLocalFileID; v != nil {
 		builder.WriteString("avatar_local_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := oh.AvatarUpdatedAt; v != nil {
+	if v := _m.AvatarUpdatedAt; v != nil {
 		builder.WriteString("avatar_updated_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("dedicated_db=")
-	builder.WriteString(fmt.Sprintf("%v", oh.DedicatedDb))
+	builder.WriteString(fmt.Sprintf("%v", _m.DedicatedDb))
 	builder.WriteByte(')')
 	return builder.String()
 }

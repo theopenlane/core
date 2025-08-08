@@ -293,6 +293,380 @@ func TestQueryTasks(t *testing.T) {
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(testUser2.UserCtx, t)
 }
 
+func getFutureDate() time.Time {
+	return gofakeit.DateRange(time.Now(), time.Now().AddDate(1, 0, 0)).Truncate(time.Second)
+}
+
+func TestQueryTasksPaginationDueDate(t *testing.T) {
+	// create a bunch to test the pagination with different users
+	// to ensure we are paginating correctly when viewing as org admin
+	numTasks := 95
+	org1TaskIDs := []string{}
+	org2TaskIDs := []string{}
+	for range numTasks {
+		t1 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(testUser1.UserCtx, t)
+		t2 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(viewOnlyUser2.UserCtx, t)
+		t3 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(adminUser.UserCtx, t)
+		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
+
+		t4 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(testUser2.UserCtx, t)
+		org2TaskIDs = append(org2TaskIDs, t4.ID)
+	}
+
+	var startCursorDue *string
+
+	first := 10
+	testCases := []struct {
+		name            string
+		orderBy         []*testclient.TaskOrder
+		client          *testclient.TestClient
+		ctx             context.Context
+		expectedResults int
+		setCursor       bool
+		useCursor       bool
+		totalCount      int64
+	}{
+		{
+			name:            "happy path, with order by due date, page 1",
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      95,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 2",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      95,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 3",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      95,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 4",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      95,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 5",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      95,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 6",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      95,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 7",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      95,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 8",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      95,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 9",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      95,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 10",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
+			expectedResults: 5,
+			totalCount:      95,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("List "+tc.name, func(t *testing.T) {
+			firstInput := int64(first)
+
+			var after *string
+
+			if tc.useCursor {
+				after = startCursorDue
+			}
+
+			resp, err := tc.client.GetTasks(tc.ctx, &firstInput, nil, after, nil, nil, tc.orderBy)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.Tasks.Edges, tc.expectedResults))
+			assert.Check(t, is.Equal(tc.totalCount, resp.Tasks.TotalCount))
+
+			if tc.setCursor {
+				// set the start cursor for the next test case
+				assert.Assert(t, resp.Tasks.PageInfo.HasNextPage)
+				assert.Assert(t, resp.Tasks.PageInfo.EndCursor != nil)
+
+				startCursorDue = resp.Tasks.PageInfo.EndCursor
+			} else if tc.useCursor {
+				// if we are using the cursor, but not setting it, we should not have a next page
+				assert.Check(t, !(resp.Tasks.PageInfo.HasNextPage))
+
+				// it should still have an end cursor
+				assert.Check(t, resp.Tasks.PageInfo.EndCursor != nil)
+			}
+
+			// ensure the tasks are sorted correctly
+			for i, edge := range resp.Tasks.Edges {
+				if i == 0 {
+					continue // skip the first one, we don't have a previous one to compare
+				}
+
+				prevEdge := resp.Tasks.Edges[i-1]
+				assert.Check(t, prevEdge.Node.Due != nil)
+				assert.Check(t, edge.Node.Due != nil)
+				currentDue := time.Time(*edge.Node.Due)
+				previousDue := time.Time(*prevEdge.Node.Due)
+
+				assert.Check(t, currentDue.After(previousDue) || currentDue.Equal(previousDue), "current due date (%s) should be after previous due date (%s)", currentDue, previousDue)
+
+			}
+		})
+	}
+
+	// cleanup
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(testUser2.UserCtx, t)
+}
+
+func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
+	// create a bunch to test the pagination with different users
+	// to ensure we are paginating correctly when viewing as org admin
+	testUser := suite.userBuilder(context.Background(), t)
+	om := (&OrgMemberBuilder{client: suite.client, Role: enums.RoleMember.String()}).MustNew(testUser.UserCtx, t)
+
+	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+
+	numTasks := 93
+	org1TaskIDs := []string{}
+	org2TaskIDs := []string{}
+	for range numTasks {
+		t1 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(testUser.UserCtx, t)
+		t2 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(viewOnlyUserCtx, t)
+		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID)
+
+		t4 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(testUser2.UserCtx, t)
+		org2TaskIDs = append(org2TaskIDs, t4.ID)
+	}
+
+	var startCursorDue *string
+
+	first := 10
+	testCases := []struct {
+		name            string
+		orderBy         []*testclient.TaskOrder
+		client          *testclient.TestClient
+		ctx             context.Context
+		expectedResults int
+		setCursor       bool
+		useCursor       bool
+		totalCount      int64
+	}{
+		{
+			name:            "happy path, with order by created date, page 1",
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             viewOnlyUserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      93,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 2",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             viewOnlyUserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      93,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 3",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             viewOnlyUserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      93,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 4",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             viewOnlyUserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      93,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 5",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             viewOnlyUserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      93,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 6",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             viewOnlyUserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      93,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 7",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             viewOnlyUserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      93,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 8",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             viewOnlyUserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      93,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 9",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             viewOnlyUserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      93,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 10",
+			useCursor:       true,
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             viewOnlyUserCtx,
+			expectedResults: 3,
+			totalCount:      93,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("List "+tc.name, func(t *testing.T) {
+			firstInput := int64(first)
+
+			var after *string
+
+			if tc.useCursor {
+				after = startCursorDue
+			}
+
+			resp, err := tc.client.GetTasks(tc.ctx, &firstInput, nil, after, nil, nil, tc.orderBy)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.Tasks.Edges, tc.expectedResults))
+			assert.Check(t, is.Equal(tc.totalCount, resp.Tasks.TotalCount))
+
+			if tc.setCursor {
+				// set the start cursor for the next test case
+				assert.Assert(t, resp.Tasks.PageInfo.HasNextPage)
+				assert.Assert(t, resp.Tasks.PageInfo.EndCursor != nil)
+
+				startCursorDue = resp.Tasks.PageInfo.EndCursor
+			} else if tc.useCursor {
+				// if we are using the cursor, but not setting it, we should not have a next page
+				assert.Check(t, !(resp.Tasks.PageInfo.HasNextPage))
+
+				// it should still have an end cursor
+				assert.Check(t, resp.Tasks.PageInfo.EndCursor != nil)
+			}
+
+			// ensure the tasks are sorted correctly
+			for i, edge := range resp.Tasks.Edges {
+				if i == 0 {
+					continue // skip the first one, we don't have a previous one to compare
+				}
+
+				prevEdge := resp.Tasks.Edges[i-1]
+				assert.Check(t, prevEdge.Node.CreatedAt != nil)
+				assert.Check(t, edge.Node.CreatedAt != nil)
+				currentCreatedAt := time.Time(*edge.Node.CreatedAt)
+				previousCreatedAt := time.Time(*prevEdge.Node.CreatedAt)
+
+				assert.Check(t, currentCreatedAt.Before(previousCreatedAt) || currentCreatedAt.Equal(previousCreatedAt), "current created at (%s) should be before previous created at (%s)", currentCreatedAt, previousCreatedAt)
+
+			}
+		})
+	}
+
+	// cleanup
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(testUser2.UserCtx, t)
+}
+
 func TestMutationCreateTask(t *testing.T) {
 	testUser := suite.userBuilder(context.Background(), t)
 	patClient := suite.setupPatClient(testUser, t)
@@ -303,6 +677,9 @@ func TestMutationCreateTask(t *testing.T) {
 
 	userCtx := auth.NewTestContextWithOrgID(om.UserID, om.OrganizationID)
 	adminCtx := auth.NewTestContextWithOrgID(om2.UserID, om2.OrganizationID)
+
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -318,6 +695,21 @@ func TestMutationCreateTask(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    testUser.UserCtx,
+		},
+		{
+			name: "happy path, minimal input by member user with edges",
+			request: testclient.CreateTaskInput{
+				Title:             "test-task",
+				Details:           lo.ToPtr("test details of the task"),
+				Status:            &enums.TaskStatusInProgress,
+				Category:          lo.ToPtr("evidence upload"),
+				Due:               lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
+				ControlIDs:        []string{control.ID},
+				InternalPolicyIDs: []string{internalPolicy.ID},
+				AssigneeID:        &om.UserID, // assign the task to self
+			},
+			client: suite.client.api,
+			ctx:    userCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -428,7 +820,12 @@ func TestMutationCreateTask(t *testing.T) {
 			} else {
 				// otherwise it defaults to the authorized user
 				assert.Check(t, resp.CreateTask.Task.Assigner != nil)
-				assert.Check(t, is.Equal(testUser.ID, resp.CreateTask.Task.Assigner.ID))
+				switch tc.ctx {
+				case testUser.UserCtx:
+					assert.Check(t, is.Equal(testUser.ID, resp.CreateTask.Task.Assigner.ID))
+				case userCtx:
+					assert.Check(t, is.Equal(om.UserID, resp.CreateTask.Task.Assigner.ID))
+				}
 			}
 
 			if tc.request.AssigneeID == nil {
@@ -442,10 +839,12 @@ func TestMutationCreateTask(t *testing.T) {
 				assert.NilError(t, err)
 				assert.Check(t, taskResp != nil)
 
-				// make sure the another org member cannot see the task
-				taskResp, err = suite.client.api.GetTaskByID(adminCtx, resp.CreateTask.Task.ID)
+				// make sure the another org member cannot see the task if not linked to objects they can see
+				if tc.request.ControlIDs == nil {
+					taskResp, err = suite.client.api.GetTaskByID(adminCtx, resp.CreateTask.Task.ID)
 
-				assert.Check(t, is.Nil(taskResp))
+					assert.Check(t, is.Nil(taskResp))
+				}
 			}
 
 			// cleanup

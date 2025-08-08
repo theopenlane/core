@@ -22,58 +22,58 @@ type ActionPlanDelete struct {
 }
 
 // Where appends a list predicates to the ActionPlanDelete builder.
-func (apd *ActionPlanDelete) Where(ps ...predicate.ActionPlan) *ActionPlanDelete {
-	apd.mutation.Where(ps...)
-	return apd
+func (_d *ActionPlanDelete) Where(ps ...predicate.ActionPlan) *ActionPlanDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (apd *ActionPlanDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, apd.sqlExec, apd.mutation, apd.hooks)
+func (_d *ActionPlanDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (apd *ActionPlanDelete) ExecX(ctx context.Context) int {
-	n, err := apd.Exec(ctx)
+func (_d *ActionPlanDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (apd *ActionPlanDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ActionPlanDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(actionplan.Table, sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString))
-	_spec.Node.Schema = apd.schemaConfig.ActionPlan
-	ctx = internal.NewSchemaConfigContext(ctx, apd.schemaConfig)
-	if ps := apd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.ActionPlan
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, apd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	apd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ActionPlanDeleteOne is the builder for deleting a single ActionPlan entity.
 type ActionPlanDeleteOne struct {
-	apd *ActionPlanDelete
+	_d *ActionPlanDelete
 }
 
 // Where appends a list predicates to the ActionPlanDelete builder.
-func (apdo *ActionPlanDeleteOne) Where(ps ...predicate.ActionPlan) *ActionPlanDeleteOne {
-	apdo.apd.mutation.Where(ps...)
-	return apdo
+func (_d *ActionPlanDeleteOne) Where(ps ...predicate.ActionPlan) *ActionPlanDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (apdo *ActionPlanDeleteOne) Exec(ctx context.Context) error {
-	n, err := apdo.apd.Exec(ctx)
+func (_d *ActionPlanDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (apdo *ActionPlanDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (apdo *ActionPlanDeleteOne) ExecX(ctx context.Context) {
-	if err := apdo.Exec(ctx); err != nil {
+func (_d *ActionPlanDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -101,6 +101,8 @@ func (ec *executionContext) fieldContext_ControlImplementationBulkCreatePayload_
 				return ec.fieldContext_ControlImplementation_controls(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_ControlImplementation_subcontrols(ctx, field)
+			case "tasks":
+				return ec.fieldContext_ControlImplementation_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlImplementation", field.Name)
 		},
@@ -183,6 +185,8 @@ func (ec *executionContext) fieldContext_ControlImplementationCreatePayload_cont
 				return ec.fieldContext_ControlImplementation_controls(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_ControlImplementation_subcontrols(ctx, field)
+			case "tasks":
+				return ec.fieldContext_ControlImplementation_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlImplementation", field.Name)
 		},
@@ -309,6 +313,8 @@ func (ec *executionContext) fieldContext_ControlImplementationUpdatePayload_cont
 				return ec.fieldContext_ControlImplementation_controls(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_ControlImplementation_subcontrols(ctx, field)
+			case "tasks":
+				return ec.fieldContext_ControlImplementation_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlImplementation", field.Name)
 		},

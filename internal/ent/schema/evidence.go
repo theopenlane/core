@@ -116,6 +116,7 @@ func (e Evidence) Mixin() []ent.Mixin {
 func (e Evidence) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeToWithPagination(e, ControlObjective{}),
+		defaultEdgeToWithPagination(e, ControlImplementation{}),
 		defaultEdgeToWithPagination(e, Control{}),
 		defaultEdgeToWithPagination(e, Subcontrol{}),
 		defaultEdgeToWithPagination(e, File{}),

@@ -25,256 +25,256 @@ type InviteCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ic *InviteCreate) SetCreatedAt(t time.Time) *InviteCreate {
-	ic.mutation.SetCreatedAt(t)
-	return ic
+func (_c *InviteCreate) SetCreatedAt(v time.Time) *InviteCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableCreatedAt(t *time.Time) *InviteCreate {
-	if t != nil {
-		ic.SetCreatedAt(*t)
+func (_c *InviteCreate) SetNillableCreatedAt(v *time.Time) *InviteCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ic *InviteCreate) SetUpdatedAt(t time.Time) *InviteCreate {
-	ic.mutation.SetUpdatedAt(t)
-	return ic
+func (_c *InviteCreate) SetUpdatedAt(v time.Time) *InviteCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableUpdatedAt(t *time.Time) *InviteCreate {
-	if t != nil {
-		ic.SetUpdatedAt(*t)
+func (_c *InviteCreate) SetNillableUpdatedAt(v *time.Time) *InviteCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (ic *InviteCreate) SetCreatedBy(s string) *InviteCreate {
-	ic.mutation.SetCreatedBy(s)
-	return ic
+func (_c *InviteCreate) SetCreatedBy(v string) *InviteCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableCreatedBy(s *string) *InviteCreate {
-	if s != nil {
-		ic.SetCreatedBy(*s)
+func (_c *InviteCreate) SetNillableCreatedBy(v *string) *InviteCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ic *InviteCreate) SetUpdatedBy(s string) *InviteCreate {
-	ic.mutation.SetUpdatedBy(s)
-	return ic
+func (_c *InviteCreate) SetUpdatedBy(v string) *InviteCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableUpdatedBy(s *string) *InviteCreate {
-	if s != nil {
-		ic.SetUpdatedBy(*s)
+func (_c *InviteCreate) SetNillableUpdatedBy(v *string) *InviteCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ic *InviteCreate) SetDeletedAt(t time.Time) *InviteCreate {
-	ic.mutation.SetDeletedAt(t)
-	return ic
+func (_c *InviteCreate) SetDeletedAt(v time.Time) *InviteCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableDeletedAt(t *time.Time) *InviteCreate {
-	if t != nil {
-		ic.SetDeletedAt(*t)
+func (_c *InviteCreate) SetNillableDeletedAt(v *time.Time) *InviteCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ic *InviteCreate) SetDeletedBy(s string) *InviteCreate {
-	ic.mutation.SetDeletedBy(s)
-	return ic
+func (_c *InviteCreate) SetDeletedBy(v string) *InviteCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableDeletedBy(s *string) *InviteCreate {
-	if s != nil {
-		ic.SetDeletedBy(*s)
+func (_c *InviteCreate) SetNillableDeletedBy(v *string) *InviteCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ic *InviteCreate) SetOwnerID(s string) *InviteCreate {
-	ic.mutation.SetOwnerID(s)
-	return ic
+func (_c *InviteCreate) SetOwnerID(v string) *InviteCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableOwnerID(s *string) *InviteCreate {
-	if s != nil {
-		ic.SetOwnerID(*s)
+func (_c *InviteCreate) SetNillableOwnerID(v *string) *InviteCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetToken sets the "token" field.
-func (ic *InviteCreate) SetToken(s string) *InviteCreate {
-	ic.mutation.SetToken(s)
-	return ic
+func (_c *InviteCreate) SetToken(v string) *InviteCreate {
+	_c.mutation.SetToken(v)
+	return _c
 }
 
 // SetExpires sets the "expires" field.
-func (ic *InviteCreate) SetExpires(t time.Time) *InviteCreate {
-	ic.mutation.SetExpires(t)
-	return ic
+func (_c *InviteCreate) SetExpires(v time.Time) *InviteCreate {
+	_c.mutation.SetExpires(v)
+	return _c
 }
 
 // SetNillableExpires sets the "expires" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableExpires(t *time.Time) *InviteCreate {
-	if t != nil {
-		ic.SetExpires(*t)
+func (_c *InviteCreate) SetNillableExpires(v *time.Time) *InviteCreate {
+	if v != nil {
+		_c.SetExpires(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetRecipient sets the "recipient" field.
-func (ic *InviteCreate) SetRecipient(s string) *InviteCreate {
-	ic.mutation.SetRecipient(s)
-	return ic
+func (_c *InviteCreate) SetRecipient(v string) *InviteCreate {
+	_c.mutation.SetRecipient(v)
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (ic *InviteCreate) SetStatus(es enums.InviteStatus) *InviteCreate {
-	ic.mutation.SetStatus(es)
-	return ic
+func (_c *InviteCreate) SetStatus(v enums.InviteStatus) *InviteCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableStatus(es *enums.InviteStatus) *InviteCreate {
-	if es != nil {
-		ic.SetStatus(*es)
+func (_c *InviteCreate) SetNillableStatus(v *enums.InviteStatus) *InviteCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetRole sets the "role" field.
-func (ic *InviteCreate) SetRole(e enums.Role) *InviteCreate {
-	ic.mutation.SetRole(e)
-	return ic
+func (_c *InviteCreate) SetRole(v enums.Role) *InviteCreate {
+	_c.mutation.SetRole(v)
+	return _c
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableRole(e *enums.Role) *InviteCreate {
-	if e != nil {
-		ic.SetRole(*e)
+func (_c *InviteCreate) SetNillableRole(v *enums.Role) *InviteCreate {
+	if v != nil {
+		_c.SetRole(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetSendAttempts sets the "send_attempts" field.
-func (ic *InviteCreate) SetSendAttempts(i int) *InviteCreate {
-	ic.mutation.SetSendAttempts(i)
-	return ic
+func (_c *InviteCreate) SetSendAttempts(v int) *InviteCreate {
+	_c.mutation.SetSendAttempts(v)
+	return _c
 }
 
 // SetNillableSendAttempts sets the "send_attempts" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableSendAttempts(i *int) *InviteCreate {
-	if i != nil {
-		ic.SetSendAttempts(*i)
+func (_c *InviteCreate) SetNillableSendAttempts(v *int) *InviteCreate {
+	if v != nil {
+		_c.SetSendAttempts(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetRequestorID sets the "requestor_id" field.
-func (ic *InviteCreate) SetRequestorID(s string) *InviteCreate {
-	ic.mutation.SetRequestorID(s)
-	return ic
+func (_c *InviteCreate) SetRequestorID(v string) *InviteCreate {
+	_c.mutation.SetRequestorID(v)
+	return _c
 }
 
 // SetNillableRequestorID sets the "requestor_id" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableRequestorID(s *string) *InviteCreate {
-	if s != nil {
-		ic.SetRequestorID(*s)
+func (_c *InviteCreate) SetNillableRequestorID(v *string) *InviteCreate {
+	if v != nil {
+		_c.SetRequestorID(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetSecret sets the "secret" field.
-func (ic *InviteCreate) SetSecret(b []byte) *InviteCreate {
-	ic.mutation.SetSecret(b)
-	return ic
+func (_c *InviteCreate) SetSecret(v []byte) *InviteCreate {
+	_c.mutation.SetSecret(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ic *InviteCreate) SetID(s string) *InviteCreate {
-	ic.mutation.SetID(s)
-	return ic
+func (_c *InviteCreate) SetID(v string) *InviteCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (ic *InviteCreate) SetNillableID(s *string) *InviteCreate {
-	if s != nil {
-		ic.SetID(*s)
+func (_c *InviteCreate) SetNillableID(v *string) *InviteCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (ic *InviteCreate) SetOwner(o *Organization) *InviteCreate {
-	return ic.SetOwnerID(o.ID)
+func (_c *InviteCreate) SetOwner(v *Organization) *InviteCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (ic *InviteCreate) AddEventIDs(ids ...string) *InviteCreate {
-	ic.mutation.AddEventIDs(ids...)
-	return ic
+func (_c *InviteCreate) AddEventIDs(ids ...string) *InviteCreate {
+	_c.mutation.AddEventIDs(ids...)
+	return _c
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (ic *InviteCreate) AddEvents(e ...*Event) *InviteCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *InviteCreate) AddEvents(v ...*Event) *InviteCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ic.AddEventIDs(ids...)
+	return _c.AddEventIDs(ids...)
 }
 
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
-func (ic *InviteCreate) AddGroupIDs(ids ...string) *InviteCreate {
-	ic.mutation.AddGroupIDs(ids...)
-	return ic
+func (_c *InviteCreate) AddGroupIDs(ids ...string) *InviteCreate {
+	_c.mutation.AddGroupIDs(ids...)
+	return _c
 }
 
 // AddGroups adds the "groups" edges to the Group entity.
-func (ic *InviteCreate) AddGroups(g ...*Group) *InviteCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *InviteCreate) AddGroups(v ...*Group) *InviteCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ic.AddGroupIDs(ids...)
+	return _c.AddGroupIDs(ids...)
 }
 
 // Mutation returns the InviteMutation object of the builder.
-func (ic *InviteCreate) Mutation() *InviteMutation {
-	return ic.mutation
+func (_c *InviteCreate) Mutation() *InviteMutation {
+	return _c.mutation
 }
 
 // Save creates the Invite in the database.
-func (ic *InviteCreate) Save(ctx context.Context) (*Invite, error) {
-	if err := ic.defaults(); err != nil {
+func (_c *InviteCreate) Save(ctx context.Context) (*Invite, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ic.sqlSave, ic.mutation, ic.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ic *InviteCreate) SaveX(ctx context.Context) *Invite {
-	v, err := ic.Save(ctx)
+func (_c *InviteCreate) SaveX(ctx context.Context) *Invite {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -282,114 +282,114 @@ func (ic *InviteCreate) SaveX(ctx context.Context) *Invite {
 }
 
 // Exec executes the query.
-func (ic *InviteCreate) Exec(ctx context.Context) error {
-	_, err := ic.Save(ctx)
+func (_c *InviteCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ic *InviteCreate) ExecX(ctx context.Context) {
-	if err := ic.Exec(ctx); err != nil {
+func (_c *InviteCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ic *InviteCreate) defaults() error {
-	if _, ok := ic.mutation.CreatedAt(); !ok {
+func (_c *InviteCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if invite.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized invite.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := invite.DefaultCreatedAt()
-		ic.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ic.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if invite.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized invite.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := invite.DefaultUpdatedAt()
-		ic.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ic.mutation.Expires(); !ok {
+	if _, ok := _c.mutation.Expires(); !ok {
 		if invite.DefaultExpires == nil {
 			return fmt.Errorf("generated: uninitialized invite.DefaultExpires (forgotten import generated/runtime?)")
 		}
 		v := invite.DefaultExpires()
-		ic.mutation.SetExpires(v)
+		_c.mutation.SetExpires(v)
 	}
-	if _, ok := ic.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := invite.DefaultStatus
-		ic.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := ic.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		v := invite.DefaultRole
-		ic.mutation.SetRole(v)
+		_c.mutation.SetRole(v)
 	}
-	if _, ok := ic.mutation.SendAttempts(); !ok {
+	if _, ok := _c.mutation.SendAttempts(); !ok {
 		v := invite.DefaultSendAttempts
-		ic.mutation.SetSendAttempts(v)
+		_c.mutation.SetSendAttempts(v)
 	}
-	if _, ok := ic.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if invite.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized invite.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := invite.DefaultID()
-		ic.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ic *InviteCreate) check() error {
-	if v, ok := ic.mutation.OwnerID(); ok {
+func (_c *InviteCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := invite.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Invite.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := ic.mutation.Token(); !ok {
+	if _, ok := _c.mutation.Token(); !ok {
 		return &ValidationError{Name: "token", err: errors.New(`generated: missing required field "Invite.token"`)}
 	}
-	if v, ok := ic.mutation.Token(); ok {
+	if v, ok := _c.mutation.Token(); ok {
 		if err := invite.TokenValidator(v); err != nil {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "Invite.token": %w`, err)}
 		}
 	}
-	if _, ok := ic.mutation.Recipient(); !ok {
+	if _, ok := _c.mutation.Recipient(); !ok {
 		return &ValidationError{Name: "recipient", err: errors.New(`generated: missing required field "Invite.recipient"`)}
 	}
-	if v, ok := ic.mutation.Recipient(); ok {
+	if v, ok := _c.mutation.Recipient(); ok {
 		if err := invite.RecipientValidator(v); err != nil {
 			return &ValidationError{Name: "recipient", err: fmt.Errorf(`generated: validator failed for field "Invite.recipient": %w`, err)}
 		}
 	}
-	if _, ok := ic.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "Invite.status"`)}
 	}
-	if v, ok := ic.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := invite.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Invite.status": %w`, err)}
 		}
 	}
-	if _, ok := ic.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`generated: missing required field "Invite.role"`)}
 	}
-	if v, ok := ic.mutation.Role(); ok {
+	if v, ok := _c.mutation.Role(); ok {
 		if err := invite.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "Invite.role": %w`, err)}
 		}
 	}
-	if _, ok := ic.mutation.SendAttempts(); !ok {
+	if _, ok := _c.mutation.SendAttempts(); !ok {
 		return &ValidationError{Name: "send_attempts", err: errors.New(`generated: missing required field "Invite.send_attempts"`)}
 	}
-	if v, ok := ic.mutation.RequestorID(); ok {
+	if v, ok := _c.mutation.RequestorID(); ok {
 		if err := invite.RequestorIDValidator(v); err != nil {
 			return &ValidationError{Name: "requestor_id", err: fmt.Errorf(`generated: validator failed for field "Invite.requestor_id": %w`, err)}
 		}
 	}
-	if _, ok := ic.mutation.Secret(); !ok {
+	if _, ok := _c.mutation.Secret(); !ok {
 		return &ValidationError{Name: "secret", err: errors.New(`generated: missing required field "Invite.secret"`)}
 	}
-	if v, ok := ic.mutation.Secret(); ok {
+	if v, ok := _c.mutation.Secret(); ok {
 		if err := invite.SecretValidator(v); err != nil {
 			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "Invite.secret": %w`, err)}
 		}
@@ -397,12 +397,12 @@ func (ic *InviteCreate) check() error {
 	return nil
 }
 
-func (ic *InviteCreate) sqlSave(ctx context.Context) (*Invite, error) {
-	if err := ic.check(); err != nil {
+func (_c *InviteCreate) sqlSave(ctx context.Context) (*Invite, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ic.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ic.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -415,78 +415,78 @@ func (ic *InviteCreate) sqlSave(ctx context.Context) (*Invite, error) {
 			return nil, fmt.Errorf("unexpected Invite.ID type: %T", _spec.ID.Value)
 		}
 	}
-	ic.mutation.id = &_node.ID
-	ic.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
+func (_c *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Invite{config: ic.config}
+		_node = &Invite{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(invite.Table, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString))
 	)
-	_spec.Schema = ic.schemaConfig.Invite
-	if id, ok := ic.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Invite
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ic.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(invite.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ic.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(invite.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ic.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(invite.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := ic.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(invite.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ic.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ic.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(invite.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := ic.mutation.Token(); ok {
+	if value, ok := _c.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)
 		_node.Token = value
 	}
-	if value, ok := ic.mutation.Expires(); ok {
+	if value, ok := _c.mutation.Expires(); ok {
 		_spec.SetField(invite.FieldExpires, field.TypeTime, value)
 		_node.Expires = value
 	}
-	if value, ok := ic.mutation.Recipient(); ok {
+	if value, ok := _c.mutation.Recipient(); ok {
 		_spec.SetField(invite.FieldRecipient, field.TypeString, value)
 		_node.Recipient = value
 	}
-	if value, ok := ic.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(invite.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := ic.mutation.Role(); ok {
+	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(invite.FieldRole, field.TypeEnum, value)
 		_node.Role = value
 	}
-	if value, ok := ic.mutation.SendAttempts(); ok {
+	if value, ok := _c.mutation.SendAttempts(); ok {
 		_spec.SetField(invite.FieldSendAttempts, field.TypeInt, value)
 		_node.SendAttempts = value
 	}
-	if value, ok := ic.mutation.RequestorID(); ok {
+	if value, ok := _c.mutation.RequestorID(); ok {
 		_spec.SetField(invite.FieldRequestorID, field.TypeString, value)
 		_node.RequestorID = value
 	}
-	if value, ok := ic.mutation.Secret(); ok {
+	if value, ok := _c.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
 		_node.Secret = &value
 	}
-	if nodes := ic.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -497,14 +497,14 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ic.schemaConfig.Invite
+		edge.Schema = _c.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ic.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -515,13 +515,13 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ic.schemaConfig.InviteEvents
+		edge.Schema = _c.schemaConfig.InviteEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ic.mutation.GroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -532,7 +532,7 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ic.schemaConfig.InviteGroups
+		edge.Schema = _c.schemaConfig.InviteGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -549,16 +549,16 @@ type InviteCreateBulk struct {
 }
 
 // Save creates the Invite entities in the database.
-func (icb *InviteCreateBulk) Save(ctx context.Context) ([]*Invite, error) {
-	if icb.err != nil {
-		return nil, icb.err
+func (_c *InviteCreateBulk) Save(ctx context.Context) ([]*Invite, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(icb.builders))
-	nodes := make([]*Invite, len(icb.builders))
-	mutators := make([]Mutator, len(icb.builders))
-	for i := range icb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Invite, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := icb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*InviteMutation)
@@ -572,11 +572,11 @@ func (icb *InviteCreateBulk) Save(ctx context.Context) ([]*Invite, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, icb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, icb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -596,7 +596,7 @@ func (icb *InviteCreateBulk) Save(ctx context.Context) ([]*Invite, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, icb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -604,8 +604,8 @@ func (icb *InviteCreateBulk) Save(ctx context.Context) ([]*Invite, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (icb *InviteCreateBulk) SaveX(ctx context.Context) []*Invite {
-	v, err := icb.Save(ctx)
+func (_c *InviteCreateBulk) SaveX(ctx context.Context) []*Invite {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -613,14 +613,14 @@ func (icb *InviteCreateBulk) SaveX(ctx context.Context) []*Invite {
 }
 
 // Exec executes the query.
-func (icb *InviteCreateBulk) Exec(ctx context.Context) error {
-	_, err := icb.Save(ctx)
+func (_c *InviteCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (icb *InviteCreateBulk) ExecX(ctx context.Context) {
-	if err := icb.Exec(ctx); err != nil {
+func (_c *InviteCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

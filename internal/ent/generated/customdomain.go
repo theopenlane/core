@@ -123,7 +123,7 @@ func (*CustomDomain) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the CustomDomain fields.
-func (cd *CustomDomain) assignValues(columns []string, values []any) error {
+func (_m *CustomDomain) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -133,49 +133,49 @@ func (cd *CustomDomain) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				cd.ID = value.String
+				_m.ID = value.String
 			}
 		case customdomain.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				cd.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case customdomain.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				cd.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case customdomain.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				cd.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case customdomain.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				cd.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case customdomain.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				cd.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case customdomain.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				cd.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case customdomain.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &cd.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -183,42 +183,42 @@ func (cd *CustomDomain) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				cd.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case customdomain.FieldCnameRecord:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field cname_record", values[i])
 			} else if value.Valid {
-				cd.CnameRecord = value.String
+				_m.CnameRecord = value.String
 			}
 		case customdomain.FieldMappableDomainID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mappable_domain_id", values[i])
 			} else if value.Valid {
-				cd.MappableDomainID = value.String
+				_m.MappableDomainID = value.String
 			}
 		case customdomain.FieldDNSVerificationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_verification_id", values[i])
 			} else if value.Valid {
-				cd.DNSVerificationID = value.String
+				_m.DNSVerificationID = value.String
 			}
 		case customdomain.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_verification_custom_domains", values[i])
 			} else if value.Valid {
-				cd.dns_verification_custom_domains = new(string)
-				*cd.dns_verification_custom_domains = value.String
+				_m.dns_verification_custom_domains = new(string)
+				*_m.dns_verification_custom_domains = value.String
 			}
 		case customdomain.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mappable_domain_custom_domains", values[i])
 			} else if value.Valid {
-				cd.mappable_domain_custom_domains = new(string)
-				*cd.mappable_domain_custom_domains = value.String
+				_m.mappable_domain_custom_domains = new(string)
+				*_m.mappable_domain_custom_domains = value.String
 			}
 		default:
-			cd.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -226,80 +226,80 @@ func (cd *CustomDomain) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the CustomDomain.
 // This includes values selected through modifiers, order, etc.
-func (cd *CustomDomain) Value(name string) (ent.Value, error) {
-	return cd.selectValues.Get(name)
+func (_m *CustomDomain) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the CustomDomain entity.
-func (cd *CustomDomain) QueryOwner() *OrganizationQuery {
-	return NewCustomDomainClient(cd.config).QueryOwner(cd)
+func (_m *CustomDomain) QueryOwner() *OrganizationQuery {
+	return NewCustomDomainClient(_m.config).QueryOwner(_m)
 }
 
 // QueryMappableDomain queries the "mappable_domain" edge of the CustomDomain entity.
-func (cd *CustomDomain) QueryMappableDomain() *MappableDomainQuery {
-	return NewCustomDomainClient(cd.config).QueryMappableDomain(cd)
+func (_m *CustomDomain) QueryMappableDomain() *MappableDomainQuery {
+	return NewCustomDomainClient(_m.config).QueryMappableDomain(_m)
 }
 
 // QueryDNSVerification queries the "dns_verification" edge of the CustomDomain entity.
-func (cd *CustomDomain) QueryDNSVerification() *DNSVerificationQuery {
-	return NewCustomDomainClient(cd.config).QueryDNSVerification(cd)
+func (_m *CustomDomain) QueryDNSVerification() *DNSVerificationQuery {
+	return NewCustomDomainClient(_m.config).QueryDNSVerification(_m)
 }
 
 // Update returns a builder for updating this CustomDomain.
 // Note that you need to call CustomDomain.Unwrap() before calling this method if this CustomDomain
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (cd *CustomDomain) Update() *CustomDomainUpdateOne {
-	return NewCustomDomainClient(cd.config).UpdateOne(cd)
+func (_m *CustomDomain) Update() *CustomDomainUpdateOne {
+	return NewCustomDomainClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the CustomDomain entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (cd *CustomDomain) Unwrap() *CustomDomain {
-	_tx, ok := cd.config.driver.(*txDriver)
+func (_m *CustomDomain) Unwrap() *CustomDomain {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: CustomDomain is not a transactional entity")
 	}
-	cd.config.driver = _tx.drv
-	return cd
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (cd *CustomDomain) String() string {
+func (_m *CustomDomain) String() string {
 	var builder strings.Builder
 	builder.WriteString("CustomDomain(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", cd.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(cd.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(cd.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(cd.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(cd.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(cd.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(cd.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", cd.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(cd.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("cname_record=")
-	builder.WriteString(cd.CnameRecord)
+	builder.WriteString(_m.CnameRecord)
 	builder.WriteString(", ")
 	builder.WriteString("mappable_domain_id=")
-	builder.WriteString(cd.MappableDomainID)
+	builder.WriteString(_m.MappableDomainID)
 	builder.WriteString(", ")
 	builder.WriteString("dns_verification_id=")
-	builder.WriteString(cd.DNSVerificationID)
+	builder.WriteString(_m.DNSVerificationID)
 	builder.WriteByte(')')
 	return builder.String()
 }

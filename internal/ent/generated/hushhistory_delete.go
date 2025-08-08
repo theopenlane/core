@@ -22,58 +22,58 @@ type HushHistoryDelete struct {
 }
 
 // Where appends a list predicates to the HushHistoryDelete builder.
-func (hhd *HushHistoryDelete) Where(ps ...predicate.HushHistory) *HushHistoryDelete {
-	hhd.mutation.Where(ps...)
-	return hhd
+func (_d *HushHistoryDelete) Where(ps ...predicate.HushHistory) *HushHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (hhd *HushHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, hhd.sqlExec, hhd.mutation, hhd.hooks)
+func (_d *HushHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (hhd *HushHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := hhd.Exec(ctx)
+func (_d *HushHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (hhd *HushHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *HushHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(hushhistory.Table, sqlgraph.NewFieldSpec(hushhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = hhd.schemaConfig.HushHistory
-	ctx = internal.NewSchemaConfigContext(ctx, hhd.schemaConfig)
-	if ps := hhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.HushHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, hhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	hhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // HushHistoryDeleteOne is the builder for deleting a single HushHistory entity.
 type HushHistoryDeleteOne struct {
-	hhd *HushHistoryDelete
+	_d *HushHistoryDelete
 }
 
 // Where appends a list predicates to the HushHistoryDelete builder.
-func (hhdo *HushHistoryDeleteOne) Where(ps ...predicate.HushHistory) *HushHistoryDeleteOne {
-	hhdo.hhd.mutation.Where(ps...)
-	return hhdo
+func (_d *HushHistoryDeleteOne) Where(ps ...predicate.HushHistory) *HushHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (hhdo *HushHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := hhdo.hhd.Exec(ctx)
+func (_d *HushHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (hhdo *HushHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (hhdo *HushHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := hhdo.Exec(ctx); err != nil {
+func (_d *HushHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

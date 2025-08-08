@@ -103,6 +103,8 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_owner(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_Evidence_controlObjectives(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Evidence_controlImplementations(ctx, field)
 			case "controls":
 				return ec.fieldContext_Evidence_controls(ctx, field)
 			case "subcontrols":
@@ -197,6 +199,8 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_owner(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_Evidence_controlObjectives(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Evidence_controlImplementations(ctx, field)
 			case "controls":
 				return ec.fieldContext_Evidence_controls(ctx, field)
 			case "subcontrols":
@@ -335,6 +339,8 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_owner(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_Evidence_controlObjectives(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Evidence_controlImplementations(ctx, field)
 			case "controls":
 				return ec.fieldContext_Evidence_controls(ctx, field)
 			case "subcontrols":

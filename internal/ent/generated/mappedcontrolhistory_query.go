@@ -33,40 +33,40 @@ type MappedControlHistoryQuery struct {
 }
 
 // Where adds a new predicate for the MappedControlHistoryQuery builder.
-func (mchq *MappedControlHistoryQuery) Where(ps ...predicate.MappedControlHistory) *MappedControlHistoryQuery {
-	mchq.predicates = append(mchq.predicates, ps...)
-	return mchq
+func (_q *MappedControlHistoryQuery) Where(ps ...predicate.MappedControlHistory) *MappedControlHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (mchq *MappedControlHistoryQuery) Limit(limit int) *MappedControlHistoryQuery {
-	mchq.ctx.Limit = &limit
-	return mchq
+func (_q *MappedControlHistoryQuery) Limit(limit int) *MappedControlHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (mchq *MappedControlHistoryQuery) Offset(offset int) *MappedControlHistoryQuery {
-	mchq.ctx.Offset = &offset
-	return mchq
+func (_q *MappedControlHistoryQuery) Offset(offset int) *MappedControlHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (mchq *MappedControlHistoryQuery) Unique(unique bool) *MappedControlHistoryQuery {
-	mchq.ctx.Unique = &unique
-	return mchq
+func (_q *MappedControlHistoryQuery) Unique(unique bool) *MappedControlHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (mchq *MappedControlHistoryQuery) Order(o ...mappedcontrolhistory.OrderOption) *MappedControlHistoryQuery {
-	mchq.order = append(mchq.order, o...)
-	return mchq
+func (_q *MappedControlHistoryQuery) Order(o ...mappedcontrolhistory.OrderOption) *MappedControlHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first MappedControlHistory entity from the query.
 // Returns a *NotFoundError when no MappedControlHistory was found.
-func (mchq *MappedControlHistoryQuery) First(ctx context.Context) (*MappedControlHistory, error) {
-	nodes, err := mchq.Limit(1).All(setContextOp(ctx, mchq.ctx, ent.OpQueryFirst))
+func (_q *MappedControlHistoryQuery) First(ctx context.Context) (*MappedControlHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (mchq *MappedControlHistoryQuery) First(ctx context.Context) (*MappedContro
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (mchq *MappedControlHistoryQuery) FirstX(ctx context.Context) *MappedControlHistory {
-	node, err := mchq.First(ctx)
+func (_q *MappedControlHistoryQuery) FirstX(ctx context.Context) *MappedControlHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (mchq *MappedControlHistoryQuery) FirstX(ctx context.Context) *MappedContro
 
 // FirstID returns the first MappedControlHistory ID from the query.
 // Returns a *NotFoundError when no MappedControlHistory ID was found.
-func (mchq *MappedControlHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *MappedControlHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = mchq.Limit(1).IDs(setContextOp(ctx, mchq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (mchq *MappedControlHistoryQuery) FirstID(ctx context.Context) (id string, 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (mchq *MappedControlHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := mchq.FirstID(ctx)
+func (_q *MappedControlHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (mchq *MappedControlHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single MappedControlHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one MappedControlHistory entity is found.
 // Returns a *NotFoundError when no MappedControlHistory entities are found.
-func (mchq *MappedControlHistoryQuery) Only(ctx context.Context) (*MappedControlHistory, error) {
-	nodes, err := mchq.Limit(2).All(setContextOp(ctx, mchq.ctx, ent.OpQueryOnly))
+func (_q *MappedControlHistoryQuery) Only(ctx context.Context) (*MappedControlHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (mchq *MappedControlHistoryQuery) Only(ctx context.Context) (*MappedControl
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (mchq *MappedControlHistoryQuery) OnlyX(ctx context.Context) *MappedControlHistory {
-	node, err := mchq.Only(ctx)
+func (_q *MappedControlHistoryQuery) OnlyX(ctx context.Context) *MappedControlHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (mchq *MappedControlHistoryQuery) OnlyX(ctx context.Context) *MappedControl
 // OnlyID is like Only, but returns the only MappedControlHistory ID in the query.
 // Returns a *NotSingularError when more than one MappedControlHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (mchq *MappedControlHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *MappedControlHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = mchq.Limit(2).IDs(setContextOp(ctx, mchq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (mchq *MappedControlHistoryQuery) OnlyID(ctx context.Context) (id string, e
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (mchq *MappedControlHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := mchq.OnlyID(ctx)
+func (_q *MappedControlHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (mchq *MappedControlHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of MappedControlHistories.
-func (mchq *MappedControlHistoryQuery) All(ctx context.Context) ([]*MappedControlHistory, error) {
-	ctx = setContextOp(ctx, mchq.ctx, ent.OpQueryAll)
-	if err := mchq.prepareQuery(ctx); err != nil {
+func (_q *MappedControlHistoryQuery) All(ctx context.Context) ([]*MappedControlHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*MappedControlHistory, *MappedControlHistoryQuery]()
-	return withInterceptors[[]*MappedControlHistory](ctx, mchq, qr, mchq.inters)
+	return withInterceptors[[]*MappedControlHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (mchq *MappedControlHistoryQuery) AllX(ctx context.Context) []*MappedControlHistory {
-	nodes, err := mchq.All(ctx)
+func (_q *MappedControlHistoryQuery) AllX(ctx context.Context) []*MappedControlHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (mchq *MappedControlHistoryQuery) AllX(ctx context.Context) []*MappedContro
 }
 
 // IDs executes the query and returns a list of MappedControlHistory IDs.
-func (mchq *MappedControlHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if mchq.ctx.Unique == nil && mchq.path != nil {
-		mchq.Unique(true)
+func (_q *MappedControlHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, mchq.ctx, ent.OpQueryIDs)
-	if err = mchq.Select(mappedcontrolhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(mappedcontrolhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (mchq *MappedControlHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := mchq.IDs(ctx)
+func (_q *MappedControlHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (mchq *MappedControlHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (mchq *MappedControlHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, mchq.ctx, ent.OpQueryCount)
-	if err := mchq.prepareQuery(ctx); err != nil {
+func (_q *MappedControlHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, mchq, querierCount[*MappedControlHistoryQuery](), mchq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*MappedControlHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (mchq *MappedControlHistoryQuery) CountX(ctx context.Context) int {
-	count, err := mchq.Count(ctx)
+func (_q *MappedControlHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (mchq *MappedControlHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (mchq *MappedControlHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, mchq.ctx, ent.OpQueryExist)
-	switch _, err := mchq.FirstID(ctx); {
+func (_q *MappedControlHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (mchq *MappedControlHistoryQuery) Exist(ctx context.Context) (bool, error) 
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (mchq *MappedControlHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := mchq.Exist(ctx)
+func (_q *MappedControlHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (mchq *MappedControlHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the MappedControlHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (mchq *MappedControlHistoryQuery) Clone() *MappedControlHistoryQuery {
-	if mchq == nil {
+func (_q *MappedControlHistoryQuery) Clone() *MappedControlHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &MappedControlHistoryQuery{
-		config:     mchq.config,
-		ctx:        mchq.ctx.Clone(),
-		order:      append([]mappedcontrolhistory.OrderOption{}, mchq.order...),
-		inters:     append([]Interceptor{}, mchq.inters...),
-		predicates: append([]predicate.MappedControlHistory{}, mchq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]mappedcontrolhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.MappedControlHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       mchq.sql.Clone(),
-		path:      mchq.path,
-		modifiers: append([]func(*sql.Selector){}, mchq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (mchq *MappedControlHistoryQuery) Clone() *MappedControlHistoryQuery {
 //		GroupBy(mappedcontrolhistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (mchq *MappedControlHistoryQuery) GroupBy(field string, fields ...string) *MappedControlHistoryGroupBy {
-	mchq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &MappedControlHistoryGroupBy{build: mchq}
-	grbuild.flds = &mchq.ctx.Fields
+func (_q *MappedControlHistoryQuery) GroupBy(field string, fields ...string) *MappedControlHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &MappedControlHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = mappedcontrolhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (mchq *MappedControlHistoryQuery) GroupBy(field string, fields ...string) *
 //	client.MappedControlHistory.Query().
 //		Select(mappedcontrolhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (mchq *MappedControlHistoryQuery) Select(fields ...string) *MappedControlHistorySelect {
-	mchq.ctx.Fields = append(mchq.ctx.Fields, fields...)
-	sbuild := &MappedControlHistorySelect{MappedControlHistoryQuery: mchq}
+func (_q *MappedControlHistoryQuery) Select(fields ...string) *MappedControlHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &MappedControlHistorySelect{MappedControlHistoryQuery: _q}
 	sbuild.label = mappedcontrolhistory.Label
-	sbuild.flds, sbuild.scan = &mchq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a MappedControlHistorySelect configured with the given aggregations.
-func (mchq *MappedControlHistoryQuery) Aggregate(fns ...AggregateFunc) *MappedControlHistorySelect {
-	return mchq.Select().Aggregate(fns...)
+func (_q *MappedControlHistoryQuery) Aggregate(fns ...AggregateFunc) *MappedControlHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (mchq *MappedControlHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range mchq.inters {
+func (_q *MappedControlHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, mchq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range mchq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !mappedcontrolhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if mchq.path != nil {
-		prev, err := mchq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		mchq.sql = prev
+		_q.sql = prev
 	}
 	if mappedcontrolhistory.Policy == nil {
 		return errors.New("generated: uninitialized mappedcontrolhistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := mappedcontrolhistory.Policy.EvalQuery(ctx, mchq); err != nil {
+	if err := mappedcontrolhistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (mchq *MappedControlHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*MappedControlHistory, error) {
+func (_q *MappedControlHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*MappedControlHistory, error) {
 	var (
 		nodes = []*MappedControlHistory{}
-		_spec = mchq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*MappedControlHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &MappedControlHistory{config: mchq.config}
+		node := &MappedControlHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = mchq.schemaConfig.MappedControlHistory
-	ctx = internal.NewSchemaConfigContext(ctx, mchq.schemaConfig)
-	if len(mchq.modifiers) > 0 {
-		_spec.Modifiers = mchq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.MappedControlHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, mchq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range mchq.loadTotal {
-		if err := mchq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (mchq *MappedControlHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := mchq.querySpec()
-	_spec.Node.Schema = mchq.schemaConfig.MappedControlHistory
-	ctx = internal.NewSchemaConfigContext(ctx, mchq.schemaConfig)
-	if len(mchq.modifiers) > 0 {
-		_spec.Modifiers = mchq.modifiers
+func (_q *MappedControlHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.MappedControlHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = mchq.ctx.Fields
-	if len(mchq.ctx.Fields) > 0 {
-		_spec.Unique = mchq.ctx.Unique != nil && *mchq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, mchq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (mchq *MappedControlHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *MappedControlHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(mappedcontrolhistory.Table, mappedcontrolhistory.Columns, sqlgraph.NewFieldSpec(mappedcontrolhistory.FieldID, field.TypeString))
-	_spec.From = mchq.sql
-	if unique := mchq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if mchq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := mchq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, mappedcontrolhistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (mchq *MappedControlHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := mchq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := mchq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := mchq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := mchq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (mchq *MappedControlHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (mchq *MappedControlHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(mchq.driver.Dialect())
+func (_q *MappedControlHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(mappedcontrolhistory.Table)
-	columns := mchq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = mappedcontrolhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if mchq.sql != nil {
-		selector = mchq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if mchq.ctx.Unique != nil && *mchq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(mchq.schemaConfig.MappedControlHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, mchq.schemaConfig)
+	t1.Schema(_q.schemaConfig.MappedControlHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range mchq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range mchq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range mchq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := mchq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := mchq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (mchq *MappedControlHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *MappedControlHistorySelect {
-	mchq.modifiers = append(mchq.modifiers, modifiers...)
-	return mchq.Select()
+func (_q *MappedControlHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *MappedControlHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type MappedControlHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (mchgb *MappedControlHistoryGroupBy) Aggregate(fns ...AggregateFunc) *MappedControlHistoryGroupBy {
-	mchgb.fns = append(mchgb.fns, fns...)
-	return mchgb
+func (_g *MappedControlHistoryGroupBy) Aggregate(fns ...AggregateFunc) *MappedControlHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (mchgb *MappedControlHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mchgb.build.ctx, ent.OpQueryGroupBy)
-	if err := mchgb.build.prepareQuery(ctx); err != nil {
+func (_g *MappedControlHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*MappedControlHistoryQuery, *MappedControlHistoryGroupBy](ctx, mchgb.build, mchgb, mchgb.build.inters, v)
+	return scanWithInterceptors[*MappedControlHistoryQuery, *MappedControlHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (mchgb *MappedControlHistoryGroupBy) sqlScan(ctx context.Context, root *MappedControlHistoryQuery, v any) error {
+func (_g *MappedControlHistoryGroupBy) sqlScan(ctx context.Context, root *MappedControlHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(mchgb.fns))
-	for _, fn := range mchgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*mchgb.flds)+len(mchgb.fns))
-		for _, f := range *mchgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*mchgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := mchgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type MappedControlHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (mchs *MappedControlHistorySelect) Aggregate(fns ...AggregateFunc) *MappedControlHistorySelect {
-	mchs.fns = append(mchs.fns, fns...)
-	return mchs
+func (_s *MappedControlHistorySelect) Aggregate(fns ...AggregateFunc) *MappedControlHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (mchs *MappedControlHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mchs.ctx, ent.OpQuerySelect)
-	if err := mchs.prepareQuery(ctx); err != nil {
+func (_s *MappedControlHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*MappedControlHistoryQuery, *MappedControlHistorySelect](ctx, mchs.MappedControlHistoryQuery, mchs, mchs.inters, v)
+	return scanWithInterceptors[*MappedControlHistoryQuery, *MappedControlHistorySelect](ctx, _s.MappedControlHistoryQuery, _s, _s.inters, v)
 }
 
-func (mchs *MappedControlHistorySelect) sqlScan(ctx context.Context, root *MappedControlHistoryQuery, v any) error {
+func (_s *MappedControlHistorySelect) sqlScan(ctx context.Context, root *MappedControlHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(mchs.fns))
-	for _, fn := range mchs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*mchs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (mchs *MappedControlHistorySelect) sqlScan(ctx context.Context, root *Mappe
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := mchs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (mchs *MappedControlHistorySelect) sqlScan(ctx context.Context, root *Mappe
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (mchs *MappedControlHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *MappedControlHistorySelect {
-	mchs.modifiers = append(mchs.modifiers, modifiers...)
-	return mchs
+func (_s *MappedControlHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *MappedControlHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

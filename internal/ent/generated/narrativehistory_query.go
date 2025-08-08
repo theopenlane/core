@@ -33,40 +33,40 @@ type NarrativeHistoryQuery struct {
 }
 
 // Where adds a new predicate for the NarrativeHistoryQuery builder.
-func (nhq *NarrativeHistoryQuery) Where(ps ...predicate.NarrativeHistory) *NarrativeHistoryQuery {
-	nhq.predicates = append(nhq.predicates, ps...)
-	return nhq
+func (_q *NarrativeHistoryQuery) Where(ps ...predicate.NarrativeHistory) *NarrativeHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (nhq *NarrativeHistoryQuery) Limit(limit int) *NarrativeHistoryQuery {
-	nhq.ctx.Limit = &limit
-	return nhq
+func (_q *NarrativeHistoryQuery) Limit(limit int) *NarrativeHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (nhq *NarrativeHistoryQuery) Offset(offset int) *NarrativeHistoryQuery {
-	nhq.ctx.Offset = &offset
-	return nhq
+func (_q *NarrativeHistoryQuery) Offset(offset int) *NarrativeHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (nhq *NarrativeHistoryQuery) Unique(unique bool) *NarrativeHistoryQuery {
-	nhq.ctx.Unique = &unique
-	return nhq
+func (_q *NarrativeHistoryQuery) Unique(unique bool) *NarrativeHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (nhq *NarrativeHistoryQuery) Order(o ...narrativehistory.OrderOption) *NarrativeHistoryQuery {
-	nhq.order = append(nhq.order, o...)
-	return nhq
+func (_q *NarrativeHistoryQuery) Order(o ...narrativehistory.OrderOption) *NarrativeHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first NarrativeHistory entity from the query.
 // Returns a *NotFoundError when no NarrativeHistory was found.
-func (nhq *NarrativeHistoryQuery) First(ctx context.Context) (*NarrativeHistory, error) {
-	nodes, err := nhq.Limit(1).All(setContextOp(ctx, nhq.ctx, ent.OpQueryFirst))
+func (_q *NarrativeHistoryQuery) First(ctx context.Context) (*NarrativeHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (nhq *NarrativeHistoryQuery) First(ctx context.Context) (*NarrativeHistory,
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (nhq *NarrativeHistoryQuery) FirstX(ctx context.Context) *NarrativeHistory {
-	node, err := nhq.First(ctx)
+func (_q *NarrativeHistoryQuery) FirstX(ctx context.Context) *NarrativeHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (nhq *NarrativeHistoryQuery) FirstX(ctx context.Context) *NarrativeHistory 
 
 // FirstID returns the first NarrativeHistory ID from the query.
 // Returns a *NotFoundError when no NarrativeHistory ID was found.
-func (nhq *NarrativeHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *NarrativeHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = nhq.Limit(1).IDs(setContextOp(ctx, nhq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (nhq *NarrativeHistoryQuery) FirstID(ctx context.Context) (id string, err e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (nhq *NarrativeHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := nhq.FirstID(ctx)
+func (_q *NarrativeHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (nhq *NarrativeHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single NarrativeHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one NarrativeHistory entity is found.
 // Returns a *NotFoundError when no NarrativeHistory entities are found.
-func (nhq *NarrativeHistoryQuery) Only(ctx context.Context) (*NarrativeHistory, error) {
-	nodes, err := nhq.Limit(2).All(setContextOp(ctx, nhq.ctx, ent.OpQueryOnly))
+func (_q *NarrativeHistoryQuery) Only(ctx context.Context) (*NarrativeHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (nhq *NarrativeHistoryQuery) Only(ctx context.Context) (*NarrativeHistory, 
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (nhq *NarrativeHistoryQuery) OnlyX(ctx context.Context) *NarrativeHistory {
-	node, err := nhq.Only(ctx)
+func (_q *NarrativeHistoryQuery) OnlyX(ctx context.Context) *NarrativeHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (nhq *NarrativeHistoryQuery) OnlyX(ctx context.Context) *NarrativeHistory {
 // OnlyID is like Only, but returns the only NarrativeHistory ID in the query.
 // Returns a *NotSingularError when more than one NarrativeHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (nhq *NarrativeHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *NarrativeHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = nhq.Limit(2).IDs(setContextOp(ctx, nhq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (nhq *NarrativeHistoryQuery) OnlyID(ctx context.Context) (id string, err er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (nhq *NarrativeHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := nhq.OnlyID(ctx)
+func (_q *NarrativeHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (nhq *NarrativeHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of NarrativeHistories.
-func (nhq *NarrativeHistoryQuery) All(ctx context.Context) ([]*NarrativeHistory, error) {
-	ctx = setContextOp(ctx, nhq.ctx, ent.OpQueryAll)
-	if err := nhq.prepareQuery(ctx); err != nil {
+func (_q *NarrativeHistoryQuery) All(ctx context.Context) ([]*NarrativeHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*NarrativeHistory, *NarrativeHistoryQuery]()
-	return withInterceptors[[]*NarrativeHistory](ctx, nhq, qr, nhq.inters)
+	return withInterceptors[[]*NarrativeHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (nhq *NarrativeHistoryQuery) AllX(ctx context.Context) []*NarrativeHistory {
-	nodes, err := nhq.All(ctx)
+func (_q *NarrativeHistoryQuery) AllX(ctx context.Context) []*NarrativeHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (nhq *NarrativeHistoryQuery) AllX(ctx context.Context) []*NarrativeHistory 
 }
 
 // IDs executes the query and returns a list of NarrativeHistory IDs.
-func (nhq *NarrativeHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if nhq.ctx.Unique == nil && nhq.path != nil {
-		nhq.Unique(true)
+func (_q *NarrativeHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, nhq.ctx, ent.OpQueryIDs)
-	if err = nhq.Select(narrativehistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(narrativehistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (nhq *NarrativeHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := nhq.IDs(ctx)
+func (_q *NarrativeHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (nhq *NarrativeHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (nhq *NarrativeHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, nhq.ctx, ent.OpQueryCount)
-	if err := nhq.prepareQuery(ctx); err != nil {
+func (_q *NarrativeHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, nhq, querierCount[*NarrativeHistoryQuery](), nhq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*NarrativeHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (nhq *NarrativeHistoryQuery) CountX(ctx context.Context) int {
-	count, err := nhq.Count(ctx)
+func (_q *NarrativeHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (nhq *NarrativeHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (nhq *NarrativeHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, nhq.ctx, ent.OpQueryExist)
-	switch _, err := nhq.FirstID(ctx); {
+func (_q *NarrativeHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (nhq *NarrativeHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (nhq *NarrativeHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := nhq.Exist(ctx)
+func (_q *NarrativeHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (nhq *NarrativeHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the NarrativeHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (nhq *NarrativeHistoryQuery) Clone() *NarrativeHistoryQuery {
-	if nhq == nil {
+func (_q *NarrativeHistoryQuery) Clone() *NarrativeHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &NarrativeHistoryQuery{
-		config:     nhq.config,
-		ctx:        nhq.ctx.Clone(),
-		order:      append([]narrativehistory.OrderOption{}, nhq.order...),
-		inters:     append([]Interceptor{}, nhq.inters...),
-		predicates: append([]predicate.NarrativeHistory{}, nhq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]narrativehistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.NarrativeHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       nhq.sql.Clone(),
-		path:      nhq.path,
-		modifiers: append([]func(*sql.Selector){}, nhq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (nhq *NarrativeHistoryQuery) Clone() *NarrativeHistoryQuery {
 //		GroupBy(narrativehistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (nhq *NarrativeHistoryQuery) GroupBy(field string, fields ...string) *NarrativeHistoryGroupBy {
-	nhq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &NarrativeHistoryGroupBy{build: nhq}
-	grbuild.flds = &nhq.ctx.Fields
+func (_q *NarrativeHistoryQuery) GroupBy(field string, fields ...string) *NarrativeHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &NarrativeHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = narrativehistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (nhq *NarrativeHistoryQuery) GroupBy(field string, fields ...string) *Narra
 //	client.NarrativeHistory.Query().
 //		Select(narrativehistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (nhq *NarrativeHistoryQuery) Select(fields ...string) *NarrativeHistorySelect {
-	nhq.ctx.Fields = append(nhq.ctx.Fields, fields...)
-	sbuild := &NarrativeHistorySelect{NarrativeHistoryQuery: nhq}
+func (_q *NarrativeHistoryQuery) Select(fields ...string) *NarrativeHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &NarrativeHistorySelect{NarrativeHistoryQuery: _q}
 	sbuild.label = narrativehistory.Label
-	sbuild.flds, sbuild.scan = &nhq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a NarrativeHistorySelect configured with the given aggregations.
-func (nhq *NarrativeHistoryQuery) Aggregate(fns ...AggregateFunc) *NarrativeHistorySelect {
-	return nhq.Select().Aggregate(fns...)
+func (_q *NarrativeHistoryQuery) Aggregate(fns ...AggregateFunc) *NarrativeHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (nhq *NarrativeHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range nhq.inters {
+func (_q *NarrativeHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, nhq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range nhq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !narrativehistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if nhq.path != nil {
-		prev, err := nhq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		nhq.sql = prev
+		_q.sql = prev
 	}
 	if narrativehistory.Policy == nil {
 		return errors.New("generated: uninitialized narrativehistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := narrativehistory.Policy.EvalQuery(ctx, nhq); err != nil {
+	if err := narrativehistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (nhq *NarrativeHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*NarrativeHistory, error) {
+func (_q *NarrativeHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*NarrativeHistory, error) {
 	var (
 		nodes = []*NarrativeHistory{}
-		_spec = nhq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*NarrativeHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &NarrativeHistory{config: nhq.config}
+		node := &NarrativeHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = nhq.schemaConfig.NarrativeHistory
-	ctx = internal.NewSchemaConfigContext(ctx, nhq.schemaConfig)
-	if len(nhq.modifiers) > 0 {
-		_spec.Modifiers = nhq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.NarrativeHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, nhq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range nhq.loadTotal {
-		if err := nhq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (nhq *NarrativeHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := nhq.querySpec()
-	_spec.Node.Schema = nhq.schemaConfig.NarrativeHistory
-	ctx = internal.NewSchemaConfigContext(ctx, nhq.schemaConfig)
-	if len(nhq.modifiers) > 0 {
-		_spec.Modifiers = nhq.modifiers
+func (_q *NarrativeHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.NarrativeHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = nhq.ctx.Fields
-	if len(nhq.ctx.Fields) > 0 {
-		_spec.Unique = nhq.ctx.Unique != nil && *nhq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, nhq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (nhq *NarrativeHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *NarrativeHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(narrativehistory.Table, narrativehistory.Columns, sqlgraph.NewFieldSpec(narrativehistory.FieldID, field.TypeString))
-	_spec.From = nhq.sql
-	if unique := nhq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if nhq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := nhq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, narrativehistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (nhq *NarrativeHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := nhq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := nhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := nhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := nhq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (nhq *NarrativeHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (nhq *NarrativeHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(nhq.driver.Dialect())
+func (_q *NarrativeHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(narrativehistory.Table)
-	columns := nhq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = narrativehistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if nhq.sql != nil {
-		selector = nhq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if nhq.ctx.Unique != nil && *nhq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(nhq.schemaConfig.NarrativeHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, nhq.schemaConfig)
+	t1.Schema(_q.schemaConfig.NarrativeHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range nhq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range nhq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range nhq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := nhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := nhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (nhq *NarrativeHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *NarrativeHistorySelect {
-	nhq.modifiers = append(nhq.modifiers, modifiers...)
-	return nhq.Select()
+func (_q *NarrativeHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *NarrativeHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type NarrativeHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (nhgb *NarrativeHistoryGroupBy) Aggregate(fns ...AggregateFunc) *NarrativeHistoryGroupBy {
-	nhgb.fns = append(nhgb.fns, fns...)
-	return nhgb
+func (_g *NarrativeHistoryGroupBy) Aggregate(fns ...AggregateFunc) *NarrativeHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (nhgb *NarrativeHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, nhgb.build.ctx, ent.OpQueryGroupBy)
-	if err := nhgb.build.prepareQuery(ctx); err != nil {
+func (_g *NarrativeHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*NarrativeHistoryQuery, *NarrativeHistoryGroupBy](ctx, nhgb.build, nhgb, nhgb.build.inters, v)
+	return scanWithInterceptors[*NarrativeHistoryQuery, *NarrativeHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (nhgb *NarrativeHistoryGroupBy) sqlScan(ctx context.Context, root *NarrativeHistoryQuery, v any) error {
+func (_g *NarrativeHistoryGroupBy) sqlScan(ctx context.Context, root *NarrativeHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(nhgb.fns))
-	for _, fn := range nhgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*nhgb.flds)+len(nhgb.fns))
-		for _, f := range *nhgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*nhgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := nhgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type NarrativeHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (nhs *NarrativeHistorySelect) Aggregate(fns ...AggregateFunc) *NarrativeHistorySelect {
-	nhs.fns = append(nhs.fns, fns...)
-	return nhs
+func (_s *NarrativeHistorySelect) Aggregate(fns ...AggregateFunc) *NarrativeHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (nhs *NarrativeHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, nhs.ctx, ent.OpQuerySelect)
-	if err := nhs.prepareQuery(ctx); err != nil {
+func (_s *NarrativeHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*NarrativeHistoryQuery, *NarrativeHistorySelect](ctx, nhs.NarrativeHistoryQuery, nhs, nhs.inters, v)
+	return scanWithInterceptors[*NarrativeHistoryQuery, *NarrativeHistorySelect](ctx, _s.NarrativeHistoryQuery, _s, _s.inters, v)
 }
 
-func (nhs *NarrativeHistorySelect) sqlScan(ctx context.Context, root *NarrativeHistoryQuery, v any) error {
+func (_s *NarrativeHistorySelect) sqlScan(ctx context.Context, root *NarrativeHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(nhs.fns))
-	for _, fn := range nhs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*nhs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (nhs *NarrativeHistorySelect) sqlScan(ctx context.Context, root *NarrativeH
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := nhs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (nhs *NarrativeHistorySelect) sqlScan(ctx context.Context, root *NarrativeH
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (nhs *NarrativeHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *NarrativeHistorySelect {
-	nhs.modifiers = append(nhs.modifiers, modifiers...)
-	return nhs
+func (_s *NarrativeHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *NarrativeHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

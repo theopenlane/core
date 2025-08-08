@@ -68,7 +68,7 @@ func (*EntityTypeHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the EntityTypeHistory fields.
-func (eth *EntityTypeHistory) assignValues(columns []string, values []any) error {
+func (_m *EntityTypeHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -78,67 +78,67 @@ func (eth *EntityTypeHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				eth.ID = value.String
+				_m.ID = value.String
 			}
 		case entitytypehistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				eth.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case entitytypehistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				eth.Ref = value.String
+				_m.Ref = value.String
 			}
 		case entitytypehistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				eth.Operation = *value
+				_m.Operation = *value
 			}
 		case entitytypehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				eth.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case entitytypehistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				eth.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case entitytypehistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				eth.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case entitytypehistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				eth.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case entitytypehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				eth.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case entitytypehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				eth.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case entitytypehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &eth.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -146,16 +146,16 @@ func (eth *EntityTypeHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				eth.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case entitytypehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				eth.Name = value.String
+				_m.Name = value.String
 			}
 		default:
-			eth.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -163,68 +163,68 @@ func (eth *EntityTypeHistory) assignValues(columns []string, values []any) error
 
 // Value returns the ent.Value that was dynamically selected and assigned to the EntityTypeHistory.
 // This includes values selected through modifiers, order, etc.
-func (eth *EntityTypeHistory) Value(name string) (ent.Value, error) {
-	return eth.selectValues.Get(name)
+func (_m *EntityTypeHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this EntityTypeHistory.
 // Note that you need to call EntityTypeHistory.Unwrap() before calling this method if this EntityTypeHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (eth *EntityTypeHistory) Update() *EntityTypeHistoryUpdateOne {
-	return NewEntityTypeHistoryClient(eth.config).UpdateOne(eth)
+func (_m *EntityTypeHistory) Update() *EntityTypeHistoryUpdateOne {
+	return NewEntityTypeHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the EntityTypeHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (eth *EntityTypeHistory) Unwrap() *EntityTypeHistory {
-	_tx, ok := eth.config.driver.(*txDriver)
+func (_m *EntityTypeHistory) Unwrap() *EntityTypeHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: EntityTypeHistory is not a transactional entity")
 	}
-	eth.config.driver = _tx.drv
-	return eth
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (eth *EntityTypeHistory) String() string {
+func (_m *EntityTypeHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("EntityTypeHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", eth.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(eth.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(eth.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", eth.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(eth.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(eth.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(eth.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(eth.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(eth.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(eth.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", eth.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(eth.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(eth.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -27,177 +27,177 @@ type TrustCenterHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the TrustCenterHistoryUpdate builder.
-func (tchu *TrustCenterHistoryUpdate) Where(ps ...predicate.TrustCenterHistory) *TrustCenterHistoryUpdate {
-	tchu.mutation.Where(ps...)
-	return tchu
+func (_u *TrustCenterHistoryUpdate) Where(ps ...predicate.TrustCenterHistory) *TrustCenterHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tchu *TrustCenterHistoryUpdate) SetUpdatedAt(t time.Time) *TrustCenterHistoryUpdate {
-	tchu.mutation.SetUpdatedAt(t)
-	return tchu
+func (_u *TrustCenterHistoryUpdate) SetUpdatedAt(v time.Time) *TrustCenterHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (tchu *TrustCenterHistoryUpdate) ClearUpdatedAt() *TrustCenterHistoryUpdate {
-	tchu.mutation.ClearUpdatedAt()
-	return tchu
+func (_u *TrustCenterHistoryUpdate) ClearUpdatedAt() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tchu *TrustCenterHistoryUpdate) SetUpdatedBy(s string) *TrustCenterHistoryUpdate {
-	tchu.mutation.SetUpdatedBy(s)
-	return tchu
+func (_u *TrustCenterHistoryUpdate) SetUpdatedBy(v string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tchu *TrustCenterHistoryUpdate) SetNillableUpdatedBy(s *string) *TrustCenterHistoryUpdate {
-	if s != nil {
-		tchu.SetUpdatedBy(*s)
+func (_u *TrustCenterHistoryUpdate) SetNillableUpdatedBy(v *string) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return tchu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (tchu *TrustCenterHistoryUpdate) ClearUpdatedBy() *TrustCenterHistoryUpdate {
-	tchu.mutation.ClearUpdatedBy()
-	return tchu
+func (_u *TrustCenterHistoryUpdate) ClearUpdatedBy() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tchu *TrustCenterHistoryUpdate) SetDeletedAt(t time.Time) *TrustCenterHistoryUpdate {
-	tchu.mutation.SetDeletedAt(t)
-	return tchu
+func (_u *TrustCenterHistoryUpdate) SetDeletedAt(v time.Time) *TrustCenterHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tchu *TrustCenterHistoryUpdate) SetNillableDeletedAt(t *time.Time) *TrustCenterHistoryUpdate {
-	if t != nil {
-		tchu.SetDeletedAt(*t)
+func (_u *TrustCenterHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return tchu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (tchu *TrustCenterHistoryUpdate) ClearDeletedAt() *TrustCenterHistoryUpdate {
-	tchu.mutation.ClearDeletedAt()
-	return tchu
+func (_u *TrustCenterHistoryUpdate) ClearDeletedAt() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tchu *TrustCenterHistoryUpdate) SetDeletedBy(s string) *TrustCenterHistoryUpdate {
-	tchu.mutation.SetDeletedBy(s)
-	return tchu
+func (_u *TrustCenterHistoryUpdate) SetDeletedBy(v string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tchu *TrustCenterHistoryUpdate) SetNillableDeletedBy(s *string) *TrustCenterHistoryUpdate {
-	if s != nil {
-		tchu.SetDeletedBy(*s)
+func (_u *TrustCenterHistoryUpdate) SetNillableDeletedBy(v *string) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return tchu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (tchu *TrustCenterHistoryUpdate) ClearDeletedBy() *TrustCenterHistoryUpdate {
-	tchu.mutation.ClearDeletedBy()
-	return tchu
+func (_u *TrustCenterHistoryUpdate) ClearDeletedBy() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (tchu *TrustCenterHistoryUpdate) SetTags(s []string) *TrustCenterHistoryUpdate {
-	tchu.mutation.SetTags(s)
-	return tchu
+func (_u *TrustCenterHistoryUpdate) SetTags(v []string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (tchu *TrustCenterHistoryUpdate) AppendTags(s []string) *TrustCenterHistoryUpdate {
-	tchu.mutation.AppendTags(s)
-	return tchu
+// AppendTags appends value to the "tags" field.
+func (_u *TrustCenterHistoryUpdate) AppendTags(v []string) *TrustCenterHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (tchu *TrustCenterHistoryUpdate) ClearTags() *TrustCenterHistoryUpdate {
-	tchu.mutation.ClearTags()
-	return tchu
+func (_u *TrustCenterHistoryUpdate) ClearTags() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (tchu *TrustCenterHistoryUpdate) SetOwnerID(s string) *TrustCenterHistoryUpdate {
-	tchu.mutation.SetOwnerID(s)
-	return tchu
+func (_u *TrustCenterHistoryUpdate) SetOwnerID(v string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (tchu *TrustCenterHistoryUpdate) SetNillableOwnerID(s *string) *TrustCenterHistoryUpdate {
-	if s != nil {
-		tchu.SetOwnerID(*s)
+func (_u *TrustCenterHistoryUpdate) SetNillableOwnerID(v *string) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return tchu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (tchu *TrustCenterHistoryUpdate) ClearOwnerID() *TrustCenterHistoryUpdate {
-	tchu.mutation.ClearOwnerID()
-	return tchu
+func (_u *TrustCenterHistoryUpdate) ClearOwnerID() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetSlug sets the "slug" field.
-func (tchu *TrustCenterHistoryUpdate) SetSlug(s string) *TrustCenterHistoryUpdate {
-	tchu.mutation.SetSlug(s)
-	return tchu
+func (_u *TrustCenterHistoryUpdate) SetSlug(v string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetSlug(v)
+	return _u
 }
 
 // SetNillableSlug sets the "slug" field if the given value is not nil.
-func (tchu *TrustCenterHistoryUpdate) SetNillableSlug(s *string) *TrustCenterHistoryUpdate {
-	if s != nil {
-		tchu.SetSlug(*s)
+func (_u *TrustCenterHistoryUpdate) SetNillableSlug(v *string) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetSlug(*v)
 	}
-	return tchu
+	return _u
 }
 
 // ClearSlug clears the value of the "slug" field.
-func (tchu *TrustCenterHistoryUpdate) ClearSlug() *TrustCenterHistoryUpdate {
-	tchu.mutation.ClearSlug()
-	return tchu
+func (_u *TrustCenterHistoryUpdate) ClearSlug() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearSlug()
+	return _u
 }
 
 // SetCustomDomainID sets the "custom_domain_id" field.
-func (tchu *TrustCenterHistoryUpdate) SetCustomDomainID(s string) *TrustCenterHistoryUpdate {
-	tchu.mutation.SetCustomDomainID(s)
-	return tchu
+func (_u *TrustCenterHistoryUpdate) SetCustomDomainID(v string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetCustomDomainID(v)
+	return _u
 }
 
 // SetNillableCustomDomainID sets the "custom_domain_id" field if the given value is not nil.
-func (tchu *TrustCenterHistoryUpdate) SetNillableCustomDomainID(s *string) *TrustCenterHistoryUpdate {
-	if s != nil {
-		tchu.SetCustomDomainID(*s)
+func (_u *TrustCenterHistoryUpdate) SetNillableCustomDomainID(v *string) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetCustomDomainID(*v)
 	}
-	return tchu
+	return _u
 }
 
 // ClearCustomDomainID clears the value of the "custom_domain_id" field.
-func (tchu *TrustCenterHistoryUpdate) ClearCustomDomainID() *TrustCenterHistoryUpdate {
-	tchu.mutation.ClearCustomDomainID()
-	return tchu
+func (_u *TrustCenterHistoryUpdate) ClearCustomDomainID() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearCustomDomainID()
+	return _u
 }
 
 // Mutation returns the TrustCenterHistoryMutation object of the builder.
-func (tchu *TrustCenterHistoryUpdate) Mutation() *TrustCenterHistoryMutation {
-	return tchu.mutation
+func (_u *TrustCenterHistoryUpdate) Mutation() *TrustCenterHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tchu *TrustCenterHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := tchu.defaults(); err != nil {
+func (_u *TrustCenterHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, tchu.sqlSave, tchu.mutation, tchu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tchu *TrustCenterHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := tchu.Save(ctx)
+func (_u *TrustCenterHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -205,111 +205,111 @@ func (tchu *TrustCenterHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (tchu *TrustCenterHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := tchu.Save(ctx)
+func (_u *TrustCenterHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tchu *TrustCenterHistoryUpdate) ExecX(ctx context.Context) {
-	if err := tchu.Exec(ctx); err != nil {
+func (_u *TrustCenterHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tchu *TrustCenterHistoryUpdate) defaults() error {
-	if _, ok := tchu.mutation.UpdatedAt(); !ok && !tchu.mutation.UpdatedAtCleared() {
+func (_u *TrustCenterHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcenterhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcenterhistory.UpdateDefaultUpdatedAt()
-		tchu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tchu *TrustCenterHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterHistoryUpdate {
-	tchu.modifiers = append(tchu.modifiers, modifiers...)
-	return tchu
+func (_u *TrustCenterHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tchu *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(trustcenterhistory.Table, trustcenterhistory.Columns, sqlgraph.NewFieldSpec(trustcenterhistory.FieldID, field.TypeString))
-	if ps := tchu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tchu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(trustcenterhistory.FieldRef, field.TypeString)
 	}
-	if tchu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := tchu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(trustcenterhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if tchu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcenterhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if tchu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := tchu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcenterhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if tchu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenterhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := tchu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcenterhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if tchu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcenterhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tchu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(trustcenterhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if tchu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tchu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(trustcenterhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := tchu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, trustcenterhistory.FieldTags, value)
 		})
 	}
-	if tchu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := tchu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(trustcenterhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if tchu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(trustcenterhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := tchu.mutation.Slug(); ok {
+	if value, ok := _u.mutation.Slug(); ok {
 		_spec.SetField(trustcenterhistory.FieldSlug, field.TypeString, value)
 	}
-	if tchu.mutation.SlugCleared() {
+	if _u.mutation.SlugCleared() {
 		_spec.ClearField(trustcenterhistory.FieldSlug, field.TypeString)
 	}
-	if value, ok := tchu.mutation.CustomDomainID(); ok {
+	if value, ok := _u.mutation.CustomDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldCustomDomainID, field.TypeString, value)
 	}
-	if tchu.mutation.CustomDomainIDCleared() {
+	if _u.mutation.CustomDomainIDCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCustomDomainID, field.TypeString)
 	}
-	_spec.Node.Schema = tchu.schemaConfig.TrustCenterHistory
-	ctx = internal.NewSchemaConfigContext(ctx, tchu.schemaConfig)
-	_spec.AddModifiers(tchu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, tchu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.TrustCenterHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcenterhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -317,8 +317,8 @@ func (tchu *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 		}
 		return 0, err
 	}
-	tchu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TrustCenterHistoryUpdateOne is the builder for updating a single TrustCenterHistory entity.
@@ -331,184 +331,184 @@ type TrustCenterHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tchuo *TrustCenterHistoryUpdateOne) SetUpdatedAt(t time.Time) *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.SetUpdatedAt(t)
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (tchuo *TrustCenterHistoryUpdateOne) ClearUpdatedAt() *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.ClearUpdatedAt()
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) ClearUpdatedAt() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tchuo *TrustCenterHistoryUpdateOne) SetUpdatedBy(s string) *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.SetUpdatedBy(s)
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) SetUpdatedBy(v string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tchuo *TrustCenterHistoryUpdateOne) SetNillableUpdatedBy(s *string) *TrustCenterHistoryUpdateOne {
-	if s != nil {
-		tchuo.SetUpdatedBy(*s)
+func (_u *TrustCenterHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return tchuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (tchuo *TrustCenterHistoryUpdateOne) ClearUpdatedBy() *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.ClearUpdatedBy()
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) ClearUpdatedBy() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tchuo *TrustCenterHistoryUpdateOne) SetDeletedAt(t time.Time) *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.SetDeletedAt(t)
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) SetDeletedAt(v time.Time) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tchuo *TrustCenterHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *TrustCenterHistoryUpdateOne {
-	if t != nil {
-		tchuo.SetDeletedAt(*t)
+func (_u *TrustCenterHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return tchuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (tchuo *TrustCenterHistoryUpdateOne) ClearDeletedAt() *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.ClearDeletedAt()
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) ClearDeletedAt() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tchuo *TrustCenterHistoryUpdateOne) SetDeletedBy(s string) *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.SetDeletedBy(s)
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) SetDeletedBy(v string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tchuo *TrustCenterHistoryUpdateOne) SetNillableDeletedBy(s *string) *TrustCenterHistoryUpdateOne {
-	if s != nil {
-		tchuo.SetDeletedBy(*s)
+func (_u *TrustCenterHistoryUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return tchuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (tchuo *TrustCenterHistoryUpdateOne) ClearDeletedBy() *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.ClearDeletedBy()
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) ClearDeletedBy() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (tchuo *TrustCenterHistoryUpdateOne) SetTags(s []string) *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.SetTags(s)
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) SetTags(v []string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (tchuo *TrustCenterHistoryUpdateOne) AppendTags(s []string) *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.AppendTags(s)
-	return tchuo
+// AppendTags appends value to the "tags" field.
+func (_u *TrustCenterHistoryUpdateOne) AppendTags(v []string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (tchuo *TrustCenterHistoryUpdateOne) ClearTags() *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.ClearTags()
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) ClearTags() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (tchuo *TrustCenterHistoryUpdateOne) SetOwnerID(s string) *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.SetOwnerID(s)
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) SetOwnerID(v string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (tchuo *TrustCenterHistoryUpdateOne) SetNillableOwnerID(s *string) *TrustCenterHistoryUpdateOne {
-	if s != nil {
-		tchuo.SetOwnerID(*s)
+func (_u *TrustCenterHistoryUpdateOne) SetNillableOwnerID(v *string) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return tchuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (tchuo *TrustCenterHistoryUpdateOne) ClearOwnerID() *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.ClearOwnerID()
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) ClearOwnerID() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetSlug sets the "slug" field.
-func (tchuo *TrustCenterHistoryUpdateOne) SetSlug(s string) *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.SetSlug(s)
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) SetSlug(v string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetSlug(v)
+	return _u
 }
 
 // SetNillableSlug sets the "slug" field if the given value is not nil.
-func (tchuo *TrustCenterHistoryUpdateOne) SetNillableSlug(s *string) *TrustCenterHistoryUpdateOne {
-	if s != nil {
-		tchuo.SetSlug(*s)
+func (_u *TrustCenterHistoryUpdateOne) SetNillableSlug(v *string) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetSlug(*v)
 	}
-	return tchuo
+	return _u
 }
 
 // ClearSlug clears the value of the "slug" field.
-func (tchuo *TrustCenterHistoryUpdateOne) ClearSlug() *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.ClearSlug()
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) ClearSlug() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearSlug()
+	return _u
 }
 
 // SetCustomDomainID sets the "custom_domain_id" field.
-func (tchuo *TrustCenterHistoryUpdateOne) SetCustomDomainID(s string) *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.SetCustomDomainID(s)
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) SetCustomDomainID(v string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetCustomDomainID(v)
+	return _u
 }
 
 // SetNillableCustomDomainID sets the "custom_domain_id" field if the given value is not nil.
-func (tchuo *TrustCenterHistoryUpdateOne) SetNillableCustomDomainID(s *string) *TrustCenterHistoryUpdateOne {
-	if s != nil {
-		tchuo.SetCustomDomainID(*s)
+func (_u *TrustCenterHistoryUpdateOne) SetNillableCustomDomainID(v *string) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetCustomDomainID(*v)
 	}
-	return tchuo
+	return _u
 }
 
 // ClearCustomDomainID clears the value of the "custom_domain_id" field.
-func (tchuo *TrustCenterHistoryUpdateOne) ClearCustomDomainID() *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.ClearCustomDomainID()
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) ClearCustomDomainID() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearCustomDomainID()
+	return _u
 }
 
 // Mutation returns the TrustCenterHistoryMutation object of the builder.
-func (tchuo *TrustCenterHistoryUpdateOne) Mutation() *TrustCenterHistoryMutation {
-	return tchuo.mutation
+func (_u *TrustCenterHistoryUpdateOne) Mutation() *TrustCenterHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TrustCenterHistoryUpdate builder.
-func (tchuo *TrustCenterHistoryUpdateOne) Where(ps ...predicate.TrustCenterHistory) *TrustCenterHistoryUpdateOne {
-	tchuo.mutation.Where(ps...)
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) Where(ps ...predicate.TrustCenterHistory) *TrustCenterHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tchuo *TrustCenterHistoryUpdateOne) Select(field string, fields ...string) *TrustCenterHistoryUpdateOne {
-	tchuo.fields = append([]string{field}, fields...)
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) Select(field string, fields ...string) *TrustCenterHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TrustCenterHistory entity.
-func (tchuo *TrustCenterHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterHistory, error) {
-	if err := tchuo.defaults(); err != nil {
+func (_u *TrustCenterHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, tchuo.sqlSave, tchuo.mutation, tchuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tchuo *TrustCenterHistoryUpdateOne) SaveX(ctx context.Context) *TrustCenterHistory {
-	node, err := tchuo.Save(ctx)
+func (_u *TrustCenterHistoryUpdateOne) SaveX(ctx context.Context) *TrustCenterHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -516,44 +516,44 @@ func (tchuo *TrustCenterHistoryUpdateOne) SaveX(ctx context.Context) *TrustCente
 }
 
 // Exec executes the query on the entity.
-func (tchuo *TrustCenterHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := tchuo.Save(ctx)
+func (_u *TrustCenterHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tchuo *TrustCenterHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := tchuo.Exec(ctx); err != nil {
+func (_u *TrustCenterHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tchuo *TrustCenterHistoryUpdateOne) defaults() error {
-	if _, ok := tchuo.mutation.UpdatedAt(); !ok && !tchuo.mutation.UpdatedAtCleared() {
+func (_u *TrustCenterHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcenterhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcenterhistory.UpdateDefaultUpdatedAt()
-		tchuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tchuo *TrustCenterHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterHistoryUpdateOne {
-	tchuo.modifiers = append(tchuo.modifiers, modifiers...)
-	return tchuo
+func (_u *TrustCenterHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tchuo *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterHistory, err error) {
+func (_u *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(trustcenterhistory.Table, trustcenterhistory.Columns, sqlgraph.NewFieldSpec(trustcenterhistory.FieldID, field.TypeString))
-	id, ok := tchuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "TrustCenterHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tchuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, trustcenterhistory.FieldID)
 		for _, f := range fields {
@@ -565,82 +565,82 @@ func (tchuo *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 			}
 		}
 	}
-	if ps := tchuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tchuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(trustcenterhistory.FieldRef, field.TypeString)
 	}
-	if tchuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := tchuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(trustcenterhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if tchuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcenterhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if tchuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := tchuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcenterhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if tchuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenterhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := tchuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcenterhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if tchuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcenterhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tchuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(trustcenterhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if tchuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tchuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(trustcenterhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := tchuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, trustcenterhistory.FieldTags, value)
 		})
 	}
-	if tchuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := tchuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(trustcenterhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if tchuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(trustcenterhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := tchuo.mutation.Slug(); ok {
+	if value, ok := _u.mutation.Slug(); ok {
 		_spec.SetField(trustcenterhistory.FieldSlug, field.TypeString, value)
 	}
-	if tchuo.mutation.SlugCleared() {
+	if _u.mutation.SlugCleared() {
 		_spec.ClearField(trustcenterhistory.FieldSlug, field.TypeString)
 	}
-	if value, ok := tchuo.mutation.CustomDomainID(); ok {
+	if value, ok := _u.mutation.CustomDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldCustomDomainID, field.TypeString, value)
 	}
-	if tchuo.mutation.CustomDomainIDCleared() {
+	if _u.mutation.CustomDomainIDCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCustomDomainID, field.TypeString)
 	}
-	_spec.Node.Schema = tchuo.schemaConfig.TrustCenterHistory
-	ctx = internal.NewSchemaConfigContext(ctx, tchuo.schemaConfig)
-	_spec.AddModifiers(tchuo.modifiers...)
-	_node = &TrustCenterHistory{config: tchuo.config}
+	_spec.Node.Schema = _u.schemaConfig.TrustCenterHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &TrustCenterHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tchuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcenterhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -648,6 +648,6 @@ func (tchuo *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 		}
 		return nil, err
 	}
-	tchuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

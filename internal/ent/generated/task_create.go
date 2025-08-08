@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -35,414 +36,429 @@ type TaskCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tc *TaskCreate) SetCreatedAt(t time.Time) *TaskCreate {
-	tc.mutation.SetCreatedAt(t)
-	return tc
+func (_c *TaskCreate) SetCreatedAt(v time.Time) *TaskCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableCreatedAt(t *time.Time) *TaskCreate {
-	if t != nil {
-		tc.SetCreatedAt(*t)
+func (_c *TaskCreate) SetNillableCreatedAt(v *time.Time) *TaskCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tc *TaskCreate) SetUpdatedAt(t time.Time) *TaskCreate {
-	tc.mutation.SetUpdatedAt(t)
-	return tc
+func (_c *TaskCreate) SetUpdatedAt(v time.Time) *TaskCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableUpdatedAt(t *time.Time) *TaskCreate {
-	if t != nil {
-		tc.SetUpdatedAt(*t)
+func (_c *TaskCreate) SetNillableUpdatedAt(v *time.Time) *TaskCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (tc *TaskCreate) SetCreatedBy(s string) *TaskCreate {
-	tc.mutation.SetCreatedBy(s)
-	return tc
+func (_c *TaskCreate) SetCreatedBy(v string) *TaskCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableCreatedBy(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetCreatedBy(*s)
+func (_c *TaskCreate) SetNillableCreatedBy(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tc *TaskCreate) SetUpdatedBy(s string) *TaskCreate {
-	tc.mutation.SetUpdatedBy(s)
-	return tc
+func (_c *TaskCreate) SetUpdatedBy(v string) *TaskCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableUpdatedBy(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetUpdatedBy(*s)
+func (_c *TaskCreate) SetNillableUpdatedBy(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tc *TaskCreate) SetDeletedAt(t time.Time) *TaskCreate {
-	tc.mutation.SetDeletedAt(t)
-	return tc
+func (_c *TaskCreate) SetDeletedAt(v time.Time) *TaskCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableDeletedAt(t *time.Time) *TaskCreate {
-	if t != nil {
-		tc.SetDeletedAt(*t)
+func (_c *TaskCreate) SetNillableDeletedAt(v *time.Time) *TaskCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tc *TaskCreate) SetDeletedBy(s string) *TaskCreate {
-	tc.mutation.SetDeletedBy(s)
-	return tc
+func (_c *TaskCreate) SetDeletedBy(v string) *TaskCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableDeletedBy(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetDeletedBy(*s)
+func (_c *TaskCreate) SetNillableDeletedBy(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (tc *TaskCreate) SetDisplayID(s string) *TaskCreate {
-	tc.mutation.SetDisplayID(s)
-	return tc
+func (_c *TaskCreate) SetDisplayID(v string) *TaskCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (tc *TaskCreate) SetTags(s []string) *TaskCreate {
-	tc.mutation.SetTags(s)
-	return tc
+func (_c *TaskCreate) SetTags(v []string) *TaskCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (tc *TaskCreate) SetOwnerID(s string) *TaskCreate {
-	tc.mutation.SetOwnerID(s)
-	return tc
+func (_c *TaskCreate) SetOwnerID(v string) *TaskCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableOwnerID(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetOwnerID(*s)
+func (_c *TaskCreate) SetNillableOwnerID(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetTitle sets the "title" field.
-func (tc *TaskCreate) SetTitle(s string) *TaskCreate {
-	tc.mutation.SetTitle(s)
-	return tc
+func (_c *TaskCreate) SetTitle(v string) *TaskCreate {
+	_c.mutation.SetTitle(v)
+	return _c
 }
 
 // SetDetails sets the "details" field.
-func (tc *TaskCreate) SetDetails(s string) *TaskCreate {
-	tc.mutation.SetDetails(s)
-	return tc
+func (_c *TaskCreate) SetDetails(v string) *TaskCreate {
+	_c.mutation.SetDetails(v)
+	return _c
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableDetails(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetDetails(*s)
+func (_c *TaskCreate) SetNillableDetails(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetDetails(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (tc *TaskCreate) SetStatus(es enums.TaskStatus) *TaskCreate {
-	tc.mutation.SetStatus(es)
-	return tc
+func (_c *TaskCreate) SetStatus(v enums.TaskStatus) *TaskCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableStatus(es *enums.TaskStatus) *TaskCreate {
-	if es != nil {
-		tc.SetStatus(*es)
+func (_c *TaskCreate) SetNillableStatus(v *enums.TaskStatus) *TaskCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetCategory sets the "category" field.
-func (tc *TaskCreate) SetCategory(s string) *TaskCreate {
-	tc.mutation.SetCategory(s)
-	return tc
+func (_c *TaskCreate) SetCategory(v string) *TaskCreate {
+	_c.mutation.SetCategory(v)
+	return _c
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableCategory(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetCategory(*s)
+func (_c *TaskCreate) SetNillableCategory(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetCategory(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetDue sets the "due" field.
-func (tc *TaskCreate) SetDue(mt models.DateTime) *TaskCreate {
-	tc.mutation.SetDue(mt)
-	return tc
+func (_c *TaskCreate) SetDue(v models.DateTime) *TaskCreate {
+	_c.mutation.SetDue(v)
+	return _c
 }
 
 // SetNillableDue sets the "due" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableDue(mt *models.DateTime) *TaskCreate {
-	if mt != nil {
-		tc.SetDue(*mt)
+func (_c *TaskCreate) SetNillableDue(v *models.DateTime) *TaskCreate {
+	if v != nil {
+		_c.SetDue(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetCompleted sets the "completed" field.
-func (tc *TaskCreate) SetCompleted(mt models.DateTime) *TaskCreate {
-	tc.mutation.SetCompleted(mt)
-	return tc
+func (_c *TaskCreate) SetCompleted(v models.DateTime) *TaskCreate {
+	_c.mutation.SetCompleted(v)
+	return _c
 }
 
 // SetNillableCompleted sets the "completed" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableCompleted(mt *models.DateTime) *TaskCreate {
-	if mt != nil {
-		tc.SetCompleted(*mt)
+func (_c *TaskCreate) SetNillableCompleted(v *models.DateTime) *TaskCreate {
+	if v != nil {
+		_c.SetCompleted(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetAssigneeID sets the "assignee_id" field.
-func (tc *TaskCreate) SetAssigneeID(s string) *TaskCreate {
-	tc.mutation.SetAssigneeID(s)
-	return tc
+func (_c *TaskCreate) SetAssigneeID(v string) *TaskCreate {
+	_c.mutation.SetAssigneeID(v)
+	return _c
 }
 
 // SetNillableAssigneeID sets the "assignee_id" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableAssigneeID(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetAssigneeID(*s)
+func (_c *TaskCreate) SetNillableAssigneeID(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetAssigneeID(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetAssignerID sets the "assigner_id" field.
-func (tc *TaskCreate) SetAssignerID(s string) *TaskCreate {
-	tc.mutation.SetAssignerID(s)
-	return tc
+func (_c *TaskCreate) SetAssignerID(v string) *TaskCreate {
+	_c.mutation.SetAssignerID(v)
+	return _c
 }
 
 // SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableAssignerID(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetAssignerID(*s)
+func (_c *TaskCreate) SetNillableAssignerID(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetAssignerID(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tc *TaskCreate) SetID(s string) *TaskCreate {
-	tc.mutation.SetID(s)
-	return tc
+func (_c *TaskCreate) SetID(v string) *TaskCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableID(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetID(*s)
+func (_c *TaskCreate) SetNillableID(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (tc *TaskCreate) SetOwner(o *Organization) *TaskCreate {
-	return tc.SetOwnerID(o.ID)
+func (_c *TaskCreate) SetOwner(v *Organization) *TaskCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // SetAssigner sets the "assigner" edge to the User entity.
-func (tc *TaskCreate) SetAssigner(u *User) *TaskCreate {
-	return tc.SetAssignerID(u.ID)
+func (_c *TaskCreate) SetAssigner(v *User) *TaskCreate {
+	return _c.SetAssignerID(v.ID)
 }
 
 // SetAssignee sets the "assignee" edge to the User entity.
-func (tc *TaskCreate) SetAssignee(u *User) *TaskCreate {
-	return tc.SetAssigneeID(u.ID)
+func (_c *TaskCreate) SetAssignee(v *User) *TaskCreate {
+	return _c.SetAssigneeID(v.ID)
 }
 
 // AddCommentIDs adds the "comments" edge to the Note entity by IDs.
-func (tc *TaskCreate) AddCommentIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddCommentIDs(ids...)
-	return tc
+func (_c *TaskCreate) AddCommentIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddCommentIDs(ids...)
+	return _c
 }
 
 // AddComments adds the "comments" edges to the Note entity.
-func (tc *TaskCreate) AddComments(n ...*Note) *TaskCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_c *TaskCreate) AddComments(v ...*Note) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddCommentIDs(ids...)
+	return _c.AddCommentIDs(ids...)
 }
 
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
-func (tc *TaskCreate) AddGroupIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddGroupIDs(ids...)
-	return tc
+func (_c *TaskCreate) AddGroupIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddGroupIDs(ids...)
+	return _c
 }
 
 // AddGroups adds the "groups" edges to the Group entity.
-func (tc *TaskCreate) AddGroups(g ...*Group) *TaskCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *TaskCreate) AddGroups(v ...*Group) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddGroupIDs(ids...)
+	return _c.AddGroupIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (tc *TaskCreate) AddInternalPolicyIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddInternalPolicyIDs(ids...)
-	return tc
+func (_c *TaskCreate) AddInternalPolicyIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (tc *TaskCreate) AddInternalPolicies(i ...*InternalPolicy) *TaskCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *TaskCreate) AddInternalPolicies(v ...*InternalPolicy) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddInternalPolicyIDs(ids...)
+	return _c.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (tc *TaskCreate) AddProcedureIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddProcedureIDs(ids...)
-	return tc
+func (_c *TaskCreate) AddProcedureIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddProcedureIDs(ids...)
+	return _c
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (tc *TaskCreate) AddProcedures(p ...*Procedure) *TaskCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *TaskCreate) AddProcedures(v ...*Procedure) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddProcedureIDs(ids...)
+	return _c.AddProcedureIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (tc *TaskCreate) AddControlIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddControlIDs(ids...)
-	return tc
+func (_c *TaskCreate) AddControlIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (tc *TaskCreate) AddControls(c ...*Control) *TaskCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *TaskCreate) AddControls(v ...*Control) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddControlIDs(ids...)
+	return _c.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (tc *TaskCreate) AddSubcontrolIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddSubcontrolIDs(ids...)
-	return tc
+func (_c *TaskCreate) AddSubcontrolIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddSubcontrolIDs(ids...)
+	return _c
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (tc *TaskCreate) AddSubcontrols(s ...*Subcontrol) *TaskCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *TaskCreate) AddSubcontrols(v ...*Subcontrol) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddSubcontrolIDs(ids...)
+	return _c.AddSubcontrolIDs(ids...)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (tc *TaskCreate) AddControlObjectiveIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddControlObjectiveIDs(ids...)
-	return tc
+func (_c *TaskCreate) AddControlObjectiveIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddControlObjectiveIDs(ids...)
+	return _c
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (tc *TaskCreate) AddControlObjectives(c ...*ControlObjective) *TaskCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *TaskCreate) AddControlObjectives(v ...*ControlObjective) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddControlObjectiveIDs(ids...)
+	return _c.AddControlObjectiveIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (tc *TaskCreate) AddProgramIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddProgramIDs(ids...)
-	return tc
+func (_c *TaskCreate) AddProgramIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddProgramIDs(ids...)
+	return _c
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (tc *TaskCreate) AddPrograms(p ...*Program) *TaskCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *TaskCreate) AddPrograms(v ...*Program) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddProgramIDs(ids...)
+	return _c.AddProgramIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (tc *TaskCreate) AddRiskIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddRiskIDs(ids...)
-	return tc
+func (_c *TaskCreate) AddRiskIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddRiskIDs(ids...)
+	return _c
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (tc *TaskCreate) AddRisks(r ...*Risk) *TaskCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_c *TaskCreate) AddRisks(v ...*Risk) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddRiskIDs(ids...)
+	return _c.AddRiskIDs(ids...)
+}
+
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_c *TaskCreate) AddControlImplementationIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddControlImplementationIDs(ids...)
+	return _c
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_c *TaskCreate) AddControlImplementations(v ...*ControlImplementation) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddControlImplementationIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (tc *TaskCreate) AddEvidenceIDs(ids ...string) *TaskCreate {
-	tc.mutation.AddEvidenceIDs(ids...)
-	return tc
+func (_c *TaskCreate) AddEvidenceIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddEvidenceIDs(ids...)
+	return _c
 }
 
 // AddEvidence adds the "evidence" edges to the Evidence entity.
-func (tc *TaskCreate) AddEvidence(e ...*Evidence) *TaskCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *TaskCreate) AddEvidence(v ...*Evidence) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddEvidenceIDs(ids...)
+	return _c.AddEvidenceIDs(ids...)
 }
 
 // Mutation returns the TaskMutation object of the builder.
-func (tc *TaskCreate) Mutation() *TaskMutation {
-	return tc.mutation
+func (_c *TaskCreate) Mutation() *TaskMutation {
+	return _c.mutation
 }
 
 // Save creates the Task in the database.
-func (tc *TaskCreate) Save(ctx context.Context) (*Task, error) {
-	if err := tc.defaults(); err != nil {
+func (_c *TaskCreate) Save(ctx context.Context) (*Task, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, tc.sqlSave, tc.mutation, tc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tc *TaskCreate) SaveX(ctx context.Context) *Task {
-	v, err := tc.Save(ctx)
+func (_c *TaskCreate) SaveX(ctx context.Context) *Task {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -450,79 +466,79 @@ func (tc *TaskCreate) SaveX(ctx context.Context) *Task {
 }
 
 // Exec executes the query.
-func (tc *TaskCreate) Exec(ctx context.Context) error {
-	_, err := tc.Save(ctx)
+func (_c *TaskCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tc *TaskCreate) ExecX(ctx context.Context) {
-	if err := tc.Exec(ctx); err != nil {
+func (_c *TaskCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tc *TaskCreate) defaults() error {
-	if _, ok := tc.mutation.CreatedAt(); !ok {
+func (_c *TaskCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if task.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized task.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := task.DefaultCreatedAt()
-		tc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := tc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if task.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized task.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := task.DefaultUpdatedAt()
-		tc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := tc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := task.DefaultTags
-		tc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := tc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := task.DefaultStatus
-		tc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := tc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if task.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized task.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := task.DefaultID()
-		tc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tc *TaskCreate) check() error {
-	if _, ok := tc.mutation.DisplayID(); !ok {
+func (_c *TaskCreate) check() error {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Task.display_id"`)}
 	}
-	if v, ok := tc.mutation.DisplayID(); ok {
+	if v, ok := _c.mutation.DisplayID(); ok {
 		if err := task.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Task.display_id": %w`, err)}
 		}
 	}
-	if v, ok := tc.mutation.OwnerID(); ok {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := task.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Task.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := tc.mutation.Title(); !ok {
+	if _, ok := _c.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`generated: missing required field "Task.title"`)}
 	}
-	if v, ok := tc.mutation.Title(); ok {
+	if v, ok := _c.mutation.Title(); ok {
 		if err := task.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "Task.title": %w`, err)}
 		}
 	}
-	if _, ok := tc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "Task.status"`)}
 	}
-	if v, ok := tc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := task.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Task.status": %w`, err)}
 		}
@@ -530,12 +546,12 @@ func (tc *TaskCreate) check() error {
 	return nil
 }
 
-func (tc *TaskCreate) sqlSave(ctx context.Context) (*Task, error) {
-	if err := tc.check(); err != nil {
+func (_c *TaskCreate) sqlSave(ctx context.Context) (*Task, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -548,78 +564,78 @@ func (tc *TaskCreate) sqlSave(ctx context.Context) (*Task, error) {
 			return nil, fmt.Errorf("unexpected Task.ID type: %T", _spec.ID.Value)
 		}
 	}
-	tc.mutation.id = &_node.ID
-	tc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
+func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Task{config: tc.config}
+		_node = &Task{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(task.Table, sqlgraph.NewFieldSpec(task.FieldID, field.TypeString))
 	)
-	_spec.Schema = tc.schemaConfig.Task
-	if id, ok := tc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Task
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := tc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(task.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := tc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(task.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := tc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(task.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := tc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(task.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := tc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(task.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := tc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(task.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := tc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(task.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := tc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(task.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := tc.mutation.Title(); ok {
+	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(task.FieldTitle, field.TypeString, value)
 		_node.Title = value
 	}
-	if value, ok := tc.mutation.Details(); ok {
+	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(task.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
-	if value, ok := tc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := tc.mutation.Category(); ok {
+	if value, ok := _c.mutation.Category(); ok {
 		_spec.SetField(task.FieldCategory, field.TypeString, value)
 		_node.Category = value
 	}
-	if value, ok := tc.mutation.Due(); ok {
+	if value, ok := _c.mutation.Due(); ok {
 		_spec.SetField(task.FieldDue, field.TypeTime, value)
 		_node.Due = &value
 	}
-	if value, ok := tc.mutation.Completed(); ok {
+	if value, ok := _c.mutation.Completed(); ok {
 		_spec.SetField(task.FieldCompleted, field.TypeTime, value)
 		_node.Completed = &value
 	}
-	if nodes := tc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -630,14 +646,14 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.Task
+		edge.Schema = _c.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.AssignerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.AssignerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -648,14 +664,14 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.Task
+		edge.Schema = _c.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.AssignerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.AssigneeIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.AssigneeIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -666,14 +682,14 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.Task
+		edge.Schema = _c.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.AssigneeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.CommentsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CommentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -684,13 +700,13 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.Note
+		edge.Schema = _c.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.GroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -701,13 +717,13 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.GroupTasks
+		edge.Schema = _c.schemaConfig.GroupTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -718,13 +734,13 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.InternalPolicyTasks
+		edge.Schema = _c.schemaConfig.InternalPolicyTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -735,13 +751,13 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.ProcedureTasks
+		edge.Schema = _c.schemaConfig.ProcedureTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -752,13 +768,13 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.ControlTasks
+		edge.Schema = _c.schemaConfig.ControlTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -769,13 +785,13 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.SubcontrolTasks
+		edge.Schema = _c.schemaConfig.SubcontrolTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -786,13 +802,13 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.ControlObjectiveTasks
+		edge.Schema = _c.schemaConfig.ControlObjectiveTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -803,13 +819,13 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.ProgramTasks
+		edge.Schema = _c.schemaConfig.ProgramTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -820,13 +836,30 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.RiskTasks
+		edge.Schema = _c.schemaConfig.RiskTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.EvidenceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlImplementationsTable,
+			Columns: task.ControlImplementationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlImplementationTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -837,7 +870,7 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tc.schemaConfig.TaskEvidence
+		edge.Schema = _c.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -854,16 +887,16 @@ type TaskCreateBulk struct {
 }
 
 // Save creates the Task entities in the database.
-func (tcb *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
-	if tcb.err != nil {
-		return nil, tcb.err
+func (_c *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tcb.builders))
-	nodes := make([]*Task, len(tcb.builders))
-	mutators := make([]Mutator, len(tcb.builders))
-	for i := range tcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Task, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TaskMutation)
@@ -877,11 +910,11 @@ func (tcb *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -901,7 +934,7 @@ func (tcb *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -909,8 +942,8 @@ func (tcb *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcb *TaskCreateBulk) SaveX(ctx context.Context) []*Task {
-	v, err := tcb.Save(ctx)
+func (_c *TaskCreateBulk) SaveX(ctx context.Context) []*Task {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -918,14 +951,14 @@ func (tcb *TaskCreateBulk) SaveX(ctx context.Context) []*Task {
 }
 
 // Exec executes the query.
-func (tcb *TaskCreateBulk) Exec(ctx context.Context) error {
-	_, err := tcb.Save(ctx)
+func (_c *TaskCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcb *TaskCreateBulk) ExecX(ctx context.Context) {
-	if err := tcb.Exec(ctx); err != nil {
+func (_c *TaskCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

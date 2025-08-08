@@ -42,44 +42,44 @@ type PersonalAccessTokenQuery struct {
 }
 
 // Where adds a new predicate for the PersonalAccessTokenQuery builder.
-func (patq *PersonalAccessTokenQuery) Where(ps ...predicate.PersonalAccessToken) *PersonalAccessTokenQuery {
-	patq.predicates = append(patq.predicates, ps...)
-	return patq
+func (_q *PersonalAccessTokenQuery) Where(ps ...predicate.PersonalAccessToken) *PersonalAccessTokenQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (patq *PersonalAccessTokenQuery) Limit(limit int) *PersonalAccessTokenQuery {
-	patq.ctx.Limit = &limit
-	return patq
+func (_q *PersonalAccessTokenQuery) Limit(limit int) *PersonalAccessTokenQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (patq *PersonalAccessTokenQuery) Offset(offset int) *PersonalAccessTokenQuery {
-	patq.ctx.Offset = &offset
-	return patq
+func (_q *PersonalAccessTokenQuery) Offset(offset int) *PersonalAccessTokenQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (patq *PersonalAccessTokenQuery) Unique(unique bool) *PersonalAccessTokenQuery {
-	patq.ctx.Unique = &unique
-	return patq
+func (_q *PersonalAccessTokenQuery) Unique(unique bool) *PersonalAccessTokenQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (patq *PersonalAccessTokenQuery) Order(o ...personalaccesstoken.OrderOption) *PersonalAccessTokenQuery {
-	patq.order = append(patq.order, o...)
-	return patq
+func (_q *PersonalAccessTokenQuery) Order(o ...personalaccesstoken.OrderOption) *PersonalAccessTokenQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (patq *PersonalAccessTokenQuery) QueryOwner() *UserQuery {
-	query := (&UserClient{config: patq.config}).Query()
+func (_q *PersonalAccessTokenQuery) QueryOwner() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := patq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := patq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -88,23 +88,23 @@ func (patq *PersonalAccessTokenQuery) QueryOwner() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, personalaccesstoken.OwnerTable, personalaccesstoken.OwnerColumn),
 		)
-		schemaConfig := patq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.PersonalAccessToken
-		fromU = sqlgraph.SetNeighbors(patq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryOrganizations chains the current query on the "organizations" edge.
-func (patq *PersonalAccessTokenQuery) QueryOrganizations() *OrganizationQuery {
-	query := (&OrganizationClient{config: patq.config}).Query()
+func (_q *PersonalAccessTokenQuery) QueryOrganizations() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := patq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := patq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -113,23 +113,23 @@ func (patq *PersonalAccessTokenQuery) QueryOrganizations() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, personalaccesstoken.OrganizationsTable, personalaccesstoken.OrganizationsPrimaryKey...),
 		)
-		schemaConfig := patq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.OrganizationPersonalAccessTokens
-		fromU = sqlgraph.SetNeighbors(patq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEvents chains the current query on the "events" edge.
-func (patq *PersonalAccessTokenQuery) QueryEvents() *EventQuery {
-	query := (&EventClient{config: patq.config}).Query()
+func (_q *PersonalAccessTokenQuery) QueryEvents() *EventQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := patq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := patq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -138,10 +138,10 @@ func (patq *PersonalAccessTokenQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, personalaccesstoken.EventsTable, personalaccesstoken.EventsPrimaryKey...),
 		)
-		schemaConfig := patq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.PersonalAccessTokenEvents
-		fromU = sqlgraph.SetNeighbors(patq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -149,8 +149,8 @@ func (patq *PersonalAccessTokenQuery) QueryEvents() *EventQuery {
 
 // First returns the first PersonalAccessToken entity from the query.
 // Returns a *NotFoundError when no PersonalAccessToken was found.
-func (patq *PersonalAccessTokenQuery) First(ctx context.Context) (*PersonalAccessToken, error) {
-	nodes, err := patq.Limit(1).All(setContextOp(ctx, patq.ctx, ent.OpQueryFirst))
+func (_q *PersonalAccessTokenQuery) First(ctx context.Context) (*PersonalAccessToken, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -161,8 +161,8 @@ func (patq *PersonalAccessTokenQuery) First(ctx context.Context) (*PersonalAcces
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (patq *PersonalAccessTokenQuery) FirstX(ctx context.Context) *PersonalAccessToken {
-	node, err := patq.First(ctx)
+func (_q *PersonalAccessTokenQuery) FirstX(ctx context.Context) *PersonalAccessToken {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -171,9 +171,9 @@ func (patq *PersonalAccessTokenQuery) FirstX(ctx context.Context) *PersonalAcces
 
 // FirstID returns the first PersonalAccessToken ID from the query.
 // Returns a *NotFoundError when no PersonalAccessToken ID was found.
-func (patq *PersonalAccessTokenQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *PersonalAccessTokenQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = patq.Limit(1).IDs(setContextOp(ctx, patq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -184,8 +184,8 @@ func (patq *PersonalAccessTokenQuery) FirstID(ctx context.Context) (id string, e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (patq *PersonalAccessTokenQuery) FirstIDX(ctx context.Context) string {
-	id, err := patq.FirstID(ctx)
+func (_q *PersonalAccessTokenQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -195,8 +195,8 @@ func (patq *PersonalAccessTokenQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single PersonalAccessToken entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one PersonalAccessToken entity is found.
 // Returns a *NotFoundError when no PersonalAccessToken entities are found.
-func (patq *PersonalAccessTokenQuery) Only(ctx context.Context) (*PersonalAccessToken, error) {
-	nodes, err := patq.Limit(2).All(setContextOp(ctx, patq.ctx, ent.OpQueryOnly))
+func (_q *PersonalAccessTokenQuery) Only(ctx context.Context) (*PersonalAccessToken, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -211,8 +211,8 @@ func (patq *PersonalAccessTokenQuery) Only(ctx context.Context) (*PersonalAccess
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (patq *PersonalAccessTokenQuery) OnlyX(ctx context.Context) *PersonalAccessToken {
-	node, err := patq.Only(ctx)
+func (_q *PersonalAccessTokenQuery) OnlyX(ctx context.Context) *PersonalAccessToken {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (patq *PersonalAccessTokenQuery) OnlyX(ctx context.Context) *PersonalAccess
 // OnlyID is like Only, but returns the only PersonalAccessToken ID in the query.
 // Returns a *NotSingularError when more than one PersonalAccessToken ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (patq *PersonalAccessTokenQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *PersonalAccessTokenQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = patq.Limit(2).IDs(setContextOp(ctx, patq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -239,8 +239,8 @@ func (patq *PersonalAccessTokenQuery) OnlyID(ctx context.Context) (id string, er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (patq *PersonalAccessTokenQuery) OnlyIDX(ctx context.Context) string {
-	id, err := patq.OnlyID(ctx)
+func (_q *PersonalAccessTokenQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -248,18 +248,18 @@ func (patq *PersonalAccessTokenQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of PersonalAccessTokens.
-func (patq *PersonalAccessTokenQuery) All(ctx context.Context) ([]*PersonalAccessToken, error) {
-	ctx = setContextOp(ctx, patq.ctx, ent.OpQueryAll)
-	if err := patq.prepareQuery(ctx); err != nil {
+func (_q *PersonalAccessTokenQuery) All(ctx context.Context) ([]*PersonalAccessToken, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*PersonalAccessToken, *PersonalAccessTokenQuery]()
-	return withInterceptors[[]*PersonalAccessToken](ctx, patq, qr, patq.inters)
+	return withInterceptors[[]*PersonalAccessToken](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (patq *PersonalAccessTokenQuery) AllX(ctx context.Context) []*PersonalAccessToken {
-	nodes, err := patq.All(ctx)
+func (_q *PersonalAccessTokenQuery) AllX(ctx context.Context) []*PersonalAccessToken {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -267,20 +267,20 @@ func (patq *PersonalAccessTokenQuery) AllX(ctx context.Context) []*PersonalAcces
 }
 
 // IDs executes the query and returns a list of PersonalAccessToken IDs.
-func (patq *PersonalAccessTokenQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if patq.ctx.Unique == nil && patq.path != nil {
-		patq.Unique(true)
+func (_q *PersonalAccessTokenQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, patq.ctx, ent.OpQueryIDs)
-	if err = patq.Select(personalaccesstoken.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(personalaccesstoken.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (patq *PersonalAccessTokenQuery) IDsX(ctx context.Context) []string {
-	ids, err := patq.IDs(ctx)
+func (_q *PersonalAccessTokenQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -288,17 +288,17 @@ func (patq *PersonalAccessTokenQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (patq *PersonalAccessTokenQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, patq.ctx, ent.OpQueryCount)
-	if err := patq.prepareQuery(ctx); err != nil {
+func (_q *PersonalAccessTokenQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, patq, querierCount[*PersonalAccessTokenQuery](), patq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*PersonalAccessTokenQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (patq *PersonalAccessTokenQuery) CountX(ctx context.Context) int {
-	count, err := patq.Count(ctx)
+func (_q *PersonalAccessTokenQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -306,9 +306,9 @@ func (patq *PersonalAccessTokenQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (patq *PersonalAccessTokenQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, patq.ctx, ent.OpQueryExist)
-	switch _, err := patq.FirstID(ctx); {
+func (_q *PersonalAccessTokenQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -319,8 +319,8 @@ func (patq *PersonalAccessTokenQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (patq *PersonalAccessTokenQuery) ExistX(ctx context.Context) bool {
-	exist, err := patq.Exist(ctx)
+func (_q *PersonalAccessTokenQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -329,57 +329,57 @@ func (patq *PersonalAccessTokenQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the PersonalAccessTokenQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (patq *PersonalAccessTokenQuery) Clone() *PersonalAccessTokenQuery {
-	if patq == nil {
+func (_q *PersonalAccessTokenQuery) Clone() *PersonalAccessTokenQuery {
+	if _q == nil {
 		return nil
 	}
 	return &PersonalAccessTokenQuery{
-		config:            patq.config,
-		ctx:               patq.ctx.Clone(),
-		order:             append([]personalaccesstoken.OrderOption{}, patq.order...),
-		inters:            append([]Interceptor{}, patq.inters...),
-		predicates:        append([]predicate.PersonalAccessToken{}, patq.predicates...),
-		withOwner:         patq.withOwner.Clone(),
-		withOrganizations: patq.withOrganizations.Clone(),
-		withEvents:        patq.withEvents.Clone(),
+		config:            _q.config,
+		ctx:               _q.ctx.Clone(),
+		order:             append([]personalaccesstoken.OrderOption{}, _q.order...),
+		inters:            append([]Interceptor{}, _q.inters...),
+		predicates:        append([]predicate.PersonalAccessToken{}, _q.predicates...),
+		withOwner:         _q.withOwner.Clone(),
+		withOrganizations: _q.withOrganizations.Clone(),
+		withEvents:        _q.withEvents.Clone(),
 		// clone intermediate query.
-		sql:       patq.sql.Clone(),
-		path:      patq.path,
-		modifiers: append([]func(*sql.Selector){}, patq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (patq *PersonalAccessTokenQuery) WithOwner(opts ...func(*UserQuery)) *PersonalAccessTokenQuery {
-	query := (&UserClient{config: patq.config}).Query()
+func (_q *PersonalAccessTokenQuery) WithOwner(opts ...func(*UserQuery)) *PersonalAccessTokenQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	patq.withOwner = query
-	return patq
+	_q.withOwner = query
+	return _q
 }
 
 // WithOrganizations tells the query-builder to eager-load the nodes that are connected to
 // the "organizations" edge. The optional arguments are used to configure the query builder of the edge.
-func (patq *PersonalAccessTokenQuery) WithOrganizations(opts ...func(*OrganizationQuery)) *PersonalAccessTokenQuery {
-	query := (&OrganizationClient{config: patq.config}).Query()
+func (_q *PersonalAccessTokenQuery) WithOrganizations(opts ...func(*OrganizationQuery)) *PersonalAccessTokenQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	patq.withOrganizations = query
-	return patq
+	_q.withOrganizations = query
+	return _q
 }
 
 // WithEvents tells the query-builder to eager-load the nodes that are connected to
 // the "events" edge. The optional arguments are used to configure the query builder of the edge.
-func (patq *PersonalAccessTokenQuery) WithEvents(opts ...func(*EventQuery)) *PersonalAccessTokenQuery {
-	query := (&EventClient{config: patq.config}).Query()
+func (_q *PersonalAccessTokenQuery) WithEvents(opts ...func(*EventQuery)) *PersonalAccessTokenQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	patq.withEvents = query
-	return patq
+	_q.withEvents = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -396,10 +396,10 @@ func (patq *PersonalAccessTokenQuery) WithEvents(opts ...func(*EventQuery)) *Per
 //		GroupBy(personalaccesstoken.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (patq *PersonalAccessTokenQuery) GroupBy(field string, fields ...string) *PersonalAccessTokenGroupBy {
-	patq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &PersonalAccessTokenGroupBy{build: patq}
-	grbuild.flds = &patq.ctx.Fields
+func (_q *PersonalAccessTokenQuery) GroupBy(field string, fields ...string) *PersonalAccessTokenGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &PersonalAccessTokenGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = personalaccesstoken.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -417,92 +417,92 @@ func (patq *PersonalAccessTokenQuery) GroupBy(field string, fields ...string) *P
 //	client.PersonalAccessToken.Query().
 //		Select(personalaccesstoken.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (patq *PersonalAccessTokenQuery) Select(fields ...string) *PersonalAccessTokenSelect {
-	patq.ctx.Fields = append(patq.ctx.Fields, fields...)
-	sbuild := &PersonalAccessTokenSelect{PersonalAccessTokenQuery: patq}
+func (_q *PersonalAccessTokenQuery) Select(fields ...string) *PersonalAccessTokenSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &PersonalAccessTokenSelect{PersonalAccessTokenQuery: _q}
 	sbuild.label = personalaccesstoken.Label
-	sbuild.flds, sbuild.scan = &patq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a PersonalAccessTokenSelect configured with the given aggregations.
-func (patq *PersonalAccessTokenQuery) Aggregate(fns ...AggregateFunc) *PersonalAccessTokenSelect {
-	return patq.Select().Aggregate(fns...)
+func (_q *PersonalAccessTokenQuery) Aggregate(fns ...AggregateFunc) *PersonalAccessTokenSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (patq *PersonalAccessTokenQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range patq.inters {
+func (_q *PersonalAccessTokenQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, patq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range patq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !personalaccesstoken.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if patq.path != nil {
-		prev, err := patq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		patq.sql = prev
+		_q.sql = prev
 	}
 	if personalaccesstoken.Policy == nil {
 		return errors.New("generated: uninitialized personalaccesstoken.Policy (forgotten import generated/runtime?)")
 	}
-	if err := personalaccesstoken.Policy.EvalQuery(ctx, patq); err != nil {
+	if err := personalaccesstoken.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (patq *PersonalAccessTokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*PersonalAccessToken, error) {
+func (_q *PersonalAccessTokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*PersonalAccessToken, error) {
 	var (
 		nodes       = []*PersonalAccessToken{}
-		_spec       = patq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			patq.withOwner != nil,
-			patq.withOrganizations != nil,
-			patq.withEvents != nil,
+			_q.withOwner != nil,
+			_q.withOrganizations != nil,
+			_q.withEvents != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*PersonalAccessToken).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &PersonalAccessToken{config: patq.config}
+		node := &PersonalAccessToken{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = patq.schemaConfig.PersonalAccessToken
-	ctx = internal.NewSchemaConfigContext(ctx, patq.schemaConfig)
-	if len(patq.modifiers) > 0 {
-		_spec.Modifiers = patq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.PersonalAccessToken
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, patq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := patq.withOwner; query != nil {
-		if err := patq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *PersonalAccessToken, e *User) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := patq.withOrganizations; query != nil {
-		if err := patq.loadOrganizations(ctx, query, nodes,
+	if query := _q.withOrganizations; query != nil {
+		if err := _q.loadOrganizations(ctx, query, nodes,
 			func(n *PersonalAccessToken) { n.Edges.Organizations = []*Organization{} },
 			func(n *PersonalAccessToken, e *Organization) {
 				n.Edges.Organizations = append(n.Edges.Organizations, e)
@@ -510,36 +510,36 @@ func (patq *PersonalAccessTokenQuery) sqlAll(ctx context.Context, hooks ...query
 			return nil, err
 		}
 	}
-	if query := patq.withEvents; query != nil {
-		if err := patq.loadEvents(ctx, query, nodes,
+	if query := _q.withEvents; query != nil {
+		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *PersonalAccessToken) { n.Edges.Events = []*Event{} },
 			func(n *PersonalAccessToken, e *Event) { n.Edges.Events = append(n.Edges.Events, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range patq.withNamedOrganizations {
-		if err := patq.loadOrganizations(ctx, query, nodes,
+	for name, query := range _q.withNamedOrganizations {
+		if err := _q.loadOrganizations(ctx, query, nodes,
 			func(n *PersonalAccessToken) { n.appendNamedOrganizations(name) },
 			func(n *PersonalAccessToken, e *Organization) { n.appendNamedOrganizations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range patq.withNamedEvents {
-		if err := patq.loadEvents(ctx, query, nodes,
+	for name, query := range _q.withNamedEvents {
+		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *PersonalAccessToken) { n.appendNamedEvents(name) },
 			func(n *PersonalAccessToken, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range patq.loadTotal {
-		if err := patq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (patq *PersonalAccessTokenQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *User)) error {
+func (_q *PersonalAccessTokenQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*PersonalAccessToken)
 	for i := range nodes {
@@ -568,7 +568,7 @@ func (patq *PersonalAccessTokenQuery) loadOwner(ctx context.Context, query *User
 	}
 	return nil
 }
-func (patq *PersonalAccessTokenQuery) loadOrganizations(ctx context.Context, query *OrganizationQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *Organization)) error {
+func (_q *PersonalAccessTokenQuery) loadOrganizations(ctx context.Context, query *OrganizationQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *Organization)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*PersonalAccessToken)
 	nids := make(map[string]map[*PersonalAccessToken]struct{})
@@ -581,7 +581,7 @@ func (patq *PersonalAccessTokenQuery) loadOrganizations(ctx context.Context, que
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(personalaccesstoken.OrganizationsTable)
-		joinT.Schema(patq.schemaConfig.OrganizationPersonalAccessTokens)
+		joinT.Schema(_q.schemaConfig.OrganizationPersonalAccessTokens)
 		s.Join(joinT).On(s.C(organization.FieldID), joinT.C(personalaccesstoken.OrganizationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(personalaccesstoken.OrganizationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -630,7 +630,7 @@ func (patq *PersonalAccessTokenQuery) loadOrganizations(ctx context.Context, que
 	}
 	return nil
 }
-func (patq *PersonalAccessTokenQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *Event)) error {
+func (_q *PersonalAccessTokenQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*PersonalAccessToken, init func(*PersonalAccessToken), assign func(*PersonalAccessToken, *Event)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*PersonalAccessToken)
 	nids := make(map[string]map[*PersonalAccessToken]struct{})
@@ -643,7 +643,7 @@ func (patq *PersonalAccessTokenQuery) loadEvents(ctx context.Context, query *Eve
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(personalaccesstoken.EventsTable)
-		joinT.Schema(patq.schemaConfig.PersonalAccessTokenEvents)
+		joinT.Schema(_q.schemaConfig.PersonalAccessTokenEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(personalaccesstoken.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(personalaccesstoken.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -693,29 +693,29 @@ func (patq *PersonalAccessTokenQuery) loadEvents(ctx context.Context, query *Eve
 	return nil
 }
 
-func (patq *PersonalAccessTokenQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := patq.querySpec()
-	_spec.Node.Schema = patq.schemaConfig.PersonalAccessToken
-	ctx = internal.NewSchemaConfigContext(ctx, patq.schemaConfig)
-	if len(patq.modifiers) > 0 {
-		_spec.Modifiers = patq.modifiers
+func (_q *PersonalAccessTokenQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.PersonalAccessToken
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = patq.ctx.Fields
-	if len(patq.ctx.Fields) > 0 {
-		_spec.Unique = patq.ctx.Unique != nil && *patq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, patq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (patq *PersonalAccessTokenQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *PersonalAccessTokenQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(personalaccesstoken.Table, personalaccesstoken.Columns, sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString))
-	_spec.From = patq.sql
-	if unique := patq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if patq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := patq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, personalaccesstoken.FieldID)
 		for i := range fields {
@@ -723,24 +723,24 @@ func (patq *PersonalAccessTokenQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if patq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(personalaccesstoken.FieldOwnerID)
 		}
 	}
-	if ps := patq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := patq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := patq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := patq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -750,76 +750,76 @@ func (patq *PersonalAccessTokenQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (patq *PersonalAccessTokenQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(patq.driver.Dialect())
+func (_q *PersonalAccessTokenQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(personalaccesstoken.Table)
-	columns := patq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = personalaccesstoken.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if patq.sql != nil {
-		selector = patq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if patq.ctx.Unique != nil && *patq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(patq.schemaConfig.PersonalAccessToken)
-	ctx = internal.NewSchemaConfigContext(ctx, patq.schemaConfig)
+	t1.Schema(_q.schemaConfig.PersonalAccessToken)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range patq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range patq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range patq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := patq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := patq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (patq *PersonalAccessTokenQuery) Modify(modifiers ...func(s *sql.Selector)) *PersonalAccessTokenSelect {
-	patq.modifiers = append(patq.modifiers, modifiers...)
-	return patq.Select()
+func (_q *PersonalAccessTokenQuery) Modify(modifiers ...func(s *sql.Selector)) *PersonalAccessTokenSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedOrganizations tells the query-builder to eager-load the nodes that are connected to the "organizations"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (patq *PersonalAccessTokenQuery) WithNamedOrganizations(name string, opts ...func(*OrganizationQuery)) *PersonalAccessTokenQuery {
-	query := (&OrganizationClient{config: patq.config}).Query()
+func (_q *PersonalAccessTokenQuery) WithNamedOrganizations(name string, opts ...func(*OrganizationQuery)) *PersonalAccessTokenQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if patq.withNamedOrganizations == nil {
-		patq.withNamedOrganizations = make(map[string]*OrganizationQuery)
+	if _q.withNamedOrganizations == nil {
+		_q.withNamedOrganizations = make(map[string]*OrganizationQuery)
 	}
-	patq.withNamedOrganizations[name] = query
-	return patq
+	_q.withNamedOrganizations[name] = query
+	return _q
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (patq *PersonalAccessTokenQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *PersonalAccessTokenQuery {
-	query := (&EventClient{config: patq.config}).Query()
+func (_q *PersonalAccessTokenQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *PersonalAccessTokenQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if patq.withNamedEvents == nil {
-		patq.withNamedEvents = make(map[string]*EventQuery)
+	if _q.withNamedEvents == nil {
+		_q.withNamedEvents = make(map[string]*EventQuery)
 	}
-	patq.withNamedEvents[name] = query
-	return patq
+	_q.withNamedEvents[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -848,41 +848,41 @@ type PersonalAccessTokenGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (patgb *PersonalAccessTokenGroupBy) Aggregate(fns ...AggregateFunc) *PersonalAccessTokenGroupBy {
-	patgb.fns = append(patgb.fns, fns...)
-	return patgb
+func (_g *PersonalAccessTokenGroupBy) Aggregate(fns ...AggregateFunc) *PersonalAccessTokenGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (patgb *PersonalAccessTokenGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, patgb.build.ctx, ent.OpQueryGroupBy)
-	if err := patgb.build.prepareQuery(ctx); err != nil {
+func (_g *PersonalAccessTokenGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*PersonalAccessTokenQuery, *PersonalAccessTokenGroupBy](ctx, patgb.build, patgb, patgb.build.inters, v)
+	return scanWithInterceptors[*PersonalAccessTokenQuery, *PersonalAccessTokenGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (patgb *PersonalAccessTokenGroupBy) sqlScan(ctx context.Context, root *PersonalAccessTokenQuery, v any) error {
+func (_g *PersonalAccessTokenGroupBy) sqlScan(ctx context.Context, root *PersonalAccessTokenQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(patgb.fns))
-	for _, fn := range patgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*patgb.flds)+len(patgb.fns))
-		for _, f := range *patgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*patgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := patgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -896,27 +896,27 @@ type PersonalAccessTokenSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (pats *PersonalAccessTokenSelect) Aggregate(fns ...AggregateFunc) *PersonalAccessTokenSelect {
-	pats.fns = append(pats.fns, fns...)
-	return pats
+func (_s *PersonalAccessTokenSelect) Aggregate(fns ...AggregateFunc) *PersonalAccessTokenSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (pats *PersonalAccessTokenSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, pats.ctx, ent.OpQuerySelect)
-	if err := pats.prepareQuery(ctx); err != nil {
+func (_s *PersonalAccessTokenSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*PersonalAccessTokenQuery, *PersonalAccessTokenSelect](ctx, pats.PersonalAccessTokenQuery, pats, pats.inters, v)
+	return scanWithInterceptors[*PersonalAccessTokenQuery, *PersonalAccessTokenSelect](ctx, _s.PersonalAccessTokenQuery, _s, _s.inters, v)
 }
 
-func (pats *PersonalAccessTokenSelect) sqlScan(ctx context.Context, root *PersonalAccessTokenQuery, v any) error {
+func (_s *PersonalAccessTokenSelect) sqlScan(ctx context.Context, root *PersonalAccessTokenQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(pats.fns))
-	for _, fn := range pats.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*pats.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -924,7 +924,7 @@ func (pats *PersonalAccessTokenSelect) sqlScan(ctx context.Context, root *Person
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := pats.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -932,7 +932,7 @@ func (pats *PersonalAccessTokenSelect) sqlScan(ctx context.Context, root *Person
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (pats *PersonalAccessTokenSelect) Modify(modifiers ...func(s *sql.Selector)) *PersonalAccessTokenSelect {
-	pats.modifiers = append(pats.modifiers, modifiers...)
-	return pats
+func (_s *PersonalAccessTokenSelect) Modify(modifiers ...func(s *sql.Selector)) *PersonalAccessTokenSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

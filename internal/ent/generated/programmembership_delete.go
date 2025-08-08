@@ -22,58 +22,58 @@ type ProgramMembershipDelete struct {
 }
 
 // Where appends a list predicates to the ProgramMembershipDelete builder.
-func (pmd *ProgramMembershipDelete) Where(ps ...predicate.ProgramMembership) *ProgramMembershipDelete {
-	pmd.mutation.Where(ps...)
-	return pmd
+func (_d *ProgramMembershipDelete) Where(ps ...predicate.ProgramMembership) *ProgramMembershipDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (pmd *ProgramMembershipDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, pmd.sqlExec, pmd.mutation, pmd.hooks)
+func (_d *ProgramMembershipDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmd *ProgramMembershipDelete) ExecX(ctx context.Context) int {
-	n, err := pmd.Exec(ctx)
+func (_d *ProgramMembershipDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (pmd *ProgramMembershipDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ProgramMembershipDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(programmembership.Table, sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString))
-	_spec.Node.Schema = pmd.schemaConfig.ProgramMembership
-	ctx = internal.NewSchemaConfigContext(ctx, pmd.schemaConfig)
-	if ps := pmd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.ProgramMembership
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, pmd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	pmd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ProgramMembershipDeleteOne is the builder for deleting a single ProgramMembership entity.
 type ProgramMembershipDeleteOne struct {
-	pmd *ProgramMembershipDelete
+	_d *ProgramMembershipDelete
 }
 
 // Where appends a list predicates to the ProgramMembershipDelete builder.
-func (pmdo *ProgramMembershipDeleteOne) Where(ps ...predicate.ProgramMembership) *ProgramMembershipDeleteOne {
-	pmdo.pmd.mutation.Where(ps...)
-	return pmdo
+func (_d *ProgramMembershipDeleteOne) Where(ps ...predicate.ProgramMembership) *ProgramMembershipDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (pmdo *ProgramMembershipDeleteOne) Exec(ctx context.Context) error {
-	n, err := pmdo.pmd.Exec(ctx)
+func (_d *ProgramMembershipDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (pmdo *ProgramMembershipDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmdo *ProgramMembershipDeleteOne) ExecX(ctx context.Context) {
-	if err := pmdo.Exec(ctx); err != nil {
+func (_d *ProgramMembershipDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

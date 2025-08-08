@@ -50,44 +50,44 @@ type ScanQuery struct {
 }
 
 // Where adds a new predicate for the ScanQuery builder.
-func (sq *ScanQuery) Where(ps ...predicate.Scan) *ScanQuery {
-	sq.predicates = append(sq.predicates, ps...)
-	return sq
+func (_q *ScanQuery) Where(ps ...predicate.Scan) *ScanQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (sq *ScanQuery) Limit(limit int) *ScanQuery {
-	sq.ctx.Limit = &limit
-	return sq
+func (_q *ScanQuery) Limit(limit int) *ScanQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (sq *ScanQuery) Offset(offset int) *ScanQuery {
-	sq.ctx.Offset = &offset
-	return sq
+func (_q *ScanQuery) Offset(offset int) *ScanQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (sq *ScanQuery) Unique(unique bool) *ScanQuery {
-	sq.ctx.Unique = &unique
-	return sq
+func (_q *ScanQuery) Unique(unique bool) *ScanQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (sq *ScanQuery) Order(o ...scan.OrderOption) *ScanQuery {
-	sq.order = append(sq.order, o...)
-	return sq
+func (_q *ScanQuery) Order(o ...scan.OrderOption) *ScanQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (sq *ScanQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: sq.config}).Query()
+func (_q *ScanQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -96,23 +96,23 @@ func (sq *ScanQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, scan.OwnerTable, scan.OwnerColumn),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Scan
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryBlockedGroups chains the current query on the "blocked_groups" edge.
-func (sq *ScanQuery) QueryBlockedGroups() *GroupQuery {
-	query := (&GroupClient{config: sq.config}).Query()
+func (_q *ScanQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -121,23 +121,23 @@ func (sq *ScanQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.BlockedGroupsTable, scan.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ScanBlockedGroups
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEditors chains the current query on the "editors" edge.
-func (sq *ScanQuery) QueryEditors() *GroupQuery {
-	query := (&GroupClient{config: sq.config}).Query()
+func (_q *ScanQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -146,23 +146,23 @@ func (sq *ScanQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.EditorsTable, scan.EditorsPrimaryKey...),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ScanEditors
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryViewers chains the current query on the "viewers" edge.
-func (sq *ScanQuery) QueryViewers() *GroupQuery {
-	query := (&GroupClient{config: sq.config}).Query()
+func (_q *ScanQuery) QueryViewers() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -171,23 +171,23 @@ func (sq *ScanQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.ViewersTable, scan.ViewersPrimaryKey...),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ScanViewers
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryAssets chains the current query on the "assets" edge.
-func (sq *ScanQuery) QueryAssets() *AssetQuery {
-	query := (&AssetClient{config: sq.config}).Query()
+func (_q *ScanQuery) QueryAssets() *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -196,23 +196,23 @@ func (sq *ScanQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.AssetsTable, scan.AssetsPrimaryKey...),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Asset
 		step.Edge.Schema = schemaConfig.ScanAssets
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEntities chains the current query on the "entities" edge.
-func (sq *ScanQuery) QueryEntities() *EntityQuery {
-	query := (&EntityClient{config: sq.config}).Query()
+func (_q *ScanQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -221,10 +221,10 @@ func (sq *ScanQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, scan.EntitiesTable, scan.EntitiesColumn),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Entity
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -232,8 +232,8 @@ func (sq *ScanQuery) QueryEntities() *EntityQuery {
 
 // First returns the first Scan entity from the query.
 // Returns a *NotFoundError when no Scan was found.
-func (sq *ScanQuery) First(ctx context.Context) (*Scan, error) {
-	nodes, err := sq.Limit(1).All(setContextOp(ctx, sq.ctx, ent.OpQueryFirst))
+func (_q *ScanQuery) First(ctx context.Context) (*Scan, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -244,8 +244,8 @@ func (sq *ScanQuery) First(ctx context.Context) (*Scan, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (sq *ScanQuery) FirstX(ctx context.Context) *Scan {
-	node, err := sq.First(ctx)
+func (_q *ScanQuery) FirstX(ctx context.Context) *Scan {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -254,9 +254,9 @@ func (sq *ScanQuery) FirstX(ctx context.Context) *Scan {
 
 // FirstID returns the first Scan ID from the query.
 // Returns a *NotFoundError when no Scan ID was found.
-func (sq *ScanQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ScanQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sq.Limit(1).IDs(setContextOp(ctx, sq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -267,8 +267,8 @@ func (sq *ScanQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (sq *ScanQuery) FirstIDX(ctx context.Context) string {
-	id, err := sq.FirstID(ctx)
+func (_q *ScanQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -278,8 +278,8 @@ func (sq *ScanQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Scan entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Scan entity is found.
 // Returns a *NotFoundError when no Scan entities are found.
-func (sq *ScanQuery) Only(ctx context.Context) (*Scan, error) {
-	nodes, err := sq.Limit(2).All(setContextOp(ctx, sq.ctx, ent.OpQueryOnly))
+func (_q *ScanQuery) Only(ctx context.Context) (*Scan, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -294,8 +294,8 @@ func (sq *ScanQuery) Only(ctx context.Context) (*Scan, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (sq *ScanQuery) OnlyX(ctx context.Context) *Scan {
-	node, err := sq.Only(ctx)
+func (_q *ScanQuery) OnlyX(ctx context.Context) *Scan {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -305,9 +305,9 @@ func (sq *ScanQuery) OnlyX(ctx context.Context) *Scan {
 // OnlyID is like Only, but returns the only Scan ID in the query.
 // Returns a *NotSingularError when more than one Scan ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (sq *ScanQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ScanQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sq.Limit(2).IDs(setContextOp(ctx, sq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -322,8 +322,8 @@ func (sq *ScanQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (sq *ScanQuery) OnlyIDX(ctx context.Context) string {
-	id, err := sq.OnlyID(ctx)
+func (_q *ScanQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -331,18 +331,18 @@ func (sq *ScanQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Scans.
-func (sq *ScanQuery) All(ctx context.Context) ([]*Scan, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryAll)
-	if err := sq.prepareQuery(ctx); err != nil {
+func (_q *ScanQuery) All(ctx context.Context) ([]*Scan, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Scan, *ScanQuery]()
-	return withInterceptors[[]*Scan](ctx, sq, qr, sq.inters)
+	return withInterceptors[[]*Scan](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (sq *ScanQuery) AllX(ctx context.Context) []*Scan {
-	nodes, err := sq.All(ctx)
+func (_q *ScanQuery) AllX(ctx context.Context) []*Scan {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -350,20 +350,20 @@ func (sq *ScanQuery) AllX(ctx context.Context) []*Scan {
 }
 
 // IDs executes the query and returns a list of Scan IDs.
-func (sq *ScanQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if sq.ctx.Unique == nil && sq.path != nil {
-		sq.Unique(true)
+func (_q *ScanQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryIDs)
-	if err = sq.Select(scan.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(scan.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (sq *ScanQuery) IDsX(ctx context.Context) []string {
-	ids, err := sq.IDs(ctx)
+func (_q *ScanQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -371,17 +371,17 @@ func (sq *ScanQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (sq *ScanQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryCount)
-	if err := sq.prepareQuery(ctx); err != nil {
+func (_q *ScanQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, sq, querierCount[*ScanQuery](), sq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ScanQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (sq *ScanQuery) CountX(ctx context.Context) int {
-	count, err := sq.Count(ctx)
+func (_q *ScanQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -389,9 +389,9 @@ func (sq *ScanQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (sq *ScanQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryExist)
-	switch _, err := sq.FirstID(ctx); {
+func (_q *ScanQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -402,8 +402,8 @@ func (sq *ScanQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (sq *ScanQuery) ExistX(ctx context.Context) bool {
-	exist, err := sq.Exist(ctx)
+func (_q *ScanQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -412,93 +412,93 @@ func (sq *ScanQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ScanQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (sq *ScanQuery) Clone() *ScanQuery {
-	if sq == nil {
+func (_q *ScanQuery) Clone() *ScanQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ScanQuery{
-		config:            sq.config,
-		ctx:               sq.ctx.Clone(),
-		order:             append([]scan.OrderOption{}, sq.order...),
-		inters:            append([]Interceptor{}, sq.inters...),
-		predicates:        append([]predicate.Scan{}, sq.predicates...),
-		withOwner:         sq.withOwner.Clone(),
-		withBlockedGroups: sq.withBlockedGroups.Clone(),
-		withEditors:       sq.withEditors.Clone(),
-		withViewers:       sq.withViewers.Clone(),
-		withAssets:        sq.withAssets.Clone(),
-		withEntities:      sq.withEntities.Clone(),
+		config:            _q.config,
+		ctx:               _q.ctx.Clone(),
+		order:             append([]scan.OrderOption{}, _q.order...),
+		inters:            append([]Interceptor{}, _q.inters...),
+		predicates:        append([]predicate.Scan{}, _q.predicates...),
+		withOwner:         _q.withOwner.Clone(),
+		withBlockedGroups: _q.withBlockedGroups.Clone(),
+		withEditors:       _q.withEditors.Clone(),
+		withViewers:       _q.withViewers.Clone(),
+		withAssets:        _q.withAssets.Clone(),
+		withEntities:      _q.withEntities.Clone(),
 		// clone intermediate query.
-		sql:       sq.sql.Clone(),
-		path:      sq.path,
-		modifiers: append([]func(*sql.Selector){}, sq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *ScanQuery) WithOwner(opts ...func(*OrganizationQuery)) *ScanQuery {
-	query := (&OrganizationClient{config: sq.config}).Query()
+func (_q *ScanQuery) WithOwner(opts ...func(*OrganizationQuery)) *ScanQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withOwner = query
-	return sq
+	_q.withOwner = query
+	return _q
 }
 
 // WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
 // the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *ScanQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *ScanQuery {
-	query := (&GroupClient{config: sq.config}).Query()
+func (_q *ScanQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *ScanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withBlockedGroups = query
-	return sq
+	_q.withBlockedGroups = query
+	return _q
 }
 
 // WithEditors tells the query-builder to eager-load the nodes that are connected to
 // the "editors" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *ScanQuery) WithEditors(opts ...func(*GroupQuery)) *ScanQuery {
-	query := (&GroupClient{config: sq.config}).Query()
+func (_q *ScanQuery) WithEditors(opts ...func(*GroupQuery)) *ScanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withEditors = query
-	return sq
+	_q.withEditors = query
+	return _q
 }
 
 // WithViewers tells the query-builder to eager-load the nodes that are connected to
 // the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *ScanQuery) WithViewers(opts ...func(*GroupQuery)) *ScanQuery {
-	query := (&GroupClient{config: sq.config}).Query()
+func (_q *ScanQuery) WithViewers(opts ...func(*GroupQuery)) *ScanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withViewers = query
-	return sq
+	_q.withViewers = query
+	return _q
 }
 
 // WithAssets tells the query-builder to eager-load the nodes that are connected to
 // the "assets" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *ScanQuery) WithAssets(opts ...func(*AssetQuery)) *ScanQuery {
-	query := (&AssetClient{config: sq.config}).Query()
+func (_q *ScanQuery) WithAssets(opts ...func(*AssetQuery)) *ScanQuery {
+	query := (&AssetClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withAssets = query
-	return sq
+	_q.withAssets = query
+	return _q
 }
 
 // WithEntities tells the query-builder to eager-load the nodes that are connected to
 // the "entities" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *ScanQuery) WithEntities(opts ...func(*EntityQuery)) *ScanQuery {
-	query := (&EntityClient{config: sq.config}).Query()
+func (_q *ScanQuery) WithEntities(opts ...func(*EntityQuery)) *ScanQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withEntities = query
-	return sq
+	_q.withEntities = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -515,10 +515,10 @@ func (sq *ScanQuery) WithEntities(opts ...func(*EntityQuery)) *ScanQuery {
 //		GroupBy(scan.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (sq *ScanQuery) GroupBy(field string, fields ...string) *ScanGroupBy {
-	sq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ScanGroupBy{build: sq}
-	grbuild.flds = &sq.ctx.Fields
+func (_q *ScanQuery) GroupBy(field string, fields ...string) *ScanGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ScanGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = scan.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -536,63 +536,63 @@ func (sq *ScanQuery) GroupBy(field string, fields ...string) *ScanGroupBy {
 //	client.Scan.Query().
 //		Select(scan.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (sq *ScanQuery) Select(fields ...string) *ScanSelect {
-	sq.ctx.Fields = append(sq.ctx.Fields, fields...)
-	sbuild := &ScanSelect{ScanQuery: sq}
+func (_q *ScanQuery) Select(fields ...string) *ScanSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ScanSelect{ScanQuery: _q}
 	sbuild.label = scan.Label
-	sbuild.flds, sbuild.scan = &sq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ScanSelect configured with the given aggregations.
-func (sq *ScanQuery) Aggregate(fns ...AggregateFunc) *ScanSelect {
-	return sq.Select().Aggregate(fns...)
+func (_q *ScanQuery) Aggregate(fns ...AggregateFunc) *ScanSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (sq *ScanQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range sq.inters {
+func (_q *ScanQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, sq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range sq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !scan.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if sq.path != nil {
-		prev, err := sq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		sq.sql = prev
+		_q.sql = prev
 	}
 	if scan.Policy == nil {
 		return errors.New("generated: uninitialized scan.Policy (forgotten import generated/runtime?)")
 	}
-	if err := scan.Policy.EvalQuery(ctx, sq); err != nil {
+	if err := scan.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (sq *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, error) {
+func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, error) {
 	var (
 		nodes       = []*Scan{}
-		withFKs     = sq.withFKs
-		_spec       = sq.querySpec()
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
 		loadedTypes = [6]bool{
-			sq.withOwner != nil,
-			sq.withBlockedGroups != nil,
-			sq.withEditors != nil,
-			sq.withViewers != nil,
-			sq.withAssets != nil,
-			sq.withEntities != nil,
+			_q.withOwner != nil,
+			_q.withBlockedGroups != nil,
+			_q.withEditors != nil,
+			_q.withViewers != nil,
+			_q.withAssets != nil,
+			_q.withEntities != nil,
 		}
 	)
 	if withFKs {
@@ -602,110 +602,110 @@ func (sq *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		return (*Scan).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Scan{config: sq.config}
+		node := &Scan{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = sq.schemaConfig.Scan
-	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
-	if len(sq.modifiers) > 0 {
-		_spec.Modifiers = sq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Scan
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, sq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sq.withOwner; query != nil {
-		if err := sq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Scan, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sq.withBlockedGroups; query != nil {
-		if err := sq.loadBlockedGroups(ctx, query, nodes,
+	if query := _q.withBlockedGroups; query != nil {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Scan) { n.Edges.BlockedGroups = []*Group{} },
 			func(n *Scan, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sq.withEditors; query != nil {
-		if err := sq.loadEditors(ctx, query, nodes,
+	if query := _q.withEditors; query != nil {
+		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Scan) { n.Edges.Editors = []*Group{} },
 			func(n *Scan, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sq.withViewers; query != nil {
-		if err := sq.loadViewers(ctx, query, nodes,
+	if query := _q.withViewers; query != nil {
+		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *Scan) { n.Edges.Viewers = []*Group{} },
 			func(n *Scan, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sq.withAssets; query != nil {
-		if err := sq.loadAssets(ctx, query, nodes,
+	if query := _q.withAssets; query != nil {
+		if err := _q.loadAssets(ctx, query, nodes,
 			func(n *Scan) { n.Edges.Assets = []*Asset{} },
 			func(n *Scan, e *Asset) { n.Edges.Assets = append(n.Edges.Assets, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sq.withEntities; query != nil {
-		if err := sq.loadEntities(ctx, query, nodes,
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Scan) { n.Edges.Entities = []*Entity{} },
 			func(n *Scan, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedBlockedGroups {
-		if err := sq.loadBlockedGroups(ctx, query, nodes,
+	for name, query := range _q.withNamedBlockedGroups {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Scan) { n.appendNamedBlockedGroups(name) },
 			func(n *Scan, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedEditors {
-		if err := sq.loadEditors(ctx, query, nodes,
+	for name, query := range _q.withNamedEditors {
+		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Scan) { n.appendNamedEditors(name) },
 			func(n *Scan, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedViewers {
-		if err := sq.loadViewers(ctx, query, nodes,
+	for name, query := range _q.withNamedViewers {
+		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *Scan) { n.appendNamedViewers(name) },
 			func(n *Scan, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedAssets {
-		if err := sq.loadAssets(ctx, query, nodes,
+	for name, query := range _q.withNamedAssets {
+		if err := _q.loadAssets(ctx, query, nodes,
 			func(n *Scan) { n.appendNamedAssets(name) },
 			func(n *Scan, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedEntities {
-		if err := sq.loadEntities(ctx, query, nodes,
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Scan) { n.appendNamedEntities(name) },
 			func(n *Scan, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range sq.loadTotal {
-		if err := sq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (sq *ScanQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Organization)) error {
+func (_q *ScanQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Scan)
 	for i := range nodes {
@@ -734,7 +734,7 @@ func (sq *ScanQuery) loadOwner(ctx context.Context, query *OrganizationQuery, no
 	}
 	return nil
 }
-func (sq *ScanQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Group)) error {
+func (_q *ScanQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Scan)
 	nids := make(map[string]map[*Scan]struct{})
@@ -747,7 +747,7 @@ func (sq *ScanQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.BlockedGroupsTable)
-		joinT.Schema(sq.schemaConfig.ScanBlockedGroups)
+		joinT.Schema(_q.schemaConfig.ScanBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(scan.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -796,7 +796,7 @@ func (sq *ScanQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, n
 	}
 	return nil
 }
-func (sq *ScanQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Group)) error {
+func (_q *ScanQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Scan)
 	nids := make(map[string]map[*Scan]struct{})
@@ -809,7 +809,7 @@ func (sq *ScanQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.EditorsTable)
-		joinT.Schema(sq.schemaConfig.ScanEditors)
+		joinT.Schema(_q.schemaConfig.ScanEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(scan.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -858,7 +858,7 @@ func (sq *ScanQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes [
 	}
 	return nil
 }
-func (sq *ScanQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Group)) error {
+func (_q *ScanQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Scan)
 	nids := make(map[string]map[*Scan]struct{})
@@ -871,7 +871,7 @@ func (sq *ScanQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.ViewersTable)
-		joinT.Schema(sq.schemaConfig.ScanViewers)
+		joinT.Schema(_q.schemaConfig.ScanViewers)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(scan.ViewersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.ViewersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -920,7 +920,7 @@ func (sq *ScanQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes [
 	}
 	return nil
 }
-func (sq *ScanQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Asset)) error {
+func (_q *ScanQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Asset)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Scan)
 	nids := make(map[string]map[*Scan]struct{})
@@ -933,7 +933,7 @@ func (sq *ScanQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.AssetsTable)
-		joinT.Schema(sq.schemaConfig.ScanAssets)
+		joinT.Schema(_q.schemaConfig.ScanAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(scan.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -982,7 +982,7 @@ func (sq *ScanQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []
 	}
 	return nil
 }
-func (sq *ScanQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Entity)) error {
+func (_q *ScanQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Entity)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Scan)
 	for i := range nodes {
@@ -1014,29 +1014,29 @@ func (sq *ScanQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes
 	return nil
 }
 
-func (sq *ScanQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := sq.querySpec()
-	_spec.Node.Schema = sq.schemaConfig.Scan
-	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
-	if len(sq.modifiers) > 0 {
-		_spec.Modifiers = sq.modifiers
+func (_q *ScanQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Scan
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = sq.ctx.Fields
-	if len(sq.ctx.Fields) > 0 {
-		_spec.Unique = sq.ctx.Unique != nil && *sq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, sq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (sq *ScanQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ScanQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(scan.Table, scan.Columns, sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString))
-	_spec.From = sq.sql
-	if unique := sq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if sq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := sq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, scan.FieldID)
 		for i := range fields {
@@ -1044,24 +1044,24 @@ func (sq *ScanQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if sq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(scan.FieldOwnerID)
 		}
 	}
-	if ps := sq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := sq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := sq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := sq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -1071,118 +1071,118 @@ func (sq *ScanQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (sq *ScanQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(sq.driver.Dialect())
+func (_q *ScanQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(scan.Table)
-	columns := sq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = scan.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if sq.sql != nil {
-		selector = sq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if sq.ctx.Unique != nil && *sq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(sq.schemaConfig.Scan)
-	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Scan)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range sq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range sq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range sq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := sq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := sq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (sq *ScanQuery) Modify(modifiers ...func(s *sql.Selector)) *ScanSelect {
-	sq.modifiers = append(sq.modifiers, modifiers...)
-	return sq.Select()
+func (_q *ScanQuery) Modify(modifiers ...func(s *sql.Selector)) *ScanSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *ScanQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *ScanQuery {
-	query := (&GroupClient{config: sq.config}).Query()
+func (_q *ScanQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *ScanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedBlockedGroups == nil {
-		sq.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	if _q.withNamedBlockedGroups == nil {
+		_q.withNamedBlockedGroups = make(map[string]*GroupQuery)
 	}
-	sq.withNamedBlockedGroups[name] = query
-	return sq
+	_q.withNamedBlockedGroups[name] = query
+	return _q
 }
 
 // WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *ScanQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *ScanQuery {
-	query := (&GroupClient{config: sq.config}).Query()
+func (_q *ScanQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *ScanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedEditors == nil {
-		sq.withNamedEditors = make(map[string]*GroupQuery)
+	if _q.withNamedEditors == nil {
+		_q.withNamedEditors = make(map[string]*GroupQuery)
 	}
-	sq.withNamedEditors[name] = query
-	return sq
+	_q.withNamedEditors[name] = query
+	return _q
 }
 
 // WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *ScanQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *ScanQuery {
-	query := (&GroupClient{config: sq.config}).Query()
+func (_q *ScanQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *ScanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedViewers == nil {
-		sq.withNamedViewers = make(map[string]*GroupQuery)
+	if _q.withNamedViewers == nil {
+		_q.withNamedViewers = make(map[string]*GroupQuery)
 	}
-	sq.withNamedViewers[name] = query
-	return sq
+	_q.withNamedViewers[name] = query
+	return _q
 }
 
 // WithNamedAssets tells the query-builder to eager-load the nodes that are connected to the "assets"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *ScanQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *ScanQuery {
-	query := (&AssetClient{config: sq.config}).Query()
+func (_q *ScanQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *ScanQuery {
+	query := (&AssetClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedAssets == nil {
-		sq.withNamedAssets = make(map[string]*AssetQuery)
+	if _q.withNamedAssets == nil {
+		_q.withNamedAssets = make(map[string]*AssetQuery)
 	}
-	sq.withNamedAssets[name] = query
-	return sq
+	_q.withNamedAssets[name] = query
+	return _q
 }
 
 // WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *ScanQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *ScanQuery {
-	query := (&EntityClient{config: sq.config}).Query()
+func (_q *ScanQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *ScanQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedEntities == nil {
-		sq.withNamedEntities = make(map[string]*EntityQuery)
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
 	}
-	sq.withNamedEntities[name] = query
-	return sq
+	_q.withNamedEntities[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -1211,41 +1211,41 @@ type ScanGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (sgb *ScanGroupBy) Aggregate(fns ...AggregateFunc) *ScanGroupBy {
-	sgb.fns = append(sgb.fns, fns...)
-	return sgb
+func (_g *ScanGroupBy) Aggregate(fns ...AggregateFunc) *ScanGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sgb *ScanGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sgb.build.ctx, ent.OpQueryGroupBy)
-	if err := sgb.build.prepareQuery(ctx); err != nil {
+func (_g *ScanGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ScanQuery, *ScanGroupBy](ctx, sgb.build, sgb, sgb.build.inters, v)
+	return scanWithInterceptors[*ScanQuery, *ScanGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (sgb *ScanGroupBy) sqlScan(ctx context.Context, root *ScanQuery, v any) error {
+func (_g *ScanGroupBy) sqlScan(ctx context.Context, root *ScanQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(sgb.fns))
-	for _, fn := range sgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*sgb.flds)+len(sgb.fns))
-		for _, f := range *sgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*sgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -1259,27 +1259,27 @@ type ScanSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ss *ScanSelect) Aggregate(fns ...AggregateFunc) *ScanSelect {
-	ss.fns = append(ss.fns, fns...)
-	return ss
+func (_s *ScanSelect) Aggregate(fns ...AggregateFunc) *ScanSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ss *ScanSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ss.ctx, ent.OpQuerySelect)
-	if err := ss.prepareQuery(ctx); err != nil {
+func (_s *ScanSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ScanQuery, *ScanSelect](ctx, ss.ScanQuery, ss, ss.inters, v)
+	return scanWithInterceptors[*ScanQuery, *ScanSelect](ctx, _s.ScanQuery, _s, _s.inters, v)
 }
 
-func (ss *ScanSelect) sqlScan(ctx context.Context, root *ScanQuery, v any) error {
+func (_s *ScanSelect) sqlScan(ctx context.Context, root *ScanQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ss.fns))
-	for _, fn := range ss.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ss.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -1287,7 +1287,7 @@ func (ss *ScanSelect) sqlScan(ctx context.Context, root *ScanQuery, v any) error
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ss.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -1295,7 +1295,7 @@ func (ss *ScanSelect) sqlScan(ctx context.Context, root *ScanQuery, v any) error
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ss *ScanSelect) Modify(modifiers ...func(s *sql.Selector)) *ScanSelect {
-	ss.modifiers = append(ss.modifiers, modifiers...)
-	return ss
+func (_s *ScanSelect) Modify(modifiers ...func(s *sql.Selector)) *ScanSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

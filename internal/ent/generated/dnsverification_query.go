@@ -39,44 +39,44 @@ type DNSVerificationQuery struct {
 }
 
 // Where adds a new predicate for the DNSVerificationQuery builder.
-func (dvq *DNSVerificationQuery) Where(ps ...predicate.DNSVerification) *DNSVerificationQuery {
-	dvq.predicates = append(dvq.predicates, ps...)
-	return dvq
+func (_q *DNSVerificationQuery) Where(ps ...predicate.DNSVerification) *DNSVerificationQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (dvq *DNSVerificationQuery) Limit(limit int) *DNSVerificationQuery {
-	dvq.ctx.Limit = &limit
-	return dvq
+func (_q *DNSVerificationQuery) Limit(limit int) *DNSVerificationQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (dvq *DNSVerificationQuery) Offset(offset int) *DNSVerificationQuery {
-	dvq.ctx.Offset = &offset
-	return dvq
+func (_q *DNSVerificationQuery) Offset(offset int) *DNSVerificationQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (dvq *DNSVerificationQuery) Unique(unique bool) *DNSVerificationQuery {
-	dvq.ctx.Unique = &unique
-	return dvq
+func (_q *DNSVerificationQuery) Unique(unique bool) *DNSVerificationQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (dvq *DNSVerificationQuery) Order(o ...dnsverification.OrderOption) *DNSVerificationQuery {
-	dvq.order = append(dvq.order, o...)
-	return dvq
+func (_q *DNSVerificationQuery) Order(o ...dnsverification.OrderOption) *DNSVerificationQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (dvq *DNSVerificationQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: dvq.config}).Query()
+func (_q *DNSVerificationQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := dvq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := dvq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -85,23 +85,23 @@ func (dvq *DNSVerificationQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, dnsverification.OwnerTable, dnsverification.OwnerColumn),
 		)
-		schemaConfig := dvq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.DNSVerification
-		fromU = sqlgraph.SetNeighbors(dvq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryCustomDomains chains the current query on the "custom_domains" edge.
-func (dvq *DNSVerificationQuery) QueryCustomDomains() *CustomDomainQuery {
-	query := (&CustomDomainClient{config: dvq.config}).Query()
+func (_q *DNSVerificationQuery) QueryCustomDomains() *CustomDomainQuery {
+	query := (&CustomDomainClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := dvq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := dvq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -110,10 +110,10 @@ func (dvq *DNSVerificationQuery) QueryCustomDomains() *CustomDomainQuery {
 			sqlgraph.To(customdomain.Table, customdomain.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, dnsverification.CustomDomainsTable, dnsverification.CustomDomainsColumn),
 		)
-		schemaConfig := dvq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.CustomDomain
 		step.Edge.Schema = schemaConfig.CustomDomain
-		fromU = sqlgraph.SetNeighbors(dvq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -121,8 +121,8 @@ func (dvq *DNSVerificationQuery) QueryCustomDomains() *CustomDomainQuery {
 
 // First returns the first DNSVerification entity from the query.
 // Returns a *NotFoundError when no DNSVerification was found.
-func (dvq *DNSVerificationQuery) First(ctx context.Context) (*DNSVerification, error) {
-	nodes, err := dvq.Limit(1).All(setContextOp(ctx, dvq.ctx, ent.OpQueryFirst))
+func (_q *DNSVerificationQuery) First(ctx context.Context) (*DNSVerification, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -133,8 +133,8 @@ func (dvq *DNSVerificationQuery) First(ctx context.Context) (*DNSVerification, e
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (dvq *DNSVerificationQuery) FirstX(ctx context.Context) *DNSVerification {
-	node, err := dvq.First(ctx)
+func (_q *DNSVerificationQuery) FirstX(ctx context.Context) *DNSVerification {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -143,9 +143,9 @@ func (dvq *DNSVerificationQuery) FirstX(ctx context.Context) *DNSVerification {
 
 // FirstID returns the first DNSVerification ID from the query.
 // Returns a *NotFoundError when no DNSVerification ID was found.
-func (dvq *DNSVerificationQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *DNSVerificationQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = dvq.Limit(1).IDs(setContextOp(ctx, dvq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -156,8 +156,8 @@ func (dvq *DNSVerificationQuery) FirstID(ctx context.Context) (id string, err er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (dvq *DNSVerificationQuery) FirstIDX(ctx context.Context) string {
-	id, err := dvq.FirstID(ctx)
+func (_q *DNSVerificationQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -167,8 +167,8 @@ func (dvq *DNSVerificationQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single DNSVerification entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one DNSVerification entity is found.
 // Returns a *NotFoundError when no DNSVerification entities are found.
-func (dvq *DNSVerificationQuery) Only(ctx context.Context) (*DNSVerification, error) {
-	nodes, err := dvq.Limit(2).All(setContextOp(ctx, dvq.ctx, ent.OpQueryOnly))
+func (_q *DNSVerificationQuery) Only(ctx context.Context) (*DNSVerification, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -183,8 +183,8 @@ func (dvq *DNSVerificationQuery) Only(ctx context.Context) (*DNSVerification, er
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (dvq *DNSVerificationQuery) OnlyX(ctx context.Context) *DNSVerification {
-	node, err := dvq.Only(ctx)
+func (_q *DNSVerificationQuery) OnlyX(ctx context.Context) *DNSVerification {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -194,9 +194,9 @@ func (dvq *DNSVerificationQuery) OnlyX(ctx context.Context) *DNSVerification {
 // OnlyID is like Only, but returns the only DNSVerification ID in the query.
 // Returns a *NotSingularError when more than one DNSVerification ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (dvq *DNSVerificationQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *DNSVerificationQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = dvq.Limit(2).IDs(setContextOp(ctx, dvq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -211,8 +211,8 @@ func (dvq *DNSVerificationQuery) OnlyID(ctx context.Context) (id string, err err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (dvq *DNSVerificationQuery) OnlyIDX(ctx context.Context) string {
-	id, err := dvq.OnlyID(ctx)
+func (_q *DNSVerificationQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -220,18 +220,18 @@ func (dvq *DNSVerificationQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of DNSVerifications.
-func (dvq *DNSVerificationQuery) All(ctx context.Context) ([]*DNSVerification, error) {
-	ctx = setContextOp(ctx, dvq.ctx, ent.OpQueryAll)
-	if err := dvq.prepareQuery(ctx); err != nil {
+func (_q *DNSVerificationQuery) All(ctx context.Context) ([]*DNSVerification, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*DNSVerification, *DNSVerificationQuery]()
-	return withInterceptors[[]*DNSVerification](ctx, dvq, qr, dvq.inters)
+	return withInterceptors[[]*DNSVerification](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (dvq *DNSVerificationQuery) AllX(ctx context.Context) []*DNSVerification {
-	nodes, err := dvq.All(ctx)
+func (_q *DNSVerificationQuery) AllX(ctx context.Context) []*DNSVerification {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -239,20 +239,20 @@ func (dvq *DNSVerificationQuery) AllX(ctx context.Context) []*DNSVerification {
 }
 
 // IDs executes the query and returns a list of DNSVerification IDs.
-func (dvq *DNSVerificationQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if dvq.ctx.Unique == nil && dvq.path != nil {
-		dvq.Unique(true)
+func (_q *DNSVerificationQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, dvq.ctx, ent.OpQueryIDs)
-	if err = dvq.Select(dnsverification.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(dnsverification.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (dvq *DNSVerificationQuery) IDsX(ctx context.Context) []string {
-	ids, err := dvq.IDs(ctx)
+func (_q *DNSVerificationQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -260,17 +260,17 @@ func (dvq *DNSVerificationQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (dvq *DNSVerificationQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, dvq.ctx, ent.OpQueryCount)
-	if err := dvq.prepareQuery(ctx); err != nil {
+func (_q *DNSVerificationQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, dvq, querierCount[*DNSVerificationQuery](), dvq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*DNSVerificationQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (dvq *DNSVerificationQuery) CountX(ctx context.Context) int {
-	count, err := dvq.Count(ctx)
+func (_q *DNSVerificationQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -278,9 +278,9 @@ func (dvq *DNSVerificationQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (dvq *DNSVerificationQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, dvq.ctx, ent.OpQueryExist)
-	switch _, err := dvq.FirstID(ctx); {
+func (_q *DNSVerificationQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -291,8 +291,8 @@ func (dvq *DNSVerificationQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (dvq *DNSVerificationQuery) ExistX(ctx context.Context) bool {
-	exist, err := dvq.Exist(ctx)
+func (_q *DNSVerificationQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -301,45 +301,45 @@ func (dvq *DNSVerificationQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the DNSVerificationQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (dvq *DNSVerificationQuery) Clone() *DNSVerificationQuery {
-	if dvq == nil {
+func (_q *DNSVerificationQuery) Clone() *DNSVerificationQuery {
+	if _q == nil {
 		return nil
 	}
 	return &DNSVerificationQuery{
-		config:            dvq.config,
-		ctx:               dvq.ctx.Clone(),
-		order:             append([]dnsverification.OrderOption{}, dvq.order...),
-		inters:            append([]Interceptor{}, dvq.inters...),
-		predicates:        append([]predicate.DNSVerification{}, dvq.predicates...),
-		withOwner:         dvq.withOwner.Clone(),
-		withCustomDomains: dvq.withCustomDomains.Clone(),
+		config:            _q.config,
+		ctx:               _q.ctx.Clone(),
+		order:             append([]dnsverification.OrderOption{}, _q.order...),
+		inters:            append([]Interceptor{}, _q.inters...),
+		predicates:        append([]predicate.DNSVerification{}, _q.predicates...),
+		withOwner:         _q.withOwner.Clone(),
+		withCustomDomains: _q.withCustomDomains.Clone(),
 		// clone intermediate query.
-		sql:       dvq.sql.Clone(),
-		path:      dvq.path,
-		modifiers: append([]func(*sql.Selector){}, dvq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (dvq *DNSVerificationQuery) WithOwner(opts ...func(*OrganizationQuery)) *DNSVerificationQuery {
-	query := (&OrganizationClient{config: dvq.config}).Query()
+func (_q *DNSVerificationQuery) WithOwner(opts ...func(*OrganizationQuery)) *DNSVerificationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	dvq.withOwner = query
-	return dvq
+	_q.withOwner = query
+	return _q
 }
 
 // WithCustomDomains tells the query-builder to eager-load the nodes that are connected to
 // the "custom_domains" edge. The optional arguments are used to configure the query builder of the edge.
-func (dvq *DNSVerificationQuery) WithCustomDomains(opts ...func(*CustomDomainQuery)) *DNSVerificationQuery {
-	query := (&CustomDomainClient{config: dvq.config}).Query()
+func (_q *DNSVerificationQuery) WithCustomDomains(opts ...func(*CustomDomainQuery)) *DNSVerificationQuery {
+	query := (&CustomDomainClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	dvq.withCustomDomains = query
-	return dvq
+	_q.withCustomDomains = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -356,10 +356,10 @@ func (dvq *DNSVerificationQuery) WithCustomDomains(opts ...func(*CustomDomainQue
 //		GroupBy(dnsverification.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (dvq *DNSVerificationQuery) GroupBy(field string, fields ...string) *DNSVerificationGroupBy {
-	dvq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &DNSVerificationGroupBy{build: dvq}
-	grbuild.flds = &dvq.ctx.Fields
+func (_q *DNSVerificationQuery) GroupBy(field string, fields ...string) *DNSVerificationGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &DNSVerificationGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = dnsverification.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -377,112 +377,112 @@ func (dvq *DNSVerificationQuery) GroupBy(field string, fields ...string) *DNSVer
 //	client.DNSVerification.Query().
 //		Select(dnsverification.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (dvq *DNSVerificationQuery) Select(fields ...string) *DNSVerificationSelect {
-	dvq.ctx.Fields = append(dvq.ctx.Fields, fields...)
-	sbuild := &DNSVerificationSelect{DNSVerificationQuery: dvq}
+func (_q *DNSVerificationQuery) Select(fields ...string) *DNSVerificationSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &DNSVerificationSelect{DNSVerificationQuery: _q}
 	sbuild.label = dnsverification.Label
-	sbuild.flds, sbuild.scan = &dvq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a DNSVerificationSelect configured with the given aggregations.
-func (dvq *DNSVerificationQuery) Aggregate(fns ...AggregateFunc) *DNSVerificationSelect {
-	return dvq.Select().Aggregate(fns...)
+func (_q *DNSVerificationQuery) Aggregate(fns ...AggregateFunc) *DNSVerificationSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (dvq *DNSVerificationQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range dvq.inters {
+func (_q *DNSVerificationQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, dvq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range dvq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !dnsverification.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if dvq.path != nil {
-		prev, err := dvq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		dvq.sql = prev
+		_q.sql = prev
 	}
 	if dnsverification.Policy == nil {
 		return errors.New("generated: uninitialized dnsverification.Policy (forgotten import generated/runtime?)")
 	}
-	if err := dnsverification.Policy.EvalQuery(ctx, dvq); err != nil {
+	if err := dnsverification.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (dvq *DNSVerificationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DNSVerification, error) {
+func (_q *DNSVerificationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DNSVerification, error) {
 	var (
 		nodes       = []*DNSVerification{}
-		_spec       = dvq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [2]bool{
-			dvq.withOwner != nil,
-			dvq.withCustomDomains != nil,
+			_q.withOwner != nil,
+			_q.withCustomDomains != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*DNSVerification).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &DNSVerification{config: dvq.config}
+		node := &DNSVerification{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = dvq.schemaConfig.DNSVerification
-	ctx = internal.NewSchemaConfigContext(ctx, dvq.schemaConfig)
-	if len(dvq.modifiers) > 0 {
-		_spec.Modifiers = dvq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.DNSVerification
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, dvq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := dvq.withOwner; query != nil {
-		if err := dvq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *DNSVerification, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := dvq.withCustomDomains; query != nil {
-		if err := dvq.loadCustomDomains(ctx, query, nodes,
+	if query := _q.withCustomDomains; query != nil {
+		if err := _q.loadCustomDomains(ctx, query, nodes,
 			func(n *DNSVerification) { n.Edges.CustomDomains = []*CustomDomain{} },
 			func(n *DNSVerification, e *CustomDomain) { n.Edges.CustomDomains = append(n.Edges.CustomDomains, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range dvq.withNamedCustomDomains {
-		if err := dvq.loadCustomDomains(ctx, query, nodes,
+	for name, query := range _q.withNamedCustomDomains {
+		if err := _q.loadCustomDomains(ctx, query, nodes,
 			func(n *DNSVerification) { n.appendNamedCustomDomains(name) },
 			func(n *DNSVerification, e *CustomDomain) { n.appendNamedCustomDomains(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range dvq.loadTotal {
-		if err := dvq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (dvq *DNSVerificationQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*DNSVerification, init func(*DNSVerification), assign func(*DNSVerification, *Organization)) error {
+func (_q *DNSVerificationQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*DNSVerification, init func(*DNSVerification), assign func(*DNSVerification, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*DNSVerification)
 	for i := range nodes {
@@ -511,7 +511,7 @@ func (dvq *DNSVerificationQuery) loadOwner(ctx context.Context, query *Organizat
 	}
 	return nil
 }
-func (dvq *DNSVerificationQuery) loadCustomDomains(ctx context.Context, query *CustomDomainQuery, nodes []*DNSVerification, init func(*DNSVerification), assign func(*DNSVerification, *CustomDomain)) error {
+func (_q *DNSVerificationQuery) loadCustomDomains(ctx context.Context, query *CustomDomainQuery, nodes []*DNSVerification, init func(*DNSVerification), assign func(*DNSVerification, *CustomDomain)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*DNSVerification)
 	for i := range nodes {
@@ -543,29 +543,29 @@ func (dvq *DNSVerificationQuery) loadCustomDomains(ctx context.Context, query *C
 	return nil
 }
 
-func (dvq *DNSVerificationQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := dvq.querySpec()
-	_spec.Node.Schema = dvq.schemaConfig.DNSVerification
-	ctx = internal.NewSchemaConfigContext(ctx, dvq.schemaConfig)
-	if len(dvq.modifiers) > 0 {
-		_spec.Modifiers = dvq.modifiers
+func (_q *DNSVerificationQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.DNSVerification
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = dvq.ctx.Fields
-	if len(dvq.ctx.Fields) > 0 {
-		_spec.Unique = dvq.ctx.Unique != nil && *dvq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, dvq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (dvq *DNSVerificationQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *DNSVerificationQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(dnsverification.Table, dnsverification.Columns, sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString))
-	_spec.From = dvq.sql
-	if unique := dvq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if dvq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := dvq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, dnsverification.FieldID)
 		for i := range fields {
@@ -573,24 +573,24 @@ func (dvq *DNSVerificationQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if dvq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(dnsverification.FieldOwnerID)
 		}
 	}
-	if ps := dvq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := dvq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := dvq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := dvq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -600,62 +600,62 @@ func (dvq *DNSVerificationQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (dvq *DNSVerificationQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(dvq.driver.Dialect())
+func (_q *DNSVerificationQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(dnsverification.Table)
-	columns := dvq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = dnsverification.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if dvq.sql != nil {
-		selector = dvq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if dvq.ctx.Unique != nil && *dvq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(dvq.schemaConfig.DNSVerification)
-	ctx = internal.NewSchemaConfigContext(ctx, dvq.schemaConfig)
+	t1.Schema(_q.schemaConfig.DNSVerification)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range dvq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range dvq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range dvq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := dvq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := dvq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (dvq *DNSVerificationQuery) Modify(modifiers ...func(s *sql.Selector)) *DNSVerificationSelect {
-	dvq.modifiers = append(dvq.modifiers, modifiers...)
-	return dvq.Select()
+func (_q *DNSVerificationQuery) Modify(modifiers ...func(s *sql.Selector)) *DNSVerificationSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedCustomDomains tells the query-builder to eager-load the nodes that are connected to the "custom_domains"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (dvq *DNSVerificationQuery) WithNamedCustomDomains(name string, opts ...func(*CustomDomainQuery)) *DNSVerificationQuery {
-	query := (&CustomDomainClient{config: dvq.config}).Query()
+func (_q *DNSVerificationQuery) WithNamedCustomDomains(name string, opts ...func(*CustomDomainQuery)) *DNSVerificationQuery {
+	query := (&CustomDomainClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if dvq.withNamedCustomDomains == nil {
-		dvq.withNamedCustomDomains = make(map[string]*CustomDomainQuery)
+	if _q.withNamedCustomDomains == nil {
+		_q.withNamedCustomDomains = make(map[string]*CustomDomainQuery)
 	}
-	dvq.withNamedCustomDomains[name] = query
-	return dvq
+	_q.withNamedCustomDomains[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -684,41 +684,41 @@ type DNSVerificationGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (dvgb *DNSVerificationGroupBy) Aggregate(fns ...AggregateFunc) *DNSVerificationGroupBy {
-	dvgb.fns = append(dvgb.fns, fns...)
-	return dvgb
+func (_g *DNSVerificationGroupBy) Aggregate(fns ...AggregateFunc) *DNSVerificationGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (dvgb *DNSVerificationGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, dvgb.build.ctx, ent.OpQueryGroupBy)
-	if err := dvgb.build.prepareQuery(ctx); err != nil {
+func (_g *DNSVerificationGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*DNSVerificationQuery, *DNSVerificationGroupBy](ctx, dvgb.build, dvgb, dvgb.build.inters, v)
+	return scanWithInterceptors[*DNSVerificationQuery, *DNSVerificationGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (dvgb *DNSVerificationGroupBy) sqlScan(ctx context.Context, root *DNSVerificationQuery, v any) error {
+func (_g *DNSVerificationGroupBy) sqlScan(ctx context.Context, root *DNSVerificationQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(dvgb.fns))
-	for _, fn := range dvgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*dvgb.flds)+len(dvgb.fns))
-		for _, f := range *dvgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*dvgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := dvgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -732,27 +732,27 @@ type DNSVerificationSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (dvs *DNSVerificationSelect) Aggregate(fns ...AggregateFunc) *DNSVerificationSelect {
-	dvs.fns = append(dvs.fns, fns...)
-	return dvs
+func (_s *DNSVerificationSelect) Aggregate(fns ...AggregateFunc) *DNSVerificationSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (dvs *DNSVerificationSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, dvs.ctx, ent.OpQuerySelect)
-	if err := dvs.prepareQuery(ctx); err != nil {
+func (_s *DNSVerificationSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*DNSVerificationQuery, *DNSVerificationSelect](ctx, dvs.DNSVerificationQuery, dvs, dvs.inters, v)
+	return scanWithInterceptors[*DNSVerificationQuery, *DNSVerificationSelect](ctx, _s.DNSVerificationQuery, _s, _s.inters, v)
 }
 
-func (dvs *DNSVerificationSelect) sqlScan(ctx context.Context, root *DNSVerificationQuery, v any) error {
+func (_s *DNSVerificationSelect) sqlScan(ctx context.Context, root *DNSVerificationQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(dvs.fns))
-	for _, fn := range dvs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*dvs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -760,7 +760,7 @@ func (dvs *DNSVerificationSelect) sqlScan(ctx context.Context, root *DNSVerifica
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := dvs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -768,7 +768,7 @@ func (dvs *DNSVerificationSelect) sqlScan(ctx context.Context, root *DNSVerifica
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (dvs *DNSVerificationSelect) Modify(modifiers ...func(s *sql.Selector)) *DNSVerificationSelect {
-	dvs.modifiers = append(dvs.modifiers, modifiers...)
-	return dvs
+func (_s *DNSVerificationSelect) Modify(modifiers ...func(s *sql.Selector)) *DNSVerificationSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

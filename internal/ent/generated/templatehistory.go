@@ -77,7 +77,7 @@ func (*TemplateHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TemplateHistory fields.
-func (th *TemplateHistory) assignValues(columns []string, values []any) error {
+func (_m *TemplateHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -87,67 +87,67 @@ func (th *TemplateHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				th.ID = value.String
+				_m.ID = value.String
 			}
 		case templatehistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				th.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case templatehistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				th.Ref = value.String
+				_m.Ref = value.String
 			}
 		case templatehistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				th.Operation = *value
+				_m.Operation = *value
 			}
 		case templatehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				th.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case templatehistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				th.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case templatehistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				th.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case templatehistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				th.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case templatehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				th.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case templatehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				th.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case templatehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &th.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -155,31 +155,31 @@ func (th *TemplateHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				th.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case templatehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				th.Name = value.String
+				_m.Name = value.String
 			}
 		case templatehistory.FieldTemplateType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field template_type", values[i])
 			} else if value.Valid {
-				th.TemplateType = enums.DocumentType(value.String)
+				_m.TemplateType = enums.DocumentType(value.String)
 			}
 		case templatehistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				th.Description = value.String
+				_m.Description = value.String
 			}
 		case templatehistory.FieldJsonconfig:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field jsonconfig", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &th.Jsonconfig); err != nil {
+				if err := json.Unmarshal(*value, &_m.Jsonconfig); err != nil {
 					return fmt.Errorf("unmarshal field jsonconfig: %w", err)
 				}
 			}
@@ -187,12 +187,12 @@ func (th *TemplateHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field uischema", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &th.Uischema); err != nil {
+				if err := json.Unmarshal(*value, &_m.Uischema); err != nil {
 					return fmt.Errorf("unmarshal field uischema: %w", err)
 				}
 			}
 		default:
-			th.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -200,80 +200,80 @@ func (th *TemplateHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TemplateHistory.
 // This includes values selected through modifiers, order, etc.
-func (th *TemplateHistory) Value(name string) (ent.Value, error) {
-	return th.selectValues.Get(name)
+func (_m *TemplateHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this TemplateHistory.
 // Note that you need to call TemplateHistory.Unwrap() before calling this method if this TemplateHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (th *TemplateHistory) Update() *TemplateHistoryUpdateOne {
-	return NewTemplateHistoryClient(th.config).UpdateOne(th)
+func (_m *TemplateHistory) Update() *TemplateHistoryUpdateOne {
+	return NewTemplateHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TemplateHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (th *TemplateHistory) Unwrap() *TemplateHistory {
-	_tx, ok := th.config.driver.(*txDriver)
+func (_m *TemplateHistory) Unwrap() *TemplateHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: TemplateHistory is not a transactional entity")
 	}
-	th.config.driver = _tx.drv
-	return th
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (th *TemplateHistory) String() string {
+func (_m *TemplateHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("TemplateHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", th.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(th.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(th.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", th.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(th.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(th.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(th.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(th.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(th.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(th.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", th.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(th.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(th.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("template_type=")
-	builder.WriteString(fmt.Sprintf("%v", th.TemplateType))
+	builder.WriteString(fmt.Sprintf("%v", _m.TemplateType))
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(th.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("jsonconfig=")
-	builder.WriteString(fmt.Sprintf("%v", th.Jsonconfig))
+	builder.WriteString(fmt.Sprintf("%v", _m.Jsonconfig))
 	builder.WriteString(", ")
 	builder.WriteString("uischema=")
-	builder.WriteString(fmt.Sprintf("%v", th.Uischema))
+	builder.WriteString(fmt.Sprintf("%v", _m.Uischema))
 	builder.WriteByte(')')
 	return builder.String()
 }

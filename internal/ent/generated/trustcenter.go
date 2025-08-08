@@ -128,7 +128,7 @@ func (*TrustCenter) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TrustCenter fields.
-func (tc *TrustCenter) assignValues(columns []string, values []any) error {
+func (_m *TrustCenter) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -138,49 +138,49 @@ func (tc *TrustCenter) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				tc.ID = value.String
+				_m.ID = value.String
 			}
 		case trustcenter.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tc.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case trustcenter.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tc.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case trustcenter.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				tc.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case trustcenter.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				tc.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case trustcenter.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				tc.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case trustcenter.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				tc.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case trustcenter.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &tc.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -188,22 +188,22 @@ func (tc *TrustCenter) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				tc.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case trustcenter.FieldSlug:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field slug", values[i])
 			} else if value.Valid {
-				tc.Slug = value.String
+				_m.Slug = value.String
 			}
 		case trustcenter.FieldCustomDomainID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field custom_domain_id", values[i])
 			} else if value.Valid {
-				tc.CustomDomainID = value.String
+				_m.CustomDomainID = value.String
 			}
 		default:
-			tc.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -211,107 +211,107 @@ func (tc *TrustCenter) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TrustCenter.
 // This includes values selected through modifiers, order, etc.
-func (tc *TrustCenter) Value(name string) (ent.Value, error) {
-	return tc.selectValues.Get(name)
+func (_m *TrustCenter) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the TrustCenter entity.
-func (tc *TrustCenter) QueryOwner() *OrganizationQuery {
-	return NewTrustCenterClient(tc.config).QueryOwner(tc)
+func (_m *TrustCenter) QueryOwner() *OrganizationQuery {
+	return NewTrustCenterClient(_m.config).QueryOwner(_m)
 }
 
 // QueryCustomDomain queries the "custom_domain" edge of the TrustCenter entity.
-func (tc *TrustCenter) QueryCustomDomain() *CustomDomainQuery {
-	return NewTrustCenterClient(tc.config).QueryCustomDomain(tc)
+func (_m *TrustCenter) QueryCustomDomain() *CustomDomainQuery {
+	return NewTrustCenterClient(_m.config).QueryCustomDomain(_m)
 }
 
 // QuerySetting queries the "setting" edge of the TrustCenter entity.
-func (tc *TrustCenter) QuerySetting() *TrustCenterSettingQuery {
-	return NewTrustCenterClient(tc.config).QuerySetting(tc)
+func (_m *TrustCenter) QuerySetting() *TrustCenterSettingQuery {
+	return NewTrustCenterClient(_m.config).QuerySetting(_m)
 }
 
 // QueryTrustCenterSubprocessors queries the "trust_center_subprocessors" edge of the TrustCenter entity.
-func (tc *TrustCenter) QueryTrustCenterSubprocessors() *TrustCenterSubprocessorQuery {
-	return NewTrustCenterClient(tc.config).QueryTrustCenterSubprocessors(tc)
+func (_m *TrustCenter) QueryTrustCenterSubprocessors() *TrustCenterSubprocessorQuery {
+	return NewTrustCenterClient(_m.config).QueryTrustCenterSubprocessors(_m)
 }
 
 // Update returns a builder for updating this TrustCenter.
 // Note that you need to call TrustCenter.Unwrap() before calling this method if this TrustCenter
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tc *TrustCenter) Update() *TrustCenterUpdateOne {
-	return NewTrustCenterClient(tc.config).UpdateOne(tc)
+func (_m *TrustCenter) Update() *TrustCenterUpdateOne {
+	return NewTrustCenterClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TrustCenter entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tc *TrustCenter) Unwrap() *TrustCenter {
-	_tx, ok := tc.config.driver.(*txDriver)
+func (_m *TrustCenter) Unwrap() *TrustCenter {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: TrustCenter is not a transactional entity")
 	}
-	tc.config.driver = _tx.drv
-	return tc
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tc *TrustCenter) String() string {
+func (_m *TrustCenter) String() string {
 	var builder strings.Builder
 	builder.WriteString("TrustCenter(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tc.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(tc.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(tc.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(tc.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(tc.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(tc.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(tc.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", tc.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(tc.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("slug=")
-	builder.WriteString(tc.Slug)
+	builder.WriteString(_m.Slug)
 	builder.WriteString(", ")
 	builder.WriteString("custom_domain_id=")
-	builder.WriteString(tc.CustomDomainID)
+	builder.WriteString(_m.CustomDomainID)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedTrustCenterSubprocessors returns the TrustCenterSubprocessors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (tc *TrustCenter) NamedTrustCenterSubprocessors(name string) ([]*TrustCenterSubprocessor, error) {
-	if tc.Edges.namedTrustCenterSubprocessors == nil {
+func (_m *TrustCenter) NamedTrustCenterSubprocessors(name string) ([]*TrustCenterSubprocessor, error) {
+	if _m.Edges.namedTrustCenterSubprocessors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := tc.Edges.namedTrustCenterSubprocessors[name]
+	nodes, ok := _m.Edges.namedTrustCenterSubprocessors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (tc *TrustCenter) appendNamedTrustCenterSubprocessors(name string, edges ...*TrustCenterSubprocessor) {
-	if tc.Edges.namedTrustCenterSubprocessors == nil {
-		tc.Edges.namedTrustCenterSubprocessors = make(map[string][]*TrustCenterSubprocessor)
+func (_m *TrustCenter) appendNamedTrustCenterSubprocessors(name string, edges ...*TrustCenterSubprocessor) {
+	if _m.Edges.namedTrustCenterSubprocessors == nil {
+		_m.Edges.namedTrustCenterSubprocessors = make(map[string][]*TrustCenterSubprocessor)
 	}
 	if len(edges) == 0 {
-		tc.Edges.namedTrustCenterSubprocessors[name] = []*TrustCenterSubprocessor{}
+		_m.Edges.namedTrustCenterSubprocessors[name] = []*TrustCenterSubprocessor{}
 	} else {
-		tc.Edges.namedTrustCenterSubprocessors[name] = append(tc.Edges.namedTrustCenterSubprocessors[name], edges...)
+		_m.Edges.namedTrustCenterSubprocessors[name] = append(_m.Edges.namedTrustCenterSubprocessors[name], edges...)
 	}
 }
 

@@ -22,58 +22,58 @@ type TrustCenterSubprocessorDelete struct {
 }
 
 // Where appends a list predicates to the TrustCenterSubprocessorDelete builder.
-func (tcsd *TrustCenterSubprocessorDelete) Where(ps ...predicate.TrustCenterSubprocessor) *TrustCenterSubprocessorDelete {
-	tcsd.mutation.Where(ps...)
-	return tcsd
+func (_d *TrustCenterSubprocessorDelete) Where(ps ...predicate.TrustCenterSubprocessor) *TrustCenterSubprocessorDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tcsd *TrustCenterSubprocessorDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tcsd.sqlExec, tcsd.mutation, tcsd.hooks)
+func (_d *TrustCenterSubprocessorDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcsd *TrustCenterSubprocessorDelete) ExecX(ctx context.Context) int {
-	n, err := tcsd.Exec(ctx)
+func (_d *TrustCenterSubprocessorDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tcsd *TrustCenterSubprocessorDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TrustCenterSubprocessorDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(trustcentersubprocessor.Table, sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString))
-	_spec.Node.Schema = tcsd.schemaConfig.TrustCenterSubprocessor
-	ctx = internal.NewSchemaConfigContext(ctx, tcsd.schemaConfig)
-	if ps := tcsd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.TrustCenterSubprocessor
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tcsd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tcsd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TrustCenterSubprocessorDeleteOne is the builder for deleting a single TrustCenterSubprocessor entity.
 type TrustCenterSubprocessorDeleteOne struct {
-	tcsd *TrustCenterSubprocessorDelete
+	_d *TrustCenterSubprocessorDelete
 }
 
 // Where appends a list predicates to the TrustCenterSubprocessorDelete builder.
-func (tcsdo *TrustCenterSubprocessorDeleteOne) Where(ps ...predicate.TrustCenterSubprocessor) *TrustCenterSubprocessorDeleteOne {
-	tcsdo.tcsd.mutation.Where(ps...)
-	return tcsdo
+func (_d *TrustCenterSubprocessorDeleteOne) Where(ps ...predicate.TrustCenterSubprocessor) *TrustCenterSubprocessorDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tcsdo *TrustCenterSubprocessorDeleteOne) Exec(ctx context.Context) error {
-	n, err := tcsdo.tcsd.Exec(ctx)
+func (_d *TrustCenterSubprocessorDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (tcsdo *TrustCenterSubprocessorDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcsdo *TrustCenterSubprocessorDeleteOne) ExecX(ctx context.Context) {
-	if err := tcsdo.Exec(ctx); err != nil {
+func (_d *TrustCenterSubprocessorDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

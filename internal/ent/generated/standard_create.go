@@ -24,353 +24,353 @@ type StandardCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (sc *StandardCreate) SetCreatedAt(t time.Time) *StandardCreate {
-	sc.mutation.SetCreatedAt(t)
-	return sc
+func (_c *StandardCreate) SetCreatedAt(v time.Time) *StandardCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableCreatedAt(t *time.Time) *StandardCreate {
-	if t != nil {
-		sc.SetCreatedAt(*t)
+func (_c *StandardCreate) SetNillableCreatedAt(v *time.Time) *StandardCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sc *StandardCreate) SetUpdatedAt(t time.Time) *StandardCreate {
-	sc.mutation.SetUpdatedAt(t)
-	return sc
+func (_c *StandardCreate) SetUpdatedAt(v time.Time) *StandardCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableUpdatedAt(t *time.Time) *StandardCreate {
-	if t != nil {
-		sc.SetUpdatedAt(*t)
+func (_c *StandardCreate) SetNillableUpdatedAt(v *time.Time) *StandardCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (sc *StandardCreate) SetCreatedBy(s string) *StandardCreate {
-	sc.mutation.SetCreatedBy(s)
-	return sc
+func (_c *StandardCreate) SetCreatedBy(v string) *StandardCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableCreatedBy(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetCreatedBy(*s)
+func (_c *StandardCreate) SetNillableCreatedBy(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sc *StandardCreate) SetUpdatedBy(s string) *StandardCreate {
-	sc.mutation.SetUpdatedBy(s)
-	return sc
+func (_c *StandardCreate) SetUpdatedBy(v string) *StandardCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableUpdatedBy(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetUpdatedBy(*s)
+func (_c *StandardCreate) SetNillableUpdatedBy(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (sc *StandardCreate) SetDeletedAt(t time.Time) *StandardCreate {
-	sc.mutation.SetDeletedAt(t)
-	return sc
+func (_c *StandardCreate) SetDeletedAt(v time.Time) *StandardCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableDeletedAt(t *time.Time) *StandardCreate {
-	if t != nil {
-		sc.SetDeletedAt(*t)
+func (_c *StandardCreate) SetNillableDeletedAt(v *time.Time) *StandardCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (sc *StandardCreate) SetDeletedBy(s string) *StandardCreate {
-	sc.mutation.SetDeletedBy(s)
-	return sc
+func (_c *StandardCreate) SetDeletedBy(v string) *StandardCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableDeletedBy(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetDeletedBy(*s)
+func (_c *StandardCreate) SetNillableDeletedBy(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (sc *StandardCreate) SetTags(s []string) *StandardCreate {
-	sc.mutation.SetTags(s)
-	return sc
+func (_c *StandardCreate) SetTags(v []string) *StandardCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetRevision sets the "revision" field.
-func (sc *StandardCreate) SetRevision(s string) *StandardCreate {
-	sc.mutation.SetRevision(s)
-	return sc
+func (_c *StandardCreate) SetRevision(v string) *StandardCreate {
+	_c.mutation.SetRevision(v)
+	return _c
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableRevision(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetRevision(*s)
+func (_c *StandardCreate) SetNillableRevision(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetRevision(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (sc *StandardCreate) SetOwnerID(s string) *StandardCreate {
-	sc.mutation.SetOwnerID(s)
-	return sc
+func (_c *StandardCreate) SetOwnerID(v string) *StandardCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableOwnerID(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetOwnerID(*s)
+func (_c *StandardCreate) SetNillableOwnerID(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetSystemOwned sets the "system_owned" field.
-func (sc *StandardCreate) SetSystemOwned(b bool) *StandardCreate {
-	sc.mutation.SetSystemOwned(b)
-	return sc
+func (_c *StandardCreate) SetSystemOwned(v bool) *StandardCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
 }
 
 // SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableSystemOwned(b *bool) *StandardCreate {
-	if b != nil {
-		sc.SetSystemOwned(*b)
+func (_c *StandardCreate) SetNillableSystemOwned(v *bool) *StandardCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (sc *StandardCreate) SetName(s string) *StandardCreate {
-	sc.mutation.SetName(s)
-	return sc
+func (_c *StandardCreate) SetName(v string) *StandardCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetShortName sets the "short_name" field.
-func (sc *StandardCreate) SetShortName(s string) *StandardCreate {
-	sc.mutation.SetShortName(s)
-	return sc
+func (_c *StandardCreate) SetShortName(v string) *StandardCreate {
+	_c.mutation.SetShortName(v)
+	return _c
 }
 
 // SetNillableShortName sets the "short_name" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableShortName(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetShortName(*s)
+func (_c *StandardCreate) SetNillableShortName(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetShortName(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetFramework sets the "framework" field.
-func (sc *StandardCreate) SetFramework(s string) *StandardCreate {
-	sc.mutation.SetFramework(s)
-	return sc
+func (_c *StandardCreate) SetFramework(v string) *StandardCreate {
+	_c.mutation.SetFramework(v)
+	return _c
 }
 
 // SetNillableFramework sets the "framework" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableFramework(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetFramework(*s)
+func (_c *StandardCreate) SetNillableFramework(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetFramework(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (sc *StandardCreate) SetDescription(s string) *StandardCreate {
-	sc.mutation.SetDescription(s)
-	return sc
+func (_c *StandardCreate) SetDescription(v string) *StandardCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableDescription(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetDescription(*s)
+func (_c *StandardCreate) SetNillableDescription(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetGoverningBodyLogoURL sets the "governing_body_logo_url" field.
-func (sc *StandardCreate) SetGoverningBodyLogoURL(s string) *StandardCreate {
-	sc.mutation.SetGoverningBodyLogoURL(s)
-	return sc
+func (_c *StandardCreate) SetGoverningBodyLogoURL(v string) *StandardCreate {
+	_c.mutation.SetGoverningBodyLogoURL(v)
+	return _c
 }
 
 // SetNillableGoverningBodyLogoURL sets the "governing_body_logo_url" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableGoverningBodyLogoURL(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetGoverningBodyLogoURL(*s)
+func (_c *StandardCreate) SetNillableGoverningBodyLogoURL(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetGoverningBodyLogoURL(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetGoverningBody sets the "governing_body" field.
-func (sc *StandardCreate) SetGoverningBody(s string) *StandardCreate {
-	sc.mutation.SetGoverningBody(s)
-	return sc
+func (_c *StandardCreate) SetGoverningBody(v string) *StandardCreate {
+	_c.mutation.SetGoverningBody(v)
+	return _c
 }
 
 // SetNillableGoverningBody sets the "governing_body" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableGoverningBody(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetGoverningBody(*s)
+func (_c *StandardCreate) SetNillableGoverningBody(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetGoverningBody(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDomains sets the "domains" field.
-func (sc *StandardCreate) SetDomains(s []string) *StandardCreate {
-	sc.mutation.SetDomains(s)
-	return sc
+func (_c *StandardCreate) SetDomains(v []string) *StandardCreate {
+	_c.mutation.SetDomains(v)
+	return _c
 }
 
 // SetLink sets the "link" field.
-func (sc *StandardCreate) SetLink(s string) *StandardCreate {
-	sc.mutation.SetLink(s)
-	return sc
+func (_c *StandardCreate) SetLink(v string) *StandardCreate {
+	_c.mutation.SetLink(v)
+	return _c
 }
 
 // SetNillableLink sets the "link" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableLink(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetLink(*s)
+func (_c *StandardCreate) SetNillableLink(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetLink(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (sc *StandardCreate) SetStatus(es enums.StandardStatus) *StandardCreate {
-	sc.mutation.SetStatus(es)
-	return sc
+func (_c *StandardCreate) SetStatus(v enums.StandardStatus) *StandardCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableStatus(es *enums.StandardStatus) *StandardCreate {
-	if es != nil {
-		sc.SetStatus(*es)
+func (_c *StandardCreate) SetNillableStatus(v *enums.StandardStatus) *StandardCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetIsPublic sets the "is_public" field.
-func (sc *StandardCreate) SetIsPublic(b bool) *StandardCreate {
-	sc.mutation.SetIsPublic(b)
-	return sc
+func (_c *StandardCreate) SetIsPublic(v bool) *StandardCreate {
+	_c.mutation.SetIsPublic(v)
+	return _c
 }
 
 // SetNillableIsPublic sets the "is_public" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableIsPublic(b *bool) *StandardCreate {
-	if b != nil {
-		sc.SetIsPublic(*b)
+func (_c *StandardCreate) SetNillableIsPublic(v *bool) *StandardCreate {
+	if v != nil {
+		_c.SetIsPublic(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetFreeToUse sets the "free_to_use" field.
-func (sc *StandardCreate) SetFreeToUse(b bool) *StandardCreate {
-	sc.mutation.SetFreeToUse(b)
-	return sc
+func (_c *StandardCreate) SetFreeToUse(v bool) *StandardCreate {
+	_c.mutation.SetFreeToUse(v)
+	return _c
 }
 
 // SetNillableFreeToUse sets the "free_to_use" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableFreeToUse(b *bool) *StandardCreate {
-	if b != nil {
-		sc.SetFreeToUse(*b)
+func (_c *StandardCreate) SetNillableFreeToUse(v *bool) *StandardCreate {
+	if v != nil {
+		_c.SetFreeToUse(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetStandardType sets the "standard_type" field.
-func (sc *StandardCreate) SetStandardType(s string) *StandardCreate {
-	sc.mutation.SetStandardType(s)
-	return sc
+func (_c *StandardCreate) SetStandardType(v string) *StandardCreate {
+	_c.mutation.SetStandardType(v)
+	return _c
 }
 
 // SetNillableStandardType sets the "standard_type" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableStandardType(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetStandardType(*s)
+func (_c *StandardCreate) SetNillableStandardType(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetStandardType(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetVersion sets the "version" field.
-func (sc *StandardCreate) SetVersion(s string) *StandardCreate {
-	sc.mutation.SetVersion(s)
-	return sc
+func (_c *StandardCreate) SetVersion(v string) *StandardCreate {
+	_c.mutation.SetVersion(v)
+	return _c
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableVersion(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetVersion(*s)
+func (_c *StandardCreate) SetNillableVersion(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetVersion(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (sc *StandardCreate) SetID(s string) *StandardCreate {
-	sc.mutation.SetID(s)
-	return sc
+func (_c *StandardCreate) SetID(v string) *StandardCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (sc *StandardCreate) SetNillableID(s *string) *StandardCreate {
-	if s != nil {
-		sc.SetID(*s)
+func (_c *StandardCreate) SetNillableID(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (sc *StandardCreate) SetOwner(o *Organization) *StandardCreate {
-	return sc.SetOwnerID(o.ID)
+func (_c *StandardCreate) SetOwner(v *Organization) *StandardCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (sc *StandardCreate) AddControlIDs(ids ...string) *StandardCreate {
-	sc.mutation.AddControlIDs(ids...)
-	return sc
+func (_c *StandardCreate) AddControlIDs(ids ...string) *StandardCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (sc *StandardCreate) AddControls(c ...*Control) *StandardCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *StandardCreate) AddControls(v ...*Control) *StandardCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddControlIDs(ids...)
+	return _c.AddControlIDs(ids...)
 }
 
 // Mutation returns the StandardMutation object of the builder.
-func (sc *StandardCreate) Mutation() *StandardMutation {
-	return sc.mutation
+func (_c *StandardCreate) Mutation() *StandardMutation {
+	return _c.mutation
 }
 
 // Save creates the Standard in the database.
-func (sc *StandardCreate) Save(ctx context.Context) (*Standard, error) {
-	if err := sc.defaults(); err != nil {
+func (_c *StandardCreate) Save(ctx context.Context) (*Standard, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (sc *StandardCreate) SaveX(ctx context.Context) *Standard {
-	v, err := sc.Save(ctx)
+func (_c *StandardCreate) SaveX(ctx context.Context) *Standard {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -378,94 +378,94 @@ func (sc *StandardCreate) SaveX(ctx context.Context) *Standard {
 }
 
 // Exec executes the query.
-func (sc *StandardCreate) Exec(ctx context.Context) error {
-	_, err := sc.Save(ctx)
+func (_c *StandardCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sc *StandardCreate) ExecX(ctx context.Context) {
-	if err := sc.Exec(ctx); err != nil {
+func (_c *StandardCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sc *StandardCreate) defaults() error {
-	if _, ok := sc.mutation.CreatedAt(); !ok {
+func (_c *StandardCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if standard.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized standard.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := standard.DefaultCreatedAt()
-		sc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := sc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if standard.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized standard.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := standard.DefaultUpdatedAt()
-		sc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := standard.DefaultTags
-		sc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := sc.mutation.Revision(); !ok {
+	if _, ok := _c.mutation.Revision(); !ok {
 		v := standard.DefaultRevision
-		sc.mutation.SetRevision(v)
+		_c.mutation.SetRevision(v)
 	}
-	if _, ok := sc.mutation.SystemOwned(); !ok {
+	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := standard.DefaultSystemOwned
-		sc.mutation.SetSystemOwned(v)
+		_c.mutation.SetSystemOwned(v)
 	}
-	if _, ok := sc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := standard.DefaultStatus
-		sc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := sc.mutation.IsPublic(); !ok {
+	if _, ok := _c.mutation.IsPublic(); !ok {
 		v := standard.DefaultIsPublic
-		sc.mutation.SetIsPublic(v)
+		_c.mutation.SetIsPublic(v)
 	}
-	if _, ok := sc.mutation.FreeToUse(); !ok {
+	if _, ok := _c.mutation.FreeToUse(); !ok {
 		v := standard.DefaultFreeToUse
-		sc.mutation.SetFreeToUse(v)
+		_c.mutation.SetFreeToUse(v)
 	}
-	if _, ok := sc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if standard.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized standard.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := standard.DefaultID()
-		sc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sc *StandardCreate) check() error {
-	if v, ok := sc.mutation.Revision(); ok {
+func (_c *StandardCreate) check() error {
+	if v, ok := _c.mutation.Revision(); ok {
 		if err := standard.RevisionValidator(v); err != nil {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Standard.revision": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Standard.name"`)}
 	}
-	if v, ok := sc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := standard.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
 		}
 	}
-	if v, ok := sc.mutation.GoverningBodyLogoURL(); ok {
+	if v, ok := _c.mutation.GoverningBodyLogoURL(); ok {
 		if err := standard.GoverningBodyLogoURLValidator(v); err != nil {
 			return &ValidationError{Name: "governing_body_logo_url", err: fmt.Errorf(`generated: validator failed for field "Standard.governing_body_logo_url": %w`, err)}
 		}
 	}
-	if v, ok := sc.mutation.Link(); ok {
+	if v, ok := _c.mutation.Link(); ok {
 		if err := standard.LinkValidator(v); err != nil {
 			return &ValidationError{Name: "link", err: fmt.Errorf(`generated: validator failed for field "Standard.link": %w`, err)}
 		}
 	}
-	if v, ok := sc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := standard.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Standard.status": %w`, err)}
 		}
@@ -473,12 +473,12 @@ func (sc *StandardCreate) check() error {
 	return nil
 }
 
-func (sc *StandardCreate) sqlSave(ctx context.Context) (*Standard, error) {
-	if err := sc.check(); err != nil {
+func (_c *StandardCreate) sqlSave(ctx context.Context) (*Standard, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := sc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, sc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -491,110 +491,110 @@ func (sc *StandardCreate) sqlSave(ctx context.Context) (*Standard, error) {
 			return nil, fmt.Errorf("unexpected Standard.ID type: %T", _spec.ID.Value)
 		}
 	}
-	sc.mutation.id = &_node.ID
-	sc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
+func (_c *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Standard{config: sc.config}
+		_node = &Standard{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(standard.Table, sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString))
 	)
-	_spec.Schema = sc.schemaConfig.Standard
-	if id, ok := sc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Standard
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := sc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(standard.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := sc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(standard.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := sc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(standard.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := sc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(standard.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := sc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(standard.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := sc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(standard.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := sc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(standard.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := sc.mutation.Revision(); ok {
+	if value, ok := _c.mutation.Revision(); ok {
 		_spec.SetField(standard.FieldRevision, field.TypeString, value)
 		_node.Revision = value
 	}
-	if value, ok := sc.mutation.SystemOwned(); ok {
+	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(standard.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
 	}
-	if value, ok := sc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := sc.mutation.ShortName(); ok {
+	if value, ok := _c.mutation.ShortName(); ok {
 		_spec.SetField(standard.FieldShortName, field.TypeString, value)
 		_node.ShortName = value
 	}
-	if value, ok := sc.mutation.Framework(); ok {
+	if value, ok := _c.mutation.Framework(); ok {
 		_spec.SetField(standard.FieldFramework, field.TypeString, value)
 		_node.Framework = value
 	}
-	if value, ok := sc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(standard.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := sc.mutation.GoverningBodyLogoURL(); ok {
+	if value, ok := _c.mutation.GoverningBodyLogoURL(); ok {
 		_spec.SetField(standard.FieldGoverningBodyLogoURL, field.TypeString, value)
 		_node.GoverningBodyLogoURL = value
 	}
-	if value, ok := sc.mutation.GoverningBody(); ok {
+	if value, ok := _c.mutation.GoverningBody(); ok {
 		_spec.SetField(standard.FieldGoverningBody, field.TypeString, value)
 		_node.GoverningBody = value
 	}
-	if value, ok := sc.mutation.Domains(); ok {
+	if value, ok := _c.mutation.Domains(); ok {
 		_spec.SetField(standard.FieldDomains, field.TypeJSON, value)
 		_node.Domains = value
 	}
-	if value, ok := sc.mutation.Link(); ok {
+	if value, ok := _c.mutation.Link(); ok {
 		_spec.SetField(standard.FieldLink, field.TypeString, value)
 		_node.Link = value
 	}
-	if value, ok := sc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(standard.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := sc.mutation.IsPublic(); ok {
+	if value, ok := _c.mutation.IsPublic(); ok {
 		_spec.SetField(standard.FieldIsPublic, field.TypeBool, value)
 		_node.IsPublic = value
 	}
-	if value, ok := sc.mutation.FreeToUse(); ok {
+	if value, ok := _c.mutation.FreeToUse(); ok {
 		_spec.SetField(standard.FieldFreeToUse, field.TypeBool, value)
 		_node.FreeToUse = value
 	}
-	if value, ok := sc.mutation.StandardType(); ok {
+	if value, ok := _c.mutation.StandardType(); ok {
 		_spec.SetField(standard.FieldStandardType, field.TypeString, value)
 		_node.StandardType = value
 	}
-	if value, ok := sc.mutation.Version(); ok {
+	if value, ok := _c.mutation.Version(); ok {
 		_spec.SetField(standard.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
-	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -605,14 +605,14 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.Standard
+		edge.Schema = _c.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -623,7 +623,7 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.Control
+		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -640,16 +640,16 @@ type StandardCreateBulk struct {
 }
 
 // Save creates the Standard entities in the database.
-func (scb *StandardCreateBulk) Save(ctx context.Context) ([]*Standard, error) {
-	if scb.err != nil {
-		return nil, scb.err
+func (_c *StandardCreateBulk) Save(ctx context.Context) ([]*Standard, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(scb.builders))
-	nodes := make([]*Standard, len(scb.builders))
-	mutators := make([]Mutator, len(scb.builders))
-	for i := range scb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Standard, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := scb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*StandardMutation)
@@ -663,11 +663,11 @@ func (scb *StandardCreateBulk) Save(ctx context.Context) ([]*Standard, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, scb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, scb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -687,7 +687,7 @@ func (scb *StandardCreateBulk) Save(ctx context.Context) ([]*Standard, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, scb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -695,8 +695,8 @@ func (scb *StandardCreateBulk) Save(ctx context.Context) ([]*Standard, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (scb *StandardCreateBulk) SaveX(ctx context.Context) []*Standard {
-	v, err := scb.Save(ctx)
+func (_c *StandardCreateBulk) SaveX(ctx context.Context) []*Standard {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -704,14 +704,14 @@ func (scb *StandardCreateBulk) SaveX(ctx context.Context) []*Standard {
 }
 
 // Exec executes the query.
-func (scb *StandardCreateBulk) Exec(ctx context.Context) error {
-	_, err := scb.Save(ctx)
+func (_c *StandardCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scb *StandardCreateBulk) ExecX(ctx context.Context) {
-	if err := scb.Exec(ctx); err != nil {
+func (_c *StandardCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

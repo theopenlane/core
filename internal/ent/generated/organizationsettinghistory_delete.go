@@ -22,58 +22,58 @@ type OrganizationSettingHistoryDelete struct {
 }
 
 // Where appends a list predicates to the OrganizationSettingHistoryDelete builder.
-func (oshd *OrganizationSettingHistoryDelete) Where(ps ...predicate.OrganizationSettingHistory) *OrganizationSettingHistoryDelete {
-	oshd.mutation.Where(ps...)
-	return oshd
+func (_d *OrganizationSettingHistoryDelete) Where(ps ...predicate.OrganizationSettingHistory) *OrganizationSettingHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (oshd *OrganizationSettingHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, oshd.sqlExec, oshd.mutation, oshd.hooks)
+func (_d *OrganizationSettingHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oshd *OrganizationSettingHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := oshd.Exec(ctx)
+func (_d *OrganizationSettingHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (oshd *OrganizationSettingHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *OrganizationSettingHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(organizationsettinghistory.Table, sqlgraph.NewFieldSpec(organizationsettinghistory.FieldID, field.TypeString))
-	_spec.Node.Schema = oshd.schemaConfig.OrganizationSettingHistory
-	ctx = internal.NewSchemaConfigContext(ctx, oshd.schemaConfig)
-	if ps := oshd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.OrganizationSettingHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, oshd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	oshd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // OrganizationSettingHistoryDeleteOne is the builder for deleting a single OrganizationSettingHistory entity.
 type OrganizationSettingHistoryDeleteOne struct {
-	oshd *OrganizationSettingHistoryDelete
+	_d *OrganizationSettingHistoryDelete
 }
 
 // Where appends a list predicates to the OrganizationSettingHistoryDelete builder.
-func (oshdo *OrganizationSettingHistoryDeleteOne) Where(ps ...predicate.OrganizationSettingHistory) *OrganizationSettingHistoryDeleteOne {
-	oshdo.oshd.mutation.Where(ps...)
-	return oshdo
+func (_d *OrganizationSettingHistoryDeleteOne) Where(ps ...predicate.OrganizationSettingHistory) *OrganizationSettingHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (oshdo *OrganizationSettingHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := oshdo.oshd.Exec(ctx)
+func (_d *OrganizationSettingHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (oshdo *OrganizationSettingHistoryDeleteOne) Exec(ctx context.Context) erro
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oshdo *OrganizationSettingHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := oshdo.Exec(ctx); err != nil {
+func (_d *OrganizationSettingHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -123,7 +123,7 @@ func (*JobResult) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the JobResult fields.
-func (jr *JobResult) assignValues(columns []string, values []any) error {
+func (_m *JobResult) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -133,96 +133,96 @@ func (jr *JobResult) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				jr.ID = value.String
+				_m.ID = value.String
 			}
 		case jobresult.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				jr.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case jobresult.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				jr.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case jobresult.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				jr.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case jobresult.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				jr.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case jobresult.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				jr.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case jobresult.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				jr.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case jobresult.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				jr.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case jobresult.FieldScheduledJobID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field scheduled_job_id", values[i])
 			} else if value.Valid {
-				jr.ScheduledJobID = value.String
+				_m.ScheduledJobID = value.String
 			}
 		case jobresult.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				jr.Status = enums.JobExecutionStatus(value.String)
+				_m.Status = enums.JobExecutionStatus(value.String)
 			}
 		case jobresult.FieldExitCode:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field exit_code", values[i])
 			} else if value.Valid {
-				jr.ExitCode = new(int)
-				*jr.ExitCode = int(value.Int64)
+				_m.ExitCode = new(int)
+				*_m.ExitCode = int(value.Int64)
 			}
 		case jobresult.FieldFinishedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field finished_at", values[i])
 			} else if value.Valid {
-				jr.FinishedAt = value.Time
+				_m.FinishedAt = value.Time
 			}
 		case jobresult.FieldStartedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field started_at", values[i])
 			} else if value.Valid {
-				jr.StartedAt = value.Time
+				_m.StartedAt = value.Time
 			}
 		case jobresult.FieldFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field file_id", values[i])
 			} else if value.Valid {
-				jr.FileID = value.String
+				_m.FileID = value.String
 			}
 		case jobresult.FieldLog:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field log", values[i])
 			} else if value.Valid {
-				jr.Log = new(string)
-				*jr.Log = value.String
+				_m.Log = new(string)
+				*_m.Log = value.String
 			}
 		default:
-			jr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -230,90 +230,90 @@ func (jr *JobResult) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the JobResult.
 // This includes values selected through modifiers, order, etc.
-func (jr *JobResult) Value(name string) (ent.Value, error) {
-	return jr.selectValues.Get(name)
+func (_m *JobResult) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the JobResult entity.
-func (jr *JobResult) QueryOwner() *OrganizationQuery {
-	return NewJobResultClient(jr.config).QueryOwner(jr)
+func (_m *JobResult) QueryOwner() *OrganizationQuery {
+	return NewJobResultClient(_m.config).QueryOwner(_m)
 }
 
 // QueryScheduledJob queries the "scheduled_job" edge of the JobResult entity.
-func (jr *JobResult) QueryScheduledJob() *ScheduledJobQuery {
-	return NewJobResultClient(jr.config).QueryScheduledJob(jr)
+func (_m *JobResult) QueryScheduledJob() *ScheduledJobQuery {
+	return NewJobResultClient(_m.config).QueryScheduledJob(_m)
 }
 
 // QueryFile queries the "file" edge of the JobResult entity.
-func (jr *JobResult) QueryFile() *FileQuery {
-	return NewJobResultClient(jr.config).QueryFile(jr)
+func (_m *JobResult) QueryFile() *FileQuery {
+	return NewJobResultClient(_m.config).QueryFile(_m)
 }
 
 // Update returns a builder for updating this JobResult.
 // Note that you need to call JobResult.Unwrap() before calling this method if this JobResult
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (jr *JobResult) Update() *JobResultUpdateOne {
-	return NewJobResultClient(jr.config).UpdateOne(jr)
+func (_m *JobResult) Update() *JobResultUpdateOne {
+	return NewJobResultClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the JobResult entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (jr *JobResult) Unwrap() *JobResult {
-	_tx, ok := jr.config.driver.(*txDriver)
+func (_m *JobResult) Unwrap() *JobResult {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: JobResult is not a transactional entity")
 	}
-	jr.config.driver = _tx.drv
-	return jr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (jr *JobResult) String() string {
+func (_m *JobResult) String() string {
 	var builder strings.Builder
 	builder.WriteString("JobResult(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", jr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(jr.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(jr.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(jr.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(jr.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(jr.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(jr.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(jr.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("scheduled_job_id=")
-	builder.WriteString(jr.ScheduledJobID)
+	builder.WriteString(_m.ScheduledJobID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", jr.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
-	if v := jr.ExitCode; v != nil {
+	if v := _m.ExitCode; v != nil {
 		builder.WriteString("exit_code=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("finished_at=")
-	builder.WriteString(jr.FinishedAt.Format(time.ANSIC))
+	builder.WriteString(_m.FinishedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("started_at=")
-	builder.WriteString(jr.StartedAt.Format(time.ANSIC))
+	builder.WriteString(_m.StartedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("file_id=")
-	builder.WriteString(jr.FileID)
+	builder.WriteString(_m.FileID)
 	builder.WriteString(", ")
-	if v := jr.Log; v != nil {
+	if v := _m.Log; v != nil {
 		builder.WriteString("log=")
 		builder.WriteString(*v)
 	}

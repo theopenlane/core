@@ -29,7 +29,7 @@ const (
 
 // BeginWebauthnRegistration is the request to begin a webauthn login
 func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPIContext) error {
-	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnBeginRegistrationRequest, openapi.Registry)
+	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnBeginRegistrationRequest, models.ExampleWebauthnBeginRegistrationResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -114,6 +114,11 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPICo
 
 // FinishWebauthnRegistration is the request to finish a webauthn registration - this is where we get the credential created by the user back
 func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIContext) error {
+	_, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnRegistrationFinishRequest, models.ExampleWebauthnRegistrationResponse, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
+	}
+
 	// lookup userID in cache to ensure cookie and tokens match
 	session, err := h.SessionConfig.SessionManager.Get(ctx.Request(), h.SessionConfig.CookieConfig.Name)
 	if err != nil {
@@ -206,7 +211,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 
 // BeginWebauthnLogin is the request to begin a webauthn login
 func (h *Handler) BeginWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) error {
-	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnLoginRequest, openapi.Registry)
+	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnLoginRequest, models.ExampleWebauthnBeginLoginResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -256,6 +261,11 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) 
 
 // FinishWebauthnLogin is the request to finish a webauthn login
 func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) error {
+	_, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnLoginFinishRequest, models.ExampleWebauthnLoginResponse, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
+	}
+
 	reqCtx := ctx.Request().Context()
 
 	session, err := h.SessionConfig.SessionManager.Get(ctx.Request(), h.SessionConfig.CookieConfig.Name)

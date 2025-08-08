@@ -28,174 +28,174 @@ type NoteUpdate struct {
 }
 
 // Where appends a list predicates to the NoteUpdate builder.
-func (nu *NoteUpdate) Where(ps ...predicate.Note) *NoteUpdate {
-	nu.mutation.Where(ps...)
-	return nu
+func (_u *NoteUpdate) Where(ps ...predicate.Note) *NoteUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (nu *NoteUpdate) SetUpdatedAt(t time.Time) *NoteUpdate {
-	nu.mutation.SetUpdatedAt(t)
-	return nu
+func (_u *NoteUpdate) SetUpdatedAt(v time.Time) *NoteUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (nu *NoteUpdate) ClearUpdatedAt() *NoteUpdate {
-	nu.mutation.ClearUpdatedAt()
-	return nu
+func (_u *NoteUpdate) ClearUpdatedAt() *NoteUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (nu *NoteUpdate) SetUpdatedBy(s string) *NoteUpdate {
-	nu.mutation.SetUpdatedBy(s)
-	return nu
+func (_u *NoteUpdate) SetUpdatedBy(v string) *NoteUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nu *NoteUpdate) SetNillableUpdatedBy(s *string) *NoteUpdate {
-	if s != nil {
-		nu.SetUpdatedBy(*s)
+func (_u *NoteUpdate) SetNillableUpdatedBy(v *string) *NoteUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return nu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (nu *NoteUpdate) ClearUpdatedBy() *NoteUpdate {
-	nu.mutation.ClearUpdatedBy()
-	return nu
+func (_u *NoteUpdate) ClearUpdatedBy() *NoteUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (nu *NoteUpdate) SetDeletedAt(t time.Time) *NoteUpdate {
-	nu.mutation.SetDeletedAt(t)
-	return nu
+func (_u *NoteUpdate) SetDeletedAt(v time.Time) *NoteUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nu *NoteUpdate) SetNillableDeletedAt(t *time.Time) *NoteUpdate {
-	if t != nil {
-		nu.SetDeletedAt(*t)
+func (_u *NoteUpdate) SetNillableDeletedAt(v *time.Time) *NoteUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return nu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (nu *NoteUpdate) ClearDeletedAt() *NoteUpdate {
-	nu.mutation.ClearDeletedAt()
-	return nu
+func (_u *NoteUpdate) ClearDeletedAt() *NoteUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (nu *NoteUpdate) SetDeletedBy(s string) *NoteUpdate {
-	nu.mutation.SetDeletedBy(s)
-	return nu
+func (_u *NoteUpdate) SetDeletedBy(v string) *NoteUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nu *NoteUpdate) SetNillableDeletedBy(s *string) *NoteUpdate {
-	if s != nil {
-		nu.SetDeletedBy(*s)
+func (_u *NoteUpdate) SetNillableDeletedBy(v *string) *NoteUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return nu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (nu *NoteUpdate) ClearDeletedBy() *NoteUpdate {
-	nu.mutation.ClearDeletedBy()
-	return nu
+func (_u *NoteUpdate) ClearDeletedBy() *NoteUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetText sets the "text" field.
-func (nu *NoteUpdate) SetText(s string) *NoteUpdate {
-	nu.mutation.SetText(s)
-	return nu
+func (_u *NoteUpdate) SetText(v string) *NoteUpdate {
+	_u.mutation.SetText(v)
+	return _u
 }
 
 // SetNillableText sets the "text" field if the given value is not nil.
-func (nu *NoteUpdate) SetNillableText(s *string) *NoteUpdate {
-	if s != nil {
-		nu.SetText(*s)
+func (_u *NoteUpdate) SetNillableText(v *string) *NoteUpdate {
+	if v != nil {
+		_u.SetText(*v)
 	}
-	return nu
+	return _u
 }
 
 // SetTaskID sets the "task" edge to the Task entity by ID.
-func (nu *NoteUpdate) SetTaskID(id string) *NoteUpdate {
-	nu.mutation.SetTaskID(id)
-	return nu
+func (_u *NoteUpdate) SetTaskID(id string) *NoteUpdate {
+	_u.mutation.SetTaskID(id)
+	return _u
 }
 
 // SetNillableTaskID sets the "task" edge to the Task entity by ID if the given value is not nil.
-func (nu *NoteUpdate) SetNillableTaskID(id *string) *NoteUpdate {
+func (_u *NoteUpdate) SetNillableTaskID(id *string) *NoteUpdate {
 	if id != nil {
-		nu = nu.SetTaskID(*id)
+		_u = _u.SetTaskID(*id)
 	}
-	return nu
+	return _u
 }
 
 // SetTask sets the "task" edge to the Task entity.
-func (nu *NoteUpdate) SetTask(t *Task) *NoteUpdate {
-	return nu.SetTaskID(t.ID)
+func (_u *NoteUpdate) SetTask(v *Task) *NoteUpdate {
+	return _u.SetTaskID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (nu *NoteUpdate) AddFileIDs(ids ...string) *NoteUpdate {
-	nu.mutation.AddFileIDs(ids...)
-	return nu
+func (_u *NoteUpdate) AddFileIDs(ids ...string) *NoteUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (nu *NoteUpdate) AddFiles(f ...*File) *NoteUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *NoteUpdate) AddFiles(v ...*File) *NoteUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the NoteMutation object of the builder.
-func (nu *NoteUpdate) Mutation() *NoteMutation {
-	return nu.mutation
+func (_u *NoteUpdate) Mutation() *NoteMutation {
+	return _u.mutation
 }
 
 // ClearTask clears the "task" edge to the Task entity.
-func (nu *NoteUpdate) ClearTask() *NoteUpdate {
-	nu.mutation.ClearTask()
-	return nu
+func (_u *NoteUpdate) ClearTask() *NoteUpdate {
+	_u.mutation.ClearTask()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (nu *NoteUpdate) ClearFiles() *NoteUpdate {
-	nu.mutation.ClearFiles()
-	return nu
+func (_u *NoteUpdate) ClearFiles() *NoteUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (nu *NoteUpdate) RemoveFileIDs(ids ...string) *NoteUpdate {
-	nu.mutation.RemoveFileIDs(ids...)
-	return nu
+func (_u *NoteUpdate) RemoveFileIDs(ids ...string) *NoteUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (nu *NoteUpdate) RemoveFiles(f ...*File) *NoteUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *NoteUpdate) RemoveFiles(v ...*File) *NoteUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (nu *NoteUpdate) Save(ctx context.Context) (int, error) {
-	if err := nu.defaults(); err != nil {
+func (_u *NoteUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, nu.sqlSave, nu.mutation, nu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (nu *NoteUpdate) SaveX(ctx context.Context) int {
-	affected, err := nu.Save(ctx)
+func (_u *NoteUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -203,33 +203,33 @@ func (nu *NoteUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (nu *NoteUpdate) Exec(ctx context.Context) error {
-	_, err := nu.Save(ctx)
+func (_u *NoteUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nu *NoteUpdate) ExecX(ctx context.Context) {
-	if err := nu.Exec(ctx); err != nil {
+func (_u *NoteUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (nu *NoteUpdate) defaults() error {
-	if _, ok := nu.mutation.UpdatedAt(); !ok && !nu.mutation.UpdatedAtCleared() {
+func (_u *NoteUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if note.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized note.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := note.UpdateDefaultUpdatedAt()
-		nu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (nu *NoteUpdate) check() error {
-	if v, ok := nu.mutation.Text(); ok {
+func (_u *NoteUpdate) check() error {
+	if v, ok := _u.mutation.Text(); ok {
 		if err := note.TextValidator(v); err != nil {
 			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "Note.text": %w`, err)}
 		}
@@ -238,57 +238,57 @@ func (nu *NoteUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (nu *NoteUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteUpdate {
-	nu.modifiers = append(nu.modifiers, modifiers...)
-	return nu
+func (_u *NoteUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := nu.check(); err != nil {
-		return n, err
+func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(note.Table, note.Columns, sqlgraph.NewFieldSpec(note.FieldID, field.TypeString))
-	if ps := nu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if nu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(note.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := nu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(note.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if nu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(note.FieldUpdatedAt, field.TypeTime)
 	}
-	if nu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(note.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := nu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(note.FieldUpdatedBy, field.TypeString, value)
 	}
-	if nu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(note.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := nu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(note.FieldDeletedAt, field.TypeTime, value)
 	}
-	if nu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(note.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(note.FieldDeletedBy, field.TypeString, value)
 	}
-	if nu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(note.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := nu.mutation.Text(); ok {
+	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
 	}
-	if nu.mutation.TaskCleared() {
+	if _u.mutation.TaskCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -299,10 +299,10 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.TaskIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TaskIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -313,13 +313,13 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nu.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -330,10 +330,10 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.File
+		edge.Schema = _u.schemaConfig.File
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !nu.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -344,13 +344,13 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.File
+		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -361,16 +361,16 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.File
+		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = nu.schemaConfig.Note
-	ctx = internal.NewSchemaConfigContext(ctx, nu.schemaConfig)
-	_spec.AddModifiers(nu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, nu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Note
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{note.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -378,8 +378,8 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	nu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // NoteUpdateOne is the builder for updating a single Note entity.
@@ -392,181 +392,181 @@ type NoteUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (nuo *NoteUpdateOne) SetUpdatedAt(t time.Time) *NoteUpdateOne {
-	nuo.mutation.SetUpdatedAt(t)
-	return nuo
+func (_u *NoteUpdateOne) SetUpdatedAt(v time.Time) *NoteUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (nuo *NoteUpdateOne) ClearUpdatedAt() *NoteUpdateOne {
-	nuo.mutation.ClearUpdatedAt()
-	return nuo
+func (_u *NoteUpdateOne) ClearUpdatedAt() *NoteUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (nuo *NoteUpdateOne) SetUpdatedBy(s string) *NoteUpdateOne {
-	nuo.mutation.SetUpdatedBy(s)
-	return nuo
+func (_u *NoteUpdateOne) SetUpdatedBy(v string) *NoteUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableUpdatedBy(s *string) *NoteUpdateOne {
-	if s != nil {
-		nuo.SetUpdatedBy(*s)
+func (_u *NoteUpdateOne) SetNillableUpdatedBy(v *string) *NoteUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return nuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (nuo *NoteUpdateOne) ClearUpdatedBy() *NoteUpdateOne {
-	nuo.mutation.ClearUpdatedBy()
-	return nuo
+func (_u *NoteUpdateOne) ClearUpdatedBy() *NoteUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (nuo *NoteUpdateOne) SetDeletedAt(t time.Time) *NoteUpdateOne {
-	nuo.mutation.SetDeletedAt(t)
-	return nuo
+func (_u *NoteUpdateOne) SetDeletedAt(v time.Time) *NoteUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableDeletedAt(t *time.Time) *NoteUpdateOne {
-	if t != nil {
-		nuo.SetDeletedAt(*t)
+func (_u *NoteUpdateOne) SetNillableDeletedAt(v *time.Time) *NoteUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return nuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (nuo *NoteUpdateOne) ClearDeletedAt() *NoteUpdateOne {
-	nuo.mutation.ClearDeletedAt()
-	return nuo
+func (_u *NoteUpdateOne) ClearDeletedAt() *NoteUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (nuo *NoteUpdateOne) SetDeletedBy(s string) *NoteUpdateOne {
-	nuo.mutation.SetDeletedBy(s)
-	return nuo
+func (_u *NoteUpdateOne) SetDeletedBy(v string) *NoteUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableDeletedBy(s *string) *NoteUpdateOne {
-	if s != nil {
-		nuo.SetDeletedBy(*s)
+func (_u *NoteUpdateOne) SetNillableDeletedBy(v *string) *NoteUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return nuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (nuo *NoteUpdateOne) ClearDeletedBy() *NoteUpdateOne {
-	nuo.mutation.ClearDeletedBy()
-	return nuo
+func (_u *NoteUpdateOne) ClearDeletedBy() *NoteUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetText sets the "text" field.
-func (nuo *NoteUpdateOne) SetText(s string) *NoteUpdateOne {
-	nuo.mutation.SetText(s)
-	return nuo
+func (_u *NoteUpdateOne) SetText(v string) *NoteUpdateOne {
+	_u.mutation.SetText(v)
+	return _u
 }
 
 // SetNillableText sets the "text" field if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableText(s *string) *NoteUpdateOne {
-	if s != nil {
-		nuo.SetText(*s)
+func (_u *NoteUpdateOne) SetNillableText(v *string) *NoteUpdateOne {
+	if v != nil {
+		_u.SetText(*v)
 	}
-	return nuo
+	return _u
 }
 
 // SetTaskID sets the "task" edge to the Task entity by ID.
-func (nuo *NoteUpdateOne) SetTaskID(id string) *NoteUpdateOne {
-	nuo.mutation.SetTaskID(id)
-	return nuo
+func (_u *NoteUpdateOne) SetTaskID(id string) *NoteUpdateOne {
+	_u.mutation.SetTaskID(id)
+	return _u
 }
 
 // SetNillableTaskID sets the "task" edge to the Task entity by ID if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableTaskID(id *string) *NoteUpdateOne {
+func (_u *NoteUpdateOne) SetNillableTaskID(id *string) *NoteUpdateOne {
 	if id != nil {
-		nuo = nuo.SetTaskID(*id)
+		_u = _u.SetTaskID(*id)
 	}
-	return nuo
+	return _u
 }
 
 // SetTask sets the "task" edge to the Task entity.
-func (nuo *NoteUpdateOne) SetTask(t *Task) *NoteUpdateOne {
-	return nuo.SetTaskID(t.ID)
+func (_u *NoteUpdateOne) SetTask(v *Task) *NoteUpdateOne {
+	return _u.SetTaskID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (nuo *NoteUpdateOne) AddFileIDs(ids ...string) *NoteUpdateOne {
-	nuo.mutation.AddFileIDs(ids...)
-	return nuo
+func (_u *NoteUpdateOne) AddFileIDs(ids ...string) *NoteUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (nuo *NoteUpdateOne) AddFiles(f ...*File) *NoteUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *NoteUpdateOne) AddFiles(v ...*File) *NoteUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the NoteMutation object of the builder.
-func (nuo *NoteUpdateOne) Mutation() *NoteMutation {
-	return nuo.mutation
+func (_u *NoteUpdateOne) Mutation() *NoteMutation {
+	return _u.mutation
 }
 
 // ClearTask clears the "task" edge to the Task entity.
-func (nuo *NoteUpdateOne) ClearTask() *NoteUpdateOne {
-	nuo.mutation.ClearTask()
-	return nuo
+func (_u *NoteUpdateOne) ClearTask() *NoteUpdateOne {
+	_u.mutation.ClearTask()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (nuo *NoteUpdateOne) ClearFiles() *NoteUpdateOne {
-	nuo.mutation.ClearFiles()
-	return nuo
+func (_u *NoteUpdateOne) ClearFiles() *NoteUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (nuo *NoteUpdateOne) RemoveFileIDs(ids ...string) *NoteUpdateOne {
-	nuo.mutation.RemoveFileIDs(ids...)
-	return nuo
+func (_u *NoteUpdateOne) RemoveFileIDs(ids ...string) *NoteUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (nuo *NoteUpdateOne) RemoveFiles(f ...*File) *NoteUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *NoteUpdateOne) RemoveFiles(v ...*File) *NoteUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the NoteUpdate builder.
-func (nuo *NoteUpdateOne) Where(ps ...predicate.Note) *NoteUpdateOne {
-	nuo.mutation.Where(ps...)
-	return nuo
+func (_u *NoteUpdateOne) Where(ps ...predicate.Note) *NoteUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (nuo *NoteUpdateOne) Select(field string, fields ...string) *NoteUpdateOne {
-	nuo.fields = append([]string{field}, fields...)
-	return nuo
+func (_u *NoteUpdateOne) Select(field string, fields ...string) *NoteUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Note entity.
-func (nuo *NoteUpdateOne) Save(ctx context.Context) (*Note, error) {
-	if err := nuo.defaults(); err != nil {
+func (_u *NoteUpdateOne) Save(ctx context.Context) (*Note, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, nuo.sqlSave, nuo.mutation, nuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (nuo *NoteUpdateOne) SaveX(ctx context.Context) *Note {
-	node, err := nuo.Save(ctx)
+func (_u *NoteUpdateOne) SaveX(ctx context.Context) *Note {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -574,33 +574,33 @@ func (nuo *NoteUpdateOne) SaveX(ctx context.Context) *Note {
 }
 
 // Exec executes the query on the entity.
-func (nuo *NoteUpdateOne) Exec(ctx context.Context) error {
-	_, err := nuo.Save(ctx)
+func (_u *NoteUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nuo *NoteUpdateOne) ExecX(ctx context.Context) {
-	if err := nuo.Exec(ctx); err != nil {
+func (_u *NoteUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (nuo *NoteUpdateOne) defaults() error {
-	if _, ok := nuo.mutation.UpdatedAt(); !ok && !nuo.mutation.UpdatedAtCleared() {
+func (_u *NoteUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if note.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized note.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := note.UpdateDefaultUpdatedAt()
-		nuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (nuo *NoteUpdateOne) check() error {
-	if v, ok := nuo.mutation.Text(); ok {
+func (_u *NoteUpdateOne) check() error {
+	if v, ok := _u.mutation.Text(); ok {
 		if err := note.TextValidator(v); err != nil {
 			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "Note.text": %w`, err)}
 		}
@@ -609,22 +609,22 @@ func (nuo *NoteUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (nuo *NoteUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteUpdateOne {
-	nuo.modifiers = append(nuo.modifiers, modifiers...)
-	return nuo
+func (_u *NoteUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
-	if err := nuo.check(); err != nil {
+func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(note.Table, note.Columns, sqlgraph.NewFieldSpec(note.FieldID, field.TypeString))
-	id, ok := nuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Note.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := nuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, note.FieldID)
 		for _, f := range fields {
@@ -636,47 +636,47 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 			}
 		}
 	}
-	if ps := nuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if nuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(note.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := nuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(note.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if nuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(note.FieldUpdatedAt, field.TypeTime)
 	}
-	if nuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(note.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := nuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(note.FieldUpdatedBy, field.TypeString, value)
 	}
-	if nuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(note.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := nuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(note.FieldDeletedAt, field.TypeTime, value)
 	}
-	if nuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(note.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(note.FieldDeletedBy, field.TypeString, value)
 	}
-	if nuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(note.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := nuo.mutation.Text(); ok {
+	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
 	}
-	if nuo.mutation.TaskCleared() {
+	if _u.mutation.TaskCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -687,10 +687,10 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.TaskIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TaskIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -701,13 +701,13 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nuo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -718,10 +718,10 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.File
+		edge.Schema = _u.schemaConfig.File
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !nuo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -732,13 +732,13 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.File
+		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -749,19 +749,19 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.File
+		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = nuo.schemaConfig.Note
-	ctx = internal.NewSchemaConfigContext(ctx, nuo.schemaConfig)
-	_spec.AddModifiers(nuo.modifiers...)
-	_node = &Note{config: nuo.config}
+	_spec.Node.Schema = _u.schemaConfig.Note
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Note{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, nuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{note.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -769,6 +769,6 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 		}
 		return nil, err
 	}
-	nuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

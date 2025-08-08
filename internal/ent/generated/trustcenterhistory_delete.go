@@ -22,58 +22,58 @@ type TrustCenterHistoryDelete struct {
 }
 
 // Where appends a list predicates to the TrustCenterHistoryDelete builder.
-func (tchd *TrustCenterHistoryDelete) Where(ps ...predicate.TrustCenterHistory) *TrustCenterHistoryDelete {
-	tchd.mutation.Where(ps...)
-	return tchd
+func (_d *TrustCenterHistoryDelete) Where(ps ...predicate.TrustCenterHistory) *TrustCenterHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tchd *TrustCenterHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tchd.sqlExec, tchd.mutation, tchd.hooks)
+func (_d *TrustCenterHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tchd *TrustCenterHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := tchd.Exec(ctx)
+func (_d *TrustCenterHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tchd *TrustCenterHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TrustCenterHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(trustcenterhistory.Table, sqlgraph.NewFieldSpec(trustcenterhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = tchd.schemaConfig.TrustCenterHistory
-	ctx = internal.NewSchemaConfigContext(ctx, tchd.schemaConfig)
-	if ps := tchd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.TrustCenterHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tchd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tchd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TrustCenterHistoryDeleteOne is the builder for deleting a single TrustCenterHistory entity.
 type TrustCenterHistoryDeleteOne struct {
-	tchd *TrustCenterHistoryDelete
+	_d *TrustCenterHistoryDelete
 }
 
 // Where appends a list predicates to the TrustCenterHistoryDelete builder.
-func (tchdo *TrustCenterHistoryDeleteOne) Where(ps ...predicate.TrustCenterHistory) *TrustCenterHistoryDeleteOne {
-	tchdo.tchd.mutation.Where(ps...)
-	return tchdo
+func (_d *TrustCenterHistoryDeleteOne) Where(ps ...predicate.TrustCenterHistory) *TrustCenterHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tchdo *TrustCenterHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := tchdo.tchd.Exec(ctx)
+func (_d *TrustCenterHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (tchdo *TrustCenterHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tchdo *TrustCenterHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := tchdo.Exec(ctx); err != nil {
+func (_d *TrustCenterHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

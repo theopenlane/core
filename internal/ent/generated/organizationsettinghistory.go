@@ -104,7 +104,7 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the OrganizationSettingHistory fields.
-func (osh *OrganizationSettingHistory) assignValues(columns []string, values []any) error {
+func (_m *OrganizationSettingHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -114,67 +114,67 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				osh.ID = value.String
+				_m.ID = value.String
 			}
 		case organizationsettinghistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				osh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case organizationsettinghistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				osh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case organizationsettinghistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				osh.Operation = *value
+				_m.Operation = *value
 			}
 		case organizationsettinghistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				osh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case organizationsettinghistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				osh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case organizationsettinghistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				osh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case organizationsettinghistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				osh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case organizationsettinghistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				osh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case organizationsettinghistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				osh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case organizationsettinghistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &osh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -182,7 +182,7 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field domains", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &osh.Domains); err != nil {
+				if err := json.Unmarshal(*value, &_m.Domains); err != nil {
 					return fmt.Errorf("unmarshal field domains: %w", err)
 				}
 			}
@@ -190,25 +190,25 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field billing_contact", values[i])
 			} else if value.Valid {
-				osh.BillingContact = value.String
+				_m.BillingContact = value.String
 			}
 		case organizationsettinghistory.FieldBillingEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field billing_email", values[i])
 			} else if value.Valid {
-				osh.BillingEmail = value.String
+				_m.BillingEmail = value.String
 			}
 		case organizationsettinghistory.FieldBillingPhone:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field billing_phone", values[i])
 			} else if value.Valid {
-				osh.BillingPhone = value.String
+				_m.BillingPhone = value.String
 			}
 		case organizationsettinghistory.FieldBillingAddress:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field billing_address", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &osh.BillingAddress); err != nil {
+				if err := json.Unmarshal(*value, &_m.BillingAddress); err != nil {
 					return fmt.Errorf("unmarshal field billing_address: %w", err)
 				}
 			}
@@ -216,31 +216,31 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field tax_identifier", values[i])
 			} else if value.Valid {
-				osh.TaxIdentifier = value.String
+				_m.TaxIdentifier = value.String
 			}
 		case organizationsettinghistory.FieldGeoLocation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field geo_location", values[i])
 			} else if value.Valid {
-				osh.GeoLocation = enums.Region(value.String)
+				_m.GeoLocation = enums.Region(value.String)
 			}
 		case organizationsettinghistory.FieldOrganizationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
 			} else if value.Valid {
-				osh.OrganizationID = value.String
+				_m.OrganizationID = value.String
 			}
 		case organizationsettinghistory.FieldBillingNotificationsEnabled:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field billing_notifications_enabled", values[i])
 			} else if value.Valid {
-				osh.BillingNotificationsEnabled = value.Bool
+				_m.BillingNotificationsEnabled = value.Bool
 			}
 		case organizationsettinghistory.FieldAllowedEmailDomains:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field allowed_email_domains", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &osh.AllowedEmailDomains); err != nil {
+				if err := json.Unmarshal(*value, &_m.AllowedEmailDomains); err != nil {
 					return fmt.Errorf("unmarshal field allowed_email_domains: %w", err)
 				}
 			}
@@ -248,54 +248,54 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field identity_provider", values[i])
 			} else if value.Valid {
-				osh.IdentityProvider = enums.SSOProvider(value.String)
+				_m.IdentityProvider = enums.SSOProvider(value.String)
 			}
 		case organizationsettinghistory.FieldIdentityProviderClientID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field identity_provider_client_id", values[i])
 			} else if value.Valid {
-				osh.IdentityProviderClientID = new(string)
-				*osh.IdentityProviderClientID = value.String
+				_m.IdentityProviderClientID = new(string)
+				*_m.IdentityProviderClientID = value.String
 			}
 		case organizationsettinghistory.FieldIdentityProviderClientSecret:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field identity_provider_client_secret", values[i])
 			} else if value.Valid {
-				osh.IdentityProviderClientSecret = new(string)
-				*osh.IdentityProviderClientSecret = value.String
+				_m.IdentityProviderClientSecret = new(string)
+				*_m.IdentityProviderClientSecret = value.String
 			}
 		case organizationsettinghistory.FieldIdentityProviderMetadataEndpoint:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field identity_provider_metadata_endpoint", values[i])
 			} else if value.Valid {
-				osh.IdentityProviderMetadataEndpoint = value.String
+				_m.IdentityProviderMetadataEndpoint = value.String
 			}
 		case organizationsettinghistory.FieldIdentityProviderEntityID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field identity_provider_entity_id", values[i])
 			} else if value.Valid {
-				osh.IdentityProviderEntityID = value.String
+				_m.IdentityProviderEntityID = value.String
 			}
 		case organizationsettinghistory.FieldOidcDiscoveryEndpoint:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field oidc_discovery_endpoint", values[i])
 			} else if value.Valid {
-				osh.OidcDiscoveryEndpoint = value.String
+				_m.OidcDiscoveryEndpoint = value.String
 			}
 		case organizationsettinghistory.FieldIdentityProviderLoginEnforced:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field identity_provider_login_enforced", values[i])
 			} else if value.Valid {
-				osh.IdentityProviderLoginEnforced = value.Bool
+				_m.IdentityProviderLoginEnforced = value.Bool
 			}
 		case organizationsettinghistory.FieldComplianceWebhookToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field compliance_webhook_token", values[i])
 			} else if value.Valid {
-				osh.ComplianceWebhookToken = value.String
+				_m.ComplianceWebhookToken = value.String
 			}
 		default:
-			osh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -303,120 +303,120 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 
 // Value returns the ent.Value that was dynamically selected and assigned to the OrganizationSettingHistory.
 // This includes values selected through modifiers, order, etc.
-func (osh *OrganizationSettingHistory) Value(name string) (ent.Value, error) {
-	return osh.selectValues.Get(name)
+func (_m *OrganizationSettingHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this OrganizationSettingHistory.
 // Note that you need to call OrganizationSettingHistory.Unwrap() before calling this method if this OrganizationSettingHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (osh *OrganizationSettingHistory) Update() *OrganizationSettingHistoryUpdateOne {
-	return NewOrganizationSettingHistoryClient(osh.config).UpdateOne(osh)
+func (_m *OrganizationSettingHistory) Update() *OrganizationSettingHistoryUpdateOne {
+	return NewOrganizationSettingHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the OrganizationSettingHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (osh *OrganizationSettingHistory) Unwrap() *OrganizationSettingHistory {
-	_tx, ok := osh.config.driver.(*txDriver)
+func (_m *OrganizationSettingHistory) Unwrap() *OrganizationSettingHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: OrganizationSettingHistory is not a transactional entity")
 	}
-	osh.config.driver = _tx.drv
-	return osh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (osh *OrganizationSettingHistory) String() string {
+func (_m *OrganizationSettingHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("OrganizationSettingHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", osh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(osh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(osh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", osh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(osh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(osh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(osh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(osh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(osh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(osh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", osh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("domains=")
-	builder.WriteString(fmt.Sprintf("%v", osh.Domains))
+	builder.WriteString(fmt.Sprintf("%v", _m.Domains))
 	builder.WriteString(", ")
 	builder.WriteString("billing_contact=")
-	builder.WriteString(osh.BillingContact)
+	builder.WriteString(_m.BillingContact)
 	builder.WriteString(", ")
 	builder.WriteString("billing_email=")
-	builder.WriteString(osh.BillingEmail)
+	builder.WriteString(_m.BillingEmail)
 	builder.WriteString(", ")
 	builder.WriteString("billing_phone=")
-	builder.WriteString(osh.BillingPhone)
+	builder.WriteString(_m.BillingPhone)
 	builder.WriteString(", ")
 	builder.WriteString("billing_address=")
-	builder.WriteString(fmt.Sprintf("%v", osh.BillingAddress))
+	builder.WriteString(fmt.Sprintf("%v", _m.BillingAddress))
 	builder.WriteString(", ")
 	builder.WriteString("tax_identifier=")
-	builder.WriteString(osh.TaxIdentifier)
+	builder.WriteString(_m.TaxIdentifier)
 	builder.WriteString(", ")
 	builder.WriteString("geo_location=")
-	builder.WriteString(fmt.Sprintf("%v", osh.GeoLocation))
+	builder.WriteString(fmt.Sprintf("%v", _m.GeoLocation))
 	builder.WriteString(", ")
 	builder.WriteString("organization_id=")
-	builder.WriteString(osh.OrganizationID)
+	builder.WriteString(_m.OrganizationID)
 	builder.WriteString(", ")
 	builder.WriteString("billing_notifications_enabled=")
-	builder.WriteString(fmt.Sprintf("%v", osh.BillingNotificationsEnabled))
+	builder.WriteString(fmt.Sprintf("%v", _m.BillingNotificationsEnabled))
 	builder.WriteString(", ")
 	builder.WriteString("allowed_email_domains=")
-	builder.WriteString(fmt.Sprintf("%v", osh.AllowedEmailDomains))
+	builder.WriteString(fmt.Sprintf("%v", _m.AllowedEmailDomains))
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider=")
-	builder.WriteString(fmt.Sprintf("%v", osh.IdentityProvider))
+	builder.WriteString(fmt.Sprintf("%v", _m.IdentityProvider))
 	builder.WriteString(", ")
-	if v := osh.IdentityProviderClientID; v != nil {
+	if v := _m.IdentityProviderClientID; v != nil {
 		builder.WriteString("identity_provider_client_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := osh.IdentityProviderClientSecret; v != nil {
+	if v := _m.IdentityProviderClientSecret; v != nil {
 		builder.WriteString("identity_provider_client_secret=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider_metadata_endpoint=")
-	builder.WriteString(osh.IdentityProviderMetadataEndpoint)
+	builder.WriteString(_m.IdentityProviderMetadataEndpoint)
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider_entity_id=")
-	builder.WriteString(osh.IdentityProviderEntityID)
+	builder.WriteString(_m.IdentityProviderEntityID)
 	builder.WriteString(", ")
 	builder.WriteString("oidc_discovery_endpoint=")
-	builder.WriteString(osh.OidcDiscoveryEndpoint)
+	builder.WriteString(_m.OidcDiscoveryEndpoint)
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider_login_enforced=")
-	builder.WriteString(fmt.Sprintf("%v", osh.IdentityProviderLoginEnforced))
+	builder.WriteString(fmt.Sprintf("%v", _m.IdentityProviderLoginEnforced))
 	builder.WriteString(", ")
 	builder.WriteString("compliance_webhook_token=")
-	builder.WriteString(osh.ComplianceWebhookToken)
+	builder.WriteString(_m.ComplianceWebhookToken)
 	builder.WriteByte(')')
 	return builder.String()
 }

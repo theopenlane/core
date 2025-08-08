@@ -120,7 +120,7 @@ func (*Subscriber) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Subscriber fields.
-func (s *Subscriber) assignValues(columns []string, values []any) error {
+func (_m *Subscriber) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -130,49 +130,49 @@ func (s *Subscriber) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				s.ID = value.String
+				_m.ID = value.String
 			}
 		case subscriber.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				s.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case subscriber.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				s.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case subscriber.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				s.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case subscriber.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				s.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case subscriber.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				s.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case subscriber.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				s.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case subscriber.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -180,71 +180,71 @@ func (s *Subscriber) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				s.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case subscriber.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
-				s.Email = value.String
+				_m.Email = value.String
 			}
 		case subscriber.FieldPhoneNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
 			} else if value.Valid {
-				s.PhoneNumber = value.String
+				_m.PhoneNumber = value.String
 			}
 		case subscriber.FieldVerifiedEmail:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field verified_email", values[i])
 			} else if value.Valid {
-				s.VerifiedEmail = value.Bool
+				_m.VerifiedEmail = value.Bool
 			}
 		case subscriber.FieldVerifiedPhone:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field verified_phone", values[i])
 			} else if value.Valid {
-				s.VerifiedPhone = value.Bool
+				_m.VerifiedPhone = value.Bool
 			}
 		case subscriber.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
-				s.Active = value.Bool
+				_m.Active = value.Bool
 			}
 		case subscriber.FieldToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field token", values[i])
 			} else if value.Valid {
-				s.Token = value.String
+				_m.Token = value.String
 			}
 		case subscriber.FieldTTL:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field ttl", values[i])
 			} else if value.Valid {
-				s.TTL = new(time.Time)
-				*s.TTL = value.Time
+				_m.TTL = new(time.Time)
+				*_m.TTL = value.Time
 			}
 		case subscriber.FieldSecret:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field secret", values[i])
 			} else if value != nil {
-				s.Secret = value
+				_m.Secret = value
 			}
 		case subscriber.FieldUnsubscribed:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field unsubscribed", values[i])
 			} else if value.Valid {
-				s.Unsubscribed = value.Bool
+				_m.Unsubscribed = value.Bool
 			}
 		case subscriber.FieldSendAttempts:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field send_attempts", values[i])
 			} else if value.Valid {
-				s.SendAttempts = int(value.Int64)
+				_m.SendAttempts = int(value.Int64)
 			}
 		default:
-			s.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -252,125 +252,125 @@ func (s *Subscriber) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Subscriber.
 // This includes values selected through modifiers, order, etc.
-func (s *Subscriber) Value(name string) (ent.Value, error) {
-	return s.selectValues.Get(name)
+func (_m *Subscriber) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Subscriber entity.
-func (s *Subscriber) QueryOwner() *OrganizationQuery {
-	return NewSubscriberClient(s.config).QueryOwner(s)
+func (_m *Subscriber) QueryOwner() *OrganizationQuery {
+	return NewSubscriberClient(_m.config).QueryOwner(_m)
 }
 
 // QueryEvents queries the "events" edge of the Subscriber entity.
-func (s *Subscriber) QueryEvents() *EventQuery {
-	return NewSubscriberClient(s.config).QueryEvents(s)
+func (_m *Subscriber) QueryEvents() *EventQuery {
+	return NewSubscriberClient(_m.config).QueryEvents(_m)
 }
 
 // Update returns a builder for updating this Subscriber.
 // Note that you need to call Subscriber.Unwrap() before calling this method if this Subscriber
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (s *Subscriber) Update() *SubscriberUpdateOne {
-	return NewSubscriberClient(s.config).UpdateOne(s)
+func (_m *Subscriber) Update() *SubscriberUpdateOne {
+	return NewSubscriberClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Subscriber entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (s *Subscriber) Unwrap() *Subscriber {
-	_tx, ok := s.config.driver.(*txDriver)
+func (_m *Subscriber) Unwrap() *Subscriber {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Subscriber is not a transactional entity")
 	}
-	s.config.driver = _tx.drv
-	return s
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (s *Subscriber) String() string {
+func (_m *Subscriber) String() string {
 	var builder strings.Builder
 	builder.WriteString("Subscriber(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(s.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(s.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(s.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(s.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(s.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", s.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(s.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("email=")
-	builder.WriteString(s.Email)
+	builder.WriteString(_m.Email)
 	builder.WriteString(", ")
 	builder.WriteString("phone_number=")
-	builder.WriteString(s.PhoneNumber)
+	builder.WriteString(_m.PhoneNumber)
 	builder.WriteString(", ")
 	builder.WriteString("verified_email=")
-	builder.WriteString(fmt.Sprintf("%v", s.VerifiedEmail))
+	builder.WriteString(fmt.Sprintf("%v", _m.VerifiedEmail))
 	builder.WriteString(", ")
 	builder.WriteString("verified_phone=")
-	builder.WriteString(fmt.Sprintf("%v", s.VerifiedPhone))
+	builder.WriteString(fmt.Sprintf("%v", _m.VerifiedPhone))
 	builder.WriteString(", ")
 	builder.WriteString("active=")
-	builder.WriteString(fmt.Sprintf("%v", s.Active))
+	builder.WriteString(fmt.Sprintf("%v", _m.Active))
 	builder.WriteString(", ")
 	builder.WriteString("token=")
-	builder.WriteString(s.Token)
+	builder.WriteString(_m.Token)
 	builder.WriteString(", ")
-	if v := s.TTL; v != nil {
+	if v := _m.TTL; v != nil {
 		builder.WriteString("ttl=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := s.Secret; v != nil {
+	if v := _m.Secret; v != nil {
 		builder.WriteString("secret=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("unsubscribed=")
-	builder.WriteString(fmt.Sprintf("%v", s.Unsubscribed))
+	builder.WriteString(fmt.Sprintf("%v", _m.Unsubscribed))
 	builder.WriteString(", ")
 	builder.WriteString("send_attempts=")
-	builder.WriteString(fmt.Sprintf("%v", s.SendAttempts))
+	builder.WriteString(fmt.Sprintf("%v", _m.SendAttempts))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subscriber) NamedEvents(name string) ([]*Event, error) {
-	if s.Edges.namedEvents == nil {
+func (_m *Subscriber) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subscriber) appendNamedEvents(name string, edges ...*Event) {
-	if s.Edges.namedEvents == nil {
-		s.Edges.namedEvents = make(map[string][]*Event)
+func (_m *Subscriber) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		s.Edges.namedEvents[name] = append(s.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 

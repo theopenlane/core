@@ -22,58 +22,58 @@ type StandardDelete struct {
 }
 
 // Where appends a list predicates to the StandardDelete builder.
-func (sd *StandardDelete) Where(ps ...predicate.Standard) *StandardDelete {
-	sd.mutation.Where(ps...)
-	return sd
+func (_d *StandardDelete) Where(ps ...predicate.Standard) *StandardDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (sd *StandardDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, sd.sqlExec, sd.mutation, sd.hooks)
+func (_d *StandardDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sd *StandardDelete) ExecX(ctx context.Context) int {
-	n, err := sd.Exec(ctx)
+func (_d *StandardDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (sd *StandardDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *StandardDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(standard.Table, sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString))
-	_spec.Node.Schema = sd.schemaConfig.Standard
-	ctx = internal.NewSchemaConfigContext(ctx, sd.schemaConfig)
-	if ps := sd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Standard
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, sd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	sd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // StandardDeleteOne is the builder for deleting a single Standard entity.
 type StandardDeleteOne struct {
-	sd *StandardDelete
+	_d *StandardDelete
 }
 
 // Where appends a list predicates to the StandardDelete builder.
-func (sdo *StandardDeleteOne) Where(ps ...predicate.Standard) *StandardDeleteOne {
-	sdo.sd.mutation.Where(ps...)
-	return sdo
+func (_d *StandardDeleteOne) Where(ps ...predicate.Standard) *StandardDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (sdo *StandardDeleteOne) Exec(ctx context.Context) error {
-	n, err := sdo.sd.Exec(ctx)
+func (_d *StandardDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (sdo *StandardDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sdo *StandardDeleteOne) ExecX(ctx context.Context) {
-	if err := sdo.Exec(ctx); err != nil {
+func (_d *StandardDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

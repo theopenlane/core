@@ -29,461 +29,461 @@ type OrganizationSettingHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the OrganizationSettingHistoryUpdate builder.
-func (oshu *OrganizationSettingHistoryUpdate) Where(ps ...predicate.OrganizationSettingHistory) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.Where(ps...)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) Where(ps ...predicate.OrganizationSettingHistory) *OrganizationSettingHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetUpdatedAt(t time.Time) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetUpdatedAt(t)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetUpdatedAt(v time.Time) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearUpdatedAt() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearUpdatedAt()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearUpdatedAt() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetUpdatedBy(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetUpdatedBy(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetUpdatedBy(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableUpdatedBy(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetUpdatedBy(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableUpdatedBy(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearUpdatedBy() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearUpdatedBy()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearUpdatedBy() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetDeletedAt(t time.Time) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetDeletedAt(t)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetDeletedAt(v time.Time) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableDeletedAt(t *time.Time) *OrganizationSettingHistoryUpdate {
-	if t != nil {
-		oshu.SetDeletedAt(*t)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableDeletedAt(v *time.Time) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearDeletedAt() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearDeletedAt()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearDeletedAt() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetDeletedBy(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetDeletedBy(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetDeletedBy(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableDeletedBy(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetDeletedBy(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableDeletedBy(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearDeletedBy() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearDeletedBy()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearDeletedBy() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetTags(s []string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetTags(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetTags(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (oshu *OrganizationSettingHistoryUpdate) AppendTags(s []string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.AppendTags(s)
-	return oshu
+// AppendTags appends value to the "tags" field.
+func (_u *OrganizationSettingHistoryUpdate) AppendTags(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearTags() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearTags()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearTags() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetDomains(s []string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetDomains(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (oshu *OrganizationSettingHistoryUpdate) AppendDomains(s []string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.AppendDomains(s)
-	return oshu
+// AppendDomains appends value to the "domains" field.
+func (_u *OrganizationSettingHistoryUpdate) AppendDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearDomains() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearDomains()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearDomains() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetBillingContact sets the "billing_contact" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetBillingContact(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetBillingContact(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetBillingContact(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetBillingContact(v)
+	return _u
 }
 
 // SetNillableBillingContact sets the "billing_contact" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableBillingContact(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetBillingContact(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableBillingContact(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetBillingContact(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearBillingContact clears the value of the "billing_contact" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearBillingContact() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearBillingContact()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearBillingContact() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearBillingContact()
+	return _u
 }
 
 // SetBillingEmail sets the "billing_email" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetBillingEmail(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetBillingEmail(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetBillingEmail(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetBillingEmail(v)
+	return _u
 }
 
 // SetNillableBillingEmail sets the "billing_email" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableBillingEmail(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetBillingEmail(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableBillingEmail(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetBillingEmail(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearBillingEmail clears the value of the "billing_email" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearBillingEmail() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearBillingEmail()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearBillingEmail() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearBillingEmail()
+	return _u
 }
 
 // SetBillingPhone sets the "billing_phone" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetBillingPhone(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetBillingPhone(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetBillingPhone(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetBillingPhone(v)
+	return _u
 }
 
 // SetNillableBillingPhone sets the "billing_phone" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableBillingPhone(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetBillingPhone(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableBillingPhone(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetBillingPhone(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearBillingPhone clears the value of the "billing_phone" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearBillingPhone() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearBillingPhone()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearBillingPhone() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearBillingPhone()
+	return _u
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetBillingAddress(m models.Address) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetBillingAddress(m)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetBillingAddress(v models.Address) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetBillingAddress(v)
+	return _u
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableBillingAddress(m *models.Address) *OrganizationSettingHistoryUpdate {
-	if m != nil {
-		oshu.SetBillingAddress(*m)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableBillingAddress(v *models.Address) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetBillingAddress(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearBillingAddress clears the value of the "billing_address" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearBillingAddress() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearBillingAddress()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearBillingAddress() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearBillingAddress()
+	return _u
 }
 
 // SetTaxIdentifier sets the "tax_identifier" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetTaxIdentifier(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetTaxIdentifier(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetTaxIdentifier(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetTaxIdentifier(v)
+	return _u
 }
 
 // SetNillableTaxIdentifier sets the "tax_identifier" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableTaxIdentifier(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetTaxIdentifier(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableTaxIdentifier(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetTaxIdentifier(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearTaxIdentifier clears the value of the "tax_identifier" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearTaxIdentifier() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearTaxIdentifier()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearTaxIdentifier() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearTaxIdentifier()
+	return _u
 }
 
 // SetGeoLocation sets the "geo_location" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetGeoLocation(e enums.Region) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetGeoLocation(e)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetGeoLocation(v enums.Region) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetGeoLocation(v)
+	return _u
 }
 
 // SetNillableGeoLocation sets the "geo_location" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableGeoLocation(e *enums.Region) *OrganizationSettingHistoryUpdate {
-	if e != nil {
-		oshu.SetGeoLocation(*e)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableGeoLocation(v *enums.Region) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetGeoLocation(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearGeoLocation clears the value of the "geo_location" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearGeoLocation() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearGeoLocation()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearGeoLocation() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearGeoLocation()
+	return _u
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetOrganizationID(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetOrganizationID(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetOrganizationID(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetOrganizationID(v)
+	return _u
 }
 
 // SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableOrganizationID(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetOrganizationID(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableOrganizationID(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetOrganizationID(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearOrganizationID clears the value of the "organization_id" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearOrganizationID() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearOrganizationID()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearOrganizationID() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearOrganizationID()
+	return _u
 }
 
 // SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetBillingNotificationsEnabled(b bool) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetBillingNotificationsEnabled(b)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetBillingNotificationsEnabled(v bool) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetBillingNotificationsEnabled(v)
+	return _u
 }
 
 // SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableBillingNotificationsEnabled(b *bool) *OrganizationSettingHistoryUpdate {
-	if b != nil {
-		oshu.SetBillingNotificationsEnabled(*b)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableBillingNotificationsEnabled(v *bool) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetBillingNotificationsEnabled(*v)
 	}
-	return oshu
+	return _u
 }
 
 // SetAllowedEmailDomains sets the "allowed_email_domains" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetAllowedEmailDomains(s []string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetAllowedEmailDomains(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetAllowedEmailDomains(v)
+	return _u
 }
 
-// AppendAllowedEmailDomains appends s to the "allowed_email_domains" field.
-func (oshu *OrganizationSettingHistoryUpdate) AppendAllowedEmailDomains(s []string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.AppendAllowedEmailDomains(s)
-	return oshu
+// AppendAllowedEmailDomains appends value to the "allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) AppendAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.AppendAllowedEmailDomains(v)
+	return _u
 }
 
 // ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearAllowedEmailDomains() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearAllowedEmailDomains()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearAllowedEmailDomains() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearAllowedEmailDomains()
+	return _u
 }
 
 // SetIdentityProvider sets the "identity_provider" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProvider(ep enums.SSOProvider) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetIdentityProvider(ep)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetIdentityProvider(v)
+	return _u
 }
 
 // SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProvider(ep *enums.SSOProvider) *OrganizationSettingHistoryUpdate {
-	if ep != nil {
-		oshu.SetIdentityProvider(*ep)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProvider(v *enums.SSOProvider) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetIdentityProvider(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearIdentityProvider clears the value of the "identity_provider" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearIdentityProvider() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearIdentityProvider()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProvider() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearIdentityProvider()
+	return _u
 }
 
 // SetIdentityProviderClientID sets the "identity_provider_client_id" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProviderClientID(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetIdentityProviderClientID(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderClientID(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetIdentityProviderClientID(v)
+	return _u
 }
 
 // SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderClientID(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetIdentityProviderClientID(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderClientID(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetIdentityProviderClientID(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearIdentityProviderClientID clears the value of the "identity_provider_client_id" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearIdentityProviderClientID() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearIdentityProviderClientID()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProviderClientID() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearIdentityProviderClientID()
+	return _u
 }
 
 // SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProviderClientSecret(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetIdentityProviderClientSecret(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderClientSecret(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetIdentityProviderClientSecret(v)
+	return _u
 }
 
 // SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderClientSecret(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetIdentityProviderClientSecret(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderClientSecret(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetIdentityProviderClientSecret(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearIdentityProviderClientSecret clears the value of the "identity_provider_client_secret" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearIdentityProviderClientSecret() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearIdentityProviderClientSecret()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProviderClientSecret() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearIdentityProviderClientSecret()
+	return _u
 }
 
 // SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProviderMetadataEndpoint(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetIdentityProviderMetadataEndpoint(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderMetadataEndpoint(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetIdentityProviderMetadataEndpoint(v)
+	return _u
 }
 
 // SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderMetadataEndpoint(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetIdentityProviderMetadataEndpoint(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderMetadataEndpoint(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetIdentityProviderMetadataEndpoint(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearIdentityProviderMetadataEndpoint clears the value of the "identity_provider_metadata_endpoint" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearIdentityProviderMetadataEndpoint()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearIdentityProviderMetadataEndpoint()
+	return _u
 }
 
 // SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProviderEntityID(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetIdentityProviderEntityID(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderEntityID(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetIdentityProviderEntityID(v)
+	return _u
 }
 
 // SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderEntityID(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetIdentityProviderEntityID(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderEntityID(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetIdentityProviderEntityID(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearIdentityProviderEntityID clears the value of the "identity_provider_entity_id" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearIdentityProviderEntityID() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearIdentityProviderEntityID()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProviderEntityID() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearIdentityProviderEntityID()
+	return _u
 }
 
 // SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetOidcDiscoveryEndpoint(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetOidcDiscoveryEndpoint(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetOidcDiscoveryEndpoint(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetOidcDiscoveryEndpoint(v)
+	return _u
 }
 
 // SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableOidcDiscoveryEndpoint(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetOidcDiscoveryEndpoint(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableOidcDiscoveryEndpoint(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetOidcDiscoveryEndpoint(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearOidcDiscoveryEndpoint clears the value of the "oidc_discovery_endpoint" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearOidcDiscoveryEndpoint() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearOidcDiscoveryEndpoint()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearOidcDiscoveryEndpoint() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearOidcDiscoveryEndpoint()
+	return _u
 }
 
 // SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProviderLoginEnforced(b bool) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetIdentityProviderLoginEnforced(b)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderLoginEnforced(v bool) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetIdentityProviderLoginEnforced(v)
+	return _u
 }
 
 // SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderLoginEnforced(b *bool) *OrganizationSettingHistoryUpdate {
-	if b != nil {
-		oshu.SetIdentityProviderLoginEnforced(*b)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderLoginEnforced(v *bool) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetIdentityProviderLoginEnforced(*v)
 	}
-	return oshu
+	return _u
 }
 
 // SetComplianceWebhookToken sets the "compliance_webhook_token" field.
-func (oshu *OrganizationSettingHistoryUpdate) SetComplianceWebhookToken(s string) *OrganizationSettingHistoryUpdate {
-	oshu.mutation.SetComplianceWebhookToken(s)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) SetComplianceWebhookToken(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetComplianceWebhookToken(v)
+	return _u
 }
 
 // SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
-func (oshu *OrganizationSettingHistoryUpdate) SetNillableComplianceWebhookToken(s *string) *OrganizationSettingHistoryUpdate {
-	if s != nil {
-		oshu.SetComplianceWebhookToken(*s)
+func (_u *OrganizationSettingHistoryUpdate) SetNillableComplianceWebhookToken(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetComplianceWebhookToken(*v)
 	}
-	return oshu
+	return _u
 }
 
 // ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
-func (oshu *OrganizationSettingHistoryUpdate) ClearComplianceWebhookToken() *OrganizationSettingHistoryUpdate {
-	oshu.mutation.ClearComplianceWebhookToken()
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) ClearComplianceWebhookToken() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearComplianceWebhookToken()
+	return _u
 }
 
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
-func (oshu *OrganizationSettingHistoryUpdate) Mutation() *OrganizationSettingHistoryMutation {
-	return oshu.mutation
+func (_u *OrganizationSettingHistoryUpdate) Mutation() *OrganizationSettingHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (oshu *OrganizationSettingHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := oshu.defaults(); err != nil {
+func (_u *OrganizationSettingHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, oshu.sqlSave, oshu.mutation, oshu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (oshu *OrganizationSettingHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := oshu.Save(ctx)
+func (_u *OrganizationSettingHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -491,38 +491,38 @@ func (oshu *OrganizationSettingHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (oshu *OrganizationSettingHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := oshu.Save(ctx)
+func (_u *OrganizationSettingHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oshu *OrganizationSettingHistoryUpdate) ExecX(ctx context.Context) {
-	if err := oshu.Exec(ctx); err != nil {
+func (_u *OrganizationSettingHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (oshu *OrganizationSettingHistoryUpdate) defaults() error {
-	if _, ok := oshu.mutation.UpdatedAt(); !ok && !oshu.mutation.UpdatedAtCleared() {
+func (_u *OrganizationSettingHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if organizationsettinghistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationsettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationsettinghistory.UpdateDefaultUpdatedAt()
-		oshu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (oshu *OrganizationSettingHistoryUpdate) check() error {
-	if v, ok := oshu.mutation.GeoLocation(); ok {
+func (_u *OrganizationSettingHistoryUpdate) check() error {
+	if v, ok := _u.mutation.GeoLocation(); ok {
 		if err := organizationsettinghistory.GeoLocationValidator(v); err != nil {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.geo_location": %w`, err)}
 		}
 	}
-	if v, ok := oshu.mutation.IdentityProvider(); ok {
+	if v, ok := _u.mutation.IdentityProvider(); ok {
 		if err := organizationsettinghistory.IdentityProviderValidator(v); err != nil {
 			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.identity_provider": %w`, err)}
 		}
@@ -531,183 +531,183 @@ func (oshu *OrganizationSettingHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (oshu *OrganizationSettingHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingHistoryUpdate {
-	oshu.modifiers = append(oshu.modifiers, modifiers...)
-	return oshu
+func (_u *OrganizationSettingHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := oshu.check(); err != nil {
-		return n, err
+func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(organizationsettinghistory.Table, organizationsettinghistory.Columns, sqlgraph.NewFieldSpec(organizationsettinghistory.FieldID, field.TypeString))
-	if ps := oshu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if oshu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldRef, field.TypeString)
 	}
-	if oshu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := oshu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if oshu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if oshu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := oshu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationsettinghistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if oshu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := oshu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if oshu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := oshu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if oshu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := oshu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(organizationsettinghistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := oshu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsettinghistory.FieldTags, value)
 		})
 	}
-	if oshu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := oshu.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := oshu.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsettinghistory.FieldDomains, value)
 		})
 	}
-	if oshu.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := oshu.mutation.BillingContact(); ok {
+	if value, ok := _u.mutation.BillingContact(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingContact, field.TypeString, value)
 	}
-	if oshu.mutation.BillingContactCleared() {
+	if _u.mutation.BillingContactCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingContact, field.TypeString)
 	}
-	if value, ok := oshu.mutation.BillingEmail(); ok {
+	if value, ok := _u.mutation.BillingEmail(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingEmail, field.TypeString, value)
 	}
-	if oshu.mutation.BillingEmailCleared() {
+	if _u.mutation.BillingEmailCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingEmail, field.TypeString)
 	}
-	if value, ok := oshu.mutation.BillingPhone(); ok {
+	if value, ok := _u.mutation.BillingPhone(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingPhone, field.TypeString, value)
 	}
-	if oshu.mutation.BillingPhoneCleared() {
+	if _u.mutation.BillingPhoneCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingPhone, field.TypeString)
 	}
-	if value, ok := oshu.mutation.BillingAddress(); ok {
+	if value, ok := _u.mutation.BillingAddress(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON, value)
 	}
-	if oshu.mutation.BillingAddressCleared() {
+	if _u.mutation.BillingAddressCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON)
 	}
-	if value, ok := oshu.mutation.TaxIdentifier(); ok {
+	if value, ok := _u.mutation.TaxIdentifier(); ok {
 		_spec.SetField(organizationsettinghistory.FieldTaxIdentifier, field.TypeString, value)
 	}
-	if oshu.mutation.TaxIdentifierCleared() {
+	if _u.mutation.TaxIdentifierCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldTaxIdentifier, field.TypeString)
 	}
-	if value, ok := oshu.mutation.GeoLocation(); ok {
+	if value, ok := _u.mutation.GeoLocation(); ok {
 		_spec.SetField(organizationsettinghistory.FieldGeoLocation, field.TypeEnum, value)
 	}
-	if oshu.mutation.GeoLocationCleared() {
+	if _u.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldGeoLocation, field.TypeEnum)
 	}
-	if value, ok := oshu.mutation.OrganizationID(); ok {
+	if value, ok := _u.mutation.OrganizationID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldOrganizationID, field.TypeString, value)
 	}
-	if oshu.mutation.OrganizationIDCleared() {
+	if _u.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
 	}
-	if value, ok := oshu.mutation.BillingNotificationsEnabled(); ok {
+	if value, ok := _u.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
 	}
-	if value, ok := oshu.mutation.AllowedEmailDomains(); ok {
+	if value, ok := _u.mutation.AllowedEmailDomains(); ok {
 		_spec.SetField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON, value)
 	}
-	if value, ok := oshu.mutation.AppendedAllowedEmailDomains(); ok {
+	if value, ok := _u.mutation.AppendedAllowedEmailDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsettinghistory.FieldAllowedEmailDomains, value)
 		})
 	}
-	if oshu.mutation.AllowedEmailDomainsCleared() {
+	if _u.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON)
 	}
-	if value, ok := oshu.mutation.IdentityProvider(); ok {
+	if value, ok := _u.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum, value)
 	}
-	if oshu.mutation.IdentityProviderCleared() {
+	if _u.mutation.IdentityProviderCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum)
 	}
-	if value, ok := oshu.mutation.IdentityProviderClientID(); ok {
+	if value, ok := _u.mutation.IdentityProviderClientID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString, value)
 	}
-	if oshu.mutation.IdentityProviderClientIDCleared() {
+	if _u.mutation.IdentityProviderClientIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString)
 	}
-	if value, ok := oshu.mutation.IdentityProviderClientSecret(); ok {
+	if value, ok := _u.mutation.IdentityProviderClientSecret(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString, value)
 	}
-	if oshu.mutation.IdentityProviderClientSecretCleared() {
+	if _u.mutation.IdentityProviderClientSecretCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString)
 	}
-	if value, ok := oshu.mutation.IdentityProviderMetadataEndpoint(); ok {
+	if value, ok := _u.mutation.IdentityProviderMetadataEndpoint(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
 	}
-	if oshu.mutation.IdentityProviderMetadataEndpointCleared() {
+	if _u.mutation.IdentityProviderMetadataEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString)
 	}
-	if value, ok := oshu.mutation.IdentityProviderEntityID(); ok {
+	if value, ok := _u.mutation.IdentityProviderEntityID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString, value)
 	}
-	if oshu.mutation.IdentityProviderEntityIDCleared() {
+	if _u.mutation.IdentityProviderEntityIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString)
 	}
-	if value, ok := oshu.mutation.OidcDiscoveryEndpoint(); ok {
+	if value, ok := _u.mutation.OidcDiscoveryEndpoint(); ok {
 		_spec.SetField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString, value)
 	}
-	if oshu.mutation.OidcDiscoveryEndpointCleared() {
+	if _u.mutation.OidcDiscoveryEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString)
 	}
-	if value, ok := oshu.mutation.IdentityProviderLoginEnforced(); ok {
+	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 	}
-	if value, ok := oshu.mutation.ComplianceWebhookToken(); ok {
+	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
 	}
-	if oshu.mutation.ComplianceWebhookTokenCleared() {
+	if _u.mutation.ComplianceWebhookTokenCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString)
 	}
-	_spec.Node.Schema = oshu.schemaConfig.OrganizationSettingHistory
-	ctx = internal.NewSchemaConfigContext(ctx, oshu.schemaConfig)
-	_spec.AddModifiers(oshu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, oshu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.OrganizationSettingHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationsettinghistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -715,8 +715,8 @@ func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 		}
 		return 0, err
 	}
-	oshu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OrganizationSettingHistoryUpdateOne is the builder for updating a single OrganizationSettingHistory entity.
@@ -729,468 +729,468 @@ type OrganizationSettingHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetUpdatedAt(t time.Time) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetUpdatedAt(t)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetUpdatedAt(v time.Time) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearUpdatedAt() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearUpdatedAt()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearUpdatedAt() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetUpdatedBy(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetUpdatedBy(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetUpdatedBy(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableUpdatedBy(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetUpdatedBy(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableUpdatedBy(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearUpdatedBy() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearUpdatedBy()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearUpdatedBy() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetDeletedAt(t time.Time) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetDeletedAt(t)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetDeletedAt(v time.Time) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *OrganizationSettingHistoryUpdateOne {
-	if t != nil {
-		oshuo.SetDeletedAt(*t)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearDeletedAt() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearDeletedAt()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearDeletedAt() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetDeletedBy(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetDeletedBy(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetDeletedBy(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableDeletedBy(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetDeletedBy(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableDeletedBy(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearDeletedBy() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearDeletedBy()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearDeletedBy() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetTags(s []string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetTags(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetTags(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) AppendTags(s []string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.AppendTags(s)
-	return oshuo
+// AppendTags appends value to the "tags" field.
+func (_u *OrganizationSettingHistoryUpdateOne) AppendTags(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearTags() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearTags()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearTags() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetDomains(s []string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetDomains(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) AppendDomains(s []string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.AppendDomains(s)
-	return oshuo
+// AppendDomains appends value to the "domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) AppendDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearDomains() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearDomains()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearDomains() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetBillingContact sets the "billing_contact" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetBillingContact(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetBillingContact(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetBillingContact(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetBillingContact(v)
+	return _u
 }
 
 // SetNillableBillingContact sets the "billing_contact" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableBillingContact(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetBillingContact(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableBillingContact(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetBillingContact(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearBillingContact clears the value of the "billing_contact" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearBillingContact() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearBillingContact()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearBillingContact() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearBillingContact()
+	return _u
 }
 
 // SetBillingEmail sets the "billing_email" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetBillingEmail(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetBillingEmail(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetBillingEmail(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetBillingEmail(v)
+	return _u
 }
 
 // SetNillableBillingEmail sets the "billing_email" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableBillingEmail(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetBillingEmail(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableBillingEmail(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetBillingEmail(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearBillingEmail clears the value of the "billing_email" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearBillingEmail() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearBillingEmail()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearBillingEmail() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearBillingEmail()
+	return _u
 }
 
 // SetBillingPhone sets the "billing_phone" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetBillingPhone(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetBillingPhone(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetBillingPhone(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetBillingPhone(v)
+	return _u
 }
 
 // SetNillableBillingPhone sets the "billing_phone" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableBillingPhone(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetBillingPhone(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableBillingPhone(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetBillingPhone(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearBillingPhone clears the value of the "billing_phone" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearBillingPhone() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearBillingPhone()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearBillingPhone() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearBillingPhone()
+	return _u
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetBillingAddress(m models.Address) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetBillingAddress(m)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetBillingAddress(v models.Address) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetBillingAddress(v)
+	return _u
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableBillingAddress(m *models.Address) *OrganizationSettingHistoryUpdateOne {
-	if m != nil {
-		oshuo.SetBillingAddress(*m)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableBillingAddress(v *models.Address) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetBillingAddress(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearBillingAddress clears the value of the "billing_address" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearBillingAddress() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearBillingAddress()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearBillingAddress() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearBillingAddress()
+	return _u
 }
 
 // SetTaxIdentifier sets the "tax_identifier" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetTaxIdentifier(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetTaxIdentifier(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetTaxIdentifier(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetTaxIdentifier(v)
+	return _u
 }
 
 // SetNillableTaxIdentifier sets the "tax_identifier" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableTaxIdentifier(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetTaxIdentifier(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableTaxIdentifier(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetTaxIdentifier(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearTaxIdentifier clears the value of the "tax_identifier" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearTaxIdentifier() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearTaxIdentifier()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearTaxIdentifier() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearTaxIdentifier()
+	return _u
 }
 
 // SetGeoLocation sets the "geo_location" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetGeoLocation(e enums.Region) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetGeoLocation(e)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetGeoLocation(v enums.Region) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetGeoLocation(v)
+	return _u
 }
 
 // SetNillableGeoLocation sets the "geo_location" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableGeoLocation(e *enums.Region) *OrganizationSettingHistoryUpdateOne {
-	if e != nil {
-		oshuo.SetGeoLocation(*e)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableGeoLocation(v *enums.Region) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetGeoLocation(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearGeoLocation clears the value of the "geo_location" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearGeoLocation() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearGeoLocation()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearGeoLocation() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearGeoLocation()
+	return _u
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetOrganizationID(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetOrganizationID(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetOrganizationID(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetOrganizationID(v)
+	return _u
 }
 
 // SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableOrganizationID(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetOrganizationID(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableOrganizationID(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetOrganizationID(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearOrganizationID clears the value of the "organization_id" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearOrganizationID() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearOrganizationID()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearOrganizationID() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearOrganizationID()
+	return _u
 }
 
 // SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetBillingNotificationsEnabled(b bool) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetBillingNotificationsEnabled(b)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetBillingNotificationsEnabled(v bool) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetBillingNotificationsEnabled(v)
+	return _u
 }
 
 // SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableBillingNotificationsEnabled(b *bool) *OrganizationSettingHistoryUpdateOne {
-	if b != nil {
-		oshuo.SetBillingNotificationsEnabled(*b)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableBillingNotificationsEnabled(v *bool) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetBillingNotificationsEnabled(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // SetAllowedEmailDomains sets the "allowed_email_domains" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetAllowedEmailDomains(s []string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetAllowedEmailDomains(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetAllowedEmailDomains(v)
+	return _u
 }
 
-// AppendAllowedEmailDomains appends s to the "allowed_email_domains" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) AppendAllowedEmailDomains(s []string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.AppendAllowedEmailDomains(s)
-	return oshuo
+// AppendAllowedEmailDomains appends value to the "allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) AppendAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.AppendAllowedEmailDomains(v)
+	return _u
 }
 
 // ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearAllowedEmailDomains() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearAllowedEmailDomains()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearAllowedEmailDomains() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearAllowedEmailDomains()
+	return _u
 }
 
 // SetIdentityProvider sets the "identity_provider" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProvider(ep enums.SSOProvider) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetIdentityProvider(ep)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetIdentityProvider(v)
+	return _u
 }
 
 // SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProvider(ep *enums.SSOProvider) *OrganizationSettingHistoryUpdateOne {
-	if ep != nil {
-		oshuo.SetIdentityProvider(*ep)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProvider(v *enums.SSOProvider) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentityProvider(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearIdentityProvider clears the value of the "identity_provider" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearIdentityProvider() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearIdentityProvider()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProvider() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearIdentityProvider()
+	return _u
 }
 
 // SetIdentityProviderClientID sets the "identity_provider_client_id" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProviderClientID(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetIdentityProviderClientID(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderClientID(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetIdentityProviderClientID(v)
+	return _u
 }
 
 // SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderClientID(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetIdentityProviderClientID(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderClientID(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderClientID(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearIdentityProviderClientID clears the value of the "identity_provider_client_id" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderClientID() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearIdentityProviderClientID()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderClientID() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearIdentityProviderClientID()
+	return _u
 }
 
 // SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProviderClientSecret(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetIdentityProviderClientSecret(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderClientSecret(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetIdentityProviderClientSecret(v)
+	return _u
 }
 
 // SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderClientSecret(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetIdentityProviderClientSecret(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderClientSecret(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderClientSecret(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearIdentityProviderClientSecret clears the value of the "identity_provider_client_secret" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderClientSecret() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearIdentityProviderClientSecret()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderClientSecret() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearIdentityProviderClientSecret()
+	return _u
 }
 
 // SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProviderMetadataEndpoint(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetIdentityProviderMetadataEndpoint(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderMetadataEndpoint(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetIdentityProviderMetadataEndpoint(v)
+	return _u
 }
 
 // SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderMetadataEndpoint(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetIdentityProviderMetadataEndpoint(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderMetadataEndpoint(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderMetadataEndpoint(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearIdentityProviderMetadataEndpoint clears the value of the "identity_provider_metadata_endpoint" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearIdentityProviderMetadataEndpoint()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearIdentityProviderMetadataEndpoint()
+	return _u
 }
 
 // SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProviderEntityID(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetIdentityProviderEntityID(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderEntityID(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetIdentityProviderEntityID(v)
+	return _u
 }
 
 // SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderEntityID(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetIdentityProviderEntityID(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderEntityID(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderEntityID(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearIdentityProviderEntityID clears the value of the "identity_provider_entity_id" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderEntityID() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearIdentityProviderEntityID()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderEntityID() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearIdentityProviderEntityID()
+	return _u
 }
 
 // SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetOidcDiscoveryEndpoint(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetOidcDiscoveryEndpoint(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetOidcDiscoveryEndpoint(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetOidcDiscoveryEndpoint(v)
+	return _u
 }
 
 // SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableOidcDiscoveryEndpoint(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetOidcDiscoveryEndpoint(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableOidcDiscoveryEndpoint(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetOidcDiscoveryEndpoint(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearOidcDiscoveryEndpoint clears the value of the "oidc_discovery_endpoint" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearOidcDiscoveryEndpoint() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearOidcDiscoveryEndpoint()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearOidcDiscoveryEndpoint() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearOidcDiscoveryEndpoint()
+	return _u
 }
 
 // SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProviderLoginEnforced(b bool) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetIdentityProviderLoginEnforced(b)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderLoginEnforced(v bool) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetIdentityProviderLoginEnforced(v)
+	return _u
 }
 
 // SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderLoginEnforced(b *bool) *OrganizationSettingHistoryUpdateOne {
-	if b != nil {
-		oshuo.SetIdentityProviderLoginEnforced(*b)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderLoginEnforced(v *bool) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderLoginEnforced(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // SetComplianceWebhookToken sets the "compliance_webhook_token" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetComplianceWebhookToken(s string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.SetComplianceWebhookToken(s)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) SetComplianceWebhookToken(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetComplianceWebhookToken(v)
+	return _u
 }
 
 // SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableComplianceWebhookToken(s *string) *OrganizationSettingHistoryUpdateOne {
-	if s != nil {
-		oshuo.SetComplianceWebhookToken(*s)
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableComplianceWebhookToken(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetComplianceWebhookToken(*v)
 	}
-	return oshuo
+	return _u
 }
 
 // ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ClearComplianceWebhookToken() *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.ClearComplianceWebhookToken()
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) ClearComplianceWebhookToken() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearComplianceWebhookToken()
+	return _u
 }
 
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
-func (oshuo *OrganizationSettingHistoryUpdateOne) Mutation() *OrganizationSettingHistoryMutation {
-	return oshuo.mutation
+func (_u *OrganizationSettingHistoryUpdateOne) Mutation() *OrganizationSettingHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the OrganizationSettingHistoryUpdate builder.
-func (oshuo *OrganizationSettingHistoryUpdateOne) Where(ps ...predicate.OrganizationSettingHistory) *OrganizationSettingHistoryUpdateOne {
-	oshuo.mutation.Where(ps...)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) Where(ps ...predicate.OrganizationSettingHistory) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (oshuo *OrganizationSettingHistoryUpdateOne) Select(field string, fields ...string) *OrganizationSettingHistoryUpdateOne {
-	oshuo.fields = append([]string{field}, fields...)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) Select(field string, fields ...string) *OrganizationSettingHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated OrganizationSettingHistory entity.
-func (oshuo *OrganizationSettingHistoryUpdateOne) Save(ctx context.Context) (*OrganizationSettingHistory, error) {
-	if err := oshuo.defaults(); err != nil {
+func (_u *OrganizationSettingHistoryUpdateOne) Save(ctx context.Context) (*OrganizationSettingHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, oshuo.sqlSave, oshuo.mutation, oshuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (oshuo *OrganizationSettingHistoryUpdateOne) SaveX(ctx context.Context) *OrganizationSettingHistory {
-	node, err := oshuo.Save(ctx)
+func (_u *OrganizationSettingHistoryUpdateOne) SaveX(ctx context.Context) *OrganizationSettingHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1198,38 +1198,38 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) SaveX(ctx context.Context) *Or
 }
 
 // Exec executes the query on the entity.
-func (oshuo *OrganizationSettingHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := oshuo.Save(ctx)
+func (_u *OrganizationSettingHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oshuo *OrganizationSettingHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := oshuo.Exec(ctx); err != nil {
+func (_u *OrganizationSettingHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (oshuo *OrganizationSettingHistoryUpdateOne) defaults() error {
-	if _, ok := oshuo.mutation.UpdatedAt(); !ok && !oshuo.mutation.UpdatedAtCleared() {
+func (_u *OrganizationSettingHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if organizationsettinghistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationsettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationsettinghistory.UpdateDefaultUpdatedAt()
-		oshuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (oshuo *OrganizationSettingHistoryUpdateOne) check() error {
-	if v, ok := oshuo.mutation.GeoLocation(); ok {
+func (_u *OrganizationSettingHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.GeoLocation(); ok {
 		if err := organizationsettinghistory.GeoLocationValidator(v); err != nil {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.geo_location": %w`, err)}
 		}
 	}
-	if v, ok := oshuo.mutation.IdentityProvider(); ok {
+	if v, ok := _u.mutation.IdentityProvider(); ok {
 		if err := organizationsettinghistory.IdentityProviderValidator(v); err != nil {
 			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.identity_provider": %w`, err)}
 		}
@@ -1238,22 +1238,22 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (oshuo *OrganizationSettingHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingHistoryUpdateOne {
-	oshuo.modifiers = append(oshuo.modifiers, modifiers...)
-	return oshuo
+func (_u *OrganizationSettingHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationSettingHistory, err error) {
-	if err := oshuo.check(); err != nil {
+func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationSettingHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(organizationsettinghistory.Table, organizationsettinghistory.Columns, sqlgraph.NewFieldSpec(organizationsettinghistory.FieldID, field.TypeString))
-	id, ok := oshuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "OrganizationSettingHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := oshuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, organizationsettinghistory.FieldID)
 		for _, f := range fields {
@@ -1265,176 +1265,176 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 			}
 		}
 	}
-	if ps := oshuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if oshuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldRef, field.TypeString)
 	}
-	if oshuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := oshuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if oshuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if oshuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationsettinghistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if oshuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if oshuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := oshuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if oshuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(organizationsettinghistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := oshuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsettinghistory.FieldTags, value)
 		})
 	}
-	if oshuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := oshuo.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := oshuo.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsettinghistory.FieldDomains, value)
 		})
 	}
-	if oshuo.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := oshuo.mutation.BillingContact(); ok {
+	if value, ok := _u.mutation.BillingContact(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingContact, field.TypeString, value)
 	}
-	if oshuo.mutation.BillingContactCleared() {
+	if _u.mutation.BillingContactCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingContact, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.BillingEmail(); ok {
+	if value, ok := _u.mutation.BillingEmail(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingEmail, field.TypeString, value)
 	}
-	if oshuo.mutation.BillingEmailCleared() {
+	if _u.mutation.BillingEmailCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingEmail, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.BillingPhone(); ok {
+	if value, ok := _u.mutation.BillingPhone(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingPhone, field.TypeString, value)
 	}
-	if oshuo.mutation.BillingPhoneCleared() {
+	if _u.mutation.BillingPhoneCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingPhone, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.BillingAddress(); ok {
+	if value, ok := _u.mutation.BillingAddress(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON, value)
 	}
-	if oshuo.mutation.BillingAddressCleared() {
+	if _u.mutation.BillingAddressCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON)
 	}
-	if value, ok := oshuo.mutation.TaxIdentifier(); ok {
+	if value, ok := _u.mutation.TaxIdentifier(); ok {
 		_spec.SetField(organizationsettinghistory.FieldTaxIdentifier, field.TypeString, value)
 	}
-	if oshuo.mutation.TaxIdentifierCleared() {
+	if _u.mutation.TaxIdentifierCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldTaxIdentifier, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.GeoLocation(); ok {
+	if value, ok := _u.mutation.GeoLocation(); ok {
 		_spec.SetField(organizationsettinghistory.FieldGeoLocation, field.TypeEnum, value)
 	}
-	if oshuo.mutation.GeoLocationCleared() {
+	if _u.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldGeoLocation, field.TypeEnum)
 	}
-	if value, ok := oshuo.mutation.OrganizationID(); ok {
+	if value, ok := _u.mutation.OrganizationID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldOrganizationID, field.TypeString, value)
 	}
-	if oshuo.mutation.OrganizationIDCleared() {
+	if _u.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.BillingNotificationsEnabled(); ok {
+	if value, ok := _u.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
 	}
-	if value, ok := oshuo.mutation.AllowedEmailDomains(); ok {
+	if value, ok := _u.mutation.AllowedEmailDomains(); ok {
 		_spec.SetField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON, value)
 	}
-	if value, ok := oshuo.mutation.AppendedAllowedEmailDomains(); ok {
+	if value, ok := _u.mutation.AppendedAllowedEmailDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsettinghistory.FieldAllowedEmailDomains, value)
 		})
 	}
-	if oshuo.mutation.AllowedEmailDomainsCleared() {
+	if _u.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON)
 	}
-	if value, ok := oshuo.mutation.IdentityProvider(); ok {
+	if value, ok := _u.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum, value)
 	}
-	if oshuo.mutation.IdentityProviderCleared() {
+	if _u.mutation.IdentityProviderCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum)
 	}
-	if value, ok := oshuo.mutation.IdentityProviderClientID(); ok {
+	if value, ok := _u.mutation.IdentityProviderClientID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString, value)
 	}
-	if oshuo.mutation.IdentityProviderClientIDCleared() {
+	if _u.mutation.IdentityProviderClientIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.IdentityProviderClientSecret(); ok {
+	if value, ok := _u.mutation.IdentityProviderClientSecret(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString, value)
 	}
-	if oshuo.mutation.IdentityProviderClientSecretCleared() {
+	if _u.mutation.IdentityProviderClientSecretCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.IdentityProviderMetadataEndpoint(); ok {
+	if value, ok := _u.mutation.IdentityProviderMetadataEndpoint(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
 	}
-	if oshuo.mutation.IdentityProviderMetadataEndpointCleared() {
+	if _u.mutation.IdentityProviderMetadataEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.IdentityProviderEntityID(); ok {
+	if value, ok := _u.mutation.IdentityProviderEntityID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString, value)
 	}
-	if oshuo.mutation.IdentityProviderEntityIDCleared() {
+	if _u.mutation.IdentityProviderEntityIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.OidcDiscoveryEndpoint(); ok {
+	if value, ok := _u.mutation.OidcDiscoveryEndpoint(); ok {
 		_spec.SetField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString, value)
 	}
-	if oshuo.mutation.OidcDiscoveryEndpointCleared() {
+	if _u.mutation.OidcDiscoveryEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString)
 	}
-	if value, ok := oshuo.mutation.IdentityProviderLoginEnforced(); ok {
+	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 	}
-	if value, ok := oshuo.mutation.ComplianceWebhookToken(); ok {
+	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
 	}
-	if oshuo.mutation.ComplianceWebhookTokenCleared() {
+	if _u.mutation.ComplianceWebhookTokenCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString)
 	}
-	_spec.Node.Schema = oshuo.schemaConfig.OrganizationSettingHistory
-	ctx = internal.NewSchemaConfigContext(ctx, oshuo.schemaConfig)
-	_spec.AddModifiers(oshuo.modifiers...)
-	_node = &OrganizationSettingHistory{config: oshuo.config}
+	_spec.Node.Schema = _u.schemaConfig.OrganizationSettingHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &OrganizationSettingHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, oshuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationsettinghistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1442,6 +1442,6 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 		}
 		return nil, err
 	}
-	oshuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

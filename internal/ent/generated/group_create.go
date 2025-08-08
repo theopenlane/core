@@ -41,785 +41,785 @@ type GroupCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (gc *GroupCreate) SetCreatedAt(t time.Time) *GroupCreate {
-	gc.mutation.SetCreatedAt(t)
-	return gc
+func (_c *GroupCreate) SetCreatedAt(v time.Time) *GroupCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableCreatedAt(t *time.Time) *GroupCreate {
-	if t != nil {
-		gc.SetCreatedAt(*t)
+func (_c *GroupCreate) SetNillableCreatedAt(v *time.Time) *GroupCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (gc *GroupCreate) SetUpdatedAt(t time.Time) *GroupCreate {
-	gc.mutation.SetUpdatedAt(t)
-	return gc
+func (_c *GroupCreate) SetUpdatedAt(v time.Time) *GroupCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableUpdatedAt(t *time.Time) *GroupCreate {
-	if t != nil {
-		gc.SetUpdatedAt(*t)
+func (_c *GroupCreate) SetNillableUpdatedAt(v *time.Time) *GroupCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (gc *GroupCreate) SetCreatedBy(s string) *GroupCreate {
-	gc.mutation.SetCreatedBy(s)
-	return gc
+func (_c *GroupCreate) SetCreatedBy(v string) *GroupCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableCreatedBy(s *string) *GroupCreate {
-	if s != nil {
-		gc.SetCreatedBy(*s)
+func (_c *GroupCreate) SetNillableCreatedBy(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (gc *GroupCreate) SetUpdatedBy(s string) *GroupCreate {
-	gc.mutation.SetUpdatedBy(s)
-	return gc
+func (_c *GroupCreate) SetUpdatedBy(v string) *GroupCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableUpdatedBy(s *string) *GroupCreate {
-	if s != nil {
-		gc.SetUpdatedBy(*s)
+func (_c *GroupCreate) SetNillableUpdatedBy(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (gc *GroupCreate) SetDeletedAt(t time.Time) *GroupCreate {
-	gc.mutation.SetDeletedAt(t)
-	return gc
+func (_c *GroupCreate) SetDeletedAt(v time.Time) *GroupCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableDeletedAt(t *time.Time) *GroupCreate {
-	if t != nil {
-		gc.SetDeletedAt(*t)
+func (_c *GroupCreate) SetNillableDeletedAt(v *time.Time) *GroupCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (gc *GroupCreate) SetDeletedBy(s string) *GroupCreate {
-	gc.mutation.SetDeletedBy(s)
-	return gc
+func (_c *GroupCreate) SetDeletedBy(v string) *GroupCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableDeletedBy(s *string) *GroupCreate {
-	if s != nil {
-		gc.SetDeletedBy(*s)
+func (_c *GroupCreate) SetNillableDeletedBy(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (gc *GroupCreate) SetDisplayID(s string) *GroupCreate {
-	gc.mutation.SetDisplayID(s)
-	return gc
+func (_c *GroupCreate) SetDisplayID(v string) *GroupCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (gc *GroupCreate) SetTags(s []string) *GroupCreate {
-	gc.mutation.SetTags(s)
-	return gc
+func (_c *GroupCreate) SetTags(v []string) *GroupCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (gc *GroupCreate) SetOwnerID(s string) *GroupCreate {
-	gc.mutation.SetOwnerID(s)
-	return gc
+func (_c *GroupCreate) SetOwnerID(v string) *GroupCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableOwnerID(s *string) *GroupCreate {
-	if s != nil {
-		gc.SetOwnerID(*s)
+func (_c *GroupCreate) SetNillableOwnerID(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (gc *GroupCreate) SetName(s string) *GroupCreate {
-	gc.mutation.SetName(s)
-	return gc
+func (_c *GroupCreate) SetName(v string) *GroupCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (gc *GroupCreate) SetDescription(s string) *GroupCreate {
-	gc.mutation.SetDescription(s)
-	return gc
+func (_c *GroupCreate) SetDescription(v string) *GroupCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableDescription(s *string) *GroupCreate {
-	if s != nil {
-		gc.SetDescription(*s)
+func (_c *GroupCreate) SetNillableDescription(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetIsManaged sets the "is_managed" field.
-func (gc *GroupCreate) SetIsManaged(b bool) *GroupCreate {
-	gc.mutation.SetIsManaged(b)
-	return gc
+func (_c *GroupCreate) SetIsManaged(v bool) *GroupCreate {
+	_c.mutation.SetIsManaged(v)
+	return _c
 }
 
 // SetNillableIsManaged sets the "is_managed" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableIsManaged(b *bool) *GroupCreate {
-	if b != nil {
-		gc.SetIsManaged(*b)
+func (_c *GroupCreate) SetNillableIsManaged(v *bool) *GroupCreate {
+	if v != nil {
+		_c.SetIsManaged(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetGravatarLogoURL sets the "gravatar_logo_url" field.
-func (gc *GroupCreate) SetGravatarLogoURL(s string) *GroupCreate {
-	gc.mutation.SetGravatarLogoURL(s)
-	return gc
+func (_c *GroupCreate) SetGravatarLogoURL(v string) *GroupCreate {
+	_c.mutation.SetGravatarLogoURL(v)
+	return _c
 }
 
 // SetNillableGravatarLogoURL sets the "gravatar_logo_url" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableGravatarLogoURL(s *string) *GroupCreate {
-	if s != nil {
-		gc.SetGravatarLogoURL(*s)
+func (_c *GroupCreate) SetNillableGravatarLogoURL(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetGravatarLogoURL(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetLogoURL sets the "logo_url" field.
-func (gc *GroupCreate) SetLogoURL(s string) *GroupCreate {
-	gc.mutation.SetLogoURL(s)
-	return gc
+func (_c *GroupCreate) SetLogoURL(v string) *GroupCreate {
+	_c.mutation.SetLogoURL(v)
+	return _c
 }
 
 // SetNillableLogoURL sets the "logo_url" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableLogoURL(s *string) *GroupCreate {
-	if s != nil {
-		gc.SetLogoURL(*s)
+func (_c *GroupCreate) SetNillableLogoURL(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetLogoURL(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetDisplayName sets the "display_name" field.
-func (gc *GroupCreate) SetDisplayName(s string) *GroupCreate {
-	gc.mutation.SetDisplayName(s)
-	return gc
+func (_c *GroupCreate) SetDisplayName(v string) *GroupCreate {
+	_c.mutation.SetDisplayName(v)
+	return _c
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableDisplayName(s *string) *GroupCreate {
-	if s != nil {
-		gc.SetDisplayName(*s)
+func (_c *GroupCreate) SetNillableDisplayName(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetDisplayName(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (gc *GroupCreate) SetID(s string) *GroupCreate {
-	gc.mutation.SetID(s)
-	return gc
+func (_c *GroupCreate) SetID(v string) *GroupCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (gc *GroupCreate) SetNillableID(s *string) *GroupCreate {
-	if s != nil {
-		gc.SetID(*s)
+func (_c *GroupCreate) SetNillableID(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return gc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (gc *GroupCreate) SetOwner(o *Organization) *GroupCreate {
-	return gc.SetOwnerID(o.ID)
+func (_c *GroupCreate) SetOwner(v *Organization) *GroupCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddProgramEditorIDs adds the "program_editors" edge to the Program entity by IDs.
-func (gc *GroupCreate) AddProgramEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddProgramEditorIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddProgramEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddProgramEditorIDs(ids...)
+	return _c
 }
 
 // AddProgramEditors adds the "program_editors" edges to the Program entity.
-func (gc *GroupCreate) AddProgramEditors(p ...*Program) *GroupCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *GroupCreate) AddProgramEditors(v ...*Program) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddProgramEditorIDs(ids...)
+	return _c.AddProgramEditorIDs(ids...)
 }
 
 // AddProgramBlockedGroupIDs adds the "program_blocked_groups" edge to the Program entity by IDs.
-func (gc *GroupCreate) AddProgramBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddProgramBlockedGroupIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddProgramBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddProgramBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddProgramBlockedGroups adds the "program_blocked_groups" edges to the Program entity.
-func (gc *GroupCreate) AddProgramBlockedGroups(p ...*Program) *GroupCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *GroupCreate) AddProgramBlockedGroups(v ...*Program) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddProgramBlockedGroupIDs(ids...)
+	return _c.AddProgramBlockedGroupIDs(ids...)
 }
 
 // AddProgramViewerIDs adds the "program_viewers" edge to the Program entity by IDs.
-func (gc *GroupCreate) AddProgramViewerIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddProgramViewerIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddProgramViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddProgramViewerIDs(ids...)
+	return _c
 }
 
 // AddProgramViewers adds the "program_viewers" edges to the Program entity.
-func (gc *GroupCreate) AddProgramViewers(p ...*Program) *GroupCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *GroupCreate) AddProgramViewers(v ...*Program) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddProgramViewerIDs(ids...)
+	return _c.AddProgramViewerIDs(ids...)
 }
 
 // AddRiskEditorIDs adds the "risk_editors" edge to the Risk entity by IDs.
-func (gc *GroupCreate) AddRiskEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddRiskEditorIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddRiskEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddRiskEditorIDs(ids...)
+	return _c
 }
 
 // AddRiskEditors adds the "risk_editors" edges to the Risk entity.
-func (gc *GroupCreate) AddRiskEditors(r ...*Risk) *GroupCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_c *GroupCreate) AddRiskEditors(v ...*Risk) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddRiskEditorIDs(ids...)
+	return _c.AddRiskEditorIDs(ids...)
 }
 
 // AddRiskBlockedGroupIDs adds the "risk_blocked_groups" edge to the Risk entity by IDs.
-func (gc *GroupCreate) AddRiskBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddRiskBlockedGroupIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddRiskBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddRiskBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddRiskBlockedGroups adds the "risk_blocked_groups" edges to the Risk entity.
-func (gc *GroupCreate) AddRiskBlockedGroups(r ...*Risk) *GroupCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_c *GroupCreate) AddRiskBlockedGroups(v ...*Risk) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddRiskBlockedGroupIDs(ids...)
+	return _c.AddRiskBlockedGroupIDs(ids...)
 }
 
 // AddRiskViewerIDs adds the "risk_viewers" edge to the Risk entity by IDs.
-func (gc *GroupCreate) AddRiskViewerIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddRiskViewerIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddRiskViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddRiskViewerIDs(ids...)
+	return _c
 }
 
 // AddRiskViewers adds the "risk_viewers" edges to the Risk entity.
-func (gc *GroupCreate) AddRiskViewers(r ...*Risk) *GroupCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_c *GroupCreate) AddRiskViewers(v ...*Risk) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddRiskViewerIDs(ids...)
+	return _c.AddRiskViewerIDs(ids...)
 }
 
 // AddControlObjectiveEditorIDs adds the "control_objective_editors" edge to the ControlObjective entity by IDs.
-func (gc *GroupCreate) AddControlObjectiveEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddControlObjectiveEditorIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddControlObjectiveEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddControlObjectiveEditorIDs(ids...)
+	return _c
 }
 
 // AddControlObjectiveEditors adds the "control_objective_editors" edges to the ControlObjective entity.
-func (gc *GroupCreate) AddControlObjectiveEditors(c ...*ControlObjective) *GroupCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *GroupCreate) AddControlObjectiveEditors(v ...*ControlObjective) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddControlObjectiveEditorIDs(ids...)
+	return _c.AddControlObjectiveEditorIDs(ids...)
 }
 
 // AddControlObjectiveBlockedGroupIDs adds the "control_objective_blocked_groups" edge to the ControlObjective entity by IDs.
-func (gc *GroupCreate) AddControlObjectiveBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddControlObjectiveBlockedGroupIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddControlObjectiveBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddControlObjectiveBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddControlObjectiveBlockedGroups adds the "control_objective_blocked_groups" edges to the ControlObjective entity.
-func (gc *GroupCreate) AddControlObjectiveBlockedGroups(c ...*ControlObjective) *GroupCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *GroupCreate) AddControlObjectiveBlockedGroups(v ...*ControlObjective) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddControlObjectiveBlockedGroupIDs(ids...)
+	return _c.AddControlObjectiveBlockedGroupIDs(ids...)
 }
 
 // AddControlObjectiveViewerIDs adds the "control_objective_viewers" edge to the ControlObjective entity by IDs.
-func (gc *GroupCreate) AddControlObjectiveViewerIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddControlObjectiveViewerIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddControlObjectiveViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddControlObjectiveViewerIDs(ids...)
+	return _c
 }
 
 // AddControlObjectiveViewers adds the "control_objective_viewers" edges to the ControlObjective entity.
-func (gc *GroupCreate) AddControlObjectiveViewers(c ...*ControlObjective) *GroupCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *GroupCreate) AddControlObjectiveViewers(v ...*ControlObjective) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddControlObjectiveViewerIDs(ids...)
+	return _c.AddControlObjectiveViewerIDs(ids...)
 }
 
 // AddNarrativeEditorIDs adds the "narrative_editors" edge to the Narrative entity by IDs.
-func (gc *GroupCreate) AddNarrativeEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddNarrativeEditorIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddNarrativeEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddNarrativeEditorIDs(ids...)
+	return _c
 }
 
 // AddNarrativeEditors adds the "narrative_editors" edges to the Narrative entity.
-func (gc *GroupCreate) AddNarrativeEditors(n ...*Narrative) *GroupCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_c *GroupCreate) AddNarrativeEditors(v ...*Narrative) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddNarrativeEditorIDs(ids...)
+	return _c.AddNarrativeEditorIDs(ids...)
 }
 
 // AddNarrativeBlockedGroupIDs adds the "narrative_blocked_groups" edge to the Narrative entity by IDs.
-func (gc *GroupCreate) AddNarrativeBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddNarrativeBlockedGroupIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddNarrativeBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddNarrativeBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddNarrativeBlockedGroups adds the "narrative_blocked_groups" edges to the Narrative entity.
-func (gc *GroupCreate) AddNarrativeBlockedGroups(n ...*Narrative) *GroupCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_c *GroupCreate) AddNarrativeBlockedGroups(v ...*Narrative) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddNarrativeBlockedGroupIDs(ids...)
+	return _c.AddNarrativeBlockedGroupIDs(ids...)
 }
 
 // AddNarrativeViewerIDs adds the "narrative_viewers" edge to the Narrative entity by IDs.
-func (gc *GroupCreate) AddNarrativeViewerIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddNarrativeViewerIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddNarrativeViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddNarrativeViewerIDs(ids...)
+	return _c
 }
 
 // AddNarrativeViewers adds the "narrative_viewers" edges to the Narrative entity.
-func (gc *GroupCreate) AddNarrativeViewers(n ...*Narrative) *GroupCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_c *GroupCreate) AddNarrativeViewers(v ...*Narrative) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddNarrativeViewerIDs(ids...)
+	return _c.AddNarrativeViewerIDs(ids...)
 }
 
 // AddControlImplementationEditorIDs adds the "control_implementation_editors" edge to the ControlImplementation entity by IDs.
-func (gc *GroupCreate) AddControlImplementationEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddControlImplementationEditorIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddControlImplementationEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddControlImplementationEditorIDs(ids...)
+	return _c
 }
 
 // AddControlImplementationEditors adds the "control_implementation_editors" edges to the ControlImplementation entity.
-func (gc *GroupCreate) AddControlImplementationEditors(c ...*ControlImplementation) *GroupCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *GroupCreate) AddControlImplementationEditors(v ...*ControlImplementation) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddControlImplementationEditorIDs(ids...)
+	return _c.AddControlImplementationEditorIDs(ids...)
 }
 
 // AddControlImplementationBlockedGroupIDs adds the "control_implementation_blocked_groups" edge to the ControlImplementation entity by IDs.
-func (gc *GroupCreate) AddControlImplementationBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddControlImplementationBlockedGroupIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddControlImplementationBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddControlImplementationBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddControlImplementationBlockedGroups adds the "control_implementation_blocked_groups" edges to the ControlImplementation entity.
-func (gc *GroupCreate) AddControlImplementationBlockedGroups(c ...*ControlImplementation) *GroupCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *GroupCreate) AddControlImplementationBlockedGroups(v ...*ControlImplementation) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddControlImplementationBlockedGroupIDs(ids...)
+	return _c.AddControlImplementationBlockedGroupIDs(ids...)
 }
 
 // AddControlImplementationViewerIDs adds the "control_implementation_viewers" edge to the ControlImplementation entity by IDs.
-func (gc *GroupCreate) AddControlImplementationViewerIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddControlImplementationViewerIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddControlImplementationViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddControlImplementationViewerIDs(ids...)
+	return _c
 }
 
 // AddControlImplementationViewers adds the "control_implementation_viewers" edges to the ControlImplementation entity.
-func (gc *GroupCreate) AddControlImplementationViewers(c ...*ControlImplementation) *GroupCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *GroupCreate) AddControlImplementationViewers(v ...*ControlImplementation) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddControlImplementationViewerIDs(ids...)
+	return _c.AddControlImplementationViewerIDs(ids...)
 }
 
 // AddScanEditorIDs adds the "scan_editors" edge to the Scan entity by IDs.
-func (gc *GroupCreate) AddScanEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddScanEditorIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddScanEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddScanEditorIDs(ids...)
+	return _c
 }
 
 // AddScanEditors adds the "scan_editors" edges to the Scan entity.
-func (gc *GroupCreate) AddScanEditors(s ...*Scan) *GroupCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *GroupCreate) AddScanEditors(v ...*Scan) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddScanEditorIDs(ids...)
+	return _c.AddScanEditorIDs(ids...)
 }
 
 // AddScanBlockedGroupIDs adds the "scan_blocked_groups" edge to the Scan entity by IDs.
-func (gc *GroupCreate) AddScanBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddScanBlockedGroupIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddScanBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddScanBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddScanBlockedGroups adds the "scan_blocked_groups" edges to the Scan entity.
-func (gc *GroupCreate) AddScanBlockedGroups(s ...*Scan) *GroupCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *GroupCreate) AddScanBlockedGroups(v ...*Scan) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddScanBlockedGroupIDs(ids...)
+	return _c.AddScanBlockedGroupIDs(ids...)
 }
 
 // AddScanViewerIDs adds the "scan_viewers" edge to the Scan entity by IDs.
-func (gc *GroupCreate) AddScanViewerIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddScanViewerIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddScanViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddScanViewerIDs(ids...)
+	return _c
 }
 
 // AddScanViewers adds the "scan_viewers" edges to the Scan entity.
-func (gc *GroupCreate) AddScanViewers(s ...*Scan) *GroupCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *GroupCreate) AddScanViewers(v ...*Scan) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddScanViewerIDs(ids...)
+	return _c.AddScanViewerIDs(ids...)
 }
 
 // AddEntityEditorIDs adds the "entity_editors" edge to the Entity entity by IDs.
-func (gc *GroupCreate) AddEntityEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddEntityEditorIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddEntityEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddEntityEditorIDs(ids...)
+	return _c
 }
 
 // AddEntityEditors adds the "entity_editors" edges to the Entity entity.
-func (gc *GroupCreate) AddEntityEditors(e ...*Entity) *GroupCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *GroupCreate) AddEntityEditors(v ...*Entity) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddEntityEditorIDs(ids...)
+	return _c.AddEntityEditorIDs(ids...)
 }
 
 // AddEntityBlockedGroupIDs adds the "entity_blocked_groups" edge to the Entity entity by IDs.
-func (gc *GroupCreate) AddEntityBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddEntityBlockedGroupIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddEntityBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddEntityBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddEntityBlockedGroups adds the "entity_blocked_groups" edges to the Entity entity.
-func (gc *GroupCreate) AddEntityBlockedGroups(e ...*Entity) *GroupCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *GroupCreate) AddEntityBlockedGroups(v ...*Entity) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddEntityBlockedGroupIDs(ids...)
+	return _c.AddEntityBlockedGroupIDs(ids...)
 }
 
 // AddEntityViewerIDs adds the "entity_viewers" edge to the Entity entity by IDs.
-func (gc *GroupCreate) AddEntityViewerIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddEntityViewerIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddEntityViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddEntityViewerIDs(ids...)
+	return _c
 }
 
 // AddEntityViewers adds the "entity_viewers" edges to the Entity entity.
-func (gc *GroupCreate) AddEntityViewers(e ...*Entity) *GroupCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *GroupCreate) AddEntityViewers(v ...*Entity) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddEntityViewerIDs(ids...)
+	return _c.AddEntityViewerIDs(ids...)
 }
 
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
-func (gc *GroupCreate) AddProcedureEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddProcedureEditorIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddProcedureEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddProcedureEditorIDs(ids...)
+	return _c
 }
 
 // AddProcedureEditors adds the "procedure_editors" edges to the Procedure entity.
-func (gc *GroupCreate) AddProcedureEditors(p ...*Procedure) *GroupCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *GroupCreate) AddProcedureEditors(v ...*Procedure) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddProcedureEditorIDs(ids...)
+	return _c.AddProcedureEditorIDs(ids...)
 }
 
 // AddProcedureBlockedGroupIDs adds the "procedure_blocked_groups" edge to the Procedure entity by IDs.
-func (gc *GroupCreate) AddProcedureBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddProcedureBlockedGroupIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddProcedureBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddProcedureBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddProcedureBlockedGroups adds the "procedure_blocked_groups" edges to the Procedure entity.
-func (gc *GroupCreate) AddProcedureBlockedGroups(p ...*Procedure) *GroupCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *GroupCreate) AddProcedureBlockedGroups(v ...*Procedure) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddProcedureBlockedGroupIDs(ids...)
+	return _c.AddProcedureBlockedGroupIDs(ids...)
 }
 
 // AddInternalPolicyEditorIDs adds the "internal_policy_editors" edge to the InternalPolicy entity by IDs.
-func (gc *GroupCreate) AddInternalPolicyEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddInternalPolicyEditorIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddInternalPolicyEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddInternalPolicyEditorIDs(ids...)
+	return _c
 }
 
 // AddInternalPolicyEditors adds the "internal_policy_editors" edges to the InternalPolicy entity.
-func (gc *GroupCreate) AddInternalPolicyEditors(i ...*InternalPolicy) *GroupCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *GroupCreate) AddInternalPolicyEditors(v ...*InternalPolicy) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddInternalPolicyEditorIDs(ids...)
+	return _c.AddInternalPolicyEditorIDs(ids...)
 }
 
 // AddInternalPolicyBlockedGroupIDs adds the "internal_policy_blocked_groups" edge to the InternalPolicy entity by IDs.
-func (gc *GroupCreate) AddInternalPolicyBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddInternalPolicyBlockedGroupIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddInternalPolicyBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddInternalPolicyBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddInternalPolicyBlockedGroups adds the "internal_policy_blocked_groups" edges to the InternalPolicy entity.
-func (gc *GroupCreate) AddInternalPolicyBlockedGroups(i ...*InternalPolicy) *GroupCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *GroupCreate) AddInternalPolicyBlockedGroups(v ...*InternalPolicy) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddInternalPolicyBlockedGroupIDs(ids...)
+	return _c.AddInternalPolicyBlockedGroupIDs(ids...)
 }
 
 // AddControlEditorIDs adds the "control_editors" edge to the Control entity by IDs.
-func (gc *GroupCreate) AddControlEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddControlEditorIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddControlEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddControlEditorIDs(ids...)
+	return _c
 }
 
 // AddControlEditors adds the "control_editors" edges to the Control entity.
-func (gc *GroupCreate) AddControlEditors(c ...*Control) *GroupCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *GroupCreate) AddControlEditors(v ...*Control) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddControlEditorIDs(ids...)
+	return _c.AddControlEditorIDs(ids...)
 }
 
 // AddControlBlockedGroupIDs adds the "control_blocked_groups" edge to the Control entity by IDs.
-func (gc *GroupCreate) AddControlBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddControlBlockedGroupIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddControlBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddControlBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddControlBlockedGroups adds the "control_blocked_groups" edges to the Control entity.
-func (gc *GroupCreate) AddControlBlockedGroups(c ...*Control) *GroupCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *GroupCreate) AddControlBlockedGroups(v ...*Control) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddControlBlockedGroupIDs(ids...)
+	return _c.AddControlBlockedGroupIDs(ids...)
 }
 
 // AddMappedControlEditorIDs adds the "mapped_control_editors" edge to the MappedControl entity by IDs.
-func (gc *GroupCreate) AddMappedControlEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddMappedControlEditorIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddMappedControlEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddMappedControlEditorIDs(ids...)
+	return _c
 }
 
 // AddMappedControlEditors adds the "mapped_control_editors" edges to the MappedControl entity.
-func (gc *GroupCreate) AddMappedControlEditors(m ...*MappedControl) *GroupCreate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_c *GroupCreate) AddMappedControlEditors(v ...*MappedControl) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddMappedControlEditorIDs(ids...)
+	return _c.AddMappedControlEditorIDs(ids...)
 }
 
 // AddMappedControlBlockedGroupIDs adds the "mapped_control_blocked_groups" edge to the MappedControl entity by IDs.
-func (gc *GroupCreate) AddMappedControlBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddMappedControlBlockedGroupIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddMappedControlBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddMappedControlBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddMappedControlBlockedGroups adds the "mapped_control_blocked_groups" edges to the MappedControl entity.
-func (gc *GroupCreate) AddMappedControlBlockedGroups(m ...*MappedControl) *GroupCreate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_c *GroupCreate) AddMappedControlBlockedGroups(v ...*MappedControl) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddMappedControlBlockedGroupIDs(ids...)
+	return _c.AddMappedControlBlockedGroupIDs(ids...)
 }
 
 // SetSettingID sets the "setting" edge to the GroupSetting entity by ID.
-func (gc *GroupCreate) SetSettingID(id string) *GroupCreate {
-	gc.mutation.SetSettingID(id)
-	return gc
+func (_c *GroupCreate) SetSettingID(id string) *GroupCreate {
+	_c.mutation.SetSettingID(id)
+	return _c
 }
 
 // SetNillableSettingID sets the "setting" edge to the GroupSetting entity by ID if the given value is not nil.
-func (gc *GroupCreate) SetNillableSettingID(id *string) *GroupCreate {
+func (_c *GroupCreate) SetNillableSettingID(id *string) *GroupCreate {
 	if id != nil {
-		gc = gc.SetSettingID(*id)
+		_c = _c.SetSettingID(*id)
 	}
-	return gc
+	return _c
 }
 
 // SetSetting sets the "setting" edge to the GroupSetting entity.
-func (gc *GroupCreate) SetSetting(g *GroupSetting) *GroupCreate {
-	return gc.SetSettingID(g.ID)
+func (_c *GroupCreate) SetSetting(v *GroupSetting) *GroupCreate {
+	return _c.SetSettingID(v.ID)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (gc *GroupCreate) AddUserIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddUserIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddUserIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddUserIDs(ids...)
+	return _c
 }
 
 // AddUsers adds the "users" edges to the User entity.
-func (gc *GroupCreate) AddUsers(u ...*User) *GroupCreate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_c *GroupCreate) AddUsers(v ...*User) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddUserIDs(ids...)
+	return _c.AddUserIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (gc *GroupCreate) AddEventIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddEventIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddEventIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddEventIDs(ids...)
+	return _c
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (gc *GroupCreate) AddEvents(e ...*Event) *GroupCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *GroupCreate) AddEvents(v ...*Event) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddEventIDs(ids...)
+	return _c.AddEventIDs(ids...)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
-func (gc *GroupCreate) AddIntegrationIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddIntegrationIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddIntegrationIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddIntegrationIDs(ids...)
+	return _c
 }
 
 // AddIntegrations adds the "integrations" edges to the Integration entity.
-func (gc *GroupCreate) AddIntegrations(i ...*Integration) *GroupCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *GroupCreate) AddIntegrations(v ...*Integration) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddIntegrationIDs(ids...)
+	return _c.AddIntegrationIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (gc *GroupCreate) AddFileIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddFileIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddFileIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (gc *GroupCreate) AddFiles(f ...*File) *GroupCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *GroupCreate) AddFiles(v ...*File) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (gc *GroupCreate) AddTaskIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddTaskIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddTaskIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (gc *GroupCreate) AddTasks(t ...*Task) *GroupCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *GroupCreate) AddTasks(v ...*Task) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddTaskIDs(ids...)
+	return _c.AddTaskIDs(ids...)
 }
 
 // AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
-func (gc *GroupCreate) AddInviteIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddInviteIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddInviteIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddInviteIDs(ids...)
+	return _c
 }
 
 // AddInvites adds the "invites" edges to the Invite entity.
-func (gc *GroupCreate) AddInvites(i ...*Invite) *GroupCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *GroupCreate) AddInvites(v ...*Invite) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddInviteIDs(ids...)
+	return _c.AddInviteIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
-func (gc *GroupCreate) AddMemberIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddMemberIDs(ids...)
-	return gc
+func (_c *GroupCreate) AddMemberIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddMemberIDs(ids...)
+	return _c
 }
 
 // AddMembers adds the "members" edges to the GroupMembership entity.
-func (gc *GroupCreate) AddMembers(g ...*GroupMembership) *GroupCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *GroupCreate) AddMembers(v ...*GroupMembership) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return gc.AddMemberIDs(ids...)
+	return _c.AddMemberIDs(ids...)
 }
 
 // Mutation returns the GroupMutation object of the builder.
-func (gc *GroupCreate) Mutation() *GroupMutation {
-	return gc.mutation
+func (_c *GroupCreate) Mutation() *GroupMutation {
+	return _c.mutation
 }
 
 // Save creates the Group in the database.
-func (gc *GroupCreate) Save(ctx context.Context) (*Group, error) {
-	if err := gc.defaults(); err != nil {
+func (_c *GroupCreate) Save(ctx context.Context) (*Group, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, gc.sqlSave, gc.mutation, gc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (gc *GroupCreate) SaveX(ctx context.Context) *Group {
-	v, err := gc.Save(ctx)
+func (_c *GroupCreate) SaveX(ctx context.Context) *Group {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -827,93 +827,93 @@ func (gc *GroupCreate) SaveX(ctx context.Context) *Group {
 }
 
 // Exec executes the query.
-func (gc *GroupCreate) Exec(ctx context.Context) error {
-	_, err := gc.Save(ctx)
+func (_c *GroupCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gc *GroupCreate) ExecX(ctx context.Context) {
-	if err := gc.Exec(ctx); err != nil {
+func (_c *GroupCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (gc *GroupCreate) defaults() error {
-	if _, ok := gc.mutation.CreatedAt(); !ok {
+func (_c *GroupCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if group.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized group.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := group.DefaultCreatedAt()
-		gc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := gc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if group.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized group.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := group.DefaultUpdatedAt()
-		gc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := gc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := group.DefaultTags
-		gc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := gc.mutation.IsManaged(); !ok {
+	if _, ok := _c.mutation.IsManaged(); !ok {
 		v := group.DefaultIsManaged
-		gc.mutation.SetIsManaged(v)
+		_c.mutation.SetIsManaged(v)
 	}
-	if _, ok := gc.mutation.DisplayName(); !ok {
+	if _, ok := _c.mutation.DisplayName(); !ok {
 		v := group.DefaultDisplayName
-		gc.mutation.SetDisplayName(v)
+		_c.mutation.SetDisplayName(v)
 	}
-	if _, ok := gc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if group.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized group.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := group.DefaultID()
-		gc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (gc *GroupCreate) check() error {
-	if _, ok := gc.mutation.DisplayID(); !ok {
+func (_c *GroupCreate) check() error {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Group.display_id"`)}
 	}
-	if v, ok := gc.mutation.DisplayID(); ok {
+	if v, ok := _c.mutation.DisplayID(); ok {
 		if err := group.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Group.display_id": %w`, err)}
 		}
 	}
-	if v, ok := gc.mutation.OwnerID(); ok {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := group.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Group.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := gc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Group.name"`)}
 	}
-	if v, ok := gc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := group.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Group.name": %w`, err)}
 		}
 	}
-	if v, ok := gc.mutation.GravatarLogoURL(); ok {
+	if v, ok := _c.mutation.GravatarLogoURL(); ok {
 		if err := group.GravatarLogoURLValidator(v); err != nil {
 			return &ValidationError{Name: "gravatar_logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.gravatar_logo_url": %w`, err)}
 		}
 	}
-	if v, ok := gc.mutation.LogoURL(); ok {
+	if v, ok := _c.mutation.LogoURL(); ok {
 		if err := group.LogoURLValidator(v); err != nil {
 			return &ValidationError{Name: "logo_url", err: fmt.Errorf(`generated: validator failed for field "Group.logo_url": %w`, err)}
 		}
 	}
-	if _, ok := gc.mutation.DisplayName(); !ok {
+	if _, ok := _c.mutation.DisplayName(); !ok {
 		return &ValidationError{Name: "display_name", err: errors.New(`generated: missing required field "Group.display_name"`)}
 	}
-	if v, ok := gc.mutation.DisplayName(); ok {
+	if v, ok := _c.mutation.DisplayName(); ok {
 		if err := group.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Group.display_name": %w`, err)}
 		}
@@ -921,12 +921,12 @@ func (gc *GroupCreate) check() error {
 	return nil
 }
 
-func (gc *GroupCreate) sqlSave(ctx context.Context) (*Group, error) {
-	if err := gc.check(); err != nil {
+func (_c *GroupCreate) sqlSave(ctx context.Context) (*Group, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := gc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, gc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -939,78 +939,78 @@ func (gc *GroupCreate) sqlSave(ctx context.Context) (*Group, error) {
 			return nil, fmt.Errorf("unexpected Group.ID type: %T", _spec.ID.Value)
 		}
 	}
-	gc.mutation.id = &_node.ID
-	gc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
+func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Group{config: gc.config}
+		_node = &Group{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(group.Table, sqlgraph.NewFieldSpec(group.FieldID, field.TypeString))
 	)
-	_spec.Schema = gc.schemaConfig.Group
-	if id, ok := gc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Group
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := gc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(group.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := gc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(group.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := gc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(group.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := gc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(group.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := gc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(group.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := gc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(group.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := gc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(group.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := gc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(group.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := gc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(group.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := gc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(group.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := gc.mutation.IsManaged(); ok {
+	if value, ok := _c.mutation.IsManaged(); ok {
 		_spec.SetField(group.FieldIsManaged, field.TypeBool, value)
 		_node.IsManaged = value
 	}
-	if value, ok := gc.mutation.GravatarLogoURL(); ok {
+	if value, ok := _c.mutation.GravatarLogoURL(); ok {
 		_spec.SetField(group.FieldGravatarLogoURL, field.TypeString, value)
 		_node.GravatarLogoURL = value
 	}
-	if value, ok := gc.mutation.LogoURL(); ok {
+	if value, ok := _c.mutation.LogoURL(); ok {
 		_spec.SetField(group.FieldLogoURL, field.TypeString, value)
 		_node.LogoURL = value
 	}
-	if value, ok := gc.mutation.DisplayName(); ok {
+	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
 	}
-	if nodes := gc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1021,14 +1021,14 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ProgramEditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1039,13 +1039,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ProgramEditors
+		edge.Schema = _c.schemaConfig.ProgramEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ProgramBlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramBlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1056,13 +1056,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ProgramBlockedGroups
+		edge.Schema = _c.schemaConfig.ProgramBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ProgramViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1073,13 +1073,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ProgramViewers
+		edge.Schema = _c.schemaConfig.ProgramViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.RiskEditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.RiskEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1090,13 +1090,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.RiskEditors
+		edge.Schema = _c.schemaConfig.RiskEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.RiskBlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.RiskBlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1107,13 +1107,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.RiskBlockedGroups
+		edge.Schema = _c.schemaConfig.RiskBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.RiskViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.RiskViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1124,13 +1124,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.RiskViewers
+		edge.Schema = _c.schemaConfig.RiskViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ControlObjectiveEditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlObjectiveEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1141,13 +1141,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ControlObjectiveEditors
+		edge.Schema = _c.schemaConfig.ControlObjectiveEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ControlObjectiveBlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlObjectiveBlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1158,13 +1158,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ControlObjectiveBlockedGroups
+		edge.Schema = _c.schemaConfig.ControlObjectiveBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ControlObjectiveViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlObjectiveViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1175,13 +1175,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ControlObjectiveViewers
+		edge.Schema = _c.schemaConfig.ControlObjectiveViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.NarrativeEditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NarrativeEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1192,13 +1192,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.NarrativeEditors
+		edge.Schema = _c.schemaConfig.NarrativeEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.NarrativeBlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NarrativeBlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1209,13 +1209,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.NarrativeBlockedGroups
+		edge.Schema = _c.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.NarrativeViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NarrativeViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1226,13 +1226,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.NarrativeViewers
+		edge.Schema = _c.schemaConfig.NarrativeViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ControlImplementationEditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlImplementationEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1243,13 +1243,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ControlImplementationEditors
+		edge.Schema = _c.schemaConfig.ControlImplementationEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ControlImplementationBlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlImplementationBlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1260,13 +1260,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ControlImplementationBlockedGroups
+		edge.Schema = _c.schemaConfig.ControlImplementationBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ControlImplementationViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlImplementationViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1277,13 +1277,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ControlImplementationViewers
+		edge.Schema = _c.schemaConfig.ControlImplementationViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ScanEditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScanEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1294,13 +1294,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ScanEditors
+		edge.Schema = _c.schemaConfig.ScanEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ScanBlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScanBlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1311,13 +1311,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ScanBlockedGroups
+		edge.Schema = _c.schemaConfig.ScanBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ScanViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScanViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1328,13 +1328,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ScanViewers
+		edge.Schema = _c.schemaConfig.ScanViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.EntityEditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EntityEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1345,13 +1345,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.EntityEditors
+		edge.Schema = _c.schemaConfig.EntityEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.EntityBlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EntityBlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1362,13 +1362,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.EntityBlockedGroups
+		edge.Schema = _c.schemaConfig.EntityBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.EntityViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EntityViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1379,13 +1379,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.EntityViewers
+		edge.Schema = _c.schemaConfig.EntityViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ProcedureEditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProcedureEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1396,13 +1396,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ProcedureEditors
+		edge.Schema = _c.schemaConfig.ProcedureEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ProcedureBlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProcedureBlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1413,13 +1413,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ProcedureBlockedGroups
+		edge.Schema = _c.schemaConfig.ProcedureBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.InternalPolicyEditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InternalPolicyEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1430,13 +1430,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.InternalPolicyEditors
+		edge.Schema = _c.schemaConfig.InternalPolicyEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.InternalPolicyBlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InternalPolicyBlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1447,13 +1447,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.InternalPolicyBlockedGroups
+		edge.Schema = _c.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ControlEditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1464,13 +1464,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ControlEditors
+		edge.Schema = _c.schemaConfig.ControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.ControlBlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlBlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1481,13 +1481,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.ControlBlockedGroups
+		edge.Schema = _c.schemaConfig.ControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.MappedControlEditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.MappedControlEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1498,13 +1498,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.MappedControlEditors
+		edge.Schema = _c.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.MappedControlBlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.MappedControlBlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1515,13 +1515,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.MappedControlBlockedGroups
+		edge.Schema = _c.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.SettingIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
@@ -1532,13 +1532,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(groupsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.GroupSetting
+		edge.Schema = _c.schemaConfig.GroupSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1549,11 +1549,11 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.GroupMembership
+		edge.Schema = _c.schemaConfig.GroupMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &GroupMembershipCreate{config: gc.config, mutation: newGroupMembershipMutation(gc.config, OpCreate)}
+		createE := &GroupMembershipCreate{config: _c.config, mutation: newGroupMembershipMutation(_c.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -1562,7 +1562,7 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1573,13 +1573,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.GroupEvents
+		edge.Schema = _c.schemaConfig.GroupEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.IntegrationsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1590,13 +1590,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.Integration
+		edge.Schema = _c.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1607,13 +1607,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.GroupFiles
+		edge.Schema = _c.schemaConfig.GroupFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1624,13 +1624,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.GroupTasks
+		edge.Schema = _c.schemaConfig.GroupTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.InvitesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InvitesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1641,13 +1641,13 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.InviteGroups
+		edge.Schema = _c.schemaConfig.InviteGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gc.mutation.MembersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1658,7 +1658,7 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gc.schemaConfig.GroupMembership
+		edge.Schema = _c.schemaConfig.GroupMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1675,16 +1675,16 @@ type GroupCreateBulk struct {
 }
 
 // Save creates the Group entities in the database.
-func (gcb *GroupCreateBulk) Save(ctx context.Context) ([]*Group, error) {
-	if gcb.err != nil {
-		return nil, gcb.err
+func (_c *GroupCreateBulk) Save(ctx context.Context) ([]*Group, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(gcb.builders))
-	nodes := make([]*Group, len(gcb.builders))
-	mutators := make([]Mutator, len(gcb.builders))
-	for i := range gcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Group, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := gcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*GroupMutation)
@@ -1698,11 +1698,11 @@ func (gcb *GroupCreateBulk) Save(ctx context.Context) ([]*Group, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, gcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, gcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -1722,7 +1722,7 @@ func (gcb *GroupCreateBulk) Save(ctx context.Context) ([]*Group, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, gcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -1730,8 +1730,8 @@ func (gcb *GroupCreateBulk) Save(ctx context.Context) ([]*Group, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gcb *GroupCreateBulk) SaveX(ctx context.Context) []*Group {
-	v, err := gcb.Save(ctx)
+func (_c *GroupCreateBulk) SaveX(ctx context.Context) []*Group {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1739,14 +1739,14 @@ func (gcb *GroupCreateBulk) SaveX(ctx context.Context) []*Group {
 }
 
 // Exec executes the query.
-func (gcb *GroupCreateBulk) Exec(ctx context.Context) error {
-	_, err := gcb.Save(ctx)
+func (_c *GroupCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gcb *GroupCreateBulk) ExecX(ctx context.Context) {
-	if err := gcb.Exec(ctx); err != nil {
+func (_c *GroupCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

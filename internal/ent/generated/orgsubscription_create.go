@@ -27,370 +27,370 @@ type OrgSubscriptionCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (osc *OrgSubscriptionCreate) SetCreatedAt(t time.Time) *OrgSubscriptionCreate {
-	osc.mutation.SetCreatedAt(t)
-	return osc
+func (_c *OrgSubscriptionCreate) SetCreatedAt(v time.Time) *OrgSubscriptionCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableCreatedAt(t *time.Time) *OrgSubscriptionCreate {
-	if t != nil {
-		osc.SetCreatedAt(*t)
+func (_c *OrgSubscriptionCreate) SetNillableCreatedAt(v *time.Time) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (osc *OrgSubscriptionCreate) SetUpdatedAt(t time.Time) *OrgSubscriptionCreate {
-	osc.mutation.SetUpdatedAt(t)
-	return osc
+func (_c *OrgSubscriptionCreate) SetUpdatedAt(v time.Time) *OrgSubscriptionCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableUpdatedAt(t *time.Time) *OrgSubscriptionCreate {
-	if t != nil {
-		osc.SetUpdatedAt(*t)
+func (_c *OrgSubscriptionCreate) SetNillableUpdatedAt(v *time.Time) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (osc *OrgSubscriptionCreate) SetCreatedBy(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetCreatedBy(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetCreatedBy(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableCreatedBy(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetCreatedBy(*s)
+func (_c *OrgSubscriptionCreate) SetNillableCreatedBy(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (osc *OrgSubscriptionCreate) SetUpdatedBy(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetUpdatedBy(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetUpdatedBy(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableUpdatedBy(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetUpdatedBy(*s)
+func (_c *OrgSubscriptionCreate) SetNillableUpdatedBy(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (osc *OrgSubscriptionCreate) SetDeletedAt(t time.Time) *OrgSubscriptionCreate {
-	osc.mutation.SetDeletedAt(t)
-	return osc
+func (_c *OrgSubscriptionCreate) SetDeletedAt(v time.Time) *OrgSubscriptionCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableDeletedAt(t *time.Time) *OrgSubscriptionCreate {
-	if t != nil {
-		osc.SetDeletedAt(*t)
+func (_c *OrgSubscriptionCreate) SetNillableDeletedAt(v *time.Time) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (osc *OrgSubscriptionCreate) SetDeletedBy(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetDeletedBy(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetDeletedBy(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableDeletedBy(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetDeletedBy(*s)
+func (_c *OrgSubscriptionCreate) SetNillableDeletedBy(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (osc *OrgSubscriptionCreate) SetTags(s []string) *OrgSubscriptionCreate {
-	osc.mutation.SetTags(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetTags(v []string) *OrgSubscriptionCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (osc *OrgSubscriptionCreate) SetOwnerID(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetOwnerID(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetOwnerID(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableOwnerID(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetOwnerID(*s)
+func (_c *OrgSubscriptionCreate) SetNillableOwnerID(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetStripeSubscriptionID sets the "stripe_subscription_id" field.
-func (osc *OrgSubscriptionCreate) SetStripeSubscriptionID(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetStripeSubscriptionID(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetStripeSubscriptionID(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetStripeSubscriptionID(v)
+	return _c
 }
 
 // SetNillableStripeSubscriptionID sets the "stripe_subscription_id" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableStripeSubscriptionID(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetStripeSubscriptionID(*s)
+func (_c *OrgSubscriptionCreate) SetNillableStripeSubscriptionID(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetStripeSubscriptionID(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetProductTier sets the "product_tier" field.
-func (osc *OrgSubscriptionCreate) SetProductTier(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetProductTier(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetProductTier(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetProductTier(v)
+	return _c
 }
 
 // SetNillableProductTier sets the "product_tier" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableProductTier(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetProductTier(*s)
+func (_c *OrgSubscriptionCreate) SetNillableProductTier(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetProductTier(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetProductPrice sets the "product_price" field.
-func (osc *OrgSubscriptionCreate) SetProductPrice(m models.Price) *OrgSubscriptionCreate {
-	osc.mutation.SetProductPrice(m)
-	return osc
+func (_c *OrgSubscriptionCreate) SetProductPrice(v models.Price) *OrgSubscriptionCreate {
+	_c.mutation.SetProductPrice(v)
+	return _c
 }
 
 // SetNillableProductPrice sets the "product_price" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableProductPrice(m *models.Price) *OrgSubscriptionCreate {
-	if m != nil {
-		osc.SetProductPrice(*m)
+func (_c *OrgSubscriptionCreate) SetNillableProductPrice(v *models.Price) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetProductPrice(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetStripeProductTierID sets the "stripe_product_tier_id" field.
-func (osc *OrgSubscriptionCreate) SetStripeProductTierID(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetStripeProductTierID(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetStripeProductTierID(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetStripeProductTierID(v)
+	return _c
 }
 
 // SetNillableStripeProductTierID sets the "stripe_product_tier_id" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableStripeProductTierID(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetStripeProductTierID(*s)
+func (_c *OrgSubscriptionCreate) SetNillableStripeProductTierID(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetStripeProductTierID(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetStripeSubscriptionStatus sets the "stripe_subscription_status" field.
-func (osc *OrgSubscriptionCreate) SetStripeSubscriptionStatus(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetStripeSubscriptionStatus(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetStripeSubscriptionStatus(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetStripeSubscriptionStatus(v)
+	return _c
 }
 
 // SetNillableStripeSubscriptionStatus sets the "stripe_subscription_status" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableStripeSubscriptionStatus(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetStripeSubscriptionStatus(*s)
+func (_c *OrgSubscriptionCreate) SetNillableStripeSubscriptionStatus(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetStripeSubscriptionStatus(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetActive sets the "active" field.
-func (osc *OrgSubscriptionCreate) SetActive(b bool) *OrgSubscriptionCreate {
-	osc.mutation.SetActive(b)
-	return osc
+func (_c *OrgSubscriptionCreate) SetActive(v bool) *OrgSubscriptionCreate {
+	_c.mutation.SetActive(v)
+	return _c
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableActive(b *bool) *OrgSubscriptionCreate {
-	if b != nil {
-		osc.SetActive(*b)
+func (_c *OrgSubscriptionCreate) SetNillableActive(v *bool) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetActive(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetStripeCustomerID sets the "stripe_customer_id" field.
-func (osc *OrgSubscriptionCreate) SetStripeCustomerID(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetStripeCustomerID(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetStripeCustomerID(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetStripeCustomerID(v)
+	return _c
 }
 
 // SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableStripeCustomerID(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetStripeCustomerID(*s)
+func (_c *OrgSubscriptionCreate) SetNillableStripeCustomerID(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetStripeCustomerID(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (osc *OrgSubscriptionCreate) SetExpiresAt(t time.Time) *OrgSubscriptionCreate {
-	osc.mutation.SetExpiresAt(t)
-	return osc
+func (_c *OrgSubscriptionCreate) SetExpiresAt(v time.Time) *OrgSubscriptionCreate {
+	_c.mutation.SetExpiresAt(v)
+	return _c
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableExpiresAt(t *time.Time) *OrgSubscriptionCreate {
-	if t != nil {
-		osc.SetExpiresAt(*t)
+func (_c *OrgSubscriptionCreate) SetNillableExpiresAt(v *time.Time) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetExpiresAt(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetTrialExpiresAt sets the "trial_expires_at" field.
-func (osc *OrgSubscriptionCreate) SetTrialExpiresAt(t time.Time) *OrgSubscriptionCreate {
-	osc.mutation.SetTrialExpiresAt(t)
-	return osc
+func (_c *OrgSubscriptionCreate) SetTrialExpiresAt(v time.Time) *OrgSubscriptionCreate {
+	_c.mutation.SetTrialExpiresAt(v)
+	return _c
 }
 
 // SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableTrialExpiresAt(t *time.Time) *OrgSubscriptionCreate {
-	if t != nil {
-		osc.SetTrialExpiresAt(*t)
+func (_c *OrgSubscriptionCreate) SetNillableTrialExpiresAt(v *time.Time) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetTrialExpiresAt(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetDaysUntilDue sets the "days_until_due" field.
-func (osc *OrgSubscriptionCreate) SetDaysUntilDue(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetDaysUntilDue(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetDaysUntilDue(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetDaysUntilDue(v)
+	return _c
 }
 
 // SetNillableDaysUntilDue sets the "days_until_due" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableDaysUntilDue(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetDaysUntilDue(*s)
+func (_c *OrgSubscriptionCreate) SetNillableDaysUntilDue(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetDaysUntilDue(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetPaymentMethodAdded sets the "payment_method_added" field.
-func (osc *OrgSubscriptionCreate) SetPaymentMethodAdded(b bool) *OrgSubscriptionCreate {
-	osc.mutation.SetPaymentMethodAdded(b)
-	return osc
+func (_c *OrgSubscriptionCreate) SetPaymentMethodAdded(v bool) *OrgSubscriptionCreate {
+	_c.mutation.SetPaymentMethodAdded(v)
+	return _c
 }
 
 // SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillablePaymentMethodAdded(b *bool) *OrgSubscriptionCreate {
-	if b != nil {
-		osc.SetPaymentMethodAdded(*b)
+func (_c *OrgSubscriptionCreate) SetNillablePaymentMethodAdded(v *bool) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetPaymentMethodAdded(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetFeatures sets the "features" field.
-func (osc *OrgSubscriptionCreate) SetFeatures(s []string) *OrgSubscriptionCreate {
-	osc.mutation.SetFeatures(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetFeatures(v []string) *OrgSubscriptionCreate {
+	_c.mutation.SetFeatures(v)
+	return _c
 }
 
 // SetFeatureLookupKeys sets the "feature_lookup_keys" field.
-func (osc *OrgSubscriptionCreate) SetFeatureLookupKeys(s []string) *OrgSubscriptionCreate {
-	osc.mutation.SetFeatureLookupKeys(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetFeatureLookupKeys(v []string) *OrgSubscriptionCreate {
+	_c.mutation.SetFeatureLookupKeys(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (osc *OrgSubscriptionCreate) SetID(s string) *OrgSubscriptionCreate {
-	osc.mutation.SetID(s)
-	return osc
+func (_c *OrgSubscriptionCreate) SetID(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (osc *OrgSubscriptionCreate) SetNillableID(s *string) *OrgSubscriptionCreate {
-	if s != nil {
-		osc.SetID(*s)
+func (_c *OrgSubscriptionCreate) SetNillableID(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return osc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (osc *OrgSubscriptionCreate) SetOwner(o *Organization) *OrgSubscriptionCreate {
-	return osc.SetOwnerID(o.ID)
+func (_c *OrgSubscriptionCreate) SetOwner(v *Organization) *OrgSubscriptionCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (osc *OrgSubscriptionCreate) AddEventIDs(ids ...string) *OrgSubscriptionCreate {
-	osc.mutation.AddEventIDs(ids...)
-	return osc
+func (_c *OrgSubscriptionCreate) AddEventIDs(ids ...string) *OrgSubscriptionCreate {
+	_c.mutation.AddEventIDs(ids...)
+	return _c
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (osc *OrgSubscriptionCreate) AddEvents(e ...*Event) *OrgSubscriptionCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *OrgSubscriptionCreate) AddEvents(v ...*Event) *OrgSubscriptionCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osc.AddEventIDs(ids...)
+	return _c.AddEventIDs(ids...)
 }
 
 // AddModuleIDs adds the "modules" edge to the OrgModule entity by IDs.
-func (osc *OrgSubscriptionCreate) AddModuleIDs(ids ...string) *OrgSubscriptionCreate {
-	osc.mutation.AddModuleIDs(ids...)
-	return osc
+func (_c *OrgSubscriptionCreate) AddModuleIDs(ids ...string) *OrgSubscriptionCreate {
+	_c.mutation.AddModuleIDs(ids...)
+	return _c
 }
 
 // AddModules adds the "modules" edges to the OrgModule entity.
-func (osc *OrgSubscriptionCreate) AddModules(o ...*OrgModule) *OrgSubscriptionCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *OrgSubscriptionCreate) AddModules(v ...*OrgModule) *OrgSubscriptionCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osc.AddModuleIDs(ids...)
+	return _c.AddModuleIDs(ids...)
 }
 
 // AddProductIDs adds the "products" edge to the OrgProduct entity by IDs.
-func (osc *OrgSubscriptionCreate) AddProductIDs(ids ...string) *OrgSubscriptionCreate {
-	osc.mutation.AddProductIDs(ids...)
-	return osc
+func (_c *OrgSubscriptionCreate) AddProductIDs(ids ...string) *OrgSubscriptionCreate {
+	_c.mutation.AddProductIDs(ids...)
+	return _c
 }
 
 // AddProducts adds the "products" edges to the OrgProduct entity.
-func (osc *OrgSubscriptionCreate) AddProducts(o ...*OrgProduct) *OrgSubscriptionCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *OrgSubscriptionCreate) AddProducts(v ...*OrgProduct) *OrgSubscriptionCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osc.AddProductIDs(ids...)
+	return _c.AddProductIDs(ids...)
 }
 
 // AddPriceIDs adds the "prices" edge to the OrgPrice entity by IDs.
-func (osc *OrgSubscriptionCreate) AddPriceIDs(ids ...string) *OrgSubscriptionCreate {
-	osc.mutation.AddPriceIDs(ids...)
-	return osc
+func (_c *OrgSubscriptionCreate) AddPriceIDs(ids ...string) *OrgSubscriptionCreate {
+	_c.mutation.AddPriceIDs(ids...)
+	return _c
 }
 
 // AddPrices adds the "prices" edges to the OrgPrice entity.
-func (osc *OrgSubscriptionCreate) AddPrices(o ...*OrgPrice) *OrgSubscriptionCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *OrgSubscriptionCreate) AddPrices(v ...*OrgPrice) *OrgSubscriptionCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osc.AddPriceIDs(ids...)
+	return _c.AddPriceIDs(ids...)
 }
 
 // Mutation returns the OrgSubscriptionMutation object of the builder.
-func (osc *OrgSubscriptionCreate) Mutation() *OrgSubscriptionMutation {
-	return osc.mutation
+func (_c *OrgSubscriptionCreate) Mutation() *OrgSubscriptionMutation {
+	return _c.mutation
 }
 
 // Save creates the OrgSubscription in the database.
-func (osc *OrgSubscriptionCreate) Save(ctx context.Context) (*OrgSubscription, error) {
-	if err := osc.defaults(); err != nil {
+func (_c *OrgSubscriptionCreate) Save(ctx context.Context) (*OrgSubscription, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, osc.sqlSave, osc.mutation, osc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (osc *OrgSubscriptionCreate) SaveX(ctx context.Context) *OrgSubscription {
-	v, err := osc.Save(ctx)
+func (_c *OrgSubscriptionCreate) SaveX(ctx context.Context) *OrgSubscription {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -398,71 +398,71 @@ func (osc *OrgSubscriptionCreate) SaveX(ctx context.Context) *OrgSubscription {
 }
 
 // Exec executes the query.
-func (osc *OrgSubscriptionCreate) Exec(ctx context.Context) error {
-	_, err := osc.Save(ctx)
+func (_c *OrgSubscriptionCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (osc *OrgSubscriptionCreate) ExecX(ctx context.Context) {
-	if err := osc.Exec(ctx); err != nil {
+func (_c *OrgSubscriptionCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (osc *OrgSubscriptionCreate) defaults() error {
-	if _, ok := osc.mutation.CreatedAt(); !ok {
+func (_c *OrgSubscriptionCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if orgsubscription.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgsubscription.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgsubscription.DefaultCreatedAt()
-		osc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := osc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if orgsubscription.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgsubscription.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgsubscription.DefaultUpdatedAt()
-		osc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := osc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := orgsubscription.DefaultTags
-		osc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := osc.mutation.Active(); !ok {
+	if _, ok := _c.mutation.Active(); !ok {
 		v := orgsubscription.DefaultActive
-		osc.mutation.SetActive(v)
+		_c.mutation.SetActive(v)
 	}
-	if _, ok := osc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if orgsubscription.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized orgsubscription.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := orgsubscription.DefaultID()
-		osc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (osc *OrgSubscriptionCreate) check() error {
-	if v, ok := osc.mutation.OwnerID(); ok {
+func (_c *OrgSubscriptionCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := orgsubscription.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "OrgSubscription.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := osc.mutation.Active(); !ok {
+	if _, ok := _c.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "OrgSubscription.active"`)}
 	}
 	return nil
 }
 
-func (osc *OrgSubscriptionCreate) sqlSave(ctx context.Context) (*OrgSubscription, error) {
-	if err := osc.check(); err != nil {
+func (_c *OrgSubscriptionCreate) sqlSave(ctx context.Context) (*OrgSubscription, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := osc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, osc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -475,102 +475,102 @@ func (osc *OrgSubscriptionCreate) sqlSave(ctx context.Context) (*OrgSubscription
 			return nil, fmt.Errorf("unexpected OrgSubscription.ID type: %T", _spec.ID.Value)
 		}
 	}
-	osc.mutation.id = &_node.ID
-	osc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.CreateSpec) {
+func (_c *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.CreateSpec) {
 	var (
-		_node = &OrgSubscription{config: osc.config}
+		_node = &OrgSubscription{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(orgsubscription.Table, sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString))
 	)
-	_spec.Schema = osc.schemaConfig.OrgSubscription
-	if id, ok := osc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.OrgSubscription
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := osc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(orgsubscription.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := osc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgsubscription.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := osc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(orgsubscription.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := osc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgsubscription.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := osc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := osc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := osc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := osc.mutation.StripeSubscriptionID(); ok {
+	if value, ok := _c.mutation.StripeSubscriptionID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionID, field.TypeString, value)
 		_node.StripeSubscriptionID = value
 	}
-	if value, ok := osc.mutation.ProductTier(); ok {
+	if value, ok := _c.mutation.ProductTier(); ok {
 		_spec.SetField(orgsubscription.FieldProductTier, field.TypeString, value)
 		_node.ProductTier = value
 	}
-	if value, ok := osc.mutation.ProductPrice(); ok {
+	if value, ok := _c.mutation.ProductPrice(); ok {
 		_spec.SetField(orgsubscription.FieldProductPrice, field.TypeJSON, value)
 		_node.ProductPrice = value
 	}
-	if value, ok := osc.mutation.StripeProductTierID(); ok {
+	if value, ok := _c.mutation.StripeProductTierID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeProductTierID, field.TypeString, value)
 		_node.StripeProductTierID = value
 	}
-	if value, ok := osc.mutation.StripeSubscriptionStatus(); ok {
+	if value, ok := _c.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionStatus, field.TypeString, value)
 		_node.StripeSubscriptionStatus = value
 	}
-	if value, ok := osc.mutation.Active(); ok {
+	if value, ok := _c.mutation.Active(); ok {
 		_spec.SetField(orgsubscription.FieldActive, field.TypeBool, value)
 		_node.Active = value
 	}
-	if value, ok := osc.mutation.StripeCustomerID(); ok {
+	if value, ok := _c.mutation.StripeCustomerID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeCustomerID, field.TypeString, value)
 		_node.StripeCustomerID = value
 	}
-	if value, ok := osc.mutation.ExpiresAt(); ok {
+	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscription.FieldExpiresAt, field.TypeTime, value)
 		_node.ExpiresAt = &value
 	}
-	if value, ok := osc.mutation.TrialExpiresAt(); ok {
+	if value, ok := _c.mutation.TrialExpiresAt(); ok {
 		_spec.SetField(orgsubscription.FieldTrialExpiresAt, field.TypeTime, value)
 		_node.TrialExpiresAt = &value
 	}
-	if value, ok := osc.mutation.DaysUntilDue(); ok {
+	if value, ok := _c.mutation.DaysUntilDue(); ok {
 		_spec.SetField(orgsubscription.FieldDaysUntilDue, field.TypeString, value)
 		_node.DaysUntilDue = &value
 	}
-	if value, ok := osc.mutation.PaymentMethodAdded(); ok {
+	if value, ok := _c.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool, value)
 		_node.PaymentMethodAdded = &value
 	}
-	if value, ok := osc.mutation.Features(); ok {
+	if value, ok := _c.mutation.Features(); ok {
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)
 		_node.Features = value
 	}
-	if value, ok := osc.mutation.FeatureLookupKeys(); ok {
+	if value, ok := _c.mutation.FeatureLookupKeys(); ok {
 		_spec.SetField(orgsubscription.FieldFeatureLookupKeys, field.TypeJSON, value)
 		_node.FeatureLookupKeys = value
 	}
-	if nodes := osc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -581,14 +581,14 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osc.schemaConfig.OrgSubscription
+		edge.Schema = _c.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := osc.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -599,13 +599,13 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osc.schemaConfig.OrgSubscriptionEvents
+		edge.Schema = _c.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := osc.mutation.ModulesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ModulesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -616,13 +616,13 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osc.schemaConfig.OrgModule
+		edge.Schema = _c.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := osc.mutation.ProductsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -633,13 +633,13 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osc.schemaConfig.OrgProduct
+		edge.Schema = _c.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := osc.mutation.PricesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.PricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -650,7 +650,7 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osc.schemaConfig.OrgPrice
+		edge.Schema = _c.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -667,16 +667,16 @@ type OrgSubscriptionCreateBulk struct {
 }
 
 // Save creates the OrgSubscription entities in the database.
-func (oscb *OrgSubscriptionCreateBulk) Save(ctx context.Context) ([]*OrgSubscription, error) {
-	if oscb.err != nil {
-		return nil, oscb.err
+func (_c *OrgSubscriptionCreateBulk) Save(ctx context.Context) ([]*OrgSubscription, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(oscb.builders))
-	nodes := make([]*OrgSubscription, len(oscb.builders))
-	mutators := make([]Mutator, len(oscb.builders))
-	for i := range oscb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*OrgSubscription, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := oscb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*OrgSubscriptionMutation)
@@ -690,11 +690,11 @@ func (oscb *OrgSubscriptionCreateBulk) Save(ctx context.Context) ([]*OrgSubscrip
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, oscb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, oscb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -714,7 +714,7 @@ func (oscb *OrgSubscriptionCreateBulk) Save(ctx context.Context) ([]*OrgSubscrip
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, oscb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -722,8 +722,8 @@ func (oscb *OrgSubscriptionCreateBulk) Save(ctx context.Context) ([]*OrgSubscrip
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (oscb *OrgSubscriptionCreateBulk) SaveX(ctx context.Context) []*OrgSubscription {
-	v, err := oscb.Save(ctx)
+func (_c *OrgSubscriptionCreateBulk) SaveX(ctx context.Context) []*OrgSubscription {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -731,14 +731,14 @@ func (oscb *OrgSubscriptionCreateBulk) SaveX(ctx context.Context) []*OrgSubscrip
 }
 
 // Exec executes the query.
-func (oscb *OrgSubscriptionCreateBulk) Exec(ctx context.Context) error {
-	_, err := oscb.Save(ctx)
+func (_c *OrgSubscriptionCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oscb *OrgSubscriptionCreateBulk) ExecX(ctx context.Context) {
-	if err := oscb.Exec(ctx); err != nil {
+func (_c *OrgSubscriptionCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

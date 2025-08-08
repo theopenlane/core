@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -38,852 +39,888 @@ type InternalPolicyUpdate struct {
 }
 
 // Where appends a list predicates to the InternalPolicyUpdate builder.
-func (ipu *InternalPolicyUpdate) Where(ps ...predicate.InternalPolicy) *InternalPolicyUpdate {
-	ipu.mutation.Where(ps...)
-	return ipu
+func (_u *InternalPolicyUpdate) Where(ps ...predicate.InternalPolicy) *InternalPolicyUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ipu *InternalPolicyUpdate) SetUpdatedAt(t time.Time) *InternalPolicyUpdate {
-	ipu.mutation.SetUpdatedAt(t)
-	return ipu
+func (_u *InternalPolicyUpdate) SetUpdatedAt(v time.Time) *InternalPolicyUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ipu *InternalPolicyUpdate) ClearUpdatedAt() *InternalPolicyUpdate {
-	ipu.mutation.ClearUpdatedAt()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearUpdatedAt() *InternalPolicyUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ipu *InternalPolicyUpdate) SetUpdatedBy(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetUpdatedBy(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetUpdatedBy(v string) *InternalPolicyUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableUpdatedBy(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetUpdatedBy(*s)
+func (_u *InternalPolicyUpdate) SetNillableUpdatedBy(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ipu *InternalPolicyUpdate) ClearUpdatedBy() *InternalPolicyUpdate {
-	ipu.mutation.ClearUpdatedBy()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearUpdatedBy() *InternalPolicyUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ipu *InternalPolicyUpdate) SetDeletedAt(t time.Time) *InternalPolicyUpdate {
-	ipu.mutation.SetDeletedAt(t)
-	return ipu
+func (_u *InternalPolicyUpdate) SetDeletedAt(v time.Time) *InternalPolicyUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableDeletedAt(t *time.Time) *InternalPolicyUpdate {
-	if t != nil {
-		ipu.SetDeletedAt(*t)
+func (_u *InternalPolicyUpdate) SetNillableDeletedAt(v *time.Time) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ipu *InternalPolicyUpdate) ClearDeletedAt() *InternalPolicyUpdate {
-	ipu.mutation.ClearDeletedAt()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearDeletedAt() *InternalPolicyUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ipu *InternalPolicyUpdate) SetDeletedBy(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetDeletedBy(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetDeletedBy(v string) *InternalPolicyUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableDeletedBy(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetDeletedBy(*s)
+func (_u *InternalPolicyUpdate) SetNillableDeletedBy(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ipu *InternalPolicyUpdate) ClearDeletedBy() *InternalPolicyUpdate {
-	ipu.mutation.ClearDeletedBy()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearDeletedBy() *InternalPolicyUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ipu *InternalPolicyUpdate) SetTags(s []string) *InternalPolicyUpdate {
-	ipu.mutation.SetTags(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetTags(v []string) *InternalPolicyUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ipu *InternalPolicyUpdate) AppendTags(s []string) *InternalPolicyUpdate {
-	ipu.mutation.AppendTags(s)
-	return ipu
+// AppendTags appends value to the "tags" field.
+func (_u *InternalPolicyUpdate) AppendTags(v []string) *InternalPolicyUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ipu *InternalPolicyUpdate) ClearTags() *InternalPolicyUpdate {
-	ipu.mutation.ClearTags()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearTags() *InternalPolicyUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (ipu *InternalPolicyUpdate) SetRevision(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetRevision(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetRevision(v string) *InternalPolicyUpdate {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableRevision(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetRevision(*s)
+func (_u *InternalPolicyUpdate) SetNillableRevision(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (ipu *InternalPolicyUpdate) ClearRevision() *InternalPolicyUpdate {
-	ipu.mutation.ClearRevision()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearRevision() *InternalPolicyUpdate {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ipu *InternalPolicyUpdate) SetOwnerID(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetOwnerID(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetOwnerID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableOwnerID(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetOwnerID(*s)
+func (_u *InternalPolicyUpdate) SetNillableOwnerID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (ipu *InternalPolicyUpdate) ClearOwnerID() *InternalPolicyUpdate {
-	ipu.mutation.ClearOwnerID()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearOwnerID() *InternalPolicyUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ipu *InternalPolicyUpdate) SetName(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetName(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetName(v string) *InternalPolicyUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableName(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetName(*s)
+func (_u *InternalPolicyUpdate) SetNillableName(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ipu
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (ipu *InternalPolicyUpdate) SetStatus(es enums.DocumentStatus) *InternalPolicyUpdate {
-	ipu.mutation.SetStatus(es)
-	return ipu
+func (_u *InternalPolicyUpdate) SetStatus(v enums.DocumentStatus) *InternalPolicyUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableStatus(es *enums.DocumentStatus) *InternalPolicyUpdate {
-	if es != nil {
-		ipu.SetStatus(*es)
+func (_u *InternalPolicyUpdate) SetNillableStatus(v *enums.DocumentStatus) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (ipu *InternalPolicyUpdate) ClearStatus() *InternalPolicyUpdate {
-	ipu.mutation.ClearStatus()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearStatus() *InternalPolicyUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetPolicyType sets the "policy_type" field.
-func (ipu *InternalPolicyUpdate) SetPolicyType(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetPolicyType(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetPolicyType(v string) *InternalPolicyUpdate {
+	_u.mutation.SetPolicyType(v)
+	return _u
 }
 
 // SetNillablePolicyType sets the "policy_type" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillablePolicyType(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetPolicyType(*s)
+func (_u *InternalPolicyUpdate) SetNillablePolicyType(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetPolicyType(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearPolicyType clears the value of the "policy_type" field.
-func (ipu *InternalPolicyUpdate) ClearPolicyType() *InternalPolicyUpdate {
-	ipu.mutation.ClearPolicyType()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearPolicyType() *InternalPolicyUpdate {
+	_u.mutation.ClearPolicyType()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (ipu *InternalPolicyUpdate) SetDetails(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetDetails(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetDetails(v string) *InternalPolicyUpdate {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableDetails(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetDetails(*s)
+func (_u *InternalPolicyUpdate) SetNillableDetails(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (ipu *InternalPolicyUpdate) ClearDetails() *InternalPolicyUpdate {
-	ipu.mutation.ClearDetails()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearDetails() *InternalPolicyUpdate {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetApprovalRequired sets the "approval_required" field.
-func (ipu *InternalPolicyUpdate) SetApprovalRequired(b bool) *InternalPolicyUpdate {
-	ipu.mutation.SetApprovalRequired(b)
-	return ipu
+func (_u *InternalPolicyUpdate) SetApprovalRequired(v bool) *InternalPolicyUpdate {
+	_u.mutation.SetApprovalRequired(v)
+	return _u
 }
 
 // SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableApprovalRequired(b *bool) *InternalPolicyUpdate {
-	if b != nil {
-		ipu.SetApprovalRequired(*b)
+func (_u *InternalPolicyUpdate) SetNillableApprovalRequired(v *bool) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetApprovalRequired(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearApprovalRequired clears the value of the "approval_required" field.
-func (ipu *InternalPolicyUpdate) ClearApprovalRequired() *InternalPolicyUpdate {
-	ipu.mutation.ClearApprovalRequired()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearApprovalRequired() *InternalPolicyUpdate {
+	_u.mutation.ClearApprovalRequired()
+	return _u
 }
 
 // SetReviewDue sets the "review_due" field.
-func (ipu *InternalPolicyUpdate) SetReviewDue(t time.Time) *InternalPolicyUpdate {
-	ipu.mutation.SetReviewDue(t)
-	return ipu
+func (_u *InternalPolicyUpdate) SetReviewDue(v time.Time) *InternalPolicyUpdate {
+	_u.mutation.SetReviewDue(v)
+	return _u
 }
 
 // SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableReviewDue(t *time.Time) *InternalPolicyUpdate {
-	if t != nil {
-		ipu.SetReviewDue(*t)
+func (_u *InternalPolicyUpdate) SetNillableReviewDue(v *time.Time) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetReviewDue(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearReviewDue clears the value of the "review_due" field.
-func (ipu *InternalPolicyUpdate) ClearReviewDue() *InternalPolicyUpdate {
-	ipu.mutation.ClearReviewDue()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearReviewDue() *InternalPolicyUpdate {
+	_u.mutation.ClearReviewDue()
+	return _u
 }
 
 // SetReviewFrequency sets the "review_frequency" field.
-func (ipu *InternalPolicyUpdate) SetReviewFrequency(e enums.Frequency) *InternalPolicyUpdate {
-	ipu.mutation.SetReviewFrequency(e)
-	return ipu
+func (_u *InternalPolicyUpdate) SetReviewFrequency(v enums.Frequency) *InternalPolicyUpdate {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
 }
 
 // SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableReviewFrequency(e *enums.Frequency) *InternalPolicyUpdate {
-	if e != nil {
-		ipu.SetReviewFrequency(*e)
+func (_u *InternalPolicyUpdate) SetNillableReviewFrequency(v *enums.Frequency) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearReviewFrequency clears the value of the "review_frequency" field.
-func (ipu *InternalPolicyUpdate) ClearReviewFrequency() *InternalPolicyUpdate {
-	ipu.mutation.ClearReviewFrequency()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearReviewFrequency() *InternalPolicyUpdate {
+	_u.mutation.ClearReviewFrequency()
+	return _u
 }
 
 // SetApproverID sets the "approver_id" field.
-func (ipu *InternalPolicyUpdate) SetApproverID(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetApproverID(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetApproverID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetApproverID(v)
+	return _u
 }
 
 // SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableApproverID(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetApproverID(*s)
+func (_u *InternalPolicyUpdate) SetNillableApproverID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetApproverID(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearApproverID clears the value of the "approver_id" field.
-func (ipu *InternalPolicyUpdate) ClearApproverID() *InternalPolicyUpdate {
-	ipu.mutation.ClearApproverID()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearApproverID() *InternalPolicyUpdate {
+	_u.mutation.ClearApproverID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (ipu *InternalPolicyUpdate) SetDelegateID(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetDelegateID(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetDelegateID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableDelegateID(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetDelegateID(*s)
+func (_u *InternalPolicyUpdate) SetNillableDelegateID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (ipu *InternalPolicyUpdate) ClearDelegateID() *InternalPolicyUpdate {
-	ipu.mutation.ClearDelegateID()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearDelegateID() *InternalPolicyUpdate {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // SetSummary sets the "summary" field.
-func (ipu *InternalPolicyUpdate) SetSummary(s string) *InternalPolicyUpdate {
-	ipu.mutation.SetSummary(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetSummary(v string) *InternalPolicyUpdate {
+	_u.mutation.SetSummary(v)
+	return _u
 }
 
 // SetNillableSummary sets the "summary" field if the given value is not nil.
-func (ipu *InternalPolicyUpdate) SetNillableSummary(s *string) *InternalPolicyUpdate {
-	if s != nil {
-		ipu.SetSummary(*s)
+func (_u *InternalPolicyUpdate) SetNillableSummary(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetSummary(*v)
 	}
-	return ipu
+	return _u
 }
 
 // ClearSummary clears the value of the "summary" field.
-func (ipu *InternalPolicyUpdate) ClearSummary() *InternalPolicyUpdate {
-	ipu.mutation.ClearSummary()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearSummary() *InternalPolicyUpdate {
+	_u.mutation.ClearSummary()
+	return _u
 }
 
 // SetTagSuggestions sets the "tag_suggestions" field.
-func (ipu *InternalPolicyUpdate) SetTagSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.SetTagSuggestions(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetTagSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.SetTagSuggestions(v)
+	return _u
 }
 
-// AppendTagSuggestions appends s to the "tag_suggestions" field.
-func (ipu *InternalPolicyUpdate) AppendTagSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.AppendTagSuggestions(s)
-	return ipu
+// AppendTagSuggestions appends value to the "tag_suggestions" field.
+func (_u *InternalPolicyUpdate) AppendTagSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.AppendTagSuggestions(v)
+	return _u
 }
 
 // ClearTagSuggestions clears the value of the "tag_suggestions" field.
-func (ipu *InternalPolicyUpdate) ClearTagSuggestions() *InternalPolicyUpdate {
-	ipu.mutation.ClearTagSuggestions()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearTagSuggestions() *InternalPolicyUpdate {
+	_u.mutation.ClearTagSuggestions()
+	return _u
 }
 
 // SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
-func (ipu *InternalPolicyUpdate) SetDismissedTagSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.SetDismissedTagSuggestions(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetDismissedTagSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.SetDismissedTagSuggestions(v)
+	return _u
 }
 
-// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
-func (ipu *InternalPolicyUpdate) AppendDismissedTagSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.AppendDismissedTagSuggestions(s)
-	return ipu
+// AppendDismissedTagSuggestions appends value to the "dismissed_tag_suggestions" field.
+func (_u *InternalPolicyUpdate) AppendDismissedTagSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.AppendDismissedTagSuggestions(v)
+	return _u
 }
 
 // ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
-func (ipu *InternalPolicyUpdate) ClearDismissedTagSuggestions() *InternalPolicyUpdate {
-	ipu.mutation.ClearDismissedTagSuggestions()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearDismissedTagSuggestions() *InternalPolicyUpdate {
+	_u.mutation.ClearDismissedTagSuggestions()
+	return _u
 }
 
 // SetControlSuggestions sets the "control_suggestions" field.
-func (ipu *InternalPolicyUpdate) SetControlSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.SetControlSuggestions(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetControlSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.SetControlSuggestions(v)
+	return _u
 }
 
-// AppendControlSuggestions appends s to the "control_suggestions" field.
-func (ipu *InternalPolicyUpdate) AppendControlSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.AppendControlSuggestions(s)
-	return ipu
+// AppendControlSuggestions appends value to the "control_suggestions" field.
+func (_u *InternalPolicyUpdate) AppendControlSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.AppendControlSuggestions(v)
+	return _u
 }
 
 // ClearControlSuggestions clears the value of the "control_suggestions" field.
-func (ipu *InternalPolicyUpdate) ClearControlSuggestions() *InternalPolicyUpdate {
-	ipu.mutation.ClearControlSuggestions()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearControlSuggestions() *InternalPolicyUpdate {
+	_u.mutation.ClearControlSuggestions()
+	return _u
 }
 
 // SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
-func (ipu *InternalPolicyUpdate) SetDismissedControlSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.SetDismissedControlSuggestions(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetDismissedControlSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.SetDismissedControlSuggestions(v)
+	return _u
 }
 
-// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
-func (ipu *InternalPolicyUpdate) AppendDismissedControlSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.AppendDismissedControlSuggestions(s)
-	return ipu
+// AppendDismissedControlSuggestions appends value to the "dismissed_control_suggestions" field.
+func (_u *InternalPolicyUpdate) AppendDismissedControlSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.AppendDismissedControlSuggestions(v)
+	return _u
 }
 
 // ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
-func (ipu *InternalPolicyUpdate) ClearDismissedControlSuggestions() *InternalPolicyUpdate {
-	ipu.mutation.ClearDismissedControlSuggestions()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearDismissedControlSuggestions() *InternalPolicyUpdate {
+	_u.mutation.ClearDismissedControlSuggestions()
+	return _u
 }
 
 // SetImprovementSuggestions sets the "improvement_suggestions" field.
-func (ipu *InternalPolicyUpdate) SetImprovementSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.SetImprovementSuggestions(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetImprovementSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.SetImprovementSuggestions(v)
+	return _u
 }
 
-// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
-func (ipu *InternalPolicyUpdate) AppendImprovementSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.AppendImprovementSuggestions(s)
-	return ipu
+// AppendImprovementSuggestions appends value to the "improvement_suggestions" field.
+func (_u *InternalPolicyUpdate) AppendImprovementSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.AppendImprovementSuggestions(v)
+	return _u
 }
 
 // ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
-func (ipu *InternalPolicyUpdate) ClearImprovementSuggestions() *InternalPolicyUpdate {
-	ipu.mutation.ClearImprovementSuggestions()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearImprovementSuggestions() *InternalPolicyUpdate {
+	_u.mutation.ClearImprovementSuggestions()
+	return _u
 }
 
 // SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
-func (ipu *InternalPolicyUpdate) SetDismissedImprovementSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.SetDismissedImprovementSuggestions(s)
-	return ipu
+func (_u *InternalPolicyUpdate) SetDismissedImprovementSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.SetDismissedImprovementSuggestions(v)
+	return _u
 }
 
-// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
-func (ipu *InternalPolicyUpdate) AppendDismissedImprovementSuggestions(s []string) *InternalPolicyUpdate {
-	ipu.mutation.AppendDismissedImprovementSuggestions(s)
-	return ipu
+// AppendDismissedImprovementSuggestions appends value to the "dismissed_improvement_suggestions" field.
+func (_u *InternalPolicyUpdate) AppendDismissedImprovementSuggestions(v []string) *InternalPolicyUpdate {
+	_u.mutation.AppendDismissedImprovementSuggestions(v)
+	return _u
 }
 
 // ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
-func (ipu *InternalPolicyUpdate) ClearDismissedImprovementSuggestions() *InternalPolicyUpdate {
-	ipu.mutation.ClearDismissedImprovementSuggestions()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearDismissedImprovementSuggestions() *InternalPolicyUpdate {
+	_u.mutation.ClearDismissedImprovementSuggestions()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (ipu *InternalPolicyUpdate) SetOwner(o *Organization) *InternalPolicyUpdate {
-	return ipu.SetOwnerID(o.ID)
+func (_u *InternalPolicyUpdate) SetOwner(v *Organization) *InternalPolicyUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (ipu *InternalPolicyUpdate) AddBlockedGroupIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddBlockedGroupIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) AddBlockedGroupIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (ipu *InternalPolicyUpdate) AddBlockedGroups(g ...*Group) *InternalPolicyUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InternalPolicyUpdate) AddBlockedGroups(v ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (ipu *InternalPolicyUpdate) AddEditorIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddEditorIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) AddEditorIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (ipu *InternalPolicyUpdate) AddEditors(g ...*Group) *InternalPolicyUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InternalPolicyUpdate) AddEditors(v ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // SetApprover sets the "approver" edge to the Group entity.
-func (ipu *InternalPolicyUpdate) SetApprover(g *Group) *InternalPolicyUpdate {
-	return ipu.SetApproverID(g.ID)
+func (_u *InternalPolicyUpdate) SetApprover(v *Group) *InternalPolicyUpdate {
+	return _u.SetApproverID(v.ID)
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
-func (ipu *InternalPolicyUpdate) SetDelegate(g *Group) *InternalPolicyUpdate {
-	return ipu.SetDelegateID(g.ID)
+func (_u *InternalPolicyUpdate) SetDelegate(v *Group) *InternalPolicyUpdate {
+	return _u.SetDelegateID(v.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (ipu *InternalPolicyUpdate) AddControlObjectiveIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddControlObjectiveIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) AddControlObjectiveIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddControlObjectiveIDs(ids...)
+	return _u
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (ipu *InternalPolicyUpdate) AddControlObjectives(c ...*ControlObjective) *InternalPolicyUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *InternalPolicyUpdate) AddControlObjectives(v ...*ControlObjective) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.AddControlObjectiveIDs(ids...)
+	return _u.AddControlObjectiveIDs(ids...)
+}
+
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_u *InternalPolicyUpdate) AddControlImplementationIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddControlImplementationIDs(ids...)
+	return _u
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_u *InternalPolicyUpdate) AddControlImplementations(v ...*ControlImplementation) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlImplementationIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (ipu *InternalPolicyUpdate) AddControlIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddControlIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) AddControlIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (ipu *InternalPolicyUpdate) AddControls(c ...*Control) *InternalPolicyUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *InternalPolicyUpdate) AddControls(v ...*Control) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (ipu *InternalPolicyUpdate) AddSubcontrolIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddSubcontrolIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) AddSubcontrolIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (ipu *InternalPolicyUpdate) AddSubcontrols(s ...*Subcontrol) *InternalPolicyUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *InternalPolicyUpdate) AddSubcontrols(v ...*Subcontrol) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (ipu *InternalPolicyUpdate) AddProcedureIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddProcedureIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) AddProcedureIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (ipu *InternalPolicyUpdate) AddProcedures(p ...*Procedure) *InternalPolicyUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *InternalPolicyUpdate) AddProcedures(v ...*Procedure) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.AddProcedureIDs(ids...)
+	return _u.AddProcedureIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
-func (ipu *InternalPolicyUpdate) AddNarrativeIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddNarrativeIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) AddNarrativeIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddNarrativeIDs(ids...)
+	return _u
 }
 
 // AddNarratives adds the "narratives" edges to the Narrative entity.
-func (ipu *InternalPolicyUpdate) AddNarratives(n ...*Narrative) *InternalPolicyUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *InternalPolicyUpdate) AddNarratives(v ...*Narrative) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.AddNarrativeIDs(ids...)
+	return _u.AddNarrativeIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (ipu *InternalPolicyUpdate) AddTaskIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddTaskIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) AddTaskIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (ipu *InternalPolicyUpdate) AddTasks(t ...*Task) *InternalPolicyUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *InternalPolicyUpdate) AddTasks(v ...*Task) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.AddTaskIDs(ids...)
+	return _u.AddTaskIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (ipu *InternalPolicyUpdate) AddRiskIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddRiskIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) AddRiskIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (ipu *InternalPolicyUpdate) AddRisks(r ...*Risk) *InternalPolicyUpdate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *InternalPolicyUpdate) AddRisks(v ...*Risk) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.AddRiskIDs(ids...)
+	return _u.AddRiskIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (ipu *InternalPolicyUpdate) AddProgramIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddProgramIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) AddProgramIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (ipu *InternalPolicyUpdate) AddPrograms(p ...*Program) *InternalPolicyUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *InternalPolicyUpdate) AddPrograms(v ...*Program) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
-func (ipu *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
-	return ipu.mutation
+func (_u *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (ipu *InternalPolicyUpdate) ClearOwner() *InternalPolicyUpdate {
-	ipu.mutation.ClearOwner()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearOwner() *InternalPolicyUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (ipu *InternalPolicyUpdate) ClearBlockedGroups() *InternalPolicyUpdate {
-	ipu.mutation.ClearBlockedGroups()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearBlockedGroups() *InternalPolicyUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveBlockedGroupIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveBlockedGroupIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) RemoveBlockedGroupIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (ipu *InternalPolicyUpdate) RemoveBlockedGroups(g ...*Group) *InternalPolicyUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InternalPolicyUpdate) RemoveBlockedGroups(v ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (ipu *InternalPolicyUpdate) ClearEditors() *InternalPolicyUpdate {
-	ipu.mutation.ClearEditors()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearEditors() *InternalPolicyUpdate {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveEditorIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveEditorIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) RemoveEditorIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (ipu *InternalPolicyUpdate) RemoveEditors(g ...*Group) *InternalPolicyUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InternalPolicyUpdate) RemoveEditors(v ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearApprover clears the "approver" edge to the Group entity.
-func (ipu *InternalPolicyUpdate) ClearApprover() *InternalPolicyUpdate {
-	ipu.mutation.ClearApprover()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearApprover() *InternalPolicyUpdate {
+	_u.mutation.ClearApprover()
+	return _u
 }
 
 // ClearDelegate clears the "delegate" edge to the Group entity.
-func (ipu *InternalPolicyUpdate) ClearDelegate() *InternalPolicyUpdate {
-	ipu.mutation.ClearDelegate()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearDelegate() *InternalPolicyUpdate {
+	_u.mutation.ClearDelegate()
+	return _u
 }
 
 // ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
-func (ipu *InternalPolicyUpdate) ClearControlObjectives() *InternalPolicyUpdate {
-	ipu.mutation.ClearControlObjectives()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearControlObjectives() *InternalPolicyUpdate {
+	_u.mutation.ClearControlObjectives()
+	return _u
 }
 
 // RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveControlObjectiveIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveControlObjectiveIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) RemoveControlObjectiveIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveControlObjectiveIDs(ids...)
+	return _u
 }
 
 // RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
-func (ipu *InternalPolicyUpdate) RemoveControlObjectives(c ...*ControlObjective) *InternalPolicyUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *InternalPolicyUpdate) RemoveControlObjectives(v ...*ControlObjective) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.RemoveControlObjectiveIDs(ids...)
+	return _u.RemoveControlObjectiveIDs(ids...)
+}
+
+// ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
+func (_u *InternalPolicyUpdate) ClearControlImplementations() *InternalPolicyUpdate {
+	_u.mutation.ClearControlImplementations()
+	return _u
+}
+
+// RemoveControlImplementationIDs removes the "control_implementations" edge to ControlImplementation entities by IDs.
+func (_u *InternalPolicyUpdate) RemoveControlImplementationIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveControlImplementationIDs(ids...)
+	return _u
+}
+
+// RemoveControlImplementations removes "control_implementations" edges to ControlImplementation entities.
+func (_u *InternalPolicyUpdate) RemoveControlImplementations(v ...*ControlImplementation) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlImplementationIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (ipu *InternalPolicyUpdate) ClearControls() *InternalPolicyUpdate {
-	ipu.mutation.ClearControls()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearControls() *InternalPolicyUpdate {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveControlIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveControlIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) RemoveControlIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (ipu *InternalPolicyUpdate) RemoveControls(c ...*Control) *InternalPolicyUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *InternalPolicyUpdate) RemoveControls(v ...*Control) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (ipu *InternalPolicyUpdate) ClearSubcontrols() *InternalPolicyUpdate {
-	ipu.mutation.ClearSubcontrols()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearSubcontrols() *InternalPolicyUpdate {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveSubcontrolIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveSubcontrolIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) RemoveSubcontrolIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (ipu *InternalPolicyUpdate) RemoveSubcontrols(s ...*Subcontrol) *InternalPolicyUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *InternalPolicyUpdate) RemoveSubcontrols(v ...*Subcontrol) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (ipu *InternalPolicyUpdate) ClearProcedures() *InternalPolicyUpdate {
-	ipu.mutation.ClearProcedures()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearProcedures() *InternalPolicyUpdate {
+	_u.mutation.ClearProcedures()
+	return _u
 }
 
 // RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveProcedureIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveProcedureIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) RemoveProcedureIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
 }
 
 // RemoveProcedures removes "procedures" edges to Procedure entities.
-func (ipu *InternalPolicyUpdate) RemoveProcedures(p ...*Procedure) *InternalPolicyUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *InternalPolicyUpdate) RemoveProcedures(v ...*Procedure) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.RemoveProcedureIDs(ids...)
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
-func (ipu *InternalPolicyUpdate) ClearNarratives() *InternalPolicyUpdate {
-	ipu.mutation.ClearNarratives()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearNarratives() *InternalPolicyUpdate {
+	_u.mutation.ClearNarratives()
+	return _u
 }
 
 // RemoveNarrativeIDs removes the "narratives" edge to Narrative entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveNarrativeIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveNarrativeIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) RemoveNarrativeIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveNarrativeIDs(ids...)
+	return _u
 }
 
 // RemoveNarratives removes "narratives" edges to Narrative entities.
-func (ipu *InternalPolicyUpdate) RemoveNarratives(n ...*Narrative) *InternalPolicyUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *InternalPolicyUpdate) RemoveNarratives(v ...*Narrative) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.RemoveNarrativeIDs(ids...)
+	return _u.RemoveNarrativeIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
-func (ipu *InternalPolicyUpdate) ClearTasks() *InternalPolicyUpdate {
-	ipu.mutation.ClearTasks()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearTasks() *InternalPolicyUpdate {
+	_u.mutation.ClearTasks()
+	return _u
 }
 
 // RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveTaskIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveTaskIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) RemoveTaskIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
 }
 
 // RemoveTasks removes "tasks" edges to Task entities.
-func (ipu *InternalPolicyUpdate) RemoveTasks(t ...*Task) *InternalPolicyUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *InternalPolicyUpdate) RemoveTasks(v ...*Task) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.RemoveTaskIDs(ids...)
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // ClearRisks clears all "risks" edges to the Risk entity.
-func (ipu *InternalPolicyUpdate) ClearRisks() *InternalPolicyUpdate {
-	ipu.mutation.ClearRisks()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearRisks() *InternalPolicyUpdate {
+	_u.mutation.ClearRisks()
+	return _u
 }
 
 // RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveRiskIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveRiskIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) RemoveRiskIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
 }
 
 // RemoveRisks removes "risks" edges to Risk entities.
-func (ipu *InternalPolicyUpdate) RemoveRisks(r ...*Risk) *InternalPolicyUpdate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *InternalPolicyUpdate) RemoveRisks(v ...*Risk) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.RemoveRiskIDs(ids...)
+	return _u.RemoveRiskIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (ipu *InternalPolicyUpdate) ClearPrograms() *InternalPolicyUpdate {
-	ipu.mutation.ClearPrograms()
-	return ipu
+func (_u *InternalPolicyUpdate) ClearPrograms() *InternalPolicyUpdate {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveProgramIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveProgramIDs(ids...)
-	return ipu
+func (_u *InternalPolicyUpdate) RemoveProgramIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (ipu *InternalPolicyUpdate) RemovePrograms(p ...*Program) *InternalPolicyUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *InternalPolicyUpdate) RemovePrograms(v ...*Program) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipu.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ipu *InternalPolicyUpdate) Save(ctx context.Context) (int, error) {
-	if err := ipu.defaults(); err != nil {
+func (_u *InternalPolicyUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, ipu.sqlSave, ipu.mutation, ipu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ipu *InternalPolicyUpdate) SaveX(ctx context.Context) int {
-	affected, err := ipu.Save(ctx)
+func (_u *InternalPolicyUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -891,48 +928,48 @@ func (ipu *InternalPolicyUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ipu *InternalPolicyUpdate) Exec(ctx context.Context) error {
-	_, err := ipu.Save(ctx)
+func (_u *InternalPolicyUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ipu *InternalPolicyUpdate) ExecX(ctx context.Context) {
-	if err := ipu.Exec(ctx); err != nil {
+func (_u *InternalPolicyUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ipu *InternalPolicyUpdate) defaults() error {
-	if _, ok := ipu.mutation.UpdatedAt(); !ok && !ipu.mutation.UpdatedAtCleared() {
+func (_u *InternalPolicyUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if internalpolicy.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized internalpolicy.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := internalpolicy.UpdateDefaultUpdatedAt()
-		ipu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ipu *InternalPolicyUpdate) check() error {
-	if v, ok := ipu.mutation.Revision(); ok {
+func (_u *InternalPolicyUpdate) check() error {
+	if v, ok := _u.mutation.Revision(); ok {
 		if err := internalpolicy.RevisionValidator(v); err != nil {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
 		}
 	}
-	if v, ok := ipu.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := internalpolicy.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.name": %w`, err)}
 		}
 	}
-	if v, ok := ipu.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := internalpolicy.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.status": %w`, err)}
 		}
 	}
-	if v, ok := ipu.mutation.ReviewFrequency(); ok {
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := internalpolicy.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
 		}
@@ -941,182 +978,182 @@ func (ipu *InternalPolicyUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ipu *InternalPolicyUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InternalPolicyUpdate {
-	ipu.modifiers = append(ipu.modifiers, modifiers...)
-	return ipu
+func (_u *InternalPolicyUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InternalPolicyUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := ipu.check(); err != nil {
-		return n, err
+func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(internalpolicy.Table, internalpolicy.Columns, sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString))
-	if ps := ipu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ipu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ipu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(internalpolicy.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ipu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedAt, field.TypeTime)
 	}
-	if ipu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(internalpolicy.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ipu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(internalpolicy.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ipu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ipu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ipu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ipu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedBy, field.TypeString, value)
 	}
-	if ipu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(internalpolicy.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ipu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ipu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldTags, value)
 		})
 	}
-	if ipu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(internalpolicy.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ipu.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(internalpolicy.FieldRevision, field.TypeString, value)
 	}
-	if ipu.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(internalpolicy.FieldRevision, field.TypeString)
 	}
-	if value, ok := ipu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(internalpolicy.FieldName, field.TypeString, value)
 	}
-	if value, ok := ipu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(internalpolicy.FieldStatus, field.TypeEnum, value)
 	}
-	if ipu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicy.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := ipu.mutation.PolicyType(); ok {
+	if value, ok := _u.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicy.FieldPolicyType, field.TypeString, value)
 	}
-	if ipu.mutation.PolicyTypeCleared() {
+	if _u.mutation.PolicyTypeCleared() {
 		_spec.ClearField(internalpolicy.FieldPolicyType, field.TypeString)
 	}
-	if value, ok := ipu.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeString, value)
 	}
-	if ipu.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicy.FieldDetails, field.TypeString)
 	}
-	if value, ok := ipu.mutation.ApprovalRequired(); ok {
+	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(internalpolicy.FieldApprovalRequired, field.TypeBool, value)
 	}
-	if ipu.mutation.ApprovalRequiredCleared() {
+	if _u.mutation.ApprovalRequiredCleared() {
 		_spec.ClearField(internalpolicy.FieldApprovalRequired, field.TypeBool)
 	}
-	if value, ok := ipu.mutation.ReviewDue(); ok {
+	if value, ok := _u.mutation.ReviewDue(); ok {
 		_spec.SetField(internalpolicy.FieldReviewDue, field.TypeTime, value)
 	}
-	if ipu.mutation.ReviewDueCleared() {
+	if _u.mutation.ReviewDueCleared() {
 		_spec.ClearField(internalpolicy.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := ipu.mutation.ReviewFrequency(); ok {
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(internalpolicy.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if ipu.mutation.ReviewFrequencyCleared() {
+	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(internalpolicy.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := ipu.mutation.Summary(); ok {
+	if value, ok := _u.mutation.Summary(); ok {
 		_spec.SetField(internalpolicy.FieldSummary, field.TypeString, value)
 	}
-	if ipu.mutation.SummaryCleared() {
+	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(internalpolicy.FieldSummary, field.TypeString)
 	}
-	if value, ok := ipu.mutation.TagSuggestions(); ok {
+	if value, ok := _u.mutation.TagSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipu.mutation.AppendedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldTagSuggestions, value)
 		})
 	}
-	if ipu.mutation.TagSuggestionsCleared() {
+	if _u.mutation.TagSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := ipu.mutation.DismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedTagSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldDismissedTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipu.mutation.AppendedDismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldDismissedTagSuggestions, value)
 		})
 	}
-	if ipu.mutation.DismissedTagSuggestionsCleared() {
+	if _u.mutation.DismissedTagSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldDismissedTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := ipu.mutation.ControlSuggestions(); ok {
+	if value, ok := _u.mutation.ControlSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipu.mutation.AppendedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldControlSuggestions, value)
 		})
 	}
-	if ipu.mutation.ControlSuggestionsCleared() {
+	if _u.mutation.ControlSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := ipu.mutation.DismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedControlSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldDismissedControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipu.mutation.AppendedDismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldDismissedControlSuggestions, value)
 		})
 	}
-	if ipu.mutation.DismissedControlSuggestionsCleared() {
+	if _u.mutation.DismissedControlSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldDismissedControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := ipu.mutation.ImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.ImprovementSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipu.mutation.AppendedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldImprovementSuggestions, value)
 		})
 	}
-	if ipu.mutation.ImprovementSuggestionsCleared() {
+	if _u.mutation.ImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := ipu.mutation.DismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipu.mutation.AppendedDismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldDismissedImprovementSuggestions, value)
 		})
 	}
-	if ipu.mutation.DismissedImprovementSuggestionsCleared() {
+	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
-	if ipu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1127,10 +1164,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1141,13 +1178,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1158,10 +1195,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
+		edge.Schema = _u.schemaConfig.InternalPolicyBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ipu.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1172,13 +1209,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
+		edge.Schema = _u.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1189,13 +1226,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
+		edge.Schema = _u.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1206,10 +1243,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
+		edge.Schema = _u.schemaConfig.InternalPolicyEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ipu.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1220,13 +1257,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
+		edge.Schema = _u.schemaConfig.InternalPolicyEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1237,13 +1274,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
+		edge.Schema = _u.schemaConfig.InternalPolicyEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.ApproverCleared() {
+	if _u.mutation.ApproverCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1254,10 +1291,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.ApproverIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ApproverIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1268,13 +1305,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.DelegateCleared() {
+	if _u.mutation.DelegateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1285,10 +1322,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.DelegateIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DelegateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1299,13 +1336,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.ControlObjectivesCleared() {
+	if _u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1316,10 +1353,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyControlObjectives
+		edge.Schema = _u.schemaConfig.InternalPolicyControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !ipu.mutation.ControlObjectivesCleared() {
+	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1330,13 +1367,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyControlObjectives
+		edge.Schema = _u.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1347,13 +1384,61 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyControlObjectives
+		edge.Schema = _u.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.ControlsCleared() {
+	if _u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1364,10 +1449,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyControls
+		edge.Schema = _u.schemaConfig.InternalPolicyControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ipu.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1378,13 +1463,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyControls
+		edge.Schema = _u.schemaConfig.InternalPolicyControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1395,13 +1480,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyControls
+		edge.Schema = _u.schemaConfig.InternalPolicyControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1412,10 +1497,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicySubcontrols
+		edge.Schema = _u.schemaConfig.InternalPolicySubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ipu.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1426,13 +1511,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicySubcontrols
+		edge.Schema = _u.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1443,13 +1528,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicySubcontrols
+		edge.Schema = _u.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.ProceduresCleared() {
+	if _u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1460,10 +1545,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyProcedures
+		edge.Schema = _u.schemaConfig.InternalPolicyProcedures
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !ipu.mutation.ProceduresCleared() {
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1474,13 +1559,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyProcedures
+		edge.Schema = _u.schemaConfig.InternalPolicyProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1491,13 +1576,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyProcedures
+		edge.Schema = _u.schemaConfig.InternalPolicyProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.NarrativesCleared() {
+	if _u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1508,10 +1593,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !ipu.mutation.NarrativesCleared() {
+	if nodes := _u.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !_u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1522,13 +1607,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.NarrativesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1539,13 +1624,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.TasksCleared() {
+	if _u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1556,10 +1641,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyTasks
+		edge.Schema = _u.schemaConfig.InternalPolicyTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ipu.mutation.TasksCleared() {
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1570,13 +1655,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyTasks
+		edge.Schema = _u.schemaConfig.InternalPolicyTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1587,13 +1672,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyTasks
+		edge.Schema = _u.schemaConfig.InternalPolicyTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.RisksCleared() {
+	if _u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1604,10 +1689,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.RemovedRisksIDs(); len(nodes) > 0 && !ipu.mutation.RisksCleared() {
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1618,13 +1703,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1635,13 +1720,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1652,10 +1737,10 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !ipu.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1666,13 +1751,13 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipu.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1683,16 +1768,16 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipu.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = ipu.schemaConfig.InternalPolicy
-	ctx = internal.NewSchemaConfigContext(ctx, ipu.schemaConfig)
-	_spec.AddModifiers(ipu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, ipu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.InternalPolicy
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{internalpolicy.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1700,8 +1785,8 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		return 0, err
 	}
-	ipu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // InternalPolicyUpdateOne is the builder for updating a single InternalPolicy entity.
@@ -1714,859 +1799,895 @@ type InternalPolicyUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ipuo *InternalPolicyUpdateOne) SetUpdatedAt(t time.Time) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetUpdatedAt(t)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetUpdatedAt(v time.Time) *InternalPolicyUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ipuo *InternalPolicyUpdateOne) ClearUpdatedAt() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearUpdatedAt()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearUpdatedAt() *InternalPolicyUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ipuo *InternalPolicyUpdateOne) SetUpdatedBy(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetUpdatedBy(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetUpdatedBy(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableUpdatedBy(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetUpdatedBy(*s)
+func (_u *InternalPolicyUpdateOne) SetNillableUpdatedBy(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ipuo *InternalPolicyUpdateOne) ClearUpdatedBy() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearUpdatedBy()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearUpdatedBy() *InternalPolicyUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ipuo *InternalPolicyUpdateOne) SetDeletedAt(t time.Time) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetDeletedAt(t)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetDeletedAt(v time.Time) *InternalPolicyUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableDeletedAt(t *time.Time) *InternalPolicyUpdateOne {
-	if t != nil {
-		ipuo.SetDeletedAt(*t)
+func (_u *InternalPolicyUpdateOne) SetNillableDeletedAt(v *time.Time) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ipuo *InternalPolicyUpdateOne) ClearDeletedAt() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearDeletedAt()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearDeletedAt() *InternalPolicyUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ipuo *InternalPolicyUpdateOne) SetDeletedBy(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetDeletedBy(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetDeletedBy(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableDeletedBy(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetDeletedBy(*s)
+func (_u *InternalPolicyUpdateOne) SetNillableDeletedBy(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ipuo *InternalPolicyUpdateOne) ClearDeletedBy() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearDeletedBy()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearDeletedBy() *InternalPolicyUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ipuo *InternalPolicyUpdateOne) SetTags(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetTags(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetTags(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ipuo *InternalPolicyUpdateOne) AppendTags(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AppendTags(s)
-	return ipuo
+// AppendTags appends value to the "tags" field.
+func (_u *InternalPolicyUpdateOne) AppendTags(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ipuo *InternalPolicyUpdateOne) ClearTags() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearTags()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearTags() *InternalPolicyUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (ipuo *InternalPolicyUpdateOne) SetRevision(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetRevision(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetRevision(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableRevision(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetRevision(*s)
+func (_u *InternalPolicyUpdateOne) SetNillableRevision(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (ipuo *InternalPolicyUpdateOne) ClearRevision() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearRevision()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearRevision() *InternalPolicyUpdateOne {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ipuo *InternalPolicyUpdateOne) SetOwnerID(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetOwnerID(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetOwnerID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableOwnerID(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetOwnerID(*s)
+func (_u *InternalPolicyUpdateOne) SetNillableOwnerID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (ipuo *InternalPolicyUpdateOne) ClearOwnerID() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearOwnerID()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearOwnerID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ipuo *InternalPolicyUpdateOne) SetName(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetName(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetName(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableName(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetName(*s)
+func (_u *InternalPolicyUpdateOne) SetNillableName(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (ipuo *InternalPolicyUpdateOne) SetStatus(es enums.DocumentStatus) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetStatus(es)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetStatus(v enums.DocumentStatus) *InternalPolicyUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableStatus(es *enums.DocumentStatus) *InternalPolicyUpdateOne {
-	if es != nil {
-		ipuo.SetStatus(*es)
+func (_u *InternalPolicyUpdateOne) SetNillableStatus(v *enums.DocumentStatus) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (ipuo *InternalPolicyUpdateOne) ClearStatus() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearStatus()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearStatus() *InternalPolicyUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetPolicyType sets the "policy_type" field.
-func (ipuo *InternalPolicyUpdateOne) SetPolicyType(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetPolicyType(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetPolicyType(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetPolicyType(v)
+	return _u
 }
 
 // SetNillablePolicyType sets the "policy_type" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillablePolicyType(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetPolicyType(*s)
+func (_u *InternalPolicyUpdateOne) SetNillablePolicyType(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetPolicyType(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearPolicyType clears the value of the "policy_type" field.
-func (ipuo *InternalPolicyUpdateOne) ClearPolicyType() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearPolicyType()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearPolicyType() *InternalPolicyUpdateOne {
+	_u.mutation.ClearPolicyType()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (ipuo *InternalPolicyUpdateOne) SetDetails(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetDetails(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetDetails(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableDetails(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetDetails(*s)
+func (_u *InternalPolicyUpdateOne) SetNillableDetails(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (ipuo *InternalPolicyUpdateOne) ClearDetails() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearDetails()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearDetails() *InternalPolicyUpdateOne {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetApprovalRequired sets the "approval_required" field.
-func (ipuo *InternalPolicyUpdateOne) SetApprovalRequired(b bool) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetApprovalRequired(b)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetApprovalRequired(v bool) *InternalPolicyUpdateOne {
+	_u.mutation.SetApprovalRequired(v)
+	return _u
 }
 
 // SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableApprovalRequired(b *bool) *InternalPolicyUpdateOne {
-	if b != nil {
-		ipuo.SetApprovalRequired(*b)
+func (_u *InternalPolicyUpdateOne) SetNillableApprovalRequired(v *bool) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetApprovalRequired(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearApprovalRequired clears the value of the "approval_required" field.
-func (ipuo *InternalPolicyUpdateOne) ClearApprovalRequired() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearApprovalRequired()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearApprovalRequired() *InternalPolicyUpdateOne {
+	_u.mutation.ClearApprovalRequired()
+	return _u
 }
 
 // SetReviewDue sets the "review_due" field.
-func (ipuo *InternalPolicyUpdateOne) SetReviewDue(t time.Time) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetReviewDue(t)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetReviewDue(v time.Time) *InternalPolicyUpdateOne {
+	_u.mutation.SetReviewDue(v)
+	return _u
 }
 
 // SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableReviewDue(t *time.Time) *InternalPolicyUpdateOne {
-	if t != nil {
-		ipuo.SetReviewDue(*t)
+func (_u *InternalPolicyUpdateOne) SetNillableReviewDue(v *time.Time) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetReviewDue(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearReviewDue clears the value of the "review_due" field.
-func (ipuo *InternalPolicyUpdateOne) ClearReviewDue() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearReviewDue()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearReviewDue() *InternalPolicyUpdateOne {
+	_u.mutation.ClearReviewDue()
+	return _u
 }
 
 // SetReviewFrequency sets the "review_frequency" field.
-func (ipuo *InternalPolicyUpdateOne) SetReviewFrequency(e enums.Frequency) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetReviewFrequency(e)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetReviewFrequency(v enums.Frequency) *InternalPolicyUpdateOne {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
 }
 
 // SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableReviewFrequency(e *enums.Frequency) *InternalPolicyUpdateOne {
-	if e != nil {
-		ipuo.SetReviewFrequency(*e)
+func (_u *InternalPolicyUpdateOne) SetNillableReviewFrequency(v *enums.Frequency) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearReviewFrequency clears the value of the "review_frequency" field.
-func (ipuo *InternalPolicyUpdateOne) ClearReviewFrequency() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearReviewFrequency()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearReviewFrequency() *InternalPolicyUpdateOne {
+	_u.mutation.ClearReviewFrequency()
+	return _u
 }
 
 // SetApproverID sets the "approver_id" field.
-func (ipuo *InternalPolicyUpdateOne) SetApproverID(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetApproverID(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetApproverID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetApproverID(v)
+	return _u
 }
 
 // SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableApproverID(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetApproverID(*s)
+func (_u *InternalPolicyUpdateOne) SetNillableApproverID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetApproverID(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearApproverID clears the value of the "approver_id" field.
-func (ipuo *InternalPolicyUpdateOne) ClearApproverID() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearApproverID()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearApproverID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearApproverID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (ipuo *InternalPolicyUpdateOne) SetDelegateID(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetDelegateID(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetDelegateID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableDelegateID(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetDelegateID(*s)
+func (_u *InternalPolicyUpdateOne) SetNillableDelegateID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (ipuo *InternalPolicyUpdateOne) ClearDelegateID() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearDelegateID()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearDelegateID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // SetSummary sets the "summary" field.
-func (ipuo *InternalPolicyUpdateOne) SetSummary(s string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetSummary(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetSummary(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetSummary(v)
+	return _u
 }
 
 // SetNillableSummary sets the "summary" field if the given value is not nil.
-func (ipuo *InternalPolicyUpdateOne) SetNillableSummary(s *string) *InternalPolicyUpdateOne {
-	if s != nil {
-		ipuo.SetSummary(*s)
+func (_u *InternalPolicyUpdateOne) SetNillableSummary(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetSummary(*v)
 	}
-	return ipuo
+	return _u
 }
 
 // ClearSummary clears the value of the "summary" field.
-func (ipuo *InternalPolicyUpdateOne) ClearSummary() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearSummary()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearSummary() *InternalPolicyUpdateOne {
+	_u.mutation.ClearSummary()
+	return _u
 }
 
 // SetTagSuggestions sets the "tag_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) SetTagSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetTagSuggestions(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetTagSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.SetTagSuggestions(v)
+	return _u
 }
 
-// AppendTagSuggestions appends s to the "tag_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) AppendTagSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AppendTagSuggestions(s)
-	return ipuo
+// AppendTagSuggestions appends value to the "tag_suggestions" field.
+func (_u *InternalPolicyUpdateOne) AppendTagSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.AppendTagSuggestions(v)
+	return _u
 }
 
 // ClearTagSuggestions clears the value of the "tag_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) ClearTagSuggestions() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearTagSuggestions()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearTagSuggestions() *InternalPolicyUpdateOne {
+	_u.mutation.ClearTagSuggestions()
+	return _u
 }
 
 // SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) SetDismissedTagSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetDismissedTagSuggestions(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetDismissedTagSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.SetDismissedTagSuggestions(v)
+	return _u
 }
 
-// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) AppendDismissedTagSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AppendDismissedTagSuggestions(s)
-	return ipuo
+// AppendDismissedTagSuggestions appends value to the "dismissed_tag_suggestions" field.
+func (_u *InternalPolicyUpdateOne) AppendDismissedTagSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.AppendDismissedTagSuggestions(v)
+	return _u
 }
 
 // ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) ClearDismissedTagSuggestions() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearDismissedTagSuggestions()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearDismissedTagSuggestions() *InternalPolicyUpdateOne {
+	_u.mutation.ClearDismissedTagSuggestions()
+	return _u
 }
 
 // SetControlSuggestions sets the "control_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) SetControlSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetControlSuggestions(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetControlSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.SetControlSuggestions(v)
+	return _u
 }
 
-// AppendControlSuggestions appends s to the "control_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) AppendControlSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AppendControlSuggestions(s)
-	return ipuo
+// AppendControlSuggestions appends value to the "control_suggestions" field.
+func (_u *InternalPolicyUpdateOne) AppendControlSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.AppendControlSuggestions(v)
+	return _u
 }
 
 // ClearControlSuggestions clears the value of the "control_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) ClearControlSuggestions() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearControlSuggestions()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearControlSuggestions() *InternalPolicyUpdateOne {
+	_u.mutation.ClearControlSuggestions()
+	return _u
 }
 
 // SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) SetDismissedControlSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetDismissedControlSuggestions(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetDismissedControlSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.SetDismissedControlSuggestions(v)
+	return _u
 }
 
-// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) AppendDismissedControlSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AppendDismissedControlSuggestions(s)
-	return ipuo
+// AppendDismissedControlSuggestions appends value to the "dismissed_control_suggestions" field.
+func (_u *InternalPolicyUpdateOne) AppendDismissedControlSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.AppendDismissedControlSuggestions(v)
+	return _u
 }
 
 // ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) ClearDismissedControlSuggestions() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearDismissedControlSuggestions()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearDismissedControlSuggestions() *InternalPolicyUpdateOne {
+	_u.mutation.ClearDismissedControlSuggestions()
+	return _u
 }
 
 // SetImprovementSuggestions sets the "improvement_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) SetImprovementSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetImprovementSuggestions(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetImprovementSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.SetImprovementSuggestions(v)
+	return _u
 }
 
-// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) AppendImprovementSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AppendImprovementSuggestions(s)
-	return ipuo
+// AppendImprovementSuggestions appends value to the "improvement_suggestions" field.
+func (_u *InternalPolicyUpdateOne) AppendImprovementSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.AppendImprovementSuggestions(v)
+	return _u
 }
 
 // ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) ClearImprovementSuggestions() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearImprovementSuggestions()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearImprovementSuggestions() *InternalPolicyUpdateOne {
+	_u.mutation.ClearImprovementSuggestions()
+	return _u
 }
 
 // SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) SetDismissedImprovementSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetDismissedImprovementSuggestions(s)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) SetDismissedImprovementSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.SetDismissedImprovementSuggestions(v)
+	return _u
 }
 
-// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) AppendDismissedImprovementSuggestions(s []string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AppendDismissedImprovementSuggestions(s)
-	return ipuo
+// AppendDismissedImprovementSuggestions appends value to the "dismissed_improvement_suggestions" field.
+func (_u *InternalPolicyUpdateOne) AppendDismissedImprovementSuggestions(v []string) *InternalPolicyUpdateOne {
+	_u.mutation.AppendDismissedImprovementSuggestions(v)
+	return _u
 }
 
 // ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
-func (ipuo *InternalPolicyUpdateOne) ClearDismissedImprovementSuggestions() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearDismissedImprovementSuggestions()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearDismissedImprovementSuggestions() *InternalPolicyUpdateOne {
+	_u.mutation.ClearDismissedImprovementSuggestions()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (ipuo *InternalPolicyUpdateOne) SetOwner(o *Organization) *InternalPolicyUpdateOne {
-	return ipuo.SetOwnerID(o.ID)
+func (_u *InternalPolicyUpdateOne) SetOwner(v *Organization) *InternalPolicyUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddBlockedGroupIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddBlockedGroupIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) AddBlockedGroupIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) AddBlockedGroups(g ...*Group) *InternalPolicyUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InternalPolicyUpdateOne) AddBlockedGroups(v ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddEditorIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddEditorIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) AddEditorIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) AddEditors(g ...*Group) *InternalPolicyUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InternalPolicyUpdateOne) AddEditors(v ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // SetApprover sets the "approver" edge to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) SetApprover(g *Group) *InternalPolicyUpdateOne {
-	return ipuo.SetApproverID(g.ID)
+func (_u *InternalPolicyUpdateOne) SetApprover(v *Group) *InternalPolicyUpdateOne {
+	return _u.SetApproverID(v.ID)
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) SetDelegate(g *Group) *InternalPolicyUpdateOne {
-	return ipuo.SetDelegateID(g.ID)
+func (_u *InternalPolicyUpdateOne) SetDelegate(v *Group) *InternalPolicyUpdateOne {
+	return _u.SetDelegateID(v.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddControlObjectiveIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddControlObjectiveIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) AddControlObjectiveIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddControlObjectiveIDs(ids...)
+	return _u
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (ipuo *InternalPolicyUpdateOne) AddControlObjectives(c ...*ControlObjective) *InternalPolicyUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *InternalPolicyUpdateOne) AddControlObjectives(v ...*ControlObjective) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.AddControlObjectiveIDs(ids...)
+	return _u.AddControlObjectiveIDs(ids...)
+}
+
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_u *InternalPolicyUpdateOne) AddControlImplementationIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddControlImplementationIDs(ids...)
+	return _u
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_u *InternalPolicyUpdateOne) AddControlImplementations(v ...*ControlImplementation) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlImplementationIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddControlIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddControlIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) AddControlIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (ipuo *InternalPolicyUpdateOne) AddControls(c ...*Control) *InternalPolicyUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *InternalPolicyUpdateOne) AddControls(v ...*Control) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddSubcontrolIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddSubcontrolIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) AddSubcontrolIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (ipuo *InternalPolicyUpdateOne) AddSubcontrols(s ...*Subcontrol) *InternalPolicyUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *InternalPolicyUpdateOne) AddSubcontrols(v ...*Subcontrol) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddProcedureIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddProcedureIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) AddProcedureIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (ipuo *InternalPolicyUpdateOne) AddProcedures(p ...*Procedure) *InternalPolicyUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *InternalPolicyUpdateOne) AddProcedures(v ...*Procedure) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.AddProcedureIDs(ids...)
+	return _u.AddProcedureIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddNarrativeIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddNarrativeIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) AddNarrativeIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddNarrativeIDs(ids...)
+	return _u
 }
 
 // AddNarratives adds the "narratives" edges to the Narrative entity.
-func (ipuo *InternalPolicyUpdateOne) AddNarratives(n ...*Narrative) *InternalPolicyUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *InternalPolicyUpdateOne) AddNarratives(v ...*Narrative) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.AddNarrativeIDs(ids...)
+	return _u.AddNarrativeIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddTaskIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddTaskIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) AddTaskIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (ipuo *InternalPolicyUpdateOne) AddTasks(t ...*Task) *InternalPolicyUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *InternalPolicyUpdateOne) AddTasks(v ...*Task) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.AddTaskIDs(ids...)
+	return _u.AddTaskIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddRiskIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddRiskIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) AddRiskIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (ipuo *InternalPolicyUpdateOne) AddRisks(r ...*Risk) *InternalPolicyUpdateOne {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *InternalPolicyUpdateOne) AddRisks(v ...*Risk) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.AddRiskIDs(ids...)
+	return _u.AddRiskIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddProgramIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddProgramIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) AddProgramIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (ipuo *InternalPolicyUpdateOne) AddPrograms(p ...*Program) *InternalPolicyUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *InternalPolicyUpdateOne) AddPrograms(v ...*Program) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
-func (ipuo *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
-	return ipuo.mutation
+func (_u *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (ipuo *InternalPolicyUpdateOne) ClearOwner() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearOwner()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearOwner() *InternalPolicyUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) ClearBlockedGroups() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearBlockedGroups()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearBlockedGroups() *InternalPolicyUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveBlockedGroupIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveBlockedGroupIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) RemoveBlockedGroupIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (ipuo *InternalPolicyUpdateOne) RemoveBlockedGroups(g ...*Group) *InternalPolicyUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InternalPolicyUpdateOne) RemoveBlockedGroups(v ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) ClearEditors() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearEditors()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearEditors() *InternalPolicyUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveEditorIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveEditorIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) RemoveEditorIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (ipuo *InternalPolicyUpdateOne) RemoveEditors(g ...*Group) *InternalPolicyUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InternalPolicyUpdateOne) RemoveEditors(v ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearApprover clears the "approver" edge to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) ClearApprover() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearApprover()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearApprover() *InternalPolicyUpdateOne {
+	_u.mutation.ClearApprover()
+	return _u
 }
 
 // ClearDelegate clears the "delegate" edge to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) ClearDelegate() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearDelegate()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearDelegate() *InternalPolicyUpdateOne {
+	_u.mutation.ClearDelegate()
+	return _u
 }
 
 // ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
-func (ipuo *InternalPolicyUpdateOne) ClearControlObjectives() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearControlObjectives()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearControlObjectives() *InternalPolicyUpdateOne {
+	_u.mutation.ClearControlObjectives()
+	return _u
 }
 
 // RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveControlObjectiveIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveControlObjectiveIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) RemoveControlObjectiveIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveControlObjectiveIDs(ids...)
+	return _u
 }
 
 // RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
-func (ipuo *InternalPolicyUpdateOne) RemoveControlObjectives(c ...*ControlObjective) *InternalPolicyUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *InternalPolicyUpdateOne) RemoveControlObjectives(v ...*ControlObjective) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.RemoveControlObjectiveIDs(ids...)
+	return _u.RemoveControlObjectiveIDs(ids...)
+}
+
+// ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
+func (_u *InternalPolicyUpdateOne) ClearControlImplementations() *InternalPolicyUpdateOne {
+	_u.mutation.ClearControlImplementations()
+	return _u
+}
+
+// RemoveControlImplementationIDs removes the "control_implementations" edge to ControlImplementation entities by IDs.
+func (_u *InternalPolicyUpdateOne) RemoveControlImplementationIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveControlImplementationIDs(ids...)
+	return _u
+}
+
+// RemoveControlImplementations removes "control_implementations" edges to ControlImplementation entities.
+func (_u *InternalPolicyUpdateOne) RemoveControlImplementations(v ...*ControlImplementation) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlImplementationIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (ipuo *InternalPolicyUpdateOne) ClearControls() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearControls()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearControls() *InternalPolicyUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveControlIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveControlIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) RemoveControlIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (ipuo *InternalPolicyUpdateOne) RemoveControls(c ...*Control) *InternalPolicyUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *InternalPolicyUpdateOne) RemoveControls(v ...*Control) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (ipuo *InternalPolicyUpdateOne) ClearSubcontrols() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearSubcontrols()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearSubcontrols() *InternalPolicyUpdateOne {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveSubcontrolIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveSubcontrolIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) RemoveSubcontrolIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (ipuo *InternalPolicyUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *InternalPolicyUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *InternalPolicyUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (ipuo *InternalPolicyUpdateOne) ClearProcedures() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearProcedures()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearProcedures() *InternalPolicyUpdateOne {
+	_u.mutation.ClearProcedures()
+	return _u
 }
 
 // RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveProcedureIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveProcedureIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) RemoveProcedureIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
 }
 
 // RemoveProcedures removes "procedures" edges to Procedure entities.
-func (ipuo *InternalPolicyUpdateOne) RemoveProcedures(p ...*Procedure) *InternalPolicyUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *InternalPolicyUpdateOne) RemoveProcedures(v ...*Procedure) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.RemoveProcedureIDs(ids...)
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
-func (ipuo *InternalPolicyUpdateOne) ClearNarratives() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearNarratives()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearNarratives() *InternalPolicyUpdateOne {
+	_u.mutation.ClearNarratives()
+	return _u
 }
 
 // RemoveNarrativeIDs removes the "narratives" edge to Narrative entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveNarrativeIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveNarrativeIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) RemoveNarrativeIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveNarrativeIDs(ids...)
+	return _u
 }
 
 // RemoveNarratives removes "narratives" edges to Narrative entities.
-func (ipuo *InternalPolicyUpdateOne) RemoveNarratives(n ...*Narrative) *InternalPolicyUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *InternalPolicyUpdateOne) RemoveNarratives(v ...*Narrative) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.RemoveNarrativeIDs(ids...)
+	return _u.RemoveNarrativeIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
-func (ipuo *InternalPolicyUpdateOne) ClearTasks() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearTasks()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearTasks() *InternalPolicyUpdateOne {
+	_u.mutation.ClearTasks()
+	return _u
 }
 
 // RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveTaskIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveTaskIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) RemoveTaskIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
 }
 
 // RemoveTasks removes "tasks" edges to Task entities.
-func (ipuo *InternalPolicyUpdateOne) RemoveTasks(t ...*Task) *InternalPolicyUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *InternalPolicyUpdateOne) RemoveTasks(v ...*Task) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.RemoveTaskIDs(ids...)
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // ClearRisks clears all "risks" edges to the Risk entity.
-func (ipuo *InternalPolicyUpdateOne) ClearRisks() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearRisks()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearRisks() *InternalPolicyUpdateOne {
+	_u.mutation.ClearRisks()
+	return _u
 }
 
 // RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveRiskIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveRiskIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) RemoveRiskIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
 }
 
 // RemoveRisks removes "risks" edges to Risk entities.
-func (ipuo *InternalPolicyUpdateOne) RemoveRisks(r ...*Risk) *InternalPolicyUpdateOne {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *InternalPolicyUpdateOne) RemoveRisks(v ...*Risk) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.RemoveRiskIDs(ids...)
+	return _u.RemoveRiskIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (ipuo *InternalPolicyUpdateOne) ClearPrograms() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearPrograms()
-	return ipuo
+func (_u *InternalPolicyUpdateOne) ClearPrograms() *InternalPolicyUpdateOne {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveProgramIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveProgramIDs(ids...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) RemoveProgramIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (ipuo *InternalPolicyUpdateOne) RemovePrograms(p ...*Program) *InternalPolicyUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *InternalPolicyUpdateOne) RemovePrograms(v ...*Program) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipuo.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the InternalPolicyUpdate builder.
-func (ipuo *InternalPolicyUpdateOne) Where(ps ...predicate.InternalPolicy) *InternalPolicyUpdateOne {
-	ipuo.mutation.Where(ps...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) Where(ps ...predicate.InternalPolicy) *InternalPolicyUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ipuo *InternalPolicyUpdateOne) Select(field string, fields ...string) *InternalPolicyUpdateOne {
-	ipuo.fields = append([]string{field}, fields...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) Select(field string, fields ...string) *InternalPolicyUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated InternalPolicy entity.
-func (ipuo *InternalPolicyUpdateOne) Save(ctx context.Context) (*InternalPolicy, error) {
-	if err := ipuo.defaults(); err != nil {
+func (_u *InternalPolicyUpdateOne) Save(ctx context.Context) (*InternalPolicy, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ipuo.sqlSave, ipuo.mutation, ipuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ipuo *InternalPolicyUpdateOne) SaveX(ctx context.Context) *InternalPolicy {
-	node, err := ipuo.Save(ctx)
+func (_u *InternalPolicyUpdateOne) SaveX(ctx context.Context) *InternalPolicy {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -2574,48 +2695,48 @@ func (ipuo *InternalPolicyUpdateOne) SaveX(ctx context.Context) *InternalPolicy 
 }
 
 // Exec executes the query on the entity.
-func (ipuo *InternalPolicyUpdateOne) Exec(ctx context.Context) error {
-	_, err := ipuo.Save(ctx)
+func (_u *InternalPolicyUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ipuo *InternalPolicyUpdateOne) ExecX(ctx context.Context) {
-	if err := ipuo.Exec(ctx); err != nil {
+func (_u *InternalPolicyUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ipuo *InternalPolicyUpdateOne) defaults() error {
-	if _, ok := ipuo.mutation.UpdatedAt(); !ok && !ipuo.mutation.UpdatedAtCleared() {
+func (_u *InternalPolicyUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if internalpolicy.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized internalpolicy.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := internalpolicy.UpdateDefaultUpdatedAt()
-		ipuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ipuo *InternalPolicyUpdateOne) check() error {
-	if v, ok := ipuo.mutation.Revision(); ok {
+func (_u *InternalPolicyUpdateOne) check() error {
+	if v, ok := _u.mutation.Revision(); ok {
 		if err := internalpolicy.RevisionValidator(v); err != nil {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
 		}
 	}
-	if v, ok := ipuo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := internalpolicy.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.name": %w`, err)}
 		}
 	}
-	if v, ok := ipuo.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := internalpolicy.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.status": %w`, err)}
 		}
 	}
-	if v, ok := ipuo.mutation.ReviewFrequency(); ok {
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := internalpolicy.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
 		}
@@ -2624,22 +2745,22 @@ func (ipuo *InternalPolicyUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ipuo *InternalPolicyUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InternalPolicyUpdateOne {
-	ipuo.modifiers = append(ipuo.modifiers, modifiers...)
-	return ipuo
+func (_u *InternalPolicyUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InternalPolicyUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *InternalPolicy, err error) {
-	if err := ipuo.check(); err != nil {
+func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *InternalPolicy, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(internalpolicy.Table, internalpolicy.Columns, sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString))
-	id, ok := ipuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "InternalPolicy.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ipuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, internalpolicy.FieldID)
 		for _, f := range fields {
@@ -2651,172 +2772,172 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 			}
 		}
 	}
-	if ps := ipuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ipuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ipuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(internalpolicy.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ipuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedAt, field.TypeTime)
 	}
-	if ipuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(internalpolicy.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ipuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(internalpolicy.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ipuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ipuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ipuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicy.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ipuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedBy, field.TypeString, value)
 	}
-	if ipuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(internalpolicy.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ipuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ipuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldTags, value)
 		})
 	}
-	if ipuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(internalpolicy.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ipuo.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(internalpolicy.FieldRevision, field.TypeString, value)
 	}
-	if ipuo.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(internalpolicy.FieldRevision, field.TypeString)
 	}
-	if value, ok := ipuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(internalpolicy.FieldName, field.TypeString, value)
 	}
-	if value, ok := ipuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(internalpolicy.FieldStatus, field.TypeEnum, value)
 	}
-	if ipuo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicy.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := ipuo.mutation.PolicyType(); ok {
+	if value, ok := _u.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicy.FieldPolicyType, field.TypeString, value)
 	}
-	if ipuo.mutation.PolicyTypeCleared() {
+	if _u.mutation.PolicyTypeCleared() {
 		_spec.ClearField(internalpolicy.FieldPolicyType, field.TypeString)
 	}
-	if value, ok := ipuo.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeString, value)
 	}
-	if ipuo.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicy.FieldDetails, field.TypeString)
 	}
-	if value, ok := ipuo.mutation.ApprovalRequired(); ok {
+	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(internalpolicy.FieldApprovalRequired, field.TypeBool, value)
 	}
-	if ipuo.mutation.ApprovalRequiredCleared() {
+	if _u.mutation.ApprovalRequiredCleared() {
 		_spec.ClearField(internalpolicy.FieldApprovalRequired, field.TypeBool)
 	}
-	if value, ok := ipuo.mutation.ReviewDue(); ok {
+	if value, ok := _u.mutation.ReviewDue(); ok {
 		_spec.SetField(internalpolicy.FieldReviewDue, field.TypeTime, value)
 	}
-	if ipuo.mutation.ReviewDueCleared() {
+	if _u.mutation.ReviewDueCleared() {
 		_spec.ClearField(internalpolicy.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := ipuo.mutation.ReviewFrequency(); ok {
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(internalpolicy.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if ipuo.mutation.ReviewFrequencyCleared() {
+	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(internalpolicy.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := ipuo.mutation.Summary(); ok {
+	if value, ok := _u.mutation.Summary(); ok {
 		_spec.SetField(internalpolicy.FieldSummary, field.TypeString, value)
 	}
-	if ipuo.mutation.SummaryCleared() {
+	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(internalpolicy.FieldSummary, field.TypeString)
 	}
-	if value, ok := ipuo.mutation.TagSuggestions(); ok {
+	if value, ok := _u.mutation.TagSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipuo.mutation.AppendedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldTagSuggestions, value)
 		})
 	}
-	if ipuo.mutation.TagSuggestionsCleared() {
+	if _u.mutation.TagSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := ipuo.mutation.DismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedTagSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldDismissedTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipuo.mutation.AppendedDismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldDismissedTagSuggestions, value)
 		})
 	}
-	if ipuo.mutation.DismissedTagSuggestionsCleared() {
+	if _u.mutation.DismissedTagSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldDismissedTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := ipuo.mutation.ControlSuggestions(); ok {
+	if value, ok := _u.mutation.ControlSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipuo.mutation.AppendedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldControlSuggestions, value)
 		})
 	}
-	if ipuo.mutation.ControlSuggestionsCleared() {
+	if _u.mutation.ControlSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := ipuo.mutation.DismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedControlSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldDismissedControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipuo.mutation.AppendedDismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldDismissedControlSuggestions, value)
 		})
 	}
-	if ipuo.mutation.DismissedControlSuggestionsCleared() {
+	if _u.mutation.DismissedControlSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldDismissedControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := ipuo.mutation.ImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.ImprovementSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipuo.mutation.AppendedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldImprovementSuggestions, value)
 		})
 	}
-	if ipuo.mutation.ImprovementSuggestionsCleared() {
+	if _u.mutation.ImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := ipuo.mutation.DismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := ipuo.mutation.AppendedDismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicy.FieldDismissedImprovementSuggestions, value)
 		})
 	}
-	if ipuo.mutation.DismissedImprovementSuggestionsCleared() {
+	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
-	if ipuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -2827,10 +2948,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -2841,13 +2962,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2858,10 +2979,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
+		edge.Schema = _u.schemaConfig.InternalPolicyBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ipuo.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2872,13 +2993,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
+		edge.Schema = _u.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2889,13 +3010,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
+		edge.Schema = _u.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2906,10 +3027,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
+		edge.Schema = _u.schemaConfig.InternalPolicyEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ipuo.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2920,13 +3041,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
+		edge.Schema = _u.schemaConfig.InternalPolicyEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2937,13 +3058,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
+		edge.Schema = _u.schemaConfig.InternalPolicyEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.ApproverCleared() {
+	if _u.mutation.ApproverCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -2954,10 +3075,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.ApproverIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ApproverIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -2968,13 +3089,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.DelegateCleared() {
+	if _u.mutation.DelegateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -2985,10 +3106,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.DelegateIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DelegateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -2999,13 +3120,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.ControlObjectivesCleared() {
+	if _u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3016,10 +3137,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyControlObjectives
+		edge.Schema = _u.schemaConfig.InternalPolicyControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !ipuo.mutation.ControlObjectivesCleared() {
+	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3030,13 +3151,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyControlObjectives
+		edge.Schema = _u.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3047,13 +3168,61 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyControlObjectives
+		edge.Schema = _u.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.ControlsCleared() {
+	if _u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3064,10 +3233,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyControls
+		edge.Schema = _u.schemaConfig.InternalPolicyControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ipuo.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3078,13 +3247,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyControls
+		edge.Schema = _u.schemaConfig.InternalPolicyControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3095,13 +3264,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyControls
+		edge.Schema = _u.schemaConfig.InternalPolicyControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3112,10 +3281,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicySubcontrols
+		edge.Schema = _u.schemaConfig.InternalPolicySubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ipuo.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3126,13 +3295,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicySubcontrols
+		edge.Schema = _u.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3143,13 +3312,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicySubcontrols
+		edge.Schema = _u.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.ProceduresCleared() {
+	if _u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3160,10 +3329,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyProcedures
+		edge.Schema = _u.schemaConfig.InternalPolicyProcedures
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !ipuo.mutation.ProceduresCleared() {
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3174,13 +3343,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyProcedures
+		edge.Schema = _u.schemaConfig.InternalPolicyProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3191,13 +3360,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyProcedures
+		edge.Schema = _u.schemaConfig.InternalPolicyProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.NarrativesCleared() {
+	if _u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3208,10 +3377,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !ipuo.mutation.NarrativesCleared() {
+	if nodes := _u.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !_u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3222,13 +3391,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.NarrativesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3239,13 +3408,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.TasksCleared() {
+	if _u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3256,10 +3425,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyTasks
+		edge.Schema = _u.schemaConfig.InternalPolicyTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ipuo.mutation.TasksCleared() {
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3270,13 +3439,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyTasks
+		edge.Schema = _u.schemaConfig.InternalPolicyTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3287,13 +3456,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyTasks
+		edge.Schema = _u.schemaConfig.InternalPolicyTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.RisksCleared() {
+	if _u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3304,10 +3473,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.RemovedRisksIDs(); len(nodes) > 0 && !ipuo.mutation.RisksCleared() {
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3318,13 +3487,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3335,13 +3504,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipuo.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3352,10 +3521,10 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !ipuo.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3366,13 +3535,13 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ipuo.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3383,19 +3552,19 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipuo.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = ipuo.schemaConfig.InternalPolicy
-	ctx = internal.NewSchemaConfigContext(ctx, ipuo.schemaConfig)
-	_spec.AddModifiers(ipuo.modifiers...)
-	_node = &InternalPolicy{config: ipuo.config}
+	_spec.Node.Schema = _u.schemaConfig.InternalPolicy
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &InternalPolicy{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ipuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{internalpolicy.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -3403,6 +3572,6 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 		}
 		return nil, err
 	}
-	ipuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

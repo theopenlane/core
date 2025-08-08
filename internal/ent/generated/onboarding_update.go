@@ -27,132 +27,132 @@ type OnboardingUpdate struct {
 }
 
 // Where appends a list predicates to the OnboardingUpdate builder.
-func (ou *OnboardingUpdate) Where(ps ...predicate.Onboarding) *OnboardingUpdate {
-	ou.mutation.Where(ps...)
-	return ou
+func (_u *OnboardingUpdate) Where(ps ...predicate.Onboarding) *OnboardingUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ou *OnboardingUpdate) SetDeletedAt(t time.Time) *OnboardingUpdate {
-	ou.mutation.SetDeletedAt(t)
-	return ou
+func (_u *OnboardingUpdate) SetDeletedAt(v time.Time) *OnboardingUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ou *OnboardingUpdate) SetNillableDeletedAt(t *time.Time) *OnboardingUpdate {
-	if t != nil {
-		ou.SetDeletedAt(*t)
+func (_u *OnboardingUpdate) SetNillableDeletedAt(v *time.Time) *OnboardingUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ou
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ou *OnboardingUpdate) ClearDeletedAt() *OnboardingUpdate {
-	ou.mutation.ClearDeletedAt()
-	return ou
+func (_u *OnboardingUpdate) ClearDeletedAt() *OnboardingUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ou *OnboardingUpdate) SetDeletedBy(s string) *OnboardingUpdate {
-	ou.mutation.SetDeletedBy(s)
-	return ou
+func (_u *OnboardingUpdate) SetDeletedBy(v string) *OnboardingUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ou *OnboardingUpdate) SetNillableDeletedBy(s *string) *OnboardingUpdate {
-	if s != nil {
-		ou.SetDeletedBy(*s)
+func (_u *OnboardingUpdate) SetNillableDeletedBy(v *string) *OnboardingUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ou
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ou *OnboardingUpdate) ClearDeletedBy() *OnboardingUpdate {
-	ou.mutation.ClearDeletedBy()
-	return ou
+func (_u *OnboardingUpdate) ClearDeletedBy() *OnboardingUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetCompanyName sets the "company_name" field.
-func (ou *OnboardingUpdate) SetCompanyName(s string) *OnboardingUpdate {
-	ou.mutation.SetCompanyName(s)
-	return ou
+func (_u *OnboardingUpdate) SetCompanyName(v string) *OnboardingUpdate {
+	_u.mutation.SetCompanyName(v)
+	return _u
 }
 
 // SetNillableCompanyName sets the "company_name" field if the given value is not nil.
-func (ou *OnboardingUpdate) SetNillableCompanyName(s *string) *OnboardingUpdate {
-	if s != nil {
-		ou.SetCompanyName(*s)
+func (_u *OnboardingUpdate) SetNillableCompanyName(v *string) *OnboardingUpdate {
+	if v != nil {
+		_u.SetCompanyName(*v)
 	}
-	return ou
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (ou *OnboardingUpdate) SetDomains(s []string) *OnboardingUpdate {
-	ou.mutation.SetDomains(s)
-	return ou
+func (_u *OnboardingUpdate) SetDomains(v []string) *OnboardingUpdate {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (ou *OnboardingUpdate) AppendDomains(s []string) *OnboardingUpdate {
-	ou.mutation.AppendDomains(s)
-	return ou
+// AppendDomains appends value to the "domains" field.
+func (_u *OnboardingUpdate) AppendDomains(v []string) *OnboardingUpdate {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (ou *OnboardingUpdate) ClearDomains() *OnboardingUpdate {
-	ou.mutation.ClearDomains()
-	return ou
+func (_u *OnboardingUpdate) ClearDomains() *OnboardingUpdate {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetCompanyDetails sets the "company_details" field.
-func (ou *OnboardingUpdate) SetCompanyDetails(m map[string]interface{}) *OnboardingUpdate {
-	ou.mutation.SetCompanyDetails(m)
-	return ou
+func (_u *OnboardingUpdate) SetCompanyDetails(v map[string]interface{}) *OnboardingUpdate {
+	_u.mutation.SetCompanyDetails(v)
+	return _u
 }
 
 // ClearCompanyDetails clears the value of the "company_details" field.
-func (ou *OnboardingUpdate) ClearCompanyDetails() *OnboardingUpdate {
-	ou.mutation.ClearCompanyDetails()
-	return ou
+func (_u *OnboardingUpdate) ClearCompanyDetails() *OnboardingUpdate {
+	_u.mutation.ClearCompanyDetails()
+	return _u
 }
 
 // SetUserDetails sets the "user_details" field.
-func (ou *OnboardingUpdate) SetUserDetails(m map[string]interface{}) *OnboardingUpdate {
-	ou.mutation.SetUserDetails(m)
-	return ou
+func (_u *OnboardingUpdate) SetUserDetails(v map[string]interface{}) *OnboardingUpdate {
+	_u.mutation.SetUserDetails(v)
+	return _u
 }
 
 // ClearUserDetails clears the value of the "user_details" field.
-func (ou *OnboardingUpdate) ClearUserDetails() *OnboardingUpdate {
-	ou.mutation.ClearUserDetails()
-	return ou
+func (_u *OnboardingUpdate) ClearUserDetails() *OnboardingUpdate {
+	_u.mutation.ClearUserDetails()
+	return _u
 }
 
 // SetCompliance sets the "compliance" field.
-func (ou *OnboardingUpdate) SetCompliance(m map[string]interface{}) *OnboardingUpdate {
-	ou.mutation.SetCompliance(m)
-	return ou
+func (_u *OnboardingUpdate) SetCompliance(v map[string]interface{}) *OnboardingUpdate {
+	_u.mutation.SetCompliance(v)
+	return _u
 }
 
 // ClearCompliance clears the value of the "compliance" field.
-func (ou *OnboardingUpdate) ClearCompliance() *OnboardingUpdate {
-	ou.mutation.ClearCompliance()
-	return ou
+func (_u *OnboardingUpdate) ClearCompliance() *OnboardingUpdate {
+	_u.mutation.ClearCompliance()
+	return _u
 }
 
 // Mutation returns the OnboardingMutation object of the builder.
-func (ou *OnboardingUpdate) Mutation() *OnboardingMutation {
-	return ou.mutation
+func (_u *OnboardingUpdate) Mutation() *OnboardingMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ou *OnboardingUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, ou.sqlSave, ou.mutation, ou.hooks)
+func (_u *OnboardingUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ou *OnboardingUpdate) SaveX(ctx context.Context) int {
-	affected, err := ou.Save(ctx)
+func (_u *OnboardingUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,81 +160,81 @@ func (ou *OnboardingUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ou *OnboardingUpdate) Exec(ctx context.Context) error {
-	_, err := ou.Save(ctx)
+func (_u *OnboardingUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ou *OnboardingUpdate) ExecX(ctx context.Context) {
-	if err := ou.Exec(ctx); err != nil {
+func (_u *OnboardingUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ou *OnboardingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OnboardingUpdate {
-	ou.modifiers = append(ou.modifiers, modifiers...)
-	return ou
+func (_u *OnboardingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OnboardingUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ou *OnboardingUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *OnboardingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(onboarding.Table, onboarding.Columns, sqlgraph.NewFieldSpec(onboarding.FieldID, field.TypeString))
-	if ps := ou.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ou.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(onboarding.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ou.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(onboarding.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ou.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(onboarding.FieldDeletedBy, field.TypeString, value)
 	}
-	if ou.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(onboarding.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ou.mutation.CompanyName(); ok {
+	if value, ok := _u.mutation.CompanyName(); ok {
 		_spec.SetField(onboarding.FieldCompanyName, field.TypeString, value)
 	}
-	if value, ok := ou.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(onboarding.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := ou.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, onboarding.FieldDomains, value)
 		})
 	}
-	if ou.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(onboarding.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := ou.mutation.CompanyDetails(); ok {
+	if value, ok := _u.mutation.CompanyDetails(); ok {
 		_spec.SetField(onboarding.FieldCompanyDetails, field.TypeJSON, value)
 	}
-	if ou.mutation.CompanyDetailsCleared() {
+	if _u.mutation.CompanyDetailsCleared() {
 		_spec.ClearField(onboarding.FieldCompanyDetails, field.TypeJSON)
 	}
-	if value, ok := ou.mutation.UserDetails(); ok {
+	if value, ok := _u.mutation.UserDetails(); ok {
 		_spec.SetField(onboarding.FieldUserDetails, field.TypeJSON, value)
 	}
-	if ou.mutation.UserDetailsCleared() {
+	if _u.mutation.UserDetailsCleared() {
 		_spec.ClearField(onboarding.FieldUserDetails, field.TypeJSON)
 	}
-	if value, ok := ou.mutation.Compliance(); ok {
+	if value, ok := _u.mutation.Compliance(); ok {
 		_spec.SetField(onboarding.FieldCompliance, field.TypeJSON, value)
 	}
-	if ou.mutation.ComplianceCleared() {
+	if _u.mutation.ComplianceCleared() {
 		_spec.ClearField(onboarding.FieldCompliance, field.TypeJSON)
 	}
-	_spec.Node.Schema = ou.schemaConfig.Onboarding
-	ctx = internal.NewSchemaConfigContext(ctx, ou.schemaConfig)
-	_spec.AddModifiers(ou.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, ou.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Onboarding
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{onboarding.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -242,8 +242,8 @@ func (ou *OnboardingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	ou.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OnboardingUpdateOne is the builder for updating a single Onboarding entity.
@@ -256,139 +256,139 @@ type OnboardingUpdateOne struct {
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ouo *OnboardingUpdateOne) SetDeletedAt(t time.Time) *OnboardingUpdateOne {
-	ouo.mutation.SetDeletedAt(t)
-	return ouo
+func (_u *OnboardingUpdateOne) SetDeletedAt(v time.Time) *OnboardingUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ouo *OnboardingUpdateOne) SetNillableDeletedAt(t *time.Time) *OnboardingUpdateOne {
-	if t != nil {
-		ouo.SetDeletedAt(*t)
+func (_u *OnboardingUpdateOne) SetNillableDeletedAt(v *time.Time) *OnboardingUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ouo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ouo *OnboardingUpdateOne) ClearDeletedAt() *OnboardingUpdateOne {
-	ouo.mutation.ClearDeletedAt()
-	return ouo
+func (_u *OnboardingUpdateOne) ClearDeletedAt() *OnboardingUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ouo *OnboardingUpdateOne) SetDeletedBy(s string) *OnboardingUpdateOne {
-	ouo.mutation.SetDeletedBy(s)
-	return ouo
+func (_u *OnboardingUpdateOne) SetDeletedBy(v string) *OnboardingUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ouo *OnboardingUpdateOne) SetNillableDeletedBy(s *string) *OnboardingUpdateOne {
-	if s != nil {
-		ouo.SetDeletedBy(*s)
+func (_u *OnboardingUpdateOne) SetNillableDeletedBy(v *string) *OnboardingUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ouo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ouo *OnboardingUpdateOne) ClearDeletedBy() *OnboardingUpdateOne {
-	ouo.mutation.ClearDeletedBy()
-	return ouo
+func (_u *OnboardingUpdateOne) ClearDeletedBy() *OnboardingUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetCompanyName sets the "company_name" field.
-func (ouo *OnboardingUpdateOne) SetCompanyName(s string) *OnboardingUpdateOne {
-	ouo.mutation.SetCompanyName(s)
-	return ouo
+func (_u *OnboardingUpdateOne) SetCompanyName(v string) *OnboardingUpdateOne {
+	_u.mutation.SetCompanyName(v)
+	return _u
 }
 
 // SetNillableCompanyName sets the "company_name" field if the given value is not nil.
-func (ouo *OnboardingUpdateOne) SetNillableCompanyName(s *string) *OnboardingUpdateOne {
-	if s != nil {
-		ouo.SetCompanyName(*s)
+func (_u *OnboardingUpdateOne) SetNillableCompanyName(v *string) *OnboardingUpdateOne {
+	if v != nil {
+		_u.SetCompanyName(*v)
 	}
-	return ouo
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (ouo *OnboardingUpdateOne) SetDomains(s []string) *OnboardingUpdateOne {
-	ouo.mutation.SetDomains(s)
-	return ouo
+func (_u *OnboardingUpdateOne) SetDomains(v []string) *OnboardingUpdateOne {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (ouo *OnboardingUpdateOne) AppendDomains(s []string) *OnboardingUpdateOne {
-	ouo.mutation.AppendDomains(s)
-	return ouo
+// AppendDomains appends value to the "domains" field.
+func (_u *OnboardingUpdateOne) AppendDomains(v []string) *OnboardingUpdateOne {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (ouo *OnboardingUpdateOne) ClearDomains() *OnboardingUpdateOne {
-	ouo.mutation.ClearDomains()
-	return ouo
+func (_u *OnboardingUpdateOne) ClearDomains() *OnboardingUpdateOne {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetCompanyDetails sets the "company_details" field.
-func (ouo *OnboardingUpdateOne) SetCompanyDetails(m map[string]interface{}) *OnboardingUpdateOne {
-	ouo.mutation.SetCompanyDetails(m)
-	return ouo
+func (_u *OnboardingUpdateOne) SetCompanyDetails(v map[string]interface{}) *OnboardingUpdateOne {
+	_u.mutation.SetCompanyDetails(v)
+	return _u
 }
 
 // ClearCompanyDetails clears the value of the "company_details" field.
-func (ouo *OnboardingUpdateOne) ClearCompanyDetails() *OnboardingUpdateOne {
-	ouo.mutation.ClearCompanyDetails()
-	return ouo
+func (_u *OnboardingUpdateOne) ClearCompanyDetails() *OnboardingUpdateOne {
+	_u.mutation.ClearCompanyDetails()
+	return _u
 }
 
 // SetUserDetails sets the "user_details" field.
-func (ouo *OnboardingUpdateOne) SetUserDetails(m map[string]interface{}) *OnboardingUpdateOne {
-	ouo.mutation.SetUserDetails(m)
-	return ouo
+func (_u *OnboardingUpdateOne) SetUserDetails(v map[string]interface{}) *OnboardingUpdateOne {
+	_u.mutation.SetUserDetails(v)
+	return _u
 }
 
 // ClearUserDetails clears the value of the "user_details" field.
-func (ouo *OnboardingUpdateOne) ClearUserDetails() *OnboardingUpdateOne {
-	ouo.mutation.ClearUserDetails()
-	return ouo
+func (_u *OnboardingUpdateOne) ClearUserDetails() *OnboardingUpdateOne {
+	_u.mutation.ClearUserDetails()
+	return _u
 }
 
 // SetCompliance sets the "compliance" field.
-func (ouo *OnboardingUpdateOne) SetCompliance(m map[string]interface{}) *OnboardingUpdateOne {
-	ouo.mutation.SetCompliance(m)
-	return ouo
+func (_u *OnboardingUpdateOne) SetCompliance(v map[string]interface{}) *OnboardingUpdateOne {
+	_u.mutation.SetCompliance(v)
+	return _u
 }
 
 // ClearCompliance clears the value of the "compliance" field.
-func (ouo *OnboardingUpdateOne) ClearCompliance() *OnboardingUpdateOne {
-	ouo.mutation.ClearCompliance()
-	return ouo
+func (_u *OnboardingUpdateOne) ClearCompliance() *OnboardingUpdateOne {
+	_u.mutation.ClearCompliance()
+	return _u
 }
 
 // Mutation returns the OnboardingMutation object of the builder.
-func (ouo *OnboardingUpdateOne) Mutation() *OnboardingMutation {
-	return ouo.mutation
+func (_u *OnboardingUpdateOne) Mutation() *OnboardingMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the OnboardingUpdate builder.
-func (ouo *OnboardingUpdateOne) Where(ps ...predicate.Onboarding) *OnboardingUpdateOne {
-	ouo.mutation.Where(ps...)
-	return ouo
+func (_u *OnboardingUpdateOne) Where(ps ...predicate.Onboarding) *OnboardingUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ouo *OnboardingUpdateOne) Select(field string, fields ...string) *OnboardingUpdateOne {
-	ouo.fields = append([]string{field}, fields...)
-	return ouo
+func (_u *OnboardingUpdateOne) Select(field string, fields ...string) *OnboardingUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Onboarding entity.
-func (ouo *OnboardingUpdateOne) Save(ctx context.Context) (*Onboarding, error) {
-	return withHooks(ctx, ouo.sqlSave, ouo.mutation, ouo.hooks)
+func (_u *OnboardingUpdateOne) Save(ctx context.Context) (*Onboarding, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ouo *OnboardingUpdateOne) SaveX(ctx context.Context) *Onboarding {
-	node, err := ouo.Save(ctx)
+func (_u *OnboardingUpdateOne) SaveX(ctx context.Context) *Onboarding {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -396,32 +396,32 @@ func (ouo *OnboardingUpdateOne) SaveX(ctx context.Context) *Onboarding {
 }
 
 // Exec executes the query on the entity.
-func (ouo *OnboardingUpdateOne) Exec(ctx context.Context) error {
-	_, err := ouo.Save(ctx)
+func (_u *OnboardingUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ouo *OnboardingUpdateOne) ExecX(ctx context.Context) {
-	if err := ouo.Exec(ctx); err != nil {
+func (_u *OnboardingUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ouo *OnboardingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OnboardingUpdateOne {
-	ouo.modifiers = append(ouo.modifiers, modifiers...)
-	return ouo
+func (_u *OnboardingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OnboardingUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ouo *OnboardingUpdateOne) sqlSave(ctx context.Context) (_node *Onboarding, err error) {
+func (_u *OnboardingUpdateOne) sqlSave(ctx context.Context) (_node *Onboarding, err error) {
 	_spec := sqlgraph.NewUpdateSpec(onboarding.Table, onboarding.Columns, sqlgraph.NewFieldSpec(onboarding.FieldID, field.TypeString))
-	id, ok := ouo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Onboarding.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ouo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, onboarding.FieldID)
 		for _, f := range fields {
@@ -433,64 +433,64 @@ func (ouo *OnboardingUpdateOne) sqlSave(ctx context.Context) (_node *Onboarding,
 			}
 		}
 	}
-	if ps := ouo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ouo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(onboarding.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ouo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(onboarding.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ouo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(onboarding.FieldDeletedBy, field.TypeString, value)
 	}
-	if ouo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(onboarding.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ouo.mutation.CompanyName(); ok {
+	if value, ok := _u.mutation.CompanyName(); ok {
 		_spec.SetField(onboarding.FieldCompanyName, field.TypeString, value)
 	}
-	if value, ok := ouo.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(onboarding.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := ouo.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, onboarding.FieldDomains, value)
 		})
 	}
-	if ouo.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(onboarding.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := ouo.mutation.CompanyDetails(); ok {
+	if value, ok := _u.mutation.CompanyDetails(); ok {
 		_spec.SetField(onboarding.FieldCompanyDetails, field.TypeJSON, value)
 	}
-	if ouo.mutation.CompanyDetailsCleared() {
+	if _u.mutation.CompanyDetailsCleared() {
 		_spec.ClearField(onboarding.FieldCompanyDetails, field.TypeJSON)
 	}
-	if value, ok := ouo.mutation.UserDetails(); ok {
+	if value, ok := _u.mutation.UserDetails(); ok {
 		_spec.SetField(onboarding.FieldUserDetails, field.TypeJSON, value)
 	}
-	if ouo.mutation.UserDetailsCleared() {
+	if _u.mutation.UserDetailsCleared() {
 		_spec.ClearField(onboarding.FieldUserDetails, field.TypeJSON)
 	}
-	if value, ok := ouo.mutation.Compliance(); ok {
+	if value, ok := _u.mutation.Compliance(); ok {
 		_spec.SetField(onboarding.FieldCompliance, field.TypeJSON, value)
 	}
-	if ouo.mutation.ComplianceCleared() {
+	if _u.mutation.ComplianceCleared() {
 		_spec.ClearField(onboarding.FieldCompliance, field.TypeJSON)
 	}
-	_spec.Node.Schema = ouo.schemaConfig.Onboarding
-	ctx = internal.NewSchemaConfigContext(ctx, ouo.schemaConfig)
-	_spec.AddModifiers(ouo.modifiers...)
-	_node = &Onboarding{config: ouo.config}
+	_spec.Node.Schema = _u.schemaConfig.Onboarding
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Onboarding{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ouo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{onboarding.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -498,6 +498,6 @@ func (ouo *OnboardingUpdateOne) sqlSave(ctx context.Context) (_node *Onboarding,
 		}
 		return nil, err
 	}
-	ouo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

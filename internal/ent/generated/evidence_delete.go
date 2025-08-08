@@ -22,58 +22,58 @@ type EvidenceDelete struct {
 }
 
 // Where appends a list predicates to the EvidenceDelete builder.
-func (ed *EvidenceDelete) Where(ps ...predicate.Evidence) *EvidenceDelete {
-	ed.mutation.Where(ps...)
-	return ed
+func (_d *EvidenceDelete) Where(ps ...predicate.Evidence) *EvidenceDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (ed *EvidenceDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, ed.sqlExec, ed.mutation, ed.hooks)
+func (_d *EvidenceDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ed *EvidenceDelete) ExecX(ctx context.Context) int {
-	n, err := ed.Exec(ctx)
+func (_d *EvidenceDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (ed *EvidenceDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *EvidenceDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(evidence.Table, sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString))
-	_spec.Node.Schema = ed.schemaConfig.Evidence
-	ctx = internal.NewSchemaConfigContext(ctx, ed.schemaConfig)
-	if ps := ed.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Evidence
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, ed.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	ed.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // EvidenceDeleteOne is the builder for deleting a single Evidence entity.
 type EvidenceDeleteOne struct {
-	ed *EvidenceDelete
+	_d *EvidenceDelete
 }
 
 // Where appends a list predicates to the EvidenceDelete builder.
-func (edo *EvidenceDeleteOne) Where(ps ...predicate.Evidence) *EvidenceDeleteOne {
-	edo.ed.mutation.Where(ps...)
-	return edo
+func (_d *EvidenceDeleteOne) Where(ps ...predicate.Evidence) *EvidenceDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (edo *EvidenceDeleteOne) Exec(ctx context.Context) error {
-	n, err := edo.ed.Exec(ctx)
+func (_d *EvidenceDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (edo *EvidenceDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (edo *EvidenceDeleteOne) ExecX(ctx context.Context) {
-	if err := edo.Exec(ctx); err != nil {
+func (_d *EvidenceDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -22,58 +22,58 @@ type NarrativeDelete struct {
 }
 
 // Where appends a list predicates to the NarrativeDelete builder.
-func (nd *NarrativeDelete) Where(ps ...predicate.Narrative) *NarrativeDelete {
-	nd.mutation.Where(ps...)
-	return nd
+func (_d *NarrativeDelete) Where(ps ...predicate.Narrative) *NarrativeDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (nd *NarrativeDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, nd.sqlExec, nd.mutation, nd.hooks)
+func (_d *NarrativeDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nd *NarrativeDelete) ExecX(ctx context.Context) int {
-	n, err := nd.Exec(ctx)
+func (_d *NarrativeDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (nd *NarrativeDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *NarrativeDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(narrative.Table, sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString))
-	_spec.Node.Schema = nd.schemaConfig.Narrative
-	ctx = internal.NewSchemaConfigContext(ctx, nd.schemaConfig)
-	if ps := nd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Narrative
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, nd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	nd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // NarrativeDeleteOne is the builder for deleting a single Narrative entity.
 type NarrativeDeleteOne struct {
-	nd *NarrativeDelete
+	_d *NarrativeDelete
 }
 
 // Where appends a list predicates to the NarrativeDelete builder.
-func (ndo *NarrativeDeleteOne) Where(ps ...predicate.Narrative) *NarrativeDeleteOne {
-	ndo.nd.mutation.Where(ps...)
-	return ndo
+func (_d *NarrativeDeleteOne) Where(ps ...predicate.Narrative) *NarrativeDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (ndo *NarrativeDeleteOne) Exec(ctx context.Context) error {
-	n, err := ndo.nd.Exec(ctx)
+func (_d *NarrativeDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (ndo *NarrativeDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ndo *NarrativeDeleteOne) ExecX(ctx context.Context) {
-	if err := ndo.Exec(ctx); err != nil {
+func (_d *NarrativeDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

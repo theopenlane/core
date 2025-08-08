@@ -22,58 +22,58 @@ type ProgramDelete struct {
 }
 
 // Where appends a list predicates to the ProgramDelete builder.
-func (pd *ProgramDelete) Where(ps ...predicate.Program) *ProgramDelete {
-	pd.mutation.Where(ps...)
-	return pd
+func (_d *ProgramDelete) Where(ps ...predicate.Program) *ProgramDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (pd *ProgramDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, pd.sqlExec, pd.mutation, pd.hooks)
+func (_d *ProgramDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pd *ProgramDelete) ExecX(ctx context.Context) int {
-	n, err := pd.Exec(ctx)
+func (_d *ProgramDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (pd *ProgramDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ProgramDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(program.Table, sqlgraph.NewFieldSpec(program.FieldID, field.TypeString))
-	_spec.Node.Schema = pd.schemaConfig.Program
-	ctx = internal.NewSchemaConfigContext(ctx, pd.schemaConfig)
-	if ps := pd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Program
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, pd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	pd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ProgramDeleteOne is the builder for deleting a single Program entity.
 type ProgramDeleteOne struct {
-	pd *ProgramDelete
+	_d *ProgramDelete
 }
 
 // Where appends a list predicates to the ProgramDelete builder.
-func (pdo *ProgramDeleteOne) Where(ps ...predicate.Program) *ProgramDeleteOne {
-	pdo.pd.mutation.Where(ps...)
-	return pdo
+func (_d *ProgramDeleteOne) Where(ps ...predicate.Program) *ProgramDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (pdo *ProgramDeleteOne) Exec(ctx context.Context) error {
-	n, err := pdo.pd.Exec(ctx)
+func (_d *ProgramDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (pdo *ProgramDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pdo *ProgramDeleteOne) ExecX(ctx context.Context) {
-	if err := pdo.Exec(ctx); err != nil {
+func (_d *ProgramDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

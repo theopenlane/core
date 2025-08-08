@@ -28,191 +28,191 @@ type ScanHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the ScanHistoryUpdate builder.
-func (shu *ScanHistoryUpdate) Where(ps ...predicate.ScanHistory) *ScanHistoryUpdate {
-	shu.mutation.Where(ps...)
-	return shu
+func (_u *ScanHistoryUpdate) Where(ps ...predicate.ScanHistory) *ScanHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shu *ScanHistoryUpdate) SetUpdatedAt(t time.Time) *ScanHistoryUpdate {
-	shu.mutation.SetUpdatedAt(t)
-	return shu
+func (_u *ScanHistoryUpdate) SetUpdatedAt(v time.Time) *ScanHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (shu *ScanHistoryUpdate) ClearUpdatedAt() *ScanHistoryUpdate {
-	shu.mutation.ClearUpdatedAt()
-	return shu
+func (_u *ScanHistoryUpdate) ClearUpdatedAt() *ScanHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (shu *ScanHistoryUpdate) SetUpdatedBy(s string) *ScanHistoryUpdate {
-	shu.mutation.SetUpdatedBy(s)
-	return shu
+func (_u *ScanHistoryUpdate) SetUpdatedBy(v string) *ScanHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shu *ScanHistoryUpdate) SetNillableUpdatedBy(s *string) *ScanHistoryUpdate {
-	if s != nil {
-		shu.SetUpdatedBy(*s)
+func (_u *ScanHistoryUpdate) SetNillableUpdatedBy(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (shu *ScanHistoryUpdate) ClearUpdatedBy() *ScanHistoryUpdate {
-	shu.mutation.ClearUpdatedBy()
-	return shu
+func (_u *ScanHistoryUpdate) ClearUpdatedBy() *ScanHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (shu *ScanHistoryUpdate) SetDeletedAt(t time.Time) *ScanHistoryUpdate {
-	shu.mutation.SetDeletedAt(t)
-	return shu
+func (_u *ScanHistoryUpdate) SetDeletedAt(v time.Time) *ScanHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shu *ScanHistoryUpdate) SetNillableDeletedAt(t *time.Time) *ScanHistoryUpdate {
-	if t != nil {
-		shu.SetDeletedAt(*t)
+func (_u *ScanHistoryUpdate) SetNillableDeletedAt(v *time.Time) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (shu *ScanHistoryUpdate) ClearDeletedAt() *ScanHistoryUpdate {
-	shu.mutation.ClearDeletedAt()
-	return shu
+func (_u *ScanHistoryUpdate) ClearDeletedAt() *ScanHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (shu *ScanHistoryUpdate) SetDeletedBy(s string) *ScanHistoryUpdate {
-	shu.mutation.SetDeletedBy(s)
-	return shu
+func (_u *ScanHistoryUpdate) SetDeletedBy(v string) *ScanHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shu *ScanHistoryUpdate) SetNillableDeletedBy(s *string) *ScanHistoryUpdate {
-	if s != nil {
-		shu.SetDeletedBy(*s)
+func (_u *ScanHistoryUpdate) SetNillableDeletedBy(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (shu *ScanHistoryUpdate) ClearDeletedBy() *ScanHistoryUpdate {
-	shu.mutation.ClearDeletedBy()
-	return shu
+func (_u *ScanHistoryUpdate) ClearDeletedBy() *ScanHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (shu *ScanHistoryUpdate) SetTags(s []string) *ScanHistoryUpdate {
-	shu.mutation.SetTags(s)
-	return shu
+func (_u *ScanHistoryUpdate) SetTags(v []string) *ScanHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (shu *ScanHistoryUpdate) AppendTags(s []string) *ScanHistoryUpdate {
-	shu.mutation.AppendTags(s)
-	return shu
+// AppendTags appends value to the "tags" field.
+func (_u *ScanHistoryUpdate) AppendTags(v []string) *ScanHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (shu *ScanHistoryUpdate) ClearTags() *ScanHistoryUpdate {
-	shu.mutation.ClearTags()
-	return shu
+func (_u *ScanHistoryUpdate) ClearTags() *ScanHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (shu *ScanHistoryUpdate) SetOwnerID(s string) *ScanHistoryUpdate {
-	shu.mutation.SetOwnerID(s)
-	return shu
+func (_u *ScanHistoryUpdate) SetOwnerID(v string) *ScanHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (shu *ScanHistoryUpdate) SetNillableOwnerID(s *string) *ScanHistoryUpdate {
-	if s != nil {
-		shu.SetOwnerID(*s)
+func (_u *ScanHistoryUpdate) SetNillableOwnerID(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (shu *ScanHistoryUpdate) ClearOwnerID() *ScanHistoryUpdate {
-	shu.mutation.ClearOwnerID()
-	return shu
+func (_u *ScanHistoryUpdate) ClearOwnerID() *ScanHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetTarget sets the "target" field.
-func (shu *ScanHistoryUpdate) SetTarget(s string) *ScanHistoryUpdate {
-	shu.mutation.SetTarget(s)
-	return shu
+func (_u *ScanHistoryUpdate) SetTarget(v string) *ScanHistoryUpdate {
+	_u.mutation.SetTarget(v)
+	return _u
 }
 
 // SetNillableTarget sets the "target" field if the given value is not nil.
-func (shu *ScanHistoryUpdate) SetNillableTarget(s *string) *ScanHistoryUpdate {
-	if s != nil {
-		shu.SetTarget(*s)
+func (_u *ScanHistoryUpdate) SetNillableTarget(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetTarget(*v)
 	}
-	return shu
+	return _u
 }
 
 // SetScanType sets the "scan_type" field.
-func (shu *ScanHistoryUpdate) SetScanType(et enums.ScanType) *ScanHistoryUpdate {
-	shu.mutation.SetScanType(et)
-	return shu
+func (_u *ScanHistoryUpdate) SetScanType(v enums.ScanType) *ScanHistoryUpdate {
+	_u.mutation.SetScanType(v)
+	return _u
 }
 
 // SetNillableScanType sets the "scan_type" field if the given value is not nil.
-func (shu *ScanHistoryUpdate) SetNillableScanType(et *enums.ScanType) *ScanHistoryUpdate {
-	if et != nil {
-		shu.SetScanType(*et)
+func (_u *ScanHistoryUpdate) SetNillableScanType(v *enums.ScanType) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetScanType(*v)
 	}
-	return shu
+	return _u
 }
 
 // SetMetadata sets the "metadata" field.
-func (shu *ScanHistoryUpdate) SetMetadata(m map[string]interface{}) *ScanHistoryUpdate {
-	shu.mutation.SetMetadata(m)
-	return shu
+func (_u *ScanHistoryUpdate) SetMetadata(v map[string]interface{}) *ScanHistoryUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
 }
 
 // ClearMetadata clears the value of the "metadata" field.
-func (shu *ScanHistoryUpdate) ClearMetadata() *ScanHistoryUpdate {
-	shu.mutation.ClearMetadata()
-	return shu
+func (_u *ScanHistoryUpdate) ClearMetadata() *ScanHistoryUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (shu *ScanHistoryUpdate) SetStatus(es enums.ScanStatus) *ScanHistoryUpdate {
-	shu.mutation.SetStatus(es)
-	return shu
+func (_u *ScanHistoryUpdate) SetStatus(v enums.ScanStatus) *ScanHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (shu *ScanHistoryUpdate) SetNillableStatus(es *enums.ScanStatus) *ScanHistoryUpdate {
-	if es != nil {
-		shu.SetStatus(*es)
+func (_u *ScanHistoryUpdate) SetNillableStatus(v *enums.ScanStatus) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return shu
+	return _u
 }
 
 // Mutation returns the ScanHistoryMutation object of the builder.
-func (shu *ScanHistoryUpdate) Mutation() *ScanHistoryMutation {
-	return shu.mutation
+func (_u *ScanHistoryUpdate) Mutation() *ScanHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (shu *ScanHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := shu.defaults(); err != nil {
+func (_u *ScanHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, shu.sqlSave, shu.mutation, shu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shu *ScanHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := shu.Save(ctx)
+func (_u *ScanHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -220,38 +220,38 @@ func (shu *ScanHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (shu *ScanHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := shu.Save(ctx)
+func (_u *ScanHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shu *ScanHistoryUpdate) ExecX(ctx context.Context) {
-	if err := shu.Exec(ctx); err != nil {
+func (_u *ScanHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shu *ScanHistoryUpdate) defaults() error {
-	if _, ok := shu.mutation.UpdatedAt(); !ok && !shu.mutation.UpdatedAtCleared() {
+func (_u *ScanHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if scanhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scanhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := scanhistory.UpdateDefaultUpdatedAt()
-		shu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (shu *ScanHistoryUpdate) check() error {
-	if v, ok := shu.mutation.ScanType(); ok {
+func (_u *ScanHistoryUpdate) check() error {
+	if v, ok := _u.mutation.ScanType(); ok {
 		if err := scanhistory.ScanTypeValidator(v); err != nil {
 			return &ValidationError{Name: "scan_type", err: fmt.Errorf(`generated: validator failed for field "ScanHistory.scan_type": %w`, err)}
 		}
 	}
-	if v, ok := shu.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := scanhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ScanHistory.status": %w`, err)}
 		}
@@ -260,92 +260,92 @@ func (shu *ScanHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (shu *ScanHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScanHistoryUpdate {
-	shu.modifiers = append(shu.modifiers, modifiers...)
-	return shu
+func (_u *ScanHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScanHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (shu *ScanHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := shu.check(); err != nil {
-		return n, err
+func (_u *ScanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(scanhistory.Table, scanhistory.Columns, sqlgraph.NewFieldSpec(scanhistory.FieldID, field.TypeString))
-	if ps := shu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if shu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(scanhistory.FieldRef, field.TypeString)
 	}
-	if shu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(scanhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := shu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(scanhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if shu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(scanhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if shu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(scanhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := shu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(scanhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if shu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(scanhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := shu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(scanhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if shu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(scanhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := shu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(scanhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if shu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(scanhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := shu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(scanhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := shu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, scanhistory.FieldTags, value)
 		})
 	}
-	if shu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scanhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := shu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(scanhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if shu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(scanhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := shu.mutation.Target(); ok {
+	if value, ok := _u.mutation.Target(); ok {
 		_spec.SetField(scanhistory.FieldTarget, field.TypeString, value)
 	}
-	if value, ok := shu.mutation.ScanType(); ok {
+	if value, ok := _u.mutation.ScanType(); ok {
 		_spec.SetField(scanhistory.FieldScanType, field.TypeEnum, value)
 	}
-	if value, ok := shu.mutation.Metadata(); ok {
+	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(scanhistory.FieldMetadata, field.TypeJSON, value)
 	}
-	if shu.mutation.MetadataCleared() {
+	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(scanhistory.FieldMetadata, field.TypeJSON)
 	}
-	if value, ok := shu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scanhistory.FieldStatus, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = shu.schemaConfig.ScanHistory
-	ctx = internal.NewSchemaConfigContext(ctx, shu.schemaConfig)
-	_spec.AddModifiers(shu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, shu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.ScanHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{scanhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -353,8 +353,8 @@ func (shu *ScanHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	shu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ScanHistoryUpdateOne is the builder for updating a single ScanHistory entity.
@@ -367,198 +367,198 @@ type ScanHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shuo *ScanHistoryUpdateOne) SetUpdatedAt(t time.Time) *ScanHistoryUpdateOne {
-	shuo.mutation.SetUpdatedAt(t)
-	return shuo
+func (_u *ScanHistoryUpdateOne) SetUpdatedAt(v time.Time) *ScanHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (shuo *ScanHistoryUpdateOne) ClearUpdatedAt() *ScanHistoryUpdateOne {
-	shuo.mutation.ClearUpdatedAt()
-	return shuo
+func (_u *ScanHistoryUpdateOne) ClearUpdatedAt() *ScanHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (shuo *ScanHistoryUpdateOne) SetUpdatedBy(s string) *ScanHistoryUpdateOne {
-	shuo.mutation.SetUpdatedBy(s)
-	return shuo
+func (_u *ScanHistoryUpdateOne) SetUpdatedBy(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shuo *ScanHistoryUpdateOne) SetNillableUpdatedBy(s *string) *ScanHistoryUpdateOne {
-	if s != nil {
-		shuo.SetUpdatedBy(*s)
+func (_u *ScanHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (shuo *ScanHistoryUpdateOne) ClearUpdatedBy() *ScanHistoryUpdateOne {
-	shuo.mutation.ClearUpdatedBy()
-	return shuo
+func (_u *ScanHistoryUpdateOne) ClearUpdatedBy() *ScanHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (shuo *ScanHistoryUpdateOne) SetDeletedAt(t time.Time) *ScanHistoryUpdateOne {
-	shuo.mutation.SetDeletedAt(t)
-	return shuo
+func (_u *ScanHistoryUpdateOne) SetDeletedAt(v time.Time) *ScanHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shuo *ScanHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *ScanHistoryUpdateOne {
-	if t != nil {
-		shuo.SetDeletedAt(*t)
+func (_u *ScanHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (shuo *ScanHistoryUpdateOne) ClearDeletedAt() *ScanHistoryUpdateOne {
-	shuo.mutation.ClearDeletedAt()
-	return shuo
+func (_u *ScanHistoryUpdateOne) ClearDeletedAt() *ScanHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (shuo *ScanHistoryUpdateOne) SetDeletedBy(s string) *ScanHistoryUpdateOne {
-	shuo.mutation.SetDeletedBy(s)
-	return shuo
+func (_u *ScanHistoryUpdateOne) SetDeletedBy(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shuo *ScanHistoryUpdateOne) SetNillableDeletedBy(s *string) *ScanHistoryUpdateOne {
-	if s != nil {
-		shuo.SetDeletedBy(*s)
+func (_u *ScanHistoryUpdateOne) SetNillableDeletedBy(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (shuo *ScanHistoryUpdateOne) ClearDeletedBy() *ScanHistoryUpdateOne {
-	shuo.mutation.ClearDeletedBy()
-	return shuo
+func (_u *ScanHistoryUpdateOne) ClearDeletedBy() *ScanHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (shuo *ScanHistoryUpdateOne) SetTags(s []string) *ScanHistoryUpdateOne {
-	shuo.mutation.SetTags(s)
-	return shuo
+func (_u *ScanHistoryUpdateOne) SetTags(v []string) *ScanHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (shuo *ScanHistoryUpdateOne) AppendTags(s []string) *ScanHistoryUpdateOne {
-	shuo.mutation.AppendTags(s)
-	return shuo
+// AppendTags appends value to the "tags" field.
+func (_u *ScanHistoryUpdateOne) AppendTags(v []string) *ScanHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (shuo *ScanHistoryUpdateOne) ClearTags() *ScanHistoryUpdateOne {
-	shuo.mutation.ClearTags()
-	return shuo
+func (_u *ScanHistoryUpdateOne) ClearTags() *ScanHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (shuo *ScanHistoryUpdateOne) SetOwnerID(s string) *ScanHistoryUpdateOne {
-	shuo.mutation.SetOwnerID(s)
-	return shuo
+func (_u *ScanHistoryUpdateOne) SetOwnerID(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (shuo *ScanHistoryUpdateOne) SetNillableOwnerID(s *string) *ScanHistoryUpdateOne {
-	if s != nil {
-		shuo.SetOwnerID(*s)
+func (_u *ScanHistoryUpdateOne) SetNillableOwnerID(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (shuo *ScanHistoryUpdateOne) ClearOwnerID() *ScanHistoryUpdateOne {
-	shuo.mutation.ClearOwnerID()
-	return shuo
+func (_u *ScanHistoryUpdateOne) ClearOwnerID() *ScanHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetTarget sets the "target" field.
-func (shuo *ScanHistoryUpdateOne) SetTarget(s string) *ScanHistoryUpdateOne {
-	shuo.mutation.SetTarget(s)
-	return shuo
+func (_u *ScanHistoryUpdateOne) SetTarget(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetTarget(v)
+	return _u
 }
 
 // SetNillableTarget sets the "target" field if the given value is not nil.
-func (shuo *ScanHistoryUpdateOne) SetNillableTarget(s *string) *ScanHistoryUpdateOne {
-	if s != nil {
-		shuo.SetTarget(*s)
+func (_u *ScanHistoryUpdateOne) SetNillableTarget(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetTarget(*v)
 	}
-	return shuo
+	return _u
 }
 
 // SetScanType sets the "scan_type" field.
-func (shuo *ScanHistoryUpdateOne) SetScanType(et enums.ScanType) *ScanHistoryUpdateOne {
-	shuo.mutation.SetScanType(et)
-	return shuo
+func (_u *ScanHistoryUpdateOne) SetScanType(v enums.ScanType) *ScanHistoryUpdateOne {
+	_u.mutation.SetScanType(v)
+	return _u
 }
 
 // SetNillableScanType sets the "scan_type" field if the given value is not nil.
-func (shuo *ScanHistoryUpdateOne) SetNillableScanType(et *enums.ScanType) *ScanHistoryUpdateOne {
-	if et != nil {
-		shuo.SetScanType(*et)
+func (_u *ScanHistoryUpdateOne) SetNillableScanType(v *enums.ScanType) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetScanType(*v)
 	}
-	return shuo
+	return _u
 }
 
 // SetMetadata sets the "metadata" field.
-func (shuo *ScanHistoryUpdateOne) SetMetadata(m map[string]interface{}) *ScanHistoryUpdateOne {
-	shuo.mutation.SetMetadata(m)
-	return shuo
+func (_u *ScanHistoryUpdateOne) SetMetadata(v map[string]interface{}) *ScanHistoryUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
 }
 
 // ClearMetadata clears the value of the "metadata" field.
-func (shuo *ScanHistoryUpdateOne) ClearMetadata() *ScanHistoryUpdateOne {
-	shuo.mutation.ClearMetadata()
-	return shuo
+func (_u *ScanHistoryUpdateOne) ClearMetadata() *ScanHistoryUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (shuo *ScanHistoryUpdateOne) SetStatus(es enums.ScanStatus) *ScanHistoryUpdateOne {
-	shuo.mutation.SetStatus(es)
-	return shuo
+func (_u *ScanHistoryUpdateOne) SetStatus(v enums.ScanStatus) *ScanHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (shuo *ScanHistoryUpdateOne) SetNillableStatus(es *enums.ScanStatus) *ScanHistoryUpdateOne {
-	if es != nil {
-		shuo.SetStatus(*es)
+func (_u *ScanHistoryUpdateOne) SetNillableStatus(v *enums.ScanStatus) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return shuo
+	return _u
 }
 
 // Mutation returns the ScanHistoryMutation object of the builder.
-func (shuo *ScanHistoryUpdateOne) Mutation() *ScanHistoryMutation {
-	return shuo.mutation
+func (_u *ScanHistoryUpdateOne) Mutation() *ScanHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ScanHistoryUpdate builder.
-func (shuo *ScanHistoryUpdateOne) Where(ps ...predicate.ScanHistory) *ScanHistoryUpdateOne {
-	shuo.mutation.Where(ps...)
-	return shuo
+func (_u *ScanHistoryUpdateOne) Where(ps ...predicate.ScanHistory) *ScanHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (shuo *ScanHistoryUpdateOne) Select(field string, fields ...string) *ScanHistoryUpdateOne {
-	shuo.fields = append([]string{field}, fields...)
-	return shuo
+func (_u *ScanHistoryUpdateOne) Select(field string, fields ...string) *ScanHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ScanHistory entity.
-func (shuo *ScanHistoryUpdateOne) Save(ctx context.Context) (*ScanHistory, error) {
-	if err := shuo.defaults(); err != nil {
+func (_u *ScanHistoryUpdateOne) Save(ctx context.Context) (*ScanHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, shuo.sqlSave, shuo.mutation, shuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shuo *ScanHistoryUpdateOne) SaveX(ctx context.Context) *ScanHistory {
-	node, err := shuo.Save(ctx)
+func (_u *ScanHistoryUpdateOne) SaveX(ctx context.Context) *ScanHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -566,38 +566,38 @@ func (shuo *ScanHistoryUpdateOne) SaveX(ctx context.Context) *ScanHistory {
 }
 
 // Exec executes the query on the entity.
-func (shuo *ScanHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := shuo.Save(ctx)
+func (_u *ScanHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shuo *ScanHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := shuo.Exec(ctx); err != nil {
+func (_u *ScanHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shuo *ScanHistoryUpdateOne) defaults() error {
-	if _, ok := shuo.mutation.UpdatedAt(); !ok && !shuo.mutation.UpdatedAtCleared() {
+func (_u *ScanHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if scanhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scanhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := scanhistory.UpdateDefaultUpdatedAt()
-		shuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (shuo *ScanHistoryUpdateOne) check() error {
-	if v, ok := shuo.mutation.ScanType(); ok {
+func (_u *ScanHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.ScanType(); ok {
 		if err := scanhistory.ScanTypeValidator(v); err != nil {
 			return &ValidationError{Name: "scan_type", err: fmt.Errorf(`generated: validator failed for field "ScanHistory.scan_type": %w`, err)}
 		}
 	}
-	if v, ok := shuo.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := scanhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ScanHistory.status": %w`, err)}
 		}
@@ -606,22 +606,22 @@ func (shuo *ScanHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (shuo *ScanHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScanHistoryUpdateOne {
-	shuo.modifiers = append(shuo.modifiers, modifiers...)
-	return shuo
+func (_u *ScanHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScanHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (shuo *ScanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ScanHistory, err error) {
-	if err := shuo.check(); err != nil {
+func (_u *ScanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ScanHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(scanhistory.Table, scanhistory.Columns, sqlgraph.NewFieldSpec(scanhistory.FieldID, field.TypeString))
-	id, ok := shuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "ScanHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := shuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, scanhistory.FieldID)
 		for _, f := range fields {
@@ -633,85 +633,85 @@ func (shuo *ScanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ScanHisto
 			}
 		}
 	}
-	if ps := shuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if shuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(scanhistory.FieldRef, field.TypeString)
 	}
-	if shuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(scanhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := shuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(scanhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if shuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(scanhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if shuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(scanhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := shuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(scanhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if shuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(scanhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := shuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(scanhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if shuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(scanhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := shuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(scanhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if shuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(scanhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := shuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(scanhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := shuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, scanhistory.FieldTags, value)
 		})
 	}
-	if shuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scanhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := shuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(scanhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if shuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(scanhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := shuo.mutation.Target(); ok {
+	if value, ok := _u.mutation.Target(); ok {
 		_spec.SetField(scanhistory.FieldTarget, field.TypeString, value)
 	}
-	if value, ok := shuo.mutation.ScanType(); ok {
+	if value, ok := _u.mutation.ScanType(); ok {
 		_spec.SetField(scanhistory.FieldScanType, field.TypeEnum, value)
 	}
-	if value, ok := shuo.mutation.Metadata(); ok {
+	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(scanhistory.FieldMetadata, field.TypeJSON, value)
 	}
-	if shuo.mutation.MetadataCleared() {
+	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(scanhistory.FieldMetadata, field.TypeJSON)
 	}
-	if value, ok := shuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scanhistory.FieldStatus, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = shuo.schemaConfig.ScanHistory
-	ctx = internal.NewSchemaConfigContext(ctx, shuo.schemaConfig)
-	_spec.AddModifiers(shuo.modifiers...)
-	_node = &ScanHistory{config: shuo.config}
+	_spec.Node.Schema = _u.schemaConfig.ScanHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &ScanHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, shuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{scanhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -719,6 +719,6 @@ func (shuo *ScanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ScanHisto
 		}
 		return nil, err
 	}
-	shuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

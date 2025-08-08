@@ -23,151 +23,151 @@ type GroupMembershipHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (gmhc *GroupMembershipHistoryCreate) SetHistoryTime(t time.Time) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetHistoryTime(t)
-	return gmhc
+func (_c *GroupMembershipHistoryCreate) SetHistoryTime(v time.Time) *GroupMembershipHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableHistoryTime(t *time.Time) *GroupMembershipHistoryCreate {
-	if t != nil {
-		gmhc.SetHistoryTime(*t)
+func (_c *GroupMembershipHistoryCreate) SetNillableHistoryTime(v *time.Time) *GroupMembershipHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return gmhc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (gmhc *GroupMembershipHistoryCreate) SetRef(s string) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetRef(s)
-	return gmhc
+func (_c *GroupMembershipHistoryCreate) SetRef(v string) *GroupMembershipHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableRef(s *string) *GroupMembershipHistoryCreate {
-	if s != nil {
-		gmhc.SetRef(*s)
+func (_c *GroupMembershipHistoryCreate) SetNillableRef(v *string) *GroupMembershipHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return gmhc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (gmhc *GroupMembershipHistoryCreate) SetOperation(ht history.OpType) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetOperation(ht)
-	return gmhc
+func (_c *GroupMembershipHistoryCreate) SetOperation(v history.OpType) *GroupMembershipHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (gmhc *GroupMembershipHistoryCreate) SetCreatedAt(t time.Time) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetCreatedAt(t)
-	return gmhc
+func (_c *GroupMembershipHistoryCreate) SetCreatedAt(v time.Time) *GroupMembershipHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableCreatedAt(t *time.Time) *GroupMembershipHistoryCreate {
-	if t != nil {
-		gmhc.SetCreatedAt(*t)
+func (_c *GroupMembershipHistoryCreate) SetNillableCreatedAt(v *time.Time) *GroupMembershipHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return gmhc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (gmhc *GroupMembershipHistoryCreate) SetUpdatedAt(t time.Time) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetUpdatedAt(t)
-	return gmhc
+func (_c *GroupMembershipHistoryCreate) SetUpdatedAt(v time.Time) *GroupMembershipHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableUpdatedAt(t *time.Time) *GroupMembershipHistoryCreate {
-	if t != nil {
-		gmhc.SetUpdatedAt(*t)
+func (_c *GroupMembershipHistoryCreate) SetNillableUpdatedAt(v *time.Time) *GroupMembershipHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return gmhc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (gmhc *GroupMembershipHistoryCreate) SetCreatedBy(s string) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetCreatedBy(s)
-	return gmhc
+func (_c *GroupMembershipHistoryCreate) SetCreatedBy(v string) *GroupMembershipHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableCreatedBy(s *string) *GroupMembershipHistoryCreate {
-	if s != nil {
-		gmhc.SetCreatedBy(*s)
+func (_c *GroupMembershipHistoryCreate) SetNillableCreatedBy(v *string) *GroupMembershipHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return gmhc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (gmhc *GroupMembershipHistoryCreate) SetUpdatedBy(s string) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetUpdatedBy(s)
-	return gmhc
+func (_c *GroupMembershipHistoryCreate) SetUpdatedBy(v string) *GroupMembershipHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *GroupMembershipHistoryCreate {
-	if s != nil {
-		gmhc.SetUpdatedBy(*s)
+func (_c *GroupMembershipHistoryCreate) SetNillableUpdatedBy(v *string) *GroupMembershipHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return gmhc
+	return _c
 }
 
 // SetRole sets the "role" field.
-func (gmhc *GroupMembershipHistoryCreate) SetRole(e enums.Role) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetRole(e)
-	return gmhc
+func (_c *GroupMembershipHistoryCreate) SetRole(v enums.Role) *GroupMembershipHistoryCreate {
+	_c.mutation.SetRole(v)
+	return _c
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableRole(e *enums.Role) *GroupMembershipHistoryCreate {
-	if e != nil {
-		gmhc.SetRole(*e)
+func (_c *GroupMembershipHistoryCreate) SetNillableRole(v *enums.Role) *GroupMembershipHistoryCreate {
+	if v != nil {
+		_c.SetRole(*v)
 	}
-	return gmhc
+	return _c
 }
 
 // SetGroupID sets the "group_id" field.
-func (gmhc *GroupMembershipHistoryCreate) SetGroupID(s string) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetGroupID(s)
-	return gmhc
+func (_c *GroupMembershipHistoryCreate) SetGroupID(v string) *GroupMembershipHistoryCreate {
+	_c.mutation.SetGroupID(v)
+	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (gmhc *GroupMembershipHistoryCreate) SetUserID(s string) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetUserID(s)
-	return gmhc
+func (_c *GroupMembershipHistoryCreate) SetUserID(v string) *GroupMembershipHistoryCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (gmhc *GroupMembershipHistoryCreate) SetID(s string) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetID(s)
-	return gmhc
+func (_c *GroupMembershipHistoryCreate) SetID(v string) *GroupMembershipHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableID(s *string) *GroupMembershipHistoryCreate {
-	if s != nil {
-		gmhc.SetID(*s)
+func (_c *GroupMembershipHistoryCreate) SetNillableID(v *string) *GroupMembershipHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return gmhc
+	return _c
 }
 
 // Mutation returns the GroupMembershipHistoryMutation object of the builder.
-func (gmhc *GroupMembershipHistoryCreate) Mutation() *GroupMembershipHistoryMutation {
-	return gmhc.mutation
+func (_c *GroupMembershipHistoryCreate) Mutation() *GroupMembershipHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the GroupMembershipHistory in the database.
-func (gmhc *GroupMembershipHistoryCreate) Save(ctx context.Context) (*GroupMembershipHistory, error) {
-	if err := gmhc.defaults(); err != nil {
+func (_c *GroupMembershipHistoryCreate) Save(ctx context.Context) (*GroupMembershipHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, gmhc.sqlSave, gmhc.mutation, gmhc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (gmhc *GroupMembershipHistoryCreate) SaveX(ctx context.Context) *GroupMembershipHistory {
-	v, err := gmhc.Save(ctx)
+func (_c *GroupMembershipHistoryCreate) SaveX(ctx context.Context) *GroupMembershipHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -175,91 +175,91 @@ func (gmhc *GroupMembershipHistoryCreate) SaveX(ctx context.Context) *GroupMembe
 }
 
 // Exec executes the query.
-func (gmhc *GroupMembershipHistoryCreate) Exec(ctx context.Context) error {
-	_, err := gmhc.Save(ctx)
+func (_c *GroupMembershipHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gmhc *GroupMembershipHistoryCreate) ExecX(ctx context.Context) {
-	if err := gmhc.Exec(ctx); err != nil {
+func (_c *GroupMembershipHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (gmhc *GroupMembershipHistoryCreate) defaults() error {
-	if _, ok := gmhc.mutation.HistoryTime(); !ok {
+func (_c *GroupMembershipHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if groupmembershiphistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized groupmembershiphistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := groupmembershiphistory.DefaultHistoryTime()
-		gmhc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := gmhc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if groupmembershiphistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized groupmembershiphistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := groupmembershiphistory.DefaultCreatedAt()
-		gmhc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := gmhc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if groupmembershiphistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized groupmembershiphistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := groupmembershiphistory.DefaultUpdatedAt()
-		gmhc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := gmhc.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		v := groupmembershiphistory.DefaultRole
-		gmhc.mutation.SetRole(v)
+		_c.mutation.SetRole(v)
 	}
-	if _, ok := gmhc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if groupmembershiphistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized groupmembershiphistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := groupmembershiphistory.DefaultID()
-		gmhc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (gmhc *GroupMembershipHistoryCreate) check() error {
-	if _, ok := gmhc.mutation.HistoryTime(); !ok {
+func (_c *GroupMembershipHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "GroupMembershipHistory.history_time"`)}
 	}
-	if _, ok := gmhc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "GroupMembershipHistory.operation"`)}
 	}
-	if v, ok := gmhc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := groupmembershiphistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "GroupMembershipHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := gmhc.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`generated: missing required field "GroupMembershipHistory.role"`)}
 	}
-	if v, ok := gmhc.mutation.Role(); ok {
+	if v, ok := _c.mutation.Role(); ok {
 		if err := groupmembershiphistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "GroupMembershipHistory.role": %w`, err)}
 		}
 	}
-	if _, ok := gmhc.mutation.GroupID(); !ok {
+	if _, ok := _c.mutation.GroupID(); !ok {
 		return &ValidationError{Name: "group_id", err: errors.New(`generated: missing required field "GroupMembershipHistory.group_id"`)}
 	}
-	if _, ok := gmhc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`generated: missing required field "GroupMembershipHistory.user_id"`)}
 	}
 	return nil
 }
 
-func (gmhc *GroupMembershipHistoryCreate) sqlSave(ctx context.Context) (*GroupMembershipHistory, error) {
-	if err := gmhc.check(); err != nil {
+func (_c *GroupMembershipHistoryCreate) sqlSave(ctx context.Context) (*GroupMembershipHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := gmhc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, gmhc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -272,58 +272,58 @@ func (gmhc *GroupMembershipHistoryCreate) sqlSave(ctx context.Context) (*GroupMe
 			return nil, fmt.Errorf("unexpected GroupMembershipHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	gmhc.mutation.id = &_node.ID
-	gmhc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (gmhc *GroupMembershipHistoryCreate) createSpec() (*GroupMembershipHistory, *sqlgraph.CreateSpec) {
+func (_c *GroupMembershipHistoryCreate) createSpec() (*GroupMembershipHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &GroupMembershipHistory{config: gmhc.config}
+		_node = &GroupMembershipHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(groupmembershiphistory.Table, sqlgraph.NewFieldSpec(groupmembershiphistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = gmhc.schemaConfig.GroupMembershipHistory
-	if id, ok := gmhc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.GroupMembershipHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := gmhc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(groupmembershiphistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := gmhc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := gmhc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(groupmembershiphistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := gmhc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(groupmembershiphistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := gmhc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(groupmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := gmhc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(groupmembershiphistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := gmhc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := gmhc.mutation.Role(); ok {
+	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)
 		_node.Role = value
 	}
-	if value, ok := gmhc.mutation.GroupID(); ok {
+	if value, ok := _c.mutation.GroupID(); ok {
 		_spec.SetField(groupmembershiphistory.FieldGroupID, field.TypeString, value)
 		_node.GroupID = value
 	}
-	if value, ok := gmhc.mutation.UserID(); ok {
+	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(groupmembershiphistory.FieldUserID, field.TypeString, value)
 		_node.UserID = value
 	}
@@ -338,16 +338,16 @@ type GroupMembershipHistoryCreateBulk struct {
 }
 
 // Save creates the GroupMembershipHistory entities in the database.
-func (gmhcb *GroupMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*GroupMembershipHistory, error) {
-	if gmhcb.err != nil {
-		return nil, gmhcb.err
+func (_c *GroupMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*GroupMembershipHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(gmhcb.builders))
-	nodes := make([]*GroupMembershipHistory, len(gmhcb.builders))
-	mutators := make([]Mutator, len(gmhcb.builders))
-	for i := range gmhcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*GroupMembershipHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := gmhcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*GroupMembershipHistoryMutation)
@@ -361,11 +361,11 @@ func (gmhcb *GroupMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*Gro
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, gmhcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, gmhcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -385,7 +385,7 @@ func (gmhcb *GroupMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*Gro
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, gmhcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -393,8 +393,8 @@ func (gmhcb *GroupMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*Gro
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gmhcb *GroupMembershipHistoryCreateBulk) SaveX(ctx context.Context) []*GroupMembershipHistory {
-	v, err := gmhcb.Save(ctx)
+func (_c *GroupMembershipHistoryCreateBulk) SaveX(ctx context.Context) []*GroupMembershipHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -402,14 +402,14 @@ func (gmhcb *GroupMembershipHistoryCreateBulk) SaveX(ctx context.Context) []*Gro
 }
 
 // Exec executes the query.
-func (gmhcb *GroupMembershipHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := gmhcb.Save(ctx)
+func (_c *GroupMembershipHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gmhcb *GroupMembershipHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := gmhcb.Exec(ctx); err != nil {
+func (_c *GroupMembershipHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -42,44 +42,44 @@ type HushQuery struct {
 }
 
 // Where adds a new predicate for the HushQuery builder.
-func (hq *HushQuery) Where(ps ...predicate.Hush) *HushQuery {
-	hq.predicates = append(hq.predicates, ps...)
-	return hq
+func (_q *HushQuery) Where(ps ...predicate.Hush) *HushQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (hq *HushQuery) Limit(limit int) *HushQuery {
-	hq.ctx.Limit = &limit
-	return hq
+func (_q *HushQuery) Limit(limit int) *HushQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (hq *HushQuery) Offset(offset int) *HushQuery {
-	hq.ctx.Offset = &offset
-	return hq
+func (_q *HushQuery) Offset(offset int) *HushQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (hq *HushQuery) Unique(unique bool) *HushQuery {
-	hq.ctx.Unique = &unique
-	return hq
+func (_q *HushQuery) Unique(unique bool) *HushQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (hq *HushQuery) Order(o ...hush.OrderOption) *HushQuery {
-	hq.order = append(hq.order, o...)
-	return hq
+func (_q *HushQuery) Order(o ...hush.OrderOption) *HushQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (hq *HushQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: hq.config}).Query()
+func (_q *HushQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := hq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := hq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -88,23 +88,23 @@ func (hq *HushQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, hush.OwnerTable, hush.OwnerColumn),
 		)
-		schemaConfig := hq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Hush
-		fromU = sqlgraph.SetNeighbors(hq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryIntegrations chains the current query on the "integrations" edge.
-func (hq *HushQuery) QueryIntegrations() *IntegrationQuery {
-	query := (&IntegrationClient{config: hq.config}).Query()
+func (_q *HushQuery) QueryIntegrations() *IntegrationQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := hq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := hq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -113,23 +113,23 @@ func (hq *HushQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, hush.IntegrationsTable, hush.IntegrationsPrimaryKey...),
 		)
-		schemaConfig := hq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Integration
 		step.Edge.Schema = schemaConfig.IntegrationSecrets
-		fromU = sqlgraph.SetNeighbors(hq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEvents chains the current query on the "events" edge.
-func (hq *HushQuery) QueryEvents() *EventQuery {
-	query := (&EventClient{config: hq.config}).Query()
+func (_q *HushQuery) QueryEvents() *EventQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := hq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := hq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -138,10 +138,10 @@ func (hq *HushQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, hush.EventsTable, hush.EventsPrimaryKey...),
 		)
-		schemaConfig := hq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.HushEvents
-		fromU = sqlgraph.SetNeighbors(hq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -149,8 +149,8 @@ func (hq *HushQuery) QueryEvents() *EventQuery {
 
 // First returns the first Hush entity from the query.
 // Returns a *NotFoundError when no Hush was found.
-func (hq *HushQuery) First(ctx context.Context) (*Hush, error) {
-	nodes, err := hq.Limit(1).All(setContextOp(ctx, hq.ctx, ent.OpQueryFirst))
+func (_q *HushQuery) First(ctx context.Context) (*Hush, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -161,8 +161,8 @@ func (hq *HushQuery) First(ctx context.Context) (*Hush, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (hq *HushQuery) FirstX(ctx context.Context) *Hush {
-	node, err := hq.First(ctx)
+func (_q *HushQuery) FirstX(ctx context.Context) *Hush {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -171,9 +171,9 @@ func (hq *HushQuery) FirstX(ctx context.Context) *Hush {
 
 // FirstID returns the first Hush ID from the query.
 // Returns a *NotFoundError when no Hush ID was found.
-func (hq *HushQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *HushQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = hq.Limit(1).IDs(setContextOp(ctx, hq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -184,8 +184,8 @@ func (hq *HushQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (hq *HushQuery) FirstIDX(ctx context.Context) string {
-	id, err := hq.FirstID(ctx)
+func (_q *HushQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -195,8 +195,8 @@ func (hq *HushQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Hush entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Hush entity is found.
 // Returns a *NotFoundError when no Hush entities are found.
-func (hq *HushQuery) Only(ctx context.Context) (*Hush, error) {
-	nodes, err := hq.Limit(2).All(setContextOp(ctx, hq.ctx, ent.OpQueryOnly))
+func (_q *HushQuery) Only(ctx context.Context) (*Hush, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -211,8 +211,8 @@ func (hq *HushQuery) Only(ctx context.Context) (*Hush, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (hq *HushQuery) OnlyX(ctx context.Context) *Hush {
-	node, err := hq.Only(ctx)
+func (_q *HushQuery) OnlyX(ctx context.Context) *Hush {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (hq *HushQuery) OnlyX(ctx context.Context) *Hush {
 // OnlyID is like Only, but returns the only Hush ID in the query.
 // Returns a *NotSingularError when more than one Hush ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (hq *HushQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *HushQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = hq.Limit(2).IDs(setContextOp(ctx, hq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -239,8 +239,8 @@ func (hq *HushQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (hq *HushQuery) OnlyIDX(ctx context.Context) string {
-	id, err := hq.OnlyID(ctx)
+func (_q *HushQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -248,18 +248,18 @@ func (hq *HushQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Hushes.
-func (hq *HushQuery) All(ctx context.Context) ([]*Hush, error) {
-	ctx = setContextOp(ctx, hq.ctx, ent.OpQueryAll)
-	if err := hq.prepareQuery(ctx); err != nil {
+func (_q *HushQuery) All(ctx context.Context) ([]*Hush, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Hush, *HushQuery]()
-	return withInterceptors[[]*Hush](ctx, hq, qr, hq.inters)
+	return withInterceptors[[]*Hush](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (hq *HushQuery) AllX(ctx context.Context) []*Hush {
-	nodes, err := hq.All(ctx)
+func (_q *HushQuery) AllX(ctx context.Context) []*Hush {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -267,20 +267,20 @@ func (hq *HushQuery) AllX(ctx context.Context) []*Hush {
 }
 
 // IDs executes the query and returns a list of Hush IDs.
-func (hq *HushQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if hq.ctx.Unique == nil && hq.path != nil {
-		hq.Unique(true)
+func (_q *HushQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, hq.ctx, ent.OpQueryIDs)
-	if err = hq.Select(hush.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(hush.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (hq *HushQuery) IDsX(ctx context.Context) []string {
-	ids, err := hq.IDs(ctx)
+func (_q *HushQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -288,17 +288,17 @@ func (hq *HushQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (hq *HushQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, hq.ctx, ent.OpQueryCount)
-	if err := hq.prepareQuery(ctx); err != nil {
+func (_q *HushQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, hq, querierCount[*HushQuery](), hq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*HushQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (hq *HushQuery) CountX(ctx context.Context) int {
-	count, err := hq.Count(ctx)
+func (_q *HushQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -306,9 +306,9 @@ func (hq *HushQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (hq *HushQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, hq.ctx, ent.OpQueryExist)
-	switch _, err := hq.FirstID(ctx); {
+func (_q *HushQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -319,8 +319,8 @@ func (hq *HushQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (hq *HushQuery) ExistX(ctx context.Context) bool {
-	exist, err := hq.Exist(ctx)
+func (_q *HushQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -329,57 +329,57 @@ func (hq *HushQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the HushQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (hq *HushQuery) Clone() *HushQuery {
-	if hq == nil {
+func (_q *HushQuery) Clone() *HushQuery {
+	if _q == nil {
 		return nil
 	}
 	return &HushQuery{
-		config:           hq.config,
-		ctx:              hq.ctx.Clone(),
-		order:            append([]hush.OrderOption{}, hq.order...),
-		inters:           append([]Interceptor{}, hq.inters...),
-		predicates:       append([]predicate.Hush{}, hq.predicates...),
-		withOwner:        hq.withOwner.Clone(),
-		withIntegrations: hq.withIntegrations.Clone(),
-		withEvents:       hq.withEvents.Clone(),
+		config:           _q.config,
+		ctx:              _q.ctx.Clone(),
+		order:            append([]hush.OrderOption{}, _q.order...),
+		inters:           append([]Interceptor{}, _q.inters...),
+		predicates:       append([]predicate.Hush{}, _q.predicates...),
+		withOwner:        _q.withOwner.Clone(),
+		withIntegrations: _q.withIntegrations.Clone(),
+		withEvents:       _q.withEvents.Clone(),
 		// clone intermediate query.
-		sql:       hq.sql.Clone(),
-		path:      hq.path,
-		modifiers: append([]func(*sql.Selector){}, hq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (hq *HushQuery) WithOwner(opts ...func(*OrganizationQuery)) *HushQuery {
-	query := (&OrganizationClient{config: hq.config}).Query()
+func (_q *HushQuery) WithOwner(opts ...func(*OrganizationQuery)) *HushQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	hq.withOwner = query
-	return hq
+	_q.withOwner = query
+	return _q
 }
 
 // WithIntegrations tells the query-builder to eager-load the nodes that are connected to
 // the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
-func (hq *HushQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *HushQuery {
-	query := (&IntegrationClient{config: hq.config}).Query()
+func (_q *HushQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *HushQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	hq.withIntegrations = query
-	return hq
+	_q.withIntegrations = query
+	return _q
 }
 
 // WithEvents tells the query-builder to eager-load the nodes that are connected to
 // the "events" edge. The optional arguments are used to configure the query builder of the edge.
-func (hq *HushQuery) WithEvents(opts ...func(*EventQuery)) *HushQuery {
-	query := (&EventClient{config: hq.config}).Query()
+func (_q *HushQuery) WithEvents(opts ...func(*EventQuery)) *HushQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	hq.withEvents = query
-	return hq
+	_q.withEvents = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -396,10 +396,10 @@ func (hq *HushQuery) WithEvents(opts ...func(*EventQuery)) *HushQuery {
 //		GroupBy(hush.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (hq *HushQuery) GroupBy(field string, fields ...string) *HushGroupBy {
-	hq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &HushGroupBy{build: hq}
-	grbuild.flds = &hq.ctx.Fields
+func (_q *HushQuery) GroupBy(field string, fields ...string) *HushGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &HushGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = hush.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -417,127 +417,127 @@ func (hq *HushQuery) GroupBy(field string, fields ...string) *HushGroupBy {
 //	client.Hush.Query().
 //		Select(hush.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (hq *HushQuery) Select(fields ...string) *HushSelect {
-	hq.ctx.Fields = append(hq.ctx.Fields, fields...)
-	sbuild := &HushSelect{HushQuery: hq}
+func (_q *HushQuery) Select(fields ...string) *HushSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &HushSelect{HushQuery: _q}
 	sbuild.label = hush.Label
-	sbuild.flds, sbuild.scan = &hq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a HushSelect configured with the given aggregations.
-func (hq *HushQuery) Aggregate(fns ...AggregateFunc) *HushSelect {
-	return hq.Select().Aggregate(fns...)
+func (_q *HushQuery) Aggregate(fns ...AggregateFunc) *HushSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (hq *HushQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range hq.inters {
+func (_q *HushQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, hq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range hq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !hush.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if hq.path != nil {
-		prev, err := hq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		hq.sql = prev
+		_q.sql = prev
 	}
 	if hush.Policy == nil {
 		return errors.New("generated: uninitialized hush.Policy (forgotten import generated/runtime?)")
 	}
-	if err := hush.Policy.EvalQuery(ctx, hq); err != nil {
+	if err := hush.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (hq *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, error) {
+func (_q *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, error) {
 	var (
 		nodes       = []*Hush{}
-		_spec       = hq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			hq.withOwner != nil,
-			hq.withIntegrations != nil,
-			hq.withEvents != nil,
+			_q.withOwner != nil,
+			_q.withIntegrations != nil,
+			_q.withEvents != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Hush).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Hush{config: hq.config}
+		node := &Hush{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = hq.schemaConfig.Hush
-	ctx = internal.NewSchemaConfigContext(ctx, hq.schemaConfig)
-	if len(hq.modifiers) > 0 {
-		_spec.Modifiers = hq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Hush
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, hq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := hq.withOwner; query != nil {
-		if err := hq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Hush, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := hq.withIntegrations; query != nil {
-		if err := hq.loadIntegrations(ctx, query, nodes,
+	if query := _q.withIntegrations; query != nil {
+		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Hush) { n.Edges.Integrations = []*Integration{} },
 			func(n *Hush, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := hq.withEvents; query != nil {
-		if err := hq.loadEvents(ctx, query, nodes,
+	if query := _q.withEvents; query != nil {
+		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *Hush) { n.Edges.Events = []*Event{} },
 			func(n *Hush, e *Event) { n.Edges.Events = append(n.Edges.Events, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range hq.withNamedIntegrations {
-		if err := hq.loadIntegrations(ctx, query, nodes,
+	for name, query := range _q.withNamedIntegrations {
+		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Hush) { n.appendNamedIntegrations(name) },
 			func(n *Hush, e *Integration) { n.appendNamedIntegrations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range hq.withNamedEvents {
-		if err := hq.loadEvents(ctx, query, nodes,
+	for name, query := range _q.withNamedEvents {
+		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *Hush) { n.appendNamedEvents(name) },
 			func(n *Hush, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range hq.loadTotal {
-		if err := hq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (hq *HushQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *Organization)) error {
+func (_q *HushQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Hush)
 	for i := range nodes {
@@ -566,7 +566,7 @@ func (hq *HushQuery) loadOwner(ctx context.Context, query *OrganizationQuery, no
 	}
 	return nil
 }
-func (hq *HushQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *Integration)) error {
+func (_q *HushQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *Integration)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Hush)
 	nids := make(map[string]map[*Hush]struct{})
@@ -579,7 +579,7 @@ func (hq *HushQuery) loadIntegrations(ctx context.Context, query *IntegrationQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(hush.IntegrationsTable)
-		joinT.Schema(hq.schemaConfig.IntegrationSecrets)
+		joinT.Schema(_q.schemaConfig.IntegrationSecrets)
 		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(hush.IntegrationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(hush.IntegrationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -628,7 +628,7 @@ func (hq *HushQuery) loadIntegrations(ctx context.Context, query *IntegrationQue
 	}
 	return nil
 }
-func (hq *HushQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *Event)) error {
+func (_q *HushQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *Event)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Hush)
 	nids := make(map[string]map[*Hush]struct{})
@@ -641,7 +641,7 @@ func (hq *HushQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(hush.EventsTable)
-		joinT.Schema(hq.schemaConfig.HushEvents)
+		joinT.Schema(_q.schemaConfig.HushEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(hush.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(hush.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -691,29 +691,29 @@ func (hq *HushQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []
 	return nil
 }
 
-func (hq *HushQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := hq.querySpec()
-	_spec.Node.Schema = hq.schemaConfig.Hush
-	ctx = internal.NewSchemaConfigContext(ctx, hq.schemaConfig)
-	if len(hq.modifiers) > 0 {
-		_spec.Modifiers = hq.modifiers
+func (_q *HushQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Hush
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = hq.ctx.Fields
-	if len(hq.ctx.Fields) > 0 {
-		_spec.Unique = hq.ctx.Unique != nil && *hq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, hq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (hq *HushQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *HushQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(hush.Table, hush.Columns, sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString))
-	_spec.From = hq.sql
-	if unique := hq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if hq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := hq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, hush.FieldID)
 		for i := range fields {
@@ -721,24 +721,24 @@ func (hq *HushQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if hq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(hush.FieldOwnerID)
 		}
 	}
-	if ps := hq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := hq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := hq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := hq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -748,76 +748,76 @@ func (hq *HushQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (hq *HushQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(hq.driver.Dialect())
+func (_q *HushQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(hush.Table)
-	columns := hq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = hush.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if hq.sql != nil {
-		selector = hq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if hq.ctx.Unique != nil && *hq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(hq.schemaConfig.Hush)
-	ctx = internal.NewSchemaConfigContext(ctx, hq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Hush)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range hq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range hq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range hq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := hq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := hq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (hq *HushQuery) Modify(modifiers ...func(s *sql.Selector)) *HushSelect {
-	hq.modifiers = append(hq.modifiers, modifiers...)
-	return hq.Select()
+func (_q *HushQuery) Modify(modifiers ...func(s *sql.Selector)) *HushSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedIntegrations tells the query-builder to eager-load the nodes that are connected to the "integrations"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (hq *HushQuery) WithNamedIntegrations(name string, opts ...func(*IntegrationQuery)) *HushQuery {
-	query := (&IntegrationClient{config: hq.config}).Query()
+func (_q *HushQuery) WithNamedIntegrations(name string, opts ...func(*IntegrationQuery)) *HushQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if hq.withNamedIntegrations == nil {
-		hq.withNamedIntegrations = make(map[string]*IntegrationQuery)
+	if _q.withNamedIntegrations == nil {
+		_q.withNamedIntegrations = make(map[string]*IntegrationQuery)
 	}
-	hq.withNamedIntegrations[name] = query
-	return hq
+	_q.withNamedIntegrations[name] = query
+	return _q
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (hq *HushQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *HushQuery {
-	query := (&EventClient{config: hq.config}).Query()
+func (_q *HushQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *HushQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if hq.withNamedEvents == nil {
-		hq.withNamedEvents = make(map[string]*EventQuery)
+	if _q.withNamedEvents == nil {
+		_q.withNamedEvents = make(map[string]*EventQuery)
 	}
-	hq.withNamedEvents[name] = query
-	return hq
+	_q.withNamedEvents[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -846,41 +846,41 @@ type HushGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (hgb *HushGroupBy) Aggregate(fns ...AggregateFunc) *HushGroupBy {
-	hgb.fns = append(hgb.fns, fns...)
-	return hgb
+func (_g *HushGroupBy) Aggregate(fns ...AggregateFunc) *HushGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (hgb *HushGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, hgb.build.ctx, ent.OpQueryGroupBy)
-	if err := hgb.build.prepareQuery(ctx); err != nil {
+func (_g *HushGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*HushQuery, *HushGroupBy](ctx, hgb.build, hgb, hgb.build.inters, v)
+	return scanWithInterceptors[*HushQuery, *HushGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (hgb *HushGroupBy) sqlScan(ctx context.Context, root *HushQuery, v any) error {
+func (_g *HushGroupBy) sqlScan(ctx context.Context, root *HushQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(hgb.fns))
-	for _, fn := range hgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*hgb.flds)+len(hgb.fns))
-		for _, f := range *hgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*hgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := hgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -894,27 +894,27 @@ type HushSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (hs *HushSelect) Aggregate(fns ...AggregateFunc) *HushSelect {
-	hs.fns = append(hs.fns, fns...)
-	return hs
+func (_s *HushSelect) Aggregate(fns ...AggregateFunc) *HushSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (hs *HushSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, hs.ctx, ent.OpQuerySelect)
-	if err := hs.prepareQuery(ctx); err != nil {
+func (_s *HushSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*HushQuery, *HushSelect](ctx, hs.HushQuery, hs, hs.inters, v)
+	return scanWithInterceptors[*HushQuery, *HushSelect](ctx, _s.HushQuery, _s, _s.inters, v)
 }
 
-func (hs *HushSelect) sqlScan(ctx context.Context, root *HushQuery, v any) error {
+func (_s *HushSelect) sqlScan(ctx context.Context, root *HushQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(hs.fns))
-	for _, fn := range hs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*hs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -922,7 +922,7 @@ func (hs *HushSelect) sqlScan(ctx context.Context, root *HushQuery, v any) error
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := hs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -930,7 +930,7 @@ func (hs *HushSelect) sqlScan(ctx context.Context, root *HushQuery, v any) error
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (hs *HushSelect) Modify(modifiers ...func(s *sql.Selector)) *HushSelect {
-	hs.modifiers = append(hs.modifiers, modifiers...)
-	return hs
+func (_s *HushSelect) Modify(modifiers ...func(s *sql.Selector)) *HushSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

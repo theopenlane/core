@@ -16,8 +16,6 @@ import (
 )
 
 func TestQueryTFASetting(t *testing.T) {
-	t.Parallel()
-
 	// create a user for this test
 	testUser := suite.userBuilder(context.Background(), t)
 	patClient := suite.setupPatClient(testUser, t)

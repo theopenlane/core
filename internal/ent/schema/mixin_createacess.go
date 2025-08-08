@@ -67,7 +67,7 @@ func (c GroupBasedCreateAccessMixin) Edges() []ent.Edge {
 				entgql.RelayConnection(),
 				entgql.QueryField(),
 				entgql.MultiOrder(),
-				accessmap.EdgeAuthCheck(Group{}.Name()),
+				accessmap.EdgeViewCheck(Group{}.Name()),
 			)
 
 		edges = append(edges, edge)

@@ -32,445 +32,445 @@ type MappedControlUpdate struct {
 }
 
 // Where appends a list predicates to the MappedControlUpdate builder.
-func (mcu *MappedControlUpdate) Where(ps ...predicate.MappedControl) *MappedControlUpdate {
-	mcu.mutation.Where(ps...)
-	return mcu
+func (_u *MappedControlUpdate) Where(ps ...predicate.MappedControl) *MappedControlUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mcu *MappedControlUpdate) SetUpdatedAt(t time.Time) *MappedControlUpdate {
-	mcu.mutation.SetUpdatedAt(t)
-	return mcu
+func (_u *MappedControlUpdate) SetUpdatedAt(v time.Time) *MappedControlUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (mcu *MappedControlUpdate) ClearUpdatedAt() *MappedControlUpdate {
-	mcu.mutation.ClearUpdatedAt()
-	return mcu
+func (_u *MappedControlUpdate) ClearUpdatedAt() *MappedControlUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (mcu *MappedControlUpdate) SetUpdatedBy(s string) *MappedControlUpdate {
-	mcu.mutation.SetUpdatedBy(s)
-	return mcu
+func (_u *MappedControlUpdate) SetUpdatedBy(v string) *MappedControlUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (mcu *MappedControlUpdate) SetNillableUpdatedBy(s *string) *MappedControlUpdate {
-	if s != nil {
-		mcu.SetUpdatedBy(*s)
+func (_u *MappedControlUpdate) SetNillableUpdatedBy(v *string) *MappedControlUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return mcu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (mcu *MappedControlUpdate) ClearUpdatedBy() *MappedControlUpdate {
-	mcu.mutation.ClearUpdatedBy()
-	return mcu
+func (_u *MappedControlUpdate) ClearUpdatedBy() *MappedControlUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (mcu *MappedControlUpdate) SetDeletedAt(t time.Time) *MappedControlUpdate {
-	mcu.mutation.SetDeletedAt(t)
-	return mcu
+func (_u *MappedControlUpdate) SetDeletedAt(v time.Time) *MappedControlUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (mcu *MappedControlUpdate) SetNillableDeletedAt(t *time.Time) *MappedControlUpdate {
-	if t != nil {
-		mcu.SetDeletedAt(*t)
+func (_u *MappedControlUpdate) SetNillableDeletedAt(v *time.Time) *MappedControlUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return mcu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (mcu *MappedControlUpdate) ClearDeletedAt() *MappedControlUpdate {
-	mcu.mutation.ClearDeletedAt()
-	return mcu
+func (_u *MappedControlUpdate) ClearDeletedAt() *MappedControlUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (mcu *MappedControlUpdate) SetDeletedBy(s string) *MappedControlUpdate {
-	mcu.mutation.SetDeletedBy(s)
-	return mcu
+func (_u *MappedControlUpdate) SetDeletedBy(v string) *MappedControlUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (mcu *MappedControlUpdate) SetNillableDeletedBy(s *string) *MappedControlUpdate {
-	if s != nil {
-		mcu.SetDeletedBy(*s)
+func (_u *MappedControlUpdate) SetNillableDeletedBy(v *string) *MappedControlUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return mcu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (mcu *MappedControlUpdate) ClearDeletedBy() *MappedControlUpdate {
-	mcu.mutation.ClearDeletedBy()
-	return mcu
+func (_u *MappedControlUpdate) ClearDeletedBy() *MappedControlUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (mcu *MappedControlUpdate) SetTags(s []string) *MappedControlUpdate {
-	mcu.mutation.SetTags(s)
-	return mcu
+func (_u *MappedControlUpdate) SetTags(v []string) *MappedControlUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (mcu *MappedControlUpdate) AppendTags(s []string) *MappedControlUpdate {
-	mcu.mutation.AppendTags(s)
-	return mcu
+// AppendTags appends value to the "tags" field.
+func (_u *MappedControlUpdate) AppendTags(v []string) *MappedControlUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (mcu *MappedControlUpdate) ClearTags() *MappedControlUpdate {
-	mcu.mutation.ClearTags()
-	return mcu
+func (_u *MappedControlUpdate) ClearTags() *MappedControlUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (mcu *MappedControlUpdate) SetOwnerID(s string) *MappedControlUpdate {
-	mcu.mutation.SetOwnerID(s)
-	return mcu
+func (_u *MappedControlUpdate) SetOwnerID(v string) *MappedControlUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (mcu *MappedControlUpdate) SetNillableOwnerID(s *string) *MappedControlUpdate {
-	if s != nil {
-		mcu.SetOwnerID(*s)
+func (_u *MappedControlUpdate) SetNillableOwnerID(v *string) *MappedControlUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return mcu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (mcu *MappedControlUpdate) ClearOwnerID() *MappedControlUpdate {
-	mcu.mutation.ClearOwnerID()
-	return mcu
+func (_u *MappedControlUpdate) ClearOwnerID() *MappedControlUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetMappingType sets the "mapping_type" field.
-func (mcu *MappedControlUpdate) SetMappingType(et enums.MappingType) *MappedControlUpdate {
-	mcu.mutation.SetMappingType(et)
-	return mcu
+func (_u *MappedControlUpdate) SetMappingType(v enums.MappingType) *MappedControlUpdate {
+	_u.mutation.SetMappingType(v)
+	return _u
 }
 
 // SetNillableMappingType sets the "mapping_type" field if the given value is not nil.
-func (mcu *MappedControlUpdate) SetNillableMappingType(et *enums.MappingType) *MappedControlUpdate {
-	if et != nil {
-		mcu.SetMappingType(*et)
+func (_u *MappedControlUpdate) SetNillableMappingType(v *enums.MappingType) *MappedControlUpdate {
+	if v != nil {
+		_u.SetMappingType(*v)
 	}
-	return mcu
+	return _u
 }
 
 // SetRelation sets the "relation" field.
-func (mcu *MappedControlUpdate) SetRelation(s string) *MappedControlUpdate {
-	mcu.mutation.SetRelation(s)
-	return mcu
+func (_u *MappedControlUpdate) SetRelation(v string) *MappedControlUpdate {
+	_u.mutation.SetRelation(v)
+	return _u
 }
 
 // SetNillableRelation sets the "relation" field if the given value is not nil.
-func (mcu *MappedControlUpdate) SetNillableRelation(s *string) *MappedControlUpdate {
-	if s != nil {
-		mcu.SetRelation(*s)
+func (_u *MappedControlUpdate) SetNillableRelation(v *string) *MappedControlUpdate {
+	if v != nil {
+		_u.SetRelation(*v)
 	}
-	return mcu
+	return _u
 }
 
 // ClearRelation clears the value of the "relation" field.
-func (mcu *MappedControlUpdate) ClearRelation() *MappedControlUpdate {
-	mcu.mutation.ClearRelation()
-	return mcu
+func (_u *MappedControlUpdate) ClearRelation() *MappedControlUpdate {
+	_u.mutation.ClearRelation()
+	return _u
 }
 
 // SetConfidence sets the "confidence" field.
-func (mcu *MappedControlUpdate) SetConfidence(i int) *MappedControlUpdate {
-	mcu.mutation.ResetConfidence()
-	mcu.mutation.SetConfidence(i)
-	return mcu
+func (_u *MappedControlUpdate) SetConfidence(v int) *MappedControlUpdate {
+	_u.mutation.ResetConfidence()
+	_u.mutation.SetConfidence(v)
+	return _u
 }
 
 // SetNillableConfidence sets the "confidence" field if the given value is not nil.
-func (mcu *MappedControlUpdate) SetNillableConfidence(i *int) *MappedControlUpdate {
-	if i != nil {
-		mcu.SetConfidence(*i)
+func (_u *MappedControlUpdate) SetNillableConfidence(v *int) *MappedControlUpdate {
+	if v != nil {
+		_u.SetConfidence(*v)
 	}
-	return mcu
+	return _u
 }
 
-// AddConfidence adds i to the "confidence" field.
-func (mcu *MappedControlUpdate) AddConfidence(i int) *MappedControlUpdate {
-	mcu.mutation.AddConfidence(i)
-	return mcu
+// AddConfidence adds value to the "confidence" field.
+func (_u *MappedControlUpdate) AddConfidence(v int) *MappedControlUpdate {
+	_u.mutation.AddConfidence(v)
+	return _u
 }
 
 // ClearConfidence clears the value of the "confidence" field.
-func (mcu *MappedControlUpdate) ClearConfidence() *MappedControlUpdate {
-	mcu.mutation.ClearConfidence()
-	return mcu
+func (_u *MappedControlUpdate) ClearConfidence() *MappedControlUpdate {
+	_u.mutation.ClearConfidence()
+	return _u
 }
 
 // SetSource sets the "source" field.
-func (mcu *MappedControlUpdate) SetSource(es enums.MappingSource) *MappedControlUpdate {
-	mcu.mutation.SetSource(es)
-	return mcu
+func (_u *MappedControlUpdate) SetSource(v enums.MappingSource) *MappedControlUpdate {
+	_u.mutation.SetSource(v)
+	return _u
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (mcu *MappedControlUpdate) SetNillableSource(es *enums.MappingSource) *MappedControlUpdate {
-	if es != nil {
-		mcu.SetSource(*es)
+func (_u *MappedControlUpdate) SetNillableSource(v *enums.MappingSource) *MappedControlUpdate {
+	if v != nil {
+		_u.SetSource(*v)
 	}
-	return mcu
+	return _u
 }
 
 // ClearSource clears the value of the "source" field.
-func (mcu *MappedControlUpdate) ClearSource() *MappedControlUpdate {
-	mcu.mutation.ClearSource()
-	return mcu
+func (_u *MappedControlUpdate) ClearSource() *MappedControlUpdate {
+	_u.mutation.ClearSource()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (mcu *MappedControlUpdate) SetOwner(o *Organization) *MappedControlUpdate {
-	return mcu.SetOwnerID(o.ID)
+func (_u *MappedControlUpdate) SetOwner(v *Organization) *MappedControlUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (mcu *MappedControlUpdate) AddBlockedGroupIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.AddBlockedGroupIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) AddBlockedGroupIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (mcu *MappedControlUpdate) AddBlockedGroups(g ...*Group) *MappedControlUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *MappedControlUpdate) AddBlockedGroups(v ...*Group) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (mcu *MappedControlUpdate) AddEditorIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.AddEditorIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) AddEditorIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (mcu *MappedControlUpdate) AddEditors(g ...*Group) *MappedControlUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *MappedControlUpdate) AddEditors(v ...*Group) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddFromControlIDs adds the "from_controls" edge to the Control entity by IDs.
-func (mcu *MappedControlUpdate) AddFromControlIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.AddFromControlIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) AddFromControlIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.AddFromControlIDs(ids...)
+	return _u
 }
 
 // AddFromControls adds the "from_controls" edges to the Control entity.
-func (mcu *MappedControlUpdate) AddFromControls(c ...*Control) *MappedControlUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *MappedControlUpdate) AddFromControls(v ...*Control) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.AddFromControlIDs(ids...)
+	return _u.AddFromControlIDs(ids...)
 }
 
 // AddToControlIDs adds the "to_controls" edge to the Control entity by IDs.
-func (mcu *MappedControlUpdate) AddToControlIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.AddToControlIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) AddToControlIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.AddToControlIDs(ids...)
+	return _u
 }
 
 // AddToControls adds the "to_controls" edges to the Control entity.
-func (mcu *MappedControlUpdate) AddToControls(c ...*Control) *MappedControlUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *MappedControlUpdate) AddToControls(v ...*Control) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.AddToControlIDs(ids...)
+	return _u.AddToControlIDs(ids...)
 }
 
 // AddFromSubcontrolIDs adds the "from_subcontrols" edge to the Subcontrol entity by IDs.
-func (mcu *MappedControlUpdate) AddFromSubcontrolIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.AddFromSubcontrolIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) AddFromSubcontrolIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.AddFromSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddFromSubcontrols adds the "from_subcontrols" edges to the Subcontrol entity.
-func (mcu *MappedControlUpdate) AddFromSubcontrols(s ...*Subcontrol) *MappedControlUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *MappedControlUpdate) AddFromSubcontrols(v ...*Subcontrol) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.AddFromSubcontrolIDs(ids...)
+	return _u.AddFromSubcontrolIDs(ids...)
 }
 
 // AddToSubcontrolIDs adds the "to_subcontrols" edge to the Subcontrol entity by IDs.
-func (mcu *MappedControlUpdate) AddToSubcontrolIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.AddToSubcontrolIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) AddToSubcontrolIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.AddToSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddToSubcontrols adds the "to_subcontrols" edges to the Subcontrol entity.
-func (mcu *MappedControlUpdate) AddToSubcontrols(s ...*Subcontrol) *MappedControlUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *MappedControlUpdate) AddToSubcontrols(v ...*Subcontrol) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.AddToSubcontrolIDs(ids...)
+	return _u.AddToSubcontrolIDs(ids...)
 }
 
 // Mutation returns the MappedControlMutation object of the builder.
-func (mcu *MappedControlUpdate) Mutation() *MappedControlMutation {
-	return mcu.mutation
+func (_u *MappedControlUpdate) Mutation() *MappedControlMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (mcu *MappedControlUpdate) ClearOwner() *MappedControlUpdate {
-	mcu.mutation.ClearOwner()
-	return mcu
+func (_u *MappedControlUpdate) ClearOwner() *MappedControlUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (mcu *MappedControlUpdate) ClearBlockedGroups() *MappedControlUpdate {
-	mcu.mutation.ClearBlockedGroups()
-	return mcu
+func (_u *MappedControlUpdate) ClearBlockedGroups() *MappedControlUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (mcu *MappedControlUpdate) RemoveBlockedGroupIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.RemoveBlockedGroupIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) RemoveBlockedGroupIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (mcu *MappedControlUpdate) RemoveBlockedGroups(g ...*Group) *MappedControlUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *MappedControlUpdate) RemoveBlockedGroups(v ...*Group) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (mcu *MappedControlUpdate) ClearEditors() *MappedControlUpdate {
-	mcu.mutation.ClearEditors()
-	return mcu
+func (_u *MappedControlUpdate) ClearEditors() *MappedControlUpdate {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (mcu *MappedControlUpdate) RemoveEditorIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.RemoveEditorIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) RemoveEditorIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (mcu *MappedControlUpdate) RemoveEditors(g ...*Group) *MappedControlUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *MappedControlUpdate) RemoveEditors(v ...*Group) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearFromControls clears all "from_controls" edges to the Control entity.
-func (mcu *MappedControlUpdate) ClearFromControls() *MappedControlUpdate {
-	mcu.mutation.ClearFromControls()
-	return mcu
+func (_u *MappedControlUpdate) ClearFromControls() *MappedControlUpdate {
+	_u.mutation.ClearFromControls()
+	return _u
 }
 
 // RemoveFromControlIDs removes the "from_controls" edge to Control entities by IDs.
-func (mcu *MappedControlUpdate) RemoveFromControlIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.RemoveFromControlIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) RemoveFromControlIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.RemoveFromControlIDs(ids...)
+	return _u
 }
 
 // RemoveFromControls removes "from_controls" edges to Control entities.
-func (mcu *MappedControlUpdate) RemoveFromControls(c ...*Control) *MappedControlUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *MappedControlUpdate) RemoveFromControls(v ...*Control) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.RemoveFromControlIDs(ids...)
+	return _u.RemoveFromControlIDs(ids...)
 }
 
 // ClearToControls clears all "to_controls" edges to the Control entity.
-func (mcu *MappedControlUpdate) ClearToControls() *MappedControlUpdate {
-	mcu.mutation.ClearToControls()
-	return mcu
+func (_u *MappedControlUpdate) ClearToControls() *MappedControlUpdate {
+	_u.mutation.ClearToControls()
+	return _u
 }
 
 // RemoveToControlIDs removes the "to_controls" edge to Control entities by IDs.
-func (mcu *MappedControlUpdate) RemoveToControlIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.RemoveToControlIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) RemoveToControlIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.RemoveToControlIDs(ids...)
+	return _u
 }
 
 // RemoveToControls removes "to_controls" edges to Control entities.
-func (mcu *MappedControlUpdate) RemoveToControls(c ...*Control) *MappedControlUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *MappedControlUpdate) RemoveToControls(v ...*Control) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.RemoveToControlIDs(ids...)
+	return _u.RemoveToControlIDs(ids...)
 }
 
 // ClearFromSubcontrols clears all "from_subcontrols" edges to the Subcontrol entity.
-func (mcu *MappedControlUpdate) ClearFromSubcontrols() *MappedControlUpdate {
-	mcu.mutation.ClearFromSubcontrols()
-	return mcu
+func (_u *MappedControlUpdate) ClearFromSubcontrols() *MappedControlUpdate {
+	_u.mutation.ClearFromSubcontrols()
+	return _u
 }
 
 // RemoveFromSubcontrolIDs removes the "from_subcontrols" edge to Subcontrol entities by IDs.
-func (mcu *MappedControlUpdate) RemoveFromSubcontrolIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.RemoveFromSubcontrolIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) RemoveFromSubcontrolIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.RemoveFromSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveFromSubcontrols removes "from_subcontrols" edges to Subcontrol entities.
-func (mcu *MappedControlUpdate) RemoveFromSubcontrols(s ...*Subcontrol) *MappedControlUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *MappedControlUpdate) RemoveFromSubcontrols(v ...*Subcontrol) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.RemoveFromSubcontrolIDs(ids...)
+	return _u.RemoveFromSubcontrolIDs(ids...)
 }
 
 // ClearToSubcontrols clears all "to_subcontrols" edges to the Subcontrol entity.
-func (mcu *MappedControlUpdate) ClearToSubcontrols() *MappedControlUpdate {
-	mcu.mutation.ClearToSubcontrols()
-	return mcu
+func (_u *MappedControlUpdate) ClearToSubcontrols() *MappedControlUpdate {
+	_u.mutation.ClearToSubcontrols()
+	return _u
 }
 
 // RemoveToSubcontrolIDs removes the "to_subcontrols" edge to Subcontrol entities by IDs.
-func (mcu *MappedControlUpdate) RemoveToSubcontrolIDs(ids ...string) *MappedControlUpdate {
-	mcu.mutation.RemoveToSubcontrolIDs(ids...)
-	return mcu
+func (_u *MappedControlUpdate) RemoveToSubcontrolIDs(ids ...string) *MappedControlUpdate {
+	_u.mutation.RemoveToSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveToSubcontrols removes "to_subcontrols" edges to Subcontrol entities.
-func (mcu *MappedControlUpdate) RemoveToSubcontrols(s ...*Subcontrol) *MappedControlUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *MappedControlUpdate) RemoveToSubcontrols(v ...*Subcontrol) *MappedControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcu.RemoveToSubcontrolIDs(ids...)
+	return _u.RemoveToSubcontrolIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (mcu *MappedControlUpdate) Save(ctx context.Context) (int, error) {
-	if err := mcu.defaults(); err != nil {
+func (_u *MappedControlUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, mcu.sqlSave, mcu.mutation, mcu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mcu *MappedControlUpdate) SaveX(ctx context.Context) int {
-	affected, err := mcu.Save(ctx)
+func (_u *MappedControlUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -478,48 +478,48 @@ func (mcu *MappedControlUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (mcu *MappedControlUpdate) Exec(ctx context.Context) error {
-	_, err := mcu.Save(ctx)
+func (_u *MappedControlUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mcu *MappedControlUpdate) ExecX(ctx context.Context) {
-	if err := mcu.Exec(ctx); err != nil {
+func (_u *MappedControlUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mcu *MappedControlUpdate) defaults() error {
-	if _, ok := mcu.mutation.UpdatedAt(); !ok && !mcu.mutation.UpdatedAtCleared() {
+func (_u *MappedControlUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if mappedcontrol.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized mappedcontrol.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := mappedcontrol.UpdateDefaultUpdatedAt()
-		mcu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (mcu *MappedControlUpdate) check() error {
-	if v, ok := mcu.mutation.OwnerID(); ok {
+func (_u *MappedControlUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := mappedcontrol.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "MappedControl.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := mcu.mutation.MappingType(); ok {
+	if v, ok := _u.mutation.MappingType(); ok {
 		if err := mappedcontrol.MappingTypeValidator(v); err != nil {
 			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControl.mapping_type": %w`, err)}
 		}
 	}
-	if v, ok := mcu.mutation.Confidence(); ok {
+	if v, ok := _u.mutation.Confidence(); ok {
 		if err := mappedcontrol.ConfidenceValidator(v); err != nil {
 			return &ValidationError{Name: "confidence", err: fmt.Errorf(`generated: validator failed for field "MappedControl.confidence": %w`, err)}
 		}
 	}
-	if v, ok := mcu.mutation.Source(); ok {
+	if v, ok := _u.mutation.Source(); ok {
 		if err := mappedcontrol.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "MappedControl.source": %w`, err)}
 		}
@@ -528,89 +528,89 @@ func (mcu *MappedControlUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mcu *MappedControlUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MappedControlUpdate {
-	mcu.modifiers = append(mcu.modifiers, modifiers...)
-	return mcu
+func (_u *MappedControlUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MappedControlUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := mcu.check(); err != nil {
-		return n, err
+func (_u *MappedControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(mappedcontrol.Table, mappedcontrol.Columns, sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString))
-	if ps := mcu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if mcu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(mappedcontrol.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := mcu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(mappedcontrol.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if mcu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(mappedcontrol.FieldUpdatedAt, field.TypeTime)
 	}
-	if mcu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(mappedcontrol.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := mcu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(mappedcontrol.FieldUpdatedBy, field.TypeString, value)
 	}
-	if mcu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(mappedcontrol.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := mcu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(mappedcontrol.FieldDeletedAt, field.TypeTime, value)
 	}
-	if mcu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(mappedcontrol.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := mcu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(mappedcontrol.FieldDeletedBy, field.TypeString, value)
 	}
-	if mcu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(mappedcontrol.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := mcu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(mappedcontrol.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := mcu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, mappedcontrol.FieldTags, value)
 		})
 	}
-	if mcu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(mappedcontrol.FieldTags, field.TypeJSON)
 	}
-	if value, ok := mcu.mutation.MappingType(); ok {
+	if value, ok := _u.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrol.FieldMappingType, field.TypeEnum, value)
 	}
-	if value, ok := mcu.mutation.Relation(); ok {
+	if value, ok := _u.mutation.Relation(); ok {
 		_spec.SetField(mappedcontrol.FieldRelation, field.TypeString, value)
 	}
-	if mcu.mutation.RelationCleared() {
+	if _u.mutation.RelationCleared() {
 		_spec.ClearField(mappedcontrol.FieldRelation, field.TypeString)
 	}
-	if value, ok := mcu.mutation.Confidence(); ok {
+	if value, ok := _u.mutation.Confidence(); ok {
 		_spec.SetField(mappedcontrol.FieldConfidence, field.TypeInt, value)
 	}
-	if value, ok := mcu.mutation.AddedConfidence(); ok {
+	if value, ok := _u.mutation.AddedConfidence(); ok {
 		_spec.AddField(mappedcontrol.FieldConfidence, field.TypeInt, value)
 	}
-	if mcu.mutation.ConfidenceCleared() {
+	if _u.mutation.ConfidenceCleared() {
 		_spec.ClearField(mappedcontrol.FieldConfidence, field.TypeInt)
 	}
-	if value, ok := mcu.mutation.Source(); ok {
+	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(mappedcontrol.FieldSource, field.TypeEnum, value)
 	}
-	if mcu.mutation.SourceCleared() {
+	if _u.mutation.SourceCleared() {
 		_spec.ClearField(mappedcontrol.FieldSource, field.TypeEnum)
 	}
-	if mcu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -621,10 +621,10 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControl
+		edge.Schema = _u.schemaConfig.MappedControl
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -635,13 +635,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControl
+		edge.Schema = _u.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcu.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -652,10 +652,10 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlBlockedGroups
+		edge.Schema = _u.schemaConfig.MappedControlBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !mcu.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -666,13 +666,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlBlockedGroups
+		edge.Schema = _u.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -683,13 +683,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlBlockedGroups
+		edge.Schema = _u.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcu.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -700,10 +700,10 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlEditors
+		edge.Schema = _u.schemaConfig.MappedControlEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !mcu.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -714,13 +714,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlEditors
+		edge.Schema = _u.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -731,13 +731,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlEditors
+		edge.Schema = _u.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcu.mutation.FromControlsCleared() {
+	if _u.mutation.FromControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -748,10 +748,10 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlFromControls
+		edge.Schema = _u.schemaConfig.MappedControlFromControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.RemovedFromControlsIDs(); len(nodes) > 0 && !mcu.mutation.FromControlsCleared() {
+	if nodes := _u.mutation.RemovedFromControlsIDs(); len(nodes) > 0 && !_u.mutation.FromControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -762,13 +762,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlFromControls
+		edge.Schema = _u.schemaConfig.MappedControlFromControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.FromControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FromControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -779,13 +779,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlFromControls
+		edge.Schema = _u.schemaConfig.MappedControlFromControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcu.mutation.ToControlsCleared() {
+	if _u.mutation.ToControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -796,10 +796,10 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlToControls
+		edge.Schema = _u.schemaConfig.MappedControlToControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.RemovedToControlsIDs(); len(nodes) > 0 && !mcu.mutation.ToControlsCleared() {
+	if nodes := _u.mutation.RemovedToControlsIDs(); len(nodes) > 0 && !_u.mutation.ToControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -810,13 +810,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlToControls
+		edge.Schema = _u.schemaConfig.MappedControlToControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.ToControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ToControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -827,13 +827,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlToControls
+		edge.Schema = _u.schemaConfig.MappedControlToControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcu.mutation.FromSubcontrolsCleared() {
+	if _u.mutation.FromSubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -844,10 +844,10 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlFromSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlFromSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.RemovedFromSubcontrolsIDs(); len(nodes) > 0 && !mcu.mutation.FromSubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedFromSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.FromSubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -858,13 +858,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlFromSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlFromSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.FromSubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FromSubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -875,13 +875,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlFromSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlFromSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcu.mutation.ToSubcontrolsCleared() {
+	if _u.mutation.ToSubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -892,10 +892,10 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlToSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlToSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.RemovedToSubcontrolsIDs(); len(nodes) > 0 && !mcu.mutation.ToSubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedToSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.ToSubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -906,13 +906,13 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlToSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlToSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcu.mutation.ToSubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ToSubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -923,16 +923,16 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.MappedControlToSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlToSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = mcu.schemaConfig.MappedControl
-	ctx = internal.NewSchemaConfigContext(ctx, mcu.schemaConfig)
-	_spec.AddModifiers(mcu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, mcu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.MappedControl
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{mappedcontrol.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -940,8 +940,8 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		return 0, err
 	}
-	mcu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // MappedControlUpdateOne is the builder for updating a single MappedControl entity.
@@ -954,452 +954,452 @@ type MappedControlUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mcuo *MappedControlUpdateOne) SetUpdatedAt(t time.Time) *MappedControlUpdateOne {
-	mcuo.mutation.SetUpdatedAt(t)
-	return mcuo
+func (_u *MappedControlUpdateOne) SetUpdatedAt(v time.Time) *MappedControlUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (mcuo *MappedControlUpdateOne) ClearUpdatedAt() *MappedControlUpdateOne {
-	mcuo.mutation.ClearUpdatedAt()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearUpdatedAt() *MappedControlUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (mcuo *MappedControlUpdateOne) SetUpdatedBy(s string) *MappedControlUpdateOne {
-	mcuo.mutation.SetUpdatedBy(s)
-	return mcuo
+func (_u *MappedControlUpdateOne) SetUpdatedBy(v string) *MappedControlUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (mcuo *MappedControlUpdateOne) SetNillableUpdatedBy(s *string) *MappedControlUpdateOne {
-	if s != nil {
-		mcuo.SetUpdatedBy(*s)
+func (_u *MappedControlUpdateOne) SetNillableUpdatedBy(v *string) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return mcuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (mcuo *MappedControlUpdateOne) ClearUpdatedBy() *MappedControlUpdateOne {
-	mcuo.mutation.ClearUpdatedBy()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearUpdatedBy() *MappedControlUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (mcuo *MappedControlUpdateOne) SetDeletedAt(t time.Time) *MappedControlUpdateOne {
-	mcuo.mutation.SetDeletedAt(t)
-	return mcuo
+func (_u *MappedControlUpdateOne) SetDeletedAt(v time.Time) *MappedControlUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (mcuo *MappedControlUpdateOne) SetNillableDeletedAt(t *time.Time) *MappedControlUpdateOne {
-	if t != nil {
-		mcuo.SetDeletedAt(*t)
+func (_u *MappedControlUpdateOne) SetNillableDeletedAt(v *time.Time) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return mcuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (mcuo *MappedControlUpdateOne) ClearDeletedAt() *MappedControlUpdateOne {
-	mcuo.mutation.ClearDeletedAt()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearDeletedAt() *MappedControlUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (mcuo *MappedControlUpdateOne) SetDeletedBy(s string) *MappedControlUpdateOne {
-	mcuo.mutation.SetDeletedBy(s)
-	return mcuo
+func (_u *MappedControlUpdateOne) SetDeletedBy(v string) *MappedControlUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (mcuo *MappedControlUpdateOne) SetNillableDeletedBy(s *string) *MappedControlUpdateOne {
-	if s != nil {
-		mcuo.SetDeletedBy(*s)
+func (_u *MappedControlUpdateOne) SetNillableDeletedBy(v *string) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return mcuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (mcuo *MappedControlUpdateOne) ClearDeletedBy() *MappedControlUpdateOne {
-	mcuo.mutation.ClearDeletedBy()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearDeletedBy() *MappedControlUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (mcuo *MappedControlUpdateOne) SetTags(s []string) *MappedControlUpdateOne {
-	mcuo.mutation.SetTags(s)
-	return mcuo
+func (_u *MappedControlUpdateOne) SetTags(v []string) *MappedControlUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (mcuo *MappedControlUpdateOne) AppendTags(s []string) *MappedControlUpdateOne {
-	mcuo.mutation.AppendTags(s)
-	return mcuo
+// AppendTags appends value to the "tags" field.
+func (_u *MappedControlUpdateOne) AppendTags(v []string) *MappedControlUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (mcuo *MappedControlUpdateOne) ClearTags() *MappedControlUpdateOne {
-	mcuo.mutation.ClearTags()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearTags() *MappedControlUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (mcuo *MappedControlUpdateOne) SetOwnerID(s string) *MappedControlUpdateOne {
-	mcuo.mutation.SetOwnerID(s)
-	return mcuo
+func (_u *MappedControlUpdateOne) SetOwnerID(v string) *MappedControlUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (mcuo *MappedControlUpdateOne) SetNillableOwnerID(s *string) *MappedControlUpdateOne {
-	if s != nil {
-		mcuo.SetOwnerID(*s)
+func (_u *MappedControlUpdateOne) SetNillableOwnerID(v *string) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return mcuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (mcuo *MappedControlUpdateOne) ClearOwnerID() *MappedControlUpdateOne {
-	mcuo.mutation.ClearOwnerID()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearOwnerID() *MappedControlUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetMappingType sets the "mapping_type" field.
-func (mcuo *MappedControlUpdateOne) SetMappingType(et enums.MappingType) *MappedControlUpdateOne {
-	mcuo.mutation.SetMappingType(et)
-	return mcuo
+func (_u *MappedControlUpdateOne) SetMappingType(v enums.MappingType) *MappedControlUpdateOne {
+	_u.mutation.SetMappingType(v)
+	return _u
 }
 
 // SetNillableMappingType sets the "mapping_type" field if the given value is not nil.
-func (mcuo *MappedControlUpdateOne) SetNillableMappingType(et *enums.MappingType) *MappedControlUpdateOne {
-	if et != nil {
-		mcuo.SetMappingType(*et)
+func (_u *MappedControlUpdateOne) SetNillableMappingType(v *enums.MappingType) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetMappingType(*v)
 	}
-	return mcuo
+	return _u
 }
 
 // SetRelation sets the "relation" field.
-func (mcuo *MappedControlUpdateOne) SetRelation(s string) *MappedControlUpdateOne {
-	mcuo.mutation.SetRelation(s)
-	return mcuo
+func (_u *MappedControlUpdateOne) SetRelation(v string) *MappedControlUpdateOne {
+	_u.mutation.SetRelation(v)
+	return _u
 }
 
 // SetNillableRelation sets the "relation" field if the given value is not nil.
-func (mcuo *MappedControlUpdateOne) SetNillableRelation(s *string) *MappedControlUpdateOne {
-	if s != nil {
-		mcuo.SetRelation(*s)
+func (_u *MappedControlUpdateOne) SetNillableRelation(v *string) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetRelation(*v)
 	}
-	return mcuo
+	return _u
 }
 
 // ClearRelation clears the value of the "relation" field.
-func (mcuo *MappedControlUpdateOne) ClearRelation() *MappedControlUpdateOne {
-	mcuo.mutation.ClearRelation()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearRelation() *MappedControlUpdateOne {
+	_u.mutation.ClearRelation()
+	return _u
 }
 
 // SetConfidence sets the "confidence" field.
-func (mcuo *MappedControlUpdateOne) SetConfidence(i int) *MappedControlUpdateOne {
-	mcuo.mutation.ResetConfidence()
-	mcuo.mutation.SetConfidence(i)
-	return mcuo
+func (_u *MappedControlUpdateOne) SetConfidence(v int) *MappedControlUpdateOne {
+	_u.mutation.ResetConfidence()
+	_u.mutation.SetConfidence(v)
+	return _u
 }
 
 // SetNillableConfidence sets the "confidence" field if the given value is not nil.
-func (mcuo *MappedControlUpdateOne) SetNillableConfidence(i *int) *MappedControlUpdateOne {
-	if i != nil {
-		mcuo.SetConfidence(*i)
+func (_u *MappedControlUpdateOne) SetNillableConfidence(v *int) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetConfidence(*v)
 	}
-	return mcuo
+	return _u
 }
 
-// AddConfidence adds i to the "confidence" field.
-func (mcuo *MappedControlUpdateOne) AddConfidence(i int) *MappedControlUpdateOne {
-	mcuo.mutation.AddConfidence(i)
-	return mcuo
+// AddConfidence adds value to the "confidence" field.
+func (_u *MappedControlUpdateOne) AddConfidence(v int) *MappedControlUpdateOne {
+	_u.mutation.AddConfidence(v)
+	return _u
 }
 
 // ClearConfidence clears the value of the "confidence" field.
-func (mcuo *MappedControlUpdateOne) ClearConfidence() *MappedControlUpdateOne {
-	mcuo.mutation.ClearConfidence()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearConfidence() *MappedControlUpdateOne {
+	_u.mutation.ClearConfidence()
+	return _u
 }
 
 // SetSource sets the "source" field.
-func (mcuo *MappedControlUpdateOne) SetSource(es enums.MappingSource) *MappedControlUpdateOne {
-	mcuo.mutation.SetSource(es)
-	return mcuo
+func (_u *MappedControlUpdateOne) SetSource(v enums.MappingSource) *MappedControlUpdateOne {
+	_u.mutation.SetSource(v)
+	return _u
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (mcuo *MappedControlUpdateOne) SetNillableSource(es *enums.MappingSource) *MappedControlUpdateOne {
-	if es != nil {
-		mcuo.SetSource(*es)
+func (_u *MappedControlUpdateOne) SetNillableSource(v *enums.MappingSource) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetSource(*v)
 	}
-	return mcuo
+	return _u
 }
 
 // ClearSource clears the value of the "source" field.
-func (mcuo *MappedControlUpdateOne) ClearSource() *MappedControlUpdateOne {
-	mcuo.mutation.ClearSource()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearSource() *MappedControlUpdateOne {
+	_u.mutation.ClearSource()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (mcuo *MappedControlUpdateOne) SetOwner(o *Organization) *MappedControlUpdateOne {
-	return mcuo.SetOwnerID(o.ID)
+func (_u *MappedControlUpdateOne) SetOwner(v *Organization) *MappedControlUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (mcuo *MappedControlUpdateOne) AddBlockedGroupIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.AddBlockedGroupIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) AddBlockedGroupIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (mcuo *MappedControlUpdateOne) AddBlockedGroups(g ...*Group) *MappedControlUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *MappedControlUpdateOne) AddBlockedGroups(v ...*Group) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (mcuo *MappedControlUpdateOne) AddEditorIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.AddEditorIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) AddEditorIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (mcuo *MappedControlUpdateOne) AddEditors(g ...*Group) *MappedControlUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *MappedControlUpdateOne) AddEditors(v ...*Group) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddFromControlIDs adds the "from_controls" edge to the Control entity by IDs.
-func (mcuo *MappedControlUpdateOne) AddFromControlIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.AddFromControlIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) AddFromControlIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.AddFromControlIDs(ids...)
+	return _u
 }
 
 // AddFromControls adds the "from_controls" edges to the Control entity.
-func (mcuo *MappedControlUpdateOne) AddFromControls(c ...*Control) *MappedControlUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *MappedControlUpdateOne) AddFromControls(v ...*Control) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.AddFromControlIDs(ids...)
+	return _u.AddFromControlIDs(ids...)
 }
 
 // AddToControlIDs adds the "to_controls" edge to the Control entity by IDs.
-func (mcuo *MappedControlUpdateOne) AddToControlIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.AddToControlIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) AddToControlIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.AddToControlIDs(ids...)
+	return _u
 }
 
 // AddToControls adds the "to_controls" edges to the Control entity.
-func (mcuo *MappedControlUpdateOne) AddToControls(c ...*Control) *MappedControlUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *MappedControlUpdateOne) AddToControls(v ...*Control) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.AddToControlIDs(ids...)
+	return _u.AddToControlIDs(ids...)
 }
 
 // AddFromSubcontrolIDs adds the "from_subcontrols" edge to the Subcontrol entity by IDs.
-func (mcuo *MappedControlUpdateOne) AddFromSubcontrolIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.AddFromSubcontrolIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) AddFromSubcontrolIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.AddFromSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddFromSubcontrols adds the "from_subcontrols" edges to the Subcontrol entity.
-func (mcuo *MappedControlUpdateOne) AddFromSubcontrols(s ...*Subcontrol) *MappedControlUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *MappedControlUpdateOne) AddFromSubcontrols(v ...*Subcontrol) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.AddFromSubcontrolIDs(ids...)
+	return _u.AddFromSubcontrolIDs(ids...)
 }
 
 // AddToSubcontrolIDs adds the "to_subcontrols" edge to the Subcontrol entity by IDs.
-func (mcuo *MappedControlUpdateOne) AddToSubcontrolIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.AddToSubcontrolIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) AddToSubcontrolIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.AddToSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddToSubcontrols adds the "to_subcontrols" edges to the Subcontrol entity.
-func (mcuo *MappedControlUpdateOne) AddToSubcontrols(s ...*Subcontrol) *MappedControlUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *MappedControlUpdateOne) AddToSubcontrols(v ...*Subcontrol) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.AddToSubcontrolIDs(ids...)
+	return _u.AddToSubcontrolIDs(ids...)
 }
 
 // Mutation returns the MappedControlMutation object of the builder.
-func (mcuo *MappedControlUpdateOne) Mutation() *MappedControlMutation {
-	return mcuo.mutation
+func (_u *MappedControlUpdateOne) Mutation() *MappedControlMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (mcuo *MappedControlUpdateOne) ClearOwner() *MappedControlUpdateOne {
-	mcuo.mutation.ClearOwner()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearOwner() *MappedControlUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (mcuo *MappedControlUpdateOne) ClearBlockedGroups() *MappedControlUpdateOne {
-	mcuo.mutation.ClearBlockedGroups()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearBlockedGroups() *MappedControlUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (mcuo *MappedControlUpdateOne) RemoveBlockedGroupIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.RemoveBlockedGroupIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) RemoveBlockedGroupIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (mcuo *MappedControlUpdateOne) RemoveBlockedGroups(g ...*Group) *MappedControlUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *MappedControlUpdateOne) RemoveBlockedGroups(v ...*Group) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (mcuo *MappedControlUpdateOne) ClearEditors() *MappedControlUpdateOne {
-	mcuo.mutation.ClearEditors()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearEditors() *MappedControlUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (mcuo *MappedControlUpdateOne) RemoveEditorIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.RemoveEditorIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) RemoveEditorIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (mcuo *MappedControlUpdateOne) RemoveEditors(g ...*Group) *MappedControlUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *MappedControlUpdateOne) RemoveEditors(v ...*Group) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearFromControls clears all "from_controls" edges to the Control entity.
-func (mcuo *MappedControlUpdateOne) ClearFromControls() *MappedControlUpdateOne {
-	mcuo.mutation.ClearFromControls()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearFromControls() *MappedControlUpdateOne {
+	_u.mutation.ClearFromControls()
+	return _u
 }
 
 // RemoveFromControlIDs removes the "from_controls" edge to Control entities by IDs.
-func (mcuo *MappedControlUpdateOne) RemoveFromControlIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.RemoveFromControlIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) RemoveFromControlIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.RemoveFromControlIDs(ids...)
+	return _u
 }
 
 // RemoveFromControls removes "from_controls" edges to Control entities.
-func (mcuo *MappedControlUpdateOne) RemoveFromControls(c ...*Control) *MappedControlUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *MappedControlUpdateOne) RemoveFromControls(v ...*Control) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.RemoveFromControlIDs(ids...)
+	return _u.RemoveFromControlIDs(ids...)
 }
 
 // ClearToControls clears all "to_controls" edges to the Control entity.
-func (mcuo *MappedControlUpdateOne) ClearToControls() *MappedControlUpdateOne {
-	mcuo.mutation.ClearToControls()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearToControls() *MappedControlUpdateOne {
+	_u.mutation.ClearToControls()
+	return _u
 }
 
 // RemoveToControlIDs removes the "to_controls" edge to Control entities by IDs.
-func (mcuo *MappedControlUpdateOne) RemoveToControlIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.RemoveToControlIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) RemoveToControlIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.RemoveToControlIDs(ids...)
+	return _u
 }
 
 // RemoveToControls removes "to_controls" edges to Control entities.
-func (mcuo *MappedControlUpdateOne) RemoveToControls(c ...*Control) *MappedControlUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *MappedControlUpdateOne) RemoveToControls(v ...*Control) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.RemoveToControlIDs(ids...)
+	return _u.RemoveToControlIDs(ids...)
 }
 
 // ClearFromSubcontrols clears all "from_subcontrols" edges to the Subcontrol entity.
-func (mcuo *MappedControlUpdateOne) ClearFromSubcontrols() *MappedControlUpdateOne {
-	mcuo.mutation.ClearFromSubcontrols()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearFromSubcontrols() *MappedControlUpdateOne {
+	_u.mutation.ClearFromSubcontrols()
+	return _u
 }
 
 // RemoveFromSubcontrolIDs removes the "from_subcontrols" edge to Subcontrol entities by IDs.
-func (mcuo *MappedControlUpdateOne) RemoveFromSubcontrolIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.RemoveFromSubcontrolIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) RemoveFromSubcontrolIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.RemoveFromSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveFromSubcontrols removes "from_subcontrols" edges to Subcontrol entities.
-func (mcuo *MappedControlUpdateOne) RemoveFromSubcontrols(s ...*Subcontrol) *MappedControlUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *MappedControlUpdateOne) RemoveFromSubcontrols(v ...*Subcontrol) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.RemoveFromSubcontrolIDs(ids...)
+	return _u.RemoveFromSubcontrolIDs(ids...)
 }
 
 // ClearToSubcontrols clears all "to_subcontrols" edges to the Subcontrol entity.
-func (mcuo *MappedControlUpdateOne) ClearToSubcontrols() *MappedControlUpdateOne {
-	mcuo.mutation.ClearToSubcontrols()
-	return mcuo
+func (_u *MappedControlUpdateOne) ClearToSubcontrols() *MappedControlUpdateOne {
+	_u.mutation.ClearToSubcontrols()
+	return _u
 }
 
 // RemoveToSubcontrolIDs removes the "to_subcontrols" edge to Subcontrol entities by IDs.
-func (mcuo *MappedControlUpdateOne) RemoveToSubcontrolIDs(ids ...string) *MappedControlUpdateOne {
-	mcuo.mutation.RemoveToSubcontrolIDs(ids...)
-	return mcuo
+func (_u *MappedControlUpdateOne) RemoveToSubcontrolIDs(ids ...string) *MappedControlUpdateOne {
+	_u.mutation.RemoveToSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveToSubcontrols removes "to_subcontrols" edges to Subcontrol entities.
-func (mcuo *MappedControlUpdateOne) RemoveToSubcontrols(s ...*Subcontrol) *MappedControlUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *MappedControlUpdateOne) RemoveToSubcontrols(v ...*Subcontrol) *MappedControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcuo.RemoveToSubcontrolIDs(ids...)
+	return _u.RemoveToSubcontrolIDs(ids...)
 }
 
 // Where appends a list predicates to the MappedControlUpdate builder.
-func (mcuo *MappedControlUpdateOne) Where(ps ...predicate.MappedControl) *MappedControlUpdateOne {
-	mcuo.mutation.Where(ps...)
-	return mcuo
+func (_u *MappedControlUpdateOne) Where(ps ...predicate.MappedControl) *MappedControlUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (mcuo *MappedControlUpdateOne) Select(field string, fields ...string) *MappedControlUpdateOne {
-	mcuo.fields = append([]string{field}, fields...)
-	return mcuo
+func (_u *MappedControlUpdateOne) Select(field string, fields ...string) *MappedControlUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated MappedControl entity.
-func (mcuo *MappedControlUpdateOne) Save(ctx context.Context) (*MappedControl, error) {
-	if err := mcuo.defaults(); err != nil {
+func (_u *MappedControlUpdateOne) Save(ctx context.Context) (*MappedControl, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, mcuo.sqlSave, mcuo.mutation, mcuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mcuo *MappedControlUpdateOne) SaveX(ctx context.Context) *MappedControl {
-	node, err := mcuo.Save(ctx)
+func (_u *MappedControlUpdateOne) SaveX(ctx context.Context) *MappedControl {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1407,48 +1407,48 @@ func (mcuo *MappedControlUpdateOne) SaveX(ctx context.Context) *MappedControl {
 }
 
 // Exec executes the query on the entity.
-func (mcuo *MappedControlUpdateOne) Exec(ctx context.Context) error {
-	_, err := mcuo.Save(ctx)
+func (_u *MappedControlUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mcuo *MappedControlUpdateOne) ExecX(ctx context.Context) {
-	if err := mcuo.Exec(ctx); err != nil {
+func (_u *MappedControlUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mcuo *MappedControlUpdateOne) defaults() error {
-	if _, ok := mcuo.mutation.UpdatedAt(); !ok && !mcuo.mutation.UpdatedAtCleared() {
+func (_u *MappedControlUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if mappedcontrol.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized mappedcontrol.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := mappedcontrol.UpdateDefaultUpdatedAt()
-		mcuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (mcuo *MappedControlUpdateOne) check() error {
-	if v, ok := mcuo.mutation.OwnerID(); ok {
+func (_u *MappedControlUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := mappedcontrol.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "MappedControl.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := mcuo.mutation.MappingType(); ok {
+	if v, ok := _u.mutation.MappingType(); ok {
 		if err := mappedcontrol.MappingTypeValidator(v); err != nil {
 			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControl.mapping_type": %w`, err)}
 		}
 	}
-	if v, ok := mcuo.mutation.Confidence(); ok {
+	if v, ok := _u.mutation.Confidence(); ok {
 		if err := mappedcontrol.ConfidenceValidator(v); err != nil {
 			return &ValidationError{Name: "confidence", err: fmt.Errorf(`generated: validator failed for field "MappedControl.confidence": %w`, err)}
 		}
 	}
-	if v, ok := mcuo.mutation.Source(); ok {
+	if v, ok := _u.mutation.Source(); ok {
 		if err := mappedcontrol.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "MappedControl.source": %w`, err)}
 		}
@@ -1457,22 +1457,22 @@ func (mcuo *MappedControlUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mcuo *MappedControlUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MappedControlUpdateOne {
-	mcuo.modifiers = append(mcuo.modifiers, modifiers...)
-	return mcuo
+func (_u *MappedControlUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MappedControlUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedControl, err error) {
-	if err := mcuo.check(); err != nil {
+func (_u *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedControl, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(mappedcontrol.Table, mappedcontrol.Columns, sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString))
-	id, ok := mcuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "MappedControl.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := mcuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, mappedcontrol.FieldID)
 		for _, f := range fields {
@@ -1484,79 +1484,79 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 			}
 		}
 	}
-	if ps := mcuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if mcuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(mappedcontrol.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := mcuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(mappedcontrol.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if mcuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(mappedcontrol.FieldUpdatedAt, field.TypeTime)
 	}
-	if mcuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(mappedcontrol.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := mcuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(mappedcontrol.FieldUpdatedBy, field.TypeString, value)
 	}
-	if mcuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(mappedcontrol.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := mcuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(mappedcontrol.FieldDeletedAt, field.TypeTime, value)
 	}
-	if mcuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(mappedcontrol.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := mcuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(mappedcontrol.FieldDeletedBy, field.TypeString, value)
 	}
-	if mcuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(mappedcontrol.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := mcuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(mappedcontrol.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := mcuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, mappedcontrol.FieldTags, value)
 		})
 	}
-	if mcuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(mappedcontrol.FieldTags, field.TypeJSON)
 	}
-	if value, ok := mcuo.mutation.MappingType(); ok {
+	if value, ok := _u.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrol.FieldMappingType, field.TypeEnum, value)
 	}
-	if value, ok := mcuo.mutation.Relation(); ok {
+	if value, ok := _u.mutation.Relation(); ok {
 		_spec.SetField(mappedcontrol.FieldRelation, field.TypeString, value)
 	}
-	if mcuo.mutation.RelationCleared() {
+	if _u.mutation.RelationCleared() {
 		_spec.ClearField(mappedcontrol.FieldRelation, field.TypeString)
 	}
-	if value, ok := mcuo.mutation.Confidence(); ok {
+	if value, ok := _u.mutation.Confidence(); ok {
 		_spec.SetField(mappedcontrol.FieldConfidence, field.TypeInt, value)
 	}
-	if value, ok := mcuo.mutation.AddedConfidence(); ok {
+	if value, ok := _u.mutation.AddedConfidence(); ok {
 		_spec.AddField(mappedcontrol.FieldConfidence, field.TypeInt, value)
 	}
-	if mcuo.mutation.ConfidenceCleared() {
+	if _u.mutation.ConfidenceCleared() {
 		_spec.ClearField(mappedcontrol.FieldConfidence, field.TypeInt)
 	}
-	if value, ok := mcuo.mutation.Source(); ok {
+	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(mappedcontrol.FieldSource, field.TypeEnum, value)
 	}
-	if mcuo.mutation.SourceCleared() {
+	if _u.mutation.SourceCleared() {
 		_spec.ClearField(mappedcontrol.FieldSource, field.TypeEnum)
 	}
-	if mcuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1567,10 +1567,10 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControl
+		edge.Schema = _u.schemaConfig.MappedControl
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1581,13 +1581,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControl
+		edge.Schema = _u.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcuo.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1598,10 +1598,10 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlBlockedGroups
+		edge.Schema = _u.schemaConfig.MappedControlBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !mcuo.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1612,13 +1612,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlBlockedGroups
+		edge.Schema = _u.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1629,13 +1629,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlBlockedGroups
+		edge.Schema = _u.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcuo.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1646,10 +1646,10 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlEditors
+		edge.Schema = _u.schemaConfig.MappedControlEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !mcuo.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1660,13 +1660,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlEditors
+		edge.Schema = _u.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1677,13 +1677,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlEditors
+		edge.Schema = _u.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcuo.mutation.FromControlsCleared() {
+	if _u.mutation.FromControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1694,10 +1694,10 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlFromControls
+		edge.Schema = _u.schemaConfig.MappedControlFromControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.RemovedFromControlsIDs(); len(nodes) > 0 && !mcuo.mutation.FromControlsCleared() {
+	if nodes := _u.mutation.RemovedFromControlsIDs(); len(nodes) > 0 && !_u.mutation.FromControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1708,13 +1708,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlFromControls
+		edge.Schema = _u.schemaConfig.MappedControlFromControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.FromControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FromControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1725,13 +1725,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlFromControls
+		edge.Schema = _u.schemaConfig.MappedControlFromControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcuo.mutation.ToControlsCleared() {
+	if _u.mutation.ToControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1742,10 +1742,10 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlToControls
+		edge.Schema = _u.schemaConfig.MappedControlToControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.RemovedToControlsIDs(); len(nodes) > 0 && !mcuo.mutation.ToControlsCleared() {
+	if nodes := _u.mutation.RemovedToControlsIDs(); len(nodes) > 0 && !_u.mutation.ToControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1756,13 +1756,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlToControls
+		edge.Schema = _u.schemaConfig.MappedControlToControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.ToControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ToControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1773,13 +1773,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlToControls
+		edge.Schema = _u.schemaConfig.MappedControlToControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcuo.mutation.FromSubcontrolsCleared() {
+	if _u.mutation.FromSubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1790,10 +1790,10 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlFromSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlFromSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.RemovedFromSubcontrolsIDs(); len(nodes) > 0 && !mcuo.mutation.FromSubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedFromSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.FromSubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1804,13 +1804,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlFromSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlFromSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.FromSubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FromSubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1821,13 +1821,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlFromSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlFromSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mcuo.mutation.ToSubcontrolsCleared() {
+	if _u.mutation.ToSubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1838,10 +1838,10 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlToSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlToSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.RemovedToSubcontrolsIDs(); len(nodes) > 0 && !mcuo.mutation.ToSubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedToSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.ToSubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1852,13 +1852,13 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlToSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlToSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mcuo.mutation.ToSubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ToSubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1869,19 +1869,19 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.MappedControlToSubcontrols
+		edge.Schema = _u.schemaConfig.MappedControlToSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = mcuo.schemaConfig.MappedControl
-	ctx = internal.NewSchemaConfigContext(ctx, mcuo.schemaConfig)
-	_spec.AddModifiers(mcuo.modifiers...)
-	_node = &MappedControl{config: mcuo.config}
+	_spec.Node.Schema = _u.schemaConfig.MappedControl
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &MappedControl{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, mcuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{mappedcontrol.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1889,6 +1889,6 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 		}
 		return nil, err
 	}
-	mcuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -76,6 +76,8 @@ const (
 	EdgePrograms = "programs"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
 	EdgeRisks = "risks"
+	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
+	EdgeControlImplementations = "control_implementations"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
 	// Table holds the table name of the task in the database.
@@ -148,6 +150,11 @@ const (
 	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RisksInverseTable = "risks"
+	// ControlImplementationsTable is the table that holds the control_implementations relation/edge. The primary key declared below.
+	ControlImplementationsTable = "control_implementation_tasks"
+	// ControlImplementationsInverseTable is the table name for the ControlImplementation entity.
+	// It exists in this package in order to avoid circular dependency with the "controlimplementation" package.
+	ControlImplementationsInverseTable = "control_implementations"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
 	EvidenceTable = "task_evidence"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -202,6 +209,9 @@ var (
 	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
 	// primary key for the risks relation (M2M).
 	RisksPrimaryKey = []string{"risk_id", "task_id"}
+	// ControlImplementationsPrimaryKey and ControlImplementationsColumn2 are the table columns denoting the
+	// primary key for the control_implementations relation (M2M).
+	ControlImplementationsPrimaryKey = []string{"control_implementation_id", "task_id"}
 	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
 	// primary key for the evidence relation (M2M).
 	EvidencePrimaryKey = []string{"task_id", "evidence_id"}
@@ -491,6 +501,20 @@ func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByControlImplementationsCount orders the results by control_implementations count.
+func ByControlImplementationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlImplementationsStep(), opts...)
+	}
+}
+
+// ByControlImplementations orders the results by control_implementations terms.
+func ByControlImplementations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlImplementationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByEvidenceCount orders the results by evidence count.
 func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -586,6 +610,13 @@ func newRisksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RisksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, RisksTable, RisksPrimaryKey...),
+	)
+}
+func newControlImplementationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlImplementationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlImplementationsTable, ControlImplementationsPrimaryKey...),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {

@@ -35,44 +35,44 @@ type PasswordResetTokenQuery struct {
 }
 
 // Where adds a new predicate for the PasswordResetTokenQuery builder.
-func (prtq *PasswordResetTokenQuery) Where(ps ...predicate.PasswordResetToken) *PasswordResetTokenQuery {
-	prtq.predicates = append(prtq.predicates, ps...)
-	return prtq
+func (_q *PasswordResetTokenQuery) Where(ps ...predicate.PasswordResetToken) *PasswordResetTokenQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (prtq *PasswordResetTokenQuery) Limit(limit int) *PasswordResetTokenQuery {
-	prtq.ctx.Limit = &limit
-	return prtq
+func (_q *PasswordResetTokenQuery) Limit(limit int) *PasswordResetTokenQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (prtq *PasswordResetTokenQuery) Offset(offset int) *PasswordResetTokenQuery {
-	prtq.ctx.Offset = &offset
-	return prtq
+func (_q *PasswordResetTokenQuery) Offset(offset int) *PasswordResetTokenQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (prtq *PasswordResetTokenQuery) Unique(unique bool) *PasswordResetTokenQuery {
-	prtq.ctx.Unique = &unique
-	return prtq
+func (_q *PasswordResetTokenQuery) Unique(unique bool) *PasswordResetTokenQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (prtq *PasswordResetTokenQuery) Order(o ...passwordresettoken.OrderOption) *PasswordResetTokenQuery {
-	prtq.order = append(prtq.order, o...)
-	return prtq
+func (_q *PasswordResetTokenQuery) Order(o ...passwordresettoken.OrderOption) *PasswordResetTokenQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (prtq *PasswordResetTokenQuery) QueryOwner() *UserQuery {
-	query := (&UserClient{config: prtq.config}).Query()
+func (_q *PasswordResetTokenQuery) QueryOwner() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := prtq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := prtq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -81,10 +81,10 @@ func (prtq *PasswordResetTokenQuery) QueryOwner() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, passwordresettoken.OwnerTable, passwordresettoken.OwnerColumn),
 		)
-		schemaConfig := prtq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.PasswordResetToken
-		fromU = sqlgraph.SetNeighbors(prtq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -92,8 +92,8 @@ func (prtq *PasswordResetTokenQuery) QueryOwner() *UserQuery {
 
 // First returns the first PasswordResetToken entity from the query.
 // Returns a *NotFoundError when no PasswordResetToken was found.
-func (prtq *PasswordResetTokenQuery) First(ctx context.Context) (*PasswordResetToken, error) {
-	nodes, err := prtq.Limit(1).All(setContextOp(ctx, prtq.ctx, ent.OpQueryFirst))
+func (_q *PasswordResetTokenQuery) First(ctx context.Context) (*PasswordResetToken, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -104,8 +104,8 @@ func (prtq *PasswordResetTokenQuery) First(ctx context.Context) (*PasswordResetT
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (prtq *PasswordResetTokenQuery) FirstX(ctx context.Context) *PasswordResetToken {
-	node, err := prtq.First(ctx)
+func (_q *PasswordResetTokenQuery) FirstX(ctx context.Context) *PasswordResetToken {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -114,9 +114,9 @@ func (prtq *PasswordResetTokenQuery) FirstX(ctx context.Context) *PasswordResetT
 
 // FirstID returns the first PasswordResetToken ID from the query.
 // Returns a *NotFoundError when no PasswordResetToken ID was found.
-func (prtq *PasswordResetTokenQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *PasswordResetTokenQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = prtq.Limit(1).IDs(setContextOp(ctx, prtq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -127,8 +127,8 @@ func (prtq *PasswordResetTokenQuery) FirstID(ctx context.Context) (id string, er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (prtq *PasswordResetTokenQuery) FirstIDX(ctx context.Context) string {
-	id, err := prtq.FirstID(ctx)
+func (_q *PasswordResetTokenQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -138,8 +138,8 @@ func (prtq *PasswordResetTokenQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single PasswordResetToken entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one PasswordResetToken entity is found.
 // Returns a *NotFoundError when no PasswordResetToken entities are found.
-func (prtq *PasswordResetTokenQuery) Only(ctx context.Context) (*PasswordResetToken, error) {
-	nodes, err := prtq.Limit(2).All(setContextOp(ctx, prtq.ctx, ent.OpQueryOnly))
+func (_q *PasswordResetTokenQuery) Only(ctx context.Context) (*PasswordResetToken, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -154,8 +154,8 @@ func (prtq *PasswordResetTokenQuery) Only(ctx context.Context) (*PasswordResetTo
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (prtq *PasswordResetTokenQuery) OnlyX(ctx context.Context) *PasswordResetToken {
-	node, err := prtq.Only(ctx)
+func (_q *PasswordResetTokenQuery) OnlyX(ctx context.Context) *PasswordResetToken {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -165,9 +165,9 @@ func (prtq *PasswordResetTokenQuery) OnlyX(ctx context.Context) *PasswordResetTo
 // OnlyID is like Only, but returns the only PasswordResetToken ID in the query.
 // Returns a *NotSingularError when more than one PasswordResetToken ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (prtq *PasswordResetTokenQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *PasswordResetTokenQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = prtq.Limit(2).IDs(setContextOp(ctx, prtq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -182,8 +182,8 @@ func (prtq *PasswordResetTokenQuery) OnlyID(ctx context.Context) (id string, err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (prtq *PasswordResetTokenQuery) OnlyIDX(ctx context.Context) string {
-	id, err := prtq.OnlyID(ctx)
+func (_q *PasswordResetTokenQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -191,18 +191,18 @@ func (prtq *PasswordResetTokenQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of PasswordResetTokens.
-func (prtq *PasswordResetTokenQuery) All(ctx context.Context) ([]*PasswordResetToken, error) {
-	ctx = setContextOp(ctx, prtq.ctx, ent.OpQueryAll)
-	if err := prtq.prepareQuery(ctx); err != nil {
+func (_q *PasswordResetTokenQuery) All(ctx context.Context) ([]*PasswordResetToken, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*PasswordResetToken, *PasswordResetTokenQuery]()
-	return withInterceptors[[]*PasswordResetToken](ctx, prtq, qr, prtq.inters)
+	return withInterceptors[[]*PasswordResetToken](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (prtq *PasswordResetTokenQuery) AllX(ctx context.Context) []*PasswordResetToken {
-	nodes, err := prtq.All(ctx)
+func (_q *PasswordResetTokenQuery) AllX(ctx context.Context) []*PasswordResetToken {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -210,20 +210,20 @@ func (prtq *PasswordResetTokenQuery) AllX(ctx context.Context) []*PasswordResetT
 }
 
 // IDs executes the query and returns a list of PasswordResetToken IDs.
-func (prtq *PasswordResetTokenQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if prtq.ctx.Unique == nil && prtq.path != nil {
-		prtq.Unique(true)
+func (_q *PasswordResetTokenQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, prtq.ctx, ent.OpQueryIDs)
-	if err = prtq.Select(passwordresettoken.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(passwordresettoken.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (prtq *PasswordResetTokenQuery) IDsX(ctx context.Context) []string {
-	ids, err := prtq.IDs(ctx)
+func (_q *PasswordResetTokenQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -231,17 +231,17 @@ func (prtq *PasswordResetTokenQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (prtq *PasswordResetTokenQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, prtq.ctx, ent.OpQueryCount)
-	if err := prtq.prepareQuery(ctx); err != nil {
+func (_q *PasswordResetTokenQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, prtq, querierCount[*PasswordResetTokenQuery](), prtq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*PasswordResetTokenQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (prtq *PasswordResetTokenQuery) CountX(ctx context.Context) int {
-	count, err := prtq.Count(ctx)
+func (_q *PasswordResetTokenQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -249,9 +249,9 @@ func (prtq *PasswordResetTokenQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (prtq *PasswordResetTokenQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, prtq.ctx, ent.OpQueryExist)
-	switch _, err := prtq.FirstID(ctx); {
+func (_q *PasswordResetTokenQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -262,8 +262,8 @@ func (prtq *PasswordResetTokenQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (prtq *PasswordResetTokenQuery) ExistX(ctx context.Context) bool {
-	exist, err := prtq.Exist(ctx)
+func (_q *PasswordResetTokenQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -272,33 +272,33 @@ func (prtq *PasswordResetTokenQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the PasswordResetTokenQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (prtq *PasswordResetTokenQuery) Clone() *PasswordResetTokenQuery {
-	if prtq == nil {
+func (_q *PasswordResetTokenQuery) Clone() *PasswordResetTokenQuery {
+	if _q == nil {
 		return nil
 	}
 	return &PasswordResetTokenQuery{
-		config:     prtq.config,
-		ctx:        prtq.ctx.Clone(),
-		order:      append([]passwordresettoken.OrderOption{}, prtq.order...),
-		inters:     append([]Interceptor{}, prtq.inters...),
-		predicates: append([]predicate.PasswordResetToken{}, prtq.predicates...),
-		withOwner:  prtq.withOwner.Clone(),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]passwordresettoken.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.PasswordResetToken{}, _q.predicates...),
+		withOwner:  _q.withOwner.Clone(),
 		// clone intermediate query.
-		sql:       prtq.sql.Clone(),
-		path:      prtq.path,
-		modifiers: append([]func(*sql.Selector){}, prtq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (prtq *PasswordResetTokenQuery) WithOwner(opts ...func(*UserQuery)) *PasswordResetTokenQuery {
-	query := (&UserClient{config: prtq.config}).Query()
+func (_q *PasswordResetTokenQuery) WithOwner(opts ...func(*UserQuery)) *PasswordResetTokenQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	prtq.withOwner = query
-	return prtq
+	_q.withOwner = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -315,10 +315,10 @@ func (prtq *PasswordResetTokenQuery) WithOwner(opts ...func(*UserQuery)) *Passwo
 //		GroupBy(passwordresettoken.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (prtq *PasswordResetTokenQuery) GroupBy(field string, fields ...string) *PasswordResetTokenGroupBy {
-	prtq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &PasswordResetTokenGroupBy{build: prtq}
-	grbuild.flds = &prtq.ctx.Fields
+func (_q *PasswordResetTokenQuery) GroupBy(field string, fields ...string) *PasswordResetTokenGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &PasswordResetTokenGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = passwordresettoken.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -336,97 +336,97 @@ func (prtq *PasswordResetTokenQuery) GroupBy(field string, fields ...string) *Pa
 //	client.PasswordResetToken.Query().
 //		Select(passwordresettoken.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (prtq *PasswordResetTokenQuery) Select(fields ...string) *PasswordResetTokenSelect {
-	prtq.ctx.Fields = append(prtq.ctx.Fields, fields...)
-	sbuild := &PasswordResetTokenSelect{PasswordResetTokenQuery: prtq}
+func (_q *PasswordResetTokenQuery) Select(fields ...string) *PasswordResetTokenSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &PasswordResetTokenSelect{PasswordResetTokenQuery: _q}
 	sbuild.label = passwordresettoken.Label
-	sbuild.flds, sbuild.scan = &prtq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a PasswordResetTokenSelect configured with the given aggregations.
-func (prtq *PasswordResetTokenQuery) Aggregate(fns ...AggregateFunc) *PasswordResetTokenSelect {
-	return prtq.Select().Aggregate(fns...)
+func (_q *PasswordResetTokenQuery) Aggregate(fns ...AggregateFunc) *PasswordResetTokenSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (prtq *PasswordResetTokenQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range prtq.inters {
+func (_q *PasswordResetTokenQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, prtq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range prtq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !passwordresettoken.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if prtq.path != nil {
-		prev, err := prtq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		prtq.sql = prev
+		_q.sql = prev
 	}
 	if passwordresettoken.Policy == nil {
 		return errors.New("generated: uninitialized passwordresettoken.Policy (forgotten import generated/runtime?)")
 	}
-	if err := passwordresettoken.Policy.EvalQuery(ctx, prtq); err != nil {
+	if err := passwordresettoken.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (prtq *PasswordResetTokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*PasswordResetToken, error) {
+func (_q *PasswordResetTokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*PasswordResetToken, error) {
 	var (
 		nodes       = []*PasswordResetToken{}
-		_spec       = prtq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [1]bool{
-			prtq.withOwner != nil,
+			_q.withOwner != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*PasswordResetToken).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &PasswordResetToken{config: prtq.config}
+		node := &PasswordResetToken{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = prtq.schemaConfig.PasswordResetToken
-	ctx = internal.NewSchemaConfigContext(ctx, prtq.schemaConfig)
-	if len(prtq.modifiers) > 0 {
-		_spec.Modifiers = prtq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.PasswordResetToken
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, prtq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := prtq.withOwner; query != nil {
-		if err := prtq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *PasswordResetToken, e *User) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range prtq.loadTotal {
-		if err := prtq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (prtq *PasswordResetTokenQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*PasswordResetToken, init func(*PasswordResetToken), assign func(*PasswordResetToken, *User)) error {
+func (_q *PasswordResetTokenQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*PasswordResetToken, init func(*PasswordResetToken), assign func(*PasswordResetToken, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*PasswordResetToken)
 	for i := range nodes {
@@ -456,29 +456,29 @@ func (prtq *PasswordResetTokenQuery) loadOwner(ctx context.Context, query *UserQ
 	return nil
 }
 
-func (prtq *PasswordResetTokenQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := prtq.querySpec()
-	_spec.Node.Schema = prtq.schemaConfig.PasswordResetToken
-	ctx = internal.NewSchemaConfigContext(ctx, prtq.schemaConfig)
-	if len(prtq.modifiers) > 0 {
-		_spec.Modifiers = prtq.modifiers
+func (_q *PasswordResetTokenQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.PasswordResetToken
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = prtq.ctx.Fields
-	if len(prtq.ctx.Fields) > 0 {
-		_spec.Unique = prtq.ctx.Unique != nil && *prtq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, prtq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (prtq *PasswordResetTokenQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *PasswordResetTokenQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(passwordresettoken.Table, passwordresettoken.Columns, sqlgraph.NewFieldSpec(passwordresettoken.FieldID, field.TypeString))
-	_spec.From = prtq.sql
-	if unique := prtq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if prtq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := prtq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, passwordresettoken.FieldID)
 		for i := range fields {
@@ -486,24 +486,24 @@ func (prtq *PasswordResetTokenQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if prtq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(passwordresettoken.FieldOwnerID)
 		}
 	}
-	if ps := prtq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := prtq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := prtq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := prtq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -513,48 +513,48 @@ func (prtq *PasswordResetTokenQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (prtq *PasswordResetTokenQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(prtq.driver.Dialect())
+func (_q *PasswordResetTokenQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(passwordresettoken.Table)
-	columns := prtq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = passwordresettoken.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if prtq.sql != nil {
-		selector = prtq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if prtq.ctx.Unique != nil && *prtq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(prtq.schemaConfig.PasswordResetToken)
-	ctx = internal.NewSchemaConfigContext(ctx, prtq.schemaConfig)
+	t1.Schema(_q.schemaConfig.PasswordResetToken)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range prtq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range prtq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range prtq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := prtq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := prtq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (prtq *PasswordResetTokenQuery) Modify(modifiers ...func(s *sql.Selector)) *PasswordResetTokenSelect {
-	prtq.modifiers = append(prtq.modifiers, modifiers...)
-	return prtq.Select()
+func (_q *PasswordResetTokenQuery) Modify(modifiers ...func(s *sql.Selector)) *PasswordResetTokenSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -583,41 +583,41 @@ type PasswordResetTokenGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (prtgb *PasswordResetTokenGroupBy) Aggregate(fns ...AggregateFunc) *PasswordResetTokenGroupBy {
-	prtgb.fns = append(prtgb.fns, fns...)
-	return prtgb
+func (_g *PasswordResetTokenGroupBy) Aggregate(fns ...AggregateFunc) *PasswordResetTokenGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (prtgb *PasswordResetTokenGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, prtgb.build.ctx, ent.OpQueryGroupBy)
-	if err := prtgb.build.prepareQuery(ctx); err != nil {
+func (_g *PasswordResetTokenGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*PasswordResetTokenQuery, *PasswordResetTokenGroupBy](ctx, prtgb.build, prtgb, prtgb.build.inters, v)
+	return scanWithInterceptors[*PasswordResetTokenQuery, *PasswordResetTokenGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (prtgb *PasswordResetTokenGroupBy) sqlScan(ctx context.Context, root *PasswordResetTokenQuery, v any) error {
+func (_g *PasswordResetTokenGroupBy) sqlScan(ctx context.Context, root *PasswordResetTokenQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(prtgb.fns))
-	for _, fn := range prtgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*prtgb.flds)+len(prtgb.fns))
-		for _, f := range *prtgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*prtgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := prtgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -631,27 +631,27 @@ type PasswordResetTokenSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (prts *PasswordResetTokenSelect) Aggregate(fns ...AggregateFunc) *PasswordResetTokenSelect {
-	prts.fns = append(prts.fns, fns...)
-	return prts
+func (_s *PasswordResetTokenSelect) Aggregate(fns ...AggregateFunc) *PasswordResetTokenSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (prts *PasswordResetTokenSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, prts.ctx, ent.OpQuerySelect)
-	if err := prts.prepareQuery(ctx); err != nil {
+func (_s *PasswordResetTokenSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*PasswordResetTokenQuery, *PasswordResetTokenSelect](ctx, prts.PasswordResetTokenQuery, prts, prts.inters, v)
+	return scanWithInterceptors[*PasswordResetTokenQuery, *PasswordResetTokenSelect](ctx, _s.PasswordResetTokenQuery, _s, _s.inters, v)
 }
 
-func (prts *PasswordResetTokenSelect) sqlScan(ctx context.Context, root *PasswordResetTokenQuery, v any) error {
+func (_s *PasswordResetTokenSelect) sqlScan(ctx context.Context, root *PasswordResetTokenQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(prts.fns))
-	for _, fn := range prts.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*prts.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -659,7 +659,7 @@ func (prts *PasswordResetTokenSelect) sqlScan(ctx context.Context, root *Passwor
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := prts.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -667,7 +667,7 @@ func (prts *PasswordResetTokenSelect) sqlScan(ctx context.Context, root *Passwor
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (prts *PasswordResetTokenSelect) Modify(modifiers ...func(s *sql.Selector)) *PasswordResetTokenSelect {
-	prts.modifiers = append(prts.modifiers, modifiers...)
-	return prts
+func (_s *PasswordResetTokenSelect) Modify(modifiers ...func(s *sql.Selector)) *PasswordResetTokenSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

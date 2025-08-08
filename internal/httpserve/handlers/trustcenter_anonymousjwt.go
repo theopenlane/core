@@ -86,5 +86,5 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 		AuthData: *auth,
 	}
 
-	return h.Success(ctx, response)
+	return h.Success(ctx, response, openapi)
 }

@@ -59,7 +59,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			comment:    "the group of users who are responsible for the control, will be assigned tasks, approval, etc.",
 			annotations: []schema.Annotation{
 				entgql.OrderField("CONTROL_OWNER_name"),
-				accessmap.EdgeAuthCheck(Group{}.Name()),
+				accessmap.EdgeViewCheck(Group{}.Name()),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
@@ -70,7 +70,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			comment:    "temporary delegate for the control, used for temporary control ownership",
 			annotations: []schema.Annotation{
 				entgql.OrderField("DELEGATE_name"),
-				accessmap.EdgeAuthCheck(Group{}.Name()),
+				accessmap.EdgeViewCheck(Group{}.Name()),
 			},
 		}),
 	}

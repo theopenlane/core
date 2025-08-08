@@ -30,220 +30,220 @@ type DocumentDataUpdate struct {
 }
 
 // Where appends a list predicates to the DocumentDataUpdate builder.
-func (ddu *DocumentDataUpdate) Where(ps ...predicate.DocumentData) *DocumentDataUpdate {
-	ddu.mutation.Where(ps...)
-	return ddu
+func (_u *DocumentDataUpdate) Where(ps ...predicate.DocumentData) *DocumentDataUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ddu *DocumentDataUpdate) SetUpdatedAt(t time.Time) *DocumentDataUpdate {
-	ddu.mutation.SetUpdatedAt(t)
-	return ddu
+func (_u *DocumentDataUpdate) SetUpdatedAt(v time.Time) *DocumentDataUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ddu *DocumentDataUpdate) ClearUpdatedAt() *DocumentDataUpdate {
-	ddu.mutation.ClearUpdatedAt()
-	return ddu
+func (_u *DocumentDataUpdate) ClearUpdatedAt() *DocumentDataUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ddu *DocumentDataUpdate) SetUpdatedBy(s string) *DocumentDataUpdate {
-	ddu.mutation.SetUpdatedBy(s)
-	return ddu
+func (_u *DocumentDataUpdate) SetUpdatedBy(v string) *DocumentDataUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ddu *DocumentDataUpdate) SetNillableUpdatedBy(s *string) *DocumentDataUpdate {
-	if s != nil {
-		ddu.SetUpdatedBy(*s)
+func (_u *DocumentDataUpdate) SetNillableUpdatedBy(v *string) *DocumentDataUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ddu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ddu *DocumentDataUpdate) ClearUpdatedBy() *DocumentDataUpdate {
-	ddu.mutation.ClearUpdatedBy()
-	return ddu
+func (_u *DocumentDataUpdate) ClearUpdatedBy() *DocumentDataUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ddu *DocumentDataUpdate) SetDeletedAt(t time.Time) *DocumentDataUpdate {
-	ddu.mutation.SetDeletedAt(t)
-	return ddu
+func (_u *DocumentDataUpdate) SetDeletedAt(v time.Time) *DocumentDataUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ddu *DocumentDataUpdate) SetNillableDeletedAt(t *time.Time) *DocumentDataUpdate {
-	if t != nil {
-		ddu.SetDeletedAt(*t)
+func (_u *DocumentDataUpdate) SetNillableDeletedAt(v *time.Time) *DocumentDataUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ddu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ddu *DocumentDataUpdate) ClearDeletedAt() *DocumentDataUpdate {
-	ddu.mutation.ClearDeletedAt()
-	return ddu
+func (_u *DocumentDataUpdate) ClearDeletedAt() *DocumentDataUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ddu *DocumentDataUpdate) SetDeletedBy(s string) *DocumentDataUpdate {
-	ddu.mutation.SetDeletedBy(s)
-	return ddu
+func (_u *DocumentDataUpdate) SetDeletedBy(v string) *DocumentDataUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ddu *DocumentDataUpdate) SetNillableDeletedBy(s *string) *DocumentDataUpdate {
-	if s != nil {
-		ddu.SetDeletedBy(*s)
+func (_u *DocumentDataUpdate) SetNillableDeletedBy(v *string) *DocumentDataUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ddu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ddu *DocumentDataUpdate) ClearDeletedBy() *DocumentDataUpdate {
-	ddu.mutation.ClearDeletedBy()
-	return ddu
+func (_u *DocumentDataUpdate) ClearDeletedBy() *DocumentDataUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ddu *DocumentDataUpdate) SetTags(s []string) *DocumentDataUpdate {
-	ddu.mutation.SetTags(s)
-	return ddu
+func (_u *DocumentDataUpdate) SetTags(v []string) *DocumentDataUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ddu *DocumentDataUpdate) AppendTags(s []string) *DocumentDataUpdate {
-	ddu.mutation.AppendTags(s)
-	return ddu
+// AppendTags appends value to the "tags" field.
+func (_u *DocumentDataUpdate) AppendTags(v []string) *DocumentDataUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ddu *DocumentDataUpdate) ClearTags() *DocumentDataUpdate {
-	ddu.mutation.ClearTags()
-	return ddu
+func (_u *DocumentDataUpdate) ClearTags() *DocumentDataUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetTemplateID sets the "template_id" field.
-func (ddu *DocumentDataUpdate) SetTemplateID(s string) *DocumentDataUpdate {
-	ddu.mutation.SetTemplateID(s)
-	return ddu
+func (_u *DocumentDataUpdate) SetTemplateID(v string) *DocumentDataUpdate {
+	_u.mutation.SetTemplateID(v)
+	return _u
 }
 
 // SetNillableTemplateID sets the "template_id" field if the given value is not nil.
-func (ddu *DocumentDataUpdate) SetNillableTemplateID(s *string) *DocumentDataUpdate {
-	if s != nil {
-		ddu.SetTemplateID(*s)
+func (_u *DocumentDataUpdate) SetNillableTemplateID(v *string) *DocumentDataUpdate {
+	if v != nil {
+		_u.SetTemplateID(*v)
 	}
-	return ddu
+	return _u
 }
 
 // SetData sets the "data" field.
-func (ddu *DocumentDataUpdate) SetData(m map[string]interface{}) *DocumentDataUpdate {
-	ddu.mutation.SetData(m)
-	return ddu
+func (_u *DocumentDataUpdate) SetData(v map[string]interface{}) *DocumentDataUpdate {
+	_u.mutation.SetData(v)
+	return _u
 }
 
 // SetTemplate sets the "template" edge to the Template entity.
-func (ddu *DocumentDataUpdate) SetTemplate(t *Template) *DocumentDataUpdate {
-	return ddu.SetTemplateID(t.ID)
+func (_u *DocumentDataUpdate) SetTemplate(v *Template) *DocumentDataUpdate {
+	return _u.SetTemplateID(v.ID)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (ddu *DocumentDataUpdate) AddEntityIDs(ids ...string) *DocumentDataUpdate {
-	ddu.mutation.AddEntityIDs(ids...)
-	return ddu
+func (_u *DocumentDataUpdate) AddEntityIDs(ids ...string) *DocumentDataUpdate {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (ddu *DocumentDataUpdate) AddEntities(e ...*Entity) *DocumentDataUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *DocumentDataUpdate) AddEntities(v ...*Entity) *DocumentDataUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ddu.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (ddu *DocumentDataUpdate) AddFileIDs(ids ...string) *DocumentDataUpdate {
-	ddu.mutation.AddFileIDs(ids...)
-	return ddu
+func (_u *DocumentDataUpdate) AddFileIDs(ids ...string) *DocumentDataUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (ddu *DocumentDataUpdate) AddFiles(f ...*File) *DocumentDataUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *DocumentDataUpdate) AddFiles(v ...*File) *DocumentDataUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ddu.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the DocumentDataMutation object of the builder.
-func (ddu *DocumentDataUpdate) Mutation() *DocumentDataMutation {
-	return ddu.mutation
+func (_u *DocumentDataUpdate) Mutation() *DocumentDataMutation {
+	return _u.mutation
 }
 
 // ClearTemplate clears the "template" edge to the Template entity.
-func (ddu *DocumentDataUpdate) ClearTemplate() *DocumentDataUpdate {
-	ddu.mutation.ClearTemplate()
-	return ddu
+func (_u *DocumentDataUpdate) ClearTemplate() *DocumentDataUpdate {
+	_u.mutation.ClearTemplate()
+	return _u
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (ddu *DocumentDataUpdate) ClearEntities() *DocumentDataUpdate {
-	ddu.mutation.ClearEntities()
-	return ddu
+func (_u *DocumentDataUpdate) ClearEntities() *DocumentDataUpdate {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (ddu *DocumentDataUpdate) RemoveEntityIDs(ids ...string) *DocumentDataUpdate {
-	ddu.mutation.RemoveEntityIDs(ids...)
-	return ddu
+func (_u *DocumentDataUpdate) RemoveEntityIDs(ids ...string) *DocumentDataUpdate {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (ddu *DocumentDataUpdate) RemoveEntities(e ...*Entity) *DocumentDataUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *DocumentDataUpdate) RemoveEntities(v ...*Entity) *DocumentDataUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ddu.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (ddu *DocumentDataUpdate) ClearFiles() *DocumentDataUpdate {
-	ddu.mutation.ClearFiles()
-	return ddu
+func (_u *DocumentDataUpdate) ClearFiles() *DocumentDataUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (ddu *DocumentDataUpdate) RemoveFileIDs(ids ...string) *DocumentDataUpdate {
-	ddu.mutation.RemoveFileIDs(ids...)
-	return ddu
+func (_u *DocumentDataUpdate) RemoveFileIDs(ids ...string) *DocumentDataUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (ddu *DocumentDataUpdate) RemoveFiles(f ...*File) *DocumentDataUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *DocumentDataUpdate) RemoveFiles(v ...*File) *DocumentDataUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ddu.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ddu *DocumentDataUpdate) Save(ctx context.Context) (int, error) {
-	if err := ddu.defaults(); err != nil {
+func (_u *DocumentDataUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, ddu.sqlSave, ddu.mutation, ddu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ddu *DocumentDataUpdate) SaveX(ctx context.Context) int {
-	affected, err := ddu.Save(ctx)
+func (_u *DocumentDataUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -251,101 +251,101 @@ func (ddu *DocumentDataUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ddu *DocumentDataUpdate) Exec(ctx context.Context) error {
-	_, err := ddu.Save(ctx)
+func (_u *DocumentDataUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ddu *DocumentDataUpdate) ExecX(ctx context.Context) {
-	if err := ddu.Exec(ctx); err != nil {
+func (_u *DocumentDataUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ddu *DocumentDataUpdate) defaults() error {
-	if _, ok := ddu.mutation.UpdatedAt(); !ok && !ddu.mutation.UpdatedAtCleared() {
+func (_u *DocumentDataUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if documentdata.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized documentdata.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := documentdata.UpdateDefaultUpdatedAt()
-		ddu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ddu *DocumentDataUpdate) check() error {
-	if ddu.mutation.TemplateCleared() && len(ddu.mutation.TemplateIDs()) > 0 {
+func (_u *DocumentDataUpdate) check() error {
+	if _u.mutation.TemplateCleared() && len(_u.mutation.TemplateIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "DocumentData.template"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ddu *DocumentDataUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataUpdate {
-	ddu.modifiers = append(ddu.modifiers, modifiers...)
-	return ddu
+func (_u *DocumentDataUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := ddu.check(); err != nil {
-		return n, err
+func (_u *DocumentDataUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(documentdata.Table, documentdata.Columns, sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString))
-	if ps := ddu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ddu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(documentdata.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ddu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(documentdata.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ddu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(documentdata.FieldUpdatedAt, field.TypeTime)
 	}
-	if ddu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(documentdata.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ddu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(documentdata.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ddu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(documentdata.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ddu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(documentdata.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ddu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentdata.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ddu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(documentdata.FieldDeletedBy, field.TypeString, value)
 	}
-	if ddu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(documentdata.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ddu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ddu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, documentdata.FieldTags, value)
 		})
 	}
-	if ddu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(documentdata.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ddu.mutation.Data(); ok {
+	if value, ok := _u.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
 	}
-	if ddu.mutation.TemplateCleared() {
+	if _u.mutation.TemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -356,10 +356,10 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ddu.schemaConfig.DocumentData
+		edge.Schema = _u.schemaConfig.DocumentData
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ddu.mutation.TemplateIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -370,13 +370,13 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ddu.schemaConfig.DocumentData
+		edge.Schema = _u.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ddu.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -387,10 +387,10 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ddu.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ddu.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !ddu.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -401,13 +401,13 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ddu.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ddu.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -418,13 +418,13 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ddu.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ddu.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -435,10 +435,10 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ddu.schemaConfig.DocumentDataFiles
+		edge.Schema = _u.schemaConfig.DocumentDataFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ddu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !ddu.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -449,13 +449,13 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ddu.schemaConfig.DocumentDataFiles
+		edge.Schema = _u.schemaConfig.DocumentDataFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ddu.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -466,16 +466,16 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ddu.schemaConfig.DocumentDataFiles
+		edge.Schema = _u.schemaConfig.DocumentDataFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = ddu.schemaConfig.DocumentData
-	ctx = internal.NewSchemaConfigContext(ctx, ddu.schemaConfig)
-	_spec.AddModifiers(ddu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, ddu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.DocumentData
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{documentdata.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -483,8 +483,8 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	ddu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // DocumentDataUpdateOne is the builder for updating a single DocumentData entity.
@@ -497,227 +497,227 @@ type DocumentDataUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (dduo *DocumentDataUpdateOne) SetUpdatedAt(t time.Time) *DocumentDataUpdateOne {
-	dduo.mutation.SetUpdatedAt(t)
-	return dduo
+func (_u *DocumentDataUpdateOne) SetUpdatedAt(v time.Time) *DocumentDataUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (dduo *DocumentDataUpdateOne) ClearUpdatedAt() *DocumentDataUpdateOne {
-	dduo.mutation.ClearUpdatedAt()
-	return dduo
+func (_u *DocumentDataUpdateOne) ClearUpdatedAt() *DocumentDataUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (dduo *DocumentDataUpdateOne) SetUpdatedBy(s string) *DocumentDataUpdateOne {
-	dduo.mutation.SetUpdatedBy(s)
-	return dduo
+func (_u *DocumentDataUpdateOne) SetUpdatedBy(v string) *DocumentDataUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (dduo *DocumentDataUpdateOne) SetNillableUpdatedBy(s *string) *DocumentDataUpdateOne {
-	if s != nil {
-		dduo.SetUpdatedBy(*s)
+func (_u *DocumentDataUpdateOne) SetNillableUpdatedBy(v *string) *DocumentDataUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return dduo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (dduo *DocumentDataUpdateOne) ClearUpdatedBy() *DocumentDataUpdateOne {
-	dduo.mutation.ClearUpdatedBy()
-	return dduo
+func (_u *DocumentDataUpdateOne) ClearUpdatedBy() *DocumentDataUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (dduo *DocumentDataUpdateOne) SetDeletedAt(t time.Time) *DocumentDataUpdateOne {
-	dduo.mutation.SetDeletedAt(t)
-	return dduo
+func (_u *DocumentDataUpdateOne) SetDeletedAt(v time.Time) *DocumentDataUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (dduo *DocumentDataUpdateOne) SetNillableDeletedAt(t *time.Time) *DocumentDataUpdateOne {
-	if t != nil {
-		dduo.SetDeletedAt(*t)
+func (_u *DocumentDataUpdateOne) SetNillableDeletedAt(v *time.Time) *DocumentDataUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return dduo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (dduo *DocumentDataUpdateOne) ClearDeletedAt() *DocumentDataUpdateOne {
-	dduo.mutation.ClearDeletedAt()
-	return dduo
+func (_u *DocumentDataUpdateOne) ClearDeletedAt() *DocumentDataUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (dduo *DocumentDataUpdateOne) SetDeletedBy(s string) *DocumentDataUpdateOne {
-	dduo.mutation.SetDeletedBy(s)
-	return dduo
+func (_u *DocumentDataUpdateOne) SetDeletedBy(v string) *DocumentDataUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (dduo *DocumentDataUpdateOne) SetNillableDeletedBy(s *string) *DocumentDataUpdateOne {
-	if s != nil {
-		dduo.SetDeletedBy(*s)
+func (_u *DocumentDataUpdateOne) SetNillableDeletedBy(v *string) *DocumentDataUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return dduo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (dduo *DocumentDataUpdateOne) ClearDeletedBy() *DocumentDataUpdateOne {
-	dduo.mutation.ClearDeletedBy()
-	return dduo
+func (_u *DocumentDataUpdateOne) ClearDeletedBy() *DocumentDataUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (dduo *DocumentDataUpdateOne) SetTags(s []string) *DocumentDataUpdateOne {
-	dduo.mutation.SetTags(s)
-	return dduo
+func (_u *DocumentDataUpdateOne) SetTags(v []string) *DocumentDataUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (dduo *DocumentDataUpdateOne) AppendTags(s []string) *DocumentDataUpdateOne {
-	dduo.mutation.AppendTags(s)
-	return dduo
+// AppendTags appends value to the "tags" field.
+func (_u *DocumentDataUpdateOne) AppendTags(v []string) *DocumentDataUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (dduo *DocumentDataUpdateOne) ClearTags() *DocumentDataUpdateOne {
-	dduo.mutation.ClearTags()
-	return dduo
+func (_u *DocumentDataUpdateOne) ClearTags() *DocumentDataUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetTemplateID sets the "template_id" field.
-func (dduo *DocumentDataUpdateOne) SetTemplateID(s string) *DocumentDataUpdateOne {
-	dduo.mutation.SetTemplateID(s)
-	return dduo
+func (_u *DocumentDataUpdateOne) SetTemplateID(v string) *DocumentDataUpdateOne {
+	_u.mutation.SetTemplateID(v)
+	return _u
 }
 
 // SetNillableTemplateID sets the "template_id" field if the given value is not nil.
-func (dduo *DocumentDataUpdateOne) SetNillableTemplateID(s *string) *DocumentDataUpdateOne {
-	if s != nil {
-		dduo.SetTemplateID(*s)
+func (_u *DocumentDataUpdateOne) SetNillableTemplateID(v *string) *DocumentDataUpdateOne {
+	if v != nil {
+		_u.SetTemplateID(*v)
 	}
-	return dduo
+	return _u
 }
 
 // SetData sets the "data" field.
-func (dduo *DocumentDataUpdateOne) SetData(m map[string]interface{}) *DocumentDataUpdateOne {
-	dduo.mutation.SetData(m)
-	return dduo
+func (_u *DocumentDataUpdateOne) SetData(v map[string]interface{}) *DocumentDataUpdateOne {
+	_u.mutation.SetData(v)
+	return _u
 }
 
 // SetTemplate sets the "template" edge to the Template entity.
-func (dduo *DocumentDataUpdateOne) SetTemplate(t *Template) *DocumentDataUpdateOne {
-	return dduo.SetTemplateID(t.ID)
+func (_u *DocumentDataUpdateOne) SetTemplate(v *Template) *DocumentDataUpdateOne {
+	return _u.SetTemplateID(v.ID)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (dduo *DocumentDataUpdateOne) AddEntityIDs(ids ...string) *DocumentDataUpdateOne {
-	dduo.mutation.AddEntityIDs(ids...)
-	return dduo
+func (_u *DocumentDataUpdateOne) AddEntityIDs(ids ...string) *DocumentDataUpdateOne {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (dduo *DocumentDataUpdateOne) AddEntities(e ...*Entity) *DocumentDataUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *DocumentDataUpdateOne) AddEntities(v ...*Entity) *DocumentDataUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return dduo.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (dduo *DocumentDataUpdateOne) AddFileIDs(ids ...string) *DocumentDataUpdateOne {
-	dduo.mutation.AddFileIDs(ids...)
-	return dduo
+func (_u *DocumentDataUpdateOne) AddFileIDs(ids ...string) *DocumentDataUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (dduo *DocumentDataUpdateOne) AddFiles(f ...*File) *DocumentDataUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *DocumentDataUpdateOne) AddFiles(v ...*File) *DocumentDataUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return dduo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the DocumentDataMutation object of the builder.
-func (dduo *DocumentDataUpdateOne) Mutation() *DocumentDataMutation {
-	return dduo.mutation
+func (_u *DocumentDataUpdateOne) Mutation() *DocumentDataMutation {
+	return _u.mutation
 }
 
 // ClearTemplate clears the "template" edge to the Template entity.
-func (dduo *DocumentDataUpdateOne) ClearTemplate() *DocumentDataUpdateOne {
-	dduo.mutation.ClearTemplate()
-	return dduo
+func (_u *DocumentDataUpdateOne) ClearTemplate() *DocumentDataUpdateOne {
+	_u.mutation.ClearTemplate()
+	return _u
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (dduo *DocumentDataUpdateOne) ClearEntities() *DocumentDataUpdateOne {
-	dduo.mutation.ClearEntities()
-	return dduo
+func (_u *DocumentDataUpdateOne) ClearEntities() *DocumentDataUpdateOne {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (dduo *DocumentDataUpdateOne) RemoveEntityIDs(ids ...string) *DocumentDataUpdateOne {
-	dduo.mutation.RemoveEntityIDs(ids...)
-	return dduo
+func (_u *DocumentDataUpdateOne) RemoveEntityIDs(ids ...string) *DocumentDataUpdateOne {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (dduo *DocumentDataUpdateOne) RemoveEntities(e ...*Entity) *DocumentDataUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *DocumentDataUpdateOne) RemoveEntities(v ...*Entity) *DocumentDataUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return dduo.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (dduo *DocumentDataUpdateOne) ClearFiles() *DocumentDataUpdateOne {
-	dduo.mutation.ClearFiles()
-	return dduo
+func (_u *DocumentDataUpdateOne) ClearFiles() *DocumentDataUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (dduo *DocumentDataUpdateOne) RemoveFileIDs(ids ...string) *DocumentDataUpdateOne {
-	dduo.mutation.RemoveFileIDs(ids...)
-	return dduo
+func (_u *DocumentDataUpdateOne) RemoveFileIDs(ids ...string) *DocumentDataUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (dduo *DocumentDataUpdateOne) RemoveFiles(f ...*File) *DocumentDataUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *DocumentDataUpdateOne) RemoveFiles(v ...*File) *DocumentDataUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return dduo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the DocumentDataUpdate builder.
-func (dduo *DocumentDataUpdateOne) Where(ps ...predicate.DocumentData) *DocumentDataUpdateOne {
-	dduo.mutation.Where(ps...)
-	return dduo
+func (_u *DocumentDataUpdateOne) Where(ps ...predicate.DocumentData) *DocumentDataUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (dduo *DocumentDataUpdateOne) Select(field string, fields ...string) *DocumentDataUpdateOne {
-	dduo.fields = append([]string{field}, fields...)
-	return dduo
+func (_u *DocumentDataUpdateOne) Select(field string, fields ...string) *DocumentDataUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated DocumentData entity.
-func (dduo *DocumentDataUpdateOne) Save(ctx context.Context) (*DocumentData, error) {
-	if err := dduo.defaults(); err != nil {
+func (_u *DocumentDataUpdateOne) Save(ctx context.Context) (*DocumentData, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, dduo.sqlSave, dduo.mutation, dduo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (dduo *DocumentDataUpdateOne) SaveX(ctx context.Context) *DocumentData {
-	node, err := dduo.Save(ctx)
+func (_u *DocumentDataUpdateOne) SaveX(ctx context.Context) *DocumentData {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -725,55 +725,55 @@ func (dduo *DocumentDataUpdateOne) SaveX(ctx context.Context) *DocumentData {
 }
 
 // Exec executes the query on the entity.
-func (dduo *DocumentDataUpdateOne) Exec(ctx context.Context) error {
-	_, err := dduo.Save(ctx)
+func (_u *DocumentDataUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dduo *DocumentDataUpdateOne) ExecX(ctx context.Context) {
-	if err := dduo.Exec(ctx); err != nil {
+func (_u *DocumentDataUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (dduo *DocumentDataUpdateOne) defaults() error {
-	if _, ok := dduo.mutation.UpdatedAt(); !ok && !dduo.mutation.UpdatedAtCleared() {
+func (_u *DocumentDataUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if documentdata.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized documentdata.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := documentdata.UpdateDefaultUpdatedAt()
-		dduo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (dduo *DocumentDataUpdateOne) check() error {
-	if dduo.mutation.TemplateCleared() && len(dduo.mutation.TemplateIDs()) > 0 {
+func (_u *DocumentDataUpdateOne) check() error {
+	if _u.mutation.TemplateCleared() && len(_u.mutation.TemplateIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "DocumentData.template"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (dduo *DocumentDataUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataUpdateOne {
-	dduo.modifiers = append(dduo.modifiers, modifiers...)
-	return dduo
+func (_u *DocumentDataUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *DocumentData, err error) {
-	if err := dduo.check(); err != nil {
+func (_u *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *DocumentData, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(documentdata.Table, documentdata.Columns, sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString))
-	id, ok := dduo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "DocumentData.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := dduo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, documentdata.FieldID)
 		for _, f := range fields {
@@ -785,58 +785,58 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 			}
 		}
 	}
-	if ps := dduo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if dduo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(documentdata.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := dduo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(documentdata.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if dduo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(documentdata.FieldUpdatedAt, field.TypeTime)
 	}
-	if dduo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(documentdata.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := dduo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(documentdata.FieldUpdatedBy, field.TypeString, value)
 	}
-	if dduo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(documentdata.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := dduo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(documentdata.FieldDeletedAt, field.TypeTime, value)
 	}
-	if dduo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentdata.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := dduo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(documentdata.FieldDeletedBy, field.TypeString, value)
 	}
-	if dduo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(documentdata.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := dduo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := dduo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, documentdata.FieldTags, value)
 		})
 	}
-	if dduo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(documentdata.FieldTags, field.TypeJSON)
 	}
-	if value, ok := dduo.mutation.Data(); ok {
+	if value, ok := _u.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
 	}
-	if dduo.mutation.TemplateCleared() {
+	if _u.mutation.TemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -847,10 +847,10 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = dduo.schemaConfig.DocumentData
+		edge.Schema = _u.schemaConfig.DocumentData
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := dduo.mutation.TemplateIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -861,13 +861,13 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = dduo.schemaConfig.DocumentData
+		edge.Schema = _u.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if dduo.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -878,10 +878,10 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = dduo.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := dduo.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !dduo.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -892,13 +892,13 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = dduo.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := dduo.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -909,13 +909,13 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = dduo.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if dduo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -926,10 +926,10 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = dduo.schemaConfig.DocumentDataFiles
+		edge.Schema = _u.schemaConfig.DocumentDataFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := dduo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !dduo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -940,13 +940,13 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = dduo.schemaConfig.DocumentDataFiles
+		edge.Schema = _u.schemaConfig.DocumentDataFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := dduo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -957,19 +957,19 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = dduo.schemaConfig.DocumentDataFiles
+		edge.Schema = _u.schemaConfig.DocumentDataFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = dduo.schemaConfig.DocumentData
-	ctx = internal.NewSchemaConfigContext(ctx, dduo.schemaConfig)
-	_spec.AddModifiers(dduo.modifiers...)
-	_node = &DocumentData{config: dduo.config}
+	_spec.Node.Schema = _u.schemaConfig.DocumentData
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &DocumentData{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, dduo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{documentdata.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -977,6 +977,6 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 		}
 		return nil, err
 	}
-	dduo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

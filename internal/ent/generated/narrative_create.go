@@ -27,289 +27,289 @@ type NarrativeCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (nc *NarrativeCreate) SetCreatedAt(t time.Time) *NarrativeCreate {
-	nc.mutation.SetCreatedAt(t)
-	return nc
+func (_c *NarrativeCreate) SetCreatedAt(v time.Time) *NarrativeCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableCreatedAt(t *time.Time) *NarrativeCreate {
-	if t != nil {
-		nc.SetCreatedAt(*t)
+func (_c *NarrativeCreate) SetNillableCreatedAt(v *time.Time) *NarrativeCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (nc *NarrativeCreate) SetUpdatedAt(t time.Time) *NarrativeCreate {
-	nc.mutation.SetUpdatedAt(t)
-	return nc
+func (_c *NarrativeCreate) SetUpdatedAt(v time.Time) *NarrativeCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableUpdatedAt(t *time.Time) *NarrativeCreate {
-	if t != nil {
-		nc.SetUpdatedAt(*t)
+func (_c *NarrativeCreate) SetNillableUpdatedAt(v *time.Time) *NarrativeCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (nc *NarrativeCreate) SetCreatedBy(s string) *NarrativeCreate {
-	nc.mutation.SetCreatedBy(s)
-	return nc
+func (_c *NarrativeCreate) SetCreatedBy(v string) *NarrativeCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableCreatedBy(s *string) *NarrativeCreate {
-	if s != nil {
-		nc.SetCreatedBy(*s)
+func (_c *NarrativeCreate) SetNillableCreatedBy(v *string) *NarrativeCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (nc *NarrativeCreate) SetUpdatedBy(s string) *NarrativeCreate {
-	nc.mutation.SetUpdatedBy(s)
-	return nc
+func (_c *NarrativeCreate) SetUpdatedBy(v string) *NarrativeCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableUpdatedBy(s *string) *NarrativeCreate {
-	if s != nil {
-		nc.SetUpdatedBy(*s)
+func (_c *NarrativeCreate) SetNillableUpdatedBy(v *string) *NarrativeCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (nc *NarrativeCreate) SetDeletedAt(t time.Time) *NarrativeCreate {
-	nc.mutation.SetDeletedAt(t)
-	return nc
+func (_c *NarrativeCreate) SetDeletedAt(v time.Time) *NarrativeCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableDeletedAt(t *time.Time) *NarrativeCreate {
-	if t != nil {
-		nc.SetDeletedAt(*t)
+func (_c *NarrativeCreate) SetNillableDeletedAt(v *time.Time) *NarrativeCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (nc *NarrativeCreate) SetDeletedBy(s string) *NarrativeCreate {
-	nc.mutation.SetDeletedBy(s)
-	return nc
+func (_c *NarrativeCreate) SetDeletedBy(v string) *NarrativeCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableDeletedBy(s *string) *NarrativeCreate {
-	if s != nil {
-		nc.SetDeletedBy(*s)
+func (_c *NarrativeCreate) SetNillableDeletedBy(v *string) *NarrativeCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (nc *NarrativeCreate) SetDisplayID(s string) *NarrativeCreate {
-	nc.mutation.SetDisplayID(s)
-	return nc
+func (_c *NarrativeCreate) SetDisplayID(v string) *NarrativeCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (nc *NarrativeCreate) SetTags(s []string) *NarrativeCreate {
-	nc.mutation.SetTags(s)
-	return nc
+func (_c *NarrativeCreate) SetTags(v []string) *NarrativeCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (nc *NarrativeCreate) SetOwnerID(s string) *NarrativeCreate {
-	nc.mutation.SetOwnerID(s)
-	return nc
+func (_c *NarrativeCreate) SetOwnerID(v string) *NarrativeCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableOwnerID(s *string) *NarrativeCreate {
-	if s != nil {
-		nc.SetOwnerID(*s)
+func (_c *NarrativeCreate) SetNillableOwnerID(v *string) *NarrativeCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (nc *NarrativeCreate) SetName(s string) *NarrativeCreate {
-	nc.mutation.SetName(s)
-	return nc
+func (_c *NarrativeCreate) SetName(v string) *NarrativeCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (nc *NarrativeCreate) SetDescription(s string) *NarrativeCreate {
-	nc.mutation.SetDescription(s)
-	return nc
+func (_c *NarrativeCreate) SetDescription(v string) *NarrativeCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableDescription(s *string) *NarrativeCreate {
-	if s != nil {
-		nc.SetDescription(*s)
+func (_c *NarrativeCreate) SetNillableDescription(v *string) *NarrativeCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetDetails sets the "details" field.
-func (nc *NarrativeCreate) SetDetails(s string) *NarrativeCreate {
-	nc.mutation.SetDetails(s)
-	return nc
+func (_c *NarrativeCreate) SetDetails(v string) *NarrativeCreate {
+	_c.mutation.SetDetails(v)
+	return _c
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableDetails(s *string) *NarrativeCreate {
-	if s != nil {
-		nc.SetDetails(*s)
+func (_c *NarrativeCreate) SetNillableDetails(v *string) *NarrativeCreate {
+	if v != nil {
+		_c.SetDetails(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (nc *NarrativeCreate) SetID(s string) *NarrativeCreate {
-	nc.mutation.SetID(s)
-	return nc
+func (_c *NarrativeCreate) SetID(v string) *NarrativeCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (nc *NarrativeCreate) SetNillableID(s *string) *NarrativeCreate {
-	if s != nil {
-		nc.SetID(*s)
+func (_c *NarrativeCreate) SetNillableID(v *string) *NarrativeCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (nc *NarrativeCreate) SetOwner(o *Organization) *NarrativeCreate {
-	return nc.SetOwnerID(o.ID)
+func (_c *NarrativeCreate) SetOwner(v *Organization) *NarrativeCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (nc *NarrativeCreate) AddBlockedGroupIDs(ids ...string) *NarrativeCreate {
-	nc.mutation.AddBlockedGroupIDs(ids...)
-	return nc
+func (_c *NarrativeCreate) AddBlockedGroupIDs(ids ...string) *NarrativeCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (nc *NarrativeCreate) AddBlockedGroups(g ...*Group) *NarrativeCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *NarrativeCreate) AddBlockedGroups(v ...*Group) *NarrativeCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nc.AddBlockedGroupIDs(ids...)
+	return _c.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (nc *NarrativeCreate) AddEditorIDs(ids ...string) *NarrativeCreate {
-	nc.mutation.AddEditorIDs(ids...)
-	return nc
+func (_c *NarrativeCreate) AddEditorIDs(ids ...string) *NarrativeCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (nc *NarrativeCreate) AddEditors(g ...*Group) *NarrativeCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *NarrativeCreate) AddEditors(v ...*Group) *NarrativeCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nc.AddEditorIDs(ids...)
+	return _c.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (nc *NarrativeCreate) AddViewerIDs(ids ...string) *NarrativeCreate {
-	nc.mutation.AddViewerIDs(ids...)
-	return nc
+func (_c *NarrativeCreate) AddViewerIDs(ids ...string) *NarrativeCreate {
+	_c.mutation.AddViewerIDs(ids...)
+	return _c
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (nc *NarrativeCreate) AddViewers(g ...*Group) *NarrativeCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *NarrativeCreate) AddViewers(v ...*Group) *NarrativeCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nc.AddViewerIDs(ids...)
+	return _c.AddViewerIDs(ids...)
 }
 
 // AddSatisfyIDs adds the "satisfies" edge to the Control entity by IDs.
-func (nc *NarrativeCreate) AddSatisfyIDs(ids ...string) *NarrativeCreate {
-	nc.mutation.AddSatisfyIDs(ids...)
-	return nc
+func (_c *NarrativeCreate) AddSatisfyIDs(ids ...string) *NarrativeCreate {
+	_c.mutation.AddSatisfyIDs(ids...)
+	return _c
 }
 
 // AddSatisfies adds the "satisfies" edges to the Control entity.
-func (nc *NarrativeCreate) AddSatisfies(c ...*Control) *NarrativeCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *NarrativeCreate) AddSatisfies(v ...*Control) *NarrativeCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nc.AddSatisfyIDs(ids...)
+	return _c.AddSatisfyIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (nc *NarrativeCreate) AddProgramIDs(ids ...string) *NarrativeCreate {
-	nc.mutation.AddProgramIDs(ids...)
-	return nc
+func (_c *NarrativeCreate) AddProgramIDs(ids ...string) *NarrativeCreate {
+	_c.mutation.AddProgramIDs(ids...)
+	return _c
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (nc *NarrativeCreate) AddPrograms(p ...*Program) *NarrativeCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *NarrativeCreate) AddPrograms(v ...*Program) *NarrativeCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nc.AddProgramIDs(ids...)
+	return _c.AddProgramIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (nc *NarrativeCreate) AddInternalPolicyIDs(ids ...string) *NarrativeCreate {
-	nc.mutation.AddInternalPolicyIDs(ids...)
-	return nc
+func (_c *NarrativeCreate) AddInternalPolicyIDs(ids ...string) *NarrativeCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (nc *NarrativeCreate) AddInternalPolicies(i ...*InternalPolicy) *NarrativeCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *NarrativeCreate) AddInternalPolicies(v ...*InternalPolicy) *NarrativeCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nc.AddInternalPolicyIDs(ids...)
+	return _c.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (nc *NarrativeCreate) AddProcedureIDs(ids ...string) *NarrativeCreate {
-	nc.mutation.AddProcedureIDs(ids...)
-	return nc
+func (_c *NarrativeCreate) AddProcedureIDs(ids ...string) *NarrativeCreate {
+	_c.mutation.AddProcedureIDs(ids...)
+	return _c
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (nc *NarrativeCreate) AddProcedures(p ...*Procedure) *NarrativeCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *NarrativeCreate) AddProcedures(v ...*Procedure) *NarrativeCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nc.AddProcedureIDs(ids...)
+	return _c.AddProcedureIDs(ids...)
 }
 
 // Mutation returns the NarrativeMutation object of the builder.
-func (nc *NarrativeCreate) Mutation() *NarrativeMutation {
-	return nc.mutation
+func (_c *NarrativeCreate) Mutation() *NarrativeMutation {
+	return _c.mutation
 }
 
 // Save creates the Narrative in the database.
-func (nc *NarrativeCreate) Save(ctx context.Context) (*Narrative, error) {
-	if err := nc.defaults(); err != nil {
+func (_c *NarrativeCreate) Save(ctx context.Context) (*Narrative, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, nc.sqlSave, nc.mutation, nc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (nc *NarrativeCreate) SaveX(ctx context.Context) *Narrative {
-	v, err := nc.Save(ctx)
+func (_c *NarrativeCreate) SaveX(ctx context.Context) *Narrative {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -317,67 +317,67 @@ func (nc *NarrativeCreate) SaveX(ctx context.Context) *Narrative {
 }
 
 // Exec executes the query.
-func (nc *NarrativeCreate) Exec(ctx context.Context) error {
-	_, err := nc.Save(ctx)
+func (_c *NarrativeCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nc *NarrativeCreate) ExecX(ctx context.Context) {
-	if err := nc.Exec(ctx); err != nil {
+func (_c *NarrativeCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (nc *NarrativeCreate) defaults() error {
-	if _, ok := nc.mutation.CreatedAt(); !ok {
+func (_c *NarrativeCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if narrative.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized narrative.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := narrative.DefaultCreatedAt()
-		nc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := nc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if narrative.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized narrative.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := narrative.DefaultUpdatedAt()
-		nc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := nc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := narrative.DefaultTags
-		nc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := nc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if narrative.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized narrative.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := narrative.DefaultID()
-		nc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (nc *NarrativeCreate) check() error {
-	if _, ok := nc.mutation.DisplayID(); !ok {
+func (_c *NarrativeCreate) check() error {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Narrative.display_id"`)}
 	}
-	if v, ok := nc.mutation.DisplayID(); ok {
+	if v, ok := _c.mutation.DisplayID(); ok {
 		if err := narrative.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Narrative.display_id": %w`, err)}
 		}
 	}
-	if v, ok := nc.mutation.OwnerID(); ok {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := narrative.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Narrative.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := nc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Narrative.name"`)}
 	}
-	if v, ok := nc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := narrative.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Narrative.name": %w`, err)}
 		}
@@ -385,12 +385,12 @@ func (nc *NarrativeCreate) check() error {
 	return nil
 }
 
-func (nc *NarrativeCreate) sqlSave(ctx context.Context) (*Narrative, error) {
-	if err := nc.check(); err != nil {
+func (_c *NarrativeCreate) sqlSave(ctx context.Context) (*Narrative, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := nc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, nc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -403,66 +403,66 @@ func (nc *NarrativeCreate) sqlSave(ctx context.Context) (*Narrative, error) {
 			return nil, fmt.Errorf("unexpected Narrative.ID type: %T", _spec.ID.Value)
 		}
 	}
-	nc.mutation.id = &_node.ID
-	nc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
+func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Narrative{config: nc.config}
+		_node = &Narrative{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(narrative.Table, sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString))
 	)
-	_spec.Schema = nc.schemaConfig.Narrative
-	if id, ok := nc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Narrative
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := nc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(narrative.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := nc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(narrative.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := nc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(narrative.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := nc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(narrative.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := nc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(narrative.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := nc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(narrative.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := nc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(narrative.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := nc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(narrative.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := nc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(narrative.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := nc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(narrative.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := nc.mutation.Details(); ok {
+	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(narrative.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
-	if nodes := nc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -473,14 +473,14 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nc.schemaConfig.Narrative
+		edge.Schema = _c.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -491,13 +491,13 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nc.schemaConfig.NarrativeBlockedGroups
+		edge.Schema = _c.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -508,13 +508,13 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nc.schemaConfig.NarrativeEditors
+		edge.Schema = _c.schemaConfig.NarrativeEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -525,13 +525,13 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nc.schemaConfig.NarrativeViewers
+		edge.Schema = _c.schemaConfig.NarrativeViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.SatisfiesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SatisfiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -542,13 +542,13 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nc.schemaConfig.ControlNarratives
+		edge.Schema = _c.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -559,13 +559,13 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nc.schemaConfig.ProgramNarratives
+		edge.Schema = _c.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -576,13 +576,13 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nc.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _c.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -593,7 +593,7 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nc.schemaConfig.ProcedureNarratives
+		edge.Schema = _c.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -610,16 +610,16 @@ type NarrativeCreateBulk struct {
 }
 
 // Save creates the Narrative entities in the database.
-func (ncb *NarrativeCreateBulk) Save(ctx context.Context) ([]*Narrative, error) {
-	if ncb.err != nil {
-		return nil, ncb.err
+func (_c *NarrativeCreateBulk) Save(ctx context.Context) ([]*Narrative, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ncb.builders))
-	nodes := make([]*Narrative, len(ncb.builders))
-	mutators := make([]Mutator, len(ncb.builders))
-	for i := range ncb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Narrative, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ncb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*NarrativeMutation)
@@ -633,11 +633,11 @@ func (ncb *NarrativeCreateBulk) Save(ctx context.Context) ([]*Narrative, error) 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ncb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ncb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -657,7 +657,7 @@ func (ncb *NarrativeCreateBulk) Save(ctx context.Context) ([]*Narrative, error) 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ncb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -665,8 +665,8 @@ func (ncb *NarrativeCreateBulk) Save(ctx context.Context) ([]*Narrative, error) 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ncb *NarrativeCreateBulk) SaveX(ctx context.Context) []*Narrative {
-	v, err := ncb.Save(ctx)
+func (_c *NarrativeCreateBulk) SaveX(ctx context.Context) []*Narrative {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -674,14 +674,14 @@ func (ncb *NarrativeCreateBulk) SaveX(ctx context.Context) []*Narrative {
 }
 
 // Exec executes the query.
-func (ncb *NarrativeCreateBulk) Exec(ctx context.Context) error {
-	_, err := ncb.Save(ctx)
+func (_c *NarrativeCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ncb *NarrativeCreateBulk) ExecX(ctx context.Context) {
-	if err := ncb.Exec(ctx); err != nil {
+func (_c *NarrativeCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

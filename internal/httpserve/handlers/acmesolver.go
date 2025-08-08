@@ -10,14 +10,19 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/rout"
 )
 
 // ACMESolverHandler handles ACME challenge requests by looking up the challenge path
 // and returning the expected challenge value for domain verification
 func (h *Handler) ACMESolverHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleAcmeSolverRequest, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleAcmeSolverRequest, rout.Reply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
+	}
+
+	if isRegistrationContext(ctx) {
+		return nil
 	}
 
 	allowCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow) // bypass privacy policy

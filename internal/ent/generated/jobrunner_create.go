@@ -24,255 +24,255 @@ type JobRunnerCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (jrc *JobRunnerCreate) SetCreatedAt(t time.Time) *JobRunnerCreate {
-	jrc.mutation.SetCreatedAt(t)
-	return jrc
+func (_c *JobRunnerCreate) SetCreatedAt(v time.Time) *JobRunnerCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableCreatedAt(t *time.Time) *JobRunnerCreate {
-	if t != nil {
-		jrc.SetCreatedAt(*t)
+func (_c *JobRunnerCreate) SetNillableCreatedAt(v *time.Time) *JobRunnerCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jrc *JobRunnerCreate) SetUpdatedAt(t time.Time) *JobRunnerCreate {
-	jrc.mutation.SetUpdatedAt(t)
-	return jrc
+func (_c *JobRunnerCreate) SetUpdatedAt(v time.Time) *JobRunnerCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableUpdatedAt(t *time.Time) *JobRunnerCreate {
-	if t != nil {
-		jrc.SetUpdatedAt(*t)
+func (_c *JobRunnerCreate) SetNillableUpdatedAt(v *time.Time) *JobRunnerCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (jrc *JobRunnerCreate) SetCreatedBy(s string) *JobRunnerCreate {
-	jrc.mutation.SetCreatedBy(s)
-	return jrc
+func (_c *JobRunnerCreate) SetCreatedBy(v string) *JobRunnerCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableCreatedBy(s *string) *JobRunnerCreate {
-	if s != nil {
-		jrc.SetCreatedBy(*s)
+func (_c *JobRunnerCreate) SetNillableCreatedBy(v *string) *JobRunnerCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jrc *JobRunnerCreate) SetUpdatedBy(s string) *JobRunnerCreate {
-	jrc.mutation.SetUpdatedBy(s)
-	return jrc
+func (_c *JobRunnerCreate) SetUpdatedBy(v string) *JobRunnerCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableUpdatedBy(s *string) *JobRunnerCreate {
-	if s != nil {
-		jrc.SetUpdatedBy(*s)
+func (_c *JobRunnerCreate) SetNillableUpdatedBy(v *string) *JobRunnerCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jrc *JobRunnerCreate) SetDeletedAt(t time.Time) *JobRunnerCreate {
-	jrc.mutation.SetDeletedAt(t)
-	return jrc
+func (_c *JobRunnerCreate) SetDeletedAt(v time.Time) *JobRunnerCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableDeletedAt(t *time.Time) *JobRunnerCreate {
-	if t != nil {
-		jrc.SetDeletedAt(*t)
+func (_c *JobRunnerCreate) SetNillableDeletedAt(v *time.Time) *JobRunnerCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jrc *JobRunnerCreate) SetDeletedBy(s string) *JobRunnerCreate {
-	jrc.mutation.SetDeletedBy(s)
-	return jrc
+func (_c *JobRunnerCreate) SetDeletedBy(v string) *JobRunnerCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableDeletedBy(s *string) *JobRunnerCreate {
-	if s != nil {
-		jrc.SetDeletedBy(*s)
+func (_c *JobRunnerCreate) SetNillableDeletedBy(v *string) *JobRunnerCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (jrc *JobRunnerCreate) SetDisplayID(s string) *JobRunnerCreate {
-	jrc.mutation.SetDisplayID(s)
-	return jrc
+func (_c *JobRunnerCreate) SetDisplayID(v string) *JobRunnerCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (jrc *JobRunnerCreate) SetTags(s []string) *JobRunnerCreate {
-	jrc.mutation.SetTags(s)
-	return jrc
+func (_c *JobRunnerCreate) SetTags(v []string) *JobRunnerCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jrc *JobRunnerCreate) SetOwnerID(s string) *JobRunnerCreate {
-	jrc.mutation.SetOwnerID(s)
-	return jrc
+func (_c *JobRunnerCreate) SetOwnerID(v string) *JobRunnerCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableOwnerID(s *string) *JobRunnerCreate {
-	if s != nil {
-		jrc.SetOwnerID(*s)
+func (_c *JobRunnerCreate) SetNillableOwnerID(v *string) *JobRunnerCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetSystemOwned sets the "system_owned" field.
-func (jrc *JobRunnerCreate) SetSystemOwned(b bool) *JobRunnerCreate {
-	jrc.mutation.SetSystemOwned(b)
-	return jrc
+func (_c *JobRunnerCreate) SetSystemOwned(v bool) *JobRunnerCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
 }
 
 // SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableSystemOwned(b *bool) *JobRunnerCreate {
-	if b != nil {
-		jrc.SetSystemOwned(*b)
+func (_c *JobRunnerCreate) SetNillableSystemOwned(v *bool) *JobRunnerCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (jrc *JobRunnerCreate) SetName(s string) *JobRunnerCreate {
-	jrc.mutation.SetName(s)
-	return jrc
+func (_c *JobRunnerCreate) SetName(v string) *JobRunnerCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (jrc *JobRunnerCreate) SetStatus(ers enums.JobRunnerStatus) *JobRunnerCreate {
-	jrc.mutation.SetStatus(ers)
-	return jrc
+func (_c *JobRunnerCreate) SetStatus(v enums.JobRunnerStatus) *JobRunnerCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableStatus(ers *enums.JobRunnerStatus) *JobRunnerCreate {
-	if ers != nil {
-		jrc.SetStatus(*ers)
+func (_c *JobRunnerCreate) SetNillableStatus(v *enums.JobRunnerStatus) *JobRunnerCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetIPAddress sets the "ip_address" field.
-func (jrc *JobRunnerCreate) SetIPAddress(s string) *JobRunnerCreate {
-	jrc.mutation.SetIPAddress(s)
-	return jrc
+func (_c *JobRunnerCreate) SetIPAddress(v string) *JobRunnerCreate {
+	_c.mutation.SetIPAddress(v)
+	return _c
 }
 
 // SetNillableIPAddress sets the "ip_address" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableIPAddress(s *string) *JobRunnerCreate {
-	if s != nil {
-		jrc.SetIPAddress(*s)
+func (_c *JobRunnerCreate) SetNillableIPAddress(v *string) *JobRunnerCreate {
+	if v != nil {
+		_c.SetIPAddress(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetLastSeen sets the "last_seen" field.
-func (jrc *JobRunnerCreate) SetLastSeen(t time.Time) *JobRunnerCreate {
-	jrc.mutation.SetLastSeen(t)
-	return jrc
+func (_c *JobRunnerCreate) SetLastSeen(v time.Time) *JobRunnerCreate {
+	_c.mutation.SetLastSeen(v)
+	return _c
 }
 
 // SetNillableLastSeen sets the "last_seen" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableLastSeen(t *time.Time) *JobRunnerCreate {
-	if t != nil {
-		jrc.SetLastSeen(*t)
+func (_c *JobRunnerCreate) SetNillableLastSeen(v *time.Time) *JobRunnerCreate {
+	if v != nil {
+		_c.SetLastSeen(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetVersion sets the "version" field.
-func (jrc *JobRunnerCreate) SetVersion(s string) *JobRunnerCreate {
-	jrc.mutation.SetVersion(s)
-	return jrc
+func (_c *JobRunnerCreate) SetVersion(v string) *JobRunnerCreate {
+	_c.mutation.SetVersion(v)
+	return _c
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableVersion(s *string) *JobRunnerCreate {
-	if s != nil {
-		jrc.SetVersion(*s)
+func (_c *JobRunnerCreate) SetNillableVersion(v *string) *JobRunnerCreate {
+	if v != nil {
+		_c.SetVersion(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetOs sets the "os" field.
-func (jrc *JobRunnerCreate) SetOs(s string) *JobRunnerCreate {
-	jrc.mutation.SetOs(s)
-	return jrc
+func (_c *JobRunnerCreate) SetOs(v string) *JobRunnerCreate {
+	_c.mutation.SetOs(v)
+	return _c
 }
 
 // SetNillableOs sets the "os" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableOs(s *string) *JobRunnerCreate {
-	if s != nil {
-		jrc.SetOs(*s)
+func (_c *JobRunnerCreate) SetNillableOs(v *string) *JobRunnerCreate {
+	if v != nil {
+		_c.SetOs(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (jrc *JobRunnerCreate) SetID(s string) *JobRunnerCreate {
-	jrc.mutation.SetID(s)
-	return jrc
+func (_c *JobRunnerCreate) SetID(v string) *JobRunnerCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableID(s *string) *JobRunnerCreate {
-	if s != nil {
-		jrc.SetID(*s)
+func (_c *JobRunnerCreate) SetNillableID(v *string) *JobRunnerCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return jrc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (jrc *JobRunnerCreate) SetOwner(o *Organization) *JobRunnerCreate {
-	return jrc.SetOwnerID(o.ID)
+func (_c *JobRunnerCreate) SetOwner(v *Organization) *JobRunnerCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
-func (jrc *JobRunnerCreate) AddJobRunnerTokenIDs(ids ...string) *JobRunnerCreate {
-	jrc.mutation.AddJobRunnerTokenIDs(ids...)
-	return jrc
+func (_c *JobRunnerCreate) AddJobRunnerTokenIDs(ids ...string) *JobRunnerCreate {
+	_c.mutation.AddJobRunnerTokenIDs(ids...)
+	return _c
 }
 
 // AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
-func (jrc *JobRunnerCreate) AddJobRunnerTokens(j ...*JobRunnerToken) *JobRunnerCreate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_c *JobRunnerCreate) AddJobRunnerTokens(v ...*JobRunnerToken) *JobRunnerCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return jrc.AddJobRunnerTokenIDs(ids...)
+	return _c.AddJobRunnerTokenIDs(ids...)
 }
 
 // Mutation returns the JobRunnerMutation object of the builder.
-func (jrc *JobRunnerCreate) Mutation() *JobRunnerMutation {
-	return jrc.mutation
+func (_c *JobRunnerCreate) Mutation() *JobRunnerMutation {
+	return _c.mutation
 }
 
 // Save creates the JobRunner in the database.
-func (jrc *JobRunnerCreate) Save(ctx context.Context) (*JobRunner, error) {
-	if err := jrc.defaults(); err != nil {
+func (_c *JobRunnerCreate) Save(ctx context.Context) (*JobRunner, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, jrc.sqlSave, jrc.mutation, jrc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (jrc *JobRunnerCreate) SaveX(ctx context.Context) *JobRunner {
-	v, err := jrc.Save(ctx)
+func (_c *JobRunnerCreate) SaveX(ctx context.Context) *JobRunner {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -280,73 +280,73 @@ func (jrc *JobRunnerCreate) SaveX(ctx context.Context) *JobRunner {
 }
 
 // Exec executes the query.
-func (jrc *JobRunnerCreate) Exec(ctx context.Context) error {
-	_, err := jrc.Save(ctx)
+func (_c *JobRunnerCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jrc *JobRunnerCreate) ExecX(ctx context.Context) {
-	if err := jrc.Exec(ctx); err != nil {
+func (_c *JobRunnerCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jrc *JobRunnerCreate) defaults() error {
-	if _, ok := jrc.mutation.CreatedAt(); !ok {
+func (_c *JobRunnerCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if jobrunner.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobrunner.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobrunner.DefaultCreatedAt()
-		jrc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := jrc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if jobrunner.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobrunner.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobrunner.DefaultUpdatedAt()
-		jrc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := jrc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := jobrunner.DefaultTags
-		jrc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := jrc.mutation.SystemOwned(); !ok {
+	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := jobrunner.DefaultSystemOwned
-		jrc.mutation.SetSystemOwned(v)
+		_c.mutation.SetSystemOwned(v)
 	}
-	if _, ok := jrc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := jobrunner.DefaultStatus
-		jrc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := jrc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if jobrunner.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized jobrunner.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := jobrunner.DefaultID()
-		jrc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (jrc *JobRunnerCreate) check() error {
-	if _, ok := jrc.mutation.DisplayID(); !ok {
+func (_c *JobRunnerCreate) check() error {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "JobRunner.display_id"`)}
 	}
-	if v, ok := jrc.mutation.DisplayID(); ok {
+	if v, ok := _c.mutation.DisplayID(); ok {
 		if err := jobrunner.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "JobRunner.display_id": %w`, err)}
 		}
 	}
-	if _, ok := jrc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "JobRunner.name"`)}
 	}
-	if _, ok := jrc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "JobRunner.status"`)}
 	}
-	if v, ok := jrc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := jobrunner.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "JobRunner.status": %w`, err)}
 		}
@@ -354,12 +354,12 @@ func (jrc *JobRunnerCreate) check() error {
 	return nil
 }
 
-func (jrc *JobRunnerCreate) sqlSave(ctx context.Context) (*JobRunner, error) {
-	if err := jrc.check(); err != nil {
+func (_c *JobRunnerCreate) sqlSave(ctx context.Context) (*JobRunner, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := jrc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, jrc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -372,82 +372,82 @@ func (jrc *JobRunnerCreate) sqlSave(ctx context.Context) (*JobRunner, error) {
 			return nil, fmt.Errorf("unexpected JobRunner.ID type: %T", _spec.ID.Value)
 		}
 	}
-	jrc.mutation.id = &_node.ID
-	jrc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (jrc *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
+func (_c *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
 	var (
-		_node = &JobRunner{config: jrc.config}
+		_node = &JobRunner{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(jobrunner.Table, sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString))
 	)
-	_spec.Schema = jrc.schemaConfig.JobRunner
-	if id, ok := jrc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.JobRunner
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := jrc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(jobrunner.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := jrc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobrunner.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := jrc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(jobrunner.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := jrc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobrunner.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := jrc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(jobrunner.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := jrc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(jobrunner.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := jrc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(jobrunner.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := jrc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(jobrunner.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := jrc.mutation.SystemOwned(); ok {
+	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(jobrunner.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
 	}
-	if value, ok := jrc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(jobrunner.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := jrc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(jobrunner.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := jrc.mutation.IPAddress(); ok {
+	if value, ok := _c.mutation.IPAddress(); ok {
 		_spec.SetField(jobrunner.FieldIPAddress, field.TypeString, value)
 		_node.IPAddress = value
 	}
-	if value, ok := jrc.mutation.LastSeen(); ok {
+	if value, ok := _c.mutation.LastSeen(); ok {
 		_spec.SetField(jobrunner.FieldLastSeen, field.TypeTime, value)
 		_node.LastSeen = value
 	}
-	if value, ok := jrc.mutation.Version(); ok {
+	if value, ok := _c.mutation.Version(); ok {
 		_spec.SetField(jobrunner.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
-	if value, ok := jrc.mutation.Os(); ok {
+	if value, ok := _c.mutation.Os(); ok {
 		_spec.SetField(jobrunner.FieldOs, field.TypeString, value)
 		_node.Os = value
 	}
-	if nodes := jrc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -458,14 +458,14 @@ func (jrc *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrc.schemaConfig.JobRunner
+		edge.Schema = _c.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := jrc.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -476,7 +476,7 @@ func (jrc *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrc.schemaConfig.JobRunnerJobRunnerTokens
+		edge.Schema = _c.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -493,16 +493,16 @@ type JobRunnerCreateBulk struct {
 }
 
 // Save creates the JobRunner entities in the database.
-func (jrcb *JobRunnerCreateBulk) Save(ctx context.Context) ([]*JobRunner, error) {
-	if jrcb.err != nil {
-		return nil, jrcb.err
+func (_c *JobRunnerCreateBulk) Save(ctx context.Context) ([]*JobRunner, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(jrcb.builders))
-	nodes := make([]*JobRunner, len(jrcb.builders))
-	mutators := make([]Mutator, len(jrcb.builders))
-	for i := range jrcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*JobRunner, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := jrcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*JobRunnerMutation)
@@ -516,11 +516,11 @@ func (jrcb *JobRunnerCreateBulk) Save(ctx context.Context) ([]*JobRunner, error)
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, jrcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, jrcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -540,7 +540,7 @@ func (jrcb *JobRunnerCreateBulk) Save(ctx context.Context) ([]*JobRunner, error)
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, jrcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -548,8 +548,8 @@ func (jrcb *JobRunnerCreateBulk) Save(ctx context.Context) ([]*JobRunner, error)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jrcb *JobRunnerCreateBulk) SaveX(ctx context.Context) []*JobRunner {
-	v, err := jrcb.Save(ctx)
+func (_c *JobRunnerCreateBulk) SaveX(ctx context.Context) []*JobRunner {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -557,14 +557,14 @@ func (jrcb *JobRunnerCreateBulk) SaveX(ctx context.Context) []*JobRunner {
 }
 
 // Exec executes the query.
-func (jrcb *JobRunnerCreateBulk) Exec(ctx context.Context) error {
-	_, err := jrcb.Save(ctx)
+func (_c *JobRunnerCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jrcb *JobRunnerCreateBulk) ExecX(ctx context.Context) {
-	if err := jrcb.Exec(ctx); err != nil {
+func (_c *JobRunnerCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

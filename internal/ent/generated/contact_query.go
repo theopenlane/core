@@ -42,44 +42,44 @@ type ContactQuery struct {
 }
 
 // Where adds a new predicate for the ContactQuery builder.
-func (cq *ContactQuery) Where(ps ...predicate.Contact) *ContactQuery {
-	cq.predicates = append(cq.predicates, ps...)
-	return cq
+func (_q *ContactQuery) Where(ps ...predicate.Contact) *ContactQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (cq *ContactQuery) Limit(limit int) *ContactQuery {
-	cq.ctx.Limit = &limit
-	return cq
+func (_q *ContactQuery) Limit(limit int) *ContactQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (cq *ContactQuery) Offset(offset int) *ContactQuery {
-	cq.ctx.Offset = &offset
-	return cq
+func (_q *ContactQuery) Offset(offset int) *ContactQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (cq *ContactQuery) Unique(unique bool) *ContactQuery {
-	cq.ctx.Unique = &unique
-	return cq
+func (_q *ContactQuery) Unique(unique bool) *ContactQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (cq *ContactQuery) Order(o ...contact.OrderOption) *ContactQuery {
-	cq.order = append(cq.order, o...)
-	return cq
+func (_q *ContactQuery) Order(o ...contact.OrderOption) *ContactQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (cq *ContactQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: cq.config}).Query()
+func (_q *ContactQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := cq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -88,23 +88,23 @@ func (cq *ContactQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, contact.OwnerTable, contact.OwnerColumn),
 		)
-		schemaConfig := cq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Contact
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEntities chains the current query on the "entities" edge.
-func (cq *ContactQuery) QueryEntities() *EntityQuery {
-	query := (&EntityClient{config: cq.config}).Query()
+func (_q *ContactQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := cq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -113,23 +113,23 @@ func (cq *ContactQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, contact.EntitiesTable, contact.EntitiesPrimaryKey...),
 		)
-		schemaConfig := cq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.EntityContacts
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFiles chains the current query on the "files" edge.
-func (cq *ContactQuery) QueryFiles() *FileQuery {
-	query := (&FileClient{config: cq.config}).Query()
+func (_q *ContactQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := cq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -138,10 +138,10 @@ func (cq *ContactQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, contact.FilesTable, contact.FilesPrimaryKey...),
 		)
-		schemaConfig := cq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.ContactFiles
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -149,8 +149,8 @@ func (cq *ContactQuery) QueryFiles() *FileQuery {
 
 // First returns the first Contact entity from the query.
 // Returns a *NotFoundError when no Contact was found.
-func (cq *ContactQuery) First(ctx context.Context) (*Contact, error) {
-	nodes, err := cq.Limit(1).All(setContextOp(ctx, cq.ctx, ent.OpQueryFirst))
+func (_q *ContactQuery) First(ctx context.Context) (*Contact, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -161,8 +161,8 @@ func (cq *ContactQuery) First(ctx context.Context) (*Contact, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (cq *ContactQuery) FirstX(ctx context.Context) *Contact {
-	node, err := cq.First(ctx)
+func (_q *ContactQuery) FirstX(ctx context.Context) *Contact {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -171,9 +171,9 @@ func (cq *ContactQuery) FirstX(ctx context.Context) *Contact {
 
 // FirstID returns the first Contact ID from the query.
 // Returns a *NotFoundError when no Contact ID was found.
-func (cq *ContactQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ContactQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = cq.Limit(1).IDs(setContextOp(ctx, cq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -184,8 +184,8 @@ func (cq *ContactQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (cq *ContactQuery) FirstIDX(ctx context.Context) string {
-	id, err := cq.FirstID(ctx)
+func (_q *ContactQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -195,8 +195,8 @@ func (cq *ContactQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Contact entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Contact entity is found.
 // Returns a *NotFoundError when no Contact entities are found.
-func (cq *ContactQuery) Only(ctx context.Context) (*Contact, error) {
-	nodes, err := cq.Limit(2).All(setContextOp(ctx, cq.ctx, ent.OpQueryOnly))
+func (_q *ContactQuery) Only(ctx context.Context) (*Contact, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -211,8 +211,8 @@ func (cq *ContactQuery) Only(ctx context.Context) (*Contact, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (cq *ContactQuery) OnlyX(ctx context.Context) *Contact {
-	node, err := cq.Only(ctx)
+func (_q *ContactQuery) OnlyX(ctx context.Context) *Contact {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (cq *ContactQuery) OnlyX(ctx context.Context) *Contact {
 // OnlyID is like Only, but returns the only Contact ID in the query.
 // Returns a *NotSingularError when more than one Contact ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (cq *ContactQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ContactQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = cq.Limit(2).IDs(setContextOp(ctx, cq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -239,8 +239,8 @@ func (cq *ContactQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (cq *ContactQuery) OnlyIDX(ctx context.Context) string {
-	id, err := cq.OnlyID(ctx)
+func (_q *ContactQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -248,18 +248,18 @@ func (cq *ContactQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Contacts.
-func (cq *ContactQuery) All(ctx context.Context) ([]*Contact, error) {
-	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryAll)
-	if err := cq.prepareQuery(ctx); err != nil {
+func (_q *ContactQuery) All(ctx context.Context) ([]*Contact, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Contact, *ContactQuery]()
-	return withInterceptors[[]*Contact](ctx, cq, qr, cq.inters)
+	return withInterceptors[[]*Contact](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (cq *ContactQuery) AllX(ctx context.Context) []*Contact {
-	nodes, err := cq.All(ctx)
+func (_q *ContactQuery) AllX(ctx context.Context) []*Contact {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -267,20 +267,20 @@ func (cq *ContactQuery) AllX(ctx context.Context) []*Contact {
 }
 
 // IDs executes the query and returns a list of Contact IDs.
-func (cq *ContactQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if cq.ctx.Unique == nil && cq.path != nil {
-		cq.Unique(true)
+func (_q *ContactQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryIDs)
-	if err = cq.Select(contact.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(contact.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (cq *ContactQuery) IDsX(ctx context.Context) []string {
-	ids, err := cq.IDs(ctx)
+func (_q *ContactQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -288,17 +288,17 @@ func (cq *ContactQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (cq *ContactQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryCount)
-	if err := cq.prepareQuery(ctx); err != nil {
+func (_q *ContactQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, cq, querierCount[*ContactQuery](), cq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ContactQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (cq *ContactQuery) CountX(ctx context.Context) int {
-	count, err := cq.Count(ctx)
+func (_q *ContactQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -306,9 +306,9 @@ func (cq *ContactQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (cq *ContactQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryExist)
-	switch _, err := cq.FirstID(ctx); {
+func (_q *ContactQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -319,8 +319,8 @@ func (cq *ContactQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (cq *ContactQuery) ExistX(ctx context.Context) bool {
-	exist, err := cq.Exist(ctx)
+func (_q *ContactQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -329,57 +329,57 @@ func (cq *ContactQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ContactQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (cq *ContactQuery) Clone() *ContactQuery {
-	if cq == nil {
+func (_q *ContactQuery) Clone() *ContactQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ContactQuery{
-		config:       cq.config,
-		ctx:          cq.ctx.Clone(),
-		order:        append([]contact.OrderOption{}, cq.order...),
-		inters:       append([]Interceptor{}, cq.inters...),
-		predicates:   append([]predicate.Contact{}, cq.predicates...),
-		withOwner:    cq.withOwner.Clone(),
-		withEntities: cq.withEntities.Clone(),
-		withFiles:    cq.withFiles.Clone(),
+		config:       _q.config,
+		ctx:          _q.ctx.Clone(),
+		order:        append([]contact.OrderOption{}, _q.order...),
+		inters:       append([]Interceptor{}, _q.inters...),
+		predicates:   append([]predicate.Contact{}, _q.predicates...),
+		withOwner:    _q.withOwner.Clone(),
+		withEntities: _q.withEntities.Clone(),
+		withFiles:    _q.withFiles.Clone(),
 		// clone intermediate query.
-		sql:       cq.sql.Clone(),
-		path:      cq.path,
-		modifiers: append([]func(*sql.Selector){}, cq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *ContactQuery) WithOwner(opts ...func(*OrganizationQuery)) *ContactQuery {
-	query := (&OrganizationClient{config: cq.config}).Query()
+func (_q *ContactQuery) WithOwner(opts ...func(*OrganizationQuery)) *ContactQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withOwner = query
-	return cq
+	_q.withOwner = query
+	return _q
 }
 
 // WithEntities tells the query-builder to eager-load the nodes that are connected to
 // the "entities" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *ContactQuery) WithEntities(opts ...func(*EntityQuery)) *ContactQuery {
-	query := (&EntityClient{config: cq.config}).Query()
+func (_q *ContactQuery) WithEntities(opts ...func(*EntityQuery)) *ContactQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withEntities = query
-	return cq
+	_q.withEntities = query
+	return _q
 }
 
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *ContactQuery) WithFiles(opts ...func(*FileQuery)) *ContactQuery {
-	query := (&FileClient{config: cq.config}).Query()
+func (_q *ContactQuery) WithFiles(opts ...func(*FileQuery)) *ContactQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withFiles = query
-	return cq
+	_q.withFiles = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -396,10 +396,10 @@ func (cq *ContactQuery) WithFiles(opts ...func(*FileQuery)) *ContactQuery {
 //		GroupBy(contact.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (cq *ContactQuery) GroupBy(field string, fields ...string) *ContactGroupBy {
-	cq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ContactGroupBy{build: cq}
-	grbuild.flds = &cq.ctx.Fields
+func (_q *ContactQuery) GroupBy(field string, fields ...string) *ContactGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ContactGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = contact.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -417,127 +417,127 @@ func (cq *ContactQuery) GroupBy(field string, fields ...string) *ContactGroupBy 
 //	client.Contact.Query().
 //		Select(contact.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (cq *ContactQuery) Select(fields ...string) *ContactSelect {
-	cq.ctx.Fields = append(cq.ctx.Fields, fields...)
-	sbuild := &ContactSelect{ContactQuery: cq}
+func (_q *ContactQuery) Select(fields ...string) *ContactSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ContactSelect{ContactQuery: _q}
 	sbuild.label = contact.Label
-	sbuild.flds, sbuild.scan = &cq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ContactSelect configured with the given aggregations.
-func (cq *ContactQuery) Aggregate(fns ...AggregateFunc) *ContactSelect {
-	return cq.Select().Aggregate(fns...)
+func (_q *ContactQuery) Aggregate(fns ...AggregateFunc) *ContactSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (cq *ContactQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range cq.inters {
+func (_q *ContactQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, cq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range cq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !contact.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if cq.path != nil {
-		prev, err := cq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		cq.sql = prev
+		_q.sql = prev
 	}
 	if contact.Policy == nil {
 		return errors.New("generated: uninitialized contact.Policy (forgotten import generated/runtime?)")
 	}
-	if err := contact.Policy.EvalQuery(ctx, cq); err != nil {
+	if err := contact.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (cq *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Contact, error) {
+func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Contact, error) {
 	var (
 		nodes       = []*Contact{}
-		_spec       = cq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			cq.withOwner != nil,
-			cq.withEntities != nil,
-			cq.withFiles != nil,
+			_q.withOwner != nil,
+			_q.withEntities != nil,
+			_q.withFiles != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Contact).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Contact{config: cq.config}
+		node := &Contact{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = cq.schemaConfig.Contact
-	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
-	if len(cq.modifiers) > 0 {
-		_spec.Modifiers = cq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Contact
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, cq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := cq.withOwner; query != nil {
-		if err := cq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Contact, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := cq.withEntities; query != nil {
-		if err := cq.loadEntities(ctx, query, nodes,
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Contact) { n.Edges.Entities = []*Entity{} },
 			func(n *Contact, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := cq.withFiles; query != nil {
-		if err := cq.loadFiles(ctx, query, nodes,
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Contact) { n.Edges.Files = []*File{} },
 			func(n *Contact, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range cq.withNamedEntities {
-		if err := cq.loadEntities(ctx, query, nodes,
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Contact) { n.appendNamedEntities(name) },
 			func(n *Contact, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range cq.withNamedFiles {
-		if err := cq.loadFiles(ctx, query, nodes,
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Contact) { n.appendNamedFiles(name) },
 			func(n *Contact, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range cq.loadTotal {
-		if err := cq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (cq *ContactQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *Organization)) error {
+func (_q *ContactQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Contact)
 	for i := range nodes {
@@ -566,7 +566,7 @@ func (cq *ContactQuery) loadOwner(ctx context.Context, query *OrganizationQuery,
 	}
 	return nil
 }
-func (cq *ContactQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *Entity)) error {
+func (_q *ContactQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *Entity)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Contact)
 	nids := make(map[string]map[*Contact]struct{})
@@ -579,7 +579,7 @@ func (cq *ContactQuery) loadEntities(ctx context.Context, query *EntityQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(contact.EntitiesTable)
-		joinT.Schema(cq.schemaConfig.EntityContacts)
+		joinT.Schema(_q.schemaConfig.EntityContacts)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(contact.EntitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(contact.EntitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -628,7 +628,7 @@ func (cq *ContactQuery) loadEntities(ctx context.Context, query *EntityQuery, no
 	}
 	return nil
 }
-func (cq *ContactQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *File)) error {
+func (_q *ContactQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Contact)
 	nids := make(map[string]map[*Contact]struct{})
@@ -641,7 +641,7 @@ func (cq *ContactQuery) loadFiles(ctx context.Context, query *FileQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(contact.FilesTable)
-		joinT.Schema(cq.schemaConfig.ContactFiles)
+		joinT.Schema(_q.schemaConfig.ContactFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(contact.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(contact.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -691,29 +691,29 @@ func (cq *ContactQuery) loadFiles(ctx context.Context, query *FileQuery, nodes [
 	return nil
 }
 
-func (cq *ContactQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := cq.querySpec()
-	_spec.Node.Schema = cq.schemaConfig.Contact
-	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
-	if len(cq.modifiers) > 0 {
-		_spec.Modifiers = cq.modifiers
+func (_q *ContactQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Contact
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = cq.ctx.Fields
-	if len(cq.ctx.Fields) > 0 {
-		_spec.Unique = cq.ctx.Unique != nil && *cq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, cq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (cq *ContactQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ContactQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(contact.Table, contact.Columns, sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString))
-	_spec.From = cq.sql
-	if unique := cq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if cq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := cq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, contact.FieldID)
 		for i := range fields {
@@ -721,24 +721,24 @@ func (cq *ContactQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if cq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(contact.FieldOwnerID)
 		}
 	}
-	if ps := cq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := cq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := cq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := cq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -748,76 +748,76 @@ func (cq *ContactQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (cq *ContactQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(cq.driver.Dialect())
+func (_q *ContactQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(contact.Table)
-	columns := cq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = contact.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if cq.sql != nil {
-		selector = cq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if cq.ctx.Unique != nil && *cq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(cq.schemaConfig.Contact)
-	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Contact)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range cq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range cq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range cq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := cq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := cq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (cq *ContactQuery) Modify(modifiers ...func(s *sql.Selector)) *ContactSelect {
-	cq.modifiers = append(cq.modifiers, modifiers...)
-	return cq.Select()
+func (_q *ContactQuery) Modify(modifiers ...func(s *sql.Selector)) *ContactSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (cq *ContactQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *ContactQuery {
-	query := (&EntityClient{config: cq.config}).Query()
+func (_q *ContactQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *ContactQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if cq.withNamedEntities == nil {
-		cq.withNamedEntities = make(map[string]*EntityQuery)
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
 	}
-	cq.withNamedEntities[name] = query
-	return cq
+	_q.withNamedEntities[name] = query
+	return _q
 }
 
 // WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (cq *ContactQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *ContactQuery {
-	query := (&FileClient{config: cq.config}).Query()
+func (_q *ContactQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *ContactQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if cq.withNamedFiles == nil {
-		cq.withNamedFiles = make(map[string]*FileQuery)
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
-	cq.withNamedFiles[name] = query
-	return cq
+	_q.withNamedFiles[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -846,41 +846,41 @@ type ContactGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (cgb *ContactGroupBy) Aggregate(fns ...AggregateFunc) *ContactGroupBy {
-	cgb.fns = append(cgb.fns, fns...)
-	return cgb
+func (_g *ContactGroupBy) Aggregate(fns ...AggregateFunc) *ContactGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (cgb *ContactGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cgb.build.ctx, ent.OpQueryGroupBy)
-	if err := cgb.build.prepareQuery(ctx); err != nil {
+func (_g *ContactGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ContactQuery, *ContactGroupBy](ctx, cgb.build, cgb, cgb.build.inters, v)
+	return scanWithInterceptors[*ContactQuery, *ContactGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (cgb *ContactGroupBy) sqlScan(ctx context.Context, root *ContactQuery, v any) error {
+func (_g *ContactGroupBy) sqlScan(ctx context.Context, root *ContactQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(cgb.fns))
-	for _, fn := range cgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*cgb.flds)+len(cgb.fns))
-		for _, f := range *cgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*cgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := cgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -894,27 +894,27 @@ type ContactSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (cs *ContactSelect) Aggregate(fns ...AggregateFunc) *ContactSelect {
-	cs.fns = append(cs.fns, fns...)
-	return cs
+func (_s *ContactSelect) Aggregate(fns ...AggregateFunc) *ContactSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (cs *ContactSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cs.ctx, ent.OpQuerySelect)
-	if err := cs.prepareQuery(ctx); err != nil {
+func (_s *ContactSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ContactQuery, *ContactSelect](ctx, cs.ContactQuery, cs, cs.inters, v)
+	return scanWithInterceptors[*ContactQuery, *ContactSelect](ctx, _s.ContactQuery, _s, _s.inters, v)
 }
 
-func (cs *ContactSelect) sqlScan(ctx context.Context, root *ContactQuery, v any) error {
+func (_s *ContactSelect) sqlScan(ctx context.Context, root *ContactQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(cs.fns))
-	for _, fn := range cs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*cs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -922,7 +922,7 @@ func (cs *ContactSelect) sqlScan(ctx context.Context, root *ContactQuery, v any)
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := cs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -930,7 +930,7 @@ func (cs *ContactSelect) sqlScan(ctx context.Context, root *ContactQuery, v any)
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (cs *ContactSelect) Modify(modifiers ...func(s *sql.Selector)) *ContactSelect {
-	cs.modifiers = append(cs.modifiers, modifiers...)
-	return cs
+func (_s *ContactSelect) Modify(modifiers ...func(s *sql.Selector)) *ContactSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

@@ -1879,64 +1879,70 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 
 	cursor := ""
 	testCases := []struct {
-		name                 string
-		client               *testclient.TestClient
-		first                *int64
-		after                *string
-		where                *testclient.ControlWhereInput
-		category             *string
-		ctx                  context.Context
-		expectedErr          string
-		expectedCountResults int
+		name               string
+		client             *testclient.TestClient
+		first              *int64
+		after              *string
+		where              *testclient.ControlWhereInput
+		category           *string
+		ctx                context.Context
+		expectedErr        string
+		expectedCategories map[string]struct{}
 	}{
 		{
-			name:                 "happy path, get control categories",
-			client:               suite.client.api,
-			ctx:                  user1.UserCtx,
-			expectedCountResults: 4, // 4 unique categories expected
+			name:   "happy path, get control categories",
+			client: suite.client.api,
+			ctx:    user1.UserCtx,
+			expectedCategories: map[string]struct{}{
+				control1.Category: {},
+				control2.Category: {},
+				control5.Category: {},
+				control6.Category: {},
+			},
 		},
 		{
-			name:                 "happy path, get control categories",
-			client:               suite.client.api,
-			ctx:                  user1.UserCtx,
-			expectedCountResults: 4,                  // 4 unique categories still expected
-			first:                lo.ToPtr(int64(1)), // test pagination
+			name:   "happy path, get control categories",
+			client: suite.client.api,
+			ctx:    user1.UserCtx,
+			first:  lo.ToPtr(int64(1)), // test pagination
 		},
 		{
-			name:                 "happy path, get control categories",
-			client:               suite.client.api,
-			ctx:                  user1.UserCtx,
-			expectedCountResults: 4,                                                 // 4 unique categories still expected
-			first:                lo.ToPtr(int64(1)),                                // test pagination
-			after:                &cursor,                                           // use the cursor from the previous test
-			expectedErr:          "category must be provided when using pagination", // required when using pagination
+			name:        "happy path, get control categories",
+			client:      suite.client.api,
+			ctx:         user1.UserCtx,
+			first:       lo.ToPtr(int64(1)),                                // test pagination
+			after:       &cursor,                                           // use the cursor from the previous test
+			expectedErr: "category must be provided when using pagination", // required when using pagination
 		},
 		{
-			name:                 "happy path, get control for specific category",
-			client:               suite.client.api,
-			ctx:                  user1.UserCtx,
-			expectedCountResults: 1,                  // 1 unique categories expected because of the filter
-			first:                lo.ToPtr(int64(1)), // test pagination
-			after:                &cursor,            // use the cursor from the previous test
-			category:             &category,          // filter by category
+			name:     "happy path, get control for specific category",
+			client:   suite.client.api,
+			ctx:      user1.UserCtx,
+			first:    lo.ToPtr(int64(1)), // test pagination
+			after:    &cursor,            // use the cursor from the previous test
+			category: &category,          // filter by category
 		},
 		{
-			name:                 "happy path, get next result for specific category",
-			client:               suite.client.api,
-			ctx:                  user1.UserCtx,
-			expectedCountResults: 1,                  // 1 unique categories expected because of the filter
-			first:                lo.ToPtr(int64(1)), // test pagination
-			after:                &cursor,            // use the cursor from the previous test
-			category:             &category,          // filter by category
+			name:     "happy path, get next result for specific category",
+			client:   suite.client.api,
+			ctx:      user1.UserCtx,
+			first:    lo.ToPtr(int64(1)), // test pagination
+			after:    &cursor,            // use the cursor from the previous test
+			category: &category,          // filter by category
+			expectedCategories: map[string]struct{}{
+				category: {},
+			},
 		},
 		{
-			name:                 "happy path, get next result for specific category, no more results",
-			client:               suite.client.api,
-			ctx:                  user1.UserCtx,
-			expectedCountResults: 1,                  // 1 unique categories expected because of the filter
-			first:                lo.ToPtr(int64(1)), // test pagination
-			after:                &cursor,            // use the cursor from the previous test
-			category:             &category,          // filter by category
+			name:     "happy path, get next result for specific category, no more results",
+			client:   suite.client.api,
+			ctx:      user1.UserCtx,
+			first:    lo.ToPtr(int64(1)), // test pagination
+			after:    &cursor,            // use the cursor from the previous test
+			category: &category,          // filter by category
+			expectedCategories: map[string]struct{}{
+				category: {},
+			},
 		},
 		{
 			name:   "filter by standard, two results expected",
@@ -1945,7 +1951,10 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 			where: &testclient.ControlWhereInput{
 				StandardID: &standard.ID,
 			},
-			expectedCountResults: 2, // 2 unique categories expected for the standard
+			expectedCategories: map[string]struct{}{
+				control5.Category: {},
+				control6.Category: {},
+			},
 		},
 		{
 			name:   "no controls, no results",
@@ -1968,11 +1977,22 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			// assert.Check(t, is.Len(resp.ControlsGroupByCategory.Edges, tc.expectedCountResults))
-
 			if tc.first != nil {
 				if resp.ControlsGroupByCategory.Edges[0].Node.Controls.PageInfo.HasNextPage {
 					cursor = *resp.ControlsGroupByCategory.Edges[0].Node.Controls.PageInfo.EndCursor
+				}
+			}
+
+			if tc.expectedCategories != nil {
+				for cat := range tc.expectedCategories {
+					foundCat := false
+					for _, edge := range resp.ControlsGroupByCategory.Edges {
+						if edge.Node.Category == cat {
+							foundCat = true
+							break
+						}
+					}
+					assert.Check(t, foundCat, "Expected category %s to be in the response", cat)
 				}
 			}
 		})

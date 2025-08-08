@@ -22,58 +22,58 @@ type OnboardingDelete struct {
 }
 
 // Where appends a list predicates to the OnboardingDelete builder.
-func (od *OnboardingDelete) Where(ps ...predicate.Onboarding) *OnboardingDelete {
-	od.mutation.Where(ps...)
-	return od
+func (_d *OnboardingDelete) Where(ps ...predicate.Onboarding) *OnboardingDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (od *OnboardingDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, od.sqlExec, od.mutation, od.hooks)
+func (_d *OnboardingDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (od *OnboardingDelete) ExecX(ctx context.Context) int {
-	n, err := od.Exec(ctx)
+func (_d *OnboardingDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (od *OnboardingDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *OnboardingDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(onboarding.Table, sqlgraph.NewFieldSpec(onboarding.FieldID, field.TypeString))
-	_spec.Node.Schema = od.schemaConfig.Onboarding
-	ctx = internal.NewSchemaConfigContext(ctx, od.schemaConfig)
-	if ps := od.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Onboarding
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, od.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	od.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // OnboardingDeleteOne is the builder for deleting a single Onboarding entity.
 type OnboardingDeleteOne struct {
-	od *OnboardingDelete
+	_d *OnboardingDelete
 }
 
 // Where appends a list predicates to the OnboardingDelete builder.
-func (odo *OnboardingDeleteOne) Where(ps ...predicate.Onboarding) *OnboardingDeleteOne {
-	odo.od.mutation.Where(ps...)
-	return odo
+func (_d *OnboardingDeleteOne) Where(ps ...predicate.Onboarding) *OnboardingDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (odo *OnboardingDeleteOne) Exec(ctx context.Context) error {
-	n, err := odo.od.Exec(ctx)
+func (_d *OnboardingDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (odo *OnboardingDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (odo *OnboardingDeleteOne) ExecX(ctx context.Context) {
-	if err := odo.Exec(ctx); err != nil {
+func (_d *OnboardingDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

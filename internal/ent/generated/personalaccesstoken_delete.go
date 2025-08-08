@@ -22,58 +22,58 @@ type PersonalAccessTokenDelete struct {
 }
 
 // Where appends a list predicates to the PersonalAccessTokenDelete builder.
-func (patd *PersonalAccessTokenDelete) Where(ps ...predicate.PersonalAccessToken) *PersonalAccessTokenDelete {
-	patd.mutation.Where(ps...)
-	return patd
+func (_d *PersonalAccessTokenDelete) Where(ps ...predicate.PersonalAccessToken) *PersonalAccessTokenDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (patd *PersonalAccessTokenDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, patd.sqlExec, patd.mutation, patd.hooks)
+func (_d *PersonalAccessTokenDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (patd *PersonalAccessTokenDelete) ExecX(ctx context.Context) int {
-	n, err := patd.Exec(ctx)
+func (_d *PersonalAccessTokenDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (patd *PersonalAccessTokenDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *PersonalAccessTokenDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(personalaccesstoken.Table, sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString))
-	_spec.Node.Schema = patd.schemaConfig.PersonalAccessToken
-	ctx = internal.NewSchemaConfigContext(ctx, patd.schemaConfig)
-	if ps := patd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.PersonalAccessToken
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, patd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	patd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // PersonalAccessTokenDeleteOne is the builder for deleting a single PersonalAccessToken entity.
 type PersonalAccessTokenDeleteOne struct {
-	patd *PersonalAccessTokenDelete
+	_d *PersonalAccessTokenDelete
 }
 
 // Where appends a list predicates to the PersonalAccessTokenDelete builder.
-func (patdo *PersonalAccessTokenDeleteOne) Where(ps ...predicate.PersonalAccessToken) *PersonalAccessTokenDeleteOne {
-	patdo.patd.mutation.Where(ps...)
-	return patdo
+func (_d *PersonalAccessTokenDeleteOne) Where(ps ...predicate.PersonalAccessToken) *PersonalAccessTokenDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (patdo *PersonalAccessTokenDeleteOne) Exec(ctx context.Context) error {
-	n, err := patdo.patd.Exec(ctx)
+func (_d *PersonalAccessTokenDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (patdo *PersonalAccessTokenDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (patdo *PersonalAccessTokenDeleteOne) ExecX(ctx context.Context) {
-	if err := patdo.Exec(ctx); err != nil {
+func (_d *PersonalAccessTokenDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

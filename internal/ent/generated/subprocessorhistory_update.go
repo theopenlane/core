@@ -27,211 +27,211 @@ type SubprocessorHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the SubprocessorHistoryUpdate builder.
-func (shu *SubprocessorHistoryUpdate) Where(ps ...predicate.SubprocessorHistory) *SubprocessorHistoryUpdate {
-	shu.mutation.Where(ps...)
-	return shu
+func (_u *SubprocessorHistoryUpdate) Where(ps ...predicate.SubprocessorHistory) *SubprocessorHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shu *SubprocessorHistoryUpdate) SetUpdatedAt(t time.Time) *SubprocessorHistoryUpdate {
-	shu.mutation.SetUpdatedAt(t)
-	return shu
+func (_u *SubprocessorHistoryUpdate) SetUpdatedAt(v time.Time) *SubprocessorHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (shu *SubprocessorHistoryUpdate) ClearUpdatedAt() *SubprocessorHistoryUpdate {
-	shu.mutation.ClearUpdatedAt()
-	return shu
+func (_u *SubprocessorHistoryUpdate) ClearUpdatedAt() *SubprocessorHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (shu *SubprocessorHistoryUpdate) SetUpdatedBy(s string) *SubprocessorHistoryUpdate {
-	shu.mutation.SetUpdatedBy(s)
-	return shu
+func (_u *SubprocessorHistoryUpdate) SetUpdatedBy(v string) *SubprocessorHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shu *SubprocessorHistoryUpdate) SetNillableUpdatedBy(s *string) *SubprocessorHistoryUpdate {
-	if s != nil {
-		shu.SetUpdatedBy(*s)
+func (_u *SubprocessorHistoryUpdate) SetNillableUpdatedBy(v *string) *SubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (shu *SubprocessorHistoryUpdate) ClearUpdatedBy() *SubprocessorHistoryUpdate {
-	shu.mutation.ClearUpdatedBy()
-	return shu
+func (_u *SubprocessorHistoryUpdate) ClearUpdatedBy() *SubprocessorHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (shu *SubprocessorHistoryUpdate) SetDeletedAt(t time.Time) *SubprocessorHistoryUpdate {
-	shu.mutation.SetDeletedAt(t)
-	return shu
+func (_u *SubprocessorHistoryUpdate) SetDeletedAt(v time.Time) *SubprocessorHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shu *SubprocessorHistoryUpdate) SetNillableDeletedAt(t *time.Time) *SubprocessorHistoryUpdate {
-	if t != nil {
-		shu.SetDeletedAt(*t)
+func (_u *SubprocessorHistoryUpdate) SetNillableDeletedAt(v *time.Time) *SubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (shu *SubprocessorHistoryUpdate) ClearDeletedAt() *SubprocessorHistoryUpdate {
-	shu.mutation.ClearDeletedAt()
-	return shu
+func (_u *SubprocessorHistoryUpdate) ClearDeletedAt() *SubprocessorHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (shu *SubprocessorHistoryUpdate) SetDeletedBy(s string) *SubprocessorHistoryUpdate {
-	shu.mutation.SetDeletedBy(s)
-	return shu
+func (_u *SubprocessorHistoryUpdate) SetDeletedBy(v string) *SubprocessorHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shu *SubprocessorHistoryUpdate) SetNillableDeletedBy(s *string) *SubprocessorHistoryUpdate {
-	if s != nil {
-		shu.SetDeletedBy(*s)
+func (_u *SubprocessorHistoryUpdate) SetNillableDeletedBy(v *string) *SubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (shu *SubprocessorHistoryUpdate) ClearDeletedBy() *SubprocessorHistoryUpdate {
-	shu.mutation.ClearDeletedBy()
-	return shu
+func (_u *SubprocessorHistoryUpdate) ClearDeletedBy() *SubprocessorHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (shu *SubprocessorHistoryUpdate) SetTags(s []string) *SubprocessorHistoryUpdate {
-	shu.mutation.SetTags(s)
-	return shu
+func (_u *SubprocessorHistoryUpdate) SetTags(v []string) *SubprocessorHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (shu *SubprocessorHistoryUpdate) AppendTags(s []string) *SubprocessorHistoryUpdate {
-	shu.mutation.AppendTags(s)
-	return shu
+// AppendTags appends value to the "tags" field.
+func (_u *SubprocessorHistoryUpdate) AppendTags(v []string) *SubprocessorHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (shu *SubprocessorHistoryUpdate) ClearTags() *SubprocessorHistoryUpdate {
-	shu.mutation.ClearTags()
-	return shu
+func (_u *SubprocessorHistoryUpdate) ClearTags() *SubprocessorHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (shu *SubprocessorHistoryUpdate) SetOwnerID(s string) *SubprocessorHistoryUpdate {
-	shu.mutation.SetOwnerID(s)
-	return shu
+func (_u *SubprocessorHistoryUpdate) SetOwnerID(v string) *SubprocessorHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (shu *SubprocessorHistoryUpdate) SetNillableOwnerID(s *string) *SubprocessorHistoryUpdate {
-	if s != nil {
-		shu.SetOwnerID(*s)
+func (_u *SubprocessorHistoryUpdate) SetNillableOwnerID(v *string) *SubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (shu *SubprocessorHistoryUpdate) ClearOwnerID() *SubprocessorHistoryUpdate {
-	shu.mutation.ClearOwnerID()
-	return shu
+func (_u *SubprocessorHistoryUpdate) ClearOwnerID() *SubprocessorHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (shu *SubprocessorHistoryUpdate) SetName(s string) *SubprocessorHistoryUpdate {
-	shu.mutation.SetName(s)
-	return shu
+func (_u *SubprocessorHistoryUpdate) SetName(v string) *SubprocessorHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (shu *SubprocessorHistoryUpdate) SetNillableName(s *string) *SubprocessorHistoryUpdate {
-	if s != nil {
-		shu.SetName(*s)
+func (_u *SubprocessorHistoryUpdate) SetNillableName(v *string) *SubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return shu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (shu *SubprocessorHistoryUpdate) SetDescription(s string) *SubprocessorHistoryUpdate {
-	shu.mutation.SetDescription(s)
-	return shu
+func (_u *SubprocessorHistoryUpdate) SetDescription(v string) *SubprocessorHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (shu *SubprocessorHistoryUpdate) SetNillableDescription(s *string) *SubprocessorHistoryUpdate {
-	if s != nil {
-		shu.SetDescription(*s)
+func (_u *SubprocessorHistoryUpdate) SetNillableDescription(v *string) *SubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (shu *SubprocessorHistoryUpdate) ClearDescription() *SubprocessorHistoryUpdate {
-	shu.mutation.ClearDescription()
-	return shu
+func (_u *SubprocessorHistoryUpdate) ClearDescription() *SubprocessorHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetLogoRemoteURL sets the "logo_remote_url" field.
-func (shu *SubprocessorHistoryUpdate) SetLogoRemoteURL(s string) *SubprocessorHistoryUpdate {
-	shu.mutation.SetLogoRemoteURL(s)
-	return shu
+func (_u *SubprocessorHistoryUpdate) SetLogoRemoteURL(v string) *SubprocessorHistoryUpdate {
+	_u.mutation.SetLogoRemoteURL(v)
+	return _u
 }
 
 // SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (shu *SubprocessorHistoryUpdate) SetNillableLogoRemoteURL(s *string) *SubprocessorHistoryUpdate {
-	if s != nil {
-		shu.SetLogoRemoteURL(*s)
+func (_u *SubprocessorHistoryUpdate) SetNillableLogoRemoteURL(v *string) *SubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetLogoRemoteURL(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
-func (shu *SubprocessorHistoryUpdate) ClearLogoRemoteURL() *SubprocessorHistoryUpdate {
-	shu.mutation.ClearLogoRemoteURL()
-	return shu
+func (_u *SubprocessorHistoryUpdate) ClearLogoRemoteURL() *SubprocessorHistoryUpdate {
+	_u.mutation.ClearLogoRemoteURL()
+	return _u
 }
 
 // SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (shu *SubprocessorHistoryUpdate) SetLogoLocalFileID(s string) *SubprocessorHistoryUpdate {
-	shu.mutation.SetLogoLocalFileID(s)
-	return shu
+func (_u *SubprocessorHistoryUpdate) SetLogoLocalFileID(v string) *SubprocessorHistoryUpdate {
+	_u.mutation.SetLogoLocalFileID(v)
+	return _u
 }
 
 // SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (shu *SubprocessorHistoryUpdate) SetNillableLogoLocalFileID(s *string) *SubprocessorHistoryUpdate {
-	if s != nil {
-		shu.SetLogoLocalFileID(*s)
+func (_u *SubprocessorHistoryUpdate) SetNillableLogoLocalFileID(v *string) *SubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetLogoLocalFileID(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (shu *SubprocessorHistoryUpdate) ClearLogoLocalFileID() *SubprocessorHistoryUpdate {
-	shu.mutation.ClearLogoLocalFileID()
-	return shu
+func (_u *SubprocessorHistoryUpdate) ClearLogoLocalFileID() *SubprocessorHistoryUpdate {
+	_u.mutation.ClearLogoLocalFileID()
+	return _u
 }
 
 // Mutation returns the SubprocessorHistoryMutation object of the builder.
-func (shu *SubprocessorHistoryUpdate) Mutation() *SubprocessorHistoryMutation {
-	return shu.mutation
+func (_u *SubprocessorHistoryUpdate) Mutation() *SubprocessorHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (shu *SubprocessorHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := shu.defaults(); err != nil {
+func (_u *SubprocessorHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, shu.sqlSave, shu.mutation, shu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shu *SubprocessorHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := shu.Save(ctx)
+func (_u *SubprocessorHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -239,123 +239,123 @@ func (shu *SubprocessorHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (shu *SubprocessorHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := shu.Save(ctx)
+func (_u *SubprocessorHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shu *SubprocessorHistoryUpdate) ExecX(ctx context.Context) {
-	if err := shu.Exec(ctx); err != nil {
+func (_u *SubprocessorHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shu *SubprocessorHistoryUpdate) defaults() error {
-	if _, ok := shu.mutation.UpdatedAt(); !ok && !shu.mutation.UpdatedAtCleared() {
+func (_u *SubprocessorHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if subprocessorhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subprocessorhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := subprocessorhistory.UpdateDefaultUpdatedAt()
-		shu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (shu *SubprocessorHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubprocessorHistoryUpdate {
-	shu.modifiers = append(shu.modifiers, modifiers...)
-	return shu
+func (_u *SubprocessorHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubprocessorHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (shu *SubprocessorHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *SubprocessorHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(subprocessorhistory.Table, subprocessorhistory.Columns, sqlgraph.NewFieldSpec(subprocessorhistory.FieldID, field.TypeString))
-	if ps := shu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if shu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(subprocessorhistory.FieldRef, field.TypeString)
 	}
-	if shu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(subprocessorhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := shu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(subprocessorhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if shu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subprocessorhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if shu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(subprocessorhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := shu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(subprocessorhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if shu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(subprocessorhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := shu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(subprocessorhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if shu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(subprocessorhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := shu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(subprocessorhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if shu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(subprocessorhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := shu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(subprocessorhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := shu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, subprocessorhistory.FieldTags, value)
 		})
 	}
-	if shu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subprocessorhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := shu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(subprocessorhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if shu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(subprocessorhistory.FieldOwnerID, field.TypeString)
 	}
-	if shu.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(subprocessorhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := shu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(subprocessorhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := shu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(subprocessorhistory.FieldDescription, field.TypeString, value)
 	}
-	if shu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(subprocessorhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := shu.mutation.LogoRemoteURL(); ok {
+	if value, ok := _u.mutation.LogoRemoteURL(); ok {
 		_spec.SetField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString, value)
 	}
-	if shu.mutation.LogoRemoteURLCleared() {
+	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString)
 	}
-	if value, ok := shu.mutation.LogoLocalFileID(); ok {
+	if value, ok := _u.mutation.LogoLocalFileID(); ok {
 		_spec.SetField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString, value)
 	}
-	if shu.mutation.LogoLocalFileIDCleared() {
+	if _u.mutation.LogoLocalFileIDCleared() {
 		_spec.ClearField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString)
 	}
-	_spec.Node.Schema = shu.schemaConfig.SubprocessorHistory
-	ctx = internal.NewSchemaConfigContext(ctx, shu.schemaConfig)
-	_spec.AddModifiers(shu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, shu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.SubprocessorHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{subprocessorhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -363,8 +363,8 @@ func (shu *SubprocessorHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 		}
 		return 0, err
 	}
-	shu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // SubprocessorHistoryUpdateOne is the builder for updating a single SubprocessorHistory entity.
@@ -377,218 +377,218 @@ type SubprocessorHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shuo *SubprocessorHistoryUpdateOne) SetUpdatedAt(t time.Time) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.SetUpdatedAt(t)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) SetUpdatedAt(v time.Time) *SubprocessorHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (shuo *SubprocessorHistoryUpdateOne) ClearUpdatedAt() *SubprocessorHistoryUpdateOne {
-	shuo.mutation.ClearUpdatedAt()
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) ClearUpdatedAt() *SubprocessorHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (shuo *SubprocessorHistoryUpdateOne) SetUpdatedBy(s string) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.SetUpdatedBy(s)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) SetUpdatedBy(v string) *SubprocessorHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shuo *SubprocessorHistoryUpdateOne) SetNillableUpdatedBy(s *string) *SubprocessorHistoryUpdateOne {
-	if s != nil {
-		shuo.SetUpdatedBy(*s)
+func (_u *SubprocessorHistoryUpdateOne) SetNillableUpdatedBy(v *string) *SubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (shuo *SubprocessorHistoryUpdateOne) ClearUpdatedBy() *SubprocessorHistoryUpdateOne {
-	shuo.mutation.ClearUpdatedBy()
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) ClearUpdatedBy() *SubprocessorHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (shuo *SubprocessorHistoryUpdateOne) SetDeletedAt(t time.Time) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.SetDeletedAt(t)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) SetDeletedAt(v time.Time) *SubprocessorHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shuo *SubprocessorHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *SubprocessorHistoryUpdateOne {
-	if t != nil {
-		shuo.SetDeletedAt(*t)
+func (_u *SubprocessorHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *SubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (shuo *SubprocessorHistoryUpdateOne) ClearDeletedAt() *SubprocessorHistoryUpdateOne {
-	shuo.mutation.ClearDeletedAt()
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) ClearDeletedAt() *SubprocessorHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (shuo *SubprocessorHistoryUpdateOne) SetDeletedBy(s string) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.SetDeletedBy(s)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) SetDeletedBy(v string) *SubprocessorHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shuo *SubprocessorHistoryUpdateOne) SetNillableDeletedBy(s *string) *SubprocessorHistoryUpdateOne {
-	if s != nil {
-		shuo.SetDeletedBy(*s)
+func (_u *SubprocessorHistoryUpdateOne) SetNillableDeletedBy(v *string) *SubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (shuo *SubprocessorHistoryUpdateOne) ClearDeletedBy() *SubprocessorHistoryUpdateOne {
-	shuo.mutation.ClearDeletedBy()
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) ClearDeletedBy() *SubprocessorHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (shuo *SubprocessorHistoryUpdateOne) SetTags(s []string) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.SetTags(s)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) SetTags(v []string) *SubprocessorHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (shuo *SubprocessorHistoryUpdateOne) AppendTags(s []string) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.AppendTags(s)
-	return shuo
+// AppendTags appends value to the "tags" field.
+func (_u *SubprocessorHistoryUpdateOne) AppendTags(v []string) *SubprocessorHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (shuo *SubprocessorHistoryUpdateOne) ClearTags() *SubprocessorHistoryUpdateOne {
-	shuo.mutation.ClearTags()
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) ClearTags() *SubprocessorHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (shuo *SubprocessorHistoryUpdateOne) SetOwnerID(s string) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.SetOwnerID(s)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) SetOwnerID(v string) *SubprocessorHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (shuo *SubprocessorHistoryUpdateOne) SetNillableOwnerID(s *string) *SubprocessorHistoryUpdateOne {
-	if s != nil {
-		shuo.SetOwnerID(*s)
+func (_u *SubprocessorHistoryUpdateOne) SetNillableOwnerID(v *string) *SubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (shuo *SubprocessorHistoryUpdateOne) ClearOwnerID() *SubprocessorHistoryUpdateOne {
-	shuo.mutation.ClearOwnerID()
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) ClearOwnerID() *SubprocessorHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (shuo *SubprocessorHistoryUpdateOne) SetName(s string) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.SetName(s)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) SetName(v string) *SubprocessorHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (shuo *SubprocessorHistoryUpdateOne) SetNillableName(s *string) *SubprocessorHistoryUpdateOne {
-	if s != nil {
-		shuo.SetName(*s)
+func (_u *SubprocessorHistoryUpdateOne) SetNillableName(v *string) *SubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return shuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (shuo *SubprocessorHistoryUpdateOne) SetDescription(s string) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.SetDescription(s)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) SetDescription(v string) *SubprocessorHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (shuo *SubprocessorHistoryUpdateOne) SetNillableDescription(s *string) *SubprocessorHistoryUpdateOne {
-	if s != nil {
-		shuo.SetDescription(*s)
+func (_u *SubprocessorHistoryUpdateOne) SetNillableDescription(v *string) *SubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (shuo *SubprocessorHistoryUpdateOne) ClearDescription() *SubprocessorHistoryUpdateOne {
-	shuo.mutation.ClearDescription()
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) ClearDescription() *SubprocessorHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetLogoRemoteURL sets the "logo_remote_url" field.
-func (shuo *SubprocessorHistoryUpdateOne) SetLogoRemoteURL(s string) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.SetLogoRemoteURL(s)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) SetLogoRemoteURL(v string) *SubprocessorHistoryUpdateOne {
+	_u.mutation.SetLogoRemoteURL(v)
+	return _u
 }
 
 // SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (shuo *SubprocessorHistoryUpdateOne) SetNillableLogoRemoteURL(s *string) *SubprocessorHistoryUpdateOne {
-	if s != nil {
-		shuo.SetLogoRemoteURL(*s)
+func (_u *SubprocessorHistoryUpdateOne) SetNillableLogoRemoteURL(v *string) *SubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetLogoRemoteURL(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
-func (shuo *SubprocessorHistoryUpdateOne) ClearLogoRemoteURL() *SubprocessorHistoryUpdateOne {
-	shuo.mutation.ClearLogoRemoteURL()
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) ClearLogoRemoteURL() *SubprocessorHistoryUpdateOne {
+	_u.mutation.ClearLogoRemoteURL()
+	return _u
 }
 
 // SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (shuo *SubprocessorHistoryUpdateOne) SetLogoLocalFileID(s string) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.SetLogoLocalFileID(s)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) SetLogoLocalFileID(v string) *SubprocessorHistoryUpdateOne {
+	_u.mutation.SetLogoLocalFileID(v)
+	return _u
 }
 
 // SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (shuo *SubprocessorHistoryUpdateOne) SetNillableLogoLocalFileID(s *string) *SubprocessorHistoryUpdateOne {
-	if s != nil {
-		shuo.SetLogoLocalFileID(*s)
+func (_u *SubprocessorHistoryUpdateOne) SetNillableLogoLocalFileID(v *string) *SubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetLogoLocalFileID(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (shuo *SubprocessorHistoryUpdateOne) ClearLogoLocalFileID() *SubprocessorHistoryUpdateOne {
-	shuo.mutation.ClearLogoLocalFileID()
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) ClearLogoLocalFileID() *SubprocessorHistoryUpdateOne {
+	_u.mutation.ClearLogoLocalFileID()
+	return _u
 }
 
 // Mutation returns the SubprocessorHistoryMutation object of the builder.
-func (shuo *SubprocessorHistoryUpdateOne) Mutation() *SubprocessorHistoryMutation {
-	return shuo.mutation
+func (_u *SubprocessorHistoryUpdateOne) Mutation() *SubprocessorHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the SubprocessorHistoryUpdate builder.
-func (shuo *SubprocessorHistoryUpdateOne) Where(ps ...predicate.SubprocessorHistory) *SubprocessorHistoryUpdateOne {
-	shuo.mutation.Where(ps...)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) Where(ps ...predicate.SubprocessorHistory) *SubprocessorHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (shuo *SubprocessorHistoryUpdateOne) Select(field string, fields ...string) *SubprocessorHistoryUpdateOne {
-	shuo.fields = append([]string{field}, fields...)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) Select(field string, fields ...string) *SubprocessorHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated SubprocessorHistory entity.
-func (shuo *SubprocessorHistoryUpdateOne) Save(ctx context.Context) (*SubprocessorHistory, error) {
-	if err := shuo.defaults(); err != nil {
+func (_u *SubprocessorHistoryUpdateOne) Save(ctx context.Context) (*SubprocessorHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, shuo.sqlSave, shuo.mutation, shuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shuo *SubprocessorHistoryUpdateOne) SaveX(ctx context.Context) *SubprocessorHistory {
-	node, err := shuo.Save(ctx)
+func (_u *SubprocessorHistoryUpdateOne) SaveX(ctx context.Context) *SubprocessorHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -596,44 +596,44 @@ func (shuo *SubprocessorHistoryUpdateOne) SaveX(ctx context.Context) *Subprocess
 }
 
 // Exec executes the query on the entity.
-func (shuo *SubprocessorHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := shuo.Save(ctx)
+func (_u *SubprocessorHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shuo *SubprocessorHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := shuo.Exec(ctx); err != nil {
+func (_u *SubprocessorHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shuo *SubprocessorHistoryUpdateOne) defaults() error {
-	if _, ok := shuo.mutation.UpdatedAt(); !ok && !shuo.mutation.UpdatedAtCleared() {
+func (_u *SubprocessorHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if subprocessorhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subprocessorhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := subprocessorhistory.UpdateDefaultUpdatedAt()
-		shuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (shuo *SubprocessorHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubprocessorHistoryUpdateOne {
-	shuo.modifiers = append(shuo.modifiers, modifiers...)
-	return shuo
+func (_u *SubprocessorHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubprocessorHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (shuo *SubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) (_node *SubprocessorHistory, err error) {
+func (_u *SubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) (_node *SubprocessorHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(subprocessorhistory.Table, subprocessorhistory.Columns, sqlgraph.NewFieldSpec(subprocessorhistory.FieldID, field.TypeString))
-	id, ok := shuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "SubprocessorHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := shuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, subprocessorhistory.FieldID)
 		for _, f := range fields {
@@ -645,94 +645,94 @@ func (shuo *SubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) (_node *S
 			}
 		}
 	}
-	if ps := shuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if shuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(subprocessorhistory.FieldRef, field.TypeString)
 	}
-	if shuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(subprocessorhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := shuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(subprocessorhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if shuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subprocessorhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if shuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(subprocessorhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := shuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(subprocessorhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if shuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(subprocessorhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := shuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(subprocessorhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if shuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(subprocessorhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := shuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(subprocessorhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if shuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(subprocessorhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := shuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(subprocessorhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := shuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, subprocessorhistory.FieldTags, value)
 		})
 	}
-	if shuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subprocessorhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := shuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(subprocessorhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if shuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(subprocessorhistory.FieldOwnerID, field.TypeString)
 	}
-	if shuo.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(subprocessorhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := shuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(subprocessorhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := shuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(subprocessorhistory.FieldDescription, field.TypeString, value)
 	}
-	if shuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(subprocessorhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := shuo.mutation.LogoRemoteURL(); ok {
+	if value, ok := _u.mutation.LogoRemoteURL(); ok {
 		_spec.SetField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString, value)
 	}
-	if shuo.mutation.LogoRemoteURLCleared() {
+	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString)
 	}
-	if value, ok := shuo.mutation.LogoLocalFileID(); ok {
+	if value, ok := _u.mutation.LogoLocalFileID(); ok {
 		_spec.SetField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString, value)
 	}
-	if shuo.mutation.LogoLocalFileIDCleared() {
+	if _u.mutation.LogoLocalFileIDCleared() {
 		_spec.ClearField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString)
 	}
-	_spec.Node.Schema = shuo.schemaConfig.SubprocessorHistory
-	ctx = internal.NewSchemaConfigContext(ctx, shuo.schemaConfig)
-	_spec.AddModifiers(shuo.modifiers...)
-	_node = &SubprocessorHistory{config: shuo.config}
+	_spec.Node.Schema = _u.schemaConfig.SubprocessorHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &SubprocessorHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, shuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{subprocessorhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -740,6 +740,6 @@ func (shuo *SubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) (_node *S
 		}
 		return nil, err
 	}
-	shuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

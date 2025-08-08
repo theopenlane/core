@@ -22,58 +22,58 @@ type InviteDelete struct {
 }
 
 // Where appends a list predicates to the InviteDelete builder.
-func (id *InviteDelete) Where(ps ...predicate.Invite) *InviteDelete {
-	id.mutation.Where(ps...)
-	return id
+func (_d *InviteDelete) Where(ps ...predicate.Invite) *InviteDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (id *InviteDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, id.sqlExec, id.mutation, id.hooks)
+func (_d *InviteDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (id *InviteDelete) ExecX(ctx context.Context) int {
-	n, err := id.Exec(ctx)
+func (_d *InviteDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (id *InviteDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *InviteDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(invite.Table, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString))
-	_spec.Node.Schema = id.schemaConfig.Invite
-	ctx = internal.NewSchemaConfigContext(ctx, id.schemaConfig)
-	if ps := id.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Invite
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, id.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	id.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // InviteDeleteOne is the builder for deleting a single Invite entity.
 type InviteDeleteOne struct {
-	id *InviteDelete
+	_d *InviteDelete
 }
 
 // Where appends a list predicates to the InviteDelete builder.
-func (ido *InviteDeleteOne) Where(ps ...predicate.Invite) *InviteDeleteOne {
-	ido.id.mutation.Where(ps...)
-	return ido
+func (_d *InviteDeleteOne) Where(ps ...predicate.Invite) *InviteDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (ido *InviteDeleteOne) Exec(ctx context.Context) error {
-	n, err := ido.id.Exec(ctx)
+func (_d *InviteDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (ido *InviteDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ido *InviteDeleteOne) ExecX(ctx context.Context) {
-	if err := ido.Exec(ctx); err != nil {
+func (_d *InviteDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -24,283 +24,283 @@ type TaskHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (thc *TaskHistoryCreate) SetHistoryTime(t time.Time) *TaskHistoryCreate {
-	thc.mutation.SetHistoryTime(t)
-	return thc
+func (_c *TaskHistoryCreate) SetHistoryTime(v time.Time) *TaskHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableHistoryTime(t *time.Time) *TaskHistoryCreate {
-	if t != nil {
-		thc.SetHistoryTime(*t)
+func (_c *TaskHistoryCreate) SetNillableHistoryTime(v *time.Time) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (thc *TaskHistoryCreate) SetRef(s string) *TaskHistoryCreate {
-	thc.mutation.SetRef(s)
-	return thc
+func (_c *TaskHistoryCreate) SetRef(v string) *TaskHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableRef(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetRef(*s)
+func (_c *TaskHistoryCreate) SetNillableRef(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (thc *TaskHistoryCreate) SetOperation(ht history.OpType) *TaskHistoryCreate {
-	thc.mutation.SetOperation(ht)
-	return thc
+func (_c *TaskHistoryCreate) SetOperation(v history.OpType) *TaskHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (thc *TaskHistoryCreate) SetCreatedAt(t time.Time) *TaskHistoryCreate {
-	thc.mutation.SetCreatedAt(t)
-	return thc
+func (_c *TaskHistoryCreate) SetCreatedAt(v time.Time) *TaskHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableCreatedAt(t *time.Time) *TaskHistoryCreate {
-	if t != nil {
-		thc.SetCreatedAt(*t)
+func (_c *TaskHistoryCreate) SetNillableCreatedAt(v *time.Time) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (thc *TaskHistoryCreate) SetUpdatedAt(t time.Time) *TaskHistoryCreate {
-	thc.mutation.SetUpdatedAt(t)
-	return thc
+func (_c *TaskHistoryCreate) SetUpdatedAt(v time.Time) *TaskHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableUpdatedAt(t *time.Time) *TaskHistoryCreate {
-	if t != nil {
-		thc.SetUpdatedAt(*t)
+func (_c *TaskHistoryCreate) SetNillableUpdatedAt(v *time.Time) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (thc *TaskHistoryCreate) SetCreatedBy(s string) *TaskHistoryCreate {
-	thc.mutation.SetCreatedBy(s)
-	return thc
+func (_c *TaskHistoryCreate) SetCreatedBy(v string) *TaskHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableCreatedBy(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetCreatedBy(*s)
+func (_c *TaskHistoryCreate) SetNillableCreatedBy(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (thc *TaskHistoryCreate) SetUpdatedBy(s string) *TaskHistoryCreate {
-	thc.mutation.SetUpdatedBy(s)
-	return thc
+func (_c *TaskHistoryCreate) SetUpdatedBy(v string) *TaskHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableUpdatedBy(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetUpdatedBy(*s)
+func (_c *TaskHistoryCreate) SetNillableUpdatedBy(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (thc *TaskHistoryCreate) SetDeletedAt(t time.Time) *TaskHistoryCreate {
-	thc.mutation.SetDeletedAt(t)
-	return thc
+func (_c *TaskHistoryCreate) SetDeletedAt(v time.Time) *TaskHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableDeletedAt(t *time.Time) *TaskHistoryCreate {
-	if t != nil {
-		thc.SetDeletedAt(*t)
+func (_c *TaskHistoryCreate) SetNillableDeletedAt(v *time.Time) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (thc *TaskHistoryCreate) SetDeletedBy(s string) *TaskHistoryCreate {
-	thc.mutation.SetDeletedBy(s)
-	return thc
+func (_c *TaskHistoryCreate) SetDeletedBy(v string) *TaskHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableDeletedBy(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetDeletedBy(*s)
+func (_c *TaskHistoryCreate) SetNillableDeletedBy(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (thc *TaskHistoryCreate) SetDisplayID(s string) *TaskHistoryCreate {
-	thc.mutation.SetDisplayID(s)
-	return thc
+func (_c *TaskHistoryCreate) SetDisplayID(v string) *TaskHistoryCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (thc *TaskHistoryCreate) SetTags(s []string) *TaskHistoryCreate {
-	thc.mutation.SetTags(s)
-	return thc
+func (_c *TaskHistoryCreate) SetTags(v []string) *TaskHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (thc *TaskHistoryCreate) SetOwnerID(s string) *TaskHistoryCreate {
-	thc.mutation.SetOwnerID(s)
-	return thc
+func (_c *TaskHistoryCreate) SetOwnerID(v string) *TaskHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableOwnerID(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetOwnerID(*s)
+func (_c *TaskHistoryCreate) SetNillableOwnerID(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetTitle sets the "title" field.
-func (thc *TaskHistoryCreate) SetTitle(s string) *TaskHistoryCreate {
-	thc.mutation.SetTitle(s)
-	return thc
+func (_c *TaskHistoryCreate) SetTitle(v string) *TaskHistoryCreate {
+	_c.mutation.SetTitle(v)
+	return _c
 }
 
 // SetDetails sets the "details" field.
-func (thc *TaskHistoryCreate) SetDetails(s string) *TaskHistoryCreate {
-	thc.mutation.SetDetails(s)
-	return thc
+func (_c *TaskHistoryCreate) SetDetails(v string) *TaskHistoryCreate {
+	_c.mutation.SetDetails(v)
+	return _c
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableDetails(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetDetails(*s)
+func (_c *TaskHistoryCreate) SetNillableDetails(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetDetails(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (thc *TaskHistoryCreate) SetStatus(es enums.TaskStatus) *TaskHistoryCreate {
-	thc.mutation.SetStatus(es)
-	return thc
+func (_c *TaskHistoryCreate) SetStatus(v enums.TaskStatus) *TaskHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableStatus(es *enums.TaskStatus) *TaskHistoryCreate {
-	if es != nil {
-		thc.SetStatus(*es)
+func (_c *TaskHistoryCreate) SetNillableStatus(v *enums.TaskStatus) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetCategory sets the "category" field.
-func (thc *TaskHistoryCreate) SetCategory(s string) *TaskHistoryCreate {
-	thc.mutation.SetCategory(s)
-	return thc
+func (_c *TaskHistoryCreate) SetCategory(v string) *TaskHistoryCreate {
+	_c.mutation.SetCategory(v)
+	return _c
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableCategory(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetCategory(*s)
+func (_c *TaskHistoryCreate) SetNillableCategory(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetCategory(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetDue sets the "due" field.
-func (thc *TaskHistoryCreate) SetDue(mt models.DateTime) *TaskHistoryCreate {
-	thc.mutation.SetDue(mt)
-	return thc
+func (_c *TaskHistoryCreate) SetDue(v models.DateTime) *TaskHistoryCreate {
+	_c.mutation.SetDue(v)
+	return _c
 }
 
 // SetNillableDue sets the "due" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableDue(mt *models.DateTime) *TaskHistoryCreate {
-	if mt != nil {
-		thc.SetDue(*mt)
+func (_c *TaskHistoryCreate) SetNillableDue(v *models.DateTime) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetDue(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetCompleted sets the "completed" field.
-func (thc *TaskHistoryCreate) SetCompleted(mt models.DateTime) *TaskHistoryCreate {
-	thc.mutation.SetCompleted(mt)
-	return thc
+func (_c *TaskHistoryCreate) SetCompleted(v models.DateTime) *TaskHistoryCreate {
+	_c.mutation.SetCompleted(v)
+	return _c
 }
 
 // SetNillableCompleted sets the "completed" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableCompleted(mt *models.DateTime) *TaskHistoryCreate {
-	if mt != nil {
-		thc.SetCompleted(*mt)
+func (_c *TaskHistoryCreate) SetNillableCompleted(v *models.DateTime) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetCompleted(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetAssigneeID sets the "assignee_id" field.
-func (thc *TaskHistoryCreate) SetAssigneeID(s string) *TaskHistoryCreate {
-	thc.mutation.SetAssigneeID(s)
-	return thc
+func (_c *TaskHistoryCreate) SetAssigneeID(v string) *TaskHistoryCreate {
+	_c.mutation.SetAssigneeID(v)
+	return _c
 }
 
 // SetNillableAssigneeID sets the "assignee_id" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableAssigneeID(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetAssigneeID(*s)
+func (_c *TaskHistoryCreate) SetNillableAssigneeID(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetAssigneeID(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetAssignerID sets the "assigner_id" field.
-func (thc *TaskHistoryCreate) SetAssignerID(s string) *TaskHistoryCreate {
-	thc.mutation.SetAssignerID(s)
-	return thc
+func (_c *TaskHistoryCreate) SetAssignerID(v string) *TaskHistoryCreate {
+	_c.mutation.SetAssignerID(v)
+	return _c
 }
 
 // SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableAssignerID(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetAssignerID(*s)
+func (_c *TaskHistoryCreate) SetNillableAssignerID(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetAssignerID(*v)
 	}
-	return thc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (thc *TaskHistoryCreate) SetID(s string) *TaskHistoryCreate {
-	thc.mutation.SetID(s)
-	return thc
+func (_c *TaskHistoryCreate) SetID(v string) *TaskHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableID(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetID(*s)
+func (_c *TaskHistoryCreate) SetNillableID(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return thc
+	return _c
 }
 
 // Mutation returns the TaskHistoryMutation object of the builder.
-func (thc *TaskHistoryCreate) Mutation() *TaskHistoryMutation {
-	return thc.mutation
+func (_c *TaskHistoryCreate) Mutation() *TaskHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the TaskHistory in the database.
-func (thc *TaskHistoryCreate) Save(ctx context.Context) (*TaskHistory, error) {
-	if err := thc.defaults(); err != nil {
+func (_c *TaskHistoryCreate) Save(ctx context.Context) (*TaskHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, thc.sqlSave, thc.mutation, thc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (thc *TaskHistoryCreate) SaveX(ctx context.Context) *TaskHistory {
-	v, err := thc.Save(ctx)
+func (_c *TaskHistoryCreate) SaveX(ctx context.Context) *TaskHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -308,82 +308,82 @@ func (thc *TaskHistoryCreate) SaveX(ctx context.Context) *TaskHistory {
 }
 
 // Exec executes the query.
-func (thc *TaskHistoryCreate) Exec(ctx context.Context) error {
-	_, err := thc.Save(ctx)
+func (_c *TaskHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thc *TaskHistoryCreate) ExecX(ctx context.Context) {
-	if err := thc.Exec(ctx); err != nil {
+func (_c *TaskHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (thc *TaskHistoryCreate) defaults() error {
-	if _, ok := thc.mutation.HistoryTime(); !ok {
+func (_c *TaskHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if taskhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized taskhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := taskhistory.DefaultHistoryTime()
-		thc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := thc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if taskhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized taskhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := taskhistory.DefaultCreatedAt()
-		thc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := thc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if taskhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized taskhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := taskhistory.DefaultUpdatedAt()
-		thc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := thc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := taskhistory.DefaultTags
-		thc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := thc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := taskhistory.DefaultStatus
-		thc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := thc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if taskhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized taskhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := taskhistory.DefaultID()
-		thc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (thc *TaskHistoryCreate) check() error {
-	if _, ok := thc.mutation.HistoryTime(); !ok {
+func (_c *TaskHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "TaskHistory.history_time"`)}
 	}
-	if _, ok := thc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "TaskHistory.operation"`)}
 	}
-	if v, ok := thc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := taskhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := thc.mutation.DisplayID(); !ok {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "TaskHistory.display_id"`)}
 	}
-	if _, ok := thc.mutation.Title(); !ok {
+	if _, ok := _c.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`generated: missing required field "TaskHistory.title"`)}
 	}
-	if _, ok := thc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "TaskHistory.status"`)}
 	}
-	if v, ok := thc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := taskhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.status": %w`, err)}
 		}
@@ -391,12 +391,12 @@ func (thc *TaskHistoryCreate) check() error {
 	return nil
 }
 
-func (thc *TaskHistoryCreate) sqlSave(ctx context.Context) (*TaskHistory, error) {
-	if err := thc.check(); err != nil {
+func (_c *TaskHistoryCreate) sqlSave(ctx context.Context) (*TaskHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := thc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, thc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -409,98 +409,98 @@ func (thc *TaskHistoryCreate) sqlSave(ctx context.Context) (*TaskHistory, error)
 			return nil, fmt.Errorf("unexpected TaskHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	thc.mutation.id = &_node.ID
-	thc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (thc *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
+func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TaskHistory{config: thc.config}
+		_node = &TaskHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(taskhistory.Table, sqlgraph.NewFieldSpec(taskhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = thc.schemaConfig.TaskHistory
-	if id, ok := thc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.TaskHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := thc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(taskhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := thc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(taskhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := thc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(taskhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := thc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(taskhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := thc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(taskhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := thc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(taskhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := thc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(taskhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := thc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(taskhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := thc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(taskhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := thc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(taskhistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := thc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(taskhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := thc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(taskhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := thc.mutation.Title(); ok {
+	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
 		_node.Title = value
 	}
-	if value, ok := thc.mutation.Details(); ok {
+	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(taskhistory.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
-	if value, ok := thc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := thc.mutation.Category(); ok {
+	if value, ok := _c.mutation.Category(); ok {
 		_spec.SetField(taskhistory.FieldCategory, field.TypeString, value)
 		_node.Category = value
 	}
-	if value, ok := thc.mutation.Due(); ok {
+	if value, ok := _c.mutation.Due(); ok {
 		_spec.SetField(taskhistory.FieldDue, field.TypeTime, value)
 		_node.Due = &value
 	}
-	if value, ok := thc.mutation.Completed(); ok {
+	if value, ok := _c.mutation.Completed(); ok {
 		_spec.SetField(taskhistory.FieldCompleted, field.TypeTime, value)
 		_node.Completed = &value
 	}
-	if value, ok := thc.mutation.AssigneeID(); ok {
+	if value, ok := _c.mutation.AssigneeID(); ok {
 		_spec.SetField(taskhistory.FieldAssigneeID, field.TypeString, value)
 		_node.AssigneeID = value
 	}
-	if value, ok := thc.mutation.AssignerID(); ok {
+	if value, ok := _c.mutation.AssignerID(); ok {
 		_spec.SetField(taskhistory.FieldAssignerID, field.TypeString, value)
 		_node.AssignerID = value
 	}
@@ -515,16 +515,16 @@ type TaskHistoryCreateBulk struct {
 }
 
 // Save creates the TaskHistory entities in the database.
-func (thcb *TaskHistoryCreateBulk) Save(ctx context.Context) ([]*TaskHistory, error) {
-	if thcb.err != nil {
-		return nil, thcb.err
+func (_c *TaskHistoryCreateBulk) Save(ctx context.Context) ([]*TaskHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(thcb.builders))
-	nodes := make([]*TaskHistory, len(thcb.builders))
-	mutators := make([]Mutator, len(thcb.builders))
-	for i := range thcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TaskHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := thcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TaskHistoryMutation)
@@ -538,11 +538,11 @@ func (thcb *TaskHistoryCreateBulk) Save(ctx context.Context) ([]*TaskHistory, er
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, thcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, thcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -562,7 +562,7 @@ func (thcb *TaskHistoryCreateBulk) Save(ctx context.Context) ([]*TaskHistory, er
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, thcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -570,8 +570,8 @@ func (thcb *TaskHistoryCreateBulk) Save(ctx context.Context) ([]*TaskHistory, er
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (thcb *TaskHistoryCreateBulk) SaveX(ctx context.Context) []*TaskHistory {
-	v, err := thcb.Save(ctx)
+func (_c *TaskHistoryCreateBulk) SaveX(ctx context.Context) []*TaskHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -579,14 +579,14 @@ func (thcb *TaskHistoryCreateBulk) SaveX(ctx context.Context) []*TaskHistory {
 }
 
 // Exec executes the query.
-func (thcb *TaskHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := thcb.Save(ctx)
+func (_c *TaskHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thcb *TaskHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := thcb.Exec(ctx); err != nil {
+func (_c *TaskHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

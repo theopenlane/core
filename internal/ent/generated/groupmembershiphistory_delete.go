@@ -22,58 +22,58 @@ type GroupMembershipHistoryDelete struct {
 }
 
 // Where appends a list predicates to the GroupMembershipHistoryDelete builder.
-func (gmhd *GroupMembershipHistoryDelete) Where(ps ...predicate.GroupMembershipHistory) *GroupMembershipHistoryDelete {
-	gmhd.mutation.Where(ps...)
-	return gmhd
+func (_d *GroupMembershipHistoryDelete) Where(ps ...predicate.GroupMembershipHistory) *GroupMembershipHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (gmhd *GroupMembershipHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, gmhd.sqlExec, gmhd.mutation, gmhd.hooks)
+func (_d *GroupMembershipHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gmhd *GroupMembershipHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := gmhd.Exec(ctx)
+func (_d *GroupMembershipHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (gmhd *GroupMembershipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *GroupMembershipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(groupmembershiphistory.Table, sqlgraph.NewFieldSpec(groupmembershiphistory.FieldID, field.TypeString))
-	_spec.Node.Schema = gmhd.schemaConfig.GroupMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, gmhd.schemaConfig)
-	if ps := gmhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.GroupMembershipHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, gmhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	gmhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // GroupMembershipHistoryDeleteOne is the builder for deleting a single GroupMembershipHistory entity.
 type GroupMembershipHistoryDeleteOne struct {
-	gmhd *GroupMembershipHistoryDelete
+	_d *GroupMembershipHistoryDelete
 }
 
 // Where appends a list predicates to the GroupMembershipHistoryDelete builder.
-func (gmhdo *GroupMembershipHistoryDeleteOne) Where(ps ...predicate.GroupMembershipHistory) *GroupMembershipHistoryDeleteOne {
-	gmhdo.gmhd.mutation.Where(ps...)
-	return gmhdo
+func (_d *GroupMembershipHistoryDeleteOne) Where(ps ...predicate.GroupMembershipHistory) *GroupMembershipHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (gmhdo *GroupMembershipHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := gmhdo.gmhd.Exec(ctx)
+func (_d *GroupMembershipHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (gmhdo *GroupMembershipHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gmhdo *GroupMembershipHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := gmhdo.Exec(ctx); err != nil {
+func (_d *GroupMembershipHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

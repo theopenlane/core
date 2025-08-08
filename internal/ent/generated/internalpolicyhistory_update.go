@@ -28,459 +28,459 @@ type InternalPolicyHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the InternalPolicyHistoryUpdate builder.
-func (iphu *InternalPolicyHistoryUpdate) Where(ps ...predicate.InternalPolicyHistory) *InternalPolicyHistoryUpdate {
-	iphu.mutation.Where(ps...)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) Where(ps ...predicate.InternalPolicyHistory) *InternalPolicyHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (iphu *InternalPolicyHistoryUpdate) SetUpdatedAt(t time.Time) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetUpdatedAt(t)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetUpdatedAt(v time.Time) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearUpdatedAt() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearUpdatedAt()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearUpdatedAt() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (iphu *InternalPolicyHistoryUpdate) SetUpdatedBy(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetUpdatedBy(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetUpdatedBy(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableUpdatedBy(s *string) *InternalPolicyHistoryUpdate {
-	if s != nil {
-		iphu.SetUpdatedBy(*s)
+func (_u *InternalPolicyHistoryUpdate) SetNillableUpdatedBy(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearUpdatedBy() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearUpdatedBy()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearUpdatedBy() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (iphu *InternalPolicyHistoryUpdate) SetDeletedAt(t time.Time) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetDeletedAt(t)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetDeletedAt(v time.Time) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableDeletedAt(t *time.Time) *InternalPolicyHistoryUpdate {
-	if t != nil {
-		iphu.SetDeletedAt(*t)
+func (_u *InternalPolicyHistoryUpdate) SetNillableDeletedAt(v *time.Time) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearDeletedAt() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearDeletedAt()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearDeletedAt() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (iphu *InternalPolicyHistoryUpdate) SetDeletedBy(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetDeletedBy(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetDeletedBy(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableDeletedBy(s *string) *InternalPolicyHistoryUpdate {
-	if s != nil {
-		iphu.SetDeletedBy(*s)
+func (_u *InternalPolicyHistoryUpdate) SetNillableDeletedBy(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearDeletedBy() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearDeletedBy()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearDeletedBy() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (iphu *InternalPolicyHistoryUpdate) SetTags(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetTags(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetTags(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (iphu *InternalPolicyHistoryUpdate) AppendTags(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.AppendTags(s)
-	return iphu
+// AppendTags appends value to the "tags" field.
+func (_u *InternalPolicyHistoryUpdate) AppendTags(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearTags() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearTags()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearTags() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (iphu *InternalPolicyHistoryUpdate) SetRevision(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetRevision(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetRevision(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableRevision(s *string) *InternalPolicyHistoryUpdate {
-	if s != nil {
-		iphu.SetRevision(*s)
+func (_u *InternalPolicyHistoryUpdate) SetNillableRevision(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearRevision() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearRevision()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearRevision() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (iphu *InternalPolicyHistoryUpdate) SetOwnerID(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetOwnerID(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetOwnerID(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableOwnerID(s *string) *InternalPolicyHistoryUpdate {
-	if s != nil {
-		iphu.SetOwnerID(*s)
+func (_u *InternalPolicyHistoryUpdate) SetNillableOwnerID(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearOwnerID() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearOwnerID()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearOwnerID() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (iphu *InternalPolicyHistoryUpdate) SetName(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetName(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetName(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableName(s *string) *InternalPolicyHistoryUpdate {
-	if s != nil {
-		iphu.SetName(*s)
+func (_u *InternalPolicyHistoryUpdate) SetNillableName(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return iphu
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (iphu *InternalPolicyHistoryUpdate) SetStatus(es enums.DocumentStatus) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetStatus(es)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetStatus(v enums.DocumentStatus) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableStatus(es *enums.DocumentStatus) *InternalPolicyHistoryUpdate {
-	if es != nil {
-		iphu.SetStatus(*es)
+func (_u *InternalPolicyHistoryUpdate) SetNillableStatus(v *enums.DocumentStatus) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearStatus() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearStatus()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearStatus() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetPolicyType sets the "policy_type" field.
-func (iphu *InternalPolicyHistoryUpdate) SetPolicyType(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetPolicyType(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetPolicyType(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetPolicyType(v)
+	return _u
 }
 
 // SetNillablePolicyType sets the "policy_type" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillablePolicyType(s *string) *InternalPolicyHistoryUpdate {
-	if s != nil {
-		iphu.SetPolicyType(*s)
+func (_u *InternalPolicyHistoryUpdate) SetNillablePolicyType(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetPolicyType(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearPolicyType clears the value of the "policy_type" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearPolicyType() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearPolicyType()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearPolicyType() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearPolicyType()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (iphu *InternalPolicyHistoryUpdate) SetDetails(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetDetails(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetDetails(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableDetails(s *string) *InternalPolicyHistoryUpdate {
-	if s != nil {
-		iphu.SetDetails(*s)
+func (_u *InternalPolicyHistoryUpdate) SetNillableDetails(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearDetails() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearDetails()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearDetails() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetApprovalRequired sets the "approval_required" field.
-func (iphu *InternalPolicyHistoryUpdate) SetApprovalRequired(b bool) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetApprovalRequired(b)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetApprovalRequired(v bool) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetApprovalRequired(v)
+	return _u
 }
 
 // SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableApprovalRequired(b *bool) *InternalPolicyHistoryUpdate {
-	if b != nil {
-		iphu.SetApprovalRequired(*b)
+func (_u *InternalPolicyHistoryUpdate) SetNillableApprovalRequired(v *bool) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetApprovalRequired(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearApprovalRequired clears the value of the "approval_required" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearApprovalRequired() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearApprovalRequired()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearApprovalRequired() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearApprovalRequired()
+	return _u
 }
 
 // SetReviewDue sets the "review_due" field.
-func (iphu *InternalPolicyHistoryUpdate) SetReviewDue(t time.Time) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetReviewDue(t)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetReviewDue(v time.Time) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetReviewDue(v)
+	return _u
 }
 
 // SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableReviewDue(t *time.Time) *InternalPolicyHistoryUpdate {
-	if t != nil {
-		iphu.SetReviewDue(*t)
+func (_u *InternalPolicyHistoryUpdate) SetNillableReviewDue(v *time.Time) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetReviewDue(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearReviewDue clears the value of the "review_due" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearReviewDue() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearReviewDue()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearReviewDue() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearReviewDue()
+	return _u
 }
 
 // SetReviewFrequency sets the "review_frequency" field.
-func (iphu *InternalPolicyHistoryUpdate) SetReviewFrequency(e enums.Frequency) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetReviewFrequency(e)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetReviewFrequency(v enums.Frequency) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
 }
 
 // SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableReviewFrequency(e *enums.Frequency) *InternalPolicyHistoryUpdate {
-	if e != nil {
-		iphu.SetReviewFrequency(*e)
+func (_u *InternalPolicyHistoryUpdate) SetNillableReviewFrequency(v *enums.Frequency) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearReviewFrequency clears the value of the "review_frequency" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearReviewFrequency() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearReviewFrequency()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearReviewFrequency() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearReviewFrequency()
+	return _u
 }
 
 // SetApproverID sets the "approver_id" field.
-func (iphu *InternalPolicyHistoryUpdate) SetApproverID(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetApproverID(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetApproverID(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetApproverID(v)
+	return _u
 }
 
 // SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableApproverID(s *string) *InternalPolicyHistoryUpdate {
-	if s != nil {
-		iphu.SetApproverID(*s)
+func (_u *InternalPolicyHistoryUpdate) SetNillableApproverID(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetApproverID(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearApproverID clears the value of the "approver_id" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearApproverID() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearApproverID()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearApproverID() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearApproverID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (iphu *InternalPolicyHistoryUpdate) SetDelegateID(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetDelegateID(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetDelegateID(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableDelegateID(s *string) *InternalPolicyHistoryUpdate {
-	if s != nil {
-		iphu.SetDelegateID(*s)
+func (_u *InternalPolicyHistoryUpdate) SetNillableDelegateID(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearDelegateID() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearDelegateID()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearDelegateID() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // SetSummary sets the "summary" field.
-func (iphu *InternalPolicyHistoryUpdate) SetSummary(s string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetSummary(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetSummary(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetSummary(v)
+	return _u
 }
 
 // SetNillableSummary sets the "summary" field if the given value is not nil.
-func (iphu *InternalPolicyHistoryUpdate) SetNillableSummary(s *string) *InternalPolicyHistoryUpdate {
-	if s != nil {
-		iphu.SetSummary(*s)
+func (_u *InternalPolicyHistoryUpdate) SetNillableSummary(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetSummary(*v)
 	}
-	return iphu
+	return _u
 }
 
 // ClearSummary clears the value of the "summary" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearSummary() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearSummary()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearSummary() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearSummary()
+	return _u
 }
 
 // SetTagSuggestions sets the "tag_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) SetTagSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetTagSuggestions(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetTagSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetTagSuggestions(v)
+	return _u
 }
 
-// AppendTagSuggestions appends s to the "tag_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) AppendTagSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.AppendTagSuggestions(s)
-	return iphu
+// AppendTagSuggestions appends value to the "tag_suggestions" field.
+func (_u *InternalPolicyHistoryUpdate) AppendTagSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.AppendTagSuggestions(v)
+	return _u
 }
 
 // ClearTagSuggestions clears the value of the "tag_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearTagSuggestions() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearTagSuggestions()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearTagSuggestions() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearTagSuggestions()
+	return _u
 }
 
 // SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) SetDismissedTagSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetDismissedTagSuggestions(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetDismissedTagSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetDismissedTagSuggestions(v)
+	return _u
 }
 
-// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) AppendDismissedTagSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.AppendDismissedTagSuggestions(s)
-	return iphu
+// AppendDismissedTagSuggestions appends value to the "dismissed_tag_suggestions" field.
+func (_u *InternalPolicyHistoryUpdate) AppendDismissedTagSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.AppendDismissedTagSuggestions(v)
+	return _u
 }
 
 // ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearDismissedTagSuggestions() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearDismissedTagSuggestions()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearDismissedTagSuggestions() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearDismissedTagSuggestions()
+	return _u
 }
 
 // SetControlSuggestions sets the "control_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) SetControlSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetControlSuggestions(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetControlSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetControlSuggestions(v)
+	return _u
 }
 
-// AppendControlSuggestions appends s to the "control_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) AppendControlSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.AppendControlSuggestions(s)
-	return iphu
+// AppendControlSuggestions appends value to the "control_suggestions" field.
+func (_u *InternalPolicyHistoryUpdate) AppendControlSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.AppendControlSuggestions(v)
+	return _u
 }
 
 // ClearControlSuggestions clears the value of the "control_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearControlSuggestions() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearControlSuggestions()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearControlSuggestions() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearControlSuggestions()
+	return _u
 }
 
 // SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) SetDismissedControlSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetDismissedControlSuggestions(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetDismissedControlSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetDismissedControlSuggestions(v)
+	return _u
 }
 
-// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) AppendDismissedControlSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.AppendDismissedControlSuggestions(s)
-	return iphu
+// AppendDismissedControlSuggestions appends value to the "dismissed_control_suggestions" field.
+func (_u *InternalPolicyHistoryUpdate) AppendDismissedControlSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.AppendDismissedControlSuggestions(v)
+	return _u
 }
 
 // ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearDismissedControlSuggestions() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearDismissedControlSuggestions()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearDismissedControlSuggestions() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearDismissedControlSuggestions()
+	return _u
 }
 
 // SetImprovementSuggestions sets the "improvement_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) SetImprovementSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetImprovementSuggestions(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetImprovementSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetImprovementSuggestions(v)
+	return _u
 }
 
-// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) AppendImprovementSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.AppendImprovementSuggestions(s)
-	return iphu
+// AppendImprovementSuggestions appends value to the "improvement_suggestions" field.
+func (_u *InternalPolicyHistoryUpdate) AppendImprovementSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.AppendImprovementSuggestions(v)
+	return _u
 }
 
 // ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearImprovementSuggestions() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearImprovementSuggestions()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearImprovementSuggestions() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearImprovementSuggestions()
+	return _u
 }
 
 // SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) SetDismissedImprovementSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetDismissedImprovementSuggestions(s)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) SetDismissedImprovementSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetDismissedImprovementSuggestions(v)
+	return _u
 }
 
-// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) AppendDismissedImprovementSuggestions(s []string) *InternalPolicyHistoryUpdate {
-	iphu.mutation.AppendDismissedImprovementSuggestions(s)
-	return iphu
+// AppendDismissedImprovementSuggestions appends value to the "dismissed_improvement_suggestions" field.
+func (_u *InternalPolicyHistoryUpdate) AppendDismissedImprovementSuggestions(v []string) *InternalPolicyHistoryUpdate {
+	_u.mutation.AppendDismissedImprovementSuggestions(v)
+	return _u
 }
 
 // ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearDismissedImprovementSuggestions() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearDismissedImprovementSuggestions()
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) ClearDismissedImprovementSuggestions() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearDismissedImprovementSuggestions()
+	return _u
 }
 
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
-func (iphu *InternalPolicyHistoryUpdate) Mutation() *InternalPolicyHistoryMutation {
-	return iphu.mutation
+func (_u *InternalPolicyHistoryUpdate) Mutation() *InternalPolicyHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (iphu *InternalPolicyHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := iphu.defaults(); err != nil {
+func (_u *InternalPolicyHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, iphu.sqlSave, iphu.mutation, iphu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (iphu *InternalPolicyHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := iphu.Save(ctx)
+func (_u *InternalPolicyHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -488,38 +488,38 @@ func (iphu *InternalPolicyHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (iphu *InternalPolicyHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := iphu.Save(ctx)
+func (_u *InternalPolicyHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (iphu *InternalPolicyHistoryUpdate) ExecX(ctx context.Context) {
-	if err := iphu.Exec(ctx); err != nil {
+func (_u *InternalPolicyHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (iphu *InternalPolicyHistoryUpdate) defaults() error {
-	if _, ok := iphu.mutation.UpdatedAt(); !ok && !iphu.mutation.UpdatedAtCleared() {
+func (_u *InternalPolicyHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if internalpolicyhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized internalpolicyhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := internalpolicyhistory.UpdateDefaultUpdatedAt()
-		iphu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (iphu *InternalPolicyHistoryUpdate) check() error {
-	if v, ok := iphu.mutation.Status(); ok {
+func (_u *InternalPolicyHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := internalpolicyhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "InternalPolicyHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := iphu.mutation.ReviewFrequency(); ok {
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := internalpolicyhistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicyHistory.review_frequency": %w`, err)}
 		}
@@ -528,206 +528,206 @@ func (iphu *InternalPolicyHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (iphu *InternalPolicyHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InternalPolicyHistoryUpdate {
-	iphu.modifiers = append(iphu.modifiers, modifiers...)
-	return iphu
+func (_u *InternalPolicyHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InternalPolicyHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := iphu.check(); err != nil {
-		return n, err
+func (_u *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(internalpolicyhistory.Table, internalpolicyhistory.Columns, sqlgraph.NewFieldSpec(internalpolicyhistory.FieldID, field.TypeString))
-	if ps := iphu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if iphu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldRef, field.TypeString)
 	}
-	if iphu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := iphu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(internalpolicyhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if iphu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if iphu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := iphu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(internalpolicyhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if iphu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := iphu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if iphu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iphu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if iphu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := iphu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(internalpolicyhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := iphu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldTags, value)
 		})
 	}
-	if iphu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := iphu.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(internalpolicyhistory.FieldRevision, field.TypeString, value)
 	}
-	if iphu.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldRevision, field.TypeString)
 	}
-	if value, ok := iphu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if iphu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := iphu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(internalpolicyhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := iphu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(internalpolicyhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if iphu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := iphu.mutation.PolicyType(); ok {
+	if value, ok := _u.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicyhistory.FieldPolicyType, field.TypeString, value)
 	}
-	if iphu.mutation.PolicyTypeCleared() {
+	if _u.mutation.PolicyTypeCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldPolicyType, field.TypeString)
 	}
-	if value, ok := iphu.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeString, value)
 	}
-	if iphu.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := iphu.mutation.ApprovalRequired(); ok {
+	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(internalpolicyhistory.FieldApprovalRequired, field.TypeBool, value)
 	}
-	if iphu.mutation.ApprovalRequiredCleared() {
+	if _u.mutation.ApprovalRequiredCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldApprovalRequired, field.TypeBool)
 	}
-	if value, ok := iphu.mutation.ReviewDue(); ok {
+	if value, ok := _u.mutation.ReviewDue(); ok {
 		_spec.SetField(internalpolicyhistory.FieldReviewDue, field.TypeTime, value)
 	}
-	if iphu.mutation.ReviewDueCleared() {
+	if _u.mutation.ReviewDueCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := iphu.mutation.ReviewFrequency(); ok {
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(internalpolicyhistory.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if iphu.mutation.ReviewFrequencyCleared() {
+	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := iphu.mutation.ApproverID(); ok {
+	if value, ok := _u.mutation.ApproverID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldApproverID, field.TypeString, value)
 	}
-	if iphu.mutation.ApproverIDCleared() {
+	if _u.mutation.ApproverIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldApproverID, field.TypeString)
 	}
-	if value, ok := iphu.mutation.DelegateID(); ok {
+	if value, ok := _u.mutation.DelegateID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDelegateID, field.TypeString, value)
 	}
-	if iphu.mutation.DelegateIDCleared() {
+	if _u.mutation.DelegateIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDelegateID, field.TypeString)
 	}
-	if value, ok := iphu.mutation.Summary(); ok {
+	if value, ok := _u.mutation.Summary(); ok {
 		_spec.SetField(internalpolicyhistory.FieldSummary, field.TypeString, value)
 	}
-	if iphu.mutation.SummaryCleared() {
+	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldSummary, field.TypeString)
 	}
-	if value, ok := iphu.mutation.TagSuggestions(); ok {
+	if value, ok := _u.mutation.TagSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphu.mutation.AppendedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldTagSuggestions, value)
 		})
 	}
-	if iphu.mutation.TagSuggestionsCleared() {
+	if _u.mutation.TagSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := iphu.mutation.DismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedTagSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphu.mutation.AppendedDismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldDismissedTagSuggestions, value)
 		})
 	}
-	if iphu.mutation.DismissedTagSuggestionsCleared() {
+	if _u.mutation.DismissedTagSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDismissedTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := iphu.mutation.ControlSuggestions(); ok {
+	if value, ok := _u.mutation.ControlSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphu.mutation.AppendedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldControlSuggestions, value)
 		})
 	}
-	if iphu.mutation.ControlSuggestionsCleared() {
+	if _u.mutation.ControlSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := iphu.mutation.DismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedControlSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphu.mutation.AppendedDismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldDismissedControlSuggestions, value)
 		})
 	}
-	if iphu.mutation.DismissedControlSuggestionsCleared() {
+	if _u.mutation.DismissedControlSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDismissedControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := iphu.mutation.ImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.ImprovementSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphu.mutation.AppendedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldImprovementSuggestions, value)
 		})
 	}
-	if iphu.mutation.ImprovementSuggestionsCleared() {
+	if _u.mutation.ImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := iphu.mutation.DismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphu.mutation.AppendedDismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldDismissedImprovementSuggestions, value)
 		})
 	}
-	if iphu.mutation.DismissedImprovementSuggestionsCleared() {
+	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
-	_spec.Node.Schema = iphu.schemaConfig.InternalPolicyHistory
-	ctx = internal.NewSchemaConfigContext(ctx, iphu.schemaConfig)
-	_spec.AddModifiers(iphu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, iphu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.InternalPolicyHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{internalpolicyhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -735,8 +735,8 @@ func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, er
 		}
 		return 0, err
 	}
-	iphu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // InternalPolicyHistoryUpdateOne is the builder for updating a single InternalPolicyHistory entity.
@@ -749,466 +749,466 @@ type InternalPolicyHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetUpdatedAt(t time.Time) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetUpdatedAt(t)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetUpdatedAt(v time.Time) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearUpdatedAt() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearUpdatedAt()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearUpdatedAt() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetUpdatedBy(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetUpdatedBy(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetUpdatedBy(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableUpdatedBy(s *string) *InternalPolicyHistoryUpdateOne {
-	if s != nil {
-		iphuo.SetUpdatedBy(*s)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableUpdatedBy(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearUpdatedBy() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearUpdatedBy()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearUpdatedBy() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetDeletedAt(t time.Time) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetDeletedAt(t)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetDeletedAt(v time.Time) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *InternalPolicyHistoryUpdateOne {
-	if t != nil {
-		iphuo.SetDeletedAt(*t)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearDeletedAt() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearDeletedAt()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearDeletedAt() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetDeletedBy(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetDeletedBy(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetDeletedBy(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableDeletedBy(s *string) *InternalPolicyHistoryUpdateOne {
-	if s != nil {
-		iphuo.SetDeletedBy(*s)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableDeletedBy(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearDeletedBy() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearDeletedBy()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearDeletedBy() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetTags(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetTags(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetTags(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) AppendTags(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.AppendTags(s)
-	return iphuo
+// AppendTags appends value to the "tags" field.
+func (_u *InternalPolicyHistoryUpdateOne) AppendTags(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearTags() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearTags()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearTags() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetRevision(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetRevision(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetRevision(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableRevision(s *string) *InternalPolicyHistoryUpdateOne {
-	if s != nil {
-		iphuo.SetRevision(*s)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableRevision(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearRevision() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearRevision()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearRevision() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetOwnerID(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetOwnerID(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetOwnerID(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableOwnerID(s *string) *InternalPolicyHistoryUpdateOne {
-	if s != nil {
-		iphuo.SetOwnerID(*s)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableOwnerID(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearOwnerID() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearOwnerID()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearOwnerID() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetName(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetName(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetName(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableName(s *string) *InternalPolicyHistoryUpdateOne {
-	if s != nil {
-		iphuo.SetName(*s)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableName(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetStatus(es enums.DocumentStatus) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetStatus(es)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetStatus(v enums.DocumentStatus) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableStatus(es *enums.DocumentStatus) *InternalPolicyHistoryUpdateOne {
-	if es != nil {
-		iphuo.SetStatus(*es)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableStatus(v *enums.DocumentStatus) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearStatus() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearStatus()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearStatus() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetPolicyType sets the "policy_type" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetPolicyType(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetPolicyType(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetPolicyType(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetPolicyType(v)
+	return _u
 }
 
 // SetNillablePolicyType sets the "policy_type" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillablePolicyType(s *string) *InternalPolicyHistoryUpdateOne {
-	if s != nil {
-		iphuo.SetPolicyType(*s)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillablePolicyType(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetPolicyType(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearPolicyType clears the value of the "policy_type" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearPolicyType() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearPolicyType()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearPolicyType() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearPolicyType()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetDetails(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetDetails(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetDetails(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableDetails(s *string) *InternalPolicyHistoryUpdateOne {
-	if s != nil {
-		iphuo.SetDetails(*s)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableDetails(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearDetails() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearDetails()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearDetails() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetApprovalRequired sets the "approval_required" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetApprovalRequired(b bool) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetApprovalRequired(b)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetApprovalRequired(v bool) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetApprovalRequired(v)
+	return _u
 }
 
 // SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableApprovalRequired(b *bool) *InternalPolicyHistoryUpdateOne {
-	if b != nil {
-		iphuo.SetApprovalRequired(*b)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableApprovalRequired(v *bool) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetApprovalRequired(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearApprovalRequired clears the value of the "approval_required" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearApprovalRequired() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearApprovalRequired()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearApprovalRequired() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearApprovalRequired()
+	return _u
 }
 
 // SetReviewDue sets the "review_due" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetReviewDue(t time.Time) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetReviewDue(t)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetReviewDue(v time.Time) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetReviewDue(v)
+	return _u
 }
 
 // SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableReviewDue(t *time.Time) *InternalPolicyHistoryUpdateOne {
-	if t != nil {
-		iphuo.SetReviewDue(*t)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableReviewDue(v *time.Time) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewDue(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearReviewDue clears the value of the "review_due" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearReviewDue() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearReviewDue()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearReviewDue() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearReviewDue()
+	return _u
 }
 
 // SetReviewFrequency sets the "review_frequency" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetReviewFrequency(e enums.Frequency) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetReviewFrequency(e)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetReviewFrequency(v enums.Frequency) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
 }
 
 // SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableReviewFrequency(e *enums.Frequency) *InternalPolicyHistoryUpdateOne {
-	if e != nil {
-		iphuo.SetReviewFrequency(*e)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableReviewFrequency(v *enums.Frequency) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearReviewFrequency clears the value of the "review_frequency" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearReviewFrequency() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearReviewFrequency()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearReviewFrequency() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearReviewFrequency()
+	return _u
 }
 
 // SetApproverID sets the "approver_id" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetApproverID(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetApproverID(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetApproverID(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetApproverID(v)
+	return _u
 }
 
 // SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableApproverID(s *string) *InternalPolicyHistoryUpdateOne {
-	if s != nil {
-		iphuo.SetApproverID(*s)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableApproverID(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetApproverID(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearApproverID clears the value of the "approver_id" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearApproverID() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearApproverID()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearApproverID() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearApproverID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetDelegateID(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetDelegateID(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetDelegateID(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableDelegateID(s *string) *InternalPolicyHistoryUpdateOne {
-	if s != nil {
-		iphuo.SetDelegateID(*s)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableDelegateID(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearDelegateID() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearDelegateID()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearDelegateID() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // SetSummary sets the "summary" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetSummary(s string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetSummary(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetSummary(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetSummary(v)
+	return _u
 }
 
 // SetNillableSummary sets the "summary" field if the given value is not nil.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableSummary(s *string) *InternalPolicyHistoryUpdateOne {
-	if s != nil {
-		iphuo.SetSummary(*s)
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableSummary(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetSummary(*v)
 	}
-	return iphuo
+	return _u
 }
 
 // ClearSummary clears the value of the "summary" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearSummary() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearSummary()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearSummary() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearSummary()
+	return _u
 }
 
 // SetTagSuggestions sets the "tag_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetTagSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetTagSuggestions(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetTagSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetTagSuggestions(v)
+	return _u
 }
 
-// AppendTagSuggestions appends s to the "tag_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) AppendTagSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.AppendTagSuggestions(s)
-	return iphuo
+// AppendTagSuggestions appends value to the "tag_suggestions" field.
+func (_u *InternalPolicyHistoryUpdateOne) AppendTagSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.AppendTagSuggestions(v)
+	return _u
 }
 
 // ClearTagSuggestions clears the value of the "tag_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearTagSuggestions() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearTagSuggestions()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearTagSuggestions() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearTagSuggestions()
+	return _u
 }
 
 // SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetDismissedTagSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetDismissedTagSuggestions(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetDismissedTagSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetDismissedTagSuggestions(v)
+	return _u
 }
 
-// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) AppendDismissedTagSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.AppendDismissedTagSuggestions(s)
-	return iphuo
+// AppendDismissedTagSuggestions appends value to the "dismissed_tag_suggestions" field.
+func (_u *InternalPolicyHistoryUpdateOne) AppendDismissedTagSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.AppendDismissedTagSuggestions(v)
+	return _u
 }
 
 // ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearDismissedTagSuggestions() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearDismissedTagSuggestions()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearDismissedTagSuggestions() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearDismissedTagSuggestions()
+	return _u
 }
 
 // SetControlSuggestions sets the "control_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetControlSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetControlSuggestions(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetControlSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetControlSuggestions(v)
+	return _u
 }
 
-// AppendControlSuggestions appends s to the "control_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) AppendControlSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.AppendControlSuggestions(s)
-	return iphuo
+// AppendControlSuggestions appends value to the "control_suggestions" field.
+func (_u *InternalPolicyHistoryUpdateOne) AppendControlSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.AppendControlSuggestions(v)
+	return _u
 }
 
 // ClearControlSuggestions clears the value of the "control_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearControlSuggestions() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearControlSuggestions()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearControlSuggestions() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearControlSuggestions()
+	return _u
 }
 
 // SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetDismissedControlSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetDismissedControlSuggestions(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetDismissedControlSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetDismissedControlSuggestions(v)
+	return _u
 }
 
-// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) AppendDismissedControlSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.AppendDismissedControlSuggestions(s)
-	return iphuo
+// AppendDismissedControlSuggestions appends value to the "dismissed_control_suggestions" field.
+func (_u *InternalPolicyHistoryUpdateOne) AppendDismissedControlSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.AppendDismissedControlSuggestions(v)
+	return _u
 }
 
 // ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearDismissedControlSuggestions() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearDismissedControlSuggestions()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearDismissedControlSuggestions() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearDismissedControlSuggestions()
+	return _u
 }
 
 // SetImprovementSuggestions sets the "improvement_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetImprovementSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetImprovementSuggestions(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetImprovementSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetImprovementSuggestions(v)
+	return _u
 }
 
-// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) AppendImprovementSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.AppendImprovementSuggestions(s)
-	return iphuo
+// AppendImprovementSuggestions appends value to the "improvement_suggestions" field.
+func (_u *InternalPolicyHistoryUpdateOne) AppendImprovementSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.AppendImprovementSuggestions(v)
+	return _u
 }
 
 // ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearImprovementSuggestions() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearImprovementSuggestions()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearImprovementSuggestions() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearImprovementSuggestions()
+	return _u
 }
 
 // SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetDismissedImprovementSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetDismissedImprovementSuggestions(s)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) SetDismissedImprovementSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetDismissedImprovementSuggestions(v)
+	return _u
 }
 
-// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) AppendDismissedImprovementSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.AppendDismissedImprovementSuggestions(s)
-	return iphuo
+// AppendDismissedImprovementSuggestions appends value to the "dismissed_improvement_suggestions" field.
+func (_u *InternalPolicyHistoryUpdateOne) AppendDismissedImprovementSuggestions(v []string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.AppendDismissedImprovementSuggestions(v)
+	return _u
 }
 
 // ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearDismissedImprovementSuggestions() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearDismissedImprovementSuggestions()
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) ClearDismissedImprovementSuggestions() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearDismissedImprovementSuggestions()
+	return _u
 }
 
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
-func (iphuo *InternalPolicyHistoryUpdateOne) Mutation() *InternalPolicyHistoryMutation {
-	return iphuo.mutation
+func (_u *InternalPolicyHistoryUpdateOne) Mutation() *InternalPolicyHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the InternalPolicyHistoryUpdate builder.
-func (iphuo *InternalPolicyHistoryUpdateOne) Where(ps ...predicate.InternalPolicyHistory) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.Where(ps...)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) Where(ps ...predicate.InternalPolicyHistory) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (iphuo *InternalPolicyHistoryUpdateOne) Select(field string, fields ...string) *InternalPolicyHistoryUpdateOne {
-	iphuo.fields = append([]string{field}, fields...)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) Select(field string, fields ...string) *InternalPolicyHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated InternalPolicyHistory entity.
-func (iphuo *InternalPolicyHistoryUpdateOne) Save(ctx context.Context) (*InternalPolicyHistory, error) {
-	if err := iphuo.defaults(); err != nil {
+func (_u *InternalPolicyHistoryUpdateOne) Save(ctx context.Context) (*InternalPolicyHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, iphuo.sqlSave, iphuo.mutation, iphuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (iphuo *InternalPolicyHistoryUpdateOne) SaveX(ctx context.Context) *InternalPolicyHistory {
-	node, err := iphuo.Save(ctx)
+func (_u *InternalPolicyHistoryUpdateOne) SaveX(ctx context.Context) *InternalPolicyHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1216,38 +1216,38 @@ func (iphuo *InternalPolicyHistoryUpdateOne) SaveX(ctx context.Context) *Interna
 }
 
 // Exec executes the query on the entity.
-func (iphuo *InternalPolicyHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := iphuo.Save(ctx)
+func (_u *InternalPolicyHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (iphuo *InternalPolicyHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := iphuo.Exec(ctx); err != nil {
+func (_u *InternalPolicyHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (iphuo *InternalPolicyHistoryUpdateOne) defaults() error {
-	if _, ok := iphuo.mutation.UpdatedAt(); !ok && !iphuo.mutation.UpdatedAtCleared() {
+func (_u *InternalPolicyHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if internalpolicyhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized internalpolicyhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := internalpolicyhistory.UpdateDefaultUpdatedAt()
-		iphuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (iphuo *InternalPolicyHistoryUpdateOne) check() error {
-	if v, ok := iphuo.mutation.Status(); ok {
+func (_u *InternalPolicyHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := internalpolicyhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "InternalPolicyHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := iphuo.mutation.ReviewFrequency(); ok {
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := internalpolicyhistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicyHistory.review_frequency": %w`, err)}
 		}
@@ -1256,22 +1256,22 @@ func (iphuo *InternalPolicyHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (iphuo *InternalPolicyHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InternalPolicyHistoryUpdateOne {
-	iphuo.modifiers = append(iphuo.modifiers, modifiers...)
-	return iphuo
+func (_u *InternalPolicyHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InternalPolicyHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *InternalPolicyHistory, err error) {
-	if err := iphuo.check(); err != nil {
+func (_u *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *InternalPolicyHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(internalpolicyhistory.Table, internalpolicyhistory.Columns, sqlgraph.NewFieldSpec(internalpolicyhistory.FieldID, field.TypeString))
-	id, ok := iphuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "InternalPolicyHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := iphuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, internalpolicyhistory.FieldID)
 		for _, f := range fields {
@@ -1283,199 +1283,199 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 			}
 		}
 	}
-	if ps := iphuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if iphuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldRef, field.TypeString)
 	}
-	if iphuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := iphuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(internalpolicyhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if iphuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if iphuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(internalpolicyhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if iphuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if iphuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iphuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if iphuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(internalpolicyhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := iphuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldTags, value)
 		})
 	}
-	if iphuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := iphuo.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(internalpolicyhistory.FieldRevision, field.TypeString, value)
 	}
-	if iphuo.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldRevision, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if iphuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(internalpolicyhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := iphuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(internalpolicyhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if iphuo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := iphuo.mutation.PolicyType(); ok {
+	if value, ok := _u.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicyhistory.FieldPolicyType, field.TypeString, value)
 	}
-	if iphuo.mutation.PolicyTypeCleared() {
+	if _u.mutation.PolicyTypeCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldPolicyType, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeString, value)
 	}
-	if iphuo.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.ApprovalRequired(); ok {
+	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(internalpolicyhistory.FieldApprovalRequired, field.TypeBool, value)
 	}
-	if iphuo.mutation.ApprovalRequiredCleared() {
+	if _u.mutation.ApprovalRequiredCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldApprovalRequired, field.TypeBool)
 	}
-	if value, ok := iphuo.mutation.ReviewDue(); ok {
+	if value, ok := _u.mutation.ReviewDue(); ok {
 		_spec.SetField(internalpolicyhistory.FieldReviewDue, field.TypeTime, value)
 	}
-	if iphuo.mutation.ReviewDueCleared() {
+	if _u.mutation.ReviewDueCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := iphuo.mutation.ReviewFrequency(); ok {
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(internalpolicyhistory.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if iphuo.mutation.ReviewFrequencyCleared() {
+	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := iphuo.mutation.ApproverID(); ok {
+	if value, ok := _u.mutation.ApproverID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldApproverID, field.TypeString, value)
 	}
-	if iphuo.mutation.ApproverIDCleared() {
+	if _u.mutation.ApproverIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldApproverID, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.DelegateID(); ok {
+	if value, ok := _u.mutation.DelegateID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDelegateID, field.TypeString, value)
 	}
-	if iphuo.mutation.DelegateIDCleared() {
+	if _u.mutation.DelegateIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDelegateID, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.Summary(); ok {
+	if value, ok := _u.mutation.Summary(); ok {
 		_spec.SetField(internalpolicyhistory.FieldSummary, field.TypeString, value)
 	}
-	if iphuo.mutation.SummaryCleared() {
+	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldSummary, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.TagSuggestions(); ok {
+	if value, ok := _u.mutation.TagSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphuo.mutation.AppendedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldTagSuggestions, value)
 		})
 	}
-	if iphuo.mutation.TagSuggestionsCleared() {
+	if _u.mutation.TagSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := iphuo.mutation.DismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedTagSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphuo.mutation.AppendedDismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldDismissedTagSuggestions, value)
 		})
 	}
-	if iphuo.mutation.DismissedTagSuggestionsCleared() {
+	if _u.mutation.DismissedTagSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDismissedTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := iphuo.mutation.ControlSuggestions(); ok {
+	if value, ok := _u.mutation.ControlSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphuo.mutation.AppendedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldControlSuggestions, value)
 		})
 	}
-	if iphuo.mutation.ControlSuggestionsCleared() {
+	if _u.mutation.ControlSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := iphuo.mutation.DismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedControlSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphuo.mutation.AppendedDismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldDismissedControlSuggestions, value)
 		})
 	}
-	if iphuo.mutation.DismissedControlSuggestionsCleared() {
+	if _u.mutation.DismissedControlSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDismissedControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := iphuo.mutation.ImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.ImprovementSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphuo.mutation.AppendedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldImprovementSuggestions, value)
 		})
 	}
-	if iphuo.mutation.ImprovementSuggestionsCleared() {
+	if _u.mutation.ImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := iphuo.mutation.DismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := iphuo.mutation.AppendedDismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, internalpolicyhistory.FieldDismissedImprovementSuggestions, value)
 		})
 	}
-	if iphuo.mutation.DismissedImprovementSuggestionsCleared() {
+	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
-	_spec.Node.Schema = iphuo.schemaConfig.InternalPolicyHistory
-	ctx = internal.NewSchemaConfigContext(ctx, iphuo.schemaConfig)
-	_spec.AddModifiers(iphuo.modifiers...)
-	_node = &InternalPolicyHistory{config: iphuo.config}
+	_spec.Node.Schema = _u.schemaConfig.InternalPolicyHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &InternalPolicyHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, iphuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{internalpolicyhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1483,6 +1483,6 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 		}
 		return nil, err
 	}
-	iphuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

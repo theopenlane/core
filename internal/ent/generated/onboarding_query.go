@@ -35,44 +35,44 @@ type OnboardingQuery struct {
 }
 
 // Where adds a new predicate for the OnboardingQuery builder.
-func (oq *OnboardingQuery) Where(ps ...predicate.Onboarding) *OnboardingQuery {
-	oq.predicates = append(oq.predicates, ps...)
-	return oq
+func (_q *OnboardingQuery) Where(ps ...predicate.Onboarding) *OnboardingQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (oq *OnboardingQuery) Limit(limit int) *OnboardingQuery {
-	oq.ctx.Limit = &limit
-	return oq
+func (_q *OnboardingQuery) Limit(limit int) *OnboardingQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (oq *OnboardingQuery) Offset(offset int) *OnboardingQuery {
-	oq.ctx.Offset = &offset
-	return oq
+func (_q *OnboardingQuery) Offset(offset int) *OnboardingQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (oq *OnboardingQuery) Unique(unique bool) *OnboardingQuery {
-	oq.ctx.Unique = &unique
-	return oq
+func (_q *OnboardingQuery) Unique(unique bool) *OnboardingQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (oq *OnboardingQuery) Order(o ...onboarding.OrderOption) *OnboardingQuery {
-	oq.order = append(oq.order, o...)
-	return oq
+func (_q *OnboardingQuery) Order(o ...onboarding.OrderOption) *OnboardingQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOrganization chains the current query on the "organization" edge.
-func (oq *OnboardingQuery) QueryOrganization() *OrganizationQuery {
-	query := (&OrganizationClient{config: oq.config}).Query()
+func (_q *OnboardingQuery) QueryOrganization() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := oq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := oq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -81,10 +81,10 @@ func (oq *OnboardingQuery) QueryOrganization() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, onboarding.OrganizationTable, onboarding.OrganizationColumn),
 		)
-		schemaConfig := oq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Onboarding
-		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -92,8 +92,8 @@ func (oq *OnboardingQuery) QueryOrganization() *OrganizationQuery {
 
 // First returns the first Onboarding entity from the query.
 // Returns a *NotFoundError when no Onboarding was found.
-func (oq *OnboardingQuery) First(ctx context.Context) (*Onboarding, error) {
-	nodes, err := oq.Limit(1).All(setContextOp(ctx, oq.ctx, ent.OpQueryFirst))
+func (_q *OnboardingQuery) First(ctx context.Context) (*Onboarding, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -104,8 +104,8 @@ func (oq *OnboardingQuery) First(ctx context.Context) (*Onboarding, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (oq *OnboardingQuery) FirstX(ctx context.Context) *Onboarding {
-	node, err := oq.First(ctx)
+func (_q *OnboardingQuery) FirstX(ctx context.Context) *Onboarding {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -114,9 +114,9 @@ func (oq *OnboardingQuery) FirstX(ctx context.Context) *Onboarding {
 
 // FirstID returns the first Onboarding ID from the query.
 // Returns a *NotFoundError when no Onboarding ID was found.
-func (oq *OnboardingQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *OnboardingQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = oq.Limit(1).IDs(setContextOp(ctx, oq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -127,8 +127,8 @@ func (oq *OnboardingQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (oq *OnboardingQuery) FirstIDX(ctx context.Context) string {
-	id, err := oq.FirstID(ctx)
+func (_q *OnboardingQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -138,8 +138,8 @@ func (oq *OnboardingQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Onboarding entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Onboarding entity is found.
 // Returns a *NotFoundError when no Onboarding entities are found.
-func (oq *OnboardingQuery) Only(ctx context.Context) (*Onboarding, error) {
-	nodes, err := oq.Limit(2).All(setContextOp(ctx, oq.ctx, ent.OpQueryOnly))
+func (_q *OnboardingQuery) Only(ctx context.Context) (*Onboarding, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -154,8 +154,8 @@ func (oq *OnboardingQuery) Only(ctx context.Context) (*Onboarding, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (oq *OnboardingQuery) OnlyX(ctx context.Context) *Onboarding {
-	node, err := oq.Only(ctx)
+func (_q *OnboardingQuery) OnlyX(ctx context.Context) *Onboarding {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -165,9 +165,9 @@ func (oq *OnboardingQuery) OnlyX(ctx context.Context) *Onboarding {
 // OnlyID is like Only, but returns the only Onboarding ID in the query.
 // Returns a *NotSingularError when more than one Onboarding ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (oq *OnboardingQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *OnboardingQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = oq.Limit(2).IDs(setContextOp(ctx, oq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -182,8 +182,8 @@ func (oq *OnboardingQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (oq *OnboardingQuery) OnlyIDX(ctx context.Context) string {
-	id, err := oq.OnlyID(ctx)
+func (_q *OnboardingQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -191,18 +191,18 @@ func (oq *OnboardingQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Onboardings.
-func (oq *OnboardingQuery) All(ctx context.Context) ([]*Onboarding, error) {
-	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryAll)
-	if err := oq.prepareQuery(ctx); err != nil {
+func (_q *OnboardingQuery) All(ctx context.Context) ([]*Onboarding, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Onboarding, *OnboardingQuery]()
-	return withInterceptors[[]*Onboarding](ctx, oq, qr, oq.inters)
+	return withInterceptors[[]*Onboarding](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (oq *OnboardingQuery) AllX(ctx context.Context) []*Onboarding {
-	nodes, err := oq.All(ctx)
+func (_q *OnboardingQuery) AllX(ctx context.Context) []*Onboarding {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -210,20 +210,20 @@ func (oq *OnboardingQuery) AllX(ctx context.Context) []*Onboarding {
 }
 
 // IDs executes the query and returns a list of Onboarding IDs.
-func (oq *OnboardingQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if oq.ctx.Unique == nil && oq.path != nil {
-		oq.Unique(true)
+func (_q *OnboardingQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryIDs)
-	if err = oq.Select(onboarding.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(onboarding.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (oq *OnboardingQuery) IDsX(ctx context.Context) []string {
-	ids, err := oq.IDs(ctx)
+func (_q *OnboardingQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -231,17 +231,17 @@ func (oq *OnboardingQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (oq *OnboardingQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryCount)
-	if err := oq.prepareQuery(ctx); err != nil {
+func (_q *OnboardingQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, oq, querierCount[*OnboardingQuery](), oq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*OnboardingQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (oq *OnboardingQuery) CountX(ctx context.Context) int {
-	count, err := oq.Count(ctx)
+func (_q *OnboardingQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -249,9 +249,9 @@ func (oq *OnboardingQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (oq *OnboardingQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryExist)
-	switch _, err := oq.FirstID(ctx); {
+func (_q *OnboardingQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -262,8 +262,8 @@ func (oq *OnboardingQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (oq *OnboardingQuery) ExistX(ctx context.Context) bool {
-	exist, err := oq.Exist(ctx)
+func (_q *OnboardingQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -272,33 +272,33 @@ func (oq *OnboardingQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the OnboardingQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (oq *OnboardingQuery) Clone() *OnboardingQuery {
-	if oq == nil {
+func (_q *OnboardingQuery) Clone() *OnboardingQuery {
+	if _q == nil {
 		return nil
 	}
 	return &OnboardingQuery{
-		config:           oq.config,
-		ctx:              oq.ctx.Clone(),
-		order:            append([]onboarding.OrderOption{}, oq.order...),
-		inters:           append([]Interceptor{}, oq.inters...),
-		predicates:       append([]predicate.Onboarding{}, oq.predicates...),
-		withOrganization: oq.withOrganization.Clone(),
+		config:           _q.config,
+		ctx:              _q.ctx.Clone(),
+		order:            append([]onboarding.OrderOption{}, _q.order...),
+		inters:           append([]Interceptor{}, _q.inters...),
+		predicates:       append([]predicate.Onboarding{}, _q.predicates...),
+		withOrganization: _q.withOrganization.Clone(),
 		// clone intermediate query.
-		sql:       oq.sql.Clone(),
-		path:      oq.path,
-		modifiers: append([]func(*sql.Selector){}, oq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOrganization tells the query-builder to eager-load the nodes that are connected to
 // the "organization" edge. The optional arguments are used to configure the query builder of the edge.
-func (oq *OnboardingQuery) WithOrganization(opts ...func(*OrganizationQuery)) *OnboardingQuery {
-	query := (&OrganizationClient{config: oq.config}).Query()
+func (_q *OnboardingQuery) WithOrganization(opts ...func(*OrganizationQuery)) *OnboardingQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	oq.withOrganization = query
-	return oq
+	_q.withOrganization = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -315,10 +315,10 @@ func (oq *OnboardingQuery) WithOrganization(opts ...func(*OrganizationQuery)) *O
 //		GroupBy(onboarding.FieldDeletedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (oq *OnboardingQuery) GroupBy(field string, fields ...string) *OnboardingGroupBy {
-	oq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &OnboardingGroupBy{build: oq}
-	grbuild.flds = &oq.ctx.Fields
+func (_q *OnboardingQuery) GroupBy(field string, fields ...string) *OnboardingGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &OnboardingGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = onboarding.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -336,97 +336,97 @@ func (oq *OnboardingQuery) GroupBy(field string, fields ...string) *OnboardingGr
 //	client.Onboarding.Query().
 //		Select(onboarding.FieldDeletedAt).
 //		Scan(ctx, &v)
-func (oq *OnboardingQuery) Select(fields ...string) *OnboardingSelect {
-	oq.ctx.Fields = append(oq.ctx.Fields, fields...)
-	sbuild := &OnboardingSelect{OnboardingQuery: oq}
+func (_q *OnboardingQuery) Select(fields ...string) *OnboardingSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &OnboardingSelect{OnboardingQuery: _q}
 	sbuild.label = onboarding.Label
-	sbuild.flds, sbuild.scan = &oq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a OnboardingSelect configured with the given aggregations.
-func (oq *OnboardingQuery) Aggregate(fns ...AggregateFunc) *OnboardingSelect {
-	return oq.Select().Aggregate(fns...)
+func (_q *OnboardingQuery) Aggregate(fns ...AggregateFunc) *OnboardingSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (oq *OnboardingQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range oq.inters {
+func (_q *OnboardingQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, oq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range oq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !onboarding.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if oq.path != nil {
-		prev, err := oq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		oq.sql = prev
+		_q.sql = prev
 	}
 	if onboarding.Policy == nil {
 		return errors.New("generated: uninitialized onboarding.Policy (forgotten import generated/runtime?)")
 	}
-	if err := onboarding.Policy.EvalQuery(ctx, oq); err != nil {
+	if err := onboarding.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (oq *OnboardingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Onboarding, error) {
+func (_q *OnboardingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Onboarding, error) {
 	var (
 		nodes       = []*Onboarding{}
-		_spec       = oq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [1]bool{
-			oq.withOrganization != nil,
+			_q.withOrganization != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Onboarding).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Onboarding{config: oq.config}
+		node := &Onboarding{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = oq.schemaConfig.Onboarding
-	ctx = internal.NewSchemaConfigContext(ctx, oq.schemaConfig)
-	if len(oq.modifiers) > 0 {
-		_spec.Modifiers = oq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Onboarding
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, oq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := oq.withOrganization; query != nil {
-		if err := oq.loadOrganization(ctx, query, nodes, nil,
+	if query := _q.withOrganization; query != nil {
+		if err := _q.loadOrganization(ctx, query, nodes, nil,
 			func(n *Onboarding, e *Organization) { n.Edges.Organization = e }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range oq.loadTotal {
-		if err := oq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (oq *OnboardingQuery) loadOrganization(ctx context.Context, query *OrganizationQuery, nodes []*Onboarding, init func(*Onboarding), assign func(*Onboarding, *Organization)) error {
+func (_q *OnboardingQuery) loadOrganization(ctx context.Context, query *OrganizationQuery, nodes []*Onboarding, init func(*Onboarding), assign func(*Onboarding, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Onboarding)
 	for i := range nodes {
@@ -456,29 +456,29 @@ func (oq *OnboardingQuery) loadOrganization(ctx context.Context, query *Organiza
 	return nil
 }
 
-func (oq *OnboardingQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := oq.querySpec()
-	_spec.Node.Schema = oq.schemaConfig.Onboarding
-	ctx = internal.NewSchemaConfigContext(ctx, oq.schemaConfig)
-	if len(oq.modifiers) > 0 {
-		_spec.Modifiers = oq.modifiers
+func (_q *OnboardingQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Onboarding
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = oq.ctx.Fields
-	if len(oq.ctx.Fields) > 0 {
-		_spec.Unique = oq.ctx.Unique != nil && *oq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, oq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (oq *OnboardingQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *OnboardingQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(onboarding.Table, onboarding.Columns, sqlgraph.NewFieldSpec(onboarding.FieldID, field.TypeString))
-	_spec.From = oq.sql
-	if unique := oq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if oq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := oq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, onboarding.FieldID)
 		for i := range fields {
@@ -486,24 +486,24 @@ func (oq *OnboardingQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if oq.withOrganization != nil {
+		if _q.withOrganization != nil {
 			_spec.Node.AddColumnOnce(onboarding.FieldOrganizationID)
 		}
 	}
-	if ps := oq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := oq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := oq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := oq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -513,48 +513,48 @@ func (oq *OnboardingQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (oq *OnboardingQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(oq.driver.Dialect())
+func (_q *OnboardingQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(onboarding.Table)
-	columns := oq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = onboarding.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if oq.sql != nil {
-		selector = oq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if oq.ctx.Unique != nil && *oq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(oq.schemaConfig.Onboarding)
-	ctx = internal.NewSchemaConfigContext(ctx, oq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Onboarding)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range oq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range oq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range oq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := oq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := oq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (oq *OnboardingQuery) Modify(modifiers ...func(s *sql.Selector)) *OnboardingSelect {
-	oq.modifiers = append(oq.modifiers, modifiers...)
-	return oq.Select()
+func (_q *OnboardingQuery) Modify(modifiers ...func(s *sql.Selector)) *OnboardingSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -583,41 +583,41 @@ type OnboardingGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (ogb *OnboardingGroupBy) Aggregate(fns ...AggregateFunc) *OnboardingGroupBy {
-	ogb.fns = append(ogb.fns, fns...)
-	return ogb
+func (_g *OnboardingGroupBy) Aggregate(fns ...AggregateFunc) *OnboardingGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ogb *OnboardingGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ogb.build.ctx, ent.OpQueryGroupBy)
-	if err := ogb.build.prepareQuery(ctx); err != nil {
+func (_g *OnboardingGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OnboardingQuery, *OnboardingGroupBy](ctx, ogb.build, ogb, ogb.build.inters, v)
+	return scanWithInterceptors[*OnboardingQuery, *OnboardingGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (ogb *OnboardingGroupBy) sqlScan(ctx context.Context, root *OnboardingQuery, v any) error {
+func (_g *OnboardingGroupBy) sqlScan(ctx context.Context, root *OnboardingQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(ogb.fns))
-	for _, fn := range ogb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*ogb.flds)+len(ogb.fns))
-		for _, f := range *ogb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*ogb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ogb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -631,27 +631,27 @@ type OnboardingSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (os *OnboardingSelect) Aggregate(fns ...AggregateFunc) *OnboardingSelect {
-	os.fns = append(os.fns, fns...)
-	return os
+func (_s *OnboardingSelect) Aggregate(fns ...AggregateFunc) *OnboardingSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (os *OnboardingSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, os.ctx, ent.OpQuerySelect)
-	if err := os.prepareQuery(ctx); err != nil {
+func (_s *OnboardingSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OnboardingQuery, *OnboardingSelect](ctx, os.OnboardingQuery, os, os.inters, v)
+	return scanWithInterceptors[*OnboardingQuery, *OnboardingSelect](ctx, _s.OnboardingQuery, _s, _s.inters, v)
 }
 
-func (os *OnboardingSelect) sqlScan(ctx context.Context, root *OnboardingQuery, v any) error {
+func (_s *OnboardingSelect) sqlScan(ctx context.Context, root *OnboardingQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(os.fns))
-	for _, fn := range os.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*os.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -659,7 +659,7 @@ func (os *OnboardingSelect) sqlScan(ctx context.Context, root *OnboardingQuery, 
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := os.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -667,7 +667,7 @@ func (os *OnboardingSelect) sqlScan(ctx context.Context, root *OnboardingQuery, 
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (os *OnboardingSelect) Modify(modifiers ...func(s *sql.Selector)) *OnboardingSelect {
-	os.modifiers = append(os.modifiers, modifiers...)
-	return os
+func (_s *OnboardingSelect) Modify(modifiers ...func(s *sql.Selector)) *OnboardingSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

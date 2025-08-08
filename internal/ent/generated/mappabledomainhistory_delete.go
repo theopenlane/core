@@ -22,58 +22,58 @@ type MappableDomainHistoryDelete struct {
 }
 
 // Where appends a list predicates to the MappableDomainHistoryDelete builder.
-func (mdhd *MappableDomainHistoryDelete) Where(ps ...predicate.MappableDomainHistory) *MappableDomainHistoryDelete {
-	mdhd.mutation.Where(ps...)
-	return mdhd
+func (_d *MappableDomainHistoryDelete) Where(ps ...predicate.MappableDomainHistory) *MappableDomainHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (mdhd *MappableDomainHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, mdhd.sqlExec, mdhd.mutation, mdhd.hooks)
+func (_d *MappableDomainHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mdhd *MappableDomainHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := mdhd.Exec(ctx)
+func (_d *MappableDomainHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (mdhd *MappableDomainHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *MappableDomainHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(mappabledomainhistory.Table, sqlgraph.NewFieldSpec(mappabledomainhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = mdhd.schemaConfig.MappableDomainHistory
-	ctx = internal.NewSchemaConfigContext(ctx, mdhd.schemaConfig)
-	if ps := mdhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.MappableDomainHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, mdhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	mdhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // MappableDomainHistoryDeleteOne is the builder for deleting a single MappableDomainHistory entity.
 type MappableDomainHistoryDeleteOne struct {
-	mdhd *MappableDomainHistoryDelete
+	_d *MappableDomainHistoryDelete
 }
 
 // Where appends a list predicates to the MappableDomainHistoryDelete builder.
-func (mdhdo *MappableDomainHistoryDeleteOne) Where(ps ...predicate.MappableDomainHistory) *MappableDomainHistoryDeleteOne {
-	mdhdo.mdhd.mutation.Where(ps...)
-	return mdhdo
+func (_d *MappableDomainHistoryDeleteOne) Where(ps ...predicate.MappableDomainHistory) *MappableDomainHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (mdhdo *MappableDomainHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := mdhdo.mdhd.Exec(ctx)
+func (_d *MappableDomainHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (mdhdo *MappableDomainHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mdhdo *MappableDomainHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := mdhdo.Exec(ctx); err != nil {
+func (_d *MappableDomainHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

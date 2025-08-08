@@ -106,7 +106,7 @@ func (*Webauthn) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Webauthn fields.
-func (w *Webauthn) assignValues(columns []string, values []any) error {
+func (_m *Webauthn) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -116,37 +116,37 @@ func (w *Webauthn) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				w.ID = value.String
+				_m.ID = value.String
 			}
 		case webauthn.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				w.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case webauthn.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				w.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case webauthn.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				w.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case webauthn.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				w.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case webauthn.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &w.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -154,43 +154,43 @@ func (w *Webauthn) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				w.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case webauthn.FieldCredentialID:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field credential_id", values[i])
 			} else if value != nil {
-				w.CredentialID = *value
+				_m.CredentialID = *value
 			}
 		case webauthn.FieldPublicKey:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field public_key", values[i])
 			} else if value != nil {
-				w.PublicKey = *value
+				_m.PublicKey = *value
 			}
 		case webauthn.FieldAttestationType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field attestation_type", values[i])
 			} else if value.Valid {
-				w.AttestationType = value.String
+				_m.AttestationType = value.String
 			}
 		case webauthn.FieldAaguid:
 			if value, ok := values[i].(*models.AAGUID); !ok {
 				return fmt.Errorf("unexpected type %T for field aaguid", values[i])
 			} else if value != nil {
-				w.Aaguid = value
+				_m.Aaguid = value
 			}
 		case webauthn.FieldSignCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field sign_count", values[i])
 			} else if value.Valid {
-				w.SignCount = int32(value.Int64)
+				_m.SignCount = int32(value.Int64)
 			}
 		case webauthn.FieldTransports:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field transports", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &w.Transports); err != nil {
+				if err := json.Unmarshal(*value, &_m.Transports); err != nil {
 					return fmt.Errorf("unmarshal field transports: %w", err)
 				}
 			}
@@ -198,28 +198,28 @@ func (w *Webauthn) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field backup_eligible", values[i])
 			} else if value.Valid {
-				w.BackupEligible = value.Bool
+				_m.BackupEligible = value.Bool
 			}
 		case webauthn.FieldBackupState:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field backup_state", values[i])
 			} else if value.Valid {
-				w.BackupState = value.Bool
+				_m.BackupState = value.Bool
 			}
 		case webauthn.FieldUserPresent:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field user_present", values[i])
 			} else if value.Valid {
-				w.UserPresent = value.Bool
+				_m.UserPresent = value.Bool
 			}
 		case webauthn.FieldUserVerified:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field user_verified", values[i])
 			} else if value.Valid {
-				w.UserVerified = value.Bool
+				_m.UserVerified = value.Bool
 			}
 		default:
-			w.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -227,85 +227,85 @@ func (w *Webauthn) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Webauthn.
 // This includes values selected through modifiers, order, etc.
-func (w *Webauthn) Value(name string) (ent.Value, error) {
-	return w.selectValues.Get(name)
+func (_m *Webauthn) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Webauthn entity.
-func (w *Webauthn) QueryOwner() *UserQuery {
-	return NewWebauthnClient(w.config).QueryOwner(w)
+func (_m *Webauthn) QueryOwner() *UserQuery {
+	return NewWebauthnClient(_m.config).QueryOwner(_m)
 }
 
 // Update returns a builder for updating this Webauthn.
 // Note that you need to call Webauthn.Unwrap() before calling this method if this Webauthn
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (w *Webauthn) Update() *WebauthnUpdateOne {
-	return NewWebauthnClient(w.config).UpdateOne(w)
+func (_m *Webauthn) Update() *WebauthnUpdateOne {
+	return NewWebauthnClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Webauthn entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (w *Webauthn) Unwrap() *Webauthn {
-	_tx, ok := w.config.driver.(*txDriver)
+func (_m *Webauthn) Unwrap() *Webauthn {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Webauthn is not a transactional entity")
 	}
-	w.config.driver = _tx.drv
-	return w
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (w *Webauthn) String() string {
+func (_m *Webauthn) String() string {
 	var builder strings.Builder
 	builder.WriteString("Webauthn(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", w.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(w.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(w.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(w.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(w.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", w.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(w.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("credential_id=")
-	builder.WriteString(fmt.Sprintf("%v", w.CredentialID))
+	builder.WriteString(fmt.Sprintf("%v", _m.CredentialID))
 	builder.WriteString(", ")
 	builder.WriteString("public_key=")
-	builder.WriteString(fmt.Sprintf("%v", w.PublicKey))
+	builder.WriteString(fmt.Sprintf("%v", _m.PublicKey))
 	builder.WriteString(", ")
 	builder.WriteString("attestation_type=")
-	builder.WriteString(w.AttestationType)
+	builder.WriteString(_m.AttestationType)
 	builder.WriteString(", ")
 	builder.WriteString("aaguid=")
-	builder.WriteString(fmt.Sprintf("%v", w.Aaguid))
+	builder.WriteString(fmt.Sprintf("%v", _m.Aaguid))
 	builder.WriteString(", ")
 	builder.WriteString("sign_count=")
-	builder.WriteString(fmt.Sprintf("%v", w.SignCount))
+	builder.WriteString(fmt.Sprintf("%v", _m.SignCount))
 	builder.WriteString(", ")
 	builder.WriteString("transports=")
-	builder.WriteString(fmt.Sprintf("%v", w.Transports))
+	builder.WriteString(fmt.Sprintf("%v", _m.Transports))
 	builder.WriteString(", ")
 	builder.WriteString("backup_eligible=")
-	builder.WriteString(fmt.Sprintf("%v", w.BackupEligible))
+	builder.WriteString(fmt.Sprintf("%v", _m.BackupEligible))
 	builder.WriteString(", ")
 	builder.WriteString("backup_state=")
-	builder.WriteString(fmt.Sprintf("%v", w.BackupState))
+	builder.WriteString(fmt.Sprintf("%v", _m.BackupState))
 	builder.WriteString(", ")
 	builder.WriteString("user_present=")
-	builder.WriteString(fmt.Sprintf("%v", w.UserPresent))
+	builder.WriteString(fmt.Sprintf("%v", _m.UserPresent))
 	builder.WriteString(", ")
 	builder.WriteString("user_verified=")
-	builder.WriteString(fmt.Sprintf("%v", w.UserVerified))
+	builder.WriteString(fmt.Sprintf("%v", _m.UserVerified))
 	builder.WriteByte(')')
 	return builder.String()
 }

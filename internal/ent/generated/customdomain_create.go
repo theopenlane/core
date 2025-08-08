@@ -24,180 +24,180 @@ type CustomDomainCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (cdc *CustomDomainCreate) SetCreatedAt(t time.Time) *CustomDomainCreate {
-	cdc.mutation.SetCreatedAt(t)
-	return cdc
+func (_c *CustomDomainCreate) SetCreatedAt(v time.Time) *CustomDomainCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (cdc *CustomDomainCreate) SetNillableCreatedAt(t *time.Time) *CustomDomainCreate {
-	if t != nil {
-		cdc.SetCreatedAt(*t)
+func (_c *CustomDomainCreate) SetNillableCreatedAt(v *time.Time) *CustomDomainCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return cdc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cdc *CustomDomainCreate) SetUpdatedAt(t time.Time) *CustomDomainCreate {
-	cdc.mutation.SetUpdatedAt(t)
-	return cdc
+func (_c *CustomDomainCreate) SetUpdatedAt(v time.Time) *CustomDomainCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (cdc *CustomDomainCreate) SetNillableUpdatedAt(t *time.Time) *CustomDomainCreate {
-	if t != nil {
-		cdc.SetUpdatedAt(*t)
+func (_c *CustomDomainCreate) SetNillableUpdatedAt(v *time.Time) *CustomDomainCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return cdc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (cdc *CustomDomainCreate) SetCreatedBy(s string) *CustomDomainCreate {
-	cdc.mutation.SetCreatedBy(s)
-	return cdc
+func (_c *CustomDomainCreate) SetCreatedBy(v string) *CustomDomainCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (cdc *CustomDomainCreate) SetNillableCreatedBy(s *string) *CustomDomainCreate {
-	if s != nil {
-		cdc.SetCreatedBy(*s)
+func (_c *CustomDomainCreate) SetNillableCreatedBy(v *string) *CustomDomainCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return cdc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cdc *CustomDomainCreate) SetUpdatedBy(s string) *CustomDomainCreate {
-	cdc.mutation.SetUpdatedBy(s)
-	return cdc
+func (_c *CustomDomainCreate) SetUpdatedBy(v string) *CustomDomainCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cdc *CustomDomainCreate) SetNillableUpdatedBy(s *string) *CustomDomainCreate {
-	if s != nil {
-		cdc.SetUpdatedBy(*s)
+func (_c *CustomDomainCreate) SetNillableUpdatedBy(v *string) *CustomDomainCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return cdc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cdc *CustomDomainCreate) SetDeletedAt(t time.Time) *CustomDomainCreate {
-	cdc.mutation.SetDeletedAt(t)
-	return cdc
+func (_c *CustomDomainCreate) SetDeletedAt(v time.Time) *CustomDomainCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cdc *CustomDomainCreate) SetNillableDeletedAt(t *time.Time) *CustomDomainCreate {
-	if t != nil {
-		cdc.SetDeletedAt(*t)
+func (_c *CustomDomainCreate) SetNillableDeletedAt(v *time.Time) *CustomDomainCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return cdc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cdc *CustomDomainCreate) SetDeletedBy(s string) *CustomDomainCreate {
-	cdc.mutation.SetDeletedBy(s)
-	return cdc
+func (_c *CustomDomainCreate) SetDeletedBy(v string) *CustomDomainCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cdc *CustomDomainCreate) SetNillableDeletedBy(s *string) *CustomDomainCreate {
-	if s != nil {
-		cdc.SetDeletedBy(*s)
+func (_c *CustomDomainCreate) SetNillableDeletedBy(v *string) *CustomDomainCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return cdc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (cdc *CustomDomainCreate) SetTags(s []string) *CustomDomainCreate {
-	cdc.mutation.SetTags(s)
-	return cdc
+func (_c *CustomDomainCreate) SetTags(v []string) *CustomDomainCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (cdc *CustomDomainCreate) SetOwnerID(s string) *CustomDomainCreate {
-	cdc.mutation.SetOwnerID(s)
-	return cdc
+func (_c *CustomDomainCreate) SetOwnerID(v string) *CustomDomainCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cdc *CustomDomainCreate) SetNillableOwnerID(s *string) *CustomDomainCreate {
-	if s != nil {
-		cdc.SetOwnerID(*s)
+func (_c *CustomDomainCreate) SetNillableOwnerID(v *string) *CustomDomainCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return cdc
+	return _c
 }
 
 // SetCnameRecord sets the "cname_record" field.
-func (cdc *CustomDomainCreate) SetCnameRecord(s string) *CustomDomainCreate {
-	cdc.mutation.SetCnameRecord(s)
-	return cdc
+func (_c *CustomDomainCreate) SetCnameRecord(v string) *CustomDomainCreate {
+	_c.mutation.SetCnameRecord(v)
+	return _c
 }
 
 // SetMappableDomainID sets the "mappable_domain_id" field.
-func (cdc *CustomDomainCreate) SetMappableDomainID(s string) *CustomDomainCreate {
-	cdc.mutation.SetMappableDomainID(s)
-	return cdc
+func (_c *CustomDomainCreate) SetMappableDomainID(v string) *CustomDomainCreate {
+	_c.mutation.SetMappableDomainID(v)
+	return _c
 }
 
 // SetDNSVerificationID sets the "dns_verification_id" field.
-func (cdc *CustomDomainCreate) SetDNSVerificationID(s string) *CustomDomainCreate {
-	cdc.mutation.SetDNSVerificationID(s)
-	return cdc
+func (_c *CustomDomainCreate) SetDNSVerificationID(v string) *CustomDomainCreate {
+	_c.mutation.SetDNSVerificationID(v)
+	return _c
 }
 
 // SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
-func (cdc *CustomDomainCreate) SetNillableDNSVerificationID(s *string) *CustomDomainCreate {
-	if s != nil {
-		cdc.SetDNSVerificationID(*s)
+func (_c *CustomDomainCreate) SetNillableDNSVerificationID(v *string) *CustomDomainCreate {
+	if v != nil {
+		_c.SetDNSVerificationID(*v)
 	}
-	return cdc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (cdc *CustomDomainCreate) SetID(s string) *CustomDomainCreate {
-	cdc.mutation.SetID(s)
-	return cdc
+func (_c *CustomDomainCreate) SetID(v string) *CustomDomainCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (cdc *CustomDomainCreate) SetNillableID(s *string) *CustomDomainCreate {
-	if s != nil {
-		cdc.SetID(*s)
+func (_c *CustomDomainCreate) SetNillableID(v *string) *CustomDomainCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return cdc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (cdc *CustomDomainCreate) SetOwner(o *Organization) *CustomDomainCreate {
-	return cdc.SetOwnerID(o.ID)
+func (_c *CustomDomainCreate) SetOwner(v *Organization) *CustomDomainCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // SetMappableDomain sets the "mappable_domain" edge to the MappableDomain entity.
-func (cdc *CustomDomainCreate) SetMappableDomain(m *MappableDomain) *CustomDomainCreate {
-	return cdc.SetMappableDomainID(m.ID)
+func (_c *CustomDomainCreate) SetMappableDomain(v *MappableDomain) *CustomDomainCreate {
+	return _c.SetMappableDomainID(v.ID)
 }
 
 // SetDNSVerification sets the "dns_verification" edge to the DNSVerification entity.
-func (cdc *CustomDomainCreate) SetDNSVerification(d *DNSVerification) *CustomDomainCreate {
-	return cdc.SetDNSVerificationID(d.ID)
+func (_c *CustomDomainCreate) SetDNSVerification(v *DNSVerification) *CustomDomainCreate {
+	return _c.SetDNSVerificationID(v.ID)
 }
 
 // Mutation returns the CustomDomainMutation object of the builder.
-func (cdc *CustomDomainCreate) Mutation() *CustomDomainMutation {
-	return cdc.mutation
+func (_c *CustomDomainCreate) Mutation() *CustomDomainMutation {
+	return _c.mutation
 }
 
 // Save creates the CustomDomain in the database.
-func (cdc *CustomDomainCreate) Save(ctx context.Context) (*CustomDomain, error) {
-	if err := cdc.defaults(); err != nil {
+func (_c *CustomDomainCreate) Save(ctx context.Context) (*CustomDomain, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, cdc.sqlSave, cdc.mutation, cdc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (cdc *CustomDomainCreate) SaveX(ctx context.Context) *CustomDomain {
-	v, err := cdc.Save(ctx)
+func (_c *CustomDomainCreate) SaveX(ctx context.Context) *CustomDomain {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -205,78 +205,78 @@ func (cdc *CustomDomainCreate) SaveX(ctx context.Context) *CustomDomain {
 }
 
 // Exec executes the query.
-func (cdc *CustomDomainCreate) Exec(ctx context.Context) error {
-	_, err := cdc.Save(ctx)
+func (_c *CustomDomainCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cdc *CustomDomainCreate) ExecX(ctx context.Context) {
-	if err := cdc.Exec(ctx); err != nil {
+func (_c *CustomDomainCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cdc *CustomDomainCreate) defaults() error {
-	if _, ok := cdc.mutation.CreatedAt(); !ok {
+func (_c *CustomDomainCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if customdomain.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized customdomain.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := customdomain.DefaultCreatedAt()
-		cdc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := cdc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if customdomain.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized customdomain.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := customdomain.DefaultUpdatedAt()
-		cdc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := cdc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := customdomain.DefaultTags
-		cdc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := cdc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if customdomain.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized customdomain.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := customdomain.DefaultID()
-		cdc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cdc *CustomDomainCreate) check() error {
-	if _, ok := cdc.mutation.CnameRecord(); !ok {
+func (_c *CustomDomainCreate) check() error {
+	if _, ok := _c.mutation.CnameRecord(); !ok {
 		return &ValidationError{Name: "cname_record", err: errors.New(`generated: missing required field "CustomDomain.cname_record"`)}
 	}
-	if v, ok := cdc.mutation.CnameRecord(); ok {
+	if v, ok := _c.mutation.CnameRecord(); ok {
 		if err := customdomain.CnameRecordValidator(v); err != nil {
 			return &ValidationError{Name: "cname_record", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.cname_record": %w`, err)}
 		}
 	}
-	if _, ok := cdc.mutation.MappableDomainID(); !ok {
+	if _, ok := _c.mutation.MappableDomainID(); !ok {
 		return &ValidationError{Name: "mappable_domain_id", err: errors.New(`generated: missing required field "CustomDomain.mappable_domain_id"`)}
 	}
-	if v, ok := cdc.mutation.MappableDomainID(); ok {
+	if v, ok := _c.mutation.MappableDomainID(); ok {
 		if err := customdomain.MappableDomainIDValidator(v); err != nil {
 			return &ValidationError{Name: "mappable_domain_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.mappable_domain_id": %w`, err)}
 		}
 	}
-	if len(cdc.mutation.MappableDomainIDs()) == 0 {
+	if len(_c.mutation.MappableDomainIDs()) == 0 {
 		return &ValidationError{Name: "mappable_domain", err: errors.New(`generated: missing required edge "CustomDomain.mappable_domain"`)}
 	}
 	return nil
 }
 
-func (cdc *CustomDomainCreate) sqlSave(ctx context.Context) (*CustomDomain, error) {
-	if err := cdc.check(); err != nil {
+func (_c *CustomDomainCreate) sqlSave(ctx context.Context) (*CustomDomain, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := cdc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, cdc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -289,54 +289,54 @@ func (cdc *CustomDomainCreate) sqlSave(ctx context.Context) (*CustomDomain, erro
 			return nil, fmt.Errorf("unexpected CustomDomain.ID type: %T", _spec.ID.Value)
 		}
 	}
-	cdc.mutation.id = &_node.ID
-	cdc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (cdc *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec) {
+func (_c *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec) {
 	var (
-		_node = &CustomDomain{config: cdc.config}
+		_node = &CustomDomain{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(customdomain.Table, sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString))
 	)
-	_spec.Schema = cdc.schemaConfig.CustomDomain
-	if id, ok := cdc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.CustomDomain
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := cdc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(customdomain.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := cdc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(customdomain.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cdc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(customdomain.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := cdc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(customdomain.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := cdc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(customdomain.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := cdc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(customdomain.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := cdc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(customdomain.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := cdc.mutation.CnameRecord(); ok {
+	if value, ok := _c.mutation.CnameRecord(); ok {
 		_spec.SetField(customdomain.FieldCnameRecord, field.TypeString, value)
 		_node.CnameRecord = value
 	}
-	if nodes := cdc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -347,14 +347,14 @@ func (cdc *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cdc.schemaConfig.CustomDomain
+		edge.Schema = _c.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cdc.mutation.MappableDomainIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.MappableDomainIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -365,14 +365,14 @@ func (cdc *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec
 				IDSpec: sqlgraph.NewFieldSpec(mappabledomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cdc.schemaConfig.CustomDomain
+		edge.Schema = _c.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.MappableDomainID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cdc.mutation.DNSVerificationIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DNSVerificationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -383,7 +383,7 @@ func (cdc *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cdc.schemaConfig.CustomDomain
+		edge.Schema = _c.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -401,16 +401,16 @@ type CustomDomainCreateBulk struct {
 }
 
 // Save creates the CustomDomain entities in the database.
-func (cdcb *CustomDomainCreateBulk) Save(ctx context.Context) ([]*CustomDomain, error) {
-	if cdcb.err != nil {
-		return nil, cdcb.err
+func (_c *CustomDomainCreateBulk) Save(ctx context.Context) ([]*CustomDomain, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(cdcb.builders))
-	nodes := make([]*CustomDomain, len(cdcb.builders))
-	mutators := make([]Mutator, len(cdcb.builders))
-	for i := range cdcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*CustomDomain, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := cdcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CustomDomainMutation)
@@ -424,11 +424,11 @@ func (cdcb *CustomDomainCreateBulk) Save(ctx context.Context) ([]*CustomDomain, 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, cdcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, cdcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -448,7 +448,7 @@ func (cdcb *CustomDomainCreateBulk) Save(ctx context.Context) ([]*CustomDomain, 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, cdcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -456,8 +456,8 @@ func (cdcb *CustomDomainCreateBulk) Save(ctx context.Context) ([]*CustomDomain, 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cdcb *CustomDomainCreateBulk) SaveX(ctx context.Context) []*CustomDomain {
-	v, err := cdcb.Save(ctx)
+func (_c *CustomDomainCreateBulk) SaveX(ctx context.Context) []*CustomDomain {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -465,14 +465,14 @@ func (cdcb *CustomDomainCreateBulk) SaveX(ctx context.Context) []*CustomDomain {
 }
 
 // Exec executes the query.
-func (cdcb *CustomDomainCreateBulk) Exec(ctx context.Context) error {
-	_, err := cdcb.Save(ctx)
+func (_c *CustomDomainCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cdcb *CustomDomainCreateBulk) ExecX(ctx context.Context) {
-	if err := cdcb.Exec(ctx); err != nil {
+func (_c *CustomDomainCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

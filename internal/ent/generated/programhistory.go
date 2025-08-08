@@ -97,7 +97,7 @@ func (*ProgramHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ProgramHistory fields.
-func (ph *ProgramHistory) assignValues(columns []string, values []any) error {
+func (_m *ProgramHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -107,73 +107,73 @@ func (ph *ProgramHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				ph.ID = value.String
+				_m.ID = value.String
 			}
 		case programhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				ph.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case programhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				ph.Ref = value.String
+				_m.Ref = value.String
 			}
 		case programhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				ph.Operation = *value
+				_m.Operation = *value
 			}
 		case programhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ph.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case programhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ph.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case programhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				ph.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case programhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				ph.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case programhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ph.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case programhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ph.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case programhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				ph.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case programhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -181,88 +181,88 @@ func (ph *ProgramHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				ph.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case programhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				ph.Name = value.String
+				_m.Name = value.String
 			}
 		case programhistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				ph.Description = value.String
+				_m.Description = value.String
 			}
 		case programhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ph.Status = enums.ProgramStatus(value.String)
+				_m.Status = enums.ProgramStatus(value.String)
 			}
 		case programhistory.FieldProgramType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_type", values[i])
 			} else if value.Valid {
-				ph.ProgramType = enums.ProgramType(value.String)
+				_m.ProgramType = enums.ProgramType(value.String)
 			}
 		case programhistory.FieldFrameworkName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field framework_name", values[i])
 			} else if value.Valid {
-				ph.FrameworkName = value.String
+				_m.FrameworkName = value.String
 			}
 		case programhistory.FieldStartDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field start_date", values[i])
 			} else if value.Valid {
-				ph.StartDate = value.Time
+				_m.StartDate = value.Time
 			}
 		case programhistory.FieldEndDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field end_date", values[i])
 			} else if value.Valid {
-				ph.EndDate = value.Time
+				_m.EndDate = value.Time
 			}
 		case programhistory.FieldAuditorReady:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_ready", values[i])
 			} else if value.Valid {
-				ph.AuditorReady = value.Bool
+				_m.AuditorReady = value.Bool
 			}
 		case programhistory.FieldAuditorWriteComments:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_write_comments", values[i])
 			} else if value.Valid {
-				ph.AuditorWriteComments = value.Bool
+				_m.AuditorWriteComments = value.Bool
 			}
 		case programhistory.FieldAuditorReadComments:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_read_comments", values[i])
 			} else if value.Valid {
-				ph.AuditorReadComments = value.Bool
+				_m.AuditorReadComments = value.Bool
 			}
 		case programhistory.FieldAuditFirm:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field audit_firm", values[i])
 			} else if value.Valid {
-				ph.AuditFirm = value.String
+				_m.AuditFirm = value.String
 			}
 		case programhistory.FieldAuditor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor", values[i])
 			} else if value.Valid {
-				ph.Auditor = value.String
+				_m.Auditor = value.String
 			}
 		case programhistory.FieldAuditorEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_email", values[i])
 			} else if value.Valid {
-				ph.AuditorEmail = value.String
+				_m.AuditorEmail = value.String
 			}
 		default:
-			ph.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -270,107 +270,107 @@ func (ph *ProgramHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ProgramHistory.
 // This includes values selected through modifiers, order, etc.
-func (ph *ProgramHistory) Value(name string) (ent.Value, error) {
-	return ph.selectValues.Get(name)
+func (_m *ProgramHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this ProgramHistory.
 // Note that you need to call ProgramHistory.Unwrap() before calling this method if this ProgramHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ph *ProgramHistory) Update() *ProgramHistoryUpdateOne {
-	return NewProgramHistoryClient(ph.config).UpdateOne(ph)
+func (_m *ProgramHistory) Update() *ProgramHistoryUpdateOne {
+	return NewProgramHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ProgramHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ph *ProgramHistory) Unwrap() *ProgramHistory {
-	_tx, ok := ph.config.driver.(*txDriver)
+func (_m *ProgramHistory) Unwrap() *ProgramHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ProgramHistory is not a transactional entity")
 	}
-	ph.config.driver = _tx.drv
-	return ph
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ph *ProgramHistory) String() string {
+func (_m *ProgramHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("ProgramHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ph.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(ph.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(ph.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", ph.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(ph.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ph.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(ph.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(ph.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(ph.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(ph.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(ph.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ph.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(ph.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(ph.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(ph.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", ph.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("program_type=")
-	builder.WriteString(fmt.Sprintf("%v", ph.ProgramType))
+	builder.WriteString(fmt.Sprintf("%v", _m.ProgramType))
 	builder.WriteString(", ")
 	builder.WriteString("framework_name=")
-	builder.WriteString(ph.FrameworkName)
+	builder.WriteString(_m.FrameworkName)
 	builder.WriteString(", ")
 	builder.WriteString("start_date=")
-	builder.WriteString(ph.StartDate.Format(time.ANSIC))
+	builder.WriteString(_m.StartDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("end_date=")
-	builder.WriteString(ph.EndDate.Format(time.ANSIC))
+	builder.WriteString(_m.EndDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("auditor_ready=")
-	builder.WriteString(fmt.Sprintf("%v", ph.AuditorReady))
+	builder.WriteString(fmt.Sprintf("%v", _m.AuditorReady))
 	builder.WriteString(", ")
 	builder.WriteString("auditor_write_comments=")
-	builder.WriteString(fmt.Sprintf("%v", ph.AuditorWriteComments))
+	builder.WriteString(fmt.Sprintf("%v", _m.AuditorWriteComments))
 	builder.WriteString(", ")
 	builder.WriteString("auditor_read_comments=")
-	builder.WriteString(fmt.Sprintf("%v", ph.AuditorReadComments))
+	builder.WriteString(fmt.Sprintf("%v", _m.AuditorReadComments))
 	builder.WriteString(", ")
 	builder.WriteString("audit_firm=")
-	builder.WriteString(ph.AuditFirm)
+	builder.WriteString(_m.AuditFirm)
 	builder.WriteString(", ")
 	builder.WriteString("auditor=")
-	builder.WriteString(ph.Auditor)
+	builder.WriteString(_m.Auditor)
 	builder.WriteString(", ")
 	builder.WriteString("auditor_email=")
-	builder.WriteString(ph.AuditorEmail)
+	builder.WriteString(_m.AuditorEmail)
 	builder.WriteByte(')')
 	return builder.String()
 }

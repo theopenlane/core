@@ -20,7 +20,7 @@ import (
 
 // OauthRegister returns the TokenResponse for a verified authenticated external oauth user
 func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleOauthTokenRequest, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleOauthTokenRequest, models.ExampleLoginSuccessResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

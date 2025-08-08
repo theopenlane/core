@@ -167,7 +167,7 @@ func (*OrgSubscription) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the OrgSubscription fields.
-func (os *OrgSubscription) assignValues(columns []string, values []any) error {
+func (_m *OrgSubscription) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -177,49 +177,49 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				os.ID = value.String
+				_m.ID = value.String
 			}
 		case orgsubscription.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				os.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case orgsubscription.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				os.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case orgsubscription.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				os.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case orgsubscription.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				os.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case orgsubscription.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				os.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case orgsubscription.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				os.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case orgsubscription.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &os.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -227,25 +227,25 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				os.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case orgsubscription.FieldStripeSubscriptionID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stripe_subscription_id", values[i])
 			} else if value.Valid {
-				os.StripeSubscriptionID = value.String
+				_m.StripeSubscriptionID = value.String
 			}
 		case orgsubscription.FieldProductTier:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field product_tier", values[i])
 			} else if value.Valid {
-				os.ProductTier = value.String
+				_m.ProductTier = value.String
 			}
 		case orgsubscription.FieldProductPrice:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field product_price", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &os.ProductPrice); err != nil {
+				if err := json.Unmarshal(*value, &_m.ProductPrice); err != nil {
 					return fmt.Errorf("unmarshal field product_price: %w", err)
 				}
 			}
@@ -253,59 +253,59 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stripe_product_tier_id", values[i])
 			} else if value.Valid {
-				os.StripeProductTierID = value.String
+				_m.StripeProductTierID = value.String
 			}
 		case orgsubscription.FieldStripeSubscriptionStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stripe_subscription_status", values[i])
 			} else if value.Valid {
-				os.StripeSubscriptionStatus = value.String
+				_m.StripeSubscriptionStatus = value.String
 			}
 		case orgsubscription.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
-				os.Active = value.Bool
+				_m.Active = value.Bool
 			}
 		case orgsubscription.FieldStripeCustomerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stripe_customer_id", values[i])
 			} else if value.Valid {
-				os.StripeCustomerID = value.String
+				_m.StripeCustomerID = value.String
 			}
 		case orgsubscription.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
 			} else if value.Valid {
-				os.ExpiresAt = new(time.Time)
-				*os.ExpiresAt = value.Time
+				_m.ExpiresAt = new(time.Time)
+				*_m.ExpiresAt = value.Time
 			}
 		case orgsubscription.FieldTrialExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field trial_expires_at", values[i])
 			} else if value.Valid {
-				os.TrialExpiresAt = new(time.Time)
-				*os.TrialExpiresAt = value.Time
+				_m.TrialExpiresAt = new(time.Time)
+				*_m.TrialExpiresAt = value.Time
 			}
 		case orgsubscription.FieldDaysUntilDue:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field days_until_due", values[i])
 			} else if value.Valid {
-				os.DaysUntilDue = new(string)
-				*os.DaysUntilDue = value.String
+				_m.DaysUntilDue = new(string)
+				*_m.DaysUntilDue = value.String
 			}
 		case orgsubscription.FieldPaymentMethodAdded:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field payment_method_added", values[i])
 			} else if value.Valid {
-				os.PaymentMethodAdded = new(bool)
-				*os.PaymentMethodAdded = value.Bool
+				_m.PaymentMethodAdded = new(bool)
+				*_m.PaymentMethodAdded = value.Bool
 			}
 		case orgsubscription.FieldFeatures:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field features", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &os.Features); err != nil {
+				if err := json.Unmarshal(*value, &_m.Features); err != nil {
 					return fmt.Errorf("unmarshal field features: %w", err)
 				}
 			}
@@ -313,12 +313,12 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field feature_lookup_keys", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &os.FeatureLookupKeys); err != nil {
+				if err := json.Unmarshal(*value, &_m.FeatureLookupKeys); err != nil {
 					return fmt.Errorf("unmarshal field feature_lookup_keys: %w", err)
 				}
 			}
 		default:
-			os.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -326,225 +326,225 @@ func (os *OrgSubscription) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the OrgSubscription.
 // This includes values selected through modifiers, order, etc.
-func (os *OrgSubscription) Value(name string) (ent.Value, error) {
-	return os.selectValues.Get(name)
+func (_m *OrgSubscription) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the OrgSubscription entity.
-func (os *OrgSubscription) QueryOwner() *OrganizationQuery {
-	return NewOrgSubscriptionClient(os.config).QueryOwner(os)
+func (_m *OrgSubscription) QueryOwner() *OrganizationQuery {
+	return NewOrgSubscriptionClient(_m.config).QueryOwner(_m)
 }
 
 // QueryEvents queries the "events" edge of the OrgSubscription entity.
-func (os *OrgSubscription) QueryEvents() *EventQuery {
-	return NewOrgSubscriptionClient(os.config).QueryEvents(os)
+func (_m *OrgSubscription) QueryEvents() *EventQuery {
+	return NewOrgSubscriptionClient(_m.config).QueryEvents(_m)
 }
 
 // QueryModules queries the "modules" edge of the OrgSubscription entity.
-func (os *OrgSubscription) QueryModules() *OrgModuleQuery {
-	return NewOrgSubscriptionClient(os.config).QueryModules(os)
+func (_m *OrgSubscription) QueryModules() *OrgModuleQuery {
+	return NewOrgSubscriptionClient(_m.config).QueryModules(_m)
 }
 
 // QueryProducts queries the "products" edge of the OrgSubscription entity.
-func (os *OrgSubscription) QueryProducts() *OrgProductQuery {
-	return NewOrgSubscriptionClient(os.config).QueryProducts(os)
+func (_m *OrgSubscription) QueryProducts() *OrgProductQuery {
+	return NewOrgSubscriptionClient(_m.config).QueryProducts(_m)
 }
 
 // QueryPrices queries the "prices" edge of the OrgSubscription entity.
-func (os *OrgSubscription) QueryPrices() *OrgPriceQuery {
-	return NewOrgSubscriptionClient(os.config).QueryPrices(os)
+func (_m *OrgSubscription) QueryPrices() *OrgPriceQuery {
+	return NewOrgSubscriptionClient(_m.config).QueryPrices(_m)
 }
 
 // Update returns a builder for updating this OrgSubscription.
 // Note that you need to call OrgSubscription.Unwrap() before calling this method if this OrgSubscription
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (os *OrgSubscription) Update() *OrgSubscriptionUpdateOne {
-	return NewOrgSubscriptionClient(os.config).UpdateOne(os)
+func (_m *OrgSubscription) Update() *OrgSubscriptionUpdateOne {
+	return NewOrgSubscriptionClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the OrgSubscription entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (os *OrgSubscription) Unwrap() *OrgSubscription {
-	_tx, ok := os.config.driver.(*txDriver)
+func (_m *OrgSubscription) Unwrap() *OrgSubscription {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: OrgSubscription is not a transactional entity")
 	}
-	os.config.driver = _tx.drv
-	return os
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (os *OrgSubscription) String() string {
+func (_m *OrgSubscription) String() string {
 	var builder strings.Builder
 	builder.WriteString("OrgSubscription(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", os.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(os.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(os.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(os.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(os.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(os.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(os.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", os.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(os.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("stripe_subscription_id=")
-	builder.WriteString(os.StripeSubscriptionID)
+	builder.WriteString(_m.StripeSubscriptionID)
 	builder.WriteString(", ")
 	builder.WriteString("product_tier=")
-	builder.WriteString(os.ProductTier)
+	builder.WriteString(_m.ProductTier)
 	builder.WriteString(", ")
 	builder.WriteString("product_price=")
-	builder.WriteString(fmt.Sprintf("%v", os.ProductPrice))
+	builder.WriteString(fmt.Sprintf("%v", _m.ProductPrice))
 	builder.WriteString(", ")
 	builder.WriteString("stripe_product_tier_id=")
-	builder.WriteString(os.StripeProductTierID)
+	builder.WriteString(_m.StripeProductTierID)
 	builder.WriteString(", ")
 	builder.WriteString("stripe_subscription_status=")
-	builder.WriteString(os.StripeSubscriptionStatus)
+	builder.WriteString(_m.StripeSubscriptionStatus)
 	builder.WriteString(", ")
 	builder.WriteString("active=")
-	builder.WriteString(fmt.Sprintf("%v", os.Active))
+	builder.WriteString(fmt.Sprintf("%v", _m.Active))
 	builder.WriteString(", ")
 	builder.WriteString("stripe_customer_id=")
-	builder.WriteString(os.StripeCustomerID)
+	builder.WriteString(_m.StripeCustomerID)
 	builder.WriteString(", ")
-	if v := os.ExpiresAt; v != nil {
+	if v := _m.ExpiresAt; v != nil {
 		builder.WriteString("expires_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := os.TrialExpiresAt; v != nil {
+	if v := _m.TrialExpiresAt; v != nil {
 		builder.WriteString("trial_expires_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := os.DaysUntilDue; v != nil {
+	if v := _m.DaysUntilDue; v != nil {
 		builder.WriteString("days_until_due=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := os.PaymentMethodAdded; v != nil {
+	if v := _m.PaymentMethodAdded; v != nil {
 		builder.WriteString("payment_method_added=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("features=")
-	builder.WriteString(fmt.Sprintf("%v", os.Features))
+	builder.WriteString(fmt.Sprintf("%v", _m.Features))
 	builder.WriteString(", ")
 	builder.WriteString("feature_lookup_keys=")
-	builder.WriteString(fmt.Sprintf("%v", os.FeatureLookupKeys))
+	builder.WriteString(fmt.Sprintf("%v", _m.FeatureLookupKeys))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (os *OrgSubscription) NamedEvents(name string) ([]*Event, error) {
-	if os.Edges.namedEvents == nil {
+func (_m *OrgSubscription) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := os.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (os *OrgSubscription) appendNamedEvents(name string, edges ...*Event) {
-	if os.Edges.namedEvents == nil {
-		os.Edges.namedEvents = make(map[string][]*Event)
+func (_m *OrgSubscription) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		os.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		os.Edges.namedEvents[name] = append(os.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 
 // NamedModules returns the Modules named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (os *OrgSubscription) NamedModules(name string) ([]*OrgModule, error) {
-	if os.Edges.namedModules == nil {
+func (_m *OrgSubscription) NamedModules(name string) ([]*OrgModule, error) {
+	if _m.Edges.namedModules == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := os.Edges.namedModules[name]
+	nodes, ok := _m.Edges.namedModules[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (os *OrgSubscription) appendNamedModules(name string, edges ...*OrgModule) {
-	if os.Edges.namedModules == nil {
-		os.Edges.namedModules = make(map[string][]*OrgModule)
+func (_m *OrgSubscription) appendNamedModules(name string, edges ...*OrgModule) {
+	if _m.Edges.namedModules == nil {
+		_m.Edges.namedModules = make(map[string][]*OrgModule)
 	}
 	if len(edges) == 0 {
-		os.Edges.namedModules[name] = []*OrgModule{}
+		_m.Edges.namedModules[name] = []*OrgModule{}
 	} else {
-		os.Edges.namedModules[name] = append(os.Edges.namedModules[name], edges...)
+		_m.Edges.namedModules[name] = append(_m.Edges.namedModules[name], edges...)
 	}
 }
 
 // NamedProducts returns the Products named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (os *OrgSubscription) NamedProducts(name string) ([]*OrgProduct, error) {
-	if os.Edges.namedProducts == nil {
+func (_m *OrgSubscription) NamedProducts(name string) ([]*OrgProduct, error) {
+	if _m.Edges.namedProducts == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := os.Edges.namedProducts[name]
+	nodes, ok := _m.Edges.namedProducts[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (os *OrgSubscription) appendNamedProducts(name string, edges ...*OrgProduct) {
-	if os.Edges.namedProducts == nil {
-		os.Edges.namedProducts = make(map[string][]*OrgProduct)
+func (_m *OrgSubscription) appendNamedProducts(name string, edges ...*OrgProduct) {
+	if _m.Edges.namedProducts == nil {
+		_m.Edges.namedProducts = make(map[string][]*OrgProduct)
 	}
 	if len(edges) == 0 {
-		os.Edges.namedProducts[name] = []*OrgProduct{}
+		_m.Edges.namedProducts[name] = []*OrgProduct{}
 	} else {
-		os.Edges.namedProducts[name] = append(os.Edges.namedProducts[name], edges...)
+		_m.Edges.namedProducts[name] = append(_m.Edges.namedProducts[name], edges...)
 	}
 }
 
 // NamedPrices returns the Prices named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (os *OrgSubscription) NamedPrices(name string) ([]*OrgPrice, error) {
-	if os.Edges.namedPrices == nil {
+func (_m *OrgSubscription) NamedPrices(name string) ([]*OrgPrice, error) {
+	if _m.Edges.namedPrices == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := os.Edges.namedPrices[name]
+	nodes, ok := _m.Edges.namedPrices[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (os *OrgSubscription) appendNamedPrices(name string, edges ...*OrgPrice) {
-	if os.Edges.namedPrices == nil {
-		os.Edges.namedPrices = make(map[string][]*OrgPrice)
+func (_m *OrgSubscription) appendNamedPrices(name string, edges ...*OrgPrice) {
+	if _m.Edges.namedPrices == nil {
+		_m.Edges.namedPrices = make(map[string][]*OrgPrice)
 	}
 	if len(edges) == 0 {
-		os.Edges.namedPrices[name] = []*OrgPrice{}
+		_m.Edges.namedPrices[name] = []*OrgPrice{}
 	} else {
-		os.Edges.namedPrices[name] = append(os.Edges.namedPrices[name], edges...)
+		_m.Edges.namedPrices[name] = append(_m.Edges.namedPrices[name], edges...)
 	}
 }
 

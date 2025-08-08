@@ -22,58 +22,58 @@ type ContactDelete struct {
 }
 
 // Where appends a list predicates to the ContactDelete builder.
-func (cd *ContactDelete) Where(ps ...predicate.Contact) *ContactDelete {
-	cd.mutation.Where(ps...)
-	return cd
+func (_d *ContactDelete) Where(ps ...predicate.Contact) *ContactDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (cd *ContactDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, cd.sqlExec, cd.mutation, cd.hooks)
+func (_d *ContactDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cd *ContactDelete) ExecX(ctx context.Context) int {
-	n, err := cd.Exec(ctx)
+func (_d *ContactDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (cd *ContactDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ContactDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(contact.Table, sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString))
-	_spec.Node.Schema = cd.schemaConfig.Contact
-	ctx = internal.NewSchemaConfigContext(ctx, cd.schemaConfig)
-	if ps := cd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Contact
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, cd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	cd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ContactDeleteOne is the builder for deleting a single Contact entity.
 type ContactDeleteOne struct {
-	cd *ContactDelete
+	_d *ContactDelete
 }
 
 // Where appends a list predicates to the ContactDelete builder.
-func (cdo *ContactDeleteOne) Where(ps ...predicate.Contact) *ContactDeleteOne {
-	cdo.cd.mutation.Where(ps...)
-	return cdo
+func (_d *ContactDeleteOne) Where(ps ...predicate.Contact) *ContactDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (cdo *ContactDeleteOne) Exec(ctx context.Context) error {
-	n, err := cdo.cd.Exec(ctx)
+func (_d *ContactDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (cdo *ContactDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cdo *ContactDeleteOne) ExecX(ctx context.Context) {
-	if err := cdo.Exec(ctx); err != nil {
+func (_d *ContactDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

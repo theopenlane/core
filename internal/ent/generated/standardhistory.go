@@ -99,7 +99,7 @@ func (*StandardHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the StandardHistory fields.
-func (sh *StandardHistory) assignValues(columns []string, values []any) error {
+func (_m *StandardHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -109,67 +109,67 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				sh.ID = value.String
+				_m.ID = value.String
 			}
 		case standardhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				sh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case standardhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				sh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case standardhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				sh.Operation = *value
+				_m.Operation = *value
 			}
 		case standardhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				sh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case standardhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				sh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case standardhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				sh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case standardhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				sh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case standardhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				sh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case standardhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				sh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case standardhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -177,61 +177,61 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				sh.Revision = value.String
+				_m.Revision = value.String
 			}
 		case standardhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				sh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case standardhistory.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
 			} else if value.Valid {
-				sh.SystemOwned = value.Bool
+				_m.SystemOwned = value.Bool
 			}
 		case standardhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				sh.Name = value.String
+				_m.Name = value.String
 			}
 		case standardhistory.FieldShortName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field short_name", values[i])
 			} else if value.Valid {
-				sh.ShortName = value.String
+				_m.ShortName = value.String
 			}
 		case standardhistory.FieldFramework:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field framework", values[i])
 			} else if value.Valid {
-				sh.Framework = value.String
+				_m.Framework = value.String
 			}
 		case standardhistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				sh.Description = value.String
+				_m.Description = value.String
 			}
 		case standardhistory.FieldGoverningBodyLogoURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field governing_body_logo_url", values[i])
 			} else if value.Valid {
-				sh.GoverningBodyLogoURL = value.String
+				_m.GoverningBodyLogoURL = value.String
 			}
 		case standardhistory.FieldGoverningBody:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field governing_body", values[i])
 			} else if value.Valid {
-				sh.GoverningBody = value.String
+				_m.GoverningBody = value.String
 			}
 		case standardhistory.FieldDomains:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field domains", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sh.Domains); err != nil {
+				if err := json.Unmarshal(*value, &_m.Domains); err != nil {
 					return fmt.Errorf("unmarshal field domains: %w", err)
 				}
 			}
@@ -239,40 +239,40 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field link", values[i])
 			} else if value.Valid {
-				sh.Link = value.String
+				_m.Link = value.String
 			}
 		case standardhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				sh.Status = enums.StandardStatus(value.String)
+				_m.Status = enums.StandardStatus(value.String)
 			}
 		case standardhistory.FieldIsPublic:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_public", values[i])
 			} else if value.Valid {
-				sh.IsPublic = value.Bool
+				_m.IsPublic = value.Bool
 			}
 		case standardhistory.FieldFreeToUse:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field free_to_use", values[i])
 			} else if value.Valid {
-				sh.FreeToUse = value.Bool
+				_m.FreeToUse = value.Bool
 			}
 		case standardhistory.FieldStandardType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field standard_type", values[i])
 			} else if value.Valid {
-				sh.StandardType = value.String
+				_m.StandardType = value.String
 			}
 		case standardhistory.FieldVersion:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
 			} else if value.Valid {
-				sh.Version = value.String
+				_m.Version = value.String
 			}
 		default:
-			sh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -280,110 +280,110 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the StandardHistory.
 // This includes values selected through modifiers, order, etc.
-func (sh *StandardHistory) Value(name string) (ent.Value, error) {
-	return sh.selectValues.Get(name)
+func (_m *StandardHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this StandardHistory.
 // Note that you need to call StandardHistory.Unwrap() before calling this method if this StandardHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sh *StandardHistory) Update() *StandardHistoryUpdateOne {
-	return NewStandardHistoryClient(sh.config).UpdateOne(sh)
+func (_m *StandardHistory) Update() *StandardHistoryUpdateOne {
+	return NewStandardHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the StandardHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sh *StandardHistory) Unwrap() *StandardHistory {
-	_tx, ok := sh.config.driver.(*txDriver)
+func (_m *StandardHistory) Unwrap() *StandardHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: StandardHistory is not a transactional entity")
 	}
-	sh.config.driver = _tx.drv
-	return sh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (sh *StandardHistory) String() string {
+func (_m *StandardHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("StandardHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", sh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(sh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(sh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", sh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(sh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(sh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(sh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(sh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(sh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(sh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", sh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("revision=")
-	builder.WriteString(sh.Revision)
+	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(sh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
-	builder.WriteString(fmt.Sprintf("%v", sh.SystemOwned))
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(sh.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("short_name=")
-	builder.WriteString(sh.ShortName)
+	builder.WriteString(_m.ShortName)
 	builder.WriteString(", ")
 	builder.WriteString("framework=")
-	builder.WriteString(sh.Framework)
+	builder.WriteString(_m.Framework)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(sh.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("governing_body_logo_url=")
-	builder.WriteString(sh.GoverningBodyLogoURL)
+	builder.WriteString(_m.GoverningBodyLogoURL)
 	builder.WriteString(", ")
 	builder.WriteString("governing_body=")
-	builder.WriteString(sh.GoverningBody)
+	builder.WriteString(_m.GoverningBody)
 	builder.WriteString(", ")
 	builder.WriteString("domains=")
-	builder.WriteString(fmt.Sprintf("%v", sh.Domains))
+	builder.WriteString(fmt.Sprintf("%v", _m.Domains))
 	builder.WriteString(", ")
 	builder.WriteString("link=")
-	builder.WriteString(sh.Link)
+	builder.WriteString(_m.Link)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", sh.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("is_public=")
-	builder.WriteString(fmt.Sprintf("%v", sh.IsPublic))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsPublic))
 	builder.WriteString(", ")
 	builder.WriteString("free_to_use=")
-	builder.WriteString(fmt.Sprintf("%v", sh.FreeToUse))
+	builder.WriteString(fmt.Sprintf("%v", _m.FreeToUse))
 	builder.WriteString(", ")
 	builder.WriteString("standard_type=")
-	builder.WriteString(sh.StandardType)
+	builder.WriteString(_m.StandardType)
 	builder.WriteString(", ")
 	builder.WriteString("version=")
-	builder.WriteString(sh.Version)
+	builder.WriteString(_m.Version)
 	builder.WriteByte(')')
 	return builder.String()
 }

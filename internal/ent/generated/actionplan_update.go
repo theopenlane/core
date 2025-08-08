@@ -33,660 +33,660 @@ type ActionPlanUpdate struct {
 }
 
 // Where appends a list predicates to the ActionPlanUpdate builder.
-func (apu *ActionPlanUpdate) Where(ps ...predicate.ActionPlan) *ActionPlanUpdate {
-	apu.mutation.Where(ps...)
-	return apu
+func (_u *ActionPlanUpdate) Where(ps ...predicate.ActionPlan) *ActionPlanUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (apu *ActionPlanUpdate) SetUpdatedAt(t time.Time) *ActionPlanUpdate {
-	apu.mutation.SetUpdatedAt(t)
-	return apu
+func (_u *ActionPlanUpdate) SetUpdatedAt(v time.Time) *ActionPlanUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (apu *ActionPlanUpdate) ClearUpdatedAt() *ActionPlanUpdate {
-	apu.mutation.ClearUpdatedAt()
-	return apu
+func (_u *ActionPlanUpdate) ClearUpdatedAt() *ActionPlanUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (apu *ActionPlanUpdate) SetUpdatedBy(s string) *ActionPlanUpdate {
-	apu.mutation.SetUpdatedBy(s)
-	return apu
+func (_u *ActionPlanUpdate) SetUpdatedBy(v string) *ActionPlanUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableUpdatedBy(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetUpdatedBy(*s)
+func (_u *ActionPlanUpdate) SetNillableUpdatedBy(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (apu *ActionPlanUpdate) ClearUpdatedBy() *ActionPlanUpdate {
-	apu.mutation.ClearUpdatedBy()
-	return apu
+func (_u *ActionPlanUpdate) ClearUpdatedBy() *ActionPlanUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (apu *ActionPlanUpdate) SetDeletedAt(t time.Time) *ActionPlanUpdate {
-	apu.mutation.SetDeletedAt(t)
-	return apu
+func (_u *ActionPlanUpdate) SetDeletedAt(v time.Time) *ActionPlanUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableDeletedAt(t *time.Time) *ActionPlanUpdate {
-	if t != nil {
-		apu.SetDeletedAt(*t)
+func (_u *ActionPlanUpdate) SetNillableDeletedAt(v *time.Time) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (apu *ActionPlanUpdate) ClearDeletedAt() *ActionPlanUpdate {
-	apu.mutation.ClearDeletedAt()
-	return apu
+func (_u *ActionPlanUpdate) ClearDeletedAt() *ActionPlanUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (apu *ActionPlanUpdate) SetDeletedBy(s string) *ActionPlanUpdate {
-	apu.mutation.SetDeletedBy(s)
-	return apu
+func (_u *ActionPlanUpdate) SetDeletedBy(v string) *ActionPlanUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableDeletedBy(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetDeletedBy(*s)
+func (_u *ActionPlanUpdate) SetNillableDeletedBy(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (apu *ActionPlanUpdate) ClearDeletedBy() *ActionPlanUpdate {
-	apu.mutation.ClearDeletedBy()
-	return apu
+func (_u *ActionPlanUpdate) ClearDeletedBy() *ActionPlanUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (apu *ActionPlanUpdate) SetTags(s []string) *ActionPlanUpdate {
-	apu.mutation.SetTags(s)
-	return apu
+func (_u *ActionPlanUpdate) SetTags(v []string) *ActionPlanUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (apu *ActionPlanUpdate) AppendTags(s []string) *ActionPlanUpdate {
-	apu.mutation.AppendTags(s)
-	return apu
+// AppendTags appends value to the "tags" field.
+func (_u *ActionPlanUpdate) AppendTags(v []string) *ActionPlanUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (apu *ActionPlanUpdate) ClearTags() *ActionPlanUpdate {
-	apu.mutation.ClearTags()
-	return apu
+func (_u *ActionPlanUpdate) ClearTags() *ActionPlanUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (apu *ActionPlanUpdate) SetRevision(s string) *ActionPlanUpdate {
-	apu.mutation.SetRevision(s)
-	return apu
+func (_u *ActionPlanUpdate) SetRevision(v string) *ActionPlanUpdate {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableRevision(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetRevision(*s)
+func (_u *ActionPlanUpdate) SetNillableRevision(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (apu *ActionPlanUpdate) ClearRevision() *ActionPlanUpdate {
-	apu.mutation.ClearRevision()
-	return apu
+func (_u *ActionPlanUpdate) ClearRevision() *ActionPlanUpdate {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (apu *ActionPlanUpdate) SetName(s string) *ActionPlanUpdate {
-	apu.mutation.SetName(s)
-	return apu
+func (_u *ActionPlanUpdate) SetName(v string) *ActionPlanUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableName(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetName(*s)
+func (_u *ActionPlanUpdate) SetNillableName(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return apu
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (apu *ActionPlanUpdate) SetStatus(es enums.DocumentStatus) *ActionPlanUpdate {
-	apu.mutation.SetStatus(es)
-	return apu
+func (_u *ActionPlanUpdate) SetStatus(v enums.DocumentStatus) *ActionPlanUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableStatus(es *enums.DocumentStatus) *ActionPlanUpdate {
-	if es != nil {
-		apu.SetStatus(*es)
+func (_u *ActionPlanUpdate) SetNillableStatus(v *enums.DocumentStatus) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (apu *ActionPlanUpdate) ClearStatus() *ActionPlanUpdate {
-	apu.mutation.ClearStatus()
-	return apu
+func (_u *ActionPlanUpdate) ClearStatus() *ActionPlanUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetActionPlanType sets the "action_plan_type" field.
-func (apu *ActionPlanUpdate) SetActionPlanType(s string) *ActionPlanUpdate {
-	apu.mutation.SetActionPlanType(s)
-	return apu
+func (_u *ActionPlanUpdate) SetActionPlanType(v string) *ActionPlanUpdate {
+	_u.mutation.SetActionPlanType(v)
+	return _u
 }
 
 // SetNillableActionPlanType sets the "action_plan_type" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableActionPlanType(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetActionPlanType(*s)
+func (_u *ActionPlanUpdate) SetNillableActionPlanType(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetActionPlanType(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearActionPlanType clears the value of the "action_plan_type" field.
-func (apu *ActionPlanUpdate) ClearActionPlanType() *ActionPlanUpdate {
-	apu.mutation.ClearActionPlanType()
-	return apu
+func (_u *ActionPlanUpdate) ClearActionPlanType() *ActionPlanUpdate {
+	_u.mutation.ClearActionPlanType()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (apu *ActionPlanUpdate) SetDetails(s string) *ActionPlanUpdate {
-	apu.mutation.SetDetails(s)
-	return apu
+func (_u *ActionPlanUpdate) SetDetails(v string) *ActionPlanUpdate {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableDetails(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetDetails(*s)
+func (_u *ActionPlanUpdate) SetNillableDetails(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (apu *ActionPlanUpdate) ClearDetails() *ActionPlanUpdate {
-	apu.mutation.ClearDetails()
-	return apu
+func (_u *ActionPlanUpdate) ClearDetails() *ActionPlanUpdate {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetApprovalRequired sets the "approval_required" field.
-func (apu *ActionPlanUpdate) SetApprovalRequired(b bool) *ActionPlanUpdate {
-	apu.mutation.SetApprovalRequired(b)
-	return apu
+func (_u *ActionPlanUpdate) SetApprovalRequired(v bool) *ActionPlanUpdate {
+	_u.mutation.SetApprovalRequired(v)
+	return _u
 }
 
 // SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableApprovalRequired(b *bool) *ActionPlanUpdate {
-	if b != nil {
-		apu.SetApprovalRequired(*b)
+func (_u *ActionPlanUpdate) SetNillableApprovalRequired(v *bool) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetApprovalRequired(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearApprovalRequired clears the value of the "approval_required" field.
-func (apu *ActionPlanUpdate) ClearApprovalRequired() *ActionPlanUpdate {
-	apu.mutation.ClearApprovalRequired()
-	return apu
+func (_u *ActionPlanUpdate) ClearApprovalRequired() *ActionPlanUpdate {
+	_u.mutation.ClearApprovalRequired()
+	return _u
 }
 
 // SetReviewDue sets the "review_due" field.
-func (apu *ActionPlanUpdate) SetReviewDue(t time.Time) *ActionPlanUpdate {
-	apu.mutation.SetReviewDue(t)
-	return apu
+func (_u *ActionPlanUpdate) SetReviewDue(v time.Time) *ActionPlanUpdate {
+	_u.mutation.SetReviewDue(v)
+	return _u
 }
 
 // SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableReviewDue(t *time.Time) *ActionPlanUpdate {
-	if t != nil {
-		apu.SetReviewDue(*t)
+func (_u *ActionPlanUpdate) SetNillableReviewDue(v *time.Time) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetReviewDue(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearReviewDue clears the value of the "review_due" field.
-func (apu *ActionPlanUpdate) ClearReviewDue() *ActionPlanUpdate {
-	apu.mutation.ClearReviewDue()
-	return apu
+func (_u *ActionPlanUpdate) ClearReviewDue() *ActionPlanUpdate {
+	_u.mutation.ClearReviewDue()
+	return _u
 }
 
 // SetReviewFrequency sets the "review_frequency" field.
-func (apu *ActionPlanUpdate) SetReviewFrequency(e enums.Frequency) *ActionPlanUpdate {
-	apu.mutation.SetReviewFrequency(e)
-	return apu
+func (_u *ActionPlanUpdate) SetReviewFrequency(v enums.Frequency) *ActionPlanUpdate {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
 }
 
 // SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableReviewFrequency(e *enums.Frequency) *ActionPlanUpdate {
-	if e != nil {
-		apu.SetReviewFrequency(*e)
+func (_u *ActionPlanUpdate) SetNillableReviewFrequency(v *enums.Frequency) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearReviewFrequency clears the value of the "review_frequency" field.
-func (apu *ActionPlanUpdate) ClearReviewFrequency() *ActionPlanUpdate {
-	apu.mutation.ClearReviewFrequency()
-	return apu
+func (_u *ActionPlanUpdate) ClearReviewFrequency() *ActionPlanUpdate {
+	_u.mutation.ClearReviewFrequency()
+	return _u
 }
 
 // SetApproverID sets the "approver_id" field.
-func (apu *ActionPlanUpdate) SetApproverID(s string) *ActionPlanUpdate {
-	apu.mutation.SetApproverID(s)
-	return apu
+func (_u *ActionPlanUpdate) SetApproverID(v string) *ActionPlanUpdate {
+	_u.mutation.SetApproverID(v)
+	return _u
 }
 
 // SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableApproverID(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetApproverID(*s)
+func (_u *ActionPlanUpdate) SetNillableApproverID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetApproverID(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearApproverID clears the value of the "approver_id" field.
-func (apu *ActionPlanUpdate) ClearApproverID() *ActionPlanUpdate {
-	apu.mutation.ClearApproverID()
-	return apu
+func (_u *ActionPlanUpdate) ClearApproverID() *ActionPlanUpdate {
+	_u.mutation.ClearApproverID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (apu *ActionPlanUpdate) SetDelegateID(s string) *ActionPlanUpdate {
-	apu.mutation.SetDelegateID(s)
-	return apu
+func (_u *ActionPlanUpdate) SetDelegateID(v string) *ActionPlanUpdate {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableDelegateID(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetDelegateID(*s)
+func (_u *ActionPlanUpdate) SetNillableDelegateID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (apu *ActionPlanUpdate) ClearDelegateID() *ActionPlanUpdate {
-	apu.mutation.ClearDelegateID()
-	return apu
+func (_u *ActionPlanUpdate) ClearDelegateID() *ActionPlanUpdate {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // SetSummary sets the "summary" field.
-func (apu *ActionPlanUpdate) SetSummary(s string) *ActionPlanUpdate {
-	apu.mutation.SetSummary(s)
-	return apu
+func (_u *ActionPlanUpdate) SetSummary(v string) *ActionPlanUpdate {
+	_u.mutation.SetSummary(v)
+	return _u
 }
 
 // SetNillableSummary sets the "summary" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableSummary(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetSummary(*s)
+func (_u *ActionPlanUpdate) SetNillableSummary(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetSummary(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearSummary clears the value of the "summary" field.
-func (apu *ActionPlanUpdate) ClearSummary() *ActionPlanUpdate {
-	apu.mutation.ClearSummary()
-	return apu
+func (_u *ActionPlanUpdate) ClearSummary() *ActionPlanUpdate {
+	_u.mutation.ClearSummary()
+	return _u
 }
 
 // SetTagSuggestions sets the "tag_suggestions" field.
-func (apu *ActionPlanUpdate) SetTagSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.SetTagSuggestions(s)
-	return apu
+func (_u *ActionPlanUpdate) SetTagSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.SetTagSuggestions(v)
+	return _u
 }
 
-// AppendTagSuggestions appends s to the "tag_suggestions" field.
-func (apu *ActionPlanUpdate) AppendTagSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.AppendTagSuggestions(s)
-	return apu
+// AppendTagSuggestions appends value to the "tag_suggestions" field.
+func (_u *ActionPlanUpdate) AppendTagSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.AppendTagSuggestions(v)
+	return _u
 }
 
 // ClearTagSuggestions clears the value of the "tag_suggestions" field.
-func (apu *ActionPlanUpdate) ClearTagSuggestions() *ActionPlanUpdate {
-	apu.mutation.ClearTagSuggestions()
-	return apu
+func (_u *ActionPlanUpdate) ClearTagSuggestions() *ActionPlanUpdate {
+	_u.mutation.ClearTagSuggestions()
+	return _u
 }
 
 // SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
-func (apu *ActionPlanUpdate) SetDismissedTagSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.SetDismissedTagSuggestions(s)
-	return apu
+func (_u *ActionPlanUpdate) SetDismissedTagSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.SetDismissedTagSuggestions(v)
+	return _u
 }
 
-// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
-func (apu *ActionPlanUpdate) AppendDismissedTagSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.AppendDismissedTagSuggestions(s)
-	return apu
+// AppendDismissedTagSuggestions appends value to the "dismissed_tag_suggestions" field.
+func (_u *ActionPlanUpdate) AppendDismissedTagSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.AppendDismissedTagSuggestions(v)
+	return _u
 }
 
 // ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
-func (apu *ActionPlanUpdate) ClearDismissedTagSuggestions() *ActionPlanUpdate {
-	apu.mutation.ClearDismissedTagSuggestions()
-	return apu
+func (_u *ActionPlanUpdate) ClearDismissedTagSuggestions() *ActionPlanUpdate {
+	_u.mutation.ClearDismissedTagSuggestions()
+	return _u
 }
 
 // SetControlSuggestions sets the "control_suggestions" field.
-func (apu *ActionPlanUpdate) SetControlSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.SetControlSuggestions(s)
-	return apu
+func (_u *ActionPlanUpdate) SetControlSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.SetControlSuggestions(v)
+	return _u
 }
 
-// AppendControlSuggestions appends s to the "control_suggestions" field.
-func (apu *ActionPlanUpdate) AppendControlSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.AppendControlSuggestions(s)
-	return apu
+// AppendControlSuggestions appends value to the "control_suggestions" field.
+func (_u *ActionPlanUpdate) AppendControlSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.AppendControlSuggestions(v)
+	return _u
 }
 
 // ClearControlSuggestions clears the value of the "control_suggestions" field.
-func (apu *ActionPlanUpdate) ClearControlSuggestions() *ActionPlanUpdate {
-	apu.mutation.ClearControlSuggestions()
-	return apu
+func (_u *ActionPlanUpdate) ClearControlSuggestions() *ActionPlanUpdate {
+	_u.mutation.ClearControlSuggestions()
+	return _u
 }
 
 // SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
-func (apu *ActionPlanUpdate) SetDismissedControlSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.SetDismissedControlSuggestions(s)
-	return apu
+func (_u *ActionPlanUpdate) SetDismissedControlSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.SetDismissedControlSuggestions(v)
+	return _u
 }
 
-// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
-func (apu *ActionPlanUpdate) AppendDismissedControlSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.AppendDismissedControlSuggestions(s)
-	return apu
+// AppendDismissedControlSuggestions appends value to the "dismissed_control_suggestions" field.
+func (_u *ActionPlanUpdate) AppendDismissedControlSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.AppendDismissedControlSuggestions(v)
+	return _u
 }
 
 // ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
-func (apu *ActionPlanUpdate) ClearDismissedControlSuggestions() *ActionPlanUpdate {
-	apu.mutation.ClearDismissedControlSuggestions()
-	return apu
+func (_u *ActionPlanUpdate) ClearDismissedControlSuggestions() *ActionPlanUpdate {
+	_u.mutation.ClearDismissedControlSuggestions()
+	return _u
 }
 
 // SetImprovementSuggestions sets the "improvement_suggestions" field.
-func (apu *ActionPlanUpdate) SetImprovementSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.SetImprovementSuggestions(s)
-	return apu
+func (_u *ActionPlanUpdate) SetImprovementSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.SetImprovementSuggestions(v)
+	return _u
 }
 
-// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
-func (apu *ActionPlanUpdate) AppendImprovementSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.AppendImprovementSuggestions(s)
-	return apu
+// AppendImprovementSuggestions appends value to the "improvement_suggestions" field.
+func (_u *ActionPlanUpdate) AppendImprovementSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.AppendImprovementSuggestions(v)
+	return _u
 }
 
 // ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
-func (apu *ActionPlanUpdate) ClearImprovementSuggestions() *ActionPlanUpdate {
-	apu.mutation.ClearImprovementSuggestions()
-	return apu
+func (_u *ActionPlanUpdate) ClearImprovementSuggestions() *ActionPlanUpdate {
+	_u.mutation.ClearImprovementSuggestions()
+	return _u
 }
 
 // SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
-func (apu *ActionPlanUpdate) SetDismissedImprovementSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.SetDismissedImprovementSuggestions(s)
-	return apu
+func (_u *ActionPlanUpdate) SetDismissedImprovementSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.SetDismissedImprovementSuggestions(v)
+	return _u
 }
 
-// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
-func (apu *ActionPlanUpdate) AppendDismissedImprovementSuggestions(s []string) *ActionPlanUpdate {
-	apu.mutation.AppendDismissedImprovementSuggestions(s)
-	return apu
+// AppendDismissedImprovementSuggestions appends value to the "dismissed_improvement_suggestions" field.
+func (_u *ActionPlanUpdate) AppendDismissedImprovementSuggestions(v []string) *ActionPlanUpdate {
+	_u.mutation.AppendDismissedImprovementSuggestions(v)
+	return _u
 }
 
 // ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
-func (apu *ActionPlanUpdate) ClearDismissedImprovementSuggestions() *ActionPlanUpdate {
-	apu.mutation.ClearDismissedImprovementSuggestions()
-	return apu
+func (_u *ActionPlanUpdate) ClearDismissedImprovementSuggestions() *ActionPlanUpdate {
+	_u.mutation.ClearDismissedImprovementSuggestions()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (apu *ActionPlanUpdate) SetOwnerID(s string) *ActionPlanUpdate {
-	apu.mutation.SetOwnerID(s)
-	return apu
+func (_u *ActionPlanUpdate) SetOwnerID(v string) *ActionPlanUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableOwnerID(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetOwnerID(*s)
+func (_u *ActionPlanUpdate) SetNillableOwnerID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (apu *ActionPlanUpdate) ClearOwnerID() *ActionPlanUpdate {
-	apu.mutation.ClearOwnerID()
-	return apu
+func (_u *ActionPlanUpdate) ClearOwnerID() *ActionPlanUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetDueDate sets the "due_date" field.
-func (apu *ActionPlanUpdate) SetDueDate(t time.Time) *ActionPlanUpdate {
-	apu.mutation.SetDueDate(t)
-	return apu
+func (_u *ActionPlanUpdate) SetDueDate(v time.Time) *ActionPlanUpdate {
+	_u.mutation.SetDueDate(v)
+	return _u
 }
 
 // SetNillableDueDate sets the "due_date" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableDueDate(t *time.Time) *ActionPlanUpdate {
-	if t != nil {
-		apu.SetDueDate(*t)
+func (_u *ActionPlanUpdate) SetNillableDueDate(v *time.Time) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetDueDate(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearDueDate clears the value of the "due_date" field.
-func (apu *ActionPlanUpdate) ClearDueDate() *ActionPlanUpdate {
-	apu.mutation.ClearDueDate()
-	return apu
+func (_u *ActionPlanUpdate) ClearDueDate() *ActionPlanUpdate {
+	_u.mutation.ClearDueDate()
+	return _u
 }
 
 // SetPriority sets the "priority" field.
-func (apu *ActionPlanUpdate) SetPriority(e enums.Priority) *ActionPlanUpdate {
-	apu.mutation.SetPriority(e)
-	return apu
+func (_u *ActionPlanUpdate) SetPriority(v enums.Priority) *ActionPlanUpdate {
+	_u.mutation.SetPriority(v)
+	return _u
 }
 
 // SetNillablePriority sets the "priority" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillablePriority(e *enums.Priority) *ActionPlanUpdate {
-	if e != nil {
-		apu.SetPriority(*e)
+func (_u *ActionPlanUpdate) SetNillablePriority(v *enums.Priority) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetPriority(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearPriority clears the value of the "priority" field.
-func (apu *ActionPlanUpdate) ClearPriority() *ActionPlanUpdate {
-	apu.mutation.ClearPriority()
-	return apu
+func (_u *ActionPlanUpdate) ClearPriority() *ActionPlanUpdate {
+	_u.mutation.ClearPriority()
+	return _u
 }
 
 // SetSource sets the "source" field.
-func (apu *ActionPlanUpdate) SetSource(s string) *ActionPlanUpdate {
-	apu.mutation.SetSource(s)
-	return apu
+func (_u *ActionPlanUpdate) SetSource(v string) *ActionPlanUpdate {
+	_u.mutation.SetSource(v)
+	return _u
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableSource(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetSource(*s)
+func (_u *ActionPlanUpdate) SetNillableSource(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetSource(*v)
 	}
-	return apu
+	return _u
 }
 
 // ClearSource clears the value of the "source" field.
-func (apu *ActionPlanUpdate) ClearSource() *ActionPlanUpdate {
-	apu.mutation.ClearSource()
-	return apu
+func (_u *ActionPlanUpdate) ClearSource() *ActionPlanUpdate {
+	_u.mutation.ClearSource()
+	return _u
 }
 
 // SetApprover sets the "approver" edge to the Group entity.
-func (apu *ActionPlanUpdate) SetApprover(g *Group) *ActionPlanUpdate {
-	return apu.SetApproverID(g.ID)
+func (_u *ActionPlanUpdate) SetApprover(v *Group) *ActionPlanUpdate {
+	return _u.SetApproverID(v.ID)
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
-func (apu *ActionPlanUpdate) SetDelegate(g *Group) *ActionPlanUpdate {
-	return apu.SetDelegateID(g.ID)
+func (_u *ActionPlanUpdate) SetDelegate(v *Group) *ActionPlanUpdate {
+	return _u.SetDelegateID(v.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (apu *ActionPlanUpdate) SetOwner(o *Organization) *ActionPlanUpdate {
-	return apu.SetOwnerID(o.ID)
+func (_u *ActionPlanUpdate) SetOwner(v *Organization) *ActionPlanUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (apu *ActionPlanUpdate) AddRiskIDs(ids ...string) *ActionPlanUpdate {
-	apu.mutation.AddRiskIDs(ids...)
-	return apu
+func (_u *ActionPlanUpdate) AddRiskIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (apu *ActionPlanUpdate) AddRisks(r ...*Risk) *ActionPlanUpdate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *ActionPlanUpdate) AddRisks(v ...*Risk) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apu.AddRiskIDs(ids...)
+	return _u.AddRiskIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (apu *ActionPlanUpdate) AddControlIDs(ids ...string) *ActionPlanUpdate {
-	apu.mutation.AddControlIDs(ids...)
-	return apu
+func (_u *ActionPlanUpdate) AddControlIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (apu *ActionPlanUpdate) AddControls(c ...*Control) *ActionPlanUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ActionPlanUpdate) AddControls(v ...*Control) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apu.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (apu *ActionPlanUpdate) AddProgramIDs(ids ...string) *ActionPlanUpdate {
-	apu.mutation.AddProgramIDs(ids...)
-	return apu
+func (_u *ActionPlanUpdate) AddProgramIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (apu *ActionPlanUpdate) AddPrograms(p ...*Program) *ActionPlanUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ActionPlanUpdate) AddPrograms(v ...*Program) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apu.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // Mutation returns the ActionPlanMutation object of the builder.
-func (apu *ActionPlanUpdate) Mutation() *ActionPlanMutation {
-	return apu.mutation
+func (_u *ActionPlanUpdate) Mutation() *ActionPlanMutation {
+	return _u.mutation
 }
 
 // ClearApprover clears the "approver" edge to the Group entity.
-func (apu *ActionPlanUpdate) ClearApprover() *ActionPlanUpdate {
-	apu.mutation.ClearApprover()
-	return apu
+func (_u *ActionPlanUpdate) ClearApprover() *ActionPlanUpdate {
+	_u.mutation.ClearApprover()
+	return _u
 }
 
 // ClearDelegate clears the "delegate" edge to the Group entity.
-func (apu *ActionPlanUpdate) ClearDelegate() *ActionPlanUpdate {
-	apu.mutation.ClearDelegate()
-	return apu
+func (_u *ActionPlanUpdate) ClearDelegate() *ActionPlanUpdate {
+	_u.mutation.ClearDelegate()
+	return _u
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (apu *ActionPlanUpdate) ClearOwner() *ActionPlanUpdate {
-	apu.mutation.ClearOwner()
-	return apu
+func (_u *ActionPlanUpdate) ClearOwner() *ActionPlanUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearRisks clears all "risks" edges to the Risk entity.
-func (apu *ActionPlanUpdate) ClearRisks() *ActionPlanUpdate {
-	apu.mutation.ClearRisks()
-	return apu
+func (_u *ActionPlanUpdate) ClearRisks() *ActionPlanUpdate {
+	_u.mutation.ClearRisks()
+	return _u
 }
 
 // RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
-func (apu *ActionPlanUpdate) RemoveRiskIDs(ids ...string) *ActionPlanUpdate {
-	apu.mutation.RemoveRiskIDs(ids...)
-	return apu
+func (_u *ActionPlanUpdate) RemoveRiskIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
 }
 
 // RemoveRisks removes "risks" edges to Risk entities.
-func (apu *ActionPlanUpdate) RemoveRisks(r ...*Risk) *ActionPlanUpdate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *ActionPlanUpdate) RemoveRisks(v ...*Risk) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apu.RemoveRiskIDs(ids...)
+	return _u.RemoveRiskIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (apu *ActionPlanUpdate) ClearControls() *ActionPlanUpdate {
-	apu.mutation.ClearControls()
-	return apu
+func (_u *ActionPlanUpdate) ClearControls() *ActionPlanUpdate {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (apu *ActionPlanUpdate) RemoveControlIDs(ids ...string) *ActionPlanUpdate {
-	apu.mutation.RemoveControlIDs(ids...)
-	return apu
+func (_u *ActionPlanUpdate) RemoveControlIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (apu *ActionPlanUpdate) RemoveControls(c ...*Control) *ActionPlanUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ActionPlanUpdate) RemoveControls(v ...*Control) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apu.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (apu *ActionPlanUpdate) ClearPrograms() *ActionPlanUpdate {
-	apu.mutation.ClearPrograms()
-	return apu
+func (_u *ActionPlanUpdate) ClearPrograms() *ActionPlanUpdate {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (apu *ActionPlanUpdate) RemoveProgramIDs(ids ...string) *ActionPlanUpdate {
-	apu.mutation.RemoveProgramIDs(ids...)
-	return apu
+func (_u *ActionPlanUpdate) RemoveProgramIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (apu *ActionPlanUpdate) RemovePrograms(p ...*Program) *ActionPlanUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ActionPlanUpdate) RemovePrograms(v ...*Program) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apu.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (apu *ActionPlanUpdate) Save(ctx context.Context) (int, error) {
-	if err := apu.defaults(); err != nil {
+func (_u *ActionPlanUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, apu.sqlSave, apu.mutation, apu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (apu *ActionPlanUpdate) SaveX(ctx context.Context) int {
-	affected, err := apu.Save(ctx)
+func (_u *ActionPlanUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -694,58 +694,58 @@ func (apu *ActionPlanUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (apu *ActionPlanUpdate) Exec(ctx context.Context) error {
-	_, err := apu.Save(ctx)
+func (_u *ActionPlanUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (apu *ActionPlanUpdate) ExecX(ctx context.Context) {
-	if err := apu.Exec(ctx); err != nil {
+func (_u *ActionPlanUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (apu *ActionPlanUpdate) defaults() error {
-	if _, ok := apu.mutation.UpdatedAt(); !ok && !apu.mutation.UpdatedAtCleared() {
+func (_u *ActionPlanUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if actionplan.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized actionplan.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := actionplan.UpdateDefaultUpdatedAt()
-		apu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (apu *ActionPlanUpdate) check() error {
-	if v, ok := apu.mutation.Revision(); ok {
+func (_u *ActionPlanUpdate) check() error {
+	if v, ok := _u.mutation.Revision(); ok {
 		if err := actionplan.RevisionValidator(v); err != nil {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.revision": %w`, err)}
 		}
 	}
-	if v, ok := apu.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := actionplan.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.name": %w`, err)}
 		}
 	}
-	if v, ok := apu.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := actionplan.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.status": %w`, err)}
 		}
 	}
-	if v, ok := apu.mutation.ReviewFrequency(); ok {
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := actionplan.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
 		}
 	}
-	if v, ok := apu.mutation.OwnerID(); ok {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := actionplan.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := apu.mutation.Priority(); ok {
+	if v, ok := _u.mutation.Priority(); ok {
 		if err := actionplan.PriorityValidator(v); err != nil {
 			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.priority": %w`, err)}
 		}
@@ -754,200 +754,200 @@ func (apu *ActionPlanUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (apu *ActionPlanUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ActionPlanUpdate {
-	apu.modifiers = append(apu.modifiers, modifiers...)
-	return apu
+func (_u *ActionPlanUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ActionPlanUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := apu.check(); err != nil {
-		return n, err
+func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(actionplan.Table, actionplan.Columns, sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString))
-	if ps := apu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if apu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(actionplan.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := apu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(actionplan.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if apu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(actionplan.FieldUpdatedAt, field.TypeTime)
 	}
-	if apu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(actionplan.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := apu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(actionplan.FieldUpdatedBy, field.TypeString, value)
 	}
-	if apu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(actionplan.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := apu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(actionplan.FieldDeletedAt, field.TypeTime, value)
 	}
-	if apu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(actionplan.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := apu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(actionplan.FieldDeletedBy, field.TypeString, value)
 	}
-	if apu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(actionplan.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := apu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(actionplan.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := apu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldTags, value)
 		})
 	}
-	if apu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(actionplan.FieldTags, field.TypeJSON)
 	}
-	if value, ok := apu.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(actionplan.FieldRevision, field.TypeString, value)
 	}
-	if apu.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(actionplan.FieldRevision, field.TypeString)
 	}
-	if value, ok := apu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)
 	}
-	if value, ok := apu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(actionplan.FieldStatus, field.TypeEnum, value)
 	}
-	if apu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(actionplan.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := apu.mutation.ActionPlanType(); ok {
+	if value, ok := _u.mutation.ActionPlanType(); ok {
 		_spec.SetField(actionplan.FieldActionPlanType, field.TypeString, value)
 	}
-	if apu.mutation.ActionPlanTypeCleared() {
+	if _u.mutation.ActionPlanTypeCleared() {
 		_spec.ClearField(actionplan.FieldActionPlanType, field.TypeString)
 	}
-	if value, ok := apu.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(actionplan.FieldDetails, field.TypeString, value)
 	}
-	if apu.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(actionplan.FieldDetails, field.TypeString)
 	}
-	if value, ok := apu.mutation.ApprovalRequired(); ok {
+	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(actionplan.FieldApprovalRequired, field.TypeBool, value)
 	}
-	if apu.mutation.ApprovalRequiredCleared() {
+	if _u.mutation.ApprovalRequiredCleared() {
 		_spec.ClearField(actionplan.FieldApprovalRequired, field.TypeBool)
 	}
-	if value, ok := apu.mutation.ReviewDue(); ok {
+	if value, ok := _u.mutation.ReviewDue(); ok {
 		_spec.SetField(actionplan.FieldReviewDue, field.TypeTime, value)
 	}
-	if apu.mutation.ReviewDueCleared() {
+	if _u.mutation.ReviewDueCleared() {
 		_spec.ClearField(actionplan.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := apu.mutation.ReviewFrequency(); ok {
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(actionplan.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if apu.mutation.ReviewFrequencyCleared() {
+	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(actionplan.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := apu.mutation.Summary(); ok {
+	if value, ok := _u.mutation.Summary(); ok {
 		_spec.SetField(actionplan.FieldSummary, field.TypeString, value)
 	}
-	if apu.mutation.SummaryCleared() {
+	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(actionplan.FieldSummary, field.TypeString)
 	}
-	if value, ok := apu.mutation.TagSuggestions(); ok {
+	if value, ok := _u.mutation.TagSuggestions(); ok {
 		_spec.SetField(actionplan.FieldTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apu.mutation.AppendedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldTagSuggestions, value)
 		})
 	}
-	if apu.mutation.TagSuggestionsCleared() {
+	if _u.mutation.TagSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := apu.mutation.DismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedTagSuggestions(); ok {
 		_spec.SetField(actionplan.FieldDismissedTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apu.mutation.AppendedDismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldDismissedTagSuggestions, value)
 		})
 	}
-	if apu.mutation.DismissedTagSuggestionsCleared() {
+	if _u.mutation.DismissedTagSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldDismissedTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := apu.mutation.ControlSuggestions(); ok {
+	if value, ok := _u.mutation.ControlSuggestions(); ok {
 		_spec.SetField(actionplan.FieldControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apu.mutation.AppendedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldControlSuggestions, value)
 		})
 	}
-	if apu.mutation.ControlSuggestionsCleared() {
+	if _u.mutation.ControlSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := apu.mutation.DismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedControlSuggestions(); ok {
 		_spec.SetField(actionplan.FieldDismissedControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apu.mutation.AppendedDismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldDismissedControlSuggestions, value)
 		})
 	}
-	if apu.mutation.DismissedControlSuggestionsCleared() {
+	if _u.mutation.DismissedControlSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldDismissedControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := apu.mutation.ImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.ImprovementSuggestions(); ok {
 		_spec.SetField(actionplan.FieldImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apu.mutation.AppendedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldImprovementSuggestions, value)
 		})
 	}
-	if apu.mutation.ImprovementSuggestionsCleared() {
+	if _u.mutation.ImprovementSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := apu.mutation.DismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apu.mutation.AppendedDismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldDismissedImprovementSuggestions, value)
 		})
 	}
-	if apu.mutation.DismissedImprovementSuggestionsCleared() {
+	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := apu.mutation.DueDate(); ok {
+	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 	}
-	if apu.mutation.DueDateCleared() {
+	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(actionplan.FieldDueDate, field.TypeTime)
 	}
-	if value, ok := apu.mutation.Priority(); ok {
+	if value, ok := _u.mutation.Priority(); ok {
 		_spec.SetField(actionplan.FieldPriority, field.TypeEnum, value)
 	}
-	if apu.mutation.PriorityCleared() {
+	if _u.mutation.PriorityCleared() {
 		_spec.ClearField(actionplan.FieldPriority, field.TypeEnum)
 	}
-	if value, ok := apu.mutation.Source(); ok {
+	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(actionplan.FieldSource, field.TypeString, value)
 	}
-	if apu.mutation.SourceCleared() {
+	if _u.mutation.SourceCleared() {
 		_spec.ClearField(actionplan.FieldSource, field.TypeString)
 	}
-	if apu.mutation.ApproverCleared() {
+	if _u.mutation.ApproverCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -958,10 +958,10 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.ApproverIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ApproverIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -972,13 +972,13 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apu.mutation.DelegateCleared() {
+	if _u.mutation.DelegateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -989,10 +989,10 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.DelegateIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DelegateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1003,13 +1003,13 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1020,10 +1020,10 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1034,13 +1034,13 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apu.mutation.RisksCleared() {
+	if _u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1051,10 +1051,10 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.RemovedRisksIDs(); len(nodes) > 0 && !apu.mutation.RisksCleared() {
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1065,13 +1065,13 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1082,13 +1082,13 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apu.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1099,10 +1099,10 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ControlActionPlans
+		edge.Schema = _u.schemaConfig.ControlActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.RemovedControlsIDs(); len(nodes) > 0 && !apu.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1113,13 +1113,13 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ControlActionPlans
+		edge.Schema = _u.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1130,13 +1130,13 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ControlActionPlans
+		edge.Schema = _u.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apu.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1147,10 +1147,10 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !apu.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1161,13 +1161,13 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apu.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1178,16 +1178,16 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apu.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = apu.schemaConfig.ActionPlan
-	ctx = internal.NewSchemaConfigContext(ctx, apu.schemaConfig)
-	_spec.AddModifiers(apu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, apu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.ActionPlan
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{actionplan.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1195,8 +1195,8 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	apu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ActionPlanUpdateOne is the builder for updating a single ActionPlan entity.
@@ -1209,667 +1209,667 @@ type ActionPlanUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (apuo *ActionPlanUpdateOne) SetUpdatedAt(t time.Time) *ActionPlanUpdateOne {
-	apuo.mutation.SetUpdatedAt(t)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetUpdatedAt(v time.Time) *ActionPlanUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (apuo *ActionPlanUpdateOne) ClearUpdatedAt() *ActionPlanUpdateOne {
-	apuo.mutation.ClearUpdatedAt()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearUpdatedAt() *ActionPlanUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (apuo *ActionPlanUpdateOne) SetUpdatedBy(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetUpdatedBy(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetUpdatedBy(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableUpdatedBy(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetUpdatedBy(*s)
+func (_u *ActionPlanUpdateOne) SetNillableUpdatedBy(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (apuo *ActionPlanUpdateOne) ClearUpdatedBy() *ActionPlanUpdateOne {
-	apuo.mutation.ClearUpdatedBy()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearUpdatedBy() *ActionPlanUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (apuo *ActionPlanUpdateOne) SetDeletedAt(t time.Time) *ActionPlanUpdateOne {
-	apuo.mutation.SetDeletedAt(t)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetDeletedAt(v time.Time) *ActionPlanUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableDeletedAt(t *time.Time) *ActionPlanUpdateOne {
-	if t != nil {
-		apuo.SetDeletedAt(*t)
+func (_u *ActionPlanUpdateOne) SetNillableDeletedAt(v *time.Time) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (apuo *ActionPlanUpdateOne) ClearDeletedAt() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDeletedAt()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearDeletedAt() *ActionPlanUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (apuo *ActionPlanUpdateOne) SetDeletedBy(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetDeletedBy(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetDeletedBy(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableDeletedBy(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetDeletedBy(*s)
+func (_u *ActionPlanUpdateOne) SetNillableDeletedBy(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (apuo *ActionPlanUpdateOne) ClearDeletedBy() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDeletedBy()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearDeletedBy() *ActionPlanUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (apuo *ActionPlanUpdateOne) SetTags(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.SetTags(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetTags(v []string) *ActionPlanUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (apuo *ActionPlanUpdateOne) AppendTags(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.AppendTags(s)
-	return apuo
+// AppendTags appends value to the "tags" field.
+func (_u *ActionPlanUpdateOne) AppendTags(v []string) *ActionPlanUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (apuo *ActionPlanUpdateOne) ClearTags() *ActionPlanUpdateOne {
-	apuo.mutation.ClearTags()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearTags() *ActionPlanUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (apuo *ActionPlanUpdateOne) SetRevision(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetRevision(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetRevision(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableRevision(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetRevision(*s)
+func (_u *ActionPlanUpdateOne) SetNillableRevision(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (apuo *ActionPlanUpdateOne) ClearRevision() *ActionPlanUpdateOne {
-	apuo.mutation.ClearRevision()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearRevision() *ActionPlanUpdateOne {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (apuo *ActionPlanUpdateOne) SetName(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetName(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetName(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableName(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetName(*s)
+func (_u *ActionPlanUpdateOne) SetNillableName(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return apuo
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (apuo *ActionPlanUpdateOne) SetStatus(es enums.DocumentStatus) *ActionPlanUpdateOne {
-	apuo.mutation.SetStatus(es)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetStatus(v enums.DocumentStatus) *ActionPlanUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableStatus(es *enums.DocumentStatus) *ActionPlanUpdateOne {
-	if es != nil {
-		apuo.SetStatus(*es)
+func (_u *ActionPlanUpdateOne) SetNillableStatus(v *enums.DocumentStatus) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (apuo *ActionPlanUpdateOne) ClearStatus() *ActionPlanUpdateOne {
-	apuo.mutation.ClearStatus()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearStatus() *ActionPlanUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetActionPlanType sets the "action_plan_type" field.
-func (apuo *ActionPlanUpdateOne) SetActionPlanType(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetActionPlanType(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetActionPlanType(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetActionPlanType(v)
+	return _u
 }
 
 // SetNillableActionPlanType sets the "action_plan_type" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableActionPlanType(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetActionPlanType(*s)
+func (_u *ActionPlanUpdateOne) SetNillableActionPlanType(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetActionPlanType(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearActionPlanType clears the value of the "action_plan_type" field.
-func (apuo *ActionPlanUpdateOne) ClearActionPlanType() *ActionPlanUpdateOne {
-	apuo.mutation.ClearActionPlanType()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearActionPlanType() *ActionPlanUpdateOne {
+	_u.mutation.ClearActionPlanType()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (apuo *ActionPlanUpdateOne) SetDetails(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetDetails(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetDetails(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableDetails(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetDetails(*s)
+func (_u *ActionPlanUpdateOne) SetNillableDetails(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (apuo *ActionPlanUpdateOne) ClearDetails() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDetails()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearDetails() *ActionPlanUpdateOne {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetApprovalRequired sets the "approval_required" field.
-func (apuo *ActionPlanUpdateOne) SetApprovalRequired(b bool) *ActionPlanUpdateOne {
-	apuo.mutation.SetApprovalRequired(b)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetApprovalRequired(v bool) *ActionPlanUpdateOne {
+	_u.mutation.SetApprovalRequired(v)
+	return _u
 }
 
 // SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableApprovalRequired(b *bool) *ActionPlanUpdateOne {
-	if b != nil {
-		apuo.SetApprovalRequired(*b)
+func (_u *ActionPlanUpdateOne) SetNillableApprovalRequired(v *bool) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetApprovalRequired(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearApprovalRequired clears the value of the "approval_required" field.
-func (apuo *ActionPlanUpdateOne) ClearApprovalRequired() *ActionPlanUpdateOne {
-	apuo.mutation.ClearApprovalRequired()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearApprovalRequired() *ActionPlanUpdateOne {
+	_u.mutation.ClearApprovalRequired()
+	return _u
 }
 
 // SetReviewDue sets the "review_due" field.
-func (apuo *ActionPlanUpdateOne) SetReviewDue(t time.Time) *ActionPlanUpdateOne {
-	apuo.mutation.SetReviewDue(t)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetReviewDue(v time.Time) *ActionPlanUpdateOne {
+	_u.mutation.SetReviewDue(v)
+	return _u
 }
 
 // SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableReviewDue(t *time.Time) *ActionPlanUpdateOne {
-	if t != nil {
-		apuo.SetReviewDue(*t)
+func (_u *ActionPlanUpdateOne) SetNillableReviewDue(v *time.Time) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetReviewDue(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearReviewDue clears the value of the "review_due" field.
-func (apuo *ActionPlanUpdateOne) ClearReviewDue() *ActionPlanUpdateOne {
-	apuo.mutation.ClearReviewDue()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearReviewDue() *ActionPlanUpdateOne {
+	_u.mutation.ClearReviewDue()
+	return _u
 }
 
 // SetReviewFrequency sets the "review_frequency" field.
-func (apuo *ActionPlanUpdateOne) SetReviewFrequency(e enums.Frequency) *ActionPlanUpdateOne {
-	apuo.mutation.SetReviewFrequency(e)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetReviewFrequency(v enums.Frequency) *ActionPlanUpdateOne {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
 }
 
 // SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableReviewFrequency(e *enums.Frequency) *ActionPlanUpdateOne {
-	if e != nil {
-		apuo.SetReviewFrequency(*e)
+func (_u *ActionPlanUpdateOne) SetNillableReviewFrequency(v *enums.Frequency) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearReviewFrequency clears the value of the "review_frequency" field.
-func (apuo *ActionPlanUpdateOne) ClearReviewFrequency() *ActionPlanUpdateOne {
-	apuo.mutation.ClearReviewFrequency()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearReviewFrequency() *ActionPlanUpdateOne {
+	_u.mutation.ClearReviewFrequency()
+	return _u
 }
 
 // SetApproverID sets the "approver_id" field.
-func (apuo *ActionPlanUpdateOne) SetApproverID(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetApproverID(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetApproverID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetApproverID(v)
+	return _u
 }
 
 // SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableApproverID(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetApproverID(*s)
+func (_u *ActionPlanUpdateOne) SetNillableApproverID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetApproverID(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearApproverID clears the value of the "approver_id" field.
-func (apuo *ActionPlanUpdateOne) ClearApproverID() *ActionPlanUpdateOne {
-	apuo.mutation.ClearApproverID()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearApproverID() *ActionPlanUpdateOne {
+	_u.mutation.ClearApproverID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (apuo *ActionPlanUpdateOne) SetDelegateID(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetDelegateID(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetDelegateID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableDelegateID(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetDelegateID(*s)
+func (_u *ActionPlanUpdateOne) SetNillableDelegateID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (apuo *ActionPlanUpdateOne) ClearDelegateID() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDelegateID()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearDelegateID() *ActionPlanUpdateOne {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // SetSummary sets the "summary" field.
-func (apuo *ActionPlanUpdateOne) SetSummary(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetSummary(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetSummary(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetSummary(v)
+	return _u
 }
 
 // SetNillableSummary sets the "summary" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableSummary(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetSummary(*s)
+func (_u *ActionPlanUpdateOne) SetNillableSummary(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetSummary(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearSummary clears the value of the "summary" field.
-func (apuo *ActionPlanUpdateOne) ClearSummary() *ActionPlanUpdateOne {
-	apuo.mutation.ClearSummary()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearSummary() *ActionPlanUpdateOne {
+	_u.mutation.ClearSummary()
+	return _u
 }
 
 // SetTagSuggestions sets the "tag_suggestions" field.
-func (apuo *ActionPlanUpdateOne) SetTagSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.SetTagSuggestions(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetTagSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.SetTagSuggestions(v)
+	return _u
 }
 
-// AppendTagSuggestions appends s to the "tag_suggestions" field.
-func (apuo *ActionPlanUpdateOne) AppendTagSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.AppendTagSuggestions(s)
-	return apuo
+// AppendTagSuggestions appends value to the "tag_suggestions" field.
+func (_u *ActionPlanUpdateOne) AppendTagSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.AppendTagSuggestions(v)
+	return _u
 }
 
 // ClearTagSuggestions clears the value of the "tag_suggestions" field.
-func (apuo *ActionPlanUpdateOne) ClearTagSuggestions() *ActionPlanUpdateOne {
-	apuo.mutation.ClearTagSuggestions()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearTagSuggestions() *ActionPlanUpdateOne {
+	_u.mutation.ClearTagSuggestions()
+	return _u
 }
 
 // SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
-func (apuo *ActionPlanUpdateOne) SetDismissedTagSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.SetDismissedTagSuggestions(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetDismissedTagSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.SetDismissedTagSuggestions(v)
+	return _u
 }
 
-// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
-func (apuo *ActionPlanUpdateOne) AppendDismissedTagSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.AppendDismissedTagSuggestions(s)
-	return apuo
+// AppendDismissedTagSuggestions appends value to the "dismissed_tag_suggestions" field.
+func (_u *ActionPlanUpdateOne) AppendDismissedTagSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.AppendDismissedTagSuggestions(v)
+	return _u
 }
 
 // ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
-func (apuo *ActionPlanUpdateOne) ClearDismissedTagSuggestions() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDismissedTagSuggestions()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearDismissedTagSuggestions() *ActionPlanUpdateOne {
+	_u.mutation.ClearDismissedTagSuggestions()
+	return _u
 }
 
 // SetControlSuggestions sets the "control_suggestions" field.
-func (apuo *ActionPlanUpdateOne) SetControlSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.SetControlSuggestions(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetControlSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.SetControlSuggestions(v)
+	return _u
 }
 
-// AppendControlSuggestions appends s to the "control_suggestions" field.
-func (apuo *ActionPlanUpdateOne) AppendControlSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.AppendControlSuggestions(s)
-	return apuo
+// AppendControlSuggestions appends value to the "control_suggestions" field.
+func (_u *ActionPlanUpdateOne) AppendControlSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.AppendControlSuggestions(v)
+	return _u
 }
 
 // ClearControlSuggestions clears the value of the "control_suggestions" field.
-func (apuo *ActionPlanUpdateOne) ClearControlSuggestions() *ActionPlanUpdateOne {
-	apuo.mutation.ClearControlSuggestions()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearControlSuggestions() *ActionPlanUpdateOne {
+	_u.mutation.ClearControlSuggestions()
+	return _u
 }
 
 // SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
-func (apuo *ActionPlanUpdateOne) SetDismissedControlSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.SetDismissedControlSuggestions(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetDismissedControlSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.SetDismissedControlSuggestions(v)
+	return _u
 }
 
-// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
-func (apuo *ActionPlanUpdateOne) AppendDismissedControlSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.AppendDismissedControlSuggestions(s)
-	return apuo
+// AppendDismissedControlSuggestions appends value to the "dismissed_control_suggestions" field.
+func (_u *ActionPlanUpdateOne) AppendDismissedControlSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.AppendDismissedControlSuggestions(v)
+	return _u
 }
 
 // ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
-func (apuo *ActionPlanUpdateOne) ClearDismissedControlSuggestions() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDismissedControlSuggestions()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearDismissedControlSuggestions() *ActionPlanUpdateOne {
+	_u.mutation.ClearDismissedControlSuggestions()
+	return _u
 }
 
 // SetImprovementSuggestions sets the "improvement_suggestions" field.
-func (apuo *ActionPlanUpdateOne) SetImprovementSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.SetImprovementSuggestions(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetImprovementSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.SetImprovementSuggestions(v)
+	return _u
 }
 
-// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
-func (apuo *ActionPlanUpdateOne) AppendImprovementSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.AppendImprovementSuggestions(s)
-	return apuo
+// AppendImprovementSuggestions appends value to the "improvement_suggestions" field.
+func (_u *ActionPlanUpdateOne) AppendImprovementSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.AppendImprovementSuggestions(v)
+	return _u
 }
 
 // ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
-func (apuo *ActionPlanUpdateOne) ClearImprovementSuggestions() *ActionPlanUpdateOne {
-	apuo.mutation.ClearImprovementSuggestions()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearImprovementSuggestions() *ActionPlanUpdateOne {
+	_u.mutation.ClearImprovementSuggestions()
+	return _u
 }
 
 // SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
-func (apuo *ActionPlanUpdateOne) SetDismissedImprovementSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.SetDismissedImprovementSuggestions(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetDismissedImprovementSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.SetDismissedImprovementSuggestions(v)
+	return _u
 }
 
-// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
-func (apuo *ActionPlanUpdateOne) AppendDismissedImprovementSuggestions(s []string) *ActionPlanUpdateOne {
-	apuo.mutation.AppendDismissedImprovementSuggestions(s)
-	return apuo
+// AppendDismissedImprovementSuggestions appends value to the "dismissed_improvement_suggestions" field.
+func (_u *ActionPlanUpdateOne) AppendDismissedImprovementSuggestions(v []string) *ActionPlanUpdateOne {
+	_u.mutation.AppendDismissedImprovementSuggestions(v)
+	return _u
 }
 
 // ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
-func (apuo *ActionPlanUpdateOne) ClearDismissedImprovementSuggestions() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDismissedImprovementSuggestions()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearDismissedImprovementSuggestions() *ActionPlanUpdateOne {
+	_u.mutation.ClearDismissedImprovementSuggestions()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (apuo *ActionPlanUpdateOne) SetOwnerID(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetOwnerID(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetOwnerID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableOwnerID(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetOwnerID(*s)
+func (_u *ActionPlanUpdateOne) SetNillableOwnerID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (apuo *ActionPlanUpdateOne) ClearOwnerID() *ActionPlanUpdateOne {
-	apuo.mutation.ClearOwnerID()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearOwnerID() *ActionPlanUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetDueDate sets the "due_date" field.
-func (apuo *ActionPlanUpdateOne) SetDueDate(t time.Time) *ActionPlanUpdateOne {
-	apuo.mutation.SetDueDate(t)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetDueDate(v time.Time) *ActionPlanUpdateOne {
+	_u.mutation.SetDueDate(v)
+	return _u
 }
 
 // SetNillableDueDate sets the "due_date" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableDueDate(t *time.Time) *ActionPlanUpdateOne {
-	if t != nil {
-		apuo.SetDueDate(*t)
+func (_u *ActionPlanUpdateOne) SetNillableDueDate(v *time.Time) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetDueDate(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearDueDate clears the value of the "due_date" field.
-func (apuo *ActionPlanUpdateOne) ClearDueDate() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDueDate()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearDueDate() *ActionPlanUpdateOne {
+	_u.mutation.ClearDueDate()
+	return _u
 }
 
 // SetPriority sets the "priority" field.
-func (apuo *ActionPlanUpdateOne) SetPriority(e enums.Priority) *ActionPlanUpdateOne {
-	apuo.mutation.SetPriority(e)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetPriority(v enums.Priority) *ActionPlanUpdateOne {
+	_u.mutation.SetPriority(v)
+	return _u
 }
 
 // SetNillablePriority sets the "priority" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillablePriority(e *enums.Priority) *ActionPlanUpdateOne {
-	if e != nil {
-		apuo.SetPriority(*e)
+func (_u *ActionPlanUpdateOne) SetNillablePriority(v *enums.Priority) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetPriority(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearPriority clears the value of the "priority" field.
-func (apuo *ActionPlanUpdateOne) ClearPriority() *ActionPlanUpdateOne {
-	apuo.mutation.ClearPriority()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearPriority() *ActionPlanUpdateOne {
+	_u.mutation.ClearPriority()
+	return _u
 }
 
 // SetSource sets the "source" field.
-func (apuo *ActionPlanUpdateOne) SetSource(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetSource(s)
-	return apuo
+func (_u *ActionPlanUpdateOne) SetSource(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetSource(v)
+	return _u
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableSource(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetSource(*s)
+func (_u *ActionPlanUpdateOne) SetNillableSource(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetSource(*v)
 	}
-	return apuo
+	return _u
 }
 
 // ClearSource clears the value of the "source" field.
-func (apuo *ActionPlanUpdateOne) ClearSource() *ActionPlanUpdateOne {
-	apuo.mutation.ClearSource()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearSource() *ActionPlanUpdateOne {
+	_u.mutation.ClearSource()
+	return _u
 }
 
 // SetApprover sets the "approver" edge to the Group entity.
-func (apuo *ActionPlanUpdateOne) SetApprover(g *Group) *ActionPlanUpdateOne {
-	return apuo.SetApproverID(g.ID)
+func (_u *ActionPlanUpdateOne) SetApprover(v *Group) *ActionPlanUpdateOne {
+	return _u.SetApproverID(v.ID)
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
-func (apuo *ActionPlanUpdateOne) SetDelegate(g *Group) *ActionPlanUpdateOne {
-	return apuo.SetDelegateID(g.ID)
+func (_u *ActionPlanUpdateOne) SetDelegate(v *Group) *ActionPlanUpdateOne {
+	return _u.SetDelegateID(v.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (apuo *ActionPlanUpdateOne) SetOwner(o *Organization) *ActionPlanUpdateOne {
-	return apuo.SetOwnerID(o.ID)
+func (_u *ActionPlanUpdateOne) SetOwner(v *Organization) *ActionPlanUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (apuo *ActionPlanUpdateOne) AddRiskIDs(ids ...string) *ActionPlanUpdateOne {
-	apuo.mutation.AddRiskIDs(ids...)
-	return apuo
+func (_u *ActionPlanUpdateOne) AddRiskIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (apuo *ActionPlanUpdateOne) AddRisks(r ...*Risk) *ActionPlanUpdateOne {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *ActionPlanUpdateOne) AddRisks(v ...*Risk) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apuo.AddRiskIDs(ids...)
+	return _u.AddRiskIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (apuo *ActionPlanUpdateOne) AddControlIDs(ids ...string) *ActionPlanUpdateOne {
-	apuo.mutation.AddControlIDs(ids...)
-	return apuo
+func (_u *ActionPlanUpdateOne) AddControlIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (apuo *ActionPlanUpdateOne) AddControls(c ...*Control) *ActionPlanUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ActionPlanUpdateOne) AddControls(v ...*Control) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apuo.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (apuo *ActionPlanUpdateOne) AddProgramIDs(ids ...string) *ActionPlanUpdateOne {
-	apuo.mutation.AddProgramIDs(ids...)
-	return apuo
+func (_u *ActionPlanUpdateOne) AddProgramIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (apuo *ActionPlanUpdateOne) AddPrograms(p ...*Program) *ActionPlanUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ActionPlanUpdateOne) AddPrograms(v ...*Program) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apuo.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // Mutation returns the ActionPlanMutation object of the builder.
-func (apuo *ActionPlanUpdateOne) Mutation() *ActionPlanMutation {
-	return apuo.mutation
+func (_u *ActionPlanUpdateOne) Mutation() *ActionPlanMutation {
+	return _u.mutation
 }
 
 // ClearApprover clears the "approver" edge to the Group entity.
-func (apuo *ActionPlanUpdateOne) ClearApprover() *ActionPlanUpdateOne {
-	apuo.mutation.ClearApprover()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearApprover() *ActionPlanUpdateOne {
+	_u.mutation.ClearApprover()
+	return _u
 }
 
 // ClearDelegate clears the "delegate" edge to the Group entity.
-func (apuo *ActionPlanUpdateOne) ClearDelegate() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDelegate()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearDelegate() *ActionPlanUpdateOne {
+	_u.mutation.ClearDelegate()
+	return _u
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (apuo *ActionPlanUpdateOne) ClearOwner() *ActionPlanUpdateOne {
-	apuo.mutation.ClearOwner()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearOwner() *ActionPlanUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearRisks clears all "risks" edges to the Risk entity.
-func (apuo *ActionPlanUpdateOne) ClearRisks() *ActionPlanUpdateOne {
-	apuo.mutation.ClearRisks()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearRisks() *ActionPlanUpdateOne {
+	_u.mutation.ClearRisks()
+	return _u
 }
 
 // RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
-func (apuo *ActionPlanUpdateOne) RemoveRiskIDs(ids ...string) *ActionPlanUpdateOne {
-	apuo.mutation.RemoveRiskIDs(ids...)
-	return apuo
+func (_u *ActionPlanUpdateOne) RemoveRiskIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
 }
 
 // RemoveRisks removes "risks" edges to Risk entities.
-func (apuo *ActionPlanUpdateOne) RemoveRisks(r ...*Risk) *ActionPlanUpdateOne {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *ActionPlanUpdateOne) RemoveRisks(v ...*Risk) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apuo.RemoveRiskIDs(ids...)
+	return _u.RemoveRiskIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (apuo *ActionPlanUpdateOne) ClearControls() *ActionPlanUpdateOne {
-	apuo.mutation.ClearControls()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearControls() *ActionPlanUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (apuo *ActionPlanUpdateOne) RemoveControlIDs(ids ...string) *ActionPlanUpdateOne {
-	apuo.mutation.RemoveControlIDs(ids...)
-	return apuo
+func (_u *ActionPlanUpdateOne) RemoveControlIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (apuo *ActionPlanUpdateOne) RemoveControls(c ...*Control) *ActionPlanUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ActionPlanUpdateOne) RemoveControls(v ...*Control) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apuo.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (apuo *ActionPlanUpdateOne) ClearPrograms() *ActionPlanUpdateOne {
-	apuo.mutation.ClearPrograms()
-	return apuo
+func (_u *ActionPlanUpdateOne) ClearPrograms() *ActionPlanUpdateOne {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (apuo *ActionPlanUpdateOne) RemoveProgramIDs(ids ...string) *ActionPlanUpdateOne {
-	apuo.mutation.RemoveProgramIDs(ids...)
-	return apuo
+func (_u *ActionPlanUpdateOne) RemoveProgramIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (apuo *ActionPlanUpdateOne) RemovePrograms(p ...*Program) *ActionPlanUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ActionPlanUpdateOne) RemovePrograms(v ...*Program) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return apuo.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the ActionPlanUpdate builder.
-func (apuo *ActionPlanUpdateOne) Where(ps ...predicate.ActionPlan) *ActionPlanUpdateOne {
-	apuo.mutation.Where(ps...)
-	return apuo
+func (_u *ActionPlanUpdateOne) Where(ps ...predicate.ActionPlan) *ActionPlanUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (apuo *ActionPlanUpdateOne) Select(field string, fields ...string) *ActionPlanUpdateOne {
-	apuo.fields = append([]string{field}, fields...)
-	return apuo
+func (_u *ActionPlanUpdateOne) Select(field string, fields ...string) *ActionPlanUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ActionPlan entity.
-func (apuo *ActionPlanUpdateOne) Save(ctx context.Context) (*ActionPlan, error) {
-	if err := apuo.defaults(); err != nil {
+func (_u *ActionPlanUpdateOne) Save(ctx context.Context) (*ActionPlan, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, apuo.sqlSave, apuo.mutation, apuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (apuo *ActionPlanUpdateOne) SaveX(ctx context.Context) *ActionPlan {
-	node, err := apuo.Save(ctx)
+func (_u *ActionPlanUpdateOne) SaveX(ctx context.Context) *ActionPlan {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1877,58 +1877,58 @@ func (apuo *ActionPlanUpdateOne) SaveX(ctx context.Context) *ActionPlan {
 }
 
 // Exec executes the query on the entity.
-func (apuo *ActionPlanUpdateOne) Exec(ctx context.Context) error {
-	_, err := apuo.Save(ctx)
+func (_u *ActionPlanUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (apuo *ActionPlanUpdateOne) ExecX(ctx context.Context) {
-	if err := apuo.Exec(ctx); err != nil {
+func (_u *ActionPlanUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (apuo *ActionPlanUpdateOne) defaults() error {
-	if _, ok := apuo.mutation.UpdatedAt(); !ok && !apuo.mutation.UpdatedAtCleared() {
+func (_u *ActionPlanUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if actionplan.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized actionplan.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := actionplan.UpdateDefaultUpdatedAt()
-		apuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (apuo *ActionPlanUpdateOne) check() error {
-	if v, ok := apuo.mutation.Revision(); ok {
+func (_u *ActionPlanUpdateOne) check() error {
+	if v, ok := _u.mutation.Revision(); ok {
 		if err := actionplan.RevisionValidator(v); err != nil {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.revision": %w`, err)}
 		}
 	}
-	if v, ok := apuo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := actionplan.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.name": %w`, err)}
 		}
 	}
-	if v, ok := apuo.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := actionplan.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.status": %w`, err)}
 		}
 	}
-	if v, ok := apuo.mutation.ReviewFrequency(); ok {
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := actionplan.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
 		}
 	}
-	if v, ok := apuo.mutation.OwnerID(); ok {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := actionplan.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := apuo.mutation.Priority(); ok {
+	if v, ok := _u.mutation.Priority(); ok {
 		if err := actionplan.PriorityValidator(v); err != nil {
 			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.priority": %w`, err)}
 		}
@@ -1937,22 +1937,22 @@ func (apuo *ActionPlanUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (apuo *ActionPlanUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ActionPlanUpdateOne {
-	apuo.modifiers = append(apuo.modifiers, modifiers...)
-	return apuo
+func (_u *ActionPlanUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ActionPlanUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, err error) {
-	if err := apuo.check(); err != nil {
+func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(actionplan.Table, actionplan.Columns, sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString))
-	id, ok := apuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "ActionPlan.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := apuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, actionplan.FieldID)
 		for _, f := range fields {
@@ -1964,190 +1964,190 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 			}
 		}
 	}
-	if ps := apuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if apuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(actionplan.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := apuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(actionplan.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if apuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(actionplan.FieldUpdatedAt, field.TypeTime)
 	}
-	if apuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(actionplan.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := apuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(actionplan.FieldUpdatedBy, field.TypeString, value)
 	}
-	if apuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(actionplan.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := apuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(actionplan.FieldDeletedAt, field.TypeTime, value)
 	}
-	if apuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(actionplan.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := apuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(actionplan.FieldDeletedBy, field.TypeString, value)
 	}
-	if apuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(actionplan.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := apuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(actionplan.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := apuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldTags, value)
 		})
 	}
-	if apuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(actionplan.FieldTags, field.TypeJSON)
 	}
-	if value, ok := apuo.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(actionplan.FieldRevision, field.TypeString, value)
 	}
-	if apuo.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(actionplan.FieldRevision, field.TypeString)
 	}
-	if value, ok := apuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)
 	}
-	if value, ok := apuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(actionplan.FieldStatus, field.TypeEnum, value)
 	}
-	if apuo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(actionplan.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := apuo.mutation.ActionPlanType(); ok {
+	if value, ok := _u.mutation.ActionPlanType(); ok {
 		_spec.SetField(actionplan.FieldActionPlanType, field.TypeString, value)
 	}
-	if apuo.mutation.ActionPlanTypeCleared() {
+	if _u.mutation.ActionPlanTypeCleared() {
 		_spec.ClearField(actionplan.FieldActionPlanType, field.TypeString)
 	}
-	if value, ok := apuo.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(actionplan.FieldDetails, field.TypeString, value)
 	}
-	if apuo.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(actionplan.FieldDetails, field.TypeString)
 	}
-	if value, ok := apuo.mutation.ApprovalRequired(); ok {
+	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(actionplan.FieldApprovalRequired, field.TypeBool, value)
 	}
-	if apuo.mutation.ApprovalRequiredCleared() {
+	if _u.mutation.ApprovalRequiredCleared() {
 		_spec.ClearField(actionplan.FieldApprovalRequired, field.TypeBool)
 	}
-	if value, ok := apuo.mutation.ReviewDue(); ok {
+	if value, ok := _u.mutation.ReviewDue(); ok {
 		_spec.SetField(actionplan.FieldReviewDue, field.TypeTime, value)
 	}
-	if apuo.mutation.ReviewDueCleared() {
+	if _u.mutation.ReviewDueCleared() {
 		_spec.ClearField(actionplan.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := apuo.mutation.ReviewFrequency(); ok {
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(actionplan.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if apuo.mutation.ReviewFrequencyCleared() {
+	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(actionplan.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := apuo.mutation.Summary(); ok {
+	if value, ok := _u.mutation.Summary(); ok {
 		_spec.SetField(actionplan.FieldSummary, field.TypeString, value)
 	}
-	if apuo.mutation.SummaryCleared() {
+	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(actionplan.FieldSummary, field.TypeString)
 	}
-	if value, ok := apuo.mutation.TagSuggestions(); ok {
+	if value, ok := _u.mutation.TagSuggestions(); ok {
 		_spec.SetField(actionplan.FieldTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apuo.mutation.AppendedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldTagSuggestions, value)
 		})
 	}
-	if apuo.mutation.TagSuggestionsCleared() {
+	if _u.mutation.TagSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := apuo.mutation.DismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedTagSuggestions(); ok {
 		_spec.SetField(actionplan.FieldDismissedTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apuo.mutation.AppendedDismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldDismissedTagSuggestions, value)
 		})
 	}
-	if apuo.mutation.DismissedTagSuggestionsCleared() {
+	if _u.mutation.DismissedTagSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldDismissedTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := apuo.mutation.ControlSuggestions(); ok {
+	if value, ok := _u.mutation.ControlSuggestions(); ok {
 		_spec.SetField(actionplan.FieldControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apuo.mutation.AppendedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldControlSuggestions, value)
 		})
 	}
-	if apuo.mutation.ControlSuggestionsCleared() {
+	if _u.mutation.ControlSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := apuo.mutation.DismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedControlSuggestions(); ok {
 		_spec.SetField(actionplan.FieldDismissedControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apuo.mutation.AppendedDismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldDismissedControlSuggestions, value)
 		})
 	}
-	if apuo.mutation.DismissedControlSuggestionsCleared() {
+	if _u.mutation.DismissedControlSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldDismissedControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := apuo.mutation.ImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.ImprovementSuggestions(); ok {
 		_spec.SetField(actionplan.FieldImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apuo.mutation.AppendedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldImprovementSuggestions, value)
 		})
 	}
-	if apuo.mutation.ImprovementSuggestionsCleared() {
+	if _u.mutation.ImprovementSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := apuo.mutation.DismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := apuo.mutation.AppendedDismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, actionplan.FieldDismissedImprovementSuggestions, value)
 		})
 	}
-	if apuo.mutation.DismissedImprovementSuggestionsCleared() {
+	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := apuo.mutation.DueDate(); ok {
+	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 	}
-	if apuo.mutation.DueDateCleared() {
+	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(actionplan.FieldDueDate, field.TypeTime)
 	}
-	if value, ok := apuo.mutation.Priority(); ok {
+	if value, ok := _u.mutation.Priority(); ok {
 		_spec.SetField(actionplan.FieldPriority, field.TypeEnum, value)
 	}
-	if apuo.mutation.PriorityCleared() {
+	if _u.mutation.PriorityCleared() {
 		_spec.ClearField(actionplan.FieldPriority, field.TypeEnum)
 	}
-	if value, ok := apuo.mutation.Source(); ok {
+	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(actionplan.FieldSource, field.TypeString, value)
 	}
-	if apuo.mutation.SourceCleared() {
+	if _u.mutation.SourceCleared() {
 		_spec.ClearField(actionplan.FieldSource, field.TypeString)
 	}
-	if apuo.mutation.ApproverCleared() {
+	if _u.mutation.ApproverCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -2158,10 +2158,10 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.ApproverIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ApproverIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -2172,13 +2172,13 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apuo.mutation.DelegateCleared() {
+	if _u.mutation.DelegateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -2189,10 +2189,10 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.DelegateIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DelegateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -2203,13 +2203,13 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -2220,10 +2220,10 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -2234,13 +2234,13 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ActionPlan
+		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apuo.mutation.RisksCleared() {
+	if _u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2251,10 +2251,10 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.RemovedRisksIDs(); len(nodes) > 0 && !apuo.mutation.RisksCleared() {
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2265,13 +2265,13 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2282,13 +2282,13 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apuo.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2299,10 +2299,10 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ControlActionPlans
+		edge.Schema = _u.schemaConfig.ControlActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !apuo.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2313,13 +2313,13 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ControlActionPlans
+		edge.Schema = _u.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2330,13 +2330,13 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ControlActionPlans
+		edge.Schema = _u.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if apuo.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2347,10 +2347,10 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !apuo.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2361,13 +2361,13 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := apuo.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2378,19 +2378,19 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = apuo.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = apuo.schemaConfig.ActionPlan
-	ctx = internal.NewSchemaConfigContext(ctx, apuo.schemaConfig)
-	_spec.AddModifiers(apuo.modifiers...)
-	_node = &ActionPlan{config: apuo.config}
+	_spec.Node.Schema = _u.schemaConfig.ActionPlan
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &ActionPlan{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, apuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{actionplan.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -2398,6 +2398,6 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 		}
 		return nil, err
 	}
-	apuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

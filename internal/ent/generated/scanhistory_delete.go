@@ -22,58 +22,58 @@ type ScanHistoryDelete struct {
 }
 
 // Where appends a list predicates to the ScanHistoryDelete builder.
-func (shd *ScanHistoryDelete) Where(ps ...predicate.ScanHistory) *ScanHistoryDelete {
-	shd.mutation.Where(ps...)
-	return shd
+func (_d *ScanHistoryDelete) Where(ps ...predicate.ScanHistory) *ScanHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (shd *ScanHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, shd.sqlExec, shd.mutation, shd.hooks)
+func (_d *ScanHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shd *ScanHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := shd.Exec(ctx)
+func (_d *ScanHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (shd *ScanHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ScanHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(scanhistory.Table, sqlgraph.NewFieldSpec(scanhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = shd.schemaConfig.ScanHistory
-	ctx = internal.NewSchemaConfigContext(ctx, shd.schemaConfig)
-	if ps := shd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.ScanHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, shd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	shd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ScanHistoryDeleteOne is the builder for deleting a single ScanHistory entity.
 type ScanHistoryDeleteOne struct {
-	shd *ScanHistoryDelete
+	_d *ScanHistoryDelete
 }
 
 // Where appends a list predicates to the ScanHistoryDelete builder.
-func (shdo *ScanHistoryDeleteOne) Where(ps ...predicate.ScanHistory) *ScanHistoryDeleteOne {
-	shdo.shd.mutation.Where(ps...)
-	return shdo
+func (_d *ScanHistoryDeleteOne) Where(ps ...predicate.ScanHistory) *ScanHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (shdo *ScanHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := shdo.shd.Exec(ctx)
+func (_d *ScanHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (shdo *ScanHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shdo *ScanHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := shdo.Exec(ctx); err != nil {
+func (_d *ScanHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

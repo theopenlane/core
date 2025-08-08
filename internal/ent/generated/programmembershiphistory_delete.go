@@ -22,58 +22,58 @@ type ProgramMembershipHistoryDelete struct {
 }
 
 // Where appends a list predicates to the ProgramMembershipHistoryDelete builder.
-func (pmhd *ProgramMembershipHistoryDelete) Where(ps ...predicate.ProgramMembershipHistory) *ProgramMembershipHistoryDelete {
-	pmhd.mutation.Where(ps...)
-	return pmhd
+func (_d *ProgramMembershipHistoryDelete) Where(ps ...predicate.ProgramMembershipHistory) *ProgramMembershipHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (pmhd *ProgramMembershipHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, pmhd.sqlExec, pmhd.mutation, pmhd.hooks)
+func (_d *ProgramMembershipHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmhd *ProgramMembershipHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := pmhd.Exec(ctx)
+func (_d *ProgramMembershipHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (pmhd *ProgramMembershipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ProgramMembershipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(programmembershiphistory.Table, sqlgraph.NewFieldSpec(programmembershiphistory.FieldID, field.TypeString))
-	_spec.Node.Schema = pmhd.schemaConfig.ProgramMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, pmhd.schemaConfig)
-	if ps := pmhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.ProgramMembershipHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, pmhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	pmhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ProgramMembershipHistoryDeleteOne is the builder for deleting a single ProgramMembershipHistory entity.
 type ProgramMembershipHistoryDeleteOne struct {
-	pmhd *ProgramMembershipHistoryDelete
+	_d *ProgramMembershipHistoryDelete
 }
 
 // Where appends a list predicates to the ProgramMembershipHistoryDelete builder.
-func (pmhdo *ProgramMembershipHistoryDeleteOne) Where(ps ...predicate.ProgramMembershipHistory) *ProgramMembershipHistoryDeleteOne {
-	pmhdo.pmhd.mutation.Where(ps...)
-	return pmhdo
+func (_d *ProgramMembershipHistoryDeleteOne) Where(ps ...predicate.ProgramMembershipHistory) *ProgramMembershipHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (pmhdo *ProgramMembershipHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := pmhdo.pmhd.Exec(ctx)
+func (_d *ProgramMembershipHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (pmhdo *ProgramMembershipHistoryDeleteOne) Exec(ctx context.Context) error 
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmhdo *ProgramMembershipHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := pmhdo.Exec(ctx); err != nil {
+func (_d *ProgramMembershipHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

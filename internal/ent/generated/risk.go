@@ -299,7 +299,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Risk fields.
-func (r *Risk) assignValues(columns []string, values []any) error {
+func (_m *Risk) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -309,55 +309,55 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				r.ID = value.String
+				_m.ID = value.String
 			}
 		case risk.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				r.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case risk.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				r.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case risk.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				r.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case risk.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				r.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case risk.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				r.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case risk.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				r.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case risk.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				r.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case risk.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &r.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -365,89 +365,89 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				r.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case risk.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				r.Name = value.String
+				_m.Name = value.String
 			}
 		case risk.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				r.Status = enums.RiskStatus(value.String)
+				_m.Status = enums.RiskStatus(value.String)
 			}
 		case risk.FieldRiskType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_type", values[i])
 			} else if value.Valid {
-				r.RiskType = value.String
+				_m.RiskType = value.String
 			}
 		case risk.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				r.Category = value.String
+				_m.Category = value.String
 			}
 		case risk.FieldImpact:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field impact", values[i])
 			} else if value.Valid {
-				r.Impact = enums.RiskImpact(value.String)
+				_m.Impact = enums.RiskImpact(value.String)
 			}
 		case risk.FieldLikelihood:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field likelihood", values[i])
 			} else if value.Valid {
-				r.Likelihood = enums.RiskLikelihood(value.String)
+				_m.Likelihood = enums.RiskLikelihood(value.String)
 			}
 		case risk.FieldScore:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field score", values[i])
 			} else if value.Valid {
-				r.Score = int(value.Int64)
+				_m.Score = int(value.Int64)
 			}
 		case risk.FieldMitigation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mitigation", values[i])
 			} else if value.Valid {
-				r.Mitigation = value.String
+				_m.Mitigation = value.String
 			}
 		case risk.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				r.Details = value.String
+				_m.Details = value.String
 			}
 		case risk.FieldBusinessCosts:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field business_costs", values[i])
 			} else if value.Valid {
-				r.BusinessCosts = value.String
+				_m.BusinessCosts = value.String
 			}
 		case risk.FieldStakeholderID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stakeholder_id", values[i])
 			} else if value.Valid {
-				r.StakeholderID = value.String
+				_m.StakeholderID = value.String
 			}
 		case risk.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
-				r.DelegateID = value.String
+				_m.DelegateID = value.String
 			}
 		case risk.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_risks", values[i])
 			} else if value.Valid {
-				r.control_objective_risks = new(string)
-				*r.control_objective_risks = value.String
+				_m.control_objective_risks = new(string)
+				*_m.control_objective_risks = value.String
 			}
 		default:
-			r.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -455,488 +455,488 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Risk.
 // This includes values selected through modifiers, order, etc.
-func (r *Risk) Value(name string) (ent.Value, error) {
-	return r.selectValues.Get(name)
+func (_m *Risk) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Risk entity.
-func (r *Risk) QueryOwner() *OrganizationQuery {
-	return NewRiskClient(r.config).QueryOwner(r)
+func (_m *Risk) QueryOwner() *OrganizationQuery {
+	return NewRiskClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the Risk entity.
-func (r *Risk) QueryBlockedGroups() *GroupQuery {
-	return NewRiskClient(r.config).QueryBlockedGroups(r)
+func (_m *Risk) QueryBlockedGroups() *GroupQuery {
+	return NewRiskClient(_m.config).QueryBlockedGroups(_m)
 }
 
 // QueryEditors queries the "editors" edge of the Risk entity.
-func (r *Risk) QueryEditors() *GroupQuery {
-	return NewRiskClient(r.config).QueryEditors(r)
+func (_m *Risk) QueryEditors() *GroupQuery {
+	return NewRiskClient(_m.config).QueryEditors(_m)
 }
 
 // QueryViewers queries the "viewers" edge of the Risk entity.
-func (r *Risk) QueryViewers() *GroupQuery {
-	return NewRiskClient(r.config).QueryViewers(r)
+func (_m *Risk) QueryViewers() *GroupQuery {
+	return NewRiskClient(_m.config).QueryViewers(_m)
 }
 
 // QueryControls queries the "controls" edge of the Risk entity.
-func (r *Risk) QueryControls() *ControlQuery {
-	return NewRiskClient(r.config).QueryControls(r)
+func (_m *Risk) QueryControls() *ControlQuery {
+	return NewRiskClient(_m.config).QueryControls(_m)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the Risk entity.
-func (r *Risk) QuerySubcontrols() *SubcontrolQuery {
-	return NewRiskClient(r.config).QuerySubcontrols(r)
+func (_m *Risk) QuerySubcontrols() *SubcontrolQuery {
+	return NewRiskClient(_m.config).QuerySubcontrols(_m)
 }
 
 // QueryProcedures queries the "procedures" edge of the Risk entity.
-func (r *Risk) QueryProcedures() *ProcedureQuery {
-	return NewRiskClient(r.config).QueryProcedures(r)
+func (_m *Risk) QueryProcedures() *ProcedureQuery {
+	return NewRiskClient(_m.config).QueryProcedures(_m)
 }
 
 // QueryInternalPolicies queries the "internal_policies" edge of the Risk entity.
-func (r *Risk) QueryInternalPolicies() *InternalPolicyQuery {
-	return NewRiskClient(r.config).QueryInternalPolicies(r)
+func (_m *Risk) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewRiskClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // QueryPrograms queries the "programs" edge of the Risk entity.
-func (r *Risk) QueryPrograms() *ProgramQuery {
-	return NewRiskClient(r.config).QueryPrograms(r)
+func (_m *Risk) QueryPrograms() *ProgramQuery {
+	return NewRiskClient(_m.config).QueryPrograms(_m)
 }
 
 // QueryActionPlans queries the "action_plans" edge of the Risk entity.
-func (r *Risk) QueryActionPlans() *ActionPlanQuery {
-	return NewRiskClient(r.config).QueryActionPlans(r)
+func (_m *Risk) QueryActionPlans() *ActionPlanQuery {
+	return NewRiskClient(_m.config).QueryActionPlans(_m)
 }
 
 // QueryTasks queries the "tasks" edge of the Risk entity.
-func (r *Risk) QueryTasks() *TaskQuery {
-	return NewRiskClient(r.config).QueryTasks(r)
+func (_m *Risk) QueryTasks() *TaskQuery {
+	return NewRiskClient(_m.config).QueryTasks(_m)
 }
 
 // QueryAssets queries the "assets" edge of the Risk entity.
-func (r *Risk) QueryAssets() *AssetQuery {
-	return NewRiskClient(r.config).QueryAssets(r)
+func (_m *Risk) QueryAssets() *AssetQuery {
+	return NewRiskClient(_m.config).QueryAssets(_m)
 }
 
 // QueryEntities queries the "entities" edge of the Risk entity.
-func (r *Risk) QueryEntities() *EntityQuery {
-	return NewRiskClient(r.config).QueryEntities(r)
+func (_m *Risk) QueryEntities() *EntityQuery {
+	return NewRiskClient(_m.config).QueryEntities(_m)
 }
 
 // QueryScans queries the "scans" edge of the Risk entity.
-func (r *Risk) QueryScans() *ScanQuery {
-	return NewRiskClient(r.config).QueryScans(r)
+func (_m *Risk) QueryScans() *ScanQuery {
+	return NewRiskClient(_m.config).QueryScans(_m)
 }
 
 // QueryStakeholder queries the "stakeholder" edge of the Risk entity.
-func (r *Risk) QueryStakeholder() *GroupQuery {
-	return NewRiskClient(r.config).QueryStakeholder(r)
+func (_m *Risk) QueryStakeholder() *GroupQuery {
+	return NewRiskClient(_m.config).QueryStakeholder(_m)
 }
 
 // QueryDelegate queries the "delegate" edge of the Risk entity.
-func (r *Risk) QueryDelegate() *GroupQuery {
-	return NewRiskClient(r.config).QueryDelegate(r)
+func (_m *Risk) QueryDelegate() *GroupQuery {
+	return NewRiskClient(_m.config).QueryDelegate(_m)
 }
 
 // Update returns a builder for updating this Risk.
 // Note that you need to call Risk.Unwrap() before calling this method if this Risk
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (r *Risk) Update() *RiskUpdateOne {
-	return NewRiskClient(r.config).UpdateOne(r)
+func (_m *Risk) Update() *RiskUpdateOne {
+	return NewRiskClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Risk entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (r *Risk) Unwrap() *Risk {
-	_tx, ok := r.config.driver.(*txDriver)
+func (_m *Risk) Unwrap() *Risk {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Risk is not a transactional entity")
 	}
-	r.config.driver = _tx.drv
-	return r
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (r *Risk) String() string {
+func (_m *Risk) String() string {
 	var builder strings.Builder
 	builder.WriteString("Risk(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", r.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(r.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(r.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(r.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(r.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(r.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(r.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(r.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", r.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(r.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(r.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", r.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("risk_type=")
-	builder.WriteString(r.RiskType)
+	builder.WriteString(_m.RiskType)
 	builder.WriteString(", ")
 	builder.WriteString("category=")
-	builder.WriteString(r.Category)
+	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
 	builder.WriteString("impact=")
-	builder.WriteString(fmt.Sprintf("%v", r.Impact))
+	builder.WriteString(fmt.Sprintf("%v", _m.Impact))
 	builder.WriteString(", ")
 	builder.WriteString("likelihood=")
-	builder.WriteString(fmt.Sprintf("%v", r.Likelihood))
+	builder.WriteString(fmt.Sprintf("%v", _m.Likelihood))
 	builder.WriteString(", ")
 	builder.WriteString("score=")
-	builder.WriteString(fmt.Sprintf("%v", r.Score))
+	builder.WriteString(fmt.Sprintf("%v", _m.Score))
 	builder.WriteString(", ")
 	builder.WriteString("mitigation=")
-	builder.WriteString(r.Mitigation)
+	builder.WriteString(_m.Mitigation)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(r.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteString(", ")
 	builder.WriteString("business_costs=")
-	builder.WriteString(r.BusinessCosts)
+	builder.WriteString(_m.BusinessCosts)
 	builder.WriteString(", ")
 	builder.WriteString("stakeholder_id=")
-	builder.WriteString(r.StakeholderID)
+	builder.WriteString(_m.StakeholderID)
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
-	builder.WriteString(r.DelegateID)
+	builder.WriteString(_m.DelegateID)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedBlockedGroups(name string) ([]*Group, error) {
-	if r.Edges.namedBlockedGroups == nil {
+func (_m *Risk) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedBlockedGroups[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if r.Edges.namedBlockedGroups == nil {
-		r.Edges.namedBlockedGroups = make(map[string][]*Group)
+func (_m *Risk) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedBlockedGroups[name] = []*Group{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		r.Edges.namedBlockedGroups[name] = append(r.Edges.namedBlockedGroups[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEditors returns the Editors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedEditors(name string) ([]*Group, error) {
-	if r.Edges.namedEditors == nil {
+func (_m *Risk) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedEditors[name]
+	nodes, ok := _m.Edges.namedEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedEditors(name string, edges ...*Group) {
-	if r.Edges.namedEditors == nil {
-		r.Edges.namedEditors = make(map[string][]*Group)
+func (_m *Risk) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedEditors[name] = []*Group{}
+		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
-		r.Edges.namedEditors[name] = append(r.Edges.namedEditors[name], edges...)
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 
 // NamedViewers returns the Viewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedViewers(name string) ([]*Group, error) {
-	if r.Edges.namedViewers == nil {
+func (_m *Risk) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedViewers[name]
+	nodes, ok := _m.Edges.namedViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedViewers(name string, edges ...*Group) {
-	if r.Edges.namedViewers == nil {
-		r.Edges.namedViewers = make(map[string][]*Group)
+func (_m *Risk) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedViewers[name] = []*Group{}
+		_m.Edges.namedViewers[name] = []*Group{}
 	} else {
-		r.Edges.namedViewers[name] = append(r.Edges.namedViewers[name], edges...)
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
 	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedControls(name string) ([]*Control, error) {
-	if r.Edges.namedControls == nil {
+func (_m *Risk) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedControls[name]
+	nodes, ok := _m.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedControls(name string, edges ...*Control) {
-	if r.Edges.namedControls == nil {
-		r.Edges.namedControls = make(map[string][]*Control)
+func (_m *Risk) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedControls[name] = []*Control{}
+		_m.Edges.namedControls[name] = []*Control{}
 	} else {
-		r.Edges.namedControls[name] = append(r.Edges.namedControls[name], edges...)
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 
 // NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if r.Edges.namedSubcontrols == nil {
+func (_m *Risk) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedSubcontrols[name]
+	nodes, ok := _m.Edges.namedSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if r.Edges.namedSubcontrols == nil {
-		r.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+func (_m *Risk) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
-		r.Edges.namedSubcontrols[name] = append(r.Edges.namedSubcontrols[name], edges...)
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 
 // NamedProcedures returns the Procedures named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedProcedures(name string) ([]*Procedure, error) {
-	if r.Edges.namedProcedures == nil {
+func (_m *Risk) NamedProcedures(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedures == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedProcedures[name]
+	nodes, ok := _m.Edges.namedProcedures[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedProcedures(name string, edges ...*Procedure) {
-	if r.Edges.namedProcedures == nil {
-		r.Edges.namedProcedures = make(map[string][]*Procedure)
+func (_m *Risk) appendNamedProcedures(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedures == nil {
+		_m.Edges.namedProcedures = make(map[string][]*Procedure)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedProcedures[name] = []*Procedure{}
+		_m.Edges.namedProcedures[name] = []*Procedure{}
 	} else {
-		r.Edges.namedProcedures[name] = append(r.Edges.namedProcedures[name], edges...)
+		_m.Edges.namedProcedures[name] = append(_m.Edges.namedProcedures[name], edges...)
 	}
 }
 
 // NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
-	if r.Edges.namedInternalPolicies == nil {
+func (_m *Risk) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedInternalPolicies[name]
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
-	if r.Edges.namedInternalPolicies == nil {
-		r.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+func (_m *Risk) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		r.Edges.namedInternalPolicies[name] = append(r.Edges.namedInternalPolicies[name], edges...)
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
 // NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedPrograms(name string) ([]*Program, error) {
-	if r.Edges.namedPrograms == nil {
+func (_m *Risk) NamedPrograms(name string) ([]*Program, error) {
+	if _m.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedPrograms[name]
+	nodes, ok := _m.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedPrograms(name string, edges ...*Program) {
-	if r.Edges.namedPrograms == nil {
-		r.Edges.namedPrograms = make(map[string][]*Program)
+func (_m *Risk) appendNamedPrograms(name string, edges ...*Program) {
+	if _m.Edges.namedPrograms == nil {
+		_m.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedPrograms[name] = []*Program{}
+		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		r.Edges.namedPrograms[name] = append(r.Edges.namedPrograms[name], edges...)
+		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
 	}
 }
 
 // NamedActionPlans returns the ActionPlans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedActionPlans(name string) ([]*ActionPlan, error) {
-	if r.Edges.namedActionPlans == nil {
+func (_m *Risk) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if _m.Edges.namedActionPlans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedActionPlans[name]
+	nodes, ok := _m.Edges.namedActionPlans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedActionPlans(name string, edges ...*ActionPlan) {
-	if r.Edges.namedActionPlans == nil {
-		r.Edges.namedActionPlans = make(map[string][]*ActionPlan)
+func (_m *Risk) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if _m.Edges.namedActionPlans == nil {
+		_m.Edges.namedActionPlans = make(map[string][]*ActionPlan)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedActionPlans[name] = []*ActionPlan{}
+		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
-		r.Edges.namedActionPlans[name] = append(r.Edges.namedActionPlans[name], edges...)
+		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
 	}
 }
 
 // NamedTasks returns the Tasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedTasks(name string) ([]*Task, error) {
-	if r.Edges.namedTasks == nil {
+func (_m *Risk) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedTasks[name]
+	nodes, ok := _m.Edges.namedTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedTasks(name string, edges ...*Task) {
-	if r.Edges.namedTasks == nil {
-		r.Edges.namedTasks = make(map[string][]*Task)
+func (_m *Risk) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedTasks[name] = []*Task{}
+		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
-		r.Edges.namedTasks[name] = append(r.Edges.namedTasks[name], edges...)
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 
 // NamedAssets returns the Assets named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedAssets(name string) ([]*Asset, error) {
-	if r.Edges.namedAssets == nil {
+func (_m *Risk) NamedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedAssets == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedAssets[name]
+	nodes, ok := _m.Edges.namedAssets[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedAssets(name string, edges ...*Asset) {
-	if r.Edges.namedAssets == nil {
-		r.Edges.namedAssets = make(map[string][]*Asset)
+func (_m *Risk) appendNamedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedAssets == nil {
+		_m.Edges.namedAssets = make(map[string][]*Asset)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedAssets[name] = []*Asset{}
+		_m.Edges.namedAssets[name] = []*Asset{}
 	} else {
-		r.Edges.namedAssets[name] = append(r.Edges.namedAssets[name], edges...)
+		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
 	}
 }
 
 // NamedEntities returns the Entities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedEntities(name string) ([]*Entity, error) {
-	if r.Edges.namedEntities == nil {
+func (_m *Risk) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedEntities[name]
+	nodes, ok := _m.Edges.namedEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedEntities(name string, edges ...*Entity) {
-	if r.Edges.namedEntities == nil {
-		r.Edges.namedEntities = make(map[string][]*Entity)
+func (_m *Risk) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedEntities[name] = []*Entity{}
+		_m.Edges.namedEntities[name] = []*Entity{}
 	} else {
-		r.Edges.namedEntities[name] = append(r.Edges.namedEntities[name], edges...)
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
 	}
 }
 
 // NamedScans returns the Scans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedScans(name string) ([]*Scan, error) {
-	if r.Edges.namedScans == nil {
+func (_m *Risk) NamedScans(name string) ([]*Scan, error) {
+	if _m.Edges.namedScans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedScans[name]
+	nodes, ok := _m.Edges.namedScans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedScans(name string, edges ...*Scan) {
-	if r.Edges.namedScans == nil {
-		r.Edges.namedScans = make(map[string][]*Scan)
+func (_m *Risk) appendNamedScans(name string, edges ...*Scan) {
+	if _m.Edges.namedScans == nil {
+		_m.Edges.namedScans = make(map[string][]*Scan)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedScans[name] = []*Scan{}
+		_m.Edges.namedScans[name] = []*Scan{}
 	} else {
-		r.Edges.namedScans[name] = append(r.Edges.namedScans[name], edges...)
+		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
 	}
 }
 

@@ -42,44 +42,44 @@ type UserSettingQuery struct {
 }
 
 // Where adds a new predicate for the UserSettingQuery builder.
-func (usq *UserSettingQuery) Where(ps ...predicate.UserSetting) *UserSettingQuery {
-	usq.predicates = append(usq.predicates, ps...)
-	return usq
+func (_q *UserSettingQuery) Where(ps ...predicate.UserSetting) *UserSettingQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (usq *UserSettingQuery) Limit(limit int) *UserSettingQuery {
-	usq.ctx.Limit = &limit
-	return usq
+func (_q *UserSettingQuery) Limit(limit int) *UserSettingQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (usq *UserSettingQuery) Offset(offset int) *UserSettingQuery {
-	usq.ctx.Offset = &offset
-	return usq
+func (_q *UserSettingQuery) Offset(offset int) *UserSettingQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (usq *UserSettingQuery) Unique(unique bool) *UserSettingQuery {
-	usq.ctx.Unique = &unique
-	return usq
+func (_q *UserSettingQuery) Unique(unique bool) *UserSettingQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (usq *UserSettingQuery) Order(o ...usersetting.OrderOption) *UserSettingQuery {
-	usq.order = append(usq.order, o...)
-	return usq
+func (_q *UserSettingQuery) Order(o ...usersetting.OrderOption) *UserSettingQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryUser chains the current query on the "user" edge.
-func (usq *UserSettingQuery) QueryUser() *UserQuery {
-	query := (&UserClient{config: usq.config}).Query()
+func (_q *UserSettingQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := usq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := usq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -88,23 +88,23 @@ func (usq *UserSettingQuery) QueryUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, usersetting.UserTable, usersetting.UserColumn),
 		)
-		schemaConfig := usq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.UserSetting
-		fromU = sqlgraph.SetNeighbors(usq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryDefaultOrg chains the current query on the "default_org" edge.
-func (usq *UserSettingQuery) QueryDefaultOrg() *OrganizationQuery {
-	query := (&OrganizationClient{config: usq.config}).Query()
+func (_q *UserSettingQuery) QueryDefaultOrg() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := usq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := usq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -113,23 +113,23 @@ func (usq *UserSettingQuery) QueryDefaultOrg() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, usersetting.DefaultOrgTable, usersetting.DefaultOrgColumn),
 		)
-		schemaConfig := usq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.UserSetting
-		fromU = sqlgraph.SetNeighbors(usq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFiles chains the current query on the "files" edge.
-func (usq *UserSettingQuery) QueryFiles() *FileQuery {
-	query := (&FileClient{config: usq.config}).Query()
+func (_q *UserSettingQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := usq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := usq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -138,10 +138,10 @@ func (usq *UserSettingQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, usersetting.FilesTable, usersetting.FilesPrimaryKey...),
 		)
-		schemaConfig := usq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.UserSettingFiles
-		fromU = sqlgraph.SetNeighbors(usq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -149,8 +149,8 @@ func (usq *UserSettingQuery) QueryFiles() *FileQuery {
 
 // First returns the first UserSetting entity from the query.
 // Returns a *NotFoundError when no UserSetting was found.
-func (usq *UserSettingQuery) First(ctx context.Context) (*UserSetting, error) {
-	nodes, err := usq.Limit(1).All(setContextOp(ctx, usq.ctx, ent.OpQueryFirst))
+func (_q *UserSettingQuery) First(ctx context.Context) (*UserSetting, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -161,8 +161,8 @@ func (usq *UserSettingQuery) First(ctx context.Context) (*UserSetting, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (usq *UserSettingQuery) FirstX(ctx context.Context) *UserSetting {
-	node, err := usq.First(ctx)
+func (_q *UserSettingQuery) FirstX(ctx context.Context) *UserSetting {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -171,9 +171,9 @@ func (usq *UserSettingQuery) FirstX(ctx context.Context) *UserSetting {
 
 // FirstID returns the first UserSetting ID from the query.
 // Returns a *NotFoundError when no UserSetting ID was found.
-func (usq *UserSettingQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *UserSettingQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = usq.Limit(1).IDs(setContextOp(ctx, usq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -184,8 +184,8 @@ func (usq *UserSettingQuery) FirstID(ctx context.Context) (id string, err error)
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (usq *UserSettingQuery) FirstIDX(ctx context.Context) string {
-	id, err := usq.FirstID(ctx)
+func (_q *UserSettingQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -195,8 +195,8 @@ func (usq *UserSettingQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single UserSetting entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one UserSetting entity is found.
 // Returns a *NotFoundError when no UserSetting entities are found.
-func (usq *UserSettingQuery) Only(ctx context.Context) (*UserSetting, error) {
-	nodes, err := usq.Limit(2).All(setContextOp(ctx, usq.ctx, ent.OpQueryOnly))
+func (_q *UserSettingQuery) Only(ctx context.Context) (*UserSetting, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -211,8 +211,8 @@ func (usq *UserSettingQuery) Only(ctx context.Context) (*UserSetting, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (usq *UserSettingQuery) OnlyX(ctx context.Context) *UserSetting {
-	node, err := usq.Only(ctx)
+func (_q *UserSettingQuery) OnlyX(ctx context.Context) *UserSetting {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (usq *UserSettingQuery) OnlyX(ctx context.Context) *UserSetting {
 // OnlyID is like Only, but returns the only UserSetting ID in the query.
 // Returns a *NotSingularError when more than one UserSetting ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (usq *UserSettingQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *UserSettingQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = usq.Limit(2).IDs(setContextOp(ctx, usq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -239,8 +239,8 @@ func (usq *UserSettingQuery) OnlyID(ctx context.Context) (id string, err error) 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (usq *UserSettingQuery) OnlyIDX(ctx context.Context) string {
-	id, err := usq.OnlyID(ctx)
+func (_q *UserSettingQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -248,18 +248,18 @@ func (usq *UserSettingQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of UserSettings.
-func (usq *UserSettingQuery) All(ctx context.Context) ([]*UserSetting, error) {
-	ctx = setContextOp(ctx, usq.ctx, ent.OpQueryAll)
-	if err := usq.prepareQuery(ctx); err != nil {
+func (_q *UserSettingQuery) All(ctx context.Context) ([]*UserSetting, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*UserSetting, *UserSettingQuery]()
-	return withInterceptors[[]*UserSetting](ctx, usq, qr, usq.inters)
+	return withInterceptors[[]*UserSetting](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (usq *UserSettingQuery) AllX(ctx context.Context) []*UserSetting {
-	nodes, err := usq.All(ctx)
+func (_q *UserSettingQuery) AllX(ctx context.Context) []*UserSetting {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -267,20 +267,20 @@ func (usq *UserSettingQuery) AllX(ctx context.Context) []*UserSetting {
 }
 
 // IDs executes the query and returns a list of UserSetting IDs.
-func (usq *UserSettingQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if usq.ctx.Unique == nil && usq.path != nil {
-		usq.Unique(true)
+func (_q *UserSettingQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, usq.ctx, ent.OpQueryIDs)
-	if err = usq.Select(usersetting.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(usersetting.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (usq *UserSettingQuery) IDsX(ctx context.Context) []string {
-	ids, err := usq.IDs(ctx)
+func (_q *UserSettingQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -288,17 +288,17 @@ func (usq *UserSettingQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (usq *UserSettingQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, usq.ctx, ent.OpQueryCount)
-	if err := usq.prepareQuery(ctx); err != nil {
+func (_q *UserSettingQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, usq, querierCount[*UserSettingQuery](), usq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*UserSettingQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (usq *UserSettingQuery) CountX(ctx context.Context) int {
-	count, err := usq.Count(ctx)
+func (_q *UserSettingQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -306,9 +306,9 @@ func (usq *UserSettingQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (usq *UserSettingQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, usq.ctx, ent.OpQueryExist)
-	switch _, err := usq.FirstID(ctx); {
+func (_q *UserSettingQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -319,8 +319,8 @@ func (usq *UserSettingQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (usq *UserSettingQuery) ExistX(ctx context.Context) bool {
-	exist, err := usq.Exist(ctx)
+func (_q *UserSettingQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -329,57 +329,57 @@ func (usq *UserSettingQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the UserSettingQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (usq *UserSettingQuery) Clone() *UserSettingQuery {
-	if usq == nil {
+func (_q *UserSettingQuery) Clone() *UserSettingQuery {
+	if _q == nil {
 		return nil
 	}
 	return &UserSettingQuery{
-		config:         usq.config,
-		ctx:            usq.ctx.Clone(),
-		order:          append([]usersetting.OrderOption{}, usq.order...),
-		inters:         append([]Interceptor{}, usq.inters...),
-		predicates:     append([]predicate.UserSetting{}, usq.predicates...),
-		withUser:       usq.withUser.Clone(),
-		withDefaultOrg: usq.withDefaultOrg.Clone(),
-		withFiles:      usq.withFiles.Clone(),
+		config:         _q.config,
+		ctx:            _q.ctx.Clone(),
+		order:          append([]usersetting.OrderOption{}, _q.order...),
+		inters:         append([]Interceptor{}, _q.inters...),
+		predicates:     append([]predicate.UserSetting{}, _q.predicates...),
+		withUser:       _q.withUser.Clone(),
+		withDefaultOrg: _q.withDefaultOrg.Clone(),
+		withFiles:      _q.withFiles.Clone(),
 		// clone intermediate query.
-		sql:       usq.sql.Clone(),
-		path:      usq.path,
-		modifiers: append([]func(*sql.Selector){}, usq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithUser tells the query-builder to eager-load the nodes that are connected to
 // the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (usq *UserSettingQuery) WithUser(opts ...func(*UserQuery)) *UserSettingQuery {
-	query := (&UserClient{config: usq.config}).Query()
+func (_q *UserSettingQuery) WithUser(opts ...func(*UserQuery)) *UserSettingQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	usq.withUser = query
-	return usq
+	_q.withUser = query
+	return _q
 }
 
 // WithDefaultOrg tells the query-builder to eager-load the nodes that are connected to
 // the "default_org" edge. The optional arguments are used to configure the query builder of the edge.
-func (usq *UserSettingQuery) WithDefaultOrg(opts ...func(*OrganizationQuery)) *UserSettingQuery {
-	query := (&OrganizationClient{config: usq.config}).Query()
+func (_q *UserSettingQuery) WithDefaultOrg(opts ...func(*OrganizationQuery)) *UserSettingQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	usq.withDefaultOrg = query
-	return usq
+	_q.withDefaultOrg = query
+	return _q
 }
 
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
-func (usq *UserSettingQuery) WithFiles(opts ...func(*FileQuery)) *UserSettingQuery {
-	query := (&FileClient{config: usq.config}).Query()
+func (_q *UserSettingQuery) WithFiles(opts ...func(*FileQuery)) *UserSettingQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	usq.withFiles = query
-	return usq
+	_q.withFiles = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -396,10 +396,10 @@ func (usq *UserSettingQuery) WithFiles(opts ...func(*FileQuery)) *UserSettingQue
 //		GroupBy(usersetting.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (usq *UserSettingQuery) GroupBy(field string, fields ...string) *UserSettingGroupBy {
-	usq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &UserSettingGroupBy{build: usq}
-	grbuild.flds = &usq.ctx.Fields
+func (_q *UserSettingQuery) GroupBy(field string, fields ...string) *UserSettingGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &UserSettingGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = usersetting.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -417,63 +417,63 @@ func (usq *UserSettingQuery) GroupBy(field string, fields ...string) *UserSettin
 //	client.UserSetting.Query().
 //		Select(usersetting.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (usq *UserSettingQuery) Select(fields ...string) *UserSettingSelect {
-	usq.ctx.Fields = append(usq.ctx.Fields, fields...)
-	sbuild := &UserSettingSelect{UserSettingQuery: usq}
+func (_q *UserSettingQuery) Select(fields ...string) *UserSettingSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &UserSettingSelect{UserSettingQuery: _q}
 	sbuild.label = usersetting.Label
-	sbuild.flds, sbuild.scan = &usq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a UserSettingSelect configured with the given aggregations.
-func (usq *UserSettingQuery) Aggregate(fns ...AggregateFunc) *UserSettingSelect {
-	return usq.Select().Aggregate(fns...)
+func (_q *UserSettingQuery) Aggregate(fns ...AggregateFunc) *UserSettingSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (usq *UserSettingQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range usq.inters {
+func (_q *UserSettingQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, usq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range usq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !usersetting.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if usq.path != nil {
-		prev, err := usq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		usq.sql = prev
+		_q.sql = prev
 	}
 	if usersetting.Policy == nil {
 		return errors.New("generated: uninitialized usersetting.Policy (forgotten import generated/runtime?)")
 	}
-	if err := usersetting.Policy.EvalQuery(ctx, usq); err != nil {
+	if err := usersetting.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (usq *UserSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*UserSetting, error) {
+func (_q *UserSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*UserSetting, error) {
 	var (
 		nodes       = []*UserSetting{}
-		withFKs     = usq.withFKs
-		_spec       = usq.querySpec()
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			usq.withUser != nil,
-			usq.withDefaultOrg != nil,
-			usq.withFiles != nil,
+			_q.withUser != nil,
+			_q.withDefaultOrg != nil,
+			_q.withFiles != nil,
 		}
 	)
-	if usq.withDefaultOrg != nil {
+	if _q.withDefaultOrg != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -483,60 +483,60 @@ func (usq *UserSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		return (*UserSetting).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &UserSetting{config: usq.config}
+		node := &UserSetting{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = usq.schemaConfig.UserSetting
-	ctx = internal.NewSchemaConfigContext(ctx, usq.schemaConfig)
-	if len(usq.modifiers) > 0 {
-		_spec.Modifiers = usq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.UserSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, usq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := usq.withUser; query != nil {
-		if err := usq.loadUser(ctx, query, nodes, nil,
+	if query := _q.withUser; query != nil {
+		if err := _q.loadUser(ctx, query, nodes, nil,
 			func(n *UserSetting, e *User) { n.Edges.User = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := usq.withDefaultOrg; query != nil {
-		if err := usq.loadDefaultOrg(ctx, query, nodes, nil,
+	if query := _q.withDefaultOrg; query != nil {
+		if err := _q.loadDefaultOrg(ctx, query, nodes, nil,
 			func(n *UserSetting, e *Organization) { n.Edges.DefaultOrg = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := usq.withFiles; query != nil {
-		if err := usq.loadFiles(ctx, query, nodes,
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *UserSetting) { n.Edges.Files = []*File{} },
 			func(n *UserSetting, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range usq.withNamedFiles {
-		if err := usq.loadFiles(ctx, query, nodes,
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *UserSetting) { n.appendNamedFiles(name) },
 			func(n *UserSetting, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range usq.loadTotal {
-		if err := usq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (usq *UserSettingQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *User)) error {
+func (_q *UserSettingQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*UserSetting)
 	for i := range nodes {
@@ -565,7 +565,7 @@ func (usq *UserSettingQuery) loadUser(ctx context.Context, query *UserQuery, nod
 	}
 	return nil
 }
-func (usq *UserSettingQuery) loadDefaultOrg(ctx context.Context, query *OrganizationQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *Organization)) error {
+func (_q *UserSettingQuery) loadDefaultOrg(ctx context.Context, query *OrganizationQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*UserSetting)
 	for i := range nodes {
@@ -597,7 +597,7 @@ func (usq *UserSettingQuery) loadDefaultOrg(ctx context.Context, query *Organiza
 	}
 	return nil
 }
-func (usq *UserSettingQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *File)) error {
+func (_q *UserSettingQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*UserSetting, init func(*UserSetting), assign func(*UserSetting, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*UserSetting)
 	nids := make(map[string]map[*UserSetting]struct{})
@@ -610,7 +610,7 @@ func (usq *UserSettingQuery) loadFiles(ctx context.Context, query *FileQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(usersetting.FilesTable)
-		joinT.Schema(usq.schemaConfig.UserSettingFiles)
+		joinT.Schema(_q.schemaConfig.UserSettingFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(usersetting.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(usersetting.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -660,29 +660,29 @@ func (usq *UserSettingQuery) loadFiles(ctx context.Context, query *FileQuery, no
 	return nil
 }
 
-func (usq *UserSettingQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := usq.querySpec()
-	_spec.Node.Schema = usq.schemaConfig.UserSetting
-	ctx = internal.NewSchemaConfigContext(ctx, usq.schemaConfig)
-	if len(usq.modifiers) > 0 {
-		_spec.Modifiers = usq.modifiers
+func (_q *UserSettingQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.UserSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = usq.ctx.Fields
-	if len(usq.ctx.Fields) > 0 {
-		_spec.Unique = usq.ctx.Unique != nil && *usq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, usq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (usq *UserSettingQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *UserSettingQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(usersetting.Table, usersetting.Columns, sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString))
-	_spec.From = usq.sql
-	if unique := usq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if usq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := usq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, usersetting.FieldID)
 		for i := range fields {
@@ -690,24 +690,24 @@ func (usq *UserSettingQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if usq.withUser != nil {
+		if _q.withUser != nil {
 			_spec.Node.AddColumnOnce(usersetting.FieldUserID)
 		}
 	}
-	if ps := usq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := usq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := usq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := usq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -717,62 +717,62 @@ func (usq *UserSettingQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (usq *UserSettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(usq.driver.Dialect())
+func (_q *UserSettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(usersetting.Table)
-	columns := usq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = usersetting.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if usq.sql != nil {
-		selector = usq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if usq.ctx.Unique != nil && *usq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(usq.schemaConfig.UserSetting)
-	ctx = internal.NewSchemaConfigContext(ctx, usq.schemaConfig)
+	t1.Schema(_q.schemaConfig.UserSetting)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range usq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range usq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range usq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := usq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := usq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (usq *UserSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *UserSettingSelect {
-	usq.modifiers = append(usq.modifiers, modifiers...)
-	return usq.Select()
+func (_q *UserSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *UserSettingSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (usq *UserSettingQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *UserSettingQuery {
-	query := (&FileClient{config: usq.config}).Query()
+func (_q *UserSettingQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *UserSettingQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if usq.withNamedFiles == nil {
-		usq.withNamedFiles = make(map[string]*FileQuery)
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
-	usq.withNamedFiles[name] = query
-	return usq
+	_q.withNamedFiles[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -801,41 +801,41 @@ type UserSettingGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (usgb *UserSettingGroupBy) Aggregate(fns ...AggregateFunc) *UserSettingGroupBy {
-	usgb.fns = append(usgb.fns, fns...)
-	return usgb
+func (_g *UserSettingGroupBy) Aggregate(fns ...AggregateFunc) *UserSettingGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (usgb *UserSettingGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, usgb.build.ctx, ent.OpQueryGroupBy)
-	if err := usgb.build.prepareQuery(ctx); err != nil {
+func (_g *UserSettingGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*UserSettingQuery, *UserSettingGroupBy](ctx, usgb.build, usgb, usgb.build.inters, v)
+	return scanWithInterceptors[*UserSettingQuery, *UserSettingGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (usgb *UserSettingGroupBy) sqlScan(ctx context.Context, root *UserSettingQuery, v any) error {
+func (_g *UserSettingGroupBy) sqlScan(ctx context.Context, root *UserSettingQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(usgb.fns))
-	for _, fn := range usgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*usgb.flds)+len(usgb.fns))
-		for _, f := range *usgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*usgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := usgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -849,27 +849,27 @@ type UserSettingSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (uss *UserSettingSelect) Aggregate(fns ...AggregateFunc) *UserSettingSelect {
-	uss.fns = append(uss.fns, fns...)
-	return uss
+func (_s *UserSettingSelect) Aggregate(fns ...AggregateFunc) *UserSettingSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (uss *UserSettingSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, uss.ctx, ent.OpQuerySelect)
-	if err := uss.prepareQuery(ctx); err != nil {
+func (_s *UserSettingSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*UserSettingQuery, *UserSettingSelect](ctx, uss.UserSettingQuery, uss, uss.inters, v)
+	return scanWithInterceptors[*UserSettingQuery, *UserSettingSelect](ctx, _s.UserSettingQuery, _s, _s.inters, v)
 }
 
-func (uss *UserSettingSelect) sqlScan(ctx context.Context, root *UserSettingQuery, v any) error {
+func (_s *UserSettingSelect) sqlScan(ctx context.Context, root *UserSettingQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(uss.fns))
-	for _, fn := range uss.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*uss.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -877,7 +877,7 @@ func (uss *UserSettingSelect) sqlScan(ctx context.Context, root *UserSettingQuer
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := uss.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -885,7 +885,7 @@ func (uss *UserSettingSelect) sqlScan(ctx context.Context, root *UserSettingQuer
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (uss *UserSettingSelect) Modify(modifiers ...func(s *sql.Selector)) *UserSettingSelect {
-	uss.modifiers = append(uss.modifiers, modifiers...)
-	return uss
+func (_s *UserSettingSelect) Modify(modifiers ...func(s *sql.Selector)) *UserSettingSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

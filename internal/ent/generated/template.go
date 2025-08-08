@@ -119,7 +119,7 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Template fields.
-func (t *Template) assignValues(columns []string, values []any) error {
+func (_m *Template) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -129,49 +129,49 @@ func (t *Template) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				t.ID = value.String
+				_m.ID = value.String
 			}
 		case template.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				t.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case template.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				t.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case template.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				t.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case template.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				t.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case template.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				t.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case template.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				t.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case template.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &t.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -179,31 +179,31 @@ func (t *Template) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				t.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case template.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				t.Name = value.String
+				_m.Name = value.String
 			}
 		case template.FieldTemplateType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field template_type", values[i])
 			} else if value.Valid {
-				t.TemplateType = enums.DocumentType(value.String)
+				_m.TemplateType = enums.DocumentType(value.String)
 			}
 		case template.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				t.Description = value.String
+				_m.Description = value.String
 			}
 		case template.FieldJsonconfig:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field jsonconfig", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &t.Jsonconfig); err != nil {
+				if err := json.Unmarshal(*value, &_m.Jsonconfig); err != nil {
 					return fmt.Errorf("unmarshal field jsonconfig: %w", err)
 				}
 			}
@@ -211,12 +211,12 @@ func (t *Template) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field uischema", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &t.Uischema); err != nil {
+				if err := json.Unmarshal(*value, &_m.Uischema); err != nil {
 					return fmt.Errorf("unmarshal field uischema: %w", err)
 				}
 			}
 		default:
-			t.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -224,135 +224,135 @@ func (t *Template) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Template.
 // This includes values selected through modifiers, order, etc.
-func (t *Template) Value(name string) (ent.Value, error) {
-	return t.selectValues.Get(name)
+func (_m *Template) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Template entity.
-func (t *Template) QueryOwner() *OrganizationQuery {
-	return NewTemplateClient(t.config).QueryOwner(t)
+func (_m *Template) QueryOwner() *OrganizationQuery {
+	return NewTemplateClient(_m.config).QueryOwner(_m)
 }
 
 // QueryDocuments queries the "documents" edge of the Template entity.
-func (t *Template) QueryDocuments() *DocumentDataQuery {
-	return NewTemplateClient(t.config).QueryDocuments(t)
+func (_m *Template) QueryDocuments() *DocumentDataQuery {
+	return NewTemplateClient(_m.config).QueryDocuments(_m)
 }
 
 // QueryFiles queries the "files" edge of the Template entity.
-func (t *Template) QueryFiles() *FileQuery {
-	return NewTemplateClient(t.config).QueryFiles(t)
+func (_m *Template) QueryFiles() *FileQuery {
+	return NewTemplateClient(_m.config).QueryFiles(_m)
 }
 
 // Update returns a builder for updating this Template.
 // Note that you need to call Template.Unwrap() before calling this method if this Template
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (t *Template) Update() *TemplateUpdateOne {
-	return NewTemplateClient(t.config).UpdateOne(t)
+func (_m *Template) Update() *TemplateUpdateOne {
+	return NewTemplateClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Template entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (t *Template) Unwrap() *Template {
-	_tx, ok := t.config.driver.(*txDriver)
+func (_m *Template) Unwrap() *Template {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Template is not a transactional entity")
 	}
-	t.config.driver = _tx.drv
-	return t
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (t *Template) String() string {
+func (_m *Template) String() string {
 	var builder strings.Builder
 	builder.WriteString("Template(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(t.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(t.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(t.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(t.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(t.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(t.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", t.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(t.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(t.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("template_type=")
-	builder.WriteString(fmt.Sprintf("%v", t.TemplateType))
+	builder.WriteString(fmt.Sprintf("%v", _m.TemplateType))
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(t.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("jsonconfig=")
-	builder.WriteString(fmt.Sprintf("%v", t.Jsonconfig))
+	builder.WriteString(fmt.Sprintf("%v", _m.Jsonconfig))
 	builder.WriteString(", ")
 	builder.WriteString("uischema=")
-	builder.WriteString(fmt.Sprintf("%v", t.Uischema))
+	builder.WriteString(fmt.Sprintf("%v", _m.Uischema))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedDocuments returns the Documents named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Template) NamedDocuments(name string) ([]*DocumentData, error) {
-	if t.Edges.namedDocuments == nil {
+func (_m *Template) NamedDocuments(name string) ([]*DocumentData, error) {
+	if _m.Edges.namedDocuments == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedDocuments[name]
+	nodes, ok := _m.Edges.namedDocuments[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Template) appendNamedDocuments(name string, edges ...*DocumentData) {
-	if t.Edges.namedDocuments == nil {
-		t.Edges.namedDocuments = make(map[string][]*DocumentData)
+func (_m *Template) appendNamedDocuments(name string, edges ...*DocumentData) {
+	if _m.Edges.namedDocuments == nil {
+		_m.Edges.namedDocuments = make(map[string][]*DocumentData)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedDocuments[name] = []*DocumentData{}
+		_m.Edges.namedDocuments[name] = []*DocumentData{}
 	} else {
-		t.Edges.namedDocuments[name] = append(t.Edges.namedDocuments[name], edges...)
+		_m.Edges.namedDocuments[name] = append(_m.Edges.namedDocuments[name], edges...)
 	}
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Template) NamedFiles(name string) ([]*File, error) {
-	if t.Edges.namedFiles == nil {
+func (_m *Template) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Template) appendNamedFiles(name string, edges ...*File) {
-	if t.Edges.namedFiles == nil {
-		t.Edges.namedFiles = make(map[string][]*File)
+func (_m *Template) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		t.Edges.namedFiles[name] = append(t.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

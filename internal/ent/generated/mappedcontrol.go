@@ -167,7 +167,7 @@ func (*MappedControl) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the MappedControl fields.
-func (mc *MappedControl) assignValues(columns []string, values []any) error {
+func (_m *MappedControl) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -177,49 +177,49 @@ func (mc *MappedControl) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				mc.ID = value.String
+				_m.ID = value.String
 			}
 		case mappedcontrol.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				mc.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case mappedcontrol.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				mc.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case mappedcontrol.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				mc.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case mappedcontrol.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				mc.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case mappedcontrol.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				mc.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case mappedcontrol.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				mc.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case mappedcontrol.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &mc.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -227,35 +227,35 @@ func (mc *MappedControl) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				mc.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case mappedcontrol.FieldMappingType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mapping_type", values[i])
 			} else if value.Valid {
-				mc.MappingType = enums.MappingType(value.String)
+				_m.MappingType = enums.MappingType(value.String)
 			}
 		case mappedcontrol.FieldRelation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field relation", values[i])
 			} else if value.Valid {
-				mc.Relation = value.String
+				_m.Relation = value.String
 			}
 		case mappedcontrol.FieldConfidence:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field confidence", values[i])
 			} else if value.Valid {
-				mc.Confidence = new(int)
-				*mc.Confidence = int(value.Int64)
+				_m.Confidence = new(int)
+				*_m.Confidence = int(value.Int64)
 			}
 		case mappedcontrol.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				mc.Source = enums.MappingSource(value.String)
+				_m.Source = enums.MappingSource(value.String)
 			}
 		default:
-			mc.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -263,250 +263,250 @@ func (mc *MappedControl) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the MappedControl.
 // This includes values selected through modifiers, order, etc.
-func (mc *MappedControl) Value(name string) (ent.Value, error) {
-	return mc.selectValues.Get(name)
+func (_m *MappedControl) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the MappedControl entity.
-func (mc *MappedControl) QueryOwner() *OrganizationQuery {
-	return NewMappedControlClient(mc.config).QueryOwner(mc)
+func (_m *MappedControl) QueryOwner() *OrganizationQuery {
+	return NewMappedControlClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the MappedControl entity.
-func (mc *MappedControl) QueryBlockedGroups() *GroupQuery {
-	return NewMappedControlClient(mc.config).QueryBlockedGroups(mc)
+func (_m *MappedControl) QueryBlockedGroups() *GroupQuery {
+	return NewMappedControlClient(_m.config).QueryBlockedGroups(_m)
 }
 
 // QueryEditors queries the "editors" edge of the MappedControl entity.
-func (mc *MappedControl) QueryEditors() *GroupQuery {
-	return NewMappedControlClient(mc.config).QueryEditors(mc)
+func (_m *MappedControl) QueryEditors() *GroupQuery {
+	return NewMappedControlClient(_m.config).QueryEditors(_m)
 }
 
 // QueryFromControls queries the "from_controls" edge of the MappedControl entity.
-func (mc *MappedControl) QueryFromControls() *ControlQuery {
-	return NewMappedControlClient(mc.config).QueryFromControls(mc)
+func (_m *MappedControl) QueryFromControls() *ControlQuery {
+	return NewMappedControlClient(_m.config).QueryFromControls(_m)
 }
 
 // QueryToControls queries the "to_controls" edge of the MappedControl entity.
-func (mc *MappedControl) QueryToControls() *ControlQuery {
-	return NewMappedControlClient(mc.config).QueryToControls(mc)
+func (_m *MappedControl) QueryToControls() *ControlQuery {
+	return NewMappedControlClient(_m.config).QueryToControls(_m)
 }
 
 // QueryFromSubcontrols queries the "from_subcontrols" edge of the MappedControl entity.
-func (mc *MappedControl) QueryFromSubcontrols() *SubcontrolQuery {
-	return NewMappedControlClient(mc.config).QueryFromSubcontrols(mc)
+func (_m *MappedControl) QueryFromSubcontrols() *SubcontrolQuery {
+	return NewMappedControlClient(_m.config).QueryFromSubcontrols(_m)
 }
 
 // QueryToSubcontrols queries the "to_subcontrols" edge of the MappedControl entity.
-func (mc *MappedControl) QueryToSubcontrols() *SubcontrolQuery {
-	return NewMappedControlClient(mc.config).QueryToSubcontrols(mc)
+func (_m *MappedControl) QueryToSubcontrols() *SubcontrolQuery {
+	return NewMappedControlClient(_m.config).QueryToSubcontrols(_m)
 }
 
 // Update returns a builder for updating this MappedControl.
 // Note that you need to call MappedControl.Unwrap() before calling this method if this MappedControl
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (mc *MappedControl) Update() *MappedControlUpdateOne {
-	return NewMappedControlClient(mc.config).UpdateOne(mc)
+func (_m *MappedControl) Update() *MappedControlUpdateOne {
+	return NewMappedControlClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the MappedControl entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (mc *MappedControl) Unwrap() *MappedControl {
-	_tx, ok := mc.config.driver.(*txDriver)
+func (_m *MappedControl) Unwrap() *MappedControl {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: MappedControl is not a transactional entity")
 	}
-	mc.config.driver = _tx.drv
-	return mc
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (mc *MappedControl) String() string {
+func (_m *MappedControl) String() string {
 	var builder strings.Builder
 	builder.WriteString("MappedControl(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", mc.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(mc.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(mc.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(mc.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(mc.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(mc.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(mc.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", mc.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(mc.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_type=")
-	builder.WriteString(fmt.Sprintf("%v", mc.MappingType))
+	builder.WriteString(fmt.Sprintf("%v", _m.MappingType))
 	builder.WriteString(", ")
 	builder.WriteString("relation=")
-	builder.WriteString(mc.Relation)
+	builder.WriteString(_m.Relation)
 	builder.WriteString(", ")
-	if v := mc.Confidence; v != nil {
+	if v := _m.Confidence; v != nil {
 		builder.WriteString("confidence=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(fmt.Sprintf("%v", mc.Source))
+	builder.WriteString(fmt.Sprintf("%v", _m.Source))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (mc *MappedControl) NamedBlockedGroups(name string) ([]*Group, error) {
-	if mc.Edges.namedBlockedGroups == nil {
+func (_m *MappedControl) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := mc.Edges.namedBlockedGroups[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (mc *MappedControl) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if mc.Edges.namedBlockedGroups == nil {
-		mc.Edges.namedBlockedGroups = make(map[string][]*Group)
+func (_m *MappedControl) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		mc.Edges.namedBlockedGroups[name] = []*Group{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		mc.Edges.namedBlockedGroups[name] = append(mc.Edges.namedBlockedGroups[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEditors returns the Editors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (mc *MappedControl) NamedEditors(name string) ([]*Group, error) {
-	if mc.Edges.namedEditors == nil {
+func (_m *MappedControl) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := mc.Edges.namedEditors[name]
+	nodes, ok := _m.Edges.namedEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (mc *MappedControl) appendNamedEditors(name string, edges ...*Group) {
-	if mc.Edges.namedEditors == nil {
-		mc.Edges.namedEditors = make(map[string][]*Group)
+func (_m *MappedControl) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		mc.Edges.namedEditors[name] = []*Group{}
+		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
-		mc.Edges.namedEditors[name] = append(mc.Edges.namedEditors[name], edges...)
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 
 // NamedFromControls returns the FromControls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (mc *MappedControl) NamedFromControls(name string) ([]*Control, error) {
-	if mc.Edges.namedFromControls == nil {
+func (_m *MappedControl) NamedFromControls(name string) ([]*Control, error) {
+	if _m.Edges.namedFromControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := mc.Edges.namedFromControls[name]
+	nodes, ok := _m.Edges.namedFromControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (mc *MappedControl) appendNamedFromControls(name string, edges ...*Control) {
-	if mc.Edges.namedFromControls == nil {
-		mc.Edges.namedFromControls = make(map[string][]*Control)
+func (_m *MappedControl) appendNamedFromControls(name string, edges ...*Control) {
+	if _m.Edges.namedFromControls == nil {
+		_m.Edges.namedFromControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		mc.Edges.namedFromControls[name] = []*Control{}
+		_m.Edges.namedFromControls[name] = []*Control{}
 	} else {
-		mc.Edges.namedFromControls[name] = append(mc.Edges.namedFromControls[name], edges...)
+		_m.Edges.namedFromControls[name] = append(_m.Edges.namedFromControls[name], edges...)
 	}
 }
 
 // NamedToControls returns the ToControls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (mc *MappedControl) NamedToControls(name string) ([]*Control, error) {
-	if mc.Edges.namedToControls == nil {
+func (_m *MappedControl) NamedToControls(name string) ([]*Control, error) {
+	if _m.Edges.namedToControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := mc.Edges.namedToControls[name]
+	nodes, ok := _m.Edges.namedToControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (mc *MappedControl) appendNamedToControls(name string, edges ...*Control) {
-	if mc.Edges.namedToControls == nil {
-		mc.Edges.namedToControls = make(map[string][]*Control)
+func (_m *MappedControl) appendNamedToControls(name string, edges ...*Control) {
+	if _m.Edges.namedToControls == nil {
+		_m.Edges.namedToControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		mc.Edges.namedToControls[name] = []*Control{}
+		_m.Edges.namedToControls[name] = []*Control{}
 	} else {
-		mc.Edges.namedToControls[name] = append(mc.Edges.namedToControls[name], edges...)
+		_m.Edges.namedToControls[name] = append(_m.Edges.namedToControls[name], edges...)
 	}
 }
 
 // NamedFromSubcontrols returns the FromSubcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (mc *MappedControl) NamedFromSubcontrols(name string) ([]*Subcontrol, error) {
-	if mc.Edges.namedFromSubcontrols == nil {
+func (_m *MappedControl) NamedFromSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedFromSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := mc.Edges.namedFromSubcontrols[name]
+	nodes, ok := _m.Edges.namedFromSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (mc *MappedControl) appendNamedFromSubcontrols(name string, edges ...*Subcontrol) {
-	if mc.Edges.namedFromSubcontrols == nil {
-		mc.Edges.namedFromSubcontrols = make(map[string][]*Subcontrol)
+func (_m *MappedControl) appendNamedFromSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedFromSubcontrols == nil {
+		_m.Edges.namedFromSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		mc.Edges.namedFromSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedFromSubcontrols[name] = []*Subcontrol{}
 	} else {
-		mc.Edges.namedFromSubcontrols[name] = append(mc.Edges.namedFromSubcontrols[name], edges...)
+		_m.Edges.namedFromSubcontrols[name] = append(_m.Edges.namedFromSubcontrols[name], edges...)
 	}
 }
 
 // NamedToSubcontrols returns the ToSubcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (mc *MappedControl) NamedToSubcontrols(name string) ([]*Subcontrol, error) {
-	if mc.Edges.namedToSubcontrols == nil {
+func (_m *MappedControl) NamedToSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedToSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := mc.Edges.namedToSubcontrols[name]
+	nodes, ok := _m.Edges.namedToSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (mc *MappedControl) appendNamedToSubcontrols(name string, edges ...*Subcontrol) {
-	if mc.Edges.namedToSubcontrols == nil {
-		mc.Edges.namedToSubcontrols = make(map[string][]*Subcontrol)
+func (_m *MappedControl) appendNamedToSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedToSubcontrols == nil {
+		_m.Edges.namedToSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		mc.Edges.namedToSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedToSubcontrols[name] = []*Subcontrol{}
 	} else {
-		mc.Edges.namedToSubcontrols[name] = append(mc.Edges.namedToSubcontrols[name], edges...)
+		_m.Edges.namedToSubcontrols[name] = append(_m.Edges.namedToSubcontrols[name], edges...)
 	}
 }
 

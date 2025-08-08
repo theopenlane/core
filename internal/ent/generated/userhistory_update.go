@@ -28,343 +28,343 @@ type UserHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the UserHistoryUpdate builder.
-func (uhu *UserHistoryUpdate) Where(ps ...predicate.UserHistory) *UserHistoryUpdate {
-	uhu.mutation.Where(ps...)
-	return uhu
+func (_u *UserHistoryUpdate) Where(ps ...predicate.UserHistory) *UserHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (uhu *UserHistoryUpdate) SetUpdatedAt(t time.Time) *UserHistoryUpdate {
-	uhu.mutation.SetUpdatedAt(t)
-	return uhu
+func (_u *UserHistoryUpdate) SetUpdatedAt(v time.Time) *UserHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (uhu *UserHistoryUpdate) ClearUpdatedAt() *UserHistoryUpdate {
-	uhu.mutation.ClearUpdatedAt()
-	return uhu
+func (_u *UserHistoryUpdate) ClearUpdatedAt() *UserHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (uhu *UserHistoryUpdate) SetUpdatedBy(s string) *UserHistoryUpdate {
-	uhu.mutation.SetUpdatedBy(s)
-	return uhu
+func (_u *UserHistoryUpdate) SetUpdatedBy(v string) *UserHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableUpdatedBy(s *string) *UserHistoryUpdate {
-	if s != nil {
-		uhu.SetUpdatedBy(*s)
+func (_u *UserHistoryUpdate) SetNillableUpdatedBy(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return uhu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (uhu *UserHistoryUpdate) ClearUpdatedBy() *UserHistoryUpdate {
-	uhu.mutation.ClearUpdatedBy()
-	return uhu
+func (_u *UserHistoryUpdate) ClearUpdatedBy() *UserHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (uhu *UserHistoryUpdate) SetDeletedAt(t time.Time) *UserHistoryUpdate {
-	uhu.mutation.SetDeletedAt(t)
-	return uhu
+func (_u *UserHistoryUpdate) SetDeletedAt(v time.Time) *UserHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableDeletedAt(t *time.Time) *UserHistoryUpdate {
-	if t != nil {
-		uhu.SetDeletedAt(*t)
+func (_u *UserHistoryUpdate) SetNillableDeletedAt(v *time.Time) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return uhu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (uhu *UserHistoryUpdate) ClearDeletedAt() *UserHistoryUpdate {
-	uhu.mutation.ClearDeletedAt()
-	return uhu
+func (_u *UserHistoryUpdate) ClearDeletedAt() *UserHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (uhu *UserHistoryUpdate) SetDeletedBy(s string) *UserHistoryUpdate {
-	uhu.mutation.SetDeletedBy(s)
-	return uhu
+func (_u *UserHistoryUpdate) SetDeletedBy(v string) *UserHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableDeletedBy(s *string) *UserHistoryUpdate {
-	if s != nil {
-		uhu.SetDeletedBy(*s)
+func (_u *UserHistoryUpdate) SetNillableDeletedBy(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return uhu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (uhu *UserHistoryUpdate) ClearDeletedBy() *UserHistoryUpdate {
-	uhu.mutation.ClearDeletedBy()
-	return uhu
+func (_u *UserHistoryUpdate) ClearDeletedBy() *UserHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (uhu *UserHistoryUpdate) SetTags(s []string) *UserHistoryUpdate {
-	uhu.mutation.SetTags(s)
-	return uhu
+func (_u *UserHistoryUpdate) SetTags(v []string) *UserHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (uhu *UserHistoryUpdate) AppendTags(s []string) *UserHistoryUpdate {
-	uhu.mutation.AppendTags(s)
-	return uhu
+// AppendTags appends value to the "tags" field.
+func (_u *UserHistoryUpdate) AppendTags(v []string) *UserHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (uhu *UserHistoryUpdate) ClearTags() *UserHistoryUpdate {
-	uhu.mutation.ClearTags()
-	return uhu
+func (_u *UserHistoryUpdate) ClearTags() *UserHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (uhu *UserHistoryUpdate) SetEmail(s string) *UserHistoryUpdate {
-	uhu.mutation.SetEmail(s)
-	return uhu
+func (_u *UserHistoryUpdate) SetEmail(v string) *UserHistoryUpdate {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableEmail(s *string) *UserHistoryUpdate {
-	if s != nil {
-		uhu.SetEmail(*s)
+func (_u *UserHistoryUpdate) SetNillableEmail(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return uhu
+	return _u
 }
 
 // SetFirstName sets the "first_name" field.
-func (uhu *UserHistoryUpdate) SetFirstName(s string) *UserHistoryUpdate {
-	uhu.mutation.SetFirstName(s)
-	return uhu
+func (_u *UserHistoryUpdate) SetFirstName(v string) *UserHistoryUpdate {
+	_u.mutation.SetFirstName(v)
+	return _u
 }
 
 // SetNillableFirstName sets the "first_name" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableFirstName(s *string) *UserHistoryUpdate {
-	if s != nil {
-		uhu.SetFirstName(*s)
+func (_u *UserHistoryUpdate) SetNillableFirstName(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetFirstName(*v)
 	}
-	return uhu
+	return _u
 }
 
 // ClearFirstName clears the value of the "first_name" field.
-func (uhu *UserHistoryUpdate) ClearFirstName() *UserHistoryUpdate {
-	uhu.mutation.ClearFirstName()
-	return uhu
+func (_u *UserHistoryUpdate) ClearFirstName() *UserHistoryUpdate {
+	_u.mutation.ClearFirstName()
+	return _u
 }
 
 // SetLastName sets the "last_name" field.
-func (uhu *UserHistoryUpdate) SetLastName(s string) *UserHistoryUpdate {
-	uhu.mutation.SetLastName(s)
-	return uhu
+func (_u *UserHistoryUpdate) SetLastName(v string) *UserHistoryUpdate {
+	_u.mutation.SetLastName(v)
+	return _u
 }
 
 // SetNillableLastName sets the "last_name" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableLastName(s *string) *UserHistoryUpdate {
-	if s != nil {
-		uhu.SetLastName(*s)
+func (_u *UserHistoryUpdate) SetNillableLastName(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetLastName(*v)
 	}
-	return uhu
+	return _u
 }
 
 // ClearLastName clears the value of the "last_name" field.
-func (uhu *UserHistoryUpdate) ClearLastName() *UserHistoryUpdate {
-	uhu.mutation.ClearLastName()
-	return uhu
+func (_u *UserHistoryUpdate) ClearLastName() *UserHistoryUpdate {
+	_u.mutation.ClearLastName()
+	return _u
 }
 
 // SetDisplayName sets the "display_name" field.
-func (uhu *UserHistoryUpdate) SetDisplayName(s string) *UserHistoryUpdate {
-	uhu.mutation.SetDisplayName(s)
-	return uhu
+func (_u *UserHistoryUpdate) SetDisplayName(v string) *UserHistoryUpdate {
+	_u.mutation.SetDisplayName(v)
+	return _u
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableDisplayName(s *string) *UserHistoryUpdate {
-	if s != nil {
-		uhu.SetDisplayName(*s)
+func (_u *UserHistoryUpdate) SetNillableDisplayName(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetDisplayName(*v)
 	}
-	return uhu
+	return _u
 }
 
 // SetAvatarRemoteURL sets the "avatar_remote_url" field.
-func (uhu *UserHistoryUpdate) SetAvatarRemoteURL(s string) *UserHistoryUpdate {
-	uhu.mutation.SetAvatarRemoteURL(s)
-	return uhu
+func (_u *UserHistoryUpdate) SetAvatarRemoteURL(v string) *UserHistoryUpdate {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
 }
 
 // SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableAvatarRemoteURL(s *string) *UserHistoryUpdate {
-	if s != nil {
-		uhu.SetAvatarRemoteURL(*s)
+func (_u *UserHistoryUpdate) SetNillableAvatarRemoteURL(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
 	}
-	return uhu
+	return _u
 }
 
 // ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
-func (uhu *UserHistoryUpdate) ClearAvatarRemoteURL() *UserHistoryUpdate {
-	uhu.mutation.ClearAvatarRemoteURL()
-	return uhu
+func (_u *UserHistoryUpdate) ClearAvatarRemoteURL() *UserHistoryUpdate {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
 }
 
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
-func (uhu *UserHistoryUpdate) SetAvatarLocalFileID(s string) *UserHistoryUpdate {
-	uhu.mutation.SetAvatarLocalFileID(s)
-	return uhu
+func (_u *UserHistoryUpdate) SetAvatarLocalFileID(v string) *UserHistoryUpdate {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
 }
 
 // SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableAvatarLocalFileID(s *string) *UserHistoryUpdate {
-	if s != nil {
-		uhu.SetAvatarLocalFileID(*s)
+func (_u *UserHistoryUpdate) SetNillableAvatarLocalFileID(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
 	}
-	return uhu
+	return _u
 }
 
 // ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
-func (uhu *UserHistoryUpdate) ClearAvatarLocalFileID() *UserHistoryUpdate {
-	uhu.mutation.ClearAvatarLocalFileID()
-	return uhu
+func (_u *UserHistoryUpdate) ClearAvatarLocalFileID() *UserHistoryUpdate {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
 }
 
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
-func (uhu *UserHistoryUpdate) SetAvatarUpdatedAt(t time.Time) *UserHistoryUpdate {
-	uhu.mutation.SetAvatarUpdatedAt(t)
-	return uhu
+func (_u *UserHistoryUpdate) SetAvatarUpdatedAt(v time.Time) *UserHistoryUpdate {
+	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
 }
 
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
-func (uhu *UserHistoryUpdate) ClearAvatarUpdatedAt() *UserHistoryUpdate {
-	uhu.mutation.ClearAvatarUpdatedAt()
-	return uhu
+func (_u *UserHistoryUpdate) ClearAvatarUpdatedAt() *UserHistoryUpdate {
+	_u.mutation.ClearAvatarUpdatedAt()
+	return _u
 }
 
 // SetLastSeen sets the "last_seen" field.
-func (uhu *UserHistoryUpdate) SetLastSeen(t time.Time) *UserHistoryUpdate {
-	uhu.mutation.SetLastSeen(t)
-	return uhu
+func (_u *UserHistoryUpdate) SetLastSeen(v time.Time) *UserHistoryUpdate {
+	_u.mutation.SetLastSeen(v)
+	return _u
 }
 
 // ClearLastSeen clears the value of the "last_seen" field.
-func (uhu *UserHistoryUpdate) ClearLastSeen() *UserHistoryUpdate {
-	uhu.mutation.ClearLastSeen()
-	return uhu
+func (_u *UserHistoryUpdate) ClearLastSeen() *UserHistoryUpdate {
+	_u.mutation.ClearLastSeen()
+	return _u
 }
 
 // SetLastLoginProvider sets the "last_login_provider" field.
-func (uhu *UserHistoryUpdate) SetLastLoginProvider(ep enums.AuthProvider) *UserHistoryUpdate {
-	uhu.mutation.SetLastLoginProvider(ep)
-	return uhu
+func (_u *UserHistoryUpdate) SetLastLoginProvider(v enums.AuthProvider) *UserHistoryUpdate {
+	_u.mutation.SetLastLoginProvider(v)
+	return _u
 }
 
 // SetNillableLastLoginProvider sets the "last_login_provider" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableLastLoginProvider(ep *enums.AuthProvider) *UserHistoryUpdate {
-	if ep != nil {
-		uhu.SetLastLoginProvider(*ep)
+func (_u *UserHistoryUpdate) SetNillableLastLoginProvider(v *enums.AuthProvider) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetLastLoginProvider(*v)
 	}
-	return uhu
+	return _u
 }
 
 // ClearLastLoginProvider clears the value of the "last_login_provider" field.
-func (uhu *UserHistoryUpdate) ClearLastLoginProvider() *UserHistoryUpdate {
-	uhu.mutation.ClearLastLoginProvider()
-	return uhu
+func (_u *UserHistoryUpdate) ClearLastLoginProvider() *UserHistoryUpdate {
+	_u.mutation.ClearLastLoginProvider()
+	return _u
 }
 
 // SetPassword sets the "password" field.
-func (uhu *UserHistoryUpdate) SetPassword(s string) *UserHistoryUpdate {
-	uhu.mutation.SetPassword(s)
-	return uhu
+func (_u *UserHistoryUpdate) SetPassword(v string) *UserHistoryUpdate {
+	_u.mutation.SetPassword(v)
+	return _u
 }
 
 // SetNillablePassword sets the "password" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillablePassword(s *string) *UserHistoryUpdate {
-	if s != nil {
-		uhu.SetPassword(*s)
+func (_u *UserHistoryUpdate) SetNillablePassword(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetPassword(*v)
 	}
-	return uhu
+	return _u
 }
 
 // ClearPassword clears the value of the "password" field.
-func (uhu *UserHistoryUpdate) ClearPassword() *UserHistoryUpdate {
-	uhu.mutation.ClearPassword()
-	return uhu
+func (_u *UserHistoryUpdate) ClearPassword() *UserHistoryUpdate {
+	_u.mutation.ClearPassword()
+	return _u
 }
 
 // SetSub sets the "sub" field.
-func (uhu *UserHistoryUpdate) SetSub(s string) *UserHistoryUpdate {
-	uhu.mutation.SetSub(s)
-	return uhu
+func (_u *UserHistoryUpdate) SetSub(v string) *UserHistoryUpdate {
+	_u.mutation.SetSub(v)
+	return _u
 }
 
 // SetNillableSub sets the "sub" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableSub(s *string) *UserHistoryUpdate {
-	if s != nil {
-		uhu.SetSub(*s)
+func (_u *UserHistoryUpdate) SetNillableSub(v *string) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetSub(*v)
 	}
-	return uhu
+	return _u
 }
 
 // ClearSub clears the value of the "sub" field.
-func (uhu *UserHistoryUpdate) ClearSub() *UserHistoryUpdate {
-	uhu.mutation.ClearSub()
-	return uhu
+func (_u *UserHistoryUpdate) ClearSub() *UserHistoryUpdate {
+	_u.mutation.ClearSub()
+	return _u
 }
 
 // SetAuthProvider sets the "auth_provider" field.
-func (uhu *UserHistoryUpdate) SetAuthProvider(ep enums.AuthProvider) *UserHistoryUpdate {
-	uhu.mutation.SetAuthProvider(ep)
-	return uhu
+func (_u *UserHistoryUpdate) SetAuthProvider(v enums.AuthProvider) *UserHistoryUpdate {
+	_u.mutation.SetAuthProvider(v)
+	return _u
 }
 
 // SetNillableAuthProvider sets the "auth_provider" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableAuthProvider(ep *enums.AuthProvider) *UserHistoryUpdate {
-	if ep != nil {
-		uhu.SetAuthProvider(*ep)
+func (_u *UserHistoryUpdate) SetNillableAuthProvider(v *enums.AuthProvider) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetAuthProvider(*v)
 	}
-	return uhu
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (uhu *UserHistoryUpdate) SetRole(e enums.Role) *UserHistoryUpdate {
-	uhu.mutation.SetRole(e)
-	return uhu
+func (_u *UserHistoryUpdate) SetRole(v enums.Role) *UserHistoryUpdate {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableRole(e *enums.Role) *UserHistoryUpdate {
-	if e != nil {
-		uhu.SetRole(*e)
+func (_u *UserHistoryUpdate) SetNillableRole(v *enums.Role) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return uhu
+	return _u
 }
 
 // ClearRole clears the value of the "role" field.
-func (uhu *UserHistoryUpdate) ClearRole() *UserHistoryUpdate {
-	uhu.mutation.ClearRole()
-	return uhu
+func (_u *UserHistoryUpdate) ClearRole() *UserHistoryUpdate {
+	_u.mutation.ClearRole()
+	return _u
 }
 
 // Mutation returns the UserHistoryMutation object of the builder.
-func (uhu *UserHistoryUpdate) Mutation() *UserHistoryMutation {
-	return uhu.mutation
+func (_u *UserHistoryUpdate) Mutation() *UserHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (uhu *UserHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := uhu.defaults(); err != nil {
+func (_u *UserHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, uhu.sqlSave, uhu.mutation, uhu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (uhu *UserHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := uhu.Save(ctx)
+func (_u *UserHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -372,57 +372,57 @@ func (uhu *UserHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (uhu *UserHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := uhu.Save(ctx)
+func (_u *UserHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (uhu *UserHistoryUpdate) ExecX(ctx context.Context) {
-	if err := uhu.Exec(ctx); err != nil {
+func (_u *UserHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (uhu *UserHistoryUpdate) defaults() error {
-	if _, ok := uhu.mutation.UpdatedAt(); !ok && !uhu.mutation.UpdatedAtCleared() {
+func (_u *UserHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if userhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := userhistory.UpdateDefaultUpdatedAt()
-		uhu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := uhu.mutation.AvatarUpdatedAt(); !ok && !uhu.mutation.AvatarUpdatedAtCleared() {
+	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
 		if userhistory.UpdateDefaultAvatarUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := userhistory.UpdateDefaultAvatarUpdatedAt()
-		uhu.mutation.SetAvatarUpdatedAt(v)
+		_u.mutation.SetAvatarUpdatedAt(v)
 	}
-	if _, ok := uhu.mutation.LastSeen(); !ok && !uhu.mutation.LastSeenCleared() {
+	if _, ok := _u.mutation.LastSeen(); !ok && !_u.mutation.LastSeenCleared() {
 		if userhistory.UpdateDefaultLastSeen == nil {
 			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultLastSeen (forgotten import generated/runtime?)")
 		}
 		v := userhistory.UpdateDefaultLastSeen()
-		uhu.mutation.SetLastSeen(v)
+		_u.mutation.SetLastSeen(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (uhu *UserHistoryUpdate) check() error {
-	if v, ok := uhu.mutation.LastLoginProvider(); ok {
+func (_u *UserHistoryUpdate) check() error {
+	if v, ok := _u.mutation.LastLoginProvider(); ok {
 		if err := userhistory.LastLoginProviderValidator(v); err != nil {
 			return &ValidationError{Name: "last_login_provider", err: fmt.Errorf(`generated: validator failed for field "UserHistory.last_login_provider": %w`, err)}
 		}
 	}
-	if v, ok := uhu.mutation.AuthProvider(); ok {
+	if v, ok := _u.mutation.AuthProvider(); ok {
 		if err := userhistory.AuthProviderValidator(v); err != nil {
 			return &ValidationError{Name: "auth_provider", err: fmt.Errorf(`generated: validator failed for field "UserHistory.auth_provider": %w`, err)}
 		}
 	}
-	if v, ok := uhu.mutation.Role(); ok {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := userhistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "UserHistory.role": %w`, err)}
 		}
@@ -431,140 +431,140 @@ func (uhu *UserHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (uhu *UserHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserHistoryUpdate {
-	uhu.modifiers = append(uhu.modifiers, modifiers...)
-	return uhu
+func (_u *UserHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := uhu.check(); err != nil {
-		return n, err
+func (_u *UserHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(userhistory.Table, userhistory.Columns, sqlgraph.NewFieldSpec(userhistory.FieldID, field.TypeString))
-	if ps := uhu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if uhu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(userhistory.FieldRef, field.TypeString)
 	}
-	if uhu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(userhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := uhu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(userhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if uhu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(userhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if uhu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(userhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := uhu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(userhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if uhu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(userhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := uhu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(userhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if uhu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(userhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := uhu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(userhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if uhu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(userhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := uhu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(userhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := uhu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, userhistory.FieldTags, value)
 		})
 	}
-	if uhu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(userhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := uhu.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(userhistory.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := uhu.mutation.FirstName(); ok {
+	if value, ok := _u.mutation.FirstName(); ok {
 		_spec.SetField(userhistory.FieldFirstName, field.TypeString, value)
 	}
-	if uhu.mutation.FirstNameCleared() {
+	if _u.mutation.FirstNameCleared() {
 		_spec.ClearField(userhistory.FieldFirstName, field.TypeString)
 	}
-	if value, ok := uhu.mutation.LastName(); ok {
+	if value, ok := _u.mutation.LastName(); ok {
 		_spec.SetField(userhistory.FieldLastName, field.TypeString, value)
 	}
-	if uhu.mutation.LastNameCleared() {
+	if _u.mutation.LastNameCleared() {
 		_spec.ClearField(userhistory.FieldLastName, field.TypeString)
 	}
-	if value, ok := uhu.mutation.DisplayName(); ok {
+	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(userhistory.FieldDisplayName, field.TypeString, value)
 	}
-	if value, ok := uhu.mutation.AvatarRemoteURL(); ok {
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(userhistory.FieldAvatarRemoteURL, field.TypeString, value)
 	}
-	if uhu.mutation.AvatarRemoteURLCleared() {
+	if _u.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(userhistory.FieldAvatarRemoteURL, field.TypeString)
 	}
-	if value, ok := uhu.mutation.AvatarLocalFileID(); ok {
+	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
 		_spec.SetField(userhistory.FieldAvatarLocalFileID, field.TypeString, value)
 	}
-	if uhu.mutation.AvatarLocalFileIDCleared() {
+	if _u.mutation.AvatarLocalFileIDCleared() {
 		_spec.ClearField(userhistory.FieldAvatarLocalFileID, field.TypeString)
 	}
-	if value, ok := uhu.mutation.AvatarUpdatedAt(); ok {
+	if value, ok := _u.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(userhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
 	}
-	if uhu.mutation.AvatarUpdatedAtCleared() {
+	if _u.mutation.AvatarUpdatedAtCleared() {
 		_spec.ClearField(userhistory.FieldAvatarUpdatedAt, field.TypeTime)
 	}
-	if value, ok := uhu.mutation.LastSeen(); ok {
+	if value, ok := _u.mutation.LastSeen(); ok {
 		_spec.SetField(userhistory.FieldLastSeen, field.TypeTime, value)
 	}
-	if uhu.mutation.LastSeenCleared() {
+	if _u.mutation.LastSeenCleared() {
 		_spec.ClearField(userhistory.FieldLastSeen, field.TypeTime)
 	}
-	if value, ok := uhu.mutation.LastLoginProvider(); ok {
+	if value, ok := _u.mutation.LastLoginProvider(); ok {
 		_spec.SetField(userhistory.FieldLastLoginProvider, field.TypeEnum, value)
 	}
-	if uhu.mutation.LastLoginProviderCleared() {
+	if _u.mutation.LastLoginProviderCleared() {
 		_spec.ClearField(userhistory.FieldLastLoginProvider, field.TypeEnum)
 	}
-	if value, ok := uhu.mutation.Password(); ok {
+	if value, ok := _u.mutation.Password(); ok {
 		_spec.SetField(userhistory.FieldPassword, field.TypeString, value)
 	}
-	if uhu.mutation.PasswordCleared() {
+	if _u.mutation.PasswordCleared() {
 		_spec.ClearField(userhistory.FieldPassword, field.TypeString)
 	}
-	if value, ok := uhu.mutation.Sub(); ok {
+	if value, ok := _u.mutation.Sub(); ok {
 		_spec.SetField(userhistory.FieldSub, field.TypeString, value)
 	}
-	if uhu.mutation.SubCleared() {
+	if _u.mutation.SubCleared() {
 		_spec.ClearField(userhistory.FieldSub, field.TypeString)
 	}
-	if value, ok := uhu.mutation.AuthProvider(); ok {
+	if value, ok := _u.mutation.AuthProvider(); ok {
 		_spec.SetField(userhistory.FieldAuthProvider, field.TypeEnum, value)
 	}
-	if value, ok := uhu.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(userhistory.FieldRole, field.TypeEnum, value)
 	}
-	if uhu.mutation.RoleCleared() {
+	if _u.mutation.RoleCleared() {
 		_spec.ClearField(userhistory.FieldRole, field.TypeEnum)
 	}
-	_spec.Node.Schema = uhu.schemaConfig.UserHistory
-	ctx = internal.NewSchemaConfigContext(ctx, uhu.schemaConfig)
-	_spec.AddModifiers(uhu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, uhu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.UserHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{userhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -572,8 +572,8 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	uhu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // UserHistoryUpdateOne is the builder for updating a single UserHistory entity.
@@ -586,350 +586,350 @@ type UserHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (uhuo *UserHistoryUpdateOne) SetUpdatedAt(t time.Time) *UserHistoryUpdateOne {
-	uhuo.mutation.SetUpdatedAt(t)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetUpdatedAt(v time.Time) *UserHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (uhuo *UserHistoryUpdateOne) ClearUpdatedAt() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearUpdatedAt()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearUpdatedAt() *UserHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (uhuo *UserHistoryUpdateOne) SetUpdatedBy(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetUpdatedBy(s)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetUpdatedBy(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableUpdatedBy(s *string) *UserHistoryUpdateOne {
-	if s != nil {
-		uhuo.SetUpdatedBy(*s)
+func (_u *UserHistoryUpdateOne) SetNillableUpdatedBy(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (uhuo *UserHistoryUpdateOne) ClearUpdatedBy() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearUpdatedBy()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearUpdatedBy() *UserHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (uhuo *UserHistoryUpdateOne) SetDeletedAt(t time.Time) *UserHistoryUpdateOne {
-	uhuo.mutation.SetDeletedAt(t)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetDeletedAt(v time.Time) *UserHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *UserHistoryUpdateOne {
-	if t != nil {
-		uhuo.SetDeletedAt(*t)
+func (_u *UserHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (uhuo *UserHistoryUpdateOne) ClearDeletedAt() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearDeletedAt()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearDeletedAt() *UserHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (uhuo *UserHistoryUpdateOne) SetDeletedBy(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetDeletedBy(s)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetDeletedBy(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableDeletedBy(s *string) *UserHistoryUpdateOne {
-	if s != nil {
-		uhuo.SetDeletedBy(*s)
+func (_u *UserHistoryUpdateOne) SetNillableDeletedBy(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (uhuo *UserHistoryUpdateOne) ClearDeletedBy() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearDeletedBy()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearDeletedBy() *UserHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (uhuo *UserHistoryUpdateOne) SetTags(s []string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetTags(s)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetTags(v []string) *UserHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (uhuo *UserHistoryUpdateOne) AppendTags(s []string) *UserHistoryUpdateOne {
-	uhuo.mutation.AppendTags(s)
-	return uhuo
+// AppendTags appends value to the "tags" field.
+func (_u *UserHistoryUpdateOne) AppendTags(v []string) *UserHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (uhuo *UserHistoryUpdateOne) ClearTags() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearTags()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearTags() *UserHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (uhuo *UserHistoryUpdateOne) SetEmail(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetEmail(s)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetEmail(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableEmail(s *string) *UserHistoryUpdateOne {
-	if s != nil {
-		uhuo.SetEmail(*s)
+func (_u *UserHistoryUpdateOne) SetNillableEmail(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // SetFirstName sets the "first_name" field.
-func (uhuo *UserHistoryUpdateOne) SetFirstName(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetFirstName(s)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetFirstName(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetFirstName(v)
+	return _u
 }
 
 // SetNillableFirstName sets the "first_name" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableFirstName(s *string) *UserHistoryUpdateOne {
-	if s != nil {
-		uhuo.SetFirstName(*s)
+func (_u *UserHistoryUpdateOne) SetNillableFirstName(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetFirstName(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // ClearFirstName clears the value of the "first_name" field.
-func (uhuo *UserHistoryUpdateOne) ClearFirstName() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearFirstName()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearFirstName() *UserHistoryUpdateOne {
+	_u.mutation.ClearFirstName()
+	return _u
 }
 
 // SetLastName sets the "last_name" field.
-func (uhuo *UserHistoryUpdateOne) SetLastName(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetLastName(s)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetLastName(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetLastName(v)
+	return _u
 }
 
 // SetNillableLastName sets the "last_name" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableLastName(s *string) *UserHistoryUpdateOne {
-	if s != nil {
-		uhuo.SetLastName(*s)
+func (_u *UserHistoryUpdateOne) SetNillableLastName(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetLastName(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // ClearLastName clears the value of the "last_name" field.
-func (uhuo *UserHistoryUpdateOne) ClearLastName() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearLastName()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearLastName() *UserHistoryUpdateOne {
+	_u.mutation.ClearLastName()
+	return _u
 }
 
 // SetDisplayName sets the "display_name" field.
-func (uhuo *UserHistoryUpdateOne) SetDisplayName(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetDisplayName(s)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetDisplayName(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetDisplayName(v)
+	return _u
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableDisplayName(s *string) *UserHistoryUpdateOne {
-	if s != nil {
-		uhuo.SetDisplayName(*s)
+func (_u *UserHistoryUpdateOne) SetNillableDisplayName(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetDisplayName(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // SetAvatarRemoteURL sets the "avatar_remote_url" field.
-func (uhuo *UserHistoryUpdateOne) SetAvatarRemoteURL(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetAvatarRemoteURL(s)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetAvatarRemoteURL(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
 }
 
 // SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableAvatarRemoteURL(s *string) *UserHistoryUpdateOne {
-	if s != nil {
-		uhuo.SetAvatarRemoteURL(*s)
+func (_u *UserHistoryUpdateOne) SetNillableAvatarRemoteURL(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
-func (uhuo *UserHistoryUpdateOne) ClearAvatarRemoteURL() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearAvatarRemoteURL()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearAvatarRemoteURL() *UserHistoryUpdateOne {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
 }
 
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
-func (uhuo *UserHistoryUpdateOne) SetAvatarLocalFileID(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetAvatarLocalFileID(s)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetAvatarLocalFileID(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
 }
 
 // SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableAvatarLocalFileID(s *string) *UserHistoryUpdateOne {
-	if s != nil {
-		uhuo.SetAvatarLocalFileID(*s)
+func (_u *UserHistoryUpdateOne) SetNillableAvatarLocalFileID(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
-func (uhuo *UserHistoryUpdateOne) ClearAvatarLocalFileID() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearAvatarLocalFileID()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearAvatarLocalFileID() *UserHistoryUpdateOne {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
 }
 
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
-func (uhuo *UserHistoryUpdateOne) SetAvatarUpdatedAt(t time.Time) *UserHistoryUpdateOne {
-	uhuo.mutation.SetAvatarUpdatedAt(t)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetAvatarUpdatedAt(v time.Time) *UserHistoryUpdateOne {
+	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
 }
 
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
-func (uhuo *UserHistoryUpdateOne) ClearAvatarUpdatedAt() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearAvatarUpdatedAt()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearAvatarUpdatedAt() *UserHistoryUpdateOne {
+	_u.mutation.ClearAvatarUpdatedAt()
+	return _u
 }
 
 // SetLastSeen sets the "last_seen" field.
-func (uhuo *UserHistoryUpdateOne) SetLastSeen(t time.Time) *UserHistoryUpdateOne {
-	uhuo.mutation.SetLastSeen(t)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetLastSeen(v time.Time) *UserHistoryUpdateOne {
+	_u.mutation.SetLastSeen(v)
+	return _u
 }
 
 // ClearLastSeen clears the value of the "last_seen" field.
-func (uhuo *UserHistoryUpdateOne) ClearLastSeen() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearLastSeen()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearLastSeen() *UserHistoryUpdateOne {
+	_u.mutation.ClearLastSeen()
+	return _u
 }
 
 // SetLastLoginProvider sets the "last_login_provider" field.
-func (uhuo *UserHistoryUpdateOne) SetLastLoginProvider(ep enums.AuthProvider) *UserHistoryUpdateOne {
-	uhuo.mutation.SetLastLoginProvider(ep)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetLastLoginProvider(v enums.AuthProvider) *UserHistoryUpdateOne {
+	_u.mutation.SetLastLoginProvider(v)
+	return _u
 }
 
 // SetNillableLastLoginProvider sets the "last_login_provider" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableLastLoginProvider(ep *enums.AuthProvider) *UserHistoryUpdateOne {
-	if ep != nil {
-		uhuo.SetLastLoginProvider(*ep)
+func (_u *UserHistoryUpdateOne) SetNillableLastLoginProvider(v *enums.AuthProvider) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetLastLoginProvider(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // ClearLastLoginProvider clears the value of the "last_login_provider" field.
-func (uhuo *UserHistoryUpdateOne) ClearLastLoginProvider() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearLastLoginProvider()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearLastLoginProvider() *UserHistoryUpdateOne {
+	_u.mutation.ClearLastLoginProvider()
+	return _u
 }
 
 // SetPassword sets the "password" field.
-func (uhuo *UserHistoryUpdateOne) SetPassword(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetPassword(s)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetPassword(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetPassword(v)
+	return _u
 }
 
 // SetNillablePassword sets the "password" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillablePassword(s *string) *UserHistoryUpdateOne {
-	if s != nil {
-		uhuo.SetPassword(*s)
+func (_u *UserHistoryUpdateOne) SetNillablePassword(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetPassword(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // ClearPassword clears the value of the "password" field.
-func (uhuo *UserHistoryUpdateOne) ClearPassword() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearPassword()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearPassword() *UserHistoryUpdateOne {
+	_u.mutation.ClearPassword()
+	return _u
 }
 
 // SetSub sets the "sub" field.
-func (uhuo *UserHistoryUpdateOne) SetSub(s string) *UserHistoryUpdateOne {
-	uhuo.mutation.SetSub(s)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetSub(v string) *UserHistoryUpdateOne {
+	_u.mutation.SetSub(v)
+	return _u
 }
 
 // SetNillableSub sets the "sub" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableSub(s *string) *UserHistoryUpdateOne {
-	if s != nil {
-		uhuo.SetSub(*s)
+func (_u *UserHistoryUpdateOne) SetNillableSub(v *string) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetSub(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // ClearSub clears the value of the "sub" field.
-func (uhuo *UserHistoryUpdateOne) ClearSub() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearSub()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearSub() *UserHistoryUpdateOne {
+	_u.mutation.ClearSub()
+	return _u
 }
 
 // SetAuthProvider sets the "auth_provider" field.
-func (uhuo *UserHistoryUpdateOne) SetAuthProvider(ep enums.AuthProvider) *UserHistoryUpdateOne {
-	uhuo.mutation.SetAuthProvider(ep)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetAuthProvider(v enums.AuthProvider) *UserHistoryUpdateOne {
+	_u.mutation.SetAuthProvider(v)
+	return _u
 }
 
 // SetNillableAuthProvider sets the "auth_provider" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableAuthProvider(ep *enums.AuthProvider) *UserHistoryUpdateOne {
-	if ep != nil {
-		uhuo.SetAuthProvider(*ep)
+func (_u *UserHistoryUpdateOne) SetNillableAuthProvider(v *enums.AuthProvider) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetAuthProvider(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (uhuo *UserHistoryUpdateOne) SetRole(e enums.Role) *UserHistoryUpdateOne {
-	uhuo.mutation.SetRole(e)
-	return uhuo
+func (_u *UserHistoryUpdateOne) SetRole(v enums.Role) *UserHistoryUpdateOne {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableRole(e *enums.Role) *UserHistoryUpdateOne {
-	if e != nil {
-		uhuo.SetRole(*e)
+func (_u *UserHistoryUpdateOne) SetNillableRole(v *enums.Role) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return uhuo
+	return _u
 }
 
 // ClearRole clears the value of the "role" field.
-func (uhuo *UserHistoryUpdateOne) ClearRole() *UserHistoryUpdateOne {
-	uhuo.mutation.ClearRole()
-	return uhuo
+func (_u *UserHistoryUpdateOne) ClearRole() *UserHistoryUpdateOne {
+	_u.mutation.ClearRole()
+	return _u
 }
 
 // Mutation returns the UserHistoryMutation object of the builder.
-func (uhuo *UserHistoryUpdateOne) Mutation() *UserHistoryMutation {
-	return uhuo.mutation
+func (_u *UserHistoryUpdateOne) Mutation() *UserHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the UserHistoryUpdate builder.
-func (uhuo *UserHistoryUpdateOne) Where(ps ...predicate.UserHistory) *UserHistoryUpdateOne {
-	uhuo.mutation.Where(ps...)
-	return uhuo
+func (_u *UserHistoryUpdateOne) Where(ps ...predicate.UserHistory) *UserHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (uhuo *UserHistoryUpdateOne) Select(field string, fields ...string) *UserHistoryUpdateOne {
-	uhuo.fields = append([]string{field}, fields...)
-	return uhuo
+func (_u *UserHistoryUpdateOne) Select(field string, fields ...string) *UserHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated UserHistory entity.
-func (uhuo *UserHistoryUpdateOne) Save(ctx context.Context) (*UserHistory, error) {
-	if err := uhuo.defaults(); err != nil {
+func (_u *UserHistoryUpdateOne) Save(ctx context.Context) (*UserHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, uhuo.sqlSave, uhuo.mutation, uhuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (uhuo *UserHistoryUpdateOne) SaveX(ctx context.Context) *UserHistory {
-	node, err := uhuo.Save(ctx)
+func (_u *UserHistoryUpdateOne) SaveX(ctx context.Context) *UserHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -937,57 +937,57 @@ func (uhuo *UserHistoryUpdateOne) SaveX(ctx context.Context) *UserHistory {
 }
 
 // Exec executes the query on the entity.
-func (uhuo *UserHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := uhuo.Save(ctx)
+func (_u *UserHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (uhuo *UserHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := uhuo.Exec(ctx); err != nil {
+func (_u *UserHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (uhuo *UserHistoryUpdateOne) defaults() error {
-	if _, ok := uhuo.mutation.UpdatedAt(); !ok && !uhuo.mutation.UpdatedAtCleared() {
+func (_u *UserHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if userhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := userhistory.UpdateDefaultUpdatedAt()
-		uhuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := uhuo.mutation.AvatarUpdatedAt(); !ok && !uhuo.mutation.AvatarUpdatedAtCleared() {
+	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
 		if userhistory.UpdateDefaultAvatarUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := userhistory.UpdateDefaultAvatarUpdatedAt()
-		uhuo.mutation.SetAvatarUpdatedAt(v)
+		_u.mutation.SetAvatarUpdatedAt(v)
 	}
-	if _, ok := uhuo.mutation.LastSeen(); !ok && !uhuo.mutation.LastSeenCleared() {
+	if _, ok := _u.mutation.LastSeen(); !ok && !_u.mutation.LastSeenCleared() {
 		if userhistory.UpdateDefaultLastSeen == nil {
 			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultLastSeen (forgotten import generated/runtime?)")
 		}
 		v := userhistory.UpdateDefaultLastSeen()
-		uhuo.mutation.SetLastSeen(v)
+		_u.mutation.SetLastSeen(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (uhuo *UserHistoryUpdateOne) check() error {
-	if v, ok := uhuo.mutation.LastLoginProvider(); ok {
+func (_u *UserHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.LastLoginProvider(); ok {
 		if err := userhistory.LastLoginProviderValidator(v); err != nil {
 			return &ValidationError{Name: "last_login_provider", err: fmt.Errorf(`generated: validator failed for field "UserHistory.last_login_provider": %w`, err)}
 		}
 	}
-	if v, ok := uhuo.mutation.AuthProvider(); ok {
+	if v, ok := _u.mutation.AuthProvider(); ok {
 		if err := userhistory.AuthProviderValidator(v); err != nil {
 			return &ValidationError{Name: "auth_provider", err: fmt.Errorf(`generated: validator failed for field "UserHistory.auth_provider": %w`, err)}
 		}
 	}
-	if v, ok := uhuo.mutation.Role(); ok {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := userhistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "UserHistory.role": %w`, err)}
 		}
@@ -996,22 +996,22 @@ func (uhuo *UserHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (uhuo *UserHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserHistoryUpdateOne {
-	uhuo.modifiers = append(uhuo.modifiers, modifiers...)
-	return uhuo
+func (_u *UserHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHistory, err error) {
-	if err := uhuo.check(); err != nil {
+func (_u *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(userhistory.Table, userhistory.Columns, sqlgraph.NewFieldSpec(userhistory.FieldID, field.TypeString))
-	id, ok := uhuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "UserHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := uhuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, userhistory.FieldID)
 		for _, f := range fields {
@@ -1023,133 +1023,133 @@ func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHisto
 			}
 		}
 	}
-	if ps := uhuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if uhuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(userhistory.FieldRef, field.TypeString)
 	}
-	if uhuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(userhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := uhuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(userhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if uhuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(userhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if uhuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(userhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := uhuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(userhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if uhuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(userhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := uhuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(userhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if uhuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(userhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := uhuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(userhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if uhuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(userhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := uhuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(userhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := uhuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, userhistory.FieldTags, value)
 		})
 	}
-	if uhuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(userhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := uhuo.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(userhistory.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := uhuo.mutation.FirstName(); ok {
+	if value, ok := _u.mutation.FirstName(); ok {
 		_spec.SetField(userhistory.FieldFirstName, field.TypeString, value)
 	}
-	if uhuo.mutation.FirstNameCleared() {
+	if _u.mutation.FirstNameCleared() {
 		_spec.ClearField(userhistory.FieldFirstName, field.TypeString)
 	}
-	if value, ok := uhuo.mutation.LastName(); ok {
+	if value, ok := _u.mutation.LastName(); ok {
 		_spec.SetField(userhistory.FieldLastName, field.TypeString, value)
 	}
-	if uhuo.mutation.LastNameCleared() {
+	if _u.mutation.LastNameCleared() {
 		_spec.ClearField(userhistory.FieldLastName, field.TypeString)
 	}
-	if value, ok := uhuo.mutation.DisplayName(); ok {
+	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(userhistory.FieldDisplayName, field.TypeString, value)
 	}
-	if value, ok := uhuo.mutation.AvatarRemoteURL(); ok {
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(userhistory.FieldAvatarRemoteURL, field.TypeString, value)
 	}
-	if uhuo.mutation.AvatarRemoteURLCleared() {
+	if _u.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(userhistory.FieldAvatarRemoteURL, field.TypeString)
 	}
-	if value, ok := uhuo.mutation.AvatarLocalFileID(); ok {
+	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
 		_spec.SetField(userhistory.FieldAvatarLocalFileID, field.TypeString, value)
 	}
-	if uhuo.mutation.AvatarLocalFileIDCleared() {
+	if _u.mutation.AvatarLocalFileIDCleared() {
 		_spec.ClearField(userhistory.FieldAvatarLocalFileID, field.TypeString)
 	}
-	if value, ok := uhuo.mutation.AvatarUpdatedAt(); ok {
+	if value, ok := _u.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(userhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
 	}
-	if uhuo.mutation.AvatarUpdatedAtCleared() {
+	if _u.mutation.AvatarUpdatedAtCleared() {
 		_spec.ClearField(userhistory.FieldAvatarUpdatedAt, field.TypeTime)
 	}
-	if value, ok := uhuo.mutation.LastSeen(); ok {
+	if value, ok := _u.mutation.LastSeen(); ok {
 		_spec.SetField(userhistory.FieldLastSeen, field.TypeTime, value)
 	}
-	if uhuo.mutation.LastSeenCleared() {
+	if _u.mutation.LastSeenCleared() {
 		_spec.ClearField(userhistory.FieldLastSeen, field.TypeTime)
 	}
-	if value, ok := uhuo.mutation.LastLoginProvider(); ok {
+	if value, ok := _u.mutation.LastLoginProvider(); ok {
 		_spec.SetField(userhistory.FieldLastLoginProvider, field.TypeEnum, value)
 	}
-	if uhuo.mutation.LastLoginProviderCleared() {
+	if _u.mutation.LastLoginProviderCleared() {
 		_spec.ClearField(userhistory.FieldLastLoginProvider, field.TypeEnum)
 	}
-	if value, ok := uhuo.mutation.Password(); ok {
+	if value, ok := _u.mutation.Password(); ok {
 		_spec.SetField(userhistory.FieldPassword, field.TypeString, value)
 	}
-	if uhuo.mutation.PasswordCleared() {
+	if _u.mutation.PasswordCleared() {
 		_spec.ClearField(userhistory.FieldPassword, field.TypeString)
 	}
-	if value, ok := uhuo.mutation.Sub(); ok {
+	if value, ok := _u.mutation.Sub(); ok {
 		_spec.SetField(userhistory.FieldSub, field.TypeString, value)
 	}
-	if uhuo.mutation.SubCleared() {
+	if _u.mutation.SubCleared() {
 		_spec.ClearField(userhistory.FieldSub, field.TypeString)
 	}
-	if value, ok := uhuo.mutation.AuthProvider(); ok {
+	if value, ok := _u.mutation.AuthProvider(); ok {
 		_spec.SetField(userhistory.FieldAuthProvider, field.TypeEnum, value)
 	}
-	if value, ok := uhuo.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(userhistory.FieldRole, field.TypeEnum, value)
 	}
-	if uhuo.mutation.RoleCleared() {
+	if _u.mutation.RoleCleared() {
 		_spec.ClearField(userhistory.FieldRole, field.TypeEnum)
 	}
-	_spec.Node.Schema = uhuo.schemaConfig.UserHistory
-	ctx = internal.NewSchemaConfigContext(ctx, uhuo.schemaConfig)
-	_spec.AddModifiers(uhuo.modifiers...)
-	_node = &UserHistory{config: uhuo.config}
+	_spec.Node.Schema = _u.schemaConfig.UserHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &UserHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, uhuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{userhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1157,6 +1157,6 @@ func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHisto
 		}
 		return nil, err
 	}
-	uhuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

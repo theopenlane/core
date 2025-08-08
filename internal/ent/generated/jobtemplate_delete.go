@@ -22,58 +22,58 @@ type JobTemplateDelete struct {
 }
 
 // Where appends a list predicates to the JobTemplateDelete builder.
-func (jtd *JobTemplateDelete) Where(ps ...predicate.JobTemplate) *JobTemplateDelete {
-	jtd.mutation.Where(ps...)
-	return jtd
+func (_d *JobTemplateDelete) Where(ps ...predicate.JobTemplate) *JobTemplateDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (jtd *JobTemplateDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, jtd.sqlExec, jtd.mutation, jtd.hooks)
+func (_d *JobTemplateDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jtd *JobTemplateDelete) ExecX(ctx context.Context) int {
-	n, err := jtd.Exec(ctx)
+func (_d *JobTemplateDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (jtd *JobTemplateDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *JobTemplateDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(jobtemplate.Table, sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString))
-	_spec.Node.Schema = jtd.schemaConfig.JobTemplate
-	ctx = internal.NewSchemaConfigContext(ctx, jtd.schemaConfig)
-	if ps := jtd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.JobTemplate
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, jtd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	jtd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // JobTemplateDeleteOne is the builder for deleting a single JobTemplate entity.
 type JobTemplateDeleteOne struct {
-	jtd *JobTemplateDelete
+	_d *JobTemplateDelete
 }
 
 // Where appends a list predicates to the JobTemplateDelete builder.
-func (jtdo *JobTemplateDeleteOne) Where(ps ...predicate.JobTemplate) *JobTemplateDeleteOne {
-	jtdo.jtd.mutation.Where(ps...)
-	return jtdo
+func (_d *JobTemplateDeleteOne) Where(ps ...predicate.JobTemplate) *JobTemplateDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (jtdo *JobTemplateDeleteOne) Exec(ctx context.Context) error {
-	n, err := jtdo.jtd.Exec(ctx)
+func (_d *JobTemplateDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (jtdo *JobTemplateDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jtdo *JobTemplateDeleteOne) ExecX(ctx context.Context) {
-	if err := jtdo.Exec(ctx); err != nil {
+func (_d *JobTemplateDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

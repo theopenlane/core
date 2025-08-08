@@ -72,7 +72,7 @@ func (*IntegrationHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the IntegrationHistory fields.
-func (ih *IntegrationHistory) assignValues(columns []string, values []any) error {
+func (_m *IntegrationHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -82,67 +82,67 @@ func (ih *IntegrationHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				ih.ID = value.String
+				_m.ID = value.String
 			}
 		case integrationhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				ih.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case integrationhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				ih.Ref = value.String
+				_m.Ref = value.String
 			}
 		case integrationhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				ih.Operation = *value
+				_m.Operation = *value
 			}
 		case integrationhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ih.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case integrationhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ih.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case integrationhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				ih.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case integrationhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				ih.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case integrationhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ih.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case integrationhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ih.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case integrationhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ih.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -150,28 +150,28 @@ func (ih *IntegrationHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				ih.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case integrationhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				ih.Name = value.String
+				_m.Name = value.String
 			}
 		case integrationhistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				ih.Description = value.String
+				_m.Description = value.String
 			}
 		case integrationhistory.FieldKind:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field kind", values[i])
 			} else if value.Valid {
-				ih.Kind = value.String
+				_m.Kind = value.String
 			}
 		default:
-			ih.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -179,74 +179,74 @@ func (ih *IntegrationHistory) assignValues(columns []string, values []any) error
 
 // Value returns the ent.Value that was dynamically selected and assigned to the IntegrationHistory.
 // This includes values selected through modifiers, order, etc.
-func (ih *IntegrationHistory) Value(name string) (ent.Value, error) {
-	return ih.selectValues.Get(name)
+func (_m *IntegrationHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this IntegrationHistory.
 // Note that you need to call IntegrationHistory.Unwrap() before calling this method if this IntegrationHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ih *IntegrationHistory) Update() *IntegrationHistoryUpdateOne {
-	return NewIntegrationHistoryClient(ih.config).UpdateOne(ih)
+func (_m *IntegrationHistory) Update() *IntegrationHistoryUpdateOne {
+	return NewIntegrationHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the IntegrationHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ih *IntegrationHistory) Unwrap() *IntegrationHistory {
-	_tx, ok := ih.config.driver.(*txDriver)
+func (_m *IntegrationHistory) Unwrap() *IntegrationHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: IntegrationHistory is not a transactional entity")
 	}
-	ih.config.driver = _tx.drv
-	return ih
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ih *IntegrationHistory) String() string {
+func (_m *IntegrationHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("IntegrationHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ih.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(ih.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(ih.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", ih.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(ih.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ih.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(ih.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(ih.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(ih.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(ih.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ih.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(ih.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(ih.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(ih.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("kind=")
-	builder.WriteString(ih.Kind)
+	builder.WriteString(_m.Kind)
 	builder.WriteByte(')')
 	return builder.String()
 }

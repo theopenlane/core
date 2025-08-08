@@ -22,58 +22,58 @@ type DNSVerificationHistoryDelete struct {
 }
 
 // Where appends a list predicates to the DNSVerificationHistoryDelete builder.
-func (dvhd *DNSVerificationHistoryDelete) Where(ps ...predicate.DNSVerificationHistory) *DNSVerificationHistoryDelete {
-	dvhd.mutation.Where(ps...)
-	return dvhd
+func (_d *DNSVerificationHistoryDelete) Where(ps ...predicate.DNSVerificationHistory) *DNSVerificationHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (dvhd *DNSVerificationHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, dvhd.sqlExec, dvhd.mutation, dvhd.hooks)
+func (_d *DNSVerificationHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dvhd *DNSVerificationHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := dvhd.Exec(ctx)
+func (_d *DNSVerificationHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (dvhd *DNSVerificationHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *DNSVerificationHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(dnsverificationhistory.Table, sqlgraph.NewFieldSpec(dnsverificationhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = dvhd.schemaConfig.DNSVerificationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, dvhd.schemaConfig)
-	if ps := dvhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.DNSVerificationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, dvhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	dvhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // DNSVerificationHistoryDeleteOne is the builder for deleting a single DNSVerificationHistory entity.
 type DNSVerificationHistoryDeleteOne struct {
-	dvhd *DNSVerificationHistoryDelete
+	_d *DNSVerificationHistoryDelete
 }
 
 // Where appends a list predicates to the DNSVerificationHistoryDelete builder.
-func (dvhdo *DNSVerificationHistoryDeleteOne) Where(ps ...predicate.DNSVerificationHistory) *DNSVerificationHistoryDeleteOne {
-	dvhdo.dvhd.mutation.Where(ps...)
-	return dvhdo
+func (_d *DNSVerificationHistoryDeleteOne) Where(ps ...predicate.DNSVerificationHistory) *DNSVerificationHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (dvhdo *DNSVerificationHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := dvhdo.dvhd.Exec(ctx)
+func (_d *DNSVerificationHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (dvhdo *DNSVerificationHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dvhdo *DNSVerificationHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := dvhdo.Exec(ctx); err != nil {
+func (_d *DNSVerificationHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

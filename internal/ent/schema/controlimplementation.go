@@ -97,6 +97,8 @@ func (c ControlImplementation) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeFromWithPagination(c, Control{}),
 		defaultEdgeFromWithPagination(c, Subcontrol{}),
+
+		defaultEdgeToWithPagination(c, Task{}),
 	}
 }
 

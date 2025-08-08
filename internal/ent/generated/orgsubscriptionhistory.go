@@ -95,7 +95,7 @@ func (*OrgSubscriptionHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the OrgSubscriptionHistory fields.
-func (osh *OrgSubscriptionHistory) assignValues(columns []string, values []any) error {
+func (_m *OrgSubscriptionHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -105,67 +105,67 @@ func (osh *OrgSubscriptionHistory) assignValues(columns []string, values []any) 
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				osh.ID = value.String
+				_m.ID = value.String
 			}
 		case orgsubscriptionhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				osh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case orgsubscriptionhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				osh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case orgsubscriptionhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				osh.Operation = *value
+				_m.Operation = *value
 			}
 		case orgsubscriptionhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				osh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case orgsubscriptionhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				osh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case orgsubscriptionhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				osh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case orgsubscriptionhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				osh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case orgsubscriptionhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				osh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case orgsubscriptionhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				osh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case orgsubscriptionhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &osh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -173,25 +173,25 @@ func (osh *OrgSubscriptionHistory) assignValues(columns []string, values []any) 
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				osh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case orgsubscriptionhistory.FieldStripeSubscriptionID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stripe_subscription_id", values[i])
 			} else if value.Valid {
-				osh.StripeSubscriptionID = value.String
+				_m.StripeSubscriptionID = value.String
 			}
 		case orgsubscriptionhistory.FieldProductTier:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field product_tier", values[i])
 			} else if value.Valid {
-				osh.ProductTier = value.String
+				_m.ProductTier = value.String
 			}
 		case orgsubscriptionhistory.FieldProductPrice:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field product_price", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &osh.ProductPrice); err != nil {
+				if err := json.Unmarshal(*value, &_m.ProductPrice); err != nil {
 					return fmt.Errorf("unmarshal field product_price: %w", err)
 				}
 			}
@@ -199,59 +199,59 @@ func (osh *OrgSubscriptionHistory) assignValues(columns []string, values []any) 
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stripe_product_tier_id", values[i])
 			} else if value.Valid {
-				osh.StripeProductTierID = value.String
+				_m.StripeProductTierID = value.String
 			}
 		case orgsubscriptionhistory.FieldStripeSubscriptionStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stripe_subscription_status", values[i])
 			} else if value.Valid {
-				osh.StripeSubscriptionStatus = value.String
+				_m.StripeSubscriptionStatus = value.String
 			}
 		case orgsubscriptionhistory.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
-				osh.Active = value.Bool
+				_m.Active = value.Bool
 			}
 		case orgsubscriptionhistory.FieldStripeCustomerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stripe_customer_id", values[i])
 			} else if value.Valid {
-				osh.StripeCustomerID = value.String
+				_m.StripeCustomerID = value.String
 			}
 		case orgsubscriptionhistory.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
 			} else if value.Valid {
-				osh.ExpiresAt = new(time.Time)
-				*osh.ExpiresAt = value.Time
+				_m.ExpiresAt = new(time.Time)
+				*_m.ExpiresAt = value.Time
 			}
 		case orgsubscriptionhistory.FieldTrialExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field trial_expires_at", values[i])
 			} else if value.Valid {
-				osh.TrialExpiresAt = new(time.Time)
-				*osh.TrialExpiresAt = value.Time
+				_m.TrialExpiresAt = new(time.Time)
+				*_m.TrialExpiresAt = value.Time
 			}
 		case orgsubscriptionhistory.FieldDaysUntilDue:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field days_until_due", values[i])
 			} else if value.Valid {
-				osh.DaysUntilDue = new(string)
-				*osh.DaysUntilDue = value.String
+				_m.DaysUntilDue = new(string)
+				*_m.DaysUntilDue = value.String
 			}
 		case orgsubscriptionhistory.FieldPaymentMethodAdded:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field payment_method_added", values[i])
 			} else if value.Valid {
-				osh.PaymentMethodAdded = new(bool)
-				*osh.PaymentMethodAdded = value.Bool
+				_m.PaymentMethodAdded = new(bool)
+				*_m.PaymentMethodAdded = value.Bool
 			}
 		case orgsubscriptionhistory.FieldFeatures:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field features", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &osh.Features); err != nil {
+				if err := json.Unmarshal(*value, &_m.Features); err != nil {
 					return fmt.Errorf("unmarshal field features: %w", err)
 				}
 			}
@@ -259,12 +259,12 @@ func (osh *OrgSubscriptionHistory) assignValues(columns []string, values []any) 
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field feature_lookup_keys", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &osh.FeatureLookupKeys); err != nil {
+				if err := json.Unmarshal(*value, &_m.FeatureLookupKeys); err != nil {
 					return fmt.Errorf("unmarshal field feature_lookup_keys: %w", err)
 				}
 			}
 		default:
-			osh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -272,112 +272,112 @@ func (osh *OrgSubscriptionHistory) assignValues(columns []string, values []any) 
 
 // Value returns the ent.Value that was dynamically selected and assigned to the OrgSubscriptionHistory.
 // This includes values selected through modifiers, order, etc.
-func (osh *OrgSubscriptionHistory) Value(name string) (ent.Value, error) {
-	return osh.selectValues.Get(name)
+func (_m *OrgSubscriptionHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this OrgSubscriptionHistory.
 // Note that you need to call OrgSubscriptionHistory.Unwrap() before calling this method if this OrgSubscriptionHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (osh *OrgSubscriptionHistory) Update() *OrgSubscriptionHistoryUpdateOne {
-	return NewOrgSubscriptionHistoryClient(osh.config).UpdateOne(osh)
+func (_m *OrgSubscriptionHistory) Update() *OrgSubscriptionHistoryUpdateOne {
+	return NewOrgSubscriptionHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the OrgSubscriptionHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (osh *OrgSubscriptionHistory) Unwrap() *OrgSubscriptionHistory {
-	_tx, ok := osh.config.driver.(*txDriver)
+func (_m *OrgSubscriptionHistory) Unwrap() *OrgSubscriptionHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: OrgSubscriptionHistory is not a transactional entity")
 	}
-	osh.config.driver = _tx.drv
-	return osh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (osh *OrgSubscriptionHistory) String() string {
+func (_m *OrgSubscriptionHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("OrgSubscriptionHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", osh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(osh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(osh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", osh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(osh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(osh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(osh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(osh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(osh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(osh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", osh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(osh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("stripe_subscription_id=")
-	builder.WriteString(osh.StripeSubscriptionID)
+	builder.WriteString(_m.StripeSubscriptionID)
 	builder.WriteString(", ")
 	builder.WriteString("product_tier=")
-	builder.WriteString(osh.ProductTier)
+	builder.WriteString(_m.ProductTier)
 	builder.WriteString(", ")
 	builder.WriteString("product_price=")
-	builder.WriteString(fmt.Sprintf("%v", osh.ProductPrice))
+	builder.WriteString(fmt.Sprintf("%v", _m.ProductPrice))
 	builder.WriteString(", ")
 	builder.WriteString("stripe_product_tier_id=")
-	builder.WriteString(osh.StripeProductTierID)
+	builder.WriteString(_m.StripeProductTierID)
 	builder.WriteString(", ")
 	builder.WriteString("stripe_subscription_status=")
-	builder.WriteString(osh.StripeSubscriptionStatus)
+	builder.WriteString(_m.StripeSubscriptionStatus)
 	builder.WriteString(", ")
 	builder.WriteString("active=")
-	builder.WriteString(fmt.Sprintf("%v", osh.Active))
+	builder.WriteString(fmt.Sprintf("%v", _m.Active))
 	builder.WriteString(", ")
 	builder.WriteString("stripe_customer_id=")
-	builder.WriteString(osh.StripeCustomerID)
+	builder.WriteString(_m.StripeCustomerID)
 	builder.WriteString(", ")
-	if v := osh.ExpiresAt; v != nil {
+	if v := _m.ExpiresAt; v != nil {
 		builder.WriteString("expires_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := osh.TrialExpiresAt; v != nil {
+	if v := _m.TrialExpiresAt; v != nil {
 		builder.WriteString("trial_expires_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := osh.DaysUntilDue; v != nil {
+	if v := _m.DaysUntilDue; v != nil {
 		builder.WriteString("days_until_due=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := osh.PaymentMethodAdded; v != nil {
+	if v := _m.PaymentMethodAdded; v != nil {
 		builder.WriteString("payment_method_added=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("features=")
-	builder.WriteString(fmt.Sprintf("%v", osh.Features))
+	builder.WriteString(fmt.Sprintf("%v", _m.Features))
 	builder.WriteString(", ")
 	builder.WriteString("feature_lookup_keys=")
-	builder.WriteString(fmt.Sprintf("%v", osh.FeatureLookupKeys))
+	builder.WriteString(fmt.Sprintf("%v", _m.FeatureLookupKeys))
 	builder.WriteByte(')')
 	return builder.String()
 }

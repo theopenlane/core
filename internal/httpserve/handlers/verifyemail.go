@@ -19,7 +19,7 @@ import (
 
 // VerifyEmail is the handler for the email verification endpoint
 func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleVerifySuccessRequest, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleVerifySuccessRequest, models.ExampleVerifySuccessResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

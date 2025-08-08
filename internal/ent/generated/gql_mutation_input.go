@@ -1531,6 +1531,7 @@ type CreateControlImplementationInput struct {
 	ViewerIDs          []string
 	ControlIDs         []string
 	SubcontrolIDs      []string
+	TaskIDs            []string
 }
 
 // Mutate applies the CreateControlImplementationInput on the ControlImplementationMutation builder.
@@ -1571,6 +1572,9 @@ func (i *CreateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
 	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateControlImplementationInput on the ControlImplementationCreate builder.
@@ -1609,6 +1613,9 @@ type UpdateControlImplementationInput struct {
 	ClearSubcontrols        bool
 	AddSubcontrolIDs        []string
 	RemoveSubcontrolIDs     []string
+	ClearTasks              bool
+	AddTaskIDs              []string
+	RemoveTaskIDs           []string
 }
 
 // Mutate applies the UpdateControlImplementationInput on the ControlImplementationMutation builder.
@@ -1696,6 +1703,15 @@ func (i *UpdateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	}
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
 	}
 }
 
@@ -2997,23 +3013,24 @@ func (c *EventUpdateOne) SetInput(i UpdateEventInput) *EventUpdateOne {
 
 // CreateEvidenceInput represents a mutation input for creating evidences.
 type CreateEvidenceInput struct {
-	Tags                []string
-	Name                string
-	Description         *string
-	CollectionProcedure *string
-	CreationDate        *time.Time
-	RenewalDate         *time.Time
-	Source              *string
-	IsAutomated         *bool
-	URL                 *string
-	Status              *enums.EvidenceStatus
-	OwnerID             *string
-	ControlObjectiveIDs []string
-	ControlIDs          []string
-	SubcontrolIDs       []string
-	FileIDs             []string
-	ProgramIDs          []string
-	TaskIDs             []string
+	Tags                     []string
+	Name                     string
+	Description              *string
+	CollectionProcedure      *string
+	CreationDate             *time.Time
+	RenewalDate              *time.Time
+	Source                   *string
+	IsAutomated              *bool
+	URL                      *string
+	Status                   *enums.EvidenceStatus
+	OwnerID                  *string
+	ControlObjectiveIDs      []string
+	ControlImplementationIDs []string
+	ControlIDs               []string
+	SubcontrolIDs            []string
+	FileIDs                  []string
+	ProgramIDs               []string
+	TaskIDs                  []string
 }
 
 // Mutate applies the CreateEvidenceInput on the EvidenceMutation builder.
@@ -3052,6 +3069,9 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	if v := i.ControlObjectiveIDs; len(v) > 0 {
 		m.AddControlObjectiveIDs(v...)
 	}
+	if v := i.ControlImplementationIDs; len(v) > 0 {
+		m.AddControlImplementationIDs(v...)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
@@ -3077,43 +3097,46 @@ func (c *EvidenceCreate) SetInput(i CreateEvidenceInput) *EvidenceCreate {
 
 // UpdateEvidenceInput represents a mutation input for updating evidences.
 type UpdateEvidenceInput struct {
-	ClearTags                 bool
-	Tags                      []string
-	AppendTags                []string
-	Name                      *string
-	ClearDescription          bool
-	Description               *string
-	ClearCollectionProcedure  bool
-	CollectionProcedure       *string
-	CreationDate              *time.Time
-	ClearRenewalDate          bool
-	RenewalDate               *time.Time
-	ClearSource               bool
-	Source                    *string
-	ClearIsAutomated          bool
-	IsAutomated               *bool
-	ClearURL                  bool
-	URL                       *string
-	ClearStatus               bool
-	Status                    *enums.EvidenceStatus
-	ClearControlObjectives    bool
-	AddControlObjectiveIDs    []string
-	RemoveControlObjectiveIDs []string
-	ClearControls             bool
-	AddControlIDs             []string
-	RemoveControlIDs          []string
-	ClearSubcontrols          bool
-	AddSubcontrolIDs          []string
-	RemoveSubcontrolIDs       []string
-	ClearFiles                bool
-	AddFileIDs                []string
-	RemoveFileIDs             []string
-	ClearPrograms             bool
-	AddProgramIDs             []string
-	RemoveProgramIDs          []string
-	ClearTasks                bool
-	AddTaskIDs                []string
-	RemoveTaskIDs             []string
+	ClearTags                      bool
+	Tags                           []string
+	AppendTags                     []string
+	Name                           *string
+	ClearDescription               bool
+	Description                    *string
+	ClearCollectionProcedure       bool
+	CollectionProcedure            *string
+	CreationDate                   *time.Time
+	ClearRenewalDate               bool
+	RenewalDate                    *time.Time
+	ClearSource                    bool
+	Source                         *string
+	ClearIsAutomated               bool
+	IsAutomated                    *bool
+	ClearURL                       bool
+	URL                            *string
+	ClearStatus                    bool
+	Status                         *enums.EvidenceStatus
+	ClearControlObjectives         bool
+	AddControlObjectiveIDs         []string
+	RemoveControlObjectiveIDs      []string
+	ClearControlImplementations    bool
+	AddControlImplementationIDs    []string
+	RemoveControlImplementationIDs []string
+	ClearControls                  bool
+	AddControlIDs                  []string
+	RemoveControlIDs               []string
+	ClearSubcontrols               bool
+	AddSubcontrolIDs               []string
+	RemoveSubcontrolIDs            []string
+	ClearFiles                     bool
+	AddFileIDs                     []string
+	RemoveFileIDs                  []string
+	ClearPrograms                  bool
+	AddProgramIDs                  []string
+	RemoveProgramIDs               []string
+	ClearTasks                     bool
+	AddTaskIDs                     []string
+	RemoveTaskIDs                  []string
 }
 
 // Mutate applies the UpdateEvidenceInput on the EvidenceMutation builder.
@@ -3183,6 +3206,15 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
 		m.RemoveControlObjectiveIDs(v...)
+	}
+	if i.ClearControlImplementations {
+		m.ClearControlImplementations()
+	}
+	if v := i.AddControlImplementationIDs; len(v) > 0 {
+		m.AddControlImplementationIDs(v...)
+	}
+	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
+		m.RemoveControlImplementationIDs(v...)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -4684,6 +4716,7 @@ type CreateInternalPolicyInput struct {
 	ApproverID                      *string
 	DelegateID                      *string
 	ControlObjectiveIDs             []string
+	ControlImplementationIDs        []string
 	ControlIDs                      []string
 	SubcontrolIDs                   []string
 	ProcedureIDs                    []string
@@ -4755,6 +4788,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.ControlObjectiveIDs; len(v) > 0 {
 		m.AddControlObjectiveIDs(v...)
+	}
+	if v := i.ControlImplementationIDs; len(v) > 0 {
+		m.AddControlImplementationIDs(v...)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -4838,6 +4874,9 @@ type UpdateInternalPolicyInput struct {
 	ClearControlObjectives                bool
 	AddControlObjectiveIDs                []string
 	RemoveControlObjectiveIDs             []string
+	ClearControlImplementations           bool
+	AddControlImplementationIDs           []string
+	RemoveControlImplementationIDs        []string
 	ClearControls                         bool
 	AddControlIDs                         []string
 	RemoveControlIDs                      []string
@@ -5015,6 +5054,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
 		m.RemoveControlObjectiveIDs(v...)
+	}
+	if i.ClearControlImplementations {
+		m.ClearControlImplementations()
+	}
+	if v := i.AddControlImplementationIDs; len(v) > 0 {
+		m.AddControlImplementationIDs(v...)
+	}
+	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
+		m.RemoveControlImplementationIDs(v...)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -10597,26 +10645,27 @@ func (c *TFASettingUpdateOne) SetInput(i UpdateTFASettingInput) *TFASettingUpdat
 
 // CreateTaskInput represents a mutation input for creating tasks.
 type CreateTaskInput struct {
-	Tags                []string
-	Title               string
-	Details             *string
-	Status              *enums.TaskStatus
-	Category            *string
-	Due                 *models.DateTime
-	Completed           *models.DateTime
-	OwnerID             *string
-	AssignerID          *string
-	AssigneeID          *string
-	CommentIDs          []string
-	GroupIDs            []string
-	InternalPolicyIDs   []string
-	ProcedureIDs        []string
-	ControlIDs          []string
-	SubcontrolIDs       []string
-	ControlObjectiveIDs []string
-	ProgramIDs          []string
-	RiskIDs             []string
-	EvidenceIDs         []string
+	Tags                     []string
+	Title                    string
+	Details                  *string
+	Status                   *enums.TaskStatus
+	Category                 *string
+	Due                      *models.DateTime
+	Completed                *models.DateTime
+	OwnerID                  *string
+	AssignerID               *string
+	AssigneeID               *string
+	CommentIDs               []string
+	GroupIDs                 []string
+	InternalPolicyIDs        []string
+	ProcedureIDs             []string
+	ControlIDs               []string
+	SubcontrolIDs            []string
+	ControlObjectiveIDs      []string
+	ProgramIDs               []string
+	RiskIDs                  []string
+	ControlImplementationIDs []string
+	EvidenceIDs              []string
 }
 
 // Mutate applies the CreateTaskInput on the TaskMutation builder.
@@ -10676,6 +10725,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
 	}
+	if v := i.ControlImplementationIDs; len(v) > 0 {
+		m.AddControlImplementationIDs(v...)
+	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
 	}
@@ -10689,53 +10741,56 @@ func (c *TaskCreate) SetInput(i CreateTaskInput) *TaskCreate {
 
 // UpdateTaskInput represents a mutation input for updating tasks.
 type UpdateTaskInput struct {
-	ClearTags                 bool
-	Tags                      []string
-	AppendTags                []string
-	Title                     *string
-	ClearDetails              bool
-	Details                   *string
-	Status                    *enums.TaskStatus
-	ClearCategory             bool
-	Category                  *string
-	ClearDue                  bool
-	Due                       *models.DateTime
-	ClearCompleted            bool
-	Completed                 *models.DateTime
-	ClearAssigner             bool
-	AssignerID                *string
-	ClearAssignee             bool
-	AssigneeID                *string
-	ClearComments             bool
-	AddCommentIDs             []string
-	RemoveCommentIDs          []string
-	ClearGroups               bool
-	AddGroupIDs               []string
-	RemoveGroupIDs            []string
-	ClearInternalPolicies     bool
-	AddInternalPolicyIDs      []string
-	RemoveInternalPolicyIDs   []string
-	ClearProcedures           bool
-	AddProcedureIDs           []string
-	RemoveProcedureIDs        []string
-	ClearControls             bool
-	AddControlIDs             []string
-	RemoveControlIDs          []string
-	ClearSubcontrols          bool
-	AddSubcontrolIDs          []string
-	RemoveSubcontrolIDs       []string
-	ClearControlObjectives    bool
-	AddControlObjectiveIDs    []string
-	RemoveControlObjectiveIDs []string
-	ClearPrograms             bool
-	AddProgramIDs             []string
-	RemoveProgramIDs          []string
-	ClearRisks                bool
-	AddRiskIDs                []string
-	RemoveRiskIDs             []string
-	ClearEvidence             bool
-	AddEvidenceIDs            []string
-	RemoveEvidenceIDs         []string
+	ClearTags                      bool
+	Tags                           []string
+	AppendTags                     []string
+	Title                          *string
+	ClearDetails                   bool
+	Details                        *string
+	Status                         *enums.TaskStatus
+	ClearCategory                  bool
+	Category                       *string
+	ClearDue                       bool
+	Due                            *models.DateTime
+	ClearCompleted                 bool
+	Completed                      *models.DateTime
+	ClearAssigner                  bool
+	AssignerID                     *string
+	ClearAssignee                  bool
+	AssigneeID                     *string
+	ClearComments                  bool
+	AddCommentIDs                  []string
+	RemoveCommentIDs               []string
+	ClearGroups                    bool
+	AddGroupIDs                    []string
+	RemoveGroupIDs                 []string
+	ClearInternalPolicies          bool
+	AddInternalPolicyIDs           []string
+	RemoveInternalPolicyIDs        []string
+	ClearProcedures                bool
+	AddProcedureIDs                []string
+	RemoveProcedureIDs             []string
+	ClearControls                  bool
+	AddControlIDs                  []string
+	RemoveControlIDs               []string
+	ClearSubcontrols               bool
+	AddSubcontrolIDs               []string
+	RemoveSubcontrolIDs            []string
+	ClearControlObjectives         bool
+	AddControlObjectiveIDs         []string
+	RemoveControlObjectiveIDs      []string
+	ClearPrograms                  bool
+	AddProgramIDs                  []string
+	RemoveProgramIDs               []string
+	ClearRisks                     bool
+	AddRiskIDs                     []string
+	RemoveRiskIDs                  []string
+	ClearControlImplementations    bool
+	AddControlImplementationIDs    []string
+	RemoveControlImplementationIDs []string
+	ClearEvidence                  bool
+	AddEvidenceIDs                 []string
+	RemoveEvidenceIDs              []string
 }
 
 // Mutate applies the UpdateTaskInput on the TaskMutation builder.
@@ -10871,6 +10926,15 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearControlImplementations {
+		m.ClearControlImplementations()
+	}
+	if v := i.AddControlImplementationIDs; len(v) > 0 {
+		m.AddControlImplementationIDs(v...)
+	}
+	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
+		m.RemoveControlImplementationIDs(v...)
 	}
 	if i.ClearEvidence {
 		m.ClearEvidence()

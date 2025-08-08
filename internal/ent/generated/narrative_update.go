@@ -32,423 +32,423 @@ type NarrativeUpdate struct {
 }
 
 // Where appends a list predicates to the NarrativeUpdate builder.
-func (nu *NarrativeUpdate) Where(ps ...predicate.Narrative) *NarrativeUpdate {
-	nu.mutation.Where(ps...)
-	return nu
+func (_u *NarrativeUpdate) Where(ps ...predicate.Narrative) *NarrativeUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (nu *NarrativeUpdate) SetUpdatedAt(t time.Time) *NarrativeUpdate {
-	nu.mutation.SetUpdatedAt(t)
-	return nu
+func (_u *NarrativeUpdate) SetUpdatedAt(v time.Time) *NarrativeUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (nu *NarrativeUpdate) ClearUpdatedAt() *NarrativeUpdate {
-	nu.mutation.ClearUpdatedAt()
-	return nu
+func (_u *NarrativeUpdate) ClearUpdatedAt() *NarrativeUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (nu *NarrativeUpdate) SetUpdatedBy(s string) *NarrativeUpdate {
-	nu.mutation.SetUpdatedBy(s)
-	return nu
+func (_u *NarrativeUpdate) SetUpdatedBy(v string) *NarrativeUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nu *NarrativeUpdate) SetNillableUpdatedBy(s *string) *NarrativeUpdate {
-	if s != nil {
-		nu.SetUpdatedBy(*s)
+func (_u *NarrativeUpdate) SetNillableUpdatedBy(v *string) *NarrativeUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return nu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (nu *NarrativeUpdate) ClearUpdatedBy() *NarrativeUpdate {
-	nu.mutation.ClearUpdatedBy()
-	return nu
+func (_u *NarrativeUpdate) ClearUpdatedBy() *NarrativeUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (nu *NarrativeUpdate) SetDeletedAt(t time.Time) *NarrativeUpdate {
-	nu.mutation.SetDeletedAt(t)
-	return nu
+func (_u *NarrativeUpdate) SetDeletedAt(v time.Time) *NarrativeUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nu *NarrativeUpdate) SetNillableDeletedAt(t *time.Time) *NarrativeUpdate {
-	if t != nil {
-		nu.SetDeletedAt(*t)
+func (_u *NarrativeUpdate) SetNillableDeletedAt(v *time.Time) *NarrativeUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return nu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (nu *NarrativeUpdate) ClearDeletedAt() *NarrativeUpdate {
-	nu.mutation.ClearDeletedAt()
-	return nu
+func (_u *NarrativeUpdate) ClearDeletedAt() *NarrativeUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (nu *NarrativeUpdate) SetDeletedBy(s string) *NarrativeUpdate {
-	nu.mutation.SetDeletedBy(s)
-	return nu
+func (_u *NarrativeUpdate) SetDeletedBy(v string) *NarrativeUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nu *NarrativeUpdate) SetNillableDeletedBy(s *string) *NarrativeUpdate {
-	if s != nil {
-		nu.SetDeletedBy(*s)
+func (_u *NarrativeUpdate) SetNillableDeletedBy(v *string) *NarrativeUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return nu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (nu *NarrativeUpdate) ClearDeletedBy() *NarrativeUpdate {
-	nu.mutation.ClearDeletedBy()
-	return nu
+func (_u *NarrativeUpdate) ClearDeletedBy() *NarrativeUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (nu *NarrativeUpdate) SetTags(s []string) *NarrativeUpdate {
-	nu.mutation.SetTags(s)
-	return nu
+func (_u *NarrativeUpdate) SetTags(v []string) *NarrativeUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (nu *NarrativeUpdate) AppendTags(s []string) *NarrativeUpdate {
-	nu.mutation.AppendTags(s)
-	return nu
+// AppendTags appends value to the "tags" field.
+func (_u *NarrativeUpdate) AppendTags(v []string) *NarrativeUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (nu *NarrativeUpdate) ClearTags() *NarrativeUpdate {
-	nu.mutation.ClearTags()
-	return nu
+func (_u *NarrativeUpdate) ClearTags() *NarrativeUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (nu *NarrativeUpdate) SetName(s string) *NarrativeUpdate {
-	nu.mutation.SetName(s)
-	return nu
+func (_u *NarrativeUpdate) SetName(v string) *NarrativeUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (nu *NarrativeUpdate) SetNillableName(s *string) *NarrativeUpdate {
-	if s != nil {
-		nu.SetName(*s)
+func (_u *NarrativeUpdate) SetNillableName(v *string) *NarrativeUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return nu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (nu *NarrativeUpdate) SetDescription(s string) *NarrativeUpdate {
-	nu.mutation.SetDescription(s)
-	return nu
+func (_u *NarrativeUpdate) SetDescription(v string) *NarrativeUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (nu *NarrativeUpdate) SetNillableDescription(s *string) *NarrativeUpdate {
-	if s != nil {
-		nu.SetDescription(*s)
+func (_u *NarrativeUpdate) SetNillableDescription(v *string) *NarrativeUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return nu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (nu *NarrativeUpdate) ClearDescription() *NarrativeUpdate {
-	nu.mutation.ClearDescription()
-	return nu
+func (_u *NarrativeUpdate) ClearDescription() *NarrativeUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (nu *NarrativeUpdate) SetDetails(s string) *NarrativeUpdate {
-	nu.mutation.SetDetails(s)
-	return nu
+func (_u *NarrativeUpdate) SetDetails(v string) *NarrativeUpdate {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (nu *NarrativeUpdate) SetNillableDetails(s *string) *NarrativeUpdate {
-	if s != nil {
-		nu.SetDetails(*s)
+func (_u *NarrativeUpdate) SetNillableDetails(v *string) *NarrativeUpdate {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return nu
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (nu *NarrativeUpdate) ClearDetails() *NarrativeUpdate {
-	nu.mutation.ClearDetails()
-	return nu
+func (_u *NarrativeUpdate) ClearDetails() *NarrativeUpdate {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (nu *NarrativeUpdate) AddBlockedGroupIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.AddBlockedGroupIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) AddBlockedGroupIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (nu *NarrativeUpdate) AddBlockedGroups(g ...*Group) *NarrativeUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdate) AddBlockedGroups(v ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (nu *NarrativeUpdate) AddEditorIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.AddEditorIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) AddEditorIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (nu *NarrativeUpdate) AddEditors(g ...*Group) *NarrativeUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdate) AddEditors(v ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (nu *NarrativeUpdate) AddViewerIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.AddViewerIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) AddViewerIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (nu *NarrativeUpdate) AddViewers(g ...*Group) *NarrativeUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdate) AddViewers(v ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddSatisfyIDs adds the "satisfies" edge to the Control entity by IDs.
-func (nu *NarrativeUpdate) AddSatisfyIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.AddSatisfyIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) AddSatisfyIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.AddSatisfyIDs(ids...)
+	return _u
 }
 
 // AddSatisfies adds the "satisfies" edges to the Control entity.
-func (nu *NarrativeUpdate) AddSatisfies(c ...*Control) *NarrativeUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *NarrativeUpdate) AddSatisfies(v ...*Control) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.AddSatisfyIDs(ids...)
+	return _u.AddSatisfyIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (nu *NarrativeUpdate) AddProgramIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.AddProgramIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) AddProgramIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (nu *NarrativeUpdate) AddPrograms(p ...*Program) *NarrativeUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *NarrativeUpdate) AddPrograms(v ...*Program) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (nu *NarrativeUpdate) AddInternalPolicyIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.AddInternalPolicyIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) AddInternalPolicyIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (nu *NarrativeUpdate) AddInternalPolicies(i ...*InternalPolicy) *NarrativeUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *NarrativeUpdate) AddInternalPolicies(v ...*InternalPolicy) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.AddInternalPolicyIDs(ids...)
+	return _u.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (nu *NarrativeUpdate) AddProcedureIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.AddProcedureIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) AddProcedureIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (nu *NarrativeUpdate) AddProcedures(p ...*Procedure) *NarrativeUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *NarrativeUpdate) AddProcedures(v ...*Procedure) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.AddProcedureIDs(ids...)
+	return _u.AddProcedureIDs(ids...)
 }
 
 // Mutation returns the NarrativeMutation object of the builder.
-func (nu *NarrativeUpdate) Mutation() *NarrativeMutation {
-	return nu.mutation
+func (_u *NarrativeUpdate) Mutation() *NarrativeMutation {
+	return _u.mutation
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (nu *NarrativeUpdate) ClearBlockedGroups() *NarrativeUpdate {
-	nu.mutation.ClearBlockedGroups()
-	return nu
+func (_u *NarrativeUpdate) ClearBlockedGroups() *NarrativeUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (nu *NarrativeUpdate) RemoveBlockedGroupIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.RemoveBlockedGroupIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) RemoveBlockedGroupIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (nu *NarrativeUpdate) RemoveBlockedGroups(g ...*Group) *NarrativeUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdate) RemoveBlockedGroups(v ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (nu *NarrativeUpdate) ClearEditors() *NarrativeUpdate {
-	nu.mutation.ClearEditors()
-	return nu
+func (_u *NarrativeUpdate) ClearEditors() *NarrativeUpdate {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (nu *NarrativeUpdate) RemoveEditorIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.RemoveEditorIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) RemoveEditorIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (nu *NarrativeUpdate) RemoveEditors(g ...*Group) *NarrativeUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdate) RemoveEditors(v ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (nu *NarrativeUpdate) ClearViewers() *NarrativeUpdate {
-	nu.mutation.ClearViewers()
-	return nu
+func (_u *NarrativeUpdate) ClearViewers() *NarrativeUpdate {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (nu *NarrativeUpdate) RemoveViewerIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.RemoveViewerIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) RemoveViewerIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (nu *NarrativeUpdate) RemoveViewers(g ...*Group) *NarrativeUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdate) RemoveViewers(v ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearSatisfies clears all "satisfies" edges to the Control entity.
-func (nu *NarrativeUpdate) ClearSatisfies() *NarrativeUpdate {
-	nu.mutation.ClearSatisfies()
-	return nu
+func (_u *NarrativeUpdate) ClearSatisfies() *NarrativeUpdate {
+	_u.mutation.ClearSatisfies()
+	return _u
 }
 
 // RemoveSatisfyIDs removes the "satisfies" edge to Control entities by IDs.
-func (nu *NarrativeUpdate) RemoveSatisfyIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.RemoveSatisfyIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) RemoveSatisfyIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.RemoveSatisfyIDs(ids...)
+	return _u
 }
 
 // RemoveSatisfies removes "satisfies" edges to Control entities.
-func (nu *NarrativeUpdate) RemoveSatisfies(c ...*Control) *NarrativeUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *NarrativeUpdate) RemoveSatisfies(v ...*Control) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.RemoveSatisfyIDs(ids...)
+	return _u.RemoveSatisfyIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (nu *NarrativeUpdate) ClearPrograms() *NarrativeUpdate {
-	nu.mutation.ClearPrograms()
-	return nu
+func (_u *NarrativeUpdate) ClearPrograms() *NarrativeUpdate {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (nu *NarrativeUpdate) RemoveProgramIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.RemoveProgramIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) RemoveProgramIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (nu *NarrativeUpdate) RemovePrograms(p ...*Program) *NarrativeUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *NarrativeUpdate) RemovePrograms(v ...*Program) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
-func (nu *NarrativeUpdate) ClearInternalPolicies() *NarrativeUpdate {
-	nu.mutation.ClearInternalPolicies()
-	return nu
+func (_u *NarrativeUpdate) ClearInternalPolicies() *NarrativeUpdate {
+	_u.mutation.ClearInternalPolicies()
+	return _u
 }
 
 // RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
-func (nu *NarrativeUpdate) RemoveInternalPolicyIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.RemoveInternalPolicyIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) RemoveInternalPolicyIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
 }
 
 // RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
-func (nu *NarrativeUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *NarrativeUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *NarrativeUpdate) RemoveInternalPolicies(v ...*InternalPolicy) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.RemoveInternalPolicyIDs(ids...)
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (nu *NarrativeUpdate) ClearProcedures() *NarrativeUpdate {
-	nu.mutation.ClearProcedures()
-	return nu
+func (_u *NarrativeUpdate) ClearProcedures() *NarrativeUpdate {
+	_u.mutation.ClearProcedures()
+	return _u
 }
 
 // RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (nu *NarrativeUpdate) RemoveProcedureIDs(ids ...string) *NarrativeUpdate {
-	nu.mutation.RemoveProcedureIDs(ids...)
-	return nu
+func (_u *NarrativeUpdate) RemoveProcedureIDs(ids ...string) *NarrativeUpdate {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
 }
 
 // RemoveProcedures removes "procedures" edges to Procedure entities.
-func (nu *NarrativeUpdate) RemoveProcedures(p ...*Procedure) *NarrativeUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *NarrativeUpdate) RemoveProcedures(v ...*Procedure) *NarrativeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nu.RemoveProcedureIDs(ids...)
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (nu *NarrativeUpdate) Save(ctx context.Context) (int, error) {
-	if err := nu.defaults(); err != nil {
+func (_u *NarrativeUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, nu.sqlSave, nu.mutation, nu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (nu *NarrativeUpdate) SaveX(ctx context.Context) int {
-	affected, err := nu.Save(ctx)
+func (_u *NarrativeUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -456,33 +456,33 @@ func (nu *NarrativeUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (nu *NarrativeUpdate) Exec(ctx context.Context) error {
-	_, err := nu.Save(ctx)
+func (_u *NarrativeUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nu *NarrativeUpdate) ExecX(ctx context.Context) {
-	if err := nu.Exec(ctx); err != nil {
+func (_u *NarrativeUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (nu *NarrativeUpdate) defaults() error {
-	if _, ok := nu.mutation.UpdatedAt(); !ok && !nu.mutation.UpdatedAtCleared() {
+func (_u *NarrativeUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if narrative.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized narrative.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := narrative.UpdateDefaultUpdatedAt()
-		nu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (nu *NarrativeUpdate) check() error {
-	if v, ok := nu.mutation.Name(); ok {
+func (_u *NarrativeUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := narrative.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Narrative.name": %w`, err)}
 		}
@@ -491,80 +491,80 @@ func (nu *NarrativeUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (nu *NarrativeUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NarrativeUpdate {
-	nu.modifiers = append(nu.modifiers, modifiers...)
-	return nu
+func (_u *NarrativeUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NarrativeUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := nu.check(); err != nil {
-		return n, err
+func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(narrative.Table, narrative.Columns, sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString))
-	if ps := nu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if nu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(narrative.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := nu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(narrative.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if nu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(narrative.FieldUpdatedAt, field.TypeTime)
 	}
-	if nu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(narrative.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := nu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(narrative.FieldUpdatedBy, field.TypeString, value)
 	}
-	if nu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(narrative.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := nu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(narrative.FieldDeletedAt, field.TypeTime, value)
 	}
-	if nu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrative.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(narrative.FieldDeletedBy, field.TypeString, value)
 	}
-	if nu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(narrative.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := nu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(narrative.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := nu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, narrative.FieldTags, value)
 		})
 	}
-	if nu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(narrative.FieldTags, field.TypeJSON)
 	}
-	if value, ok := nu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(narrative.FieldName, field.TypeString, value)
 	}
-	if value, ok := nu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(narrative.FieldDescription, field.TypeString, value)
 	}
-	if nu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(narrative.FieldDescription, field.TypeString)
 	}
-	if value, ok := nu.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(narrative.FieldDetails, field.TypeString, value)
 	}
-	if nu.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(narrative.FieldDetails, field.TypeString)
 	}
-	if nu.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -575,10 +575,10 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.NarrativeBlockedGroups
+		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !nu.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -589,13 +589,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.NarrativeBlockedGroups
+		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -606,13 +606,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.NarrativeBlockedGroups
+		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nu.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -623,10 +623,10 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.NarrativeEditors
+		edge.Schema = _u.schemaConfig.NarrativeEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !nu.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -637,13 +637,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.NarrativeEditors
+		edge.Schema = _u.schemaConfig.NarrativeEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -654,13 +654,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.NarrativeEditors
+		edge.Schema = _u.schemaConfig.NarrativeEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nu.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -671,10 +671,10 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.NarrativeViewers
+		edge.Schema = _u.schemaConfig.NarrativeViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.RemovedViewersIDs(); len(nodes) > 0 && !nu.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -685,13 +685,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.NarrativeViewers
+		edge.Schema = _u.schemaConfig.NarrativeViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -702,13 +702,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.NarrativeViewers
+		edge.Schema = _u.schemaConfig.NarrativeViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nu.mutation.SatisfiesCleared() {
+	if _u.mutation.SatisfiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -719,10 +719,10 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.ControlNarratives
+		edge.Schema = _u.schemaConfig.ControlNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.RemovedSatisfiesIDs(); len(nodes) > 0 && !nu.mutation.SatisfiesCleared() {
+	if nodes := _u.mutation.RemovedSatisfiesIDs(); len(nodes) > 0 && !_u.mutation.SatisfiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -733,13 +733,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.ControlNarratives
+		edge.Schema = _u.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.SatisfiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SatisfiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -750,13 +750,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.ControlNarratives
+		edge.Schema = _u.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nu.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -767,10 +767,10 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !nu.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -781,13 +781,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -798,13 +798,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nu.mutation.InternalPoliciesCleared() {
+	if _u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -815,10 +815,10 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !nu.mutation.InternalPoliciesCleared() {
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -829,13 +829,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -846,13 +846,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nu.mutation.ProceduresCleared() {
+	if _u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -863,10 +863,10 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.ProcedureNarratives
+		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !nu.mutation.ProceduresCleared() {
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -877,13 +877,13 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.ProcedureNarratives
+		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -894,16 +894,16 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nu.schemaConfig.ProcedureNarratives
+		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = nu.schemaConfig.Narrative
-	ctx = internal.NewSchemaConfigContext(ctx, nu.schemaConfig)
-	_spec.AddModifiers(nu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, nu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Narrative
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{narrative.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -911,8 +911,8 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	nu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // NarrativeUpdateOne is the builder for updating a single Narrative entity.
@@ -925,430 +925,430 @@ type NarrativeUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (nuo *NarrativeUpdateOne) SetUpdatedAt(t time.Time) *NarrativeUpdateOne {
-	nuo.mutation.SetUpdatedAt(t)
-	return nuo
+func (_u *NarrativeUpdateOne) SetUpdatedAt(v time.Time) *NarrativeUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (nuo *NarrativeUpdateOne) ClearUpdatedAt() *NarrativeUpdateOne {
-	nuo.mutation.ClearUpdatedAt()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearUpdatedAt() *NarrativeUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (nuo *NarrativeUpdateOne) SetUpdatedBy(s string) *NarrativeUpdateOne {
-	nuo.mutation.SetUpdatedBy(s)
-	return nuo
+func (_u *NarrativeUpdateOne) SetUpdatedBy(v string) *NarrativeUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nuo *NarrativeUpdateOne) SetNillableUpdatedBy(s *string) *NarrativeUpdateOne {
-	if s != nil {
-		nuo.SetUpdatedBy(*s)
+func (_u *NarrativeUpdateOne) SetNillableUpdatedBy(v *string) *NarrativeUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return nuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (nuo *NarrativeUpdateOne) ClearUpdatedBy() *NarrativeUpdateOne {
-	nuo.mutation.ClearUpdatedBy()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearUpdatedBy() *NarrativeUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (nuo *NarrativeUpdateOne) SetDeletedAt(t time.Time) *NarrativeUpdateOne {
-	nuo.mutation.SetDeletedAt(t)
-	return nuo
+func (_u *NarrativeUpdateOne) SetDeletedAt(v time.Time) *NarrativeUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nuo *NarrativeUpdateOne) SetNillableDeletedAt(t *time.Time) *NarrativeUpdateOne {
-	if t != nil {
-		nuo.SetDeletedAt(*t)
+func (_u *NarrativeUpdateOne) SetNillableDeletedAt(v *time.Time) *NarrativeUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return nuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (nuo *NarrativeUpdateOne) ClearDeletedAt() *NarrativeUpdateOne {
-	nuo.mutation.ClearDeletedAt()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearDeletedAt() *NarrativeUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (nuo *NarrativeUpdateOne) SetDeletedBy(s string) *NarrativeUpdateOne {
-	nuo.mutation.SetDeletedBy(s)
-	return nuo
+func (_u *NarrativeUpdateOne) SetDeletedBy(v string) *NarrativeUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nuo *NarrativeUpdateOne) SetNillableDeletedBy(s *string) *NarrativeUpdateOne {
-	if s != nil {
-		nuo.SetDeletedBy(*s)
+func (_u *NarrativeUpdateOne) SetNillableDeletedBy(v *string) *NarrativeUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return nuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (nuo *NarrativeUpdateOne) ClearDeletedBy() *NarrativeUpdateOne {
-	nuo.mutation.ClearDeletedBy()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearDeletedBy() *NarrativeUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (nuo *NarrativeUpdateOne) SetTags(s []string) *NarrativeUpdateOne {
-	nuo.mutation.SetTags(s)
-	return nuo
+func (_u *NarrativeUpdateOne) SetTags(v []string) *NarrativeUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (nuo *NarrativeUpdateOne) AppendTags(s []string) *NarrativeUpdateOne {
-	nuo.mutation.AppendTags(s)
-	return nuo
+// AppendTags appends value to the "tags" field.
+func (_u *NarrativeUpdateOne) AppendTags(v []string) *NarrativeUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (nuo *NarrativeUpdateOne) ClearTags() *NarrativeUpdateOne {
-	nuo.mutation.ClearTags()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearTags() *NarrativeUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (nuo *NarrativeUpdateOne) SetName(s string) *NarrativeUpdateOne {
-	nuo.mutation.SetName(s)
-	return nuo
+func (_u *NarrativeUpdateOne) SetName(v string) *NarrativeUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (nuo *NarrativeUpdateOne) SetNillableName(s *string) *NarrativeUpdateOne {
-	if s != nil {
-		nuo.SetName(*s)
+func (_u *NarrativeUpdateOne) SetNillableName(v *string) *NarrativeUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return nuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (nuo *NarrativeUpdateOne) SetDescription(s string) *NarrativeUpdateOne {
-	nuo.mutation.SetDescription(s)
-	return nuo
+func (_u *NarrativeUpdateOne) SetDescription(v string) *NarrativeUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (nuo *NarrativeUpdateOne) SetNillableDescription(s *string) *NarrativeUpdateOne {
-	if s != nil {
-		nuo.SetDescription(*s)
+func (_u *NarrativeUpdateOne) SetNillableDescription(v *string) *NarrativeUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return nuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (nuo *NarrativeUpdateOne) ClearDescription() *NarrativeUpdateOne {
-	nuo.mutation.ClearDescription()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearDescription() *NarrativeUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (nuo *NarrativeUpdateOne) SetDetails(s string) *NarrativeUpdateOne {
-	nuo.mutation.SetDetails(s)
-	return nuo
+func (_u *NarrativeUpdateOne) SetDetails(v string) *NarrativeUpdateOne {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (nuo *NarrativeUpdateOne) SetNillableDetails(s *string) *NarrativeUpdateOne {
-	if s != nil {
-		nuo.SetDetails(*s)
+func (_u *NarrativeUpdateOne) SetNillableDetails(v *string) *NarrativeUpdateOne {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return nuo
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (nuo *NarrativeUpdateOne) ClearDetails() *NarrativeUpdateOne {
-	nuo.mutation.ClearDetails()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearDetails() *NarrativeUpdateOne {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (nuo *NarrativeUpdateOne) AddBlockedGroupIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.AddBlockedGroupIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) AddBlockedGroupIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (nuo *NarrativeUpdateOne) AddBlockedGroups(g ...*Group) *NarrativeUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdateOne) AddBlockedGroups(v ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (nuo *NarrativeUpdateOne) AddEditorIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.AddEditorIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) AddEditorIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (nuo *NarrativeUpdateOne) AddEditors(g ...*Group) *NarrativeUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdateOne) AddEditors(v ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (nuo *NarrativeUpdateOne) AddViewerIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.AddViewerIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) AddViewerIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (nuo *NarrativeUpdateOne) AddViewers(g ...*Group) *NarrativeUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdateOne) AddViewers(v ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddSatisfyIDs adds the "satisfies" edge to the Control entity by IDs.
-func (nuo *NarrativeUpdateOne) AddSatisfyIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.AddSatisfyIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) AddSatisfyIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.AddSatisfyIDs(ids...)
+	return _u
 }
 
 // AddSatisfies adds the "satisfies" edges to the Control entity.
-func (nuo *NarrativeUpdateOne) AddSatisfies(c ...*Control) *NarrativeUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *NarrativeUpdateOne) AddSatisfies(v ...*Control) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.AddSatisfyIDs(ids...)
+	return _u.AddSatisfyIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (nuo *NarrativeUpdateOne) AddProgramIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.AddProgramIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) AddProgramIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (nuo *NarrativeUpdateOne) AddPrograms(p ...*Program) *NarrativeUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *NarrativeUpdateOne) AddPrograms(v ...*Program) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (nuo *NarrativeUpdateOne) AddInternalPolicyIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.AddInternalPolicyIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) AddInternalPolicyIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (nuo *NarrativeUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *NarrativeUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *NarrativeUpdateOne) AddInternalPolicies(v ...*InternalPolicy) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.AddInternalPolicyIDs(ids...)
+	return _u.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (nuo *NarrativeUpdateOne) AddProcedureIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.AddProcedureIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) AddProcedureIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (nuo *NarrativeUpdateOne) AddProcedures(p ...*Procedure) *NarrativeUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *NarrativeUpdateOne) AddProcedures(v ...*Procedure) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.AddProcedureIDs(ids...)
+	return _u.AddProcedureIDs(ids...)
 }
 
 // Mutation returns the NarrativeMutation object of the builder.
-func (nuo *NarrativeUpdateOne) Mutation() *NarrativeMutation {
-	return nuo.mutation
+func (_u *NarrativeUpdateOne) Mutation() *NarrativeMutation {
+	return _u.mutation
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (nuo *NarrativeUpdateOne) ClearBlockedGroups() *NarrativeUpdateOne {
-	nuo.mutation.ClearBlockedGroups()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearBlockedGroups() *NarrativeUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (nuo *NarrativeUpdateOne) RemoveBlockedGroupIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.RemoveBlockedGroupIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) RemoveBlockedGroupIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (nuo *NarrativeUpdateOne) RemoveBlockedGroups(g ...*Group) *NarrativeUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdateOne) RemoveBlockedGroups(v ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (nuo *NarrativeUpdateOne) ClearEditors() *NarrativeUpdateOne {
-	nuo.mutation.ClearEditors()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearEditors() *NarrativeUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (nuo *NarrativeUpdateOne) RemoveEditorIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.RemoveEditorIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) RemoveEditorIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (nuo *NarrativeUpdateOne) RemoveEditors(g ...*Group) *NarrativeUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdateOne) RemoveEditors(v ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (nuo *NarrativeUpdateOne) ClearViewers() *NarrativeUpdateOne {
-	nuo.mutation.ClearViewers()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearViewers() *NarrativeUpdateOne {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (nuo *NarrativeUpdateOne) RemoveViewerIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.RemoveViewerIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) RemoveViewerIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (nuo *NarrativeUpdateOne) RemoveViewers(g ...*Group) *NarrativeUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *NarrativeUpdateOne) RemoveViewers(v ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearSatisfies clears all "satisfies" edges to the Control entity.
-func (nuo *NarrativeUpdateOne) ClearSatisfies() *NarrativeUpdateOne {
-	nuo.mutation.ClearSatisfies()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearSatisfies() *NarrativeUpdateOne {
+	_u.mutation.ClearSatisfies()
+	return _u
 }
 
 // RemoveSatisfyIDs removes the "satisfies" edge to Control entities by IDs.
-func (nuo *NarrativeUpdateOne) RemoveSatisfyIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.RemoveSatisfyIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) RemoveSatisfyIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.RemoveSatisfyIDs(ids...)
+	return _u
 }
 
 // RemoveSatisfies removes "satisfies" edges to Control entities.
-func (nuo *NarrativeUpdateOne) RemoveSatisfies(c ...*Control) *NarrativeUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *NarrativeUpdateOne) RemoveSatisfies(v ...*Control) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.RemoveSatisfyIDs(ids...)
+	return _u.RemoveSatisfyIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (nuo *NarrativeUpdateOne) ClearPrograms() *NarrativeUpdateOne {
-	nuo.mutation.ClearPrograms()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearPrograms() *NarrativeUpdateOne {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (nuo *NarrativeUpdateOne) RemoveProgramIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.RemoveProgramIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) RemoveProgramIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (nuo *NarrativeUpdateOne) RemovePrograms(p ...*Program) *NarrativeUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *NarrativeUpdateOne) RemovePrograms(v ...*Program) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
-func (nuo *NarrativeUpdateOne) ClearInternalPolicies() *NarrativeUpdateOne {
-	nuo.mutation.ClearInternalPolicies()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearInternalPolicies() *NarrativeUpdateOne {
+	_u.mutation.ClearInternalPolicies()
+	return _u
 }
 
 // RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
-func (nuo *NarrativeUpdateOne) RemoveInternalPolicyIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.RemoveInternalPolicyIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) RemoveInternalPolicyIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
 }
 
 // RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
-func (nuo *NarrativeUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *NarrativeUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *NarrativeUpdateOne) RemoveInternalPolicies(v ...*InternalPolicy) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.RemoveInternalPolicyIDs(ids...)
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (nuo *NarrativeUpdateOne) ClearProcedures() *NarrativeUpdateOne {
-	nuo.mutation.ClearProcedures()
-	return nuo
+func (_u *NarrativeUpdateOne) ClearProcedures() *NarrativeUpdateOne {
+	_u.mutation.ClearProcedures()
+	return _u
 }
 
 // RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (nuo *NarrativeUpdateOne) RemoveProcedureIDs(ids ...string) *NarrativeUpdateOne {
-	nuo.mutation.RemoveProcedureIDs(ids...)
-	return nuo
+func (_u *NarrativeUpdateOne) RemoveProcedureIDs(ids ...string) *NarrativeUpdateOne {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
 }
 
 // RemoveProcedures removes "procedures" edges to Procedure entities.
-func (nuo *NarrativeUpdateOne) RemoveProcedures(p ...*Procedure) *NarrativeUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *NarrativeUpdateOne) RemoveProcedures(v ...*Procedure) *NarrativeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nuo.RemoveProcedureIDs(ids...)
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // Where appends a list predicates to the NarrativeUpdate builder.
-func (nuo *NarrativeUpdateOne) Where(ps ...predicate.Narrative) *NarrativeUpdateOne {
-	nuo.mutation.Where(ps...)
-	return nuo
+func (_u *NarrativeUpdateOne) Where(ps ...predicate.Narrative) *NarrativeUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (nuo *NarrativeUpdateOne) Select(field string, fields ...string) *NarrativeUpdateOne {
-	nuo.fields = append([]string{field}, fields...)
-	return nuo
+func (_u *NarrativeUpdateOne) Select(field string, fields ...string) *NarrativeUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Narrative entity.
-func (nuo *NarrativeUpdateOne) Save(ctx context.Context) (*Narrative, error) {
-	if err := nuo.defaults(); err != nil {
+func (_u *NarrativeUpdateOne) Save(ctx context.Context) (*Narrative, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, nuo.sqlSave, nuo.mutation, nuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (nuo *NarrativeUpdateOne) SaveX(ctx context.Context) *Narrative {
-	node, err := nuo.Save(ctx)
+func (_u *NarrativeUpdateOne) SaveX(ctx context.Context) *Narrative {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1356,33 +1356,33 @@ func (nuo *NarrativeUpdateOne) SaveX(ctx context.Context) *Narrative {
 }
 
 // Exec executes the query on the entity.
-func (nuo *NarrativeUpdateOne) Exec(ctx context.Context) error {
-	_, err := nuo.Save(ctx)
+func (_u *NarrativeUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nuo *NarrativeUpdateOne) ExecX(ctx context.Context) {
-	if err := nuo.Exec(ctx); err != nil {
+func (_u *NarrativeUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (nuo *NarrativeUpdateOne) defaults() error {
-	if _, ok := nuo.mutation.UpdatedAt(); !ok && !nuo.mutation.UpdatedAtCleared() {
+func (_u *NarrativeUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if narrative.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized narrative.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := narrative.UpdateDefaultUpdatedAt()
-		nuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (nuo *NarrativeUpdateOne) check() error {
-	if v, ok := nuo.mutation.Name(); ok {
+func (_u *NarrativeUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := narrative.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Narrative.name": %w`, err)}
 		}
@@ -1391,22 +1391,22 @@ func (nuo *NarrativeUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (nuo *NarrativeUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NarrativeUpdateOne {
-	nuo.modifiers = append(nuo.modifiers, modifiers...)
-	return nuo
+func (_u *NarrativeUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NarrativeUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, err error) {
-	if err := nuo.check(); err != nil {
+func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(narrative.Table, narrative.Columns, sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString))
-	id, ok := nuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Narrative.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := nuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, narrative.FieldID)
 		for _, f := range fields {
@@ -1418,70 +1418,70 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 			}
 		}
 	}
-	if ps := nuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if nuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(narrative.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := nuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(narrative.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if nuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(narrative.FieldUpdatedAt, field.TypeTime)
 	}
-	if nuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(narrative.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := nuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(narrative.FieldUpdatedBy, field.TypeString, value)
 	}
-	if nuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(narrative.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := nuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(narrative.FieldDeletedAt, field.TypeTime, value)
 	}
-	if nuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrative.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(narrative.FieldDeletedBy, field.TypeString, value)
 	}
-	if nuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(narrative.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := nuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(narrative.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := nuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, narrative.FieldTags, value)
 		})
 	}
-	if nuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(narrative.FieldTags, field.TypeJSON)
 	}
-	if value, ok := nuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(narrative.FieldName, field.TypeString, value)
 	}
-	if value, ok := nuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(narrative.FieldDescription, field.TypeString, value)
 	}
-	if nuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(narrative.FieldDescription, field.TypeString)
 	}
-	if value, ok := nuo.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(narrative.FieldDetails, field.TypeString, value)
 	}
-	if nuo.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(narrative.FieldDetails, field.TypeString)
 	}
-	if nuo.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1492,10 +1492,10 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.NarrativeBlockedGroups
+		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !nuo.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1506,13 +1506,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.NarrativeBlockedGroups
+		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1523,13 +1523,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.NarrativeBlockedGroups
+		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nuo.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1540,10 +1540,10 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.NarrativeEditors
+		edge.Schema = _u.schemaConfig.NarrativeEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !nuo.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1554,13 +1554,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.NarrativeEditors
+		edge.Schema = _u.schemaConfig.NarrativeEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1571,13 +1571,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.NarrativeEditors
+		edge.Schema = _u.schemaConfig.NarrativeEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nuo.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1588,10 +1588,10 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.NarrativeViewers
+		edge.Schema = _u.schemaConfig.NarrativeViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !nuo.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1602,13 +1602,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.NarrativeViewers
+		edge.Schema = _u.schemaConfig.NarrativeViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1619,13 +1619,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.NarrativeViewers
+		edge.Schema = _u.schemaConfig.NarrativeViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nuo.mutation.SatisfiesCleared() {
+	if _u.mutation.SatisfiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1636,10 +1636,10 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.ControlNarratives
+		edge.Schema = _u.schemaConfig.ControlNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.RemovedSatisfiesIDs(); len(nodes) > 0 && !nuo.mutation.SatisfiesCleared() {
+	if nodes := _u.mutation.RemovedSatisfiesIDs(); len(nodes) > 0 && !_u.mutation.SatisfiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1650,13 +1650,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.ControlNarratives
+		edge.Schema = _u.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.SatisfiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SatisfiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1667,13 +1667,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.ControlNarratives
+		edge.Schema = _u.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nuo.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1684,10 +1684,10 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !nuo.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1698,13 +1698,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1715,13 +1715,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nuo.mutation.InternalPoliciesCleared() {
+	if _u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1732,10 +1732,10 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !nuo.mutation.InternalPoliciesCleared() {
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1746,13 +1746,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1763,13 +1763,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nuo.mutation.ProceduresCleared() {
+	if _u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1780,10 +1780,10 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.ProcedureNarratives
+		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !nuo.mutation.ProceduresCleared() {
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1794,13 +1794,13 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.ProcedureNarratives
+		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1811,19 +1811,19 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nuo.schemaConfig.ProcedureNarratives
+		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = nuo.schemaConfig.Narrative
-	ctx = internal.NewSchemaConfigContext(ctx, nuo.schemaConfig)
-	_spec.AddModifiers(nuo.modifiers...)
-	_node = &Narrative{config: nuo.config}
+	_spec.Node.Schema = _u.schemaConfig.Narrative
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Narrative{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, nuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{narrative.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1831,6 +1831,6 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 		}
 		return nil, err
 	}
-	nuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

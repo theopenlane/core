@@ -22,58 +22,58 @@ type GroupSettingHistoryDelete struct {
 }
 
 // Where appends a list predicates to the GroupSettingHistoryDelete builder.
-func (gshd *GroupSettingHistoryDelete) Where(ps ...predicate.GroupSettingHistory) *GroupSettingHistoryDelete {
-	gshd.mutation.Where(ps...)
-	return gshd
+func (_d *GroupSettingHistoryDelete) Where(ps ...predicate.GroupSettingHistory) *GroupSettingHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (gshd *GroupSettingHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, gshd.sqlExec, gshd.mutation, gshd.hooks)
+func (_d *GroupSettingHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gshd *GroupSettingHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := gshd.Exec(ctx)
+func (_d *GroupSettingHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (gshd *GroupSettingHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *GroupSettingHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(groupsettinghistory.Table, sqlgraph.NewFieldSpec(groupsettinghistory.FieldID, field.TypeString))
-	_spec.Node.Schema = gshd.schemaConfig.GroupSettingHistory
-	ctx = internal.NewSchemaConfigContext(ctx, gshd.schemaConfig)
-	if ps := gshd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.GroupSettingHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, gshd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	gshd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // GroupSettingHistoryDeleteOne is the builder for deleting a single GroupSettingHistory entity.
 type GroupSettingHistoryDeleteOne struct {
-	gshd *GroupSettingHistoryDelete
+	_d *GroupSettingHistoryDelete
 }
 
 // Where appends a list predicates to the GroupSettingHistoryDelete builder.
-func (gshdo *GroupSettingHistoryDeleteOne) Where(ps ...predicate.GroupSettingHistory) *GroupSettingHistoryDeleteOne {
-	gshdo.gshd.mutation.Where(ps...)
-	return gshdo
+func (_d *GroupSettingHistoryDeleteOne) Where(ps ...predicate.GroupSettingHistory) *GroupSettingHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (gshdo *GroupSettingHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := gshdo.gshd.Exec(ctx)
+func (_d *GroupSettingHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (gshdo *GroupSettingHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gshdo *GroupSettingHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := gshdo.Exec(ctx); err != nil {
+func (_d *GroupSettingHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

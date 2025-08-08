@@ -22,58 +22,58 @@ type JobTemplateHistoryDelete struct {
 }
 
 // Where appends a list predicates to the JobTemplateHistoryDelete builder.
-func (jthd *JobTemplateHistoryDelete) Where(ps ...predicate.JobTemplateHistory) *JobTemplateHistoryDelete {
-	jthd.mutation.Where(ps...)
-	return jthd
+func (_d *JobTemplateHistoryDelete) Where(ps ...predicate.JobTemplateHistory) *JobTemplateHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (jthd *JobTemplateHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, jthd.sqlExec, jthd.mutation, jthd.hooks)
+func (_d *JobTemplateHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jthd *JobTemplateHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := jthd.Exec(ctx)
+func (_d *JobTemplateHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (jthd *JobTemplateHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *JobTemplateHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(jobtemplatehistory.Table, sqlgraph.NewFieldSpec(jobtemplatehistory.FieldID, field.TypeString))
-	_spec.Node.Schema = jthd.schemaConfig.JobTemplateHistory
-	ctx = internal.NewSchemaConfigContext(ctx, jthd.schemaConfig)
-	if ps := jthd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.JobTemplateHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, jthd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	jthd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // JobTemplateHistoryDeleteOne is the builder for deleting a single JobTemplateHistory entity.
 type JobTemplateHistoryDeleteOne struct {
-	jthd *JobTemplateHistoryDelete
+	_d *JobTemplateHistoryDelete
 }
 
 // Where appends a list predicates to the JobTemplateHistoryDelete builder.
-func (jthdo *JobTemplateHistoryDeleteOne) Where(ps ...predicate.JobTemplateHistory) *JobTemplateHistoryDeleteOne {
-	jthdo.jthd.mutation.Where(ps...)
-	return jthdo
+func (_d *JobTemplateHistoryDeleteOne) Where(ps ...predicate.JobTemplateHistory) *JobTemplateHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (jthdo *JobTemplateHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := jthdo.jthd.Exec(ctx)
+func (_d *JobTemplateHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (jthdo *JobTemplateHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jthdo *JobTemplateHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := jthdo.Exec(ctx); err != nil {
+func (_d *JobTemplateHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

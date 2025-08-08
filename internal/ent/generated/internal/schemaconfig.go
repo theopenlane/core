@@ -31,6 +31,7 @@ type SchemaConfig struct {
 	ControlImplementationBlockedGroups string // ControlImplementation-blocked_groups->Group table.
 	ControlImplementationEditors       string // ControlImplementation-editors->Group table.
 	ControlImplementationViewers       string // ControlImplementation-viewers->Group table.
+	ControlImplementationTasks         string // ControlImplementation-tasks->Task table.
 	ControlImplementationHistory       string // ControlImplementationHistory table.
 	ControlObjective                   string // ControlObjective table.
 	ControlObjectiveBlockedGroups      string // ControlObjective-blocked_groups->Group table.
@@ -219,8 +220,11 @@ type SchemaConfig struct {
 	TrustCenterSubprocessor            string // TrustCenterSubprocessor table.
 	TrustCenterSubprocessorHistory     string // TrustCenterSubprocessorHistory table.
 	User                               string // User table.
+	UserGroups                         string // User-groups->Group table.
+	UserOrganizations                  string // User-organizations->Organization table.
 	UserFiles                          string // User-files->File table.
 	UserEvents                         string // User-events->Event table.
+	UserPrograms                       string // User-programs->Program table.
 	UserHistory                        string // UserHistory table.
 	UserSetting                        string // UserSetting table.
 	UserSettingFiles                   string // UserSetting-files->File table.

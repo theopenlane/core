@@ -72,7 +72,7 @@ func (*GroupSettingHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the GroupSettingHistory fields.
-func (gsh *GroupSettingHistory) assignValues(columns []string, values []any) error {
+func (_m *GroupSettingHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -82,94 +82,94 @@ func (gsh *GroupSettingHistory) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				gsh.ID = value.String
+				_m.ID = value.String
 			}
 		case groupsettinghistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				gsh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case groupsettinghistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				gsh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case groupsettinghistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				gsh.Operation = *value
+				_m.Operation = *value
 			}
 		case groupsettinghistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				gsh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case groupsettinghistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				gsh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case groupsettinghistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				gsh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case groupsettinghistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				gsh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case groupsettinghistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				gsh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case groupsettinghistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				gsh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case groupsettinghistory.FieldVisibility:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field visibility", values[i])
 			} else if value.Valid {
-				gsh.Visibility = enums.Visibility(value.String)
+				_m.Visibility = enums.Visibility(value.String)
 			}
 		case groupsettinghistory.FieldJoinPolicy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field join_policy", values[i])
 			} else if value.Valid {
-				gsh.JoinPolicy = enums.JoinPolicy(value.String)
+				_m.JoinPolicy = enums.JoinPolicy(value.String)
 			}
 		case groupsettinghistory.FieldSyncToSlack:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field sync_to_slack", values[i])
 			} else if value.Valid {
-				gsh.SyncToSlack = value.Bool
+				_m.SyncToSlack = value.Bool
 			}
 		case groupsettinghistory.FieldSyncToGithub:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field sync_to_github", values[i])
 			} else if value.Valid {
-				gsh.SyncToGithub = value.Bool
+				_m.SyncToGithub = value.Bool
 			}
 		case groupsettinghistory.FieldGroupID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field group_id", values[i])
 			} else if value.Valid {
-				gsh.GroupID = value.String
+				_m.GroupID = value.String
 			}
 		default:
-			gsh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -177,74 +177,74 @@ func (gsh *GroupSettingHistory) assignValues(columns []string, values []any) err
 
 // Value returns the ent.Value that was dynamically selected and assigned to the GroupSettingHistory.
 // This includes values selected through modifiers, order, etc.
-func (gsh *GroupSettingHistory) Value(name string) (ent.Value, error) {
-	return gsh.selectValues.Get(name)
+func (_m *GroupSettingHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this GroupSettingHistory.
 // Note that you need to call GroupSettingHistory.Unwrap() before calling this method if this GroupSettingHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (gsh *GroupSettingHistory) Update() *GroupSettingHistoryUpdateOne {
-	return NewGroupSettingHistoryClient(gsh.config).UpdateOne(gsh)
+func (_m *GroupSettingHistory) Update() *GroupSettingHistoryUpdateOne {
+	return NewGroupSettingHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the GroupSettingHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (gsh *GroupSettingHistory) Unwrap() *GroupSettingHistory {
-	_tx, ok := gsh.config.driver.(*txDriver)
+func (_m *GroupSettingHistory) Unwrap() *GroupSettingHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: GroupSettingHistory is not a transactional entity")
 	}
-	gsh.config.driver = _tx.drv
-	return gsh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (gsh *GroupSettingHistory) String() string {
+func (_m *GroupSettingHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("GroupSettingHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", gsh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(gsh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(gsh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", gsh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(gsh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(gsh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(gsh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(gsh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(gsh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(gsh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("visibility=")
-	builder.WriteString(fmt.Sprintf("%v", gsh.Visibility))
+	builder.WriteString(fmt.Sprintf("%v", _m.Visibility))
 	builder.WriteString(", ")
 	builder.WriteString("join_policy=")
-	builder.WriteString(fmt.Sprintf("%v", gsh.JoinPolicy))
+	builder.WriteString(fmt.Sprintf("%v", _m.JoinPolicy))
 	builder.WriteString(", ")
 	builder.WriteString("sync_to_slack=")
-	builder.WriteString(fmt.Sprintf("%v", gsh.SyncToSlack))
+	builder.WriteString(fmt.Sprintf("%v", _m.SyncToSlack))
 	builder.WriteString(", ")
 	builder.WriteString("sync_to_github=")
-	builder.WriteString(fmt.Sprintf("%v", gsh.SyncToGithub))
+	builder.WriteString(fmt.Sprintf("%v", _m.SyncToGithub))
 	builder.WriteString(", ")
 	builder.WriteString("group_id=")
-	builder.WriteString(gsh.GroupID)
+	builder.WriteString(_m.GroupID)
 	builder.WriteByte(')')
 	return builder.String()
 }

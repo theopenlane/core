@@ -17,7 +17,7 @@ import (
 
 // AccountAccessHandler list roles a subject has access to in relation an object
 func (h *Handler) AccountRolesHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	return ProcessAuthenticatedRequest(ctx, h, openapi, models.ExampleAccountRolesRequest,
+	return ProcessAuthenticatedRequest(ctx, h, openapi, models.ExampleAccountRolesRequest, models.ExampleAccountRolesReply,
 		func(reqCtx context.Context, in *models.AccountRolesRequest, au *auth.AuthenticatedUser) (*models.AccountRolesReply, error) {
 			req := fgax.ListAccess{
 				SubjectType: in.SubjectType,

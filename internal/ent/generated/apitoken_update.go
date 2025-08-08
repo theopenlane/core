@@ -29,332 +29,332 @@ type APITokenUpdate struct {
 }
 
 // Where appends a list predicates to the APITokenUpdate builder.
-func (atu *APITokenUpdate) Where(ps ...predicate.APIToken) *APITokenUpdate {
-	atu.mutation.Where(ps...)
-	return atu
+func (_u *APITokenUpdate) Where(ps ...predicate.APIToken) *APITokenUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (atu *APITokenUpdate) SetUpdatedAt(t time.Time) *APITokenUpdate {
-	atu.mutation.SetUpdatedAt(t)
-	return atu
+func (_u *APITokenUpdate) SetUpdatedAt(v time.Time) *APITokenUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (atu *APITokenUpdate) ClearUpdatedAt() *APITokenUpdate {
-	atu.mutation.ClearUpdatedAt()
-	return atu
+func (_u *APITokenUpdate) ClearUpdatedAt() *APITokenUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (atu *APITokenUpdate) SetUpdatedBy(s string) *APITokenUpdate {
-	atu.mutation.SetUpdatedBy(s)
-	return atu
+func (_u *APITokenUpdate) SetUpdatedBy(v string) *APITokenUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableUpdatedBy(s *string) *APITokenUpdate {
-	if s != nil {
-		atu.SetUpdatedBy(*s)
+func (_u *APITokenUpdate) SetNillableUpdatedBy(v *string) *APITokenUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return atu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (atu *APITokenUpdate) ClearUpdatedBy() *APITokenUpdate {
-	atu.mutation.ClearUpdatedBy()
-	return atu
+func (_u *APITokenUpdate) ClearUpdatedBy() *APITokenUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (atu *APITokenUpdate) SetDeletedAt(t time.Time) *APITokenUpdate {
-	atu.mutation.SetDeletedAt(t)
-	return atu
+func (_u *APITokenUpdate) SetDeletedAt(v time.Time) *APITokenUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableDeletedAt(t *time.Time) *APITokenUpdate {
-	if t != nil {
-		atu.SetDeletedAt(*t)
+func (_u *APITokenUpdate) SetNillableDeletedAt(v *time.Time) *APITokenUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return atu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (atu *APITokenUpdate) ClearDeletedAt() *APITokenUpdate {
-	atu.mutation.ClearDeletedAt()
-	return atu
+func (_u *APITokenUpdate) ClearDeletedAt() *APITokenUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (atu *APITokenUpdate) SetDeletedBy(s string) *APITokenUpdate {
-	atu.mutation.SetDeletedBy(s)
-	return atu
+func (_u *APITokenUpdate) SetDeletedBy(v string) *APITokenUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableDeletedBy(s *string) *APITokenUpdate {
-	if s != nil {
-		atu.SetDeletedBy(*s)
+func (_u *APITokenUpdate) SetNillableDeletedBy(v *string) *APITokenUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return atu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (atu *APITokenUpdate) ClearDeletedBy() *APITokenUpdate {
-	atu.mutation.ClearDeletedBy()
-	return atu
+func (_u *APITokenUpdate) ClearDeletedBy() *APITokenUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (atu *APITokenUpdate) SetTags(s []string) *APITokenUpdate {
-	atu.mutation.SetTags(s)
-	return atu
+func (_u *APITokenUpdate) SetTags(v []string) *APITokenUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (atu *APITokenUpdate) AppendTags(s []string) *APITokenUpdate {
-	atu.mutation.AppendTags(s)
-	return atu
+// AppendTags appends value to the "tags" field.
+func (_u *APITokenUpdate) AppendTags(v []string) *APITokenUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (atu *APITokenUpdate) ClearTags() *APITokenUpdate {
-	atu.mutation.ClearTags()
-	return atu
+func (_u *APITokenUpdate) ClearTags() *APITokenUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (atu *APITokenUpdate) SetOwnerID(s string) *APITokenUpdate {
-	atu.mutation.SetOwnerID(s)
-	return atu
+func (_u *APITokenUpdate) SetOwnerID(v string) *APITokenUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableOwnerID(s *string) *APITokenUpdate {
-	if s != nil {
-		atu.SetOwnerID(*s)
+func (_u *APITokenUpdate) SetNillableOwnerID(v *string) *APITokenUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return atu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (atu *APITokenUpdate) ClearOwnerID() *APITokenUpdate {
-	atu.mutation.ClearOwnerID()
-	return atu
+func (_u *APITokenUpdate) ClearOwnerID() *APITokenUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (atu *APITokenUpdate) SetName(s string) *APITokenUpdate {
-	atu.mutation.SetName(s)
-	return atu
+func (_u *APITokenUpdate) SetName(v string) *APITokenUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableName(s *string) *APITokenUpdate {
-	if s != nil {
-		atu.SetName(*s)
+func (_u *APITokenUpdate) SetNillableName(v *string) *APITokenUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return atu
+	return _u
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (atu *APITokenUpdate) SetExpiresAt(t time.Time) *APITokenUpdate {
-	atu.mutation.SetExpiresAt(t)
-	return atu
+func (_u *APITokenUpdate) SetExpiresAt(v time.Time) *APITokenUpdate {
+	_u.mutation.SetExpiresAt(v)
+	return _u
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableExpiresAt(t *time.Time) *APITokenUpdate {
-	if t != nil {
-		atu.SetExpiresAt(*t)
+func (_u *APITokenUpdate) SetNillableExpiresAt(v *time.Time) *APITokenUpdate {
+	if v != nil {
+		_u.SetExpiresAt(*v)
 	}
-	return atu
+	return _u
 }
 
 // ClearExpiresAt clears the value of the "expires_at" field.
-func (atu *APITokenUpdate) ClearExpiresAt() *APITokenUpdate {
-	atu.mutation.ClearExpiresAt()
-	return atu
+func (_u *APITokenUpdate) ClearExpiresAt() *APITokenUpdate {
+	_u.mutation.ClearExpiresAt()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (atu *APITokenUpdate) SetDescription(s string) *APITokenUpdate {
-	atu.mutation.SetDescription(s)
-	return atu
+func (_u *APITokenUpdate) SetDescription(v string) *APITokenUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableDescription(s *string) *APITokenUpdate {
-	if s != nil {
-		atu.SetDescription(*s)
+func (_u *APITokenUpdate) SetNillableDescription(v *string) *APITokenUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return atu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (atu *APITokenUpdate) ClearDescription() *APITokenUpdate {
-	atu.mutation.ClearDescription()
-	return atu
+func (_u *APITokenUpdate) ClearDescription() *APITokenUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetScopes sets the "scopes" field.
-func (atu *APITokenUpdate) SetScopes(s []string) *APITokenUpdate {
-	atu.mutation.SetScopes(s)
-	return atu
+func (_u *APITokenUpdate) SetScopes(v []string) *APITokenUpdate {
+	_u.mutation.SetScopes(v)
+	return _u
 }
 
-// AppendScopes appends s to the "scopes" field.
-func (atu *APITokenUpdate) AppendScopes(s []string) *APITokenUpdate {
-	atu.mutation.AppendScopes(s)
-	return atu
+// AppendScopes appends value to the "scopes" field.
+func (_u *APITokenUpdate) AppendScopes(v []string) *APITokenUpdate {
+	_u.mutation.AppendScopes(v)
+	return _u
 }
 
 // ClearScopes clears the value of the "scopes" field.
-func (atu *APITokenUpdate) ClearScopes() *APITokenUpdate {
-	atu.mutation.ClearScopes()
-	return atu
+func (_u *APITokenUpdate) ClearScopes() *APITokenUpdate {
+	_u.mutation.ClearScopes()
+	return _u
 }
 
 // SetLastUsedAt sets the "last_used_at" field.
-func (atu *APITokenUpdate) SetLastUsedAt(t time.Time) *APITokenUpdate {
-	atu.mutation.SetLastUsedAt(t)
-	return atu
+func (_u *APITokenUpdate) SetLastUsedAt(v time.Time) *APITokenUpdate {
+	_u.mutation.SetLastUsedAt(v)
+	return _u
 }
 
 // SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableLastUsedAt(t *time.Time) *APITokenUpdate {
-	if t != nil {
-		atu.SetLastUsedAt(*t)
+func (_u *APITokenUpdate) SetNillableLastUsedAt(v *time.Time) *APITokenUpdate {
+	if v != nil {
+		_u.SetLastUsedAt(*v)
 	}
-	return atu
+	return _u
 }
 
 // ClearLastUsedAt clears the value of the "last_used_at" field.
-func (atu *APITokenUpdate) ClearLastUsedAt() *APITokenUpdate {
-	atu.mutation.ClearLastUsedAt()
-	return atu
+func (_u *APITokenUpdate) ClearLastUsedAt() *APITokenUpdate {
+	_u.mutation.ClearLastUsedAt()
+	return _u
 }
 
 // SetIsActive sets the "is_active" field.
-func (atu *APITokenUpdate) SetIsActive(b bool) *APITokenUpdate {
-	atu.mutation.SetIsActive(b)
-	return atu
+func (_u *APITokenUpdate) SetIsActive(v bool) *APITokenUpdate {
+	_u.mutation.SetIsActive(v)
+	return _u
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableIsActive(b *bool) *APITokenUpdate {
-	if b != nil {
-		atu.SetIsActive(*b)
+func (_u *APITokenUpdate) SetNillableIsActive(v *bool) *APITokenUpdate {
+	if v != nil {
+		_u.SetIsActive(*v)
 	}
-	return atu
+	return _u
 }
 
 // ClearIsActive clears the value of the "is_active" field.
-func (atu *APITokenUpdate) ClearIsActive() *APITokenUpdate {
-	atu.mutation.ClearIsActive()
-	return atu
+func (_u *APITokenUpdate) ClearIsActive() *APITokenUpdate {
+	_u.mutation.ClearIsActive()
+	return _u
 }
 
 // SetRevokedReason sets the "revoked_reason" field.
-func (atu *APITokenUpdate) SetRevokedReason(s string) *APITokenUpdate {
-	atu.mutation.SetRevokedReason(s)
-	return atu
+func (_u *APITokenUpdate) SetRevokedReason(v string) *APITokenUpdate {
+	_u.mutation.SetRevokedReason(v)
+	return _u
 }
 
 // SetNillableRevokedReason sets the "revoked_reason" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableRevokedReason(s *string) *APITokenUpdate {
-	if s != nil {
-		atu.SetRevokedReason(*s)
+func (_u *APITokenUpdate) SetNillableRevokedReason(v *string) *APITokenUpdate {
+	if v != nil {
+		_u.SetRevokedReason(*v)
 	}
-	return atu
+	return _u
 }
 
 // ClearRevokedReason clears the value of the "revoked_reason" field.
-func (atu *APITokenUpdate) ClearRevokedReason() *APITokenUpdate {
-	atu.mutation.ClearRevokedReason()
-	return atu
+func (_u *APITokenUpdate) ClearRevokedReason() *APITokenUpdate {
+	_u.mutation.ClearRevokedReason()
+	return _u
 }
 
 // SetRevokedBy sets the "revoked_by" field.
-func (atu *APITokenUpdate) SetRevokedBy(s string) *APITokenUpdate {
-	atu.mutation.SetRevokedBy(s)
-	return atu
+func (_u *APITokenUpdate) SetRevokedBy(v string) *APITokenUpdate {
+	_u.mutation.SetRevokedBy(v)
+	return _u
 }
 
 // SetNillableRevokedBy sets the "revoked_by" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableRevokedBy(s *string) *APITokenUpdate {
-	if s != nil {
-		atu.SetRevokedBy(*s)
+func (_u *APITokenUpdate) SetNillableRevokedBy(v *string) *APITokenUpdate {
+	if v != nil {
+		_u.SetRevokedBy(*v)
 	}
-	return atu
+	return _u
 }
 
 // ClearRevokedBy clears the value of the "revoked_by" field.
-func (atu *APITokenUpdate) ClearRevokedBy() *APITokenUpdate {
-	atu.mutation.ClearRevokedBy()
-	return atu
+func (_u *APITokenUpdate) ClearRevokedBy() *APITokenUpdate {
+	_u.mutation.ClearRevokedBy()
+	return _u
 }
 
 // SetRevokedAt sets the "revoked_at" field.
-func (atu *APITokenUpdate) SetRevokedAt(t time.Time) *APITokenUpdate {
-	atu.mutation.SetRevokedAt(t)
-	return atu
+func (_u *APITokenUpdate) SetRevokedAt(v time.Time) *APITokenUpdate {
+	_u.mutation.SetRevokedAt(v)
+	return _u
 }
 
 // SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
-func (atu *APITokenUpdate) SetNillableRevokedAt(t *time.Time) *APITokenUpdate {
-	if t != nil {
-		atu.SetRevokedAt(*t)
+func (_u *APITokenUpdate) SetNillableRevokedAt(v *time.Time) *APITokenUpdate {
+	if v != nil {
+		_u.SetRevokedAt(*v)
 	}
-	return atu
+	return _u
 }
 
 // ClearRevokedAt clears the value of the "revoked_at" field.
-func (atu *APITokenUpdate) ClearRevokedAt() *APITokenUpdate {
-	atu.mutation.ClearRevokedAt()
-	return atu
+func (_u *APITokenUpdate) ClearRevokedAt() *APITokenUpdate {
+	_u.mutation.ClearRevokedAt()
+	return _u
 }
 
 // SetSSOAuthorizations sets the "sso_authorizations" field.
-func (atu *APITokenUpdate) SetSSOAuthorizations(mam models.SSOAuthorizationMap) *APITokenUpdate {
-	atu.mutation.SetSSOAuthorizations(mam)
-	return atu
+func (_u *APITokenUpdate) SetSSOAuthorizations(v models.SSOAuthorizationMap) *APITokenUpdate {
+	_u.mutation.SetSSOAuthorizations(v)
+	return _u
 }
 
 // ClearSSOAuthorizations clears the value of the "sso_authorizations" field.
-func (atu *APITokenUpdate) ClearSSOAuthorizations() *APITokenUpdate {
-	atu.mutation.ClearSSOAuthorizations()
-	return atu
+func (_u *APITokenUpdate) ClearSSOAuthorizations() *APITokenUpdate {
+	_u.mutation.ClearSSOAuthorizations()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (atu *APITokenUpdate) SetOwner(o *Organization) *APITokenUpdate {
-	return atu.SetOwnerID(o.ID)
+func (_u *APITokenUpdate) SetOwner(v *Organization) *APITokenUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // Mutation returns the APITokenMutation object of the builder.
-func (atu *APITokenUpdate) Mutation() *APITokenMutation {
-	return atu.mutation
+func (_u *APITokenUpdate) Mutation() *APITokenMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (atu *APITokenUpdate) ClearOwner() *APITokenUpdate {
-	atu.mutation.ClearOwner()
-	return atu
+func (_u *APITokenUpdate) ClearOwner() *APITokenUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (atu *APITokenUpdate) Save(ctx context.Context) (int, error) {
-	if err := atu.defaults(); err != nil {
+func (_u *APITokenUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, atu.sqlSave, atu.mutation, atu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (atu *APITokenUpdate) SaveX(ctx context.Context) int {
-	affected, err := atu.Save(ctx)
+func (_u *APITokenUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -362,38 +362,38 @@ func (atu *APITokenUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (atu *APITokenUpdate) Exec(ctx context.Context) error {
-	_, err := atu.Save(ctx)
+func (_u *APITokenUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (atu *APITokenUpdate) ExecX(ctx context.Context) {
-	if err := atu.Exec(ctx); err != nil {
+func (_u *APITokenUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (atu *APITokenUpdate) defaults() error {
-	if _, ok := atu.mutation.UpdatedAt(); !ok && !atu.mutation.UpdatedAtCleared() {
+func (_u *APITokenUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if apitoken.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized apitoken.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := apitoken.UpdateDefaultUpdatedAt()
-		atu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (atu *APITokenUpdate) check() error {
-	if v, ok := atu.mutation.OwnerID(); ok {
+func (_u *APITokenUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := apitoken.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "APIToken.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := atu.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := apitoken.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "APIToken.name": %w`, err)}
 		}
@@ -402,127 +402,127 @@ func (atu *APITokenUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (atu *APITokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *APITokenUpdate {
-	atu.modifiers = append(atu.modifiers, modifiers...)
-	return atu
+func (_u *APITokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *APITokenUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := atu.check(); err != nil {
-		return n, err
+func (_u *APITokenUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(apitoken.Table, apitoken.Columns, sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString))
-	if ps := atu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if atu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(apitoken.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := atu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(apitoken.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if atu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(apitoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if atu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(apitoken.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := atu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(apitoken.FieldUpdatedBy, field.TypeString, value)
 	}
-	if atu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(apitoken.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := atu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(apitoken.FieldDeletedAt, field.TypeTime, value)
 	}
-	if atu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(apitoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := atu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(apitoken.FieldDeletedBy, field.TypeString, value)
 	}
-	if atu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(apitoken.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := atu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(apitoken.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := atu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, apitoken.FieldTags, value)
 		})
 	}
-	if atu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(apitoken.FieldTags, field.TypeJSON)
 	}
-	if value, ok := atu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(apitoken.FieldName, field.TypeString, value)
 	}
-	if value, ok := atu.mutation.ExpiresAt(); ok {
+	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(apitoken.FieldExpiresAt, field.TypeTime, value)
 	}
-	if atu.mutation.ExpiresAtCleared() {
+	if _u.mutation.ExpiresAtCleared() {
 		_spec.ClearField(apitoken.FieldExpiresAt, field.TypeTime)
 	}
-	if value, ok := atu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(apitoken.FieldDescription, field.TypeString, value)
 	}
-	if atu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(apitoken.FieldDescription, field.TypeString)
 	}
-	if value, ok := atu.mutation.Scopes(); ok {
+	if value, ok := _u.mutation.Scopes(); ok {
 		_spec.SetField(apitoken.FieldScopes, field.TypeJSON, value)
 	}
-	if value, ok := atu.mutation.AppendedScopes(); ok {
+	if value, ok := _u.mutation.AppendedScopes(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, apitoken.FieldScopes, value)
 		})
 	}
-	if atu.mutation.ScopesCleared() {
+	if _u.mutation.ScopesCleared() {
 		_spec.ClearField(apitoken.FieldScopes, field.TypeJSON)
 	}
-	if value, ok := atu.mutation.LastUsedAt(); ok {
+	if value, ok := _u.mutation.LastUsedAt(); ok {
 		_spec.SetField(apitoken.FieldLastUsedAt, field.TypeTime, value)
 	}
-	if atu.mutation.LastUsedAtCleared() {
+	if _u.mutation.LastUsedAtCleared() {
 		_spec.ClearField(apitoken.FieldLastUsedAt, field.TypeTime)
 	}
-	if value, ok := atu.mutation.IsActive(); ok {
+	if value, ok := _u.mutation.IsActive(); ok {
 		_spec.SetField(apitoken.FieldIsActive, field.TypeBool, value)
 	}
-	if atu.mutation.IsActiveCleared() {
+	if _u.mutation.IsActiveCleared() {
 		_spec.ClearField(apitoken.FieldIsActive, field.TypeBool)
 	}
-	if value, ok := atu.mutation.RevokedReason(); ok {
+	if value, ok := _u.mutation.RevokedReason(); ok {
 		_spec.SetField(apitoken.FieldRevokedReason, field.TypeString, value)
 	}
-	if atu.mutation.RevokedReasonCleared() {
+	if _u.mutation.RevokedReasonCleared() {
 		_spec.ClearField(apitoken.FieldRevokedReason, field.TypeString)
 	}
-	if value, ok := atu.mutation.RevokedBy(); ok {
+	if value, ok := _u.mutation.RevokedBy(); ok {
 		_spec.SetField(apitoken.FieldRevokedBy, field.TypeString, value)
 	}
-	if atu.mutation.RevokedByCleared() {
+	if _u.mutation.RevokedByCleared() {
 		_spec.ClearField(apitoken.FieldRevokedBy, field.TypeString)
 	}
-	if value, ok := atu.mutation.RevokedAt(); ok {
+	if value, ok := _u.mutation.RevokedAt(); ok {
 		_spec.SetField(apitoken.FieldRevokedAt, field.TypeTime, value)
 	}
-	if atu.mutation.RevokedAtCleared() {
+	if _u.mutation.RevokedAtCleared() {
 		_spec.ClearField(apitoken.FieldRevokedAt, field.TypeTime)
 	}
-	if value, ok := atu.mutation.SSOAuthorizations(); ok {
+	if value, ok := _u.mutation.SSOAuthorizations(); ok {
 		_spec.SetField(apitoken.FieldSSOAuthorizations, field.TypeJSON, value)
 	}
-	if atu.mutation.SSOAuthorizationsCleared() {
+	if _u.mutation.SSOAuthorizationsCleared() {
 		_spec.ClearField(apitoken.FieldSSOAuthorizations, field.TypeJSON)
 	}
-	if atu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -533,10 +533,10 @@ func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = atu.schemaConfig.APIToken
+		edge.Schema = _u.schemaConfig.APIToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := atu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -547,16 +547,16 @@ func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = atu.schemaConfig.APIToken
+		edge.Schema = _u.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = atu.schemaConfig.APIToken
-	ctx = internal.NewSchemaConfigContext(ctx, atu.schemaConfig)
-	_spec.AddModifiers(atu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, atu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.APIToken
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{apitoken.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -564,8 +564,8 @@ func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	atu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // APITokenUpdateOne is the builder for updating a single APIToken entity.
@@ -578,339 +578,339 @@ type APITokenUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (atuo *APITokenUpdateOne) SetUpdatedAt(t time.Time) *APITokenUpdateOne {
-	atuo.mutation.SetUpdatedAt(t)
-	return atuo
+func (_u *APITokenUpdateOne) SetUpdatedAt(v time.Time) *APITokenUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (atuo *APITokenUpdateOne) ClearUpdatedAt() *APITokenUpdateOne {
-	atuo.mutation.ClearUpdatedAt()
-	return atuo
+func (_u *APITokenUpdateOne) ClearUpdatedAt() *APITokenUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (atuo *APITokenUpdateOne) SetUpdatedBy(s string) *APITokenUpdateOne {
-	atuo.mutation.SetUpdatedBy(s)
-	return atuo
+func (_u *APITokenUpdateOne) SetUpdatedBy(v string) *APITokenUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableUpdatedBy(s *string) *APITokenUpdateOne {
-	if s != nil {
-		atuo.SetUpdatedBy(*s)
+func (_u *APITokenUpdateOne) SetNillableUpdatedBy(v *string) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return atuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (atuo *APITokenUpdateOne) ClearUpdatedBy() *APITokenUpdateOne {
-	atuo.mutation.ClearUpdatedBy()
-	return atuo
+func (_u *APITokenUpdateOne) ClearUpdatedBy() *APITokenUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (atuo *APITokenUpdateOne) SetDeletedAt(t time.Time) *APITokenUpdateOne {
-	atuo.mutation.SetDeletedAt(t)
-	return atuo
+func (_u *APITokenUpdateOne) SetDeletedAt(v time.Time) *APITokenUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableDeletedAt(t *time.Time) *APITokenUpdateOne {
-	if t != nil {
-		atuo.SetDeletedAt(*t)
+func (_u *APITokenUpdateOne) SetNillableDeletedAt(v *time.Time) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return atuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (atuo *APITokenUpdateOne) ClearDeletedAt() *APITokenUpdateOne {
-	atuo.mutation.ClearDeletedAt()
-	return atuo
+func (_u *APITokenUpdateOne) ClearDeletedAt() *APITokenUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (atuo *APITokenUpdateOne) SetDeletedBy(s string) *APITokenUpdateOne {
-	atuo.mutation.SetDeletedBy(s)
-	return atuo
+func (_u *APITokenUpdateOne) SetDeletedBy(v string) *APITokenUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableDeletedBy(s *string) *APITokenUpdateOne {
-	if s != nil {
-		atuo.SetDeletedBy(*s)
+func (_u *APITokenUpdateOne) SetNillableDeletedBy(v *string) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return atuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (atuo *APITokenUpdateOne) ClearDeletedBy() *APITokenUpdateOne {
-	atuo.mutation.ClearDeletedBy()
-	return atuo
+func (_u *APITokenUpdateOne) ClearDeletedBy() *APITokenUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (atuo *APITokenUpdateOne) SetTags(s []string) *APITokenUpdateOne {
-	atuo.mutation.SetTags(s)
-	return atuo
+func (_u *APITokenUpdateOne) SetTags(v []string) *APITokenUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (atuo *APITokenUpdateOne) AppendTags(s []string) *APITokenUpdateOne {
-	atuo.mutation.AppendTags(s)
-	return atuo
+// AppendTags appends value to the "tags" field.
+func (_u *APITokenUpdateOne) AppendTags(v []string) *APITokenUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (atuo *APITokenUpdateOne) ClearTags() *APITokenUpdateOne {
-	atuo.mutation.ClearTags()
-	return atuo
+func (_u *APITokenUpdateOne) ClearTags() *APITokenUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (atuo *APITokenUpdateOne) SetOwnerID(s string) *APITokenUpdateOne {
-	atuo.mutation.SetOwnerID(s)
-	return atuo
+func (_u *APITokenUpdateOne) SetOwnerID(v string) *APITokenUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableOwnerID(s *string) *APITokenUpdateOne {
-	if s != nil {
-		atuo.SetOwnerID(*s)
+func (_u *APITokenUpdateOne) SetNillableOwnerID(v *string) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return atuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (atuo *APITokenUpdateOne) ClearOwnerID() *APITokenUpdateOne {
-	atuo.mutation.ClearOwnerID()
-	return atuo
+func (_u *APITokenUpdateOne) ClearOwnerID() *APITokenUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (atuo *APITokenUpdateOne) SetName(s string) *APITokenUpdateOne {
-	atuo.mutation.SetName(s)
-	return atuo
+func (_u *APITokenUpdateOne) SetName(v string) *APITokenUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableName(s *string) *APITokenUpdateOne {
-	if s != nil {
-		atuo.SetName(*s)
+func (_u *APITokenUpdateOne) SetNillableName(v *string) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return atuo
+	return _u
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (atuo *APITokenUpdateOne) SetExpiresAt(t time.Time) *APITokenUpdateOne {
-	atuo.mutation.SetExpiresAt(t)
-	return atuo
+func (_u *APITokenUpdateOne) SetExpiresAt(v time.Time) *APITokenUpdateOne {
+	_u.mutation.SetExpiresAt(v)
+	return _u
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableExpiresAt(t *time.Time) *APITokenUpdateOne {
-	if t != nil {
-		atuo.SetExpiresAt(*t)
+func (_u *APITokenUpdateOne) SetNillableExpiresAt(v *time.Time) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetExpiresAt(*v)
 	}
-	return atuo
+	return _u
 }
 
 // ClearExpiresAt clears the value of the "expires_at" field.
-func (atuo *APITokenUpdateOne) ClearExpiresAt() *APITokenUpdateOne {
-	atuo.mutation.ClearExpiresAt()
-	return atuo
+func (_u *APITokenUpdateOne) ClearExpiresAt() *APITokenUpdateOne {
+	_u.mutation.ClearExpiresAt()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (atuo *APITokenUpdateOne) SetDescription(s string) *APITokenUpdateOne {
-	atuo.mutation.SetDescription(s)
-	return atuo
+func (_u *APITokenUpdateOne) SetDescription(v string) *APITokenUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableDescription(s *string) *APITokenUpdateOne {
-	if s != nil {
-		atuo.SetDescription(*s)
+func (_u *APITokenUpdateOne) SetNillableDescription(v *string) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return atuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (atuo *APITokenUpdateOne) ClearDescription() *APITokenUpdateOne {
-	atuo.mutation.ClearDescription()
-	return atuo
+func (_u *APITokenUpdateOne) ClearDescription() *APITokenUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetScopes sets the "scopes" field.
-func (atuo *APITokenUpdateOne) SetScopes(s []string) *APITokenUpdateOne {
-	atuo.mutation.SetScopes(s)
-	return atuo
+func (_u *APITokenUpdateOne) SetScopes(v []string) *APITokenUpdateOne {
+	_u.mutation.SetScopes(v)
+	return _u
 }
 
-// AppendScopes appends s to the "scopes" field.
-func (atuo *APITokenUpdateOne) AppendScopes(s []string) *APITokenUpdateOne {
-	atuo.mutation.AppendScopes(s)
-	return atuo
+// AppendScopes appends value to the "scopes" field.
+func (_u *APITokenUpdateOne) AppendScopes(v []string) *APITokenUpdateOne {
+	_u.mutation.AppendScopes(v)
+	return _u
 }
 
 // ClearScopes clears the value of the "scopes" field.
-func (atuo *APITokenUpdateOne) ClearScopes() *APITokenUpdateOne {
-	atuo.mutation.ClearScopes()
-	return atuo
+func (_u *APITokenUpdateOne) ClearScopes() *APITokenUpdateOne {
+	_u.mutation.ClearScopes()
+	return _u
 }
 
 // SetLastUsedAt sets the "last_used_at" field.
-func (atuo *APITokenUpdateOne) SetLastUsedAt(t time.Time) *APITokenUpdateOne {
-	atuo.mutation.SetLastUsedAt(t)
-	return atuo
+func (_u *APITokenUpdateOne) SetLastUsedAt(v time.Time) *APITokenUpdateOne {
+	_u.mutation.SetLastUsedAt(v)
+	return _u
 }
 
 // SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableLastUsedAt(t *time.Time) *APITokenUpdateOne {
-	if t != nil {
-		atuo.SetLastUsedAt(*t)
+func (_u *APITokenUpdateOne) SetNillableLastUsedAt(v *time.Time) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetLastUsedAt(*v)
 	}
-	return atuo
+	return _u
 }
 
 // ClearLastUsedAt clears the value of the "last_used_at" field.
-func (atuo *APITokenUpdateOne) ClearLastUsedAt() *APITokenUpdateOne {
-	atuo.mutation.ClearLastUsedAt()
-	return atuo
+func (_u *APITokenUpdateOne) ClearLastUsedAt() *APITokenUpdateOne {
+	_u.mutation.ClearLastUsedAt()
+	return _u
 }
 
 // SetIsActive sets the "is_active" field.
-func (atuo *APITokenUpdateOne) SetIsActive(b bool) *APITokenUpdateOne {
-	atuo.mutation.SetIsActive(b)
-	return atuo
+func (_u *APITokenUpdateOne) SetIsActive(v bool) *APITokenUpdateOne {
+	_u.mutation.SetIsActive(v)
+	return _u
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableIsActive(b *bool) *APITokenUpdateOne {
-	if b != nil {
-		atuo.SetIsActive(*b)
+func (_u *APITokenUpdateOne) SetNillableIsActive(v *bool) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetIsActive(*v)
 	}
-	return atuo
+	return _u
 }
 
 // ClearIsActive clears the value of the "is_active" field.
-func (atuo *APITokenUpdateOne) ClearIsActive() *APITokenUpdateOne {
-	atuo.mutation.ClearIsActive()
-	return atuo
+func (_u *APITokenUpdateOne) ClearIsActive() *APITokenUpdateOne {
+	_u.mutation.ClearIsActive()
+	return _u
 }
 
 // SetRevokedReason sets the "revoked_reason" field.
-func (atuo *APITokenUpdateOne) SetRevokedReason(s string) *APITokenUpdateOne {
-	atuo.mutation.SetRevokedReason(s)
-	return atuo
+func (_u *APITokenUpdateOne) SetRevokedReason(v string) *APITokenUpdateOne {
+	_u.mutation.SetRevokedReason(v)
+	return _u
 }
 
 // SetNillableRevokedReason sets the "revoked_reason" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableRevokedReason(s *string) *APITokenUpdateOne {
-	if s != nil {
-		atuo.SetRevokedReason(*s)
+func (_u *APITokenUpdateOne) SetNillableRevokedReason(v *string) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetRevokedReason(*v)
 	}
-	return atuo
+	return _u
 }
 
 // ClearRevokedReason clears the value of the "revoked_reason" field.
-func (atuo *APITokenUpdateOne) ClearRevokedReason() *APITokenUpdateOne {
-	atuo.mutation.ClearRevokedReason()
-	return atuo
+func (_u *APITokenUpdateOne) ClearRevokedReason() *APITokenUpdateOne {
+	_u.mutation.ClearRevokedReason()
+	return _u
 }
 
 // SetRevokedBy sets the "revoked_by" field.
-func (atuo *APITokenUpdateOne) SetRevokedBy(s string) *APITokenUpdateOne {
-	atuo.mutation.SetRevokedBy(s)
-	return atuo
+func (_u *APITokenUpdateOne) SetRevokedBy(v string) *APITokenUpdateOne {
+	_u.mutation.SetRevokedBy(v)
+	return _u
 }
 
 // SetNillableRevokedBy sets the "revoked_by" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableRevokedBy(s *string) *APITokenUpdateOne {
-	if s != nil {
-		atuo.SetRevokedBy(*s)
+func (_u *APITokenUpdateOne) SetNillableRevokedBy(v *string) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetRevokedBy(*v)
 	}
-	return atuo
+	return _u
 }
 
 // ClearRevokedBy clears the value of the "revoked_by" field.
-func (atuo *APITokenUpdateOne) ClearRevokedBy() *APITokenUpdateOne {
-	atuo.mutation.ClearRevokedBy()
-	return atuo
+func (_u *APITokenUpdateOne) ClearRevokedBy() *APITokenUpdateOne {
+	_u.mutation.ClearRevokedBy()
+	return _u
 }
 
 // SetRevokedAt sets the "revoked_at" field.
-func (atuo *APITokenUpdateOne) SetRevokedAt(t time.Time) *APITokenUpdateOne {
-	atuo.mutation.SetRevokedAt(t)
-	return atuo
+func (_u *APITokenUpdateOne) SetRevokedAt(v time.Time) *APITokenUpdateOne {
+	_u.mutation.SetRevokedAt(v)
+	return _u
 }
 
 // SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
-func (atuo *APITokenUpdateOne) SetNillableRevokedAt(t *time.Time) *APITokenUpdateOne {
-	if t != nil {
-		atuo.SetRevokedAt(*t)
+func (_u *APITokenUpdateOne) SetNillableRevokedAt(v *time.Time) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetRevokedAt(*v)
 	}
-	return atuo
+	return _u
 }
 
 // ClearRevokedAt clears the value of the "revoked_at" field.
-func (atuo *APITokenUpdateOne) ClearRevokedAt() *APITokenUpdateOne {
-	atuo.mutation.ClearRevokedAt()
-	return atuo
+func (_u *APITokenUpdateOne) ClearRevokedAt() *APITokenUpdateOne {
+	_u.mutation.ClearRevokedAt()
+	return _u
 }
 
 // SetSSOAuthorizations sets the "sso_authorizations" field.
-func (atuo *APITokenUpdateOne) SetSSOAuthorizations(mam models.SSOAuthorizationMap) *APITokenUpdateOne {
-	atuo.mutation.SetSSOAuthorizations(mam)
-	return atuo
+func (_u *APITokenUpdateOne) SetSSOAuthorizations(v models.SSOAuthorizationMap) *APITokenUpdateOne {
+	_u.mutation.SetSSOAuthorizations(v)
+	return _u
 }
 
 // ClearSSOAuthorizations clears the value of the "sso_authorizations" field.
-func (atuo *APITokenUpdateOne) ClearSSOAuthorizations() *APITokenUpdateOne {
-	atuo.mutation.ClearSSOAuthorizations()
-	return atuo
+func (_u *APITokenUpdateOne) ClearSSOAuthorizations() *APITokenUpdateOne {
+	_u.mutation.ClearSSOAuthorizations()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (atuo *APITokenUpdateOne) SetOwner(o *Organization) *APITokenUpdateOne {
-	return atuo.SetOwnerID(o.ID)
+func (_u *APITokenUpdateOne) SetOwner(v *Organization) *APITokenUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // Mutation returns the APITokenMutation object of the builder.
-func (atuo *APITokenUpdateOne) Mutation() *APITokenMutation {
-	return atuo.mutation
+func (_u *APITokenUpdateOne) Mutation() *APITokenMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (atuo *APITokenUpdateOne) ClearOwner() *APITokenUpdateOne {
-	atuo.mutation.ClearOwner()
-	return atuo
+func (_u *APITokenUpdateOne) ClearOwner() *APITokenUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // Where appends a list predicates to the APITokenUpdate builder.
-func (atuo *APITokenUpdateOne) Where(ps ...predicate.APIToken) *APITokenUpdateOne {
-	atuo.mutation.Where(ps...)
-	return atuo
+func (_u *APITokenUpdateOne) Where(ps ...predicate.APIToken) *APITokenUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (atuo *APITokenUpdateOne) Select(field string, fields ...string) *APITokenUpdateOne {
-	atuo.fields = append([]string{field}, fields...)
-	return atuo
+func (_u *APITokenUpdateOne) Select(field string, fields ...string) *APITokenUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated APIToken entity.
-func (atuo *APITokenUpdateOne) Save(ctx context.Context) (*APIToken, error) {
-	if err := atuo.defaults(); err != nil {
+func (_u *APITokenUpdateOne) Save(ctx context.Context) (*APIToken, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, atuo.sqlSave, atuo.mutation, atuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (atuo *APITokenUpdateOne) SaveX(ctx context.Context) *APIToken {
-	node, err := atuo.Save(ctx)
+func (_u *APITokenUpdateOne) SaveX(ctx context.Context) *APIToken {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -918,38 +918,38 @@ func (atuo *APITokenUpdateOne) SaveX(ctx context.Context) *APIToken {
 }
 
 // Exec executes the query on the entity.
-func (atuo *APITokenUpdateOne) Exec(ctx context.Context) error {
-	_, err := atuo.Save(ctx)
+func (_u *APITokenUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (atuo *APITokenUpdateOne) ExecX(ctx context.Context) {
-	if err := atuo.Exec(ctx); err != nil {
+func (_u *APITokenUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (atuo *APITokenUpdateOne) defaults() error {
-	if _, ok := atuo.mutation.UpdatedAt(); !ok && !atuo.mutation.UpdatedAtCleared() {
+func (_u *APITokenUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if apitoken.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized apitoken.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := apitoken.UpdateDefaultUpdatedAt()
-		atuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (atuo *APITokenUpdateOne) check() error {
-	if v, ok := atuo.mutation.OwnerID(); ok {
+func (_u *APITokenUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := apitoken.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "APIToken.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := atuo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := apitoken.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "APIToken.name": %w`, err)}
 		}
@@ -958,22 +958,22 @@ func (atuo *APITokenUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (atuo *APITokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *APITokenUpdateOne {
-	atuo.modifiers = append(atuo.modifiers, modifiers...)
-	return atuo
+func (_u *APITokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *APITokenUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, err error) {
-	if err := atuo.check(); err != nil {
+func (_u *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(apitoken.Table, apitoken.Columns, sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString))
-	id, ok := atuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "APIToken.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := atuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, apitoken.FieldID)
 		for _, f := range fields {
@@ -985,117 +985,117 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 			}
 		}
 	}
-	if ps := atuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if atuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(apitoken.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := atuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(apitoken.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if atuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(apitoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if atuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(apitoken.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := atuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(apitoken.FieldUpdatedBy, field.TypeString, value)
 	}
-	if atuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(apitoken.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := atuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(apitoken.FieldDeletedAt, field.TypeTime, value)
 	}
-	if atuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(apitoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := atuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(apitoken.FieldDeletedBy, field.TypeString, value)
 	}
-	if atuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(apitoken.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := atuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(apitoken.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := atuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, apitoken.FieldTags, value)
 		})
 	}
-	if atuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(apitoken.FieldTags, field.TypeJSON)
 	}
-	if value, ok := atuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(apitoken.FieldName, field.TypeString, value)
 	}
-	if value, ok := atuo.mutation.ExpiresAt(); ok {
+	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(apitoken.FieldExpiresAt, field.TypeTime, value)
 	}
-	if atuo.mutation.ExpiresAtCleared() {
+	if _u.mutation.ExpiresAtCleared() {
 		_spec.ClearField(apitoken.FieldExpiresAt, field.TypeTime)
 	}
-	if value, ok := atuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(apitoken.FieldDescription, field.TypeString, value)
 	}
-	if atuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(apitoken.FieldDescription, field.TypeString)
 	}
-	if value, ok := atuo.mutation.Scopes(); ok {
+	if value, ok := _u.mutation.Scopes(); ok {
 		_spec.SetField(apitoken.FieldScopes, field.TypeJSON, value)
 	}
-	if value, ok := atuo.mutation.AppendedScopes(); ok {
+	if value, ok := _u.mutation.AppendedScopes(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, apitoken.FieldScopes, value)
 		})
 	}
-	if atuo.mutation.ScopesCleared() {
+	if _u.mutation.ScopesCleared() {
 		_spec.ClearField(apitoken.FieldScopes, field.TypeJSON)
 	}
-	if value, ok := atuo.mutation.LastUsedAt(); ok {
+	if value, ok := _u.mutation.LastUsedAt(); ok {
 		_spec.SetField(apitoken.FieldLastUsedAt, field.TypeTime, value)
 	}
-	if atuo.mutation.LastUsedAtCleared() {
+	if _u.mutation.LastUsedAtCleared() {
 		_spec.ClearField(apitoken.FieldLastUsedAt, field.TypeTime)
 	}
-	if value, ok := atuo.mutation.IsActive(); ok {
+	if value, ok := _u.mutation.IsActive(); ok {
 		_spec.SetField(apitoken.FieldIsActive, field.TypeBool, value)
 	}
-	if atuo.mutation.IsActiveCleared() {
+	if _u.mutation.IsActiveCleared() {
 		_spec.ClearField(apitoken.FieldIsActive, field.TypeBool)
 	}
-	if value, ok := atuo.mutation.RevokedReason(); ok {
+	if value, ok := _u.mutation.RevokedReason(); ok {
 		_spec.SetField(apitoken.FieldRevokedReason, field.TypeString, value)
 	}
-	if atuo.mutation.RevokedReasonCleared() {
+	if _u.mutation.RevokedReasonCleared() {
 		_spec.ClearField(apitoken.FieldRevokedReason, field.TypeString)
 	}
-	if value, ok := atuo.mutation.RevokedBy(); ok {
+	if value, ok := _u.mutation.RevokedBy(); ok {
 		_spec.SetField(apitoken.FieldRevokedBy, field.TypeString, value)
 	}
-	if atuo.mutation.RevokedByCleared() {
+	if _u.mutation.RevokedByCleared() {
 		_spec.ClearField(apitoken.FieldRevokedBy, field.TypeString)
 	}
-	if value, ok := atuo.mutation.RevokedAt(); ok {
+	if value, ok := _u.mutation.RevokedAt(); ok {
 		_spec.SetField(apitoken.FieldRevokedAt, field.TypeTime, value)
 	}
-	if atuo.mutation.RevokedAtCleared() {
+	if _u.mutation.RevokedAtCleared() {
 		_spec.ClearField(apitoken.FieldRevokedAt, field.TypeTime)
 	}
-	if value, ok := atuo.mutation.SSOAuthorizations(); ok {
+	if value, ok := _u.mutation.SSOAuthorizations(); ok {
 		_spec.SetField(apitoken.FieldSSOAuthorizations, field.TypeJSON, value)
 	}
-	if atuo.mutation.SSOAuthorizationsCleared() {
+	if _u.mutation.SSOAuthorizationsCleared() {
 		_spec.ClearField(apitoken.FieldSSOAuthorizations, field.TypeJSON)
 	}
-	if atuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1106,10 +1106,10 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = atuo.schemaConfig.APIToken
+		edge.Schema = _u.schemaConfig.APIToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := atuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1120,19 +1120,19 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = atuo.schemaConfig.APIToken
+		edge.Schema = _u.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = atuo.schemaConfig.APIToken
-	ctx = internal.NewSchemaConfigContext(ctx, atuo.schemaConfig)
-	_spec.AddModifiers(atuo.modifiers...)
-	_node = &APIToken{config: atuo.config}
+	_spec.Node.Schema = _u.schemaConfig.APIToken
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &APIToken{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, atuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{apitoken.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1140,6 +1140,6 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 		}
 		return nil, err
 	}
-	atuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -27,191 +27,191 @@ type IntegrationHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the IntegrationHistoryUpdate builder.
-func (ihu *IntegrationHistoryUpdate) Where(ps ...predicate.IntegrationHistory) *IntegrationHistoryUpdate {
-	ihu.mutation.Where(ps...)
-	return ihu
+func (_u *IntegrationHistoryUpdate) Where(ps ...predicate.IntegrationHistory) *IntegrationHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ihu *IntegrationHistoryUpdate) SetUpdatedAt(t time.Time) *IntegrationHistoryUpdate {
-	ihu.mutation.SetUpdatedAt(t)
-	return ihu
+func (_u *IntegrationHistoryUpdate) SetUpdatedAt(v time.Time) *IntegrationHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ihu *IntegrationHistoryUpdate) ClearUpdatedAt() *IntegrationHistoryUpdate {
-	ihu.mutation.ClearUpdatedAt()
-	return ihu
+func (_u *IntegrationHistoryUpdate) ClearUpdatedAt() *IntegrationHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ihu *IntegrationHistoryUpdate) SetUpdatedBy(s string) *IntegrationHistoryUpdate {
-	ihu.mutation.SetUpdatedBy(s)
-	return ihu
+func (_u *IntegrationHistoryUpdate) SetUpdatedBy(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ihu *IntegrationHistoryUpdate) SetNillableUpdatedBy(s *string) *IntegrationHistoryUpdate {
-	if s != nil {
-		ihu.SetUpdatedBy(*s)
+func (_u *IntegrationHistoryUpdate) SetNillableUpdatedBy(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ihu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ihu *IntegrationHistoryUpdate) ClearUpdatedBy() *IntegrationHistoryUpdate {
-	ihu.mutation.ClearUpdatedBy()
-	return ihu
+func (_u *IntegrationHistoryUpdate) ClearUpdatedBy() *IntegrationHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ihu *IntegrationHistoryUpdate) SetDeletedAt(t time.Time) *IntegrationHistoryUpdate {
-	ihu.mutation.SetDeletedAt(t)
-	return ihu
+func (_u *IntegrationHistoryUpdate) SetDeletedAt(v time.Time) *IntegrationHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ihu *IntegrationHistoryUpdate) SetNillableDeletedAt(t *time.Time) *IntegrationHistoryUpdate {
-	if t != nil {
-		ihu.SetDeletedAt(*t)
+func (_u *IntegrationHistoryUpdate) SetNillableDeletedAt(v *time.Time) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ihu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ihu *IntegrationHistoryUpdate) ClearDeletedAt() *IntegrationHistoryUpdate {
-	ihu.mutation.ClearDeletedAt()
-	return ihu
+func (_u *IntegrationHistoryUpdate) ClearDeletedAt() *IntegrationHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ihu *IntegrationHistoryUpdate) SetDeletedBy(s string) *IntegrationHistoryUpdate {
-	ihu.mutation.SetDeletedBy(s)
-	return ihu
+func (_u *IntegrationHistoryUpdate) SetDeletedBy(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ihu *IntegrationHistoryUpdate) SetNillableDeletedBy(s *string) *IntegrationHistoryUpdate {
-	if s != nil {
-		ihu.SetDeletedBy(*s)
+func (_u *IntegrationHistoryUpdate) SetNillableDeletedBy(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ihu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ihu *IntegrationHistoryUpdate) ClearDeletedBy() *IntegrationHistoryUpdate {
-	ihu.mutation.ClearDeletedBy()
-	return ihu
+func (_u *IntegrationHistoryUpdate) ClearDeletedBy() *IntegrationHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ihu *IntegrationHistoryUpdate) SetTags(s []string) *IntegrationHistoryUpdate {
-	ihu.mutation.SetTags(s)
-	return ihu
+func (_u *IntegrationHistoryUpdate) SetTags(v []string) *IntegrationHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ihu *IntegrationHistoryUpdate) AppendTags(s []string) *IntegrationHistoryUpdate {
-	ihu.mutation.AppendTags(s)
-	return ihu
+// AppendTags appends value to the "tags" field.
+func (_u *IntegrationHistoryUpdate) AppendTags(v []string) *IntegrationHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ihu *IntegrationHistoryUpdate) ClearTags() *IntegrationHistoryUpdate {
-	ihu.mutation.ClearTags()
-	return ihu
+func (_u *IntegrationHistoryUpdate) ClearTags() *IntegrationHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ihu *IntegrationHistoryUpdate) SetOwnerID(s string) *IntegrationHistoryUpdate {
-	ihu.mutation.SetOwnerID(s)
-	return ihu
+func (_u *IntegrationHistoryUpdate) SetOwnerID(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ihu *IntegrationHistoryUpdate) SetNillableOwnerID(s *string) *IntegrationHistoryUpdate {
-	if s != nil {
-		ihu.SetOwnerID(*s)
+func (_u *IntegrationHistoryUpdate) SetNillableOwnerID(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return ihu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (ihu *IntegrationHistoryUpdate) ClearOwnerID() *IntegrationHistoryUpdate {
-	ihu.mutation.ClearOwnerID()
-	return ihu
+func (_u *IntegrationHistoryUpdate) ClearOwnerID() *IntegrationHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ihu *IntegrationHistoryUpdate) SetName(s string) *IntegrationHistoryUpdate {
-	ihu.mutation.SetName(s)
-	return ihu
+func (_u *IntegrationHistoryUpdate) SetName(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ihu *IntegrationHistoryUpdate) SetNillableName(s *string) *IntegrationHistoryUpdate {
-	if s != nil {
-		ihu.SetName(*s)
+func (_u *IntegrationHistoryUpdate) SetNillableName(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ihu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ihu *IntegrationHistoryUpdate) SetDescription(s string) *IntegrationHistoryUpdate {
-	ihu.mutation.SetDescription(s)
-	return ihu
+func (_u *IntegrationHistoryUpdate) SetDescription(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ihu *IntegrationHistoryUpdate) SetNillableDescription(s *string) *IntegrationHistoryUpdate {
-	if s != nil {
-		ihu.SetDescription(*s)
+func (_u *IntegrationHistoryUpdate) SetNillableDescription(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ihu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ihu *IntegrationHistoryUpdate) ClearDescription() *IntegrationHistoryUpdate {
-	ihu.mutation.ClearDescription()
-	return ihu
+func (_u *IntegrationHistoryUpdate) ClearDescription() *IntegrationHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetKind sets the "kind" field.
-func (ihu *IntegrationHistoryUpdate) SetKind(s string) *IntegrationHistoryUpdate {
-	ihu.mutation.SetKind(s)
-	return ihu
+func (_u *IntegrationHistoryUpdate) SetKind(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetKind(v)
+	return _u
 }
 
 // SetNillableKind sets the "kind" field if the given value is not nil.
-func (ihu *IntegrationHistoryUpdate) SetNillableKind(s *string) *IntegrationHistoryUpdate {
-	if s != nil {
-		ihu.SetKind(*s)
+func (_u *IntegrationHistoryUpdate) SetNillableKind(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetKind(*v)
 	}
-	return ihu
+	return _u
 }
 
 // ClearKind clears the value of the "kind" field.
-func (ihu *IntegrationHistoryUpdate) ClearKind() *IntegrationHistoryUpdate {
-	ihu.mutation.ClearKind()
-	return ihu
+func (_u *IntegrationHistoryUpdate) ClearKind() *IntegrationHistoryUpdate {
+	_u.mutation.ClearKind()
+	return _u
 }
 
 // Mutation returns the IntegrationHistoryMutation object of the builder.
-func (ihu *IntegrationHistoryUpdate) Mutation() *IntegrationHistoryMutation {
-	return ihu.mutation
+func (_u *IntegrationHistoryUpdate) Mutation() *IntegrationHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ihu *IntegrationHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := ihu.defaults(); err != nil {
+func (_u *IntegrationHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, ihu.sqlSave, ihu.mutation, ihu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ihu *IntegrationHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := ihu.Save(ctx)
+func (_u *IntegrationHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -219,114 +219,114 @@ func (ihu *IntegrationHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ihu *IntegrationHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := ihu.Save(ctx)
+func (_u *IntegrationHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ihu *IntegrationHistoryUpdate) ExecX(ctx context.Context) {
-	if err := ihu.Exec(ctx); err != nil {
+func (_u *IntegrationHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ihu *IntegrationHistoryUpdate) defaults() error {
-	if _, ok := ihu.mutation.UpdatedAt(); !ok && !ihu.mutation.UpdatedAtCleared() {
+func (_u *IntegrationHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if integrationhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized integrationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := integrationhistory.UpdateDefaultUpdatedAt()
-		ihu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ihu *IntegrationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationHistoryUpdate {
-	ihu.modifiers = append(ihu.modifiers, modifiers...)
-	return ihu
+func (_u *IntegrationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ihu *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(integrationhistory.Table, integrationhistory.Columns, sqlgraph.NewFieldSpec(integrationhistory.FieldID, field.TypeString))
-	if ps := ihu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ihu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(integrationhistory.FieldRef, field.TypeString)
 	}
-	if ihu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ihu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(integrationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ihu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ihu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(integrationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ihu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(integrationhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ihu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(integrationhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ihu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(integrationhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ihu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ihu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(integrationhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ihu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(integrationhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ihu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(integrationhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ihu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, integrationhistory.FieldTags, value)
 		})
 	}
-	if ihu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(integrationhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ihu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(integrationhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if ihu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(integrationhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := ihu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integrationhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ihu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(integrationhistory.FieldDescription, field.TypeString, value)
 	}
-	if ihu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(integrationhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := ihu.mutation.Kind(); ok {
+	if value, ok := _u.mutation.Kind(); ok {
 		_spec.SetField(integrationhistory.FieldKind, field.TypeString, value)
 	}
-	if ihu.mutation.KindCleared() {
+	if _u.mutation.KindCleared() {
 		_spec.ClearField(integrationhistory.FieldKind, field.TypeString)
 	}
-	_spec.Node.Schema = ihu.schemaConfig.IntegrationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ihu.schemaConfig)
-	_spec.AddModifiers(ihu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, ihu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.IntegrationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{integrationhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -334,8 +334,8 @@ func (ihu *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 		}
 		return 0, err
 	}
-	ihu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // IntegrationHistoryUpdateOne is the builder for updating a single IntegrationHistory entity.
@@ -348,198 +348,198 @@ type IntegrationHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ihuo *IntegrationHistoryUpdateOne) SetUpdatedAt(t time.Time) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.SetUpdatedAt(t)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) SetUpdatedAt(v time.Time) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ihuo *IntegrationHistoryUpdateOne) ClearUpdatedAt() *IntegrationHistoryUpdateOne {
-	ihuo.mutation.ClearUpdatedAt()
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) ClearUpdatedAt() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ihuo *IntegrationHistoryUpdateOne) SetUpdatedBy(s string) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.SetUpdatedBy(s)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) SetUpdatedBy(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ihuo *IntegrationHistoryUpdateOne) SetNillableUpdatedBy(s *string) *IntegrationHistoryUpdateOne {
-	if s != nil {
-		ihuo.SetUpdatedBy(*s)
+func (_u *IntegrationHistoryUpdateOne) SetNillableUpdatedBy(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ihuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ihuo *IntegrationHistoryUpdateOne) ClearUpdatedBy() *IntegrationHistoryUpdateOne {
-	ihuo.mutation.ClearUpdatedBy()
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) ClearUpdatedBy() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ihuo *IntegrationHistoryUpdateOne) SetDeletedAt(t time.Time) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.SetDeletedAt(t)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) SetDeletedAt(v time.Time) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ihuo *IntegrationHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *IntegrationHistoryUpdateOne {
-	if t != nil {
-		ihuo.SetDeletedAt(*t)
+func (_u *IntegrationHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ihuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ihuo *IntegrationHistoryUpdateOne) ClearDeletedAt() *IntegrationHistoryUpdateOne {
-	ihuo.mutation.ClearDeletedAt()
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) ClearDeletedAt() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ihuo *IntegrationHistoryUpdateOne) SetDeletedBy(s string) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.SetDeletedBy(s)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) SetDeletedBy(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ihuo *IntegrationHistoryUpdateOne) SetNillableDeletedBy(s *string) *IntegrationHistoryUpdateOne {
-	if s != nil {
-		ihuo.SetDeletedBy(*s)
+func (_u *IntegrationHistoryUpdateOne) SetNillableDeletedBy(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ihuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ihuo *IntegrationHistoryUpdateOne) ClearDeletedBy() *IntegrationHistoryUpdateOne {
-	ihuo.mutation.ClearDeletedBy()
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) ClearDeletedBy() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ihuo *IntegrationHistoryUpdateOne) SetTags(s []string) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.SetTags(s)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) SetTags(v []string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ihuo *IntegrationHistoryUpdateOne) AppendTags(s []string) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.AppendTags(s)
-	return ihuo
+// AppendTags appends value to the "tags" field.
+func (_u *IntegrationHistoryUpdateOne) AppendTags(v []string) *IntegrationHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ihuo *IntegrationHistoryUpdateOne) ClearTags() *IntegrationHistoryUpdateOne {
-	ihuo.mutation.ClearTags()
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) ClearTags() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ihuo *IntegrationHistoryUpdateOne) SetOwnerID(s string) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.SetOwnerID(s)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) SetOwnerID(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ihuo *IntegrationHistoryUpdateOne) SetNillableOwnerID(s *string) *IntegrationHistoryUpdateOne {
-	if s != nil {
-		ihuo.SetOwnerID(*s)
+func (_u *IntegrationHistoryUpdateOne) SetNillableOwnerID(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return ihuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (ihuo *IntegrationHistoryUpdateOne) ClearOwnerID() *IntegrationHistoryUpdateOne {
-	ihuo.mutation.ClearOwnerID()
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) ClearOwnerID() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ihuo *IntegrationHistoryUpdateOne) SetName(s string) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.SetName(s)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) SetName(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ihuo *IntegrationHistoryUpdateOne) SetNillableName(s *string) *IntegrationHistoryUpdateOne {
-	if s != nil {
-		ihuo.SetName(*s)
+func (_u *IntegrationHistoryUpdateOne) SetNillableName(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ihuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ihuo *IntegrationHistoryUpdateOne) SetDescription(s string) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.SetDescription(s)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) SetDescription(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ihuo *IntegrationHistoryUpdateOne) SetNillableDescription(s *string) *IntegrationHistoryUpdateOne {
-	if s != nil {
-		ihuo.SetDescription(*s)
+func (_u *IntegrationHistoryUpdateOne) SetNillableDescription(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ihuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ihuo *IntegrationHistoryUpdateOne) ClearDescription() *IntegrationHistoryUpdateOne {
-	ihuo.mutation.ClearDescription()
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) ClearDescription() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetKind sets the "kind" field.
-func (ihuo *IntegrationHistoryUpdateOne) SetKind(s string) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.SetKind(s)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) SetKind(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetKind(v)
+	return _u
 }
 
 // SetNillableKind sets the "kind" field if the given value is not nil.
-func (ihuo *IntegrationHistoryUpdateOne) SetNillableKind(s *string) *IntegrationHistoryUpdateOne {
-	if s != nil {
-		ihuo.SetKind(*s)
+func (_u *IntegrationHistoryUpdateOne) SetNillableKind(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetKind(*v)
 	}
-	return ihuo
+	return _u
 }
 
 // ClearKind clears the value of the "kind" field.
-func (ihuo *IntegrationHistoryUpdateOne) ClearKind() *IntegrationHistoryUpdateOne {
-	ihuo.mutation.ClearKind()
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) ClearKind() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearKind()
+	return _u
 }
 
 // Mutation returns the IntegrationHistoryMutation object of the builder.
-func (ihuo *IntegrationHistoryUpdateOne) Mutation() *IntegrationHistoryMutation {
-	return ihuo.mutation
+func (_u *IntegrationHistoryUpdateOne) Mutation() *IntegrationHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the IntegrationHistoryUpdate builder.
-func (ihuo *IntegrationHistoryUpdateOne) Where(ps ...predicate.IntegrationHistory) *IntegrationHistoryUpdateOne {
-	ihuo.mutation.Where(ps...)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) Where(ps ...predicate.IntegrationHistory) *IntegrationHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ihuo *IntegrationHistoryUpdateOne) Select(field string, fields ...string) *IntegrationHistoryUpdateOne {
-	ihuo.fields = append([]string{field}, fields...)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) Select(field string, fields ...string) *IntegrationHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated IntegrationHistory entity.
-func (ihuo *IntegrationHistoryUpdateOne) Save(ctx context.Context) (*IntegrationHistory, error) {
-	if err := ihuo.defaults(); err != nil {
+func (_u *IntegrationHistoryUpdateOne) Save(ctx context.Context) (*IntegrationHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ihuo.sqlSave, ihuo.mutation, ihuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ihuo *IntegrationHistoryUpdateOne) SaveX(ctx context.Context) *IntegrationHistory {
-	node, err := ihuo.Save(ctx)
+func (_u *IntegrationHistoryUpdateOne) SaveX(ctx context.Context) *IntegrationHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -547,44 +547,44 @@ func (ihuo *IntegrationHistoryUpdateOne) SaveX(ctx context.Context) *Integration
 }
 
 // Exec executes the query on the entity.
-func (ihuo *IntegrationHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := ihuo.Save(ctx)
+func (_u *IntegrationHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ihuo *IntegrationHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := ihuo.Exec(ctx); err != nil {
+func (_u *IntegrationHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ihuo *IntegrationHistoryUpdateOne) defaults() error {
-	if _, ok := ihuo.mutation.UpdatedAt(); !ok && !ihuo.mutation.UpdatedAtCleared() {
+func (_u *IntegrationHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if integrationhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized integrationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := integrationhistory.UpdateDefaultUpdatedAt()
-		ihuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ihuo *IntegrationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationHistoryUpdateOne {
-	ihuo.modifiers = append(ihuo.modifiers, modifiers...)
-	return ihuo
+func (_u *IntegrationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ihuo *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *IntegrationHistory, err error) {
+func (_u *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *IntegrationHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(integrationhistory.Table, integrationhistory.Columns, sqlgraph.NewFieldSpec(integrationhistory.FieldID, field.TypeString))
-	id, ok := ihuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "IntegrationHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ihuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, integrationhistory.FieldID)
 		for _, f := range fields {
@@ -596,85 +596,85 @@ func (ihuo *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *In
 			}
 		}
 	}
-	if ps := ihuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ihuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(integrationhistory.FieldRef, field.TypeString)
 	}
-	if ihuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ihuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(integrationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ihuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ihuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(integrationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ihuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(integrationhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ihuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(integrationhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ihuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(integrationhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ihuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(integrationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ihuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(integrationhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ihuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(integrationhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ihuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(integrationhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ihuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, integrationhistory.FieldTags, value)
 		})
 	}
-	if ihuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(integrationhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ihuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(integrationhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if ihuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(integrationhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := ihuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integrationhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ihuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(integrationhistory.FieldDescription, field.TypeString, value)
 	}
-	if ihuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(integrationhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := ihuo.mutation.Kind(); ok {
+	if value, ok := _u.mutation.Kind(); ok {
 		_spec.SetField(integrationhistory.FieldKind, field.TypeString, value)
 	}
-	if ihuo.mutation.KindCleared() {
+	if _u.mutation.KindCleared() {
 		_spec.ClearField(integrationhistory.FieldKind, field.TypeString)
 	}
-	_spec.Node.Schema = ihuo.schemaConfig.IntegrationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ihuo.schemaConfig)
-	_spec.AddModifiers(ihuo.modifiers...)
-	_node = &IntegrationHistory{config: ihuo.config}
+	_spec.Node.Schema = _u.schemaConfig.IntegrationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &IntegrationHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ihuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{integrationhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -682,6 +682,6 @@ func (ihuo *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *In
 		}
 		return nil, err
 	}
-	ihuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

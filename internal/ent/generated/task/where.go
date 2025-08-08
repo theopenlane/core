@@ -1512,6 +1512,35 @@ func HasRisksWith(preds ...predicate.Risk) predicate.Task {
 	})
 }
 
+// HasControlImplementations applies the HasEdge predicate on the "control_implementations" edge.
+func HasControlImplementations() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlImplementationsTable, ControlImplementationsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementationTasks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlImplementationsWith applies the HasEdge predicate on the "control_implementations" edge with a given conditions (other predicates).
+func HasControlImplementationsWith(preds ...predicate.ControlImplementation) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := newControlImplementationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementationTasks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasEvidence applies the HasEdge predicate on the "evidence" edge.
 func HasEvidence() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {

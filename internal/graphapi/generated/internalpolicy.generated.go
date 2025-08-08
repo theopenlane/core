@@ -127,6 +127,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_InternalPolicy_controlImplementations(ctx, field)
 			case "controls":
 				return ec.fieldContext_InternalPolicy_controls(ctx, field)
 			case "subcontrols":
@@ -246,6 +248,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_InternalPolicy_controlImplementations(ctx, field)
 			case "controls":
 				return ec.fieldContext_InternalPolicy_controls(ctx, field)
 			case "subcontrols":
@@ -409,6 +413,8 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_InternalPolicy_controlImplementations(ctx, field)
 			case "controls":
 				return ec.fieldContext_InternalPolicy_controls(ctx, field)
 			case "subcontrols":
@@ -575,6 +581,8 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
 			case "controlObjectives":
 				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_InternalPolicy_controlImplementations(ctx, field)
 			case "controls":
 				return ec.fieldContext_InternalPolicy_controls(ctx, field)
 			case "subcontrols":

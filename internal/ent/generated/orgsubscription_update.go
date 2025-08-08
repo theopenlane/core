@@ -33,542 +33,542 @@ type OrgSubscriptionUpdate struct {
 }
 
 // Where appends a list predicates to the OrgSubscriptionUpdate builder.
-func (osu *OrgSubscriptionUpdate) Where(ps ...predicate.OrgSubscription) *OrgSubscriptionUpdate {
-	osu.mutation.Where(ps...)
-	return osu
+func (_u *OrgSubscriptionUpdate) Where(ps ...predicate.OrgSubscription) *OrgSubscriptionUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (osu *OrgSubscriptionUpdate) SetUpdatedAt(t time.Time) *OrgSubscriptionUpdate {
-	osu.mutation.SetUpdatedAt(t)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetUpdatedAt(v time.Time) *OrgSubscriptionUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (osu *OrgSubscriptionUpdate) ClearUpdatedAt() *OrgSubscriptionUpdate {
-	osu.mutation.ClearUpdatedAt()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearUpdatedAt() *OrgSubscriptionUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (osu *OrgSubscriptionUpdate) SetUpdatedBy(s string) *OrgSubscriptionUpdate {
-	osu.mutation.SetUpdatedBy(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetUpdatedBy(v string) *OrgSubscriptionUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableUpdatedBy(s *string) *OrgSubscriptionUpdate {
-	if s != nil {
-		osu.SetUpdatedBy(*s)
+func (_u *OrgSubscriptionUpdate) SetNillableUpdatedBy(v *string) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (osu *OrgSubscriptionUpdate) ClearUpdatedBy() *OrgSubscriptionUpdate {
-	osu.mutation.ClearUpdatedBy()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearUpdatedBy() *OrgSubscriptionUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (osu *OrgSubscriptionUpdate) SetDeletedAt(t time.Time) *OrgSubscriptionUpdate {
-	osu.mutation.SetDeletedAt(t)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetDeletedAt(v time.Time) *OrgSubscriptionUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableDeletedAt(t *time.Time) *OrgSubscriptionUpdate {
-	if t != nil {
-		osu.SetDeletedAt(*t)
+func (_u *OrgSubscriptionUpdate) SetNillableDeletedAt(v *time.Time) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (osu *OrgSubscriptionUpdate) ClearDeletedAt() *OrgSubscriptionUpdate {
-	osu.mutation.ClearDeletedAt()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearDeletedAt() *OrgSubscriptionUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (osu *OrgSubscriptionUpdate) SetDeletedBy(s string) *OrgSubscriptionUpdate {
-	osu.mutation.SetDeletedBy(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetDeletedBy(v string) *OrgSubscriptionUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableDeletedBy(s *string) *OrgSubscriptionUpdate {
-	if s != nil {
-		osu.SetDeletedBy(*s)
+func (_u *OrgSubscriptionUpdate) SetNillableDeletedBy(v *string) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (osu *OrgSubscriptionUpdate) ClearDeletedBy() *OrgSubscriptionUpdate {
-	osu.mutation.ClearDeletedBy()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearDeletedBy() *OrgSubscriptionUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (osu *OrgSubscriptionUpdate) SetTags(s []string) *OrgSubscriptionUpdate {
-	osu.mutation.SetTags(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetTags(v []string) *OrgSubscriptionUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (osu *OrgSubscriptionUpdate) AppendTags(s []string) *OrgSubscriptionUpdate {
-	osu.mutation.AppendTags(s)
-	return osu
+// AppendTags appends value to the "tags" field.
+func (_u *OrgSubscriptionUpdate) AppendTags(v []string) *OrgSubscriptionUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (osu *OrgSubscriptionUpdate) ClearTags() *OrgSubscriptionUpdate {
-	osu.mutation.ClearTags()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearTags() *OrgSubscriptionUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (osu *OrgSubscriptionUpdate) SetOwnerID(s string) *OrgSubscriptionUpdate {
-	osu.mutation.SetOwnerID(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetOwnerID(v string) *OrgSubscriptionUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableOwnerID(s *string) *OrgSubscriptionUpdate {
-	if s != nil {
-		osu.SetOwnerID(*s)
+func (_u *OrgSubscriptionUpdate) SetNillableOwnerID(v *string) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (osu *OrgSubscriptionUpdate) ClearOwnerID() *OrgSubscriptionUpdate {
-	osu.mutation.ClearOwnerID()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearOwnerID() *OrgSubscriptionUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetStripeSubscriptionID sets the "stripe_subscription_id" field.
-func (osu *OrgSubscriptionUpdate) SetStripeSubscriptionID(s string) *OrgSubscriptionUpdate {
-	osu.mutation.SetStripeSubscriptionID(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetStripeSubscriptionID(v string) *OrgSubscriptionUpdate {
+	_u.mutation.SetStripeSubscriptionID(v)
+	return _u
 }
 
 // SetNillableStripeSubscriptionID sets the "stripe_subscription_id" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableStripeSubscriptionID(s *string) *OrgSubscriptionUpdate {
-	if s != nil {
-		osu.SetStripeSubscriptionID(*s)
+func (_u *OrgSubscriptionUpdate) SetNillableStripeSubscriptionID(v *string) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetStripeSubscriptionID(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearStripeSubscriptionID clears the value of the "stripe_subscription_id" field.
-func (osu *OrgSubscriptionUpdate) ClearStripeSubscriptionID() *OrgSubscriptionUpdate {
-	osu.mutation.ClearStripeSubscriptionID()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearStripeSubscriptionID() *OrgSubscriptionUpdate {
+	_u.mutation.ClearStripeSubscriptionID()
+	return _u
 }
 
 // SetProductTier sets the "product_tier" field.
-func (osu *OrgSubscriptionUpdate) SetProductTier(s string) *OrgSubscriptionUpdate {
-	osu.mutation.SetProductTier(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetProductTier(v string) *OrgSubscriptionUpdate {
+	_u.mutation.SetProductTier(v)
+	return _u
 }
 
 // SetNillableProductTier sets the "product_tier" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableProductTier(s *string) *OrgSubscriptionUpdate {
-	if s != nil {
-		osu.SetProductTier(*s)
+func (_u *OrgSubscriptionUpdate) SetNillableProductTier(v *string) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetProductTier(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearProductTier clears the value of the "product_tier" field.
-func (osu *OrgSubscriptionUpdate) ClearProductTier() *OrgSubscriptionUpdate {
-	osu.mutation.ClearProductTier()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearProductTier() *OrgSubscriptionUpdate {
+	_u.mutation.ClearProductTier()
+	return _u
 }
 
 // SetProductPrice sets the "product_price" field.
-func (osu *OrgSubscriptionUpdate) SetProductPrice(m models.Price) *OrgSubscriptionUpdate {
-	osu.mutation.SetProductPrice(m)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetProductPrice(v models.Price) *OrgSubscriptionUpdate {
+	_u.mutation.SetProductPrice(v)
+	return _u
 }
 
 // SetNillableProductPrice sets the "product_price" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableProductPrice(m *models.Price) *OrgSubscriptionUpdate {
-	if m != nil {
-		osu.SetProductPrice(*m)
+func (_u *OrgSubscriptionUpdate) SetNillableProductPrice(v *models.Price) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetProductPrice(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearProductPrice clears the value of the "product_price" field.
-func (osu *OrgSubscriptionUpdate) ClearProductPrice() *OrgSubscriptionUpdate {
-	osu.mutation.ClearProductPrice()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearProductPrice() *OrgSubscriptionUpdate {
+	_u.mutation.ClearProductPrice()
+	return _u
 }
 
 // SetStripeProductTierID sets the "stripe_product_tier_id" field.
-func (osu *OrgSubscriptionUpdate) SetStripeProductTierID(s string) *OrgSubscriptionUpdate {
-	osu.mutation.SetStripeProductTierID(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetStripeProductTierID(v string) *OrgSubscriptionUpdate {
+	_u.mutation.SetStripeProductTierID(v)
+	return _u
 }
 
 // SetNillableStripeProductTierID sets the "stripe_product_tier_id" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableStripeProductTierID(s *string) *OrgSubscriptionUpdate {
-	if s != nil {
-		osu.SetStripeProductTierID(*s)
+func (_u *OrgSubscriptionUpdate) SetNillableStripeProductTierID(v *string) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetStripeProductTierID(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearStripeProductTierID clears the value of the "stripe_product_tier_id" field.
-func (osu *OrgSubscriptionUpdate) ClearStripeProductTierID() *OrgSubscriptionUpdate {
-	osu.mutation.ClearStripeProductTierID()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearStripeProductTierID() *OrgSubscriptionUpdate {
+	_u.mutation.ClearStripeProductTierID()
+	return _u
 }
 
 // SetStripeSubscriptionStatus sets the "stripe_subscription_status" field.
-func (osu *OrgSubscriptionUpdate) SetStripeSubscriptionStatus(s string) *OrgSubscriptionUpdate {
-	osu.mutation.SetStripeSubscriptionStatus(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetStripeSubscriptionStatus(v string) *OrgSubscriptionUpdate {
+	_u.mutation.SetStripeSubscriptionStatus(v)
+	return _u
 }
 
 // SetNillableStripeSubscriptionStatus sets the "stripe_subscription_status" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableStripeSubscriptionStatus(s *string) *OrgSubscriptionUpdate {
-	if s != nil {
-		osu.SetStripeSubscriptionStatus(*s)
+func (_u *OrgSubscriptionUpdate) SetNillableStripeSubscriptionStatus(v *string) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetStripeSubscriptionStatus(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearStripeSubscriptionStatus clears the value of the "stripe_subscription_status" field.
-func (osu *OrgSubscriptionUpdate) ClearStripeSubscriptionStatus() *OrgSubscriptionUpdate {
-	osu.mutation.ClearStripeSubscriptionStatus()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearStripeSubscriptionStatus() *OrgSubscriptionUpdate {
+	_u.mutation.ClearStripeSubscriptionStatus()
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (osu *OrgSubscriptionUpdate) SetActive(b bool) *OrgSubscriptionUpdate {
-	osu.mutation.SetActive(b)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetActive(v bool) *OrgSubscriptionUpdate {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableActive(b *bool) *OrgSubscriptionUpdate {
-	if b != nil {
-		osu.SetActive(*b)
+func (_u *OrgSubscriptionUpdate) SetNillableActive(v *bool) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return osu
+	return _u
 }
 
 // SetStripeCustomerID sets the "stripe_customer_id" field.
-func (osu *OrgSubscriptionUpdate) SetStripeCustomerID(s string) *OrgSubscriptionUpdate {
-	osu.mutation.SetStripeCustomerID(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetStripeCustomerID(v string) *OrgSubscriptionUpdate {
+	_u.mutation.SetStripeCustomerID(v)
+	return _u
 }
 
 // SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableStripeCustomerID(s *string) *OrgSubscriptionUpdate {
-	if s != nil {
-		osu.SetStripeCustomerID(*s)
+func (_u *OrgSubscriptionUpdate) SetNillableStripeCustomerID(v *string) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetStripeCustomerID(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
-func (osu *OrgSubscriptionUpdate) ClearStripeCustomerID() *OrgSubscriptionUpdate {
-	osu.mutation.ClearStripeCustomerID()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearStripeCustomerID() *OrgSubscriptionUpdate {
+	_u.mutation.ClearStripeCustomerID()
+	return _u
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (osu *OrgSubscriptionUpdate) SetExpiresAt(t time.Time) *OrgSubscriptionUpdate {
-	osu.mutation.SetExpiresAt(t)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetExpiresAt(v time.Time) *OrgSubscriptionUpdate {
+	_u.mutation.SetExpiresAt(v)
+	return _u
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableExpiresAt(t *time.Time) *OrgSubscriptionUpdate {
-	if t != nil {
-		osu.SetExpiresAt(*t)
+func (_u *OrgSubscriptionUpdate) SetNillableExpiresAt(v *time.Time) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetExpiresAt(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearExpiresAt clears the value of the "expires_at" field.
-func (osu *OrgSubscriptionUpdate) ClearExpiresAt() *OrgSubscriptionUpdate {
-	osu.mutation.ClearExpiresAt()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearExpiresAt() *OrgSubscriptionUpdate {
+	_u.mutation.ClearExpiresAt()
+	return _u
 }
 
 // SetTrialExpiresAt sets the "trial_expires_at" field.
-func (osu *OrgSubscriptionUpdate) SetTrialExpiresAt(t time.Time) *OrgSubscriptionUpdate {
-	osu.mutation.SetTrialExpiresAt(t)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetTrialExpiresAt(v time.Time) *OrgSubscriptionUpdate {
+	_u.mutation.SetTrialExpiresAt(v)
+	return _u
 }
 
 // SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableTrialExpiresAt(t *time.Time) *OrgSubscriptionUpdate {
-	if t != nil {
-		osu.SetTrialExpiresAt(*t)
+func (_u *OrgSubscriptionUpdate) SetNillableTrialExpiresAt(v *time.Time) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetTrialExpiresAt(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
-func (osu *OrgSubscriptionUpdate) ClearTrialExpiresAt() *OrgSubscriptionUpdate {
-	osu.mutation.ClearTrialExpiresAt()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearTrialExpiresAt() *OrgSubscriptionUpdate {
+	_u.mutation.ClearTrialExpiresAt()
+	return _u
 }
 
 // SetDaysUntilDue sets the "days_until_due" field.
-func (osu *OrgSubscriptionUpdate) SetDaysUntilDue(s string) *OrgSubscriptionUpdate {
-	osu.mutation.SetDaysUntilDue(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetDaysUntilDue(v string) *OrgSubscriptionUpdate {
+	_u.mutation.SetDaysUntilDue(v)
+	return _u
 }
 
 // SetNillableDaysUntilDue sets the "days_until_due" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillableDaysUntilDue(s *string) *OrgSubscriptionUpdate {
-	if s != nil {
-		osu.SetDaysUntilDue(*s)
+func (_u *OrgSubscriptionUpdate) SetNillableDaysUntilDue(v *string) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetDaysUntilDue(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearDaysUntilDue clears the value of the "days_until_due" field.
-func (osu *OrgSubscriptionUpdate) ClearDaysUntilDue() *OrgSubscriptionUpdate {
-	osu.mutation.ClearDaysUntilDue()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearDaysUntilDue() *OrgSubscriptionUpdate {
+	_u.mutation.ClearDaysUntilDue()
+	return _u
 }
 
 // SetPaymentMethodAdded sets the "payment_method_added" field.
-func (osu *OrgSubscriptionUpdate) SetPaymentMethodAdded(b bool) *OrgSubscriptionUpdate {
-	osu.mutation.SetPaymentMethodAdded(b)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetPaymentMethodAdded(v bool) *OrgSubscriptionUpdate {
+	_u.mutation.SetPaymentMethodAdded(v)
+	return _u
 }
 
 // SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (osu *OrgSubscriptionUpdate) SetNillablePaymentMethodAdded(b *bool) *OrgSubscriptionUpdate {
-	if b != nil {
-		osu.SetPaymentMethodAdded(*b)
+func (_u *OrgSubscriptionUpdate) SetNillablePaymentMethodAdded(v *bool) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetPaymentMethodAdded(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
-func (osu *OrgSubscriptionUpdate) ClearPaymentMethodAdded() *OrgSubscriptionUpdate {
-	osu.mutation.ClearPaymentMethodAdded()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearPaymentMethodAdded() *OrgSubscriptionUpdate {
+	_u.mutation.ClearPaymentMethodAdded()
+	return _u
 }
 
 // SetFeatures sets the "features" field.
-func (osu *OrgSubscriptionUpdate) SetFeatures(s []string) *OrgSubscriptionUpdate {
-	osu.mutation.SetFeatures(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetFeatures(v []string) *OrgSubscriptionUpdate {
+	_u.mutation.SetFeatures(v)
+	return _u
 }
 
-// AppendFeatures appends s to the "features" field.
-func (osu *OrgSubscriptionUpdate) AppendFeatures(s []string) *OrgSubscriptionUpdate {
-	osu.mutation.AppendFeatures(s)
-	return osu
+// AppendFeatures appends value to the "features" field.
+func (_u *OrgSubscriptionUpdate) AppendFeatures(v []string) *OrgSubscriptionUpdate {
+	_u.mutation.AppendFeatures(v)
+	return _u
 }
 
 // ClearFeatures clears the value of the "features" field.
-func (osu *OrgSubscriptionUpdate) ClearFeatures() *OrgSubscriptionUpdate {
-	osu.mutation.ClearFeatures()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearFeatures() *OrgSubscriptionUpdate {
+	_u.mutation.ClearFeatures()
+	return _u
 }
 
 // SetFeatureLookupKeys sets the "feature_lookup_keys" field.
-func (osu *OrgSubscriptionUpdate) SetFeatureLookupKeys(s []string) *OrgSubscriptionUpdate {
-	osu.mutation.SetFeatureLookupKeys(s)
-	return osu
+func (_u *OrgSubscriptionUpdate) SetFeatureLookupKeys(v []string) *OrgSubscriptionUpdate {
+	_u.mutation.SetFeatureLookupKeys(v)
+	return _u
 }
 
-// AppendFeatureLookupKeys appends s to the "feature_lookup_keys" field.
-func (osu *OrgSubscriptionUpdate) AppendFeatureLookupKeys(s []string) *OrgSubscriptionUpdate {
-	osu.mutation.AppendFeatureLookupKeys(s)
-	return osu
+// AppendFeatureLookupKeys appends value to the "feature_lookup_keys" field.
+func (_u *OrgSubscriptionUpdate) AppendFeatureLookupKeys(v []string) *OrgSubscriptionUpdate {
+	_u.mutation.AppendFeatureLookupKeys(v)
+	return _u
 }
 
 // ClearFeatureLookupKeys clears the value of the "feature_lookup_keys" field.
-func (osu *OrgSubscriptionUpdate) ClearFeatureLookupKeys() *OrgSubscriptionUpdate {
-	osu.mutation.ClearFeatureLookupKeys()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearFeatureLookupKeys() *OrgSubscriptionUpdate {
+	_u.mutation.ClearFeatureLookupKeys()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (osu *OrgSubscriptionUpdate) SetOwner(o *Organization) *OrgSubscriptionUpdate {
-	return osu.SetOwnerID(o.ID)
+func (_u *OrgSubscriptionUpdate) SetOwner(v *Organization) *OrgSubscriptionUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (osu *OrgSubscriptionUpdate) AddEventIDs(ids ...string) *OrgSubscriptionUpdate {
-	osu.mutation.AddEventIDs(ids...)
-	return osu
+func (_u *OrgSubscriptionUpdate) AddEventIDs(ids ...string) *OrgSubscriptionUpdate {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (osu *OrgSubscriptionUpdate) AddEvents(e ...*Event) *OrgSubscriptionUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrgSubscriptionUpdate) AddEvents(v ...*Event) *OrgSubscriptionUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osu.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // AddModuleIDs adds the "modules" edge to the OrgModule entity by IDs.
-func (osu *OrgSubscriptionUpdate) AddModuleIDs(ids ...string) *OrgSubscriptionUpdate {
-	osu.mutation.AddModuleIDs(ids...)
-	return osu
+func (_u *OrgSubscriptionUpdate) AddModuleIDs(ids ...string) *OrgSubscriptionUpdate {
+	_u.mutation.AddModuleIDs(ids...)
+	return _u
 }
 
 // AddModules adds the "modules" edges to the OrgModule entity.
-func (osu *OrgSubscriptionUpdate) AddModules(o ...*OrgModule) *OrgSubscriptionUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdate) AddModules(v ...*OrgModule) *OrgSubscriptionUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osu.AddModuleIDs(ids...)
+	return _u.AddModuleIDs(ids...)
 }
 
 // AddProductIDs adds the "products" edge to the OrgProduct entity by IDs.
-func (osu *OrgSubscriptionUpdate) AddProductIDs(ids ...string) *OrgSubscriptionUpdate {
-	osu.mutation.AddProductIDs(ids...)
-	return osu
+func (_u *OrgSubscriptionUpdate) AddProductIDs(ids ...string) *OrgSubscriptionUpdate {
+	_u.mutation.AddProductIDs(ids...)
+	return _u
 }
 
 // AddProducts adds the "products" edges to the OrgProduct entity.
-func (osu *OrgSubscriptionUpdate) AddProducts(o ...*OrgProduct) *OrgSubscriptionUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdate) AddProducts(v ...*OrgProduct) *OrgSubscriptionUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osu.AddProductIDs(ids...)
+	return _u.AddProductIDs(ids...)
 }
 
 // AddPriceIDs adds the "prices" edge to the OrgPrice entity by IDs.
-func (osu *OrgSubscriptionUpdate) AddPriceIDs(ids ...string) *OrgSubscriptionUpdate {
-	osu.mutation.AddPriceIDs(ids...)
-	return osu
+func (_u *OrgSubscriptionUpdate) AddPriceIDs(ids ...string) *OrgSubscriptionUpdate {
+	_u.mutation.AddPriceIDs(ids...)
+	return _u
 }
 
 // AddPrices adds the "prices" edges to the OrgPrice entity.
-func (osu *OrgSubscriptionUpdate) AddPrices(o ...*OrgPrice) *OrgSubscriptionUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdate) AddPrices(v ...*OrgPrice) *OrgSubscriptionUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osu.AddPriceIDs(ids...)
+	return _u.AddPriceIDs(ids...)
 }
 
 // Mutation returns the OrgSubscriptionMutation object of the builder.
-func (osu *OrgSubscriptionUpdate) Mutation() *OrgSubscriptionMutation {
-	return osu.mutation
+func (_u *OrgSubscriptionUpdate) Mutation() *OrgSubscriptionMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (osu *OrgSubscriptionUpdate) ClearOwner() *OrgSubscriptionUpdate {
-	osu.mutation.ClearOwner()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearOwner() *OrgSubscriptionUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (osu *OrgSubscriptionUpdate) ClearEvents() *OrgSubscriptionUpdate {
-	osu.mutation.ClearEvents()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearEvents() *OrgSubscriptionUpdate {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (osu *OrgSubscriptionUpdate) RemoveEventIDs(ids ...string) *OrgSubscriptionUpdate {
-	osu.mutation.RemoveEventIDs(ids...)
-	return osu
+func (_u *OrgSubscriptionUpdate) RemoveEventIDs(ids ...string) *OrgSubscriptionUpdate {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (osu *OrgSubscriptionUpdate) RemoveEvents(e ...*Event) *OrgSubscriptionUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrgSubscriptionUpdate) RemoveEvents(v ...*Event) *OrgSubscriptionUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osu.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // ClearModules clears all "modules" edges to the OrgModule entity.
-func (osu *OrgSubscriptionUpdate) ClearModules() *OrgSubscriptionUpdate {
-	osu.mutation.ClearModules()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearModules() *OrgSubscriptionUpdate {
+	_u.mutation.ClearModules()
+	return _u
 }
 
 // RemoveModuleIDs removes the "modules" edge to OrgModule entities by IDs.
-func (osu *OrgSubscriptionUpdate) RemoveModuleIDs(ids ...string) *OrgSubscriptionUpdate {
-	osu.mutation.RemoveModuleIDs(ids...)
-	return osu
+func (_u *OrgSubscriptionUpdate) RemoveModuleIDs(ids ...string) *OrgSubscriptionUpdate {
+	_u.mutation.RemoveModuleIDs(ids...)
+	return _u
 }
 
 // RemoveModules removes "modules" edges to OrgModule entities.
-func (osu *OrgSubscriptionUpdate) RemoveModules(o ...*OrgModule) *OrgSubscriptionUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdate) RemoveModules(v ...*OrgModule) *OrgSubscriptionUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osu.RemoveModuleIDs(ids...)
+	return _u.RemoveModuleIDs(ids...)
 }
 
 // ClearProducts clears all "products" edges to the OrgProduct entity.
-func (osu *OrgSubscriptionUpdate) ClearProducts() *OrgSubscriptionUpdate {
-	osu.mutation.ClearProducts()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearProducts() *OrgSubscriptionUpdate {
+	_u.mutation.ClearProducts()
+	return _u
 }
 
 // RemoveProductIDs removes the "products" edge to OrgProduct entities by IDs.
-func (osu *OrgSubscriptionUpdate) RemoveProductIDs(ids ...string) *OrgSubscriptionUpdate {
-	osu.mutation.RemoveProductIDs(ids...)
-	return osu
+func (_u *OrgSubscriptionUpdate) RemoveProductIDs(ids ...string) *OrgSubscriptionUpdate {
+	_u.mutation.RemoveProductIDs(ids...)
+	return _u
 }
 
 // RemoveProducts removes "products" edges to OrgProduct entities.
-func (osu *OrgSubscriptionUpdate) RemoveProducts(o ...*OrgProduct) *OrgSubscriptionUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdate) RemoveProducts(v ...*OrgProduct) *OrgSubscriptionUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osu.RemoveProductIDs(ids...)
+	return _u.RemoveProductIDs(ids...)
 }
 
 // ClearPrices clears all "prices" edges to the OrgPrice entity.
-func (osu *OrgSubscriptionUpdate) ClearPrices() *OrgSubscriptionUpdate {
-	osu.mutation.ClearPrices()
-	return osu
+func (_u *OrgSubscriptionUpdate) ClearPrices() *OrgSubscriptionUpdate {
+	_u.mutation.ClearPrices()
+	return _u
 }
 
 // RemovePriceIDs removes the "prices" edge to OrgPrice entities by IDs.
-func (osu *OrgSubscriptionUpdate) RemovePriceIDs(ids ...string) *OrgSubscriptionUpdate {
-	osu.mutation.RemovePriceIDs(ids...)
-	return osu
+func (_u *OrgSubscriptionUpdate) RemovePriceIDs(ids ...string) *OrgSubscriptionUpdate {
+	_u.mutation.RemovePriceIDs(ids...)
+	return _u
 }
 
 // RemovePrices removes "prices" edges to OrgPrice entities.
-func (osu *OrgSubscriptionUpdate) RemovePrices(o ...*OrgPrice) *OrgSubscriptionUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdate) RemovePrices(v ...*OrgPrice) *OrgSubscriptionUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osu.RemovePriceIDs(ids...)
+	return _u.RemovePriceIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (osu *OrgSubscriptionUpdate) Save(ctx context.Context) (int, error) {
-	if err := osu.defaults(); err != nil {
+func (_u *OrgSubscriptionUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, osu.sqlSave, osu.mutation, osu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (osu *OrgSubscriptionUpdate) SaveX(ctx context.Context) int {
-	affected, err := osu.Save(ctx)
+func (_u *OrgSubscriptionUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -576,33 +576,33 @@ func (osu *OrgSubscriptionUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (osu *OrgSubscriptionUpdate) Exec(ctx context.Context) error {
-	_, err := osu.Save(ctx)
+func (_u *OrgSubscriptionUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (osu *OrgSubscriptionUpdate) ExecX(ctx context.Context) {
-	if err := osu.Exec(ctx); err != nil {
+func (_u *OrgSubscriptionUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (osu *OrgSubscriptionUpdate) defaults() error {
-	if _, ok := osu.mutation.UpdatedAt(); !ok && !osu.mutation.UpdatedAtCleared() {
+func (_u *OrgSubscriptionUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if orgsubscription.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgsubscription.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgsubscription.UpdateDefaultUpdatedAt()
-		osu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (osu *OrgSubscriptionUpdate) check() error {
-	if v, ok := osu.mutation.OwnerID(); ok {
+func (_u *OrgSubscriptionUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := orgsubscription.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "OrgSubscription.owner_id": %w`, err)}
 		}
@@ -611,150 +611,150 @@ func (osu *OrgSubscriptionUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (osu *OrgSubscriptionUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgSubscriptionUpdate {
-	osu.modifiers = append(osu.modifiers, modifiers...)
-	return osu
+func (_u *OrgSubscriptionUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgSubscriptionUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := osu.check(); err != nil {
-		return n, err
+func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(orgsubscription.Table, orgsubscription.Columns, sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString))
-	if ps := osu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if osu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgsubscription.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := osu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgsubscription.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if osu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgsubscription.FieldUpdatedAt, field.TypeTime)
 	}
-	if osu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(orgsubscription.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := osu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgsubscription.FieldUpdatedBy, field.TypeString, value)
 	}
-	if osu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgsubscription.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := osu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)
 	}
-	if osu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgsubscription.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := osu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedBy, field.TypeString, value)
 	}
-	if osu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(orgsubscription.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := osu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := osu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, orgsubscription.FieldTags, value)
 		})
 	}
-	if osu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(orgsubscription.FieldTags, field.TypeJSON)
 	}
-	if value, ok := osu.mutation.StripeSubscriptionID(); ok {
+	if value, ok := _u.mutation.StripeSubscriptionID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionID, field.TypeString, value)
 	}
-	if osu.mutation.StripeSubscriptionIDCleared() {
+	if _u.mutation.StripeSubscriptionIDCleared() {
 		_spec.ClearField(orgsubscription.FieldStripeSubscriptionID, field.TypeString)
 	}
-	if value, ok := osu.mutation.ProductTier(); ok {
+	if value, ok := _u.mutation.ProductTier(); ok {
 		_spec.SetField(orgsubscription.FieldProductTier, field.TypeString, value)
 	}
-	if osu.mutation.ProductTierCleared() {
+	if _u.mutation.ProductTierCleared() {
 		_spec.ClearField(orgsubscription.FieldProductTier, field.TypeString)
 	}
-	if value, ok := osu.mutation.ProductPrice(); ok {
+	if value, ok := _u.mutation.ProductPrice(); ok {
 		_spec.SetField(orgsubscription.FieldProductPrice, field.TypeJSON, value)
 	}
-	if osu.mutation.ProductPriceCleared() {
+	if _u.mutation.ProductPriceCleared() {
 		_spec.ClearField(orgsubscription.FieldProductPrice, field.TypeJSON)
 	}
-	if value, ok := osu.mutation.StripeProductTierID(); ok {
+	if value, ok := _u.mutation.StripeProductTierID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeProductTierID, field.TypeString, value)
 	}
-	if osu.mutation.StripeProductTierIDCleared() {
+	if _u.mutation.StripeProductTierIDCleared() {
 		_spec.ClearField(orgsubscription.FieldStripeProductTierID, field.TypeString)
 	}
-	if value, ok := osu.mutation.StripeSubscriptionStatus(); ok {
+	if value, ok := _u.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionStatus, field.TypeString, value)
 	}
-	if osu.mutation.StripeSubscriptionStatusCleared() {
+	if _u.mutation.StripeSubscriptionStatusCleared() {
 		_spec.ClearField(orgsubscription.FieldStripeSubscriptionStatus, field.TypeString)
 	}
-	if value, ok := osu.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(orgsubscription.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := osu.mutation.StripeCustomerID(); ok {
+	if value, ok := _u.mutation.StripeCustomerID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeCustomerID, field.TypeString, value)
 	}
-	if osu.mutation.StripeCustomerIDCleared() {
+	if _u.mutation.StripeCustomerIDCleared() {
 		_spec.ClearField(orgsubscription.FieldStripeCustomerID, field.TypeString)
 	}
-	if value, ok := osu.mutation.ExpiresAt(); ok {
+	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscription.FieldExpiresAt, field.TypeTime, value)
 	}
-	if osu.mutation.ExpiresAtCleared() {
+	if _u.mutation.ExpiresAtCleared() {
 		_spec.ClearField(orgsubscription.FieldExpiresAt, field.TypeTime)
 	}
-	if value, ok := osu.mutation.TrialExpiresAt(); ok {
+	if value, ok := _u.mutation.TrialExpiresAt(); ok {
 		_spec.SetField(orgsubscription.FieldTrialExpiresAt, field.TypeTime, value)
 	}
-	if osu.mutation.TrialExpiresAtCleared() {
+	if _u.mutation.TrialExpiresAtCleared() {
 		_spec.ClearField(orgsubscription.FieldTrialExpiresAt, field.TypeTime)
 	}
-	if value, ok := osu.mutation.DaysUntilDue(); ok {
+	if value, ok := _u.mutation.DaysUntilDue(); ok {
 		_spec.SetField(orgsubscription.FieldDaysUntilDue, field.TypeString, value)
 	}
-	if osu.mutation.DaysUntilDueCleared() {
+	if _u.mutation.DaysUntilDueCleared() {
 		_spec.ClearField(orgsubscription.FieldDaysUntilDue, field.TypeString)
 	}
-	if value, ok := osu.mutation.PaymentMethodAdded(); ok {
+	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool, value)
 	}
-	if osu.mutation.PaymentMethodAddedCleared() {
+	if _u.mutation.PaymentMethodAddedCleared() {
 		_spec.ClearField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool)
 	}
-	if value, ok := osu.mutation.Features(); ok {
+	if value, ok := _u.mutation.Features(); ok {
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)
 	}
-	if value, ok := osu.mutation.AppendedFeatures(); ok {
+	if value, ok := _u.mutation.AppendedFeatures(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, orgsubscription.FieldFeatures, value)
 		})
 	}
-	if osu.mutation.FeaturesCleared() {
+	if _u.mutation.FeaturesCleared() {
 		_spec.ClearField(orgsubscription.FieldFeatures, field.TypeJSON)
 	}
-	if value, ok := osu.mutation.FeatureLookupKeys(); ok {
+	if value, ok := _u.mutation.FeatureLookupKeys(); ok {
 		_spec.SetField(orgsubscription.FieldFeatureLookupKeys, field.TypeJSON, value)
 	}
-	if value, ok := osu.mutation.AppendedFeatureLookupKeys(); ok {
+	if value, ok := _u.mutation.AppendedFeatureLookupKeys(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, orgsubscription.FieldFeatureLookupKeys, value)
 		})
 	}
-	if osu.mutation.FeatureLookupKeysCleared() {
+	if _u.mutation.FeatureLookupKeysCleared() {
 		_spec.ClearField(orgsubscription.FieldFeatureLookupKeys, field.TypeJSON)
 	}
-	if osu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -765,10 +765,10 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgSubscription
+		edge.Schema = _u.schemaConfig.OrgSubscription
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -779,13 +779,13 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgSubscription
+		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if osu.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -796,10 +796,10 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgSubscriptionEvents
+		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.RemovedEventsIDs(); len(nodes) > 0 && !osu.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -810,13 +810,13 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgSubscriptionEvents
+		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -827,13 +827,13 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgSubscriptionEvents
+		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if osu.mutation.ModulesCleared() {
+	if _u.mutation.ModulesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -844,10 +844,10 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.RemovedModulesIDs(); len(nodes) > 0 && !osu.mutation.ModulesCleared() {
+	if nodes := _u.mutation.RemovedModulesIDs(); len(nodes) > 0 && !_u.mutation.ModulesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -858,13 +858,13 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.ModulesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ModulesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -875,13 +875,13 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if osu.mutation.ProductsCleared() {
+	if _u.mutation.ProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -892,10 +892,10 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.RemovedProductsIDs(); len(nodes) > 0 && !osu.mutation.ProductsCleared() {
+	if nodes := _u.mutation.RemovedProductsIDs(); len(nodes) > 0 && !_u.mutation.ProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -906,13 +906,13 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.ProductsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -923,13 +923,13 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if osu.mutation.PricesCleared() {
+	if _u.mutation.PricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -940,10 +940,10 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.RemovedPricesIDs(); len(nodes) > 0 && !osu.mutation.PricesCleared() {
+	if nodes := _u.mutation.RemovedPricesIDs(); len(nodes) > 0 && !_u.mutation.PricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -954,13 +954,13 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.PricesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -971,16 +971,16 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = osu.schemaConfig.OrgSubscription
-	ctx = internal.NewSchemaConfigContext(ctx, osu.schemaConfig)
-	_spec.AddModifiers(osu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, osu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.OrgSubscription
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orgsubscription.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -988,8 +988,8 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 		}
 		return 0, err
 	}
-	osu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OrgSubscriptionUpdateOne is the builder for updating a single OrgSubscription entity.
@@ -1002,549 +1002,549 @@ type OrgSubscriptionUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (osuo *OrgSubscriptionUpdateOne) SetUpdatedAt(t time.Time) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetUpdatedAt(t)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetUpdatedAt(v time.Time) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearUpdatedAt() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearUpdatedAt()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearUpdatedAt() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (osuo *OrgSubscriptionUpdateOne) SetUpdatedBy(s string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetUpdatedBy(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetUpdatedBy(v string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableUpdatedBy(s *string) *OrgSubscriptionUpdateOne {
-	if s != nil {
-		osuo.SetUpdatedBy(*s)
+func (_u *OrgSubscriptionUpdateOne) SetNillableUpdatedBy(v *string) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearUpdatedBy() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearUpdatedBy()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearUpdatedBy() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (osuo *OrgSubscriptionUpdateOne) SetDeletedAt(t time.Time) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetDeletedAt(t)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetDeletedAt(v time.Time) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableDeletedAt(t *time.Time) *OrgSubscriptionUpdateOne {
-	if t != nil {
-		osuo.SetDeletedAt(*t)
+func (_u *OrgSubscriptionUpdateOne) SetNillableDeletedAt(v *time.Time) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearDeletedAt() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearDeletedAt()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearDeletedAt() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (osuo *OrgSubscriptionUpdateOne) SetDeletedBy(s string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetDeletedBy(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetDeletedBy(v string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableDeletedBy(s *string) *OrgSubscriptionUpdateOne {
-	if s != nil {
-		osuo.SetDeletedBy(*s)
+func (_u *OrgSubscriptionUpdateOne) SetNillableDeletedBy(v *string) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearDeletedBy() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearDeletedBy()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearDeletedBy() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (osuo *OrgSubscriptionUpdateOne) SetTags(s []string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetTags(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetTags(v []string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (osuo *OrgSubscriptionUpdateOne) AppendTags(s []string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.AppendTags(s)
-	return osuo
+// AppendTags appends value to the "tags" field.
+func (_u *OrgSubscriptionUpdateOne) AppendTags(v []string) *OrgSubscriptionUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearTags() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearTags()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearTags() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (osuo *OrgSubscriptionUpdateOne) SetOwnerID(s string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetOwnerID(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetOwnerID(v string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableOwnerID(s *string) *OrgSubscriptionUpdateOne {
-	if s != nil {
-		osuo.SetOwnerID(*s)
+func (_u *OrgSubscriptionUpdateOne) SetNillableOwnerID(v *string) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearOwnerID() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearOwnerID()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearOwnerID() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetStripeSubscriptionID sets the "stripe_subscription_id" field.
-func (osuo *OrgSubscriptionUpdateOne) SetStripeSubscriptionID(s string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetStripeSubscriptionID(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetStripeSubscriptionID(v string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetStripeSubscriptionID(v)
+	return _u
 }
 
 // SetNillableStripeSubscriptionID sets the "stripe_subscription_id" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableStripeSubscriptionID(s *string) *OrgSubscriptionUpdateOne {
-	if s != nil {
-		osuo.SetStripeSubscriptionID(*s)
+func (_u *OrgSubscriptionUpdateOne) SetNillableStripeSubscriptionID(v *string) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetStripeSubscriptionID(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearStripeSubscriptionID clears the value of the "stripe_subscription_id" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearStripeSubscriptionID() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearStripeSubscriptionID()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearStripeSubscriptionID() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearStripeSubscriptionID()
+	return _u
 }
 
 // SetProductTier sets the "product_tier" field.
-func (osuo *OrgSubscriptionUpdateOne) SetProductTier(s string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetProductTier(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetProductTier(v string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetProductTier(v)
+	return _u
 }
 
 // SetNillableProductTier sets the "product_tier" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableProductTier(s *string) *OrgSubscriptionUpdateOne {
-	if s != nil {
-		osuo.SetProductTier(*s)
+func (_u *OrgSubscriptionUpdateOne) SetNillableProductTier(v *string) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetProductTier(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearProductTier clears the value of the "product_tier" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearProductTier() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearProductTier()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearProductTier() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearProductTier()
+	return _u
 }
 
 // SetProductPrice sets the "product_price" field.
-func (osuo *OrgSubscriptionUpdateOne) SetProductPrice(m models.Price) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetProductPrice(m)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetProductPrice(v models.Price) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetProductPrice(v)
+	return _u
 }
 
 // SetNillableProductPrice sets the "product_price" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableProductPrice(m *models.Price) *OrgSubscriptionUpdateOne {
-	if m != nil {
-		osuo.SetProductPrice(*m)
+func (_u *OrgSubscriptionUpdateOne) SetNillableProductPrice(v *models.Price) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetProductPrice(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearProductPrice clears the value of the "product_price" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearProductPrice() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearProductPrice()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearProductPrice() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearProductPrice()
+	return _u
 }
 
 // SetStripeProductTierID sets the "stripe_product_tier_id" field.
-func (osuo *OrgSubscriptionUpdateOne) SetStripeProductTierID(s string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetStripeProductTierID(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetStripeProductTierID(v string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetStripeProductTierID(v)
+	return _u
 }
 
 // SetNillableStripeProductTierID sets the "stripe_product_tier_id" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableStripeProductTierID(s *string) *OrgSubscriptionUpdateOne {
-	if s != nil {
-		osuo.SetStripeProductTierID(*s)
+func (_u *OrgSubscriptionUpdateOne) SetNillableStripeProductTierID(v *string) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetStripeProductTierID(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearStripeProductTierID clears the value of the "stripe_product_tier_id" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearStripeProductTierID() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearStripeProductTierID()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearStripeProductTierID() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearStripeProductTierID()
+	return _u
 }
 
 // SetStripeSubscriptionStatus sets the "stripe_subscription_status" field.
-func (osuo *OrgSubscriptionUpdateOne) SetStripeSubscriptionStatus(s string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetStripeSubscriptionStatus(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetStripeSubscriptionStatus(v string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetStripeSubscriptionStatus(v)
+	return _u
 }
 
 // SetNillableStripeSubscriptionStatus sets the "stripe_subscription_status" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableStripeSubscriptionStatus(s *string) *OrgSubscriptionUpdateOne {
-	if s != nil {
-		osuo.SetStripeSubscriptionStatus(*s)
+func (_u *OrgSubscriptionUpdateOne) SetNillableStripeSubscriptionStatus(v *string) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetStripeSubscriptionStatus(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearStripeSubscriptionStatus clears the value of the "stripe_subscription_status" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearStripeSubscriptionStatus() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearStripeSubscriptionStatus()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearStripeSubscriptionStatus() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearStripeSubscriptionStatus()
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (osuo *OrgSubscriptionUpdateOne) SetActive(b bool) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetActive(b)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetActive(v bool) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableActive(b *bool) *OrgSubscriptionUpdateOne {
-	if b != nil {
-		osuo.SetActive(*b)
+func (_u *OrgSubscriptionUpdateOne) SetNillableActive(v *bool) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return osuo
+	return _u
 }
 
 // SetStripeCustomerID sets the "stripe_customer_id" field.
-func (osuo *OrgSubscriptionUpdateOne) SetStripeCustomerID(s string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetStripeCustomerID(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetStripeCustomerID(v string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetStripeCustomerID(v)
+	return _u
 }
 
 // SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableStripeCustomerID(s *string) *OrgSubscriptionUpdateOne {
-	if s != nil {
-		osuo.SetStripeCustomerID(*s)
+func (_u *OrgSubscriptionUpdateOne) SetNillableStripeCustomerID(v *string) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetStripeCustomerID(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearStripeCustomerID() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearStripeCustomerID()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearStripeCustomerID() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearStripeCustomerID()
+	return _u
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (osuo *OrgSubscriptionUpdateOne) SetExpiresAt(t time.Time) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetExpiresAt(t)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetExpiresAt(v time.Time) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetExpiresAt(v)
+	return _u
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableExpiresAt(t *time.Time) *OrgSubscriptionUpdateOne {
-	if t != nil {
-		osuo.SetExpiresAt(*t)
+func (_u *OrgSubscriptionUpdateOne) SetNillableExpiresAt(v *time.Time) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetExpiresAt(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearExpiresAt clears the value of the "expires_at" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearExpiresAt() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearExpiresAt()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearExpiresAt() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearExpiresAt()
+	return _u
 }
 
 // SetTrialExpiresAt sets the "trial_expires_at" field.
-func (osuo *OrgSubscriptionUpdateOne) SetTrialExpiresAt(t time.Time) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetTrialExpiresAt(t)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetTrialExpiresAt(v time.Time) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetTrialExpiresAt(v)
+	return _u
 }
 
 // SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableTrialExpiresAt(t *time.Time) *OrgSubscriptionUpdateOne {
-	if t != nil {
-		osuo.SetTrialExpiresAt(*t)
+func (_u *OrgSubscriptionUpdateOne) SetNillableTrialExpiresAt(v *time.Time) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetTrialExpiresAt(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearTrialExpiresAt() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearTrialExpiresAt()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearTrialExpiresAt() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearTrialExpiresAt()
+	return _u
 }
 
 // SetDaysUntilDue sets the "days_until_due" field.
-func (osuo *OrgSubscriptionUpdateOne) SetDaysUntilDue(s string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetDaysUntilDue(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetDaysUntilDue(v string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetDaysUntilDue(v)
+	return _u
 }
 
 // SetNillableDaysUntilDue sets the "days_until_due" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillableDaysUntilDue(s *string) *OrgSubscriptionUpdateOne {
-	if s != nil {
-		osuo.SetDaysUntilDue(*s)
+func (_u *OrgSubscriptionUpdateOne) SetNillableDaysUntilDue(v *string) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetDaysUntilDue(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearDaysUntilDue clears the value of the "days_until_due" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearDaysUntilDue() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearDaysUntilDue()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearDaysUntilDue() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearDaysUntilDue()
+	return _u
 }
 
 // SetPaymentMethodAdded sets the "payment_method_added" field.
-func (osuo *OrgSubscriptionUpdateOne) SetPaymentMethodAdded(b bool) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetPaymentMethodAdded(b)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetPaymentMethodAdded(v bool) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetPaymentMethodAdded(v)
+	return _u
 }
 
 // SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (osuo *OrgSubscriptionUpdateOne) SetNillablePaymentMethodAdded(b *bool) *OrgSubscriptionUpdateOne {
-	if b != nil {
-		osuo.SetPaymentMethodAdded(*b)
+func (_u *OrgSubscriptionUpdateOne) SetNillablePaymentMethodAdded(v *bool) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetPaymentMethodAdded(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearPaymentMethodAdded() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearPaymentMethodAdded()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearPaymentMethodAdded() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearPaymentMethodAdded()
+	return _u
 }
 
 // SetFeatures sets the "features" field.
-func (osuo *OrgSubscriptionUpdateOne) SetFeatures(s []string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetFeatures(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetFeatures(v []string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetFeatures(v)
+	return _u
 }
 
-// AppendFeatures appends s to the "features" field.
-func (osuo *OrgSubscriptionUpdateOne) AppendFeatures(s []string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.AppendFeatures(s)
-	return osuo
+// AppendFeatures appends value to the "features" field.
+func (_u *OrgSubscriptionUpdateOne) AppendFeatures(v []string) *OrgSubscriptionUpdateOne {
+	_u.mutation.AppendFeatures(v)
+	return _u
 }
 
 // ClearFeatures clears the value of the "features" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearFeatures() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearFeatures()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearFeatures() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearFeatures()
+	return _u
 }
 
 // SetFeatureLookupKeys sets the "feature_lookup_keys" field.
-func (osuo *OrgSubscriptionUpdateOne) SetFeatureLookupKeys(s []string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.SetFeatureLookupKeys(s)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) SetFeatureLookupKeys(v []string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetFeatureLookupKeys(v)
+	return _u
 }
 
-// AppendFeatureLookupKeys appends s to the "feature_lookup_keys" field.
-func (osuo *OrgSubscriptionUpdateOne) AppendFeatureLookupKeys(s []string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.AppendFeatureLookupKeys(s)
-	return osuo
+// AppendFeatureLookupKeys appends value to the "feature_lookup_keys" field.
+func (_u *OrgSubscriptionUpdateOne) AppendFeatureLookupKeys(v []string) *OrgSubscriptionUpdateOne {
+	_u.mutation.AppendFeatureLookupKeys(v)
+	return _u
 }
 
 // ClearFeatureLookupKeys clears the value of the "feature_lookup_keys" field.
-func (osuo *OrgSubscriptionUpdateOne) ClearFeatureLookupKeys() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearFeatureLookupKeys()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearFeatureLookupKeys() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearFeatureLookupKeys()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (osuo *OrgSubscriptionUpdateOne) SetOwner(o *Organization) *OrgSubscriptionUpdateOne {
-	return osuo.SetOwnerID(o.ID)
+func (_u *OrgSubscriptionUpdateOne) SetOwner(v *Organization) *OrgSubscriptionUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (osuo *OrgSubscriptionUpdateOne) AddEventIDs(ids ...string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.AddEventIDs(ids...)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) AddEventIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (osuo *OrgSubscriptionUpdateOne) AddEvents(e ...*Event) *OrgSubscriptionUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrgSubscriptionUpdateOne) AddEvents(v ...*Event) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osuo.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // AddModuleIDs adds the "modules" edge to the OrgModule entity by IDs.
-func (osuo *OrgSubscriptionUpdateOne) AddModuleIDs(ids ...string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.AddModuleIDs(ids...)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) AddModuleIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	_u.mutation.AddModuleIDs(ids...)
+	return _u
 }
 
 // AddModules adds the "modules" edges to the OrgModule entity.
-func (osuo *OrgSubscriptionUpdateOne) AddModules(o ...*OrgModule) *OrgSubscriptionUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdateOne) AddModules(v ...*OrgModule) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osuo.AddModuleIDs(ids...)
+	return _u.AddModuleIDs(ids...)
 }
 
 // AddProductIDs adds the "products" edge to the OrgProduct entity by IDs.
-func (osuo *OrgSubscriptionUpdateOne) AddProductIDs(ids ...string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.AddProductIDs(ids...)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) AddProductIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	_u.mutation.AddProductIDs(ids...)
+	return _u
 }
 
 // AddProducts adds the "products" edges to the OrgProduct entity.
-func (osuo *OrgSubscriptionUpdateOne) AddProducts(o ...*OrgProduct) *OrgSubscriptionUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdateOne) AddProducts(v ...*OrgProduct) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osuo.AddProductIDs(ids...)
+	return _u.AddProductIDs(ids...)
 }
 
 // AddPriceIDs adds the "prices" edge to the OrgPrice entity by IDs.
-func (osuo *OrgSubscriptionUpdateOne) AddPriceIDs(ids ...string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.AddPriceIDs(ids...)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) AddPriceIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	_u.mutation.AddPriceIDs(ids...)
+	return _u
 }
 
 // AddPrices adds the "prices" edges to the OrgPrice entity.
-func (osuo *OrgSubscriptionUpdateOne) AddPrices(o ...*OrgPrice) *OrgSubscriptionUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdateOne) AddPrices(v ...*OrgPrice) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osuo.AddPriceIDs(ids...)
+	return _u.AddPriceIDs(ids...)
 }
 
 // Mutation returns the OrgSubscriptionMutation object of the builder.
-func (osuo *OrgSubscriptionUpdateOne) Mutation() *OrgSubscriptionMutation {
-	return osuo.mutation
+func (_u *OrgSubscriptionUpdateOne) Mutation() *OrgSubscriptionMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (osuo *OrgSubscriptionUpdateOne) ClearOwner() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearOwner()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearOwner() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (osuo *OrgSubscriptionUpdateOne) ClearEvents() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearEvents()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearEvents() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (osuo *OrgSubscriptionUpdateOne) RemoveEventIDs(ids ...string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.RemoveEventIDs(ids...)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) RemoveEventIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (osuo *OrgSubscriptionUpdateOne) RemoveEvents(e ...*Event) *OrgSubscriptionUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrgSubscriptionUpdateOne) RemoveEvents(v ...*Event) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osuo.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // ClearModules clears all "modules" edges to the OrgModule entity.
-func (osuo *OrgSubscriptionUpdateOne) ClearModules() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearModules()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearModules() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearModules()
+	return _u
 }
 
 // RemoveModuleIDs removes the "modules" edge to OrgModule entities by IDs.
-func (osuo *OrgSubscriptionUpdateOne) RemoveModuleIDs(ids ...string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.RemoveModuleIDs(ids...)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) RemoveModuleIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	_u.mutation.RemoveModuleIDs(ids...)
+	return _u
 }
 
 // RemoveModules removes "modules" edges to OrgModule entities.
-func (osuo *OrgSubscriptionUpdateOne) RemoveModules(o ...*OrgModule) *OrgSubscriptionUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdateOne) RemoveModules(v ...*OrgModule) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osuo.RemoveModuleIDs(ids...)
+	return _u.RemoveModuleIDs(ids...)
 }
 
 // ClearProducts clears all "products" edges to the OrgProduct entity.
-func (osuo *OrgSubscriptionUpdateOne) ClearProducts() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearProducts()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearProducts() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearProducts()
+	return _u
 }
 
 // RemoveProductIDs removes the "products" edge to OrgProduct entities by IDs.
-func (osuo *OrgSubscriptionUpdateOne) RemoveProductIDs(ids ...string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.RemoveProductIDs(ids...)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) RemoveProductIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	_u.mutation.RemoveProductIDs(ids...)
+	return _u
 }
 
 // RemoveProducts removes "products" edges to OrgProduct entities.
-func (osuo *OrgSubscriptionUpdateOne) RemoveProducts(o ...*OrgProduct) *OrgSubscriptionUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdateOne) RemoveProducts(v ...*OrgProduct) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osuo.RemoveProductIDs(ids...)
+	return _u.RemoveProductIDs(ids...)
 }
 
 // ClearPrices clears all "prices" edges to the OrgPrice entity.
-func (osuo *OrgSubscriptionUpdateOne) ClearPrices() *OrgSubscriptionUpdateOne {
-	osuo.mutation.ClearPrices()
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) ClearPrices() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearPrices()
+	return _u
 }
 
 // RemovePriceIDs removes the "prices" edge to OrgPrice entities by IDs.
-func (osuo *OrgSubscriptionUpdateOne) RemovePriceIDs(ids ...string) *OrgSubscriptionUpdateOne {
-	osuo.mutation.RemovePriceIDs(ids...)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) RemovePriceIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	_u.mutation.RemovePriceIDs(ids...)
+	return _u
 }
 
 // RemovePrices removes "prices" edges to OrgPrice entities.
-func (osuo *OrgSubscriptionUpdateOne) RemovePrices(o ...*OrgPrice) *OrgSubscriptionUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgSubscriptionUpdateOne) RemovePrices(v ...*OrgPrice) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osuo.RemovePriceIDs(ids...)
+	return _u.RemovePriceIDs(ids...)
 }
 
 // Where appends a list predicates to the OrgSubscriptionUpdate builder.
-func (osuo *OrgSubscriptionUpdateOne) Where(ps ...predicate.OrgSubscription) *OrgSubscriptionUpdateOne {
-	osuo.mutation.Where(ps...)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) Where(ps ...predicate.OrgSubscription) *OrgSubscriptionUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (osuo *OrgSubscriptionUpdateOne) Select(field string, fields ...string) *OrgSubscriptionUpdateOne {
-	osuo.fields = append([]string{field}, fields...)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) Select(field string, fields ...string) *OrgSubscriptionUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated OrgSubscription entity.
-func (osuo *OrgSubscriptionUpdateOne) Save(ctx context.Context) (*OrgSubscription, error) {
-	if err := osuo.defaults(); err != nil {
+func (_u *OrgSubscriptionUpdateOne) Save(ctx context.Context) (*OrgSubscription, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, osuo.sqlSave, osuo.mutation, osuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (osuo *OrgSubscriptionUpdateOne) SaveX(ctx context.Context) *OrgSubscription {
-	node, err := osuo.Save(ctx)
+func (_u *OrgSubscriptionUpdateOne) SaveX(ctx context.Context) *OrgSubscription {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1552,33 +1552,33 @@ func (osuo *OrgSubscriptionUpdateOne) SaveX(ctx context.Context) *OrgSubscriptio
 }
 
 // Exec executes the query on the entity.
-func (osuo *OrgSubscriptionUpdateOne) Exec(ctx context.Context) error {
-	_, err := osuo.Save(ctx)
+func (_u *OrgSubscriptionUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (osuo *OrgSubscriptionUpdateOne) ExecX(ctx context.Context) {
-	if err := osuo.Exec(ctx); err != nil {
+func (_u *OrgSubscriptionUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (osuo *OrgSubscriptionUpdateOne) defaults() error {
-	if _, ok := osuo.mutation.UpdatedAt(); !ok && !osuo.mutation.UpdatedAtCleared() {
+func (_u *OrgSubscriptionUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if orgsubscription.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgsubscription.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgsubscription.UpdateDefaultUpdatedAt()
-		osuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (osuo *OrgSubscriptionUpdateOne) check() error {
-	if v, ok := osuo.mutation.OwnerID(); ok {
+func (_u *OrgSubscriptionUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := orgsubscription.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "OrgSubscription.owner_id": %w`, err)}
 		}
@@ -1587,22 +1587,22 @@ func (osuo *OrgSubscriptionUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (osuo *OrgSubscriptionUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgSubscriptionUpdateOne {
-	osuo.modifiers = append(osuo.modifiers, modifiers...)
-	return osuo
+func (_u *OrgSubscriptionUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgSubscriptionUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubscription, err error) {
-	if err := osuo.check(); err != nil {
+func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubscription, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(orgsubscription.Table, orgsubscription.Columns, sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString))
-	id, ok := osuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "OrgSubscription.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := osuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, orgsubscription.FieldID)
 		for _, f := range fields {
@@ -1614,140 +1614,140 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 			}
 		}
 	}
-	if ps := osuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if osuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgsubscription.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := osuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgsubscription.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if osuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgsubscription.FieldUpdatedAt, field.TypeTime)
 	}
-	if osuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(orgsubscription.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := osuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgsubscription.FieldUpdatedBy, field.TypeString, value)
 	}
-	if osuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgsubscription.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := osuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)
 	}
-	if osuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgsubscription.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := osuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedBy, field.TypeString, value)
 	}
-	if osuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(orgsubscription.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := osuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(orgsubscription.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := osuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, orgsubscription.FieldTags, value)
 		})
 	}
-	if osuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(orgsubscription.FieldTags, field.TypeJSON)
 	}
-	if value, ok := osuo.mutation.StripeSubscriptionID(); ok {
+	if value, ok := _u.mutation.StripeSubscriptionID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionID, field.TypeString, value)
 	}
-	if osuo.mutation.StripeSubscriptionIDCleared() {
+	if _u.mutation.StripeSubscriptionIDCleared() {
 		_spec.ClearField(orgsubscription.FieldStripeSubscriptionID, field.TypeString)
 	}
-	if value, ok := osuo.mutation.ProductTier(); ok {
+	if value, ok := _u.mutation.ProductTier(); ok {
 		_spec.SetField(orgsubscription.FieldProductTier, field.TypeString, value)
 	}
-	if osuo.mutation.ProductTierCleared() {
+	if _u.mutation.ProductTierCleared() {
 		_spec.ClearField(orgsubscription.FieldProductTier, field.TypeString)
 	}
-	if value, ok := osuo.mutation.ProductPrice(); ok {
+	if value, ok := _u.mutation.ProductPrice(); ok {
 		_spec.SetField(orgsubscription.FieldProductPrice, field.TypeJSON, value)
 	}
-	if osuo.mutation.ProductPriceCleared() {
+	if _u.mutation.ProductPriceCleared() {
 		_spec.ClearField(orgsubscription.FieldProductPrice, field.TypeJSON)
 	}
-	if value, ok := osuo.mutation.StripeProductTierID(); ok {
+	if value, ok := _u.mutation.StripeProductTierID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeProductTierID, field.TypeString, value)
 	}
-	if osuo.mutation.StripeProductTierIDCleared() {
+	if _u.mutation.StripeProductTierIDCleared() {
 		_spec.ClearField(orgsubscription.FieldStripeProductTierID, field.TypeString)
 	}
-	if value, ok := osuo.mutation.StripeSubscriptionStatus(); ok {
+	if value, ok := _u.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionStatus, field.TypeString, value)
 	}
-	if osuo.mutation.StripeSubscriptionStatusCleared() {
+	if _u.mutation.StripeSubscriptionStatusCleared() {
 		_spec.ClearField(orgsubscription.FieldStripeSubscriptionStatus, field.TypeString)
 	}
-	if value, ok := osuo.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(orgsubscription.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := osuo.mutation.StripeCustomerID(); ok {
+	if value, ok := _u.mutation.StripeCustomerID(); ok {
 		_spec.SetField(orgsubscription.FieldStripeCustomerID, field.TypeString, value)
 	}
-	if osuo.mutation.StripeCustomerIDCleared() {
+	if _u.mutation.StripeCustomerIDCleared() {
 		_spec.ClearField(orgsubscription.FieldStripeCustomerID, field.TypeString)
 	}
-	if value, ok := osuo.mutation.ExpiresAt(); ok {
+	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscription.FieldExpiresAt, field.TypeTime, value)
 	}
-	if osuo.mutation.ExpiresAtCleared() {
+	if _u.mutation.ExpiresAtCleared() {
 		_spec.ClearField(orgsubscription.FieldExpiresAt, field.TypeTime)
 	}
-	if value, ok := osuo.mutation.TrialExpiresAt(); ok {
+	if value, ok := _u.mutation.TrialExpiresAt(); ok {
 		_spec.SetField(orgsubscription.FieldTrialExpiresAt, field.TypeTime, value)
 	}
-	if osuo.mutation.TrialExpiresAtCleared() {
+	if _u.mutation.TrialExpiresAtCleared() {
 		_spec.ClearField(orgsubscription.FieldTrialExpiresAt, field.TypeTime)
 	}
-	if value, ok := osuo.mutation.DaysUntilDue(); ok {
+	if value, ok := _u.mutation.DaysUntilDue(); ok {
 		_spec.SetField(orgsubscription.FieldDaysUntilDue, field.TypeString, value)
 	}
-	if osuo.mutation.DaysUntilDueCleared() {
+	if _u.mutation.DaysUntilDueCleared() {
 		_spec.ClearField(orgsubscription.FieldDaysUntilDue, field.TypeString)
 	}
-	if value, ok := osuo.mutation.PaymentMethodAdded(); ok {
+	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool, value)
 	}
-	if osuo.mutation.PaymentMethodAddedCleared() {
+	if _u.mutation.PaymentMethodAddedCleared() {
 		_spec.ClearField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool)
 	}
-	if value, ok := osuo.mutation.Features(); ok {
+	if value, ok := _u.mutation.Features(); ok {
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)
 	}
-	if value, ok := osuo.mutation.AppendedFeatures(); ok {
+	if value, ok := _u.mutation.AppendedFeatures(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, orgsubscription.FieldFeatures, value)
 		})
 	}
-	if osuo.mutation.FeaturesCleared() {
+	if _u.mutation.FeaturesCleared() {
 		_spec.ClearField(orgsubscription.FieldFeatures, field.TypeJSON)
 	}
-	if value, ok := osuo.mutation.FeatureLookupKeys(); ok {
+	if value, ok := _u.mutation.FeatureLookupKeys(); ok {
 		_spec.SetField(orgsubscription.FieldFeatureLookupKeys, field.TypeJSON, value)
 	}
-	if value, ok := osuo.mutation.AppendedFeatureLookupKeys(); ok {
+	if value, ok := _u.mutation.AppendedFeatureLookupKeys(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, orgsubscription.FieldFeatureLookupKeys, value)
 		})
 	}
-	if osuo.mutation.FeatureLookupKeysCleared() {
+	if _u.mutation.FeatureLookupKeysCleared() {
 		_spec.ClearField(orgsubscription.FieldFeatureLookupKeys, field.TypeJSON)
 	}
-	if osuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1758,10 +1758,10 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgSubscription
+		edge.Schema = _u.schemaConfig.OrgSubscription
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1772,13 +1772,13 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgSubscription
+		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if osuo.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1789,10 +1789,10 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgSubscriptionEvents
+		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !osuo.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1803,13 +1803,13 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgSubscriptionEvents
+		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1820,13 +1820,13 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgSubscriptionEvents
+		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if osuo.mutation.ModulesCleared() {
+	if _u.mutation.ModulesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1837,10 +1837,10 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.RemovedModulesIDs(); len(nodes) > 0 && !osuo.mutation.ModulesCleared() {
+	if nodes := _u.mutation.RemovedModulesIDs(); len(nodes) > 0 && !_u.mutation.ModulesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1851,13 +1851,13 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.ModulesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ModulesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1868,13 +1868,13 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if osuo.mutation.ProductsCleared() {
+	if _u.mutation.ProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1885,10 +1885,10 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.RemovedProductsIDs(); len(nodes) > 0 && !osuo.mutation.ProductsCleared() {
+	if nodes := _u.mutation.RemovedProductsIDs(); len(nodes) > 0 && !_u.mutation.ProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1899,13 +1899,13 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.ProductsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1916,13 +1916,13 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if osuo.mutation.PricesCleared() {
+	if _u.mutation.PricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1933,10 +1933,10 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.RemovedPricesIDs(); len(nodes) > 0 && !osuo.mutation.PricesCleared() {
+	if nodes := _u.mutation.RemovedPricesIDs(); len(nodes) > 0 && !_u.mutation.PricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1947,13 +1947,13 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.PricesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1964,19 +1964,19 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrgPrice
+		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = osuo.schemaConfig.OrgSubscription
-	ctx = internal.NewSchemaConfigContext(ctx, osuo.schemaConfig)
-	_spec.AddModifiers(osuo.modifiers...)
-	_node = &OrgSubscription{config: osuo.config}
+	_spec.Node.Schema = _u.schemaConfig.OrgSubscription
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &OrgSubscription{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, osuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orgsubscription.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1984,6 +1984,6 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 		}
 		return nil, err
 	}
-	osuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

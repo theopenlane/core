@@ -33,40 +33,40 @@ type TrustCenterComplianceHistoryQuery struct {
 }
 
 // Where adds a new predicate for the TrustCenterComplianceHistoryQuery builder.
-func (tcchq *TrustCenterComplianceHistoryQuery) Where(ps ...predicate.TrustCenterComplianceHistory) *TrustCenterComplianceHistoryQuery {
-	tcchq.predicates = append(tcchq.predicates, ps...)
-	return tcchq
+func (_q *TrustCenterComplianceHistoryQuery) Where(ps ...predicate.TrustCenterComplianceHistory) *TrustCenterComplianceHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (tcchq *TrustCenterComplianceHistoryQuery) Limit(limit int) *TrustCenterComplianceHistoryQuery {
-	tcchq.ctx.Limit = &limit
-	return tcchq
+func (_q *TrustCenterComplianceHistoryQuery) Limit(limit int) *TrustCenterComplianceHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (tcchq *TrustCenterComplianceHistoryQuery) Offset(offset int) *TrustCenterComplianceHistoryQuery {
-	tcchq.ctx.Offset = &offset
-	return tcchq
+func (_q *TrustCenterComplianceHistoryQuery) Offset(offset int) *TrustCenterComplianceHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (tcchq *TrustCenterComplianceHistoryQuery) Unique(unique bool) *TrustCenterComplianceHistoryQuery {
-	tcchq.ctx.Unique = &unique
-	return tcchq
+func (_q *TrustCenterComplianceHistoryQuery) Unique(unique bool) *TrustCenterComplianceHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (tcchq *TrustCenterComplianceHistoryQuery) Order(o ...trustcentercompliancehistory.OrderOption) *TrustCenterComplianceHistoryQuery {
-	tcchq.order = append(tcchq.order, o...)
-	return tcchq
+func (_q *TrustCenterComplianceHistoryQuery) Order(o ...trustcentercompliancehistory.OrderOption) *TrustCenterComplianceHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first TrustCenterComplianceHistory entity from the query.
 // Returns a *NotFoundError when no TrustCenterComplianceHistory was found.
-func (tcchq *TrustCenterComplianceHistoryQuery) First(ctx context.Context) (*TrustCenterComplianceHistory, error) {
-	nodes, err := tcchq.Limit(1).All(setContextOp(ctx, tcchq.ctx, ent.OpQueryFirst))
+func (_q *TrustCenterComplianceHistoryQuery) First(ctx context.Context) (*TrustCenterComplianceHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (tcchq *TrustCenterComplianceHistoryQuery) First(ctx context.Context) (*Tru
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (tcchq *TrustCenterComplianceHistoryQuery) FirstX(ctx context.Context) *TrustCenterComplianceHistory {
-	node, err := tcchq.First(ctx)
+func (_q *TrustCenterComplianceHistoryQuery) FirstX(ctx context.Context) *TrustCenterComplianceHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (tcchq *TrustCenterComplianceHistoryQuery) FirstX(ctx context.Context) *Tru
 
 // FirstID returns the first TrustCenterComplianceHistory ID from the query.
 // Returns a *NotFoundError when no TrustCenterComplianceHistory ID was found.
-func (tcchq *TrustCenterComplianceHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *TrustCenterComplianceHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = tcchq.Limit(1).IDs(setContextOp(ctx, tcchq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (tcchq *TrustCenterComplianceHistoryQuery) FirstID(ctx context.Context) (id
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tcchq *TrustCenterComplianceHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := tcchq.FirstID(ctx)
+func (_q *TrustCenterComplianceHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (tcchq *TrustCenterComplianceHistoryQuery) FirstIDX(ctx context.Context) st
 // Only returns a single TrustCenterComplianceHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TrustCenterComplianceHistory entity is found.
 // Returns a *NotFoundError when no TrustCenterComplianceHistory entities are found.
-func (tcchq *TrustCenterComplianceHistoryQuery) Only(ctx context.Context) (*TrustCenterComplianceHistory, error) {
-	nodes, err := tcchq.Limit(2).All(setContextOp(ctx, tcchq.ctx, ent.OpQueryOnly))
+func (_q *TrustCenterComplianceHistoryQuery) Only(ctx context.Context) (*TrustCenterComplianceHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (tcchq *TrustCenterComplianceHistoryQuery) Only(ctx context.Context) (*Trus
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (tcchq *TrustCenterComplianceHistoryQuery) OnlyX(ctx context.Context) *TrustCenterComplianceHistory {
-	node, err := tcchq.Only(ctx)
+func (_q *TrustCenterComplianceHistoryQuery) OnlyX(ctx context.Context) *TrustCenterComplianceHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (tcchq *TrustCenterComplianceHistoryQuery) OnlyX(ctx context.Context) *Trus
 // OnlyID is like Only, but returns the only TrustCenterComplianceHistory ID in the query.
 // Returns a *NotSingularError when more than one TrustCenterComplianceHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tcchq *TrustCenterComplianceHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *TrustCenterComplianceHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = tcchq.Limit(2).IDs(setContextOp(ctx, tcchq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (tcchq *TrustCenterComplianceHistoryQuery) OnlyID(ctx context.Context) (id 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tcchq *TrustCenterComplianceHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := tcchq.OnlyID(ctx)
+func (_q *TrustCenterComplianceHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (tcchq *TrustCenterComplianceHistoryQuery) OnlyIDX(ctx context.Context) str
 }
 
 // All executes the query and returns a list of TrustCenterComplianceHistories.
-func (tcchq *TrustCenterComplianceHistoryQuery) All(ctx context.Context) ([]*TrustCenterComplianceHistory, error) {
-	ctx = setContextOp(ctx, tcchq.ctx, ent.OpQueryAll)
-	if err := tcchq.prepareQuery(ctx); err != nil {
+func (_q *TrustCenterComplianceHistoryQuery) All(ctx context.Context) ([]*TrustCenterComplianceHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TrustCenterComplianceHistory, *TrustCenterComplianceHistoryQuery]()
-	return withInterceptors[[]*TrustCenterComplianceHistory](ctx, tcchq, qr, tcchq.inters)
+	return withInterceptors[[]*TrustCenterComplianceHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (tcchq *TrustCenterComplianceHistoryQuery) AllX(ctx context.Context) []*TrustCenterComplianceHistory {
-	nodes, err := tcchq.All(ctx)
+func (_q *TrustCenterComplianceHistoryQuery) AllX(ctx context.Context) []*TrustCenterComplianceHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (tcchq *TrustCenterComplianceHistoryQuery) AllX(ctx context.Context) []*Tru
 }
 
 // IDs executes the query and returns a list of TrustCenterComplianceHistory IDs.
-func (tcchq *TrustCenterComplianceHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if tcchq.ctx.Unique == nil && tcchq.path != nil {
-		tcchq.Unique(true)
+func (_q *TrustCenterComplianceHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, tcchq.ctx, ent.OpQueryIDs)
-	if err = tcchq.Select(trustcentercompliancehistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(trustcentercompliancehistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tcchq *TrustCenterComplianceHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := tcchq.IDs(ctx)
+func (_q *TrustCenterComplianceHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (tcchq *TrustCenterComplianceHistoryQuery) IDsX(ctx context.Context) []stri
 }
 
 // Count returns the count of the given query.
-func (tcchq *TrustCenterComplianceHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tcchq.ctx, ent.OpQueryCount)
-	if err := tcchq.prepareQuery(ctx); err != nil {
+func (_q *TrustCenterComplianceHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, tcchq, querierCount[*TrustCenterComplianceHistoryQuery](), tcchq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TrustCenterComplianceHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (tcchq *TrustCenterComplianceHistoryQuery) CountX(ctx context.Context) int {
-	count, err := tcchq.Count(ctx)
+func (_q *TrustCenterComplianceHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (tcchq *TrustCenterComplianceHistoryQuery) CountX(ctx context.Context) int 
 }
 
 // Exist returns true if the query has elements in the graph.
-func (tcchq *TrustCenterComplianceHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tcchq.ctx, ent.OpQueryExist)
-	switch _, err := tcchq.FirstID(ctx); {
+func (_q *TrustCenterComplianceHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (tcchq *TrustCenterComplianceHistoryQuery) Exist(ctx context.Context) (bool
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (tcchq *TrustCenterComplianceHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := tcchq.Exist(ctx)
+func (_q *TrustCenterComplianceHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (tcchq *TrustCenterComplianceHistoryQuery) ExistX(ctx context.Context) bool
 
 // Clone returns a duplicate of the TrustCenterComplianceHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (tcchq *TrustCenterComplianceHistoryQuery) Clone() *TrustCenterComplianceHistoryQuery {
-	if tcchq == nil {
+func (_q *TrustCenterComplianceHistoryQuery) Clone() *TrustCenterComplianceHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TrustCenterComplianceHistoryQuery{
-		config:     tcchq.config,
-		ctx:        tcchq.ctx.Clone(),
-		order:      append([]trustcentercompliancehistory.OrderOption{}, tcchq.order...),
-		inters:     append([]Interceptor{}, tcchq.inters...),
-		predicates: append([]predicate.TrustCenterComplianceHistory{}, tcchq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]trustcentercompliancehistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.TrustCenterComplianceHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       tcchq.sql.Clone(),
-		path:      tcchq.path,
-		modifiers: append([]func(*sql.Selector){}, tcchq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (tcchq *TrustCenterComplianceHistoryQuery) Clone() *TrustCenterComplianceHi
 //		GroupBy(trustcentercompliancehistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (tcchq *TrustCenterComplianceHistoryQuery) GroupBy(field string, fields ...string) *TrustCenterComplianceHistoryGroupBy {
-	tcchq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TrustCenterComplianceHistoryGroupBy{build: tcchq}
-	grbuild.flds = &tcchq.ctx.Fields
+func (_q *TrustCenterComplianceHistoryQuery) GroupBy(field string, fields ...string) *TrustCenterComplianceHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TrustCenterComplianceHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = trustcentercompliancehistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (tcchq *TrustCenterComplianceHistoryQuery) GroupBy(field string, fields ...
 //	client.TrustCenterComplianceHistory.Query().
 //		Select(trustcentercompliancehistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (tcchq *TrustCenterComplianceHistoryQuery) Select(fields ...string) *TrustCenterComplianceHistorySelect {
-	tcchq.ctx.Fields = append(tcchq.ctx.Fields, fields...)
-	sbuild := &TrustCenterComplianceHistorySelect{TrustCenterComplianceHistoryQuery: tcchq}
+func (_q *TrustCenterComplianceHistoryQuery) Select(fields ...string) *TrustCenterComplianceHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TrustCenterComplianceHistorySelect{TrustCenterComplianceHistoryQuery: _q}
 	sbuild.label = trustcentercompliancehistory.Label
-	sbuild.flds, sbuild.scan = &tcchq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TrustCenterComplianceHistorySelect configured with the given aggregations.
-func (tcchq *TrustCenterComplianceHistoryQuery) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceHistorySelect {
-	return tcchq.Select().Aggregate(fns...)
+func (_q *TrustCenterComplianceHistoryQuery) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (tcchq *TrustCenterComplianceHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range tcchq.inters {
+func (_q *TrustCenterComplianceHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, tcchq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range tcchq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !trustcentercompliancehistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if tcchq.path != nil {
-		prev, err := tcchq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		tcchq.sql = prev
+		_q.sql = prev
 	}
 	if trustcentercompliancehistory.Policy == nil {
 		return errors.New("generated: uninitialized trustcentercompliancehistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := trustcentercompliancehistory.Policy.EvalQuery(ctx, tcchq); err != nil {
+	if err := trustcentercompliancehistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (tcchq *TrustCenterComplianceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenterComplianceHistory, error) {
+func (_q *TrustCenterComplianceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenterComplianceHistory, error) {
 	var (
 		nodes = []*TrustCenterComplianceHistory{}
-		_spec = tcchq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TrustCenterComplianceHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TrustCenterComplianceHistory{config: tcchq.config}
+		node := &TrustCenterComplianceHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = tcchq.schemaConfig.TrustCenterComplianceHistory
-	ctx = internal.NewSchemaConfigContext(ctx, tcchq.schemaConfig)
-	if len(tcchq.modifiers) > 0 {
-		_spec.Modifiers = tcchq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.TrustCenterComplianceHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, tcchq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range tcchq.loadTotal {
-		if err := tcchq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (tcchq *TrustCenterComplianceHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := tcchq.querySpec()
-	_spec.Node.Schema = tcchq.schemaConfig.TrustCenterComplianceHistory
-	ctx = internal.NewSchemaConfigContext(ctx, tcchq.schemaConfig)
-	if len(tcchq.modifiers) > 0 {
-		_spec.Modifiers = tcchq.modifiers
+func (_q *TrustCenterComplianceHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.TrustCenterComplianceHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = tcchq.ctx.Fields
-	if len(tcchq.ctx.Fields) > 0 {
-		_spec.Unique = tcchq.ctx.Unique != nil && *tcchq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, tcchq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (tcchq *TrustCenterComplianceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TrustCenterComplianceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(trustcentercompliancehistory.Table, trustcentercompliancehistory.Columns, sqlgraph.NewFieldSpec(trustcentercompliancehistory.FieldID, field.TypeString))
-	_spec.From = tcchq.sql
-	if unique := tcchq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if tcchq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := tcchq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, trustcentercompliancehistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (tcchq *TrustCenterComplianceHistoryQuery) querySpec() *sqlgraph.QuerySpec 
 			}
 		}
 	}
-	if ps := tcchq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := tcchq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := tcchq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := tcchq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (tcchq *TrustCenterComplianceHistoryQuery) querySpec() *sqlgraph.QuerySpec 
 	return _spec
 }
 
-func (tcchq *TrustCenterComplianceHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(tcchq.driver.Dialect())
+func (_q *TrustCenterComplianceHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(trustcentercompliancehistory.Table)
-	columns := tcchq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = trustcentercompliancehistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if tcchq.sql != nil {
-		selector = tcchq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if tcchq.ctx.Unique != nil && *tcchq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(tcchq.schemaConfig.TrustCenterComplianceHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, tcchq.schemaConfig)
+	t1.Schema(_q.schemaConfig.TrustCenterComplianceHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range tcchq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range tcchq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range tcchq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := tcchq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := tcchq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tcchq *TrustCenterComplianceHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterComplianceHistorySelect {
-	tcchq.modifiers = append(tcchq.modifiers, modifiers...)
-	return tcchq.Select()
+func (_q *TrustCenterComplianceHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterComplianceHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type TrustCenterComplianceHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (tcchgb *TrustCenterComplianceHistoryGroupBy) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceHistoryGroupBy {
-	tcchgb.fns = append(tcchgb.fns, fns...)
-	return tcchgb
+func (_g *TrustCenterComplianceHistoryGroupBy) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tcchgb *TrustCenterComplianceHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tcchgb.build.ctx, ent.OpQueryGroupBy)
-	if err := tcchgb.build.prepareQuery(ctx); err != nil {
+func (_g *TrustCenterComplianceHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TrustCenterComplianceHistoryQuery, *TrustCenterComplianceHistoryGroupBy](ctx, tcchgb.build, tcchgb, tcchgb.build.inters, v)
+	return scanWithInterceptors[*TrustCenterComplianceHistoryQuery, *TrustCenterComplianceHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (tcchgb *TrustCenterComplianceHistoryGroupBy) sqlScan(ctx context.Context, root *TrustCenterComplianceHistoryQuery, v any) error {
+func (_g *TrustCenterComplianceHistoryGroupBy) sqlScan(ctx context.Context, root *TrustCenterComplianceHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(tcchgb.fns))
-	for _, fn := range tcchgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*tcchgb.flds)+len(tcchgb.fns))
-		for _, f := range *tcchgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*tcchgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tcchgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type TrustCenterComplianceHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (tcchs *TrustCenterComplianceHistorySelect) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceHistorySelect {
-	tcchs.fns = append(tcchs.fns, fns...)
-	return tcchs
+func (_s *TrustCenterComplianceHistorySelect) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tcchs *TrustCenterComplianceHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tcchs.ctx, ent.OpQuerySelect)
-	if err := tcchs.prepareQuery(ctx); err != nil {
+func (_s *TrustCenterComplianceHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TrustCenterComplianceHistoryQuery, *TrustCenterComplianceHistorySelect](ctx, tcchs.TrustCenterComplianceHistoryQuery, tcchs, tcchs.inters, v)
+	return scanWithInterceptors[*TrustCenterComplianceHistoryQuery, *TrustCenterComplianceHistorySelect](ctx, _s.TrustCenterComplianceHistoryQuery, _s, _s.inters, v)
 }
 
-func (tcchs *TrustCenterComplianceHistorySelect) sqlScan(ctx context.Context, root *TrustCenterComplianceHistoryQuery, v any) error {
+func (_s *TrustCenterComplianceHistorySelect) sqlScan(ctx context.Context, root *TrustCenterComplianceHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(tcchs.fns))
-	for _, fn := range tcchs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*tcchs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (tcchs *TrustCenterComplianceHistorySelect) sqlScan(ctx context.Context, ro
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tcchs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (tcchs *TrustCenterComplianceHistorySelect) sqlScan(ctx context.Context, ro
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tcchs *TrustCenterComplianceHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterComplianceHistorySelect {
-	tcchs.modifiers = append(tcchs.modifiers, modifiers...)
-	return tcchs
+func (_s *TrustCenterComplianceHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterComplianceHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

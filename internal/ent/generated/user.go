@@ -329,7 +329,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the User fields.
-func (u *User) assignValues(columns []string, values []any) error {
+func (_m *User) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -339,55 +339,55 @@ func (u *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				u.ID = value.String
+				_m.ID = value.String
 			}
 		case user.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				u.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case user.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				u.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case user.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				u.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case user.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				u.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case user.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				u.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case user.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				u.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case user.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				u.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case user.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &u.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -395,87 +395,87 @@ func (u *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
-				u.Email = value.String
+				_m.Email = value.String
 			}
 		case user.FieldFirstName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field first_name", values[i])
 			} else if value.Valid {
-				u.FirstName = value.String
+				_m.FirstName = value.String
 			}
 		case user.FieldLastName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field last_name", values[i])
 			} else if value.Valid {
-				u.LastName = value.String
+				_m.LastName = value.String
 			}
 		case user.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
-				u.DisplayName = value.String
+				_m.DisplayName = value.String
 			}
 		case user.FieldAvatarRemoteURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_remote_url", values[i])
 			} else if value.Valid {
-				u.AvatarRemoteURL = new(string)
-				*u.AvatarRemoteURL = value.String
+				_m.AvatarRemoteURL = new(string)
+				*_m.AvatarRemoteURL = value.String
 			}
 		case user.FieldAvatarLocalFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_local_file_id", values[i])
 			} else if value.Valid {
-				u.AvatarLocalFileID = new(string)
-				*u.AvatarLocalFileID = value.String
+				_m.AvatarLocalFileID = new(string)
+				*_m.AvatarLocalFileID = value.String
 			}
 		case user.FieldAvatarUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_updated_at", values[i])
 			} else if value.Valid {
-				u.AvatarUpdatedAt = new(time.Time)
-				*u.AvatarUpdatedAt = value.Time
+				_m.AvatarUpdatedAt = new(time.Time)
+				*_m.AvatarUpdatedAt = value.Time
 			}
 		case user.FieldLastSeen:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_seen", values[i])
 			} else if value.Valid {
-				u.LastSeen = new(time.Time)
-				*u.LastSeen = value.Time
+				_m.LastSeen = new(time.Time)
+				*_m.LastSeen = value.Time
 			}
 		case user.FieldLastLoginProvider:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field last_login_provider", values[i])
 			} else if value.Valid {
-				u.LastLoginProvider = enums.AuthProvider(value.String)
+				_m.LastLoginProvider = enums.AuthProvider(value.String)
 			}
 		case user.FieldPassword:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field password", values[i])
 			} else if value.Valid {
-				u.Password = new(string)
-				*u.Password = value.String
+				_m.Password = new(string)
+				*_m.Password = value.String
 			}
 		case user.FieldSub:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field sub", values[i])
 			} else if value.Valid {
-				u.Sub = value.String
+				_m.Sub = value.String
 			}
 		case user.FieldAuthProvider:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field auth_provider", values[i])
 			} else if value.Valid {
-				u.AuthProvider = enums.AuthProvider(value.String)
+				_m.AuthProvider = enums.AuthProvider(value.String)
 			}
 		case user.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
 			} else if value.Valid {
-				u.Role = enums.Role(value.String)
+				_m.Role = enums.Role(value.String)
 			}
 		default:
-			u.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -483,606 +483,606 @@ func (u *User) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the User.
 // This includes values selected through modifiers, order, etc.
-func (u *User) Value(name string) (ent.Value, error) {
-	return u.selectValues.Get(name)
+func (_m *User) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryPersonalAccessTokens queries the "personal_access_tokens" edge of the User entity.
-func (u *User) QueryPersonalAccessTokens() *PersonalAccessTokenQuery {
-	return NewUserClient(u.config).QueryPersonalAccessTokens(u)
+func (_m *User) QueryPersonalAccessTokens() *PersonalAccessTokenQuery {
+	return NewUserClient(_m.config).QueryPersonalAccessTokens(_m)
 }
 
 // QueryTfaSettings queries the "tfa_settings" edge of the User entity.
-func (u *User) QueryTfaSettings() *TFASettingQuery {
-	return NewUserClient(u.config).QueryTfaSettings(u)
+func (_m *User) QueryTfaSettings() *TFASettingQuery {
+	return NewUserClient(_m.config).QueryTfaSettings(_m)
 }
 
 // QuerySetting queries the "setting" edge of the User entity.
-func (u *User) QuerySetting() *UserSettingQuery {
-	return NewUserClient(u.config).QuerySetting(u)
+func (_m *User) QuerySetting() *UserSettingQuery {
+	return NewUserClient(_m.config).QuerySetting(_m)
 }
 
 // QueryEmailVerificationTokens queries the "email_verification_tokens" edge of the User entity.
-func (u *User) QueryEmailVerificationTokens() *EmailVerificationTokenQuery {
-	return NewUserClient(u.config).QueryEmailVerificationTokens(u)
+func (_m *User) QueryEmailVerificationTokens() *EmailVerificationTokenQuery {
+	return NewUserClient(_m.config).QueryEmailVerificationTokens(_m)
 }
 
 // QueryPasswordResetTokens queries the "password_reset_tokens" edge of the User entity.
-func (u *User) QueryPasswordResetTokens() *PasswordResetTokenQuery {
-	return NewUserClient(u.config).QueryPasswordResetTokens(u)
+func (_m *User) QueryPasswordResetTokens() *PasswordResetTokenQuery {
+	return NewUserClient(_m.config).QueryPasswordResetTokens(_m)
 }
 
 // QueryGroups queries the "groups" edge of the User entity.
-func (u *User) QueryGroups() *GroupQuery {
-	return NewUserClient(u.config).QueryGroups(u)
+func (_m *User) QueryGroups() *GroupQuery {
+	return NewUserClient(_m.config).QueryGroups(_m)
 }
 
 // QueryOrganizations queries the "organizations" edge of the User entity.
-func (u *User) QueryOrganizations() *OrganizationQuery {
-	return NewUserClient(u.config).QueryOrganizations(u)
+func (_m *User) QueryOrganizations() *OrganizationQuery {
+	return NewUserClient(_m.config).QueryOrganizations(_m)
 }
 
 // QueryWebauthns queries the "webauthns" edge of the User entity.
-func (u *User) QueryWebauthns() *WebauthnQuery {
-	return NewUserClient(u.config).QueryWebauthns(u)
+func (_m *User) QueryWebauthns() *WebauthnQuery {
+	return NewUserClient(_m.config).QueryWebauthns(_m)
 }
 
 // QueryFiles queries the "files" edge of the User entity.
-func (u *User) QueryFiles() *FileQuery {
-	return NewUserClient(u.config).QueryFiles(u)
+func (_m *User) QueryFiles() *FileQuery {
+	return NewUserClient(_m.config).QueryFiles(_m)
 }
 
 // QueryAvatarFile queries the "avatar_file" edge of the User entity.
-func (u *User) QueryAvatarFile() *FileQuery {
-	return NewUserClient(u.config).QueryAvatarFile(u)
+func (_m *User) QueryAvatarFile() *FileQuery {
+	return NewUserClient(_m.config).QueryAvatarFile(_m)
 }
 
 // QueryEvents queries the "events" edge of the User entity.
-func (u *User) QueryEvents() *EventQuery {
-	return NewUserClient(u.config).QueryEvents(u)
+func (_m *User) QueryEvents() *EventQuery {
+	return NewUserClient(_m.config).QueryEvents(_m)
 }
 
 // QueryActionPlans queries the "action_plans" edge of the User entity.
-func (u *User) QueryActionPlans() *ActionPlanQuery {
-	return NewUserClient(u.config).QueryActionPlans(u)
+func (_m *User) QueryActionPlans() *ActionPlanQuery {
+	return NewUserClient(_m.config).QueryActionPlans(_m)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the User entity.
-func (u *User) QuerySubcontrols() *SubcontrolQuery {
-	return NewUserClient(u.config).QuerySubcontrols(u)
+func (_m *User) QuerySubcontrols() *SubcontrolQuery {
+	return NewUserClient(_m.config).QuerySubcontrols(_m)
 }
 
 // QueryAssignerTasks queries the "assigner_tasks" edge of the User entity.
-func (u *User) QueryAssignerTasks() *TaskQuery {
-	return NewUserClient(u.config).QueryAssignerTasks(u)
+func (_m *User) QueryAssignerTasks() *TaskQuery {
+	return NewUserClient(_m.config).QueryAssignerTasks(_m)
 }
 
 // QueryAssigneeTasks queries the "assignee_tasks" edge of the User entity.
-func (u *User) QueryAssigneeTasks() *TaskQuery {
-	return NewUserClient(u.config).QueryAssigneeTasks(u)
+func (_m *User) QueryAssigneeTasks() *TaskQuery {
+	return NewUserClient(_m.config).QueryAssigneeTasks(_m)
 }
 
 // QueryPrograms queries the "programs" edge of the User entity.
-func (u *User) QueryPrograms() *ProgramQuery {
-	return NewUserClient(u.config).QueryPrograms(u)
+func (_m *User) QueryPrograms() *ProgramQuery {
+	return NewUserClient(_m.config).QueryPrograms(_m)
 }
 
 // QueryGroupMemberships queries the "group_memberships" edge of the User entity.
-func (u *User) QueryGroupMemberships() *GroupMembershipQuery {
-	return NewUserClient(u.config).QueryGroupMemberships(u)
+func (_m *User) QueryGroupMemberships() *GroupMembershipQuery {
+	return NewUserClient(_m.config).QueryGroupMemberships(_m)
 }
 
 // QueryOrgMemberships queries the "org_memberships" edge of the User entity.
-func (u *User) QueryOrgMemberships() *OrgMembershipQuery {
-	return NewUserClient(u.config).QueryOrgMemberships(u)
+func (_m *User) QueryOrgMemberships() *OrgMembershipQuery {
+	return NewUserClient(_m.config).QueryOrgMemberships(_m)
 }
 
 // QueryProgramMemberships queries the "program_memberships" edge of the User entity.
-func (u *User) QueryProgramMemberships() *ProgramMembershipQuery {
-	return NewUserClient(u.config).QueryProgramMemberships(u)
+func (_m *User) QueryProgramMemberships() *ProgramMembershipQuery {
+	return NewUserClient(_m.config).QueryProgramMemberships(_m)
 }
 
 // Update returns a builder for updating this User.
 // Note that you need to call User.Unwrap() before calling this method if this User
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (u *User) Update() *UserUpdateOne {
-	return NewUserClient(u.config).UpdateOne(u)
+func (_m *User) Update() *UserUpdateOne {
+	return NewUserClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the User entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (u *User) Unwrap() *User {
-	_tx, ok := u.config.driver.(*txDriver)
+func (_m *User) Unwrap() *User {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: User is not a transactional entity")
 	}
-	u.config.driver = _tx.drv
-	return u
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (u *User) String() string {
+func (_m *User) String() string {
 	var builder strings.Builder
 	builder.WriteString("User(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", u.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(u.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(u.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(u.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(u.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(u.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(u.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(u.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", u.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("email=")
-	builder.WriteString(u.Email)
+	builder.WriteString(_m.Email)
 	builder.WriteString(", ")
 	builder.WriteString("first_name=")
-	builder.WriteString(u.FirstName)
+	builder.WriteString(_m.FirstName)
 	builder.WriteString(", ")
 	builder.WriteString("last_name=")
-	builder.WriteString(u.LastName)
+	builder.WriteString(_m.LastName)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
-	builder.WriteString(u.DisplayName)
+	builder.WriteString(_m.DisplayName)
 	builder.WriteString(", ")
-	if v := u.AvatarRemoteURL; v != nil {
+	if v := _m.AvatarRemoteURL; v != nil {
 		builder.WriteString("avatar_remote_url=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := u.AvatarLocalFileID; v != nil {
+	if v := _m.AvatarLocalFileID; v != nil {
 		builder.WriteString("avatar_local_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := u.AvatarUpdatedAt; v != nil {
+	if v := _m.AvatarUpdatedAt; v != nil {
 		builder.WriteString("avatar_updated_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := u.LastSeen; v != nil {
+	if v := _m.LastSeen; v != nil {
 		builder.WriteString("last_seen=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("last_login_provider=")
-	builder.WriteString(fmt.Sprintf("%v", u.LastLoginProvider))
+	builder.WriteString(fmt.Sprintf("%v", _m.LastLoginProvider))
 	builder.WriteString(", ")
 	builder.WriteString("password=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("sub=")
-	builder.WriteString(u.Sub)
+	builder.WriteString(_m.Sub)
 	builder.WriteString(", ")
 	builder.WriteString("auth_provider=")
-	builder.WriteString(fmt.Sprintf("%v", u.AuthProvider))
+	builder.WriteString(fmt.Sprintf("%v", _m.AuthProvider))
 	builder.WriteString(", ")
 	builder.WriteString("role=")
-	builder.WriteString(fmt.Sprintf("%v", u.Role))
+	builder.WriteString(fmt.Sprintf("%v", _m.Role))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedPersonalAccessTokens returns the PersonalAccessTokens named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedPersonalAccessTokens(name string) ([]*PersonalAccessToken, error) {
-	if u.Edges.namedPersonalAccessTokens == nil {
+func (_m *User) NamedPersonalAccessTokens(name string) ([]*PersonalAccessToken, error) {
+	if _m.Edges.namedPersonalAccessTokens == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedPersonalAccessTokens[name]
+	nodes, ok := _m.Edges.namedPersonalAccessTokens[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedPersonalAccessTokens(name string, edges ...*PersonalAccessToken) {
-	if u.Edges.namedPersonalAccessTokens == nil {
-		u.Edges.namedPersonalAccessTokens = make(map[string][]*PersonalAccessToken)
+func (_m *User) appendNamedPersonalAccessTokens(name string, edges ...*PersonalAccessToken) {
+	if _m.Edges.namedPersonalAccessTokens == nil {
+		_m.Edges.namedPersonalAccessTokens = make(map[string][]*PersonalAccessToken)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedPersonalAccessTokens[name] = []*PersonalAccessToken{}
+		_m.Edges.namedPersonalAccessTokens[name] = []*PersonalAccessToken{}
 	} else {
-		u.Edges.namedPersonalAccessTokens[name] = append(u.Edges.namedPersonalAccessTokens[name], edges...)
+		_m.Edges.namedPersonalAccessTokens[name] = append(_m.Edges.namedPersonalAccessTokens[name], edges...)
 	}
 }
 
 // NamedTfaSettings returns the TfaSettings named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedTfaSettings(name string) ([]*TFASetting, error) {
-	if u.Edges.namedTfaSettings == nil {
+func (_m *User) NamedTfaSettings(name string) ([]*TFASetting, error) {
+	if _m.Edges.namedTfaSettings == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedTfaSettings[name]
+	nodes, ok := _m.Edges.namedTfaSettings[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedTfaSettings(name string, edges ...*TFASetting) {
-	if u.Edges.namedTfaSettings == nil {
-		u.Edges.namedTfaSettings = make(map[string][]*TFASetting)
+func (_m *User) appendNamedTfaSettings(name string, edges ...*TFASetting) {
+	if _m.Edges.namedTfaSettings == nil {
+		_m.Edges.namedTfaSettings = make(map[string][]*TFASetting)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedTfaSettings[name] = []*TFASetting{}
+		_m.Edges.namedTfaSettings[name] = []*TFASetting{}
 	} else {
-		u.Edges.namedTfaSettings[name] = append(u.Edges.namedTfaSettings[name], edges...)
+		_m.Edges.namedTfaSettings[name] = append(_m.Edges.namedTfaSettings[name], edges...)
 	}
 }
 
 // NamedEmailVerificationTokens returns the EmailVerificationTokens named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedEmailVerificationTokens(name string) ([]*EmailVerificationToken, error) {
-	if u.Edges.namedEmailVerificationTokens == nil {
+func (_m *User) NamedEmailVerificationTokens(name string) ([]*EmailVerificationToken, error) {
+	if _m.Edges.namedEmailVerificationTokens == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedEmailVerificationTokens[name]
+	nodes, ok := _m.Edges.namedEmailVerificationTokens[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedEmailVerificationTokens(name string, edges ...*EmailVerificationToken) {
-	if u.Edges.namedEmailVerificationTokens == nil {
-		u.Edges.namedEmailVerificationTokens = make(map[string][]*EmailVerificationToken)
+func (_m *User) appendNamedEmailVerificationTokens(name string, edges ...*EmailVerificationToken) {
+	if _m.Edges.namedEmailVerificationTokens == nil {
+		_m.Edges.namedEmailVerificationTokens = make(map[string][]*EmailVerificationToken)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedEmailVerificationTokens[name] = []*EmailVerificationToken{}
+		_m.Edges.namedEmailVerificationTokens[name] = []*EmailVerificationToken{}
 	} else {
-		u.Edges.namedEmailVerificationTokens[name] = append(u.Edges.namedEmailVerificationTokens[name], edges...)
+		_m.Edges.namedEmailVerificationTokens[name] = append(_m.Edges.namedEmailVerificationTokens[name], edges...)
 	}
 }
 
 // NamedPasswordResetTokens returns the PasswordResetTokens named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedPasswordResetTokens(name string) ([]*PasswordResetToken, error) {
-	if u.Edges.namedPasswordResetTokens == nil {
+func (_m *User) NamedPasswordResetTokens(name string) ([]*PasswordResetToken, error) {
+	if _m.Edges.namedPasswordResetTokens == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedPasswordResetTokens[name]
+	nodes, ok := _m.Edges.namedPasswordResetTokens[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedPasswordResetTokens(name string, edges ...*PasswordResetToken) {
-	if u.Edges.namedPasswordResetTokens == nil {
-		u.Edges.namedPasswordResetTokens = make(map[string][]*PasswordResetToken)
+func (_m *User) appendNamedPasswordResetTokens(name string, edges ...*PasswordResetToken) {
+	if _m.Edges.namedPasswordResetTokens == nil {
+		_m.Edges.namedPasswordResetTokens = make(map[string][]*PasswordResetToken)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedPasswordResetTokens[name] = []*PasswordResetToken{}
+		_m.Edges.namedPasswordResetTokens[name] = []*PasswordResetToken{}
 	} else {
-		u.Edges.namedPasswordResetTokens[name] = append(u.Edges.namedPasswordResetTokens[name], edges...)
+		_m.Edges.namedPasswordResetTokens[name] = append(_m.Edges.namedPasswordResetTokens[name], edges...)
 	}
 }
 
 // NamedGroups returns the Groups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedGroups(name string) ([]*Group, error) {
-	if u.Edges.namedGroups == nil {
+func (_m *User) NamedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedGroups[name]
+	nodes, ok := _m.Edges.namedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedGroups(name string, edges ...*Group) {
-	if u.Edges.namedGroups == nil {
-		u.Edges.namedGroups = make(map[string][]*Group)
+func (_m *User) appendNamedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedGroups == nil {
+		_m.Edges.namedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedGroups[name] = []*Group{}
+		_m.Edges.namedGroups[name] = []*Group{}
 	} else {
-		u.Edges.namedGroups[name] = append(u.Edges.namedGroups[name], edges...)
+		_m.Edges.namedGroups[name] = append(_m.Edges.namedGroups[name], edges...)
 	}
 }
 
 // NamedOrganizations returns the Organizations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedOrganizations(name string) ([]*Organization, error) {
-	if u.Edges.namedOrganizations == nil {
+func (_m *User) NamedOrganizations(name string) ([]*Organization, error) {
+	if _m.Edges.namedOrganizations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedOrganizations[name]
+	nodes, ok := _m.Edges.namedOrganizations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedOrganizations(name string, edges ...*Organization) {
-	if u.Edges.namedOrganizations == nil {
-		u.Edges.namedOrganizations = make(map[string][]*Organization)
+func (_m *User) appendNamedOrganizations(name string, edges ...*Organization) {
+	if _m.Edges.namedOrganizations == nil {
+		_m.Edges.namedOrganizations = make(map[string][]*Organization)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedOrganizations[name] = []*Organization{}
+		_m.Edges.namedOrganizations[name] = []*Organization{}
 	} else {
-		u.Edges.namedOrganizations[name] = append(u.Edges.namedOrganizations[name], edges...)
+		_m.Edges.namedOrganizations[name] = append(_m.Edges.namedOrganizations[name], edges...)
 	}
 }
 
 // NamedWebauthns returns the Webauthns named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedWebauthns(name string) ([]*Webauthn, error) {
-	if u.Edges.namedWebauthns == nil {
+func (_m *User) NamedWebauthns(name string) ([]*Webauthn, error) {
+	if _m.Edges.namedWebauthns == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedWebauthns[name]
+	nodes, ok := _m.Edges.namedWebauthns[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedWebauthns(name string, edges ...*Webauthn) {
-	if u.Edges.namedWebauthns == nil {
-		u.Edges.namedWebauthns = make(map[string][]*Webauthn)
+func (_m *User) appendNamedWebauthns(name string, edges ...*Webauthn) {
+	if _m.Edges.namedWebauthns == nil {
+		_m.Edges.namedWebauthns = make(map[string][]*Webauthn)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedWebauthns[name] = []*Webauthn{}
+		_m.Edges.namedWebauthns[name] = []*Webauthn{}
 	} else {
-		u.Edges.namedWebauthns[name] = append(u.Edges.namedWebauthns[name], edges...)
+		_m.Edges.namedWebauthns[name] = append(_m.Edges.namedWebauthns[name], edges...)
 	}
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedFiles(name string) ([]*File, error) {
-	if u.Edges.namedFiles == nil {
+func (_m *User) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedFiles(name string, edges ...*File) {
-	if u.Edges.namedFiles == nil {
-		u.Edges.namedFiles = make(map[string][]*File)
+func (_m *User) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		u.Edges.namedFiles[name] = append(u.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedEvents(name string) ([]*Event, error) {
-	if u.Edges.namedEvents == nil {
+func (_m *User) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedEvents(name string, edges ...*Event) {
-	if u.Edges.namedEvents == nil {
-		u.Edges.namedEvents = make(map[string][]*Event)
+func (_m *User) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		u.Edges.namedEvents[name] = append(u.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 
 // NamedActionPlans returns the ActionPlans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedActionPlans(name string) ([]*ActionPlan, error) {
-	if u.Edges.namedActionPlans == nil {
+func (_m *User) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if _m.Edges.namedActionPlans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedActionPlans[name]
+	nodes, ok := _m.Edges.namedActionPlans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedActionPlans(name string, edges ...*ActionPlan) {
-	if u.Edges.namedActionPlans == nil {
-		u.Edges.namedActionPlans = make(map[string][]*ActionPlan)
+func (_m *User) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if _m.Edges.namedActionPlans == nil {
+		_m.Edges.namedActionPlans = make(map[string][]*ActionPlan)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedActionPlans[name] = []*ActionPlan{}
+		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
-		u.Edges.namedActionPlans[name] = append(u.Edges.namedActionPlans[name], edges...)
+		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
 	}
 }
 
 // NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if u.Edges.namedSubcontrols == nil {
+func (_m *User) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedSubcontrols[name]
+	nodes, ok := _m.Edges.namedSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if u.Edges.namedSubcontrols == nil {
-		u.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+func (_m *User) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
-		u.Edges.namedSubcontrols[name] = append(u.Edges.namedSubcontrols[name], edges...)
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 
 // NamedAssignerTasks returns the AssignerTasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedAssignerTasks(name string) ([]*Task, error) {
-	if u.Edges.namedAssignerTasks == nil {
+func (_m *User) NamedAssignerTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedAssignerTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedAssignerTasks[name]
+	nodes, ok := _m.Edges.namedAssignerTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedAssignerTasks(name string, edges ...*Task) {
-	if u.Edges.namedAssignerTasks == nil {
-		u.Edges.namedAssignerTasks = make(map[string][]*Task)
+func (_m *User) appendNamedAssignerTasks(name string, edges ...*Task) {
+	if _m.Edges.namedAssignerTasks == nil {
+		_m.Edges.namedAssignerTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedAssignerTasks[name] = []*Task{}
+		_m.Edges.namedAssignerTasks[name] = []*Task{}
 	} else {
-		u.Edges.namedAssignerTasks[name] = append(u.Edges.namedAssignerTasks[name], edges...)
+		_m.Edges.namedAssignerTasks[name] = append(_m.Edges.namedAssignerTasks[name], edges...)
 	}
 }
 
 // NamedAssigneeTasks returns the AssigneeTasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedAssigneeTasks(name string) ([]*Task, error) {
-	if u.Edges.namedAssigneeTasks == nil {
+func (_m *User) NamedAssigneeTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedAssigneeTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedAssigneeTasks[name]
+	nodes, ok := _m.Edges.namedAssigneeTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedAssigneeTasks(name string, edges ...*Task) {
-	if u.Edges.namedAssigneeTasks == nil {
-		u.Edges.namedAssigneeTasks = make(map[string][]*Task)
+func (_m *User) appendNamedAssigneeTasks(name string, edges ...*Task) {
+	if _m.Edges.namedAssigneeTasks == nil {
+		_m.Edges.namedAssigneeTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedAssigneeTasks[name] = []*Task{}
+		_m.Edges.namedAssigneeTasks[name] = []*Task{}
 	} else {
-		u.Edges.namedAssigneeTasks[name] = append(u.Edges.namedAssigneeTasks[name], edges...)
+		_m.Edges.namedAssigneeTasks[name] = append(_m.Edges.namedAssigneeTasks[name], edges...)
 	}
 }
 
 // NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedPrograms(name string) ([]*Program, error) {
-	if u.Edges.namedPrograms == nil {
+func (_m *User) NamedPrograms(name string) ([]*Program, error) {
+	if _m.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedPrograms[name]
+	nodes, ok := _m.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedPrograms(name string, edges ...*Program) {
-	if u.Edges.namedPrograms == nil {
-		u.Edges.namedPrograms = make(map[string][]*Program)
+func (_m *User) appendNamedPrograms(name string, edges ...*Program) {
+	if _m.Edges.namedPrograms == nil {
+		_m.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedPrograms[name] = []*Program{}
+		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		u.Edges.namedPrograms[name] = append(u.Edges.namedPrograms[name], edges...)
+		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
 	}
 }
 
 // NamedGroupMemberships returns the GroupMemberships named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedGroupMemberships(name string) ([]*GroupMembership, error) {
-	if u.Edges.namedGroupMemberships == nil {
+func (_m *User) NamedGroupMemberships(name string) ([]*GroupMembership, error) {
+	if _m.Edges.namedGroupMemberships == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedGroupMemberships[name]
+	nodes, ok := _m.Edges.namedGroupMemberships[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedGroupMemberships(name string, edges ...*GroupMembership) {
-	if u.Edges.namedGroupMemberships == nil {
-		u.Edges.namedGroupMemberships = make(map[string][]*GroupMembership)
+func (_m *User) appendNamedGroupMemberships(name string, edges ...*GroupMembership) {
+	if _m.Edges.namedGroupMemberships == nil {
+		_m.Edges.namedGroupMemberships = make(map[string][]*GroupMembership)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedGroupMemberships[name] = []*GroupMembership{}
+		_m.Edges.namedGroupMemberships[name] = []*GroupMembership{}
 	} else {
-		u.Edges.namedGroupMemberships[name] = append(u.Edges.namedGroupMemberships[name], edges...)
+		_m.Edges.namedGroupMemberships[name] = append(_m.Edges.namedGroupMemberships[name], edges...)
 	}
 }
 
 // NamedOrgMemberships returns the OrgMemberships named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedOrgMemberships(name string) ([]*OrgMembership, error) {
-	if u.Edges.namedOrgMemberships == nil {
+func (_m *User) NamedOrgMemberships(name string) ([]*OrgMembership, error) {
+	if _m.Edges.namedOrgMemberships == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedOrgMemberships[name]
+	nodes, ok := _m.Edges.namedOrgMemberships[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedOrgMemberships(name string, edges ...*OrgMembership) {
-	if u.Edges.namedOrgMemberships == nil {
-		u.Edges.namedOrgMemberships = make(map[string][]*OrgMembership)
+func (_m *User) appendNamedOrgMemberships(name string, edges ...*OrgMembership) {
+	if _m.Edges.namedOrgMemberships == nil {
+		_m.Edges.namedOrgMemberships = make(map[string][]*OrgMembership)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedOrgMemberships[name] = []*OrgMembership{}
+		_m.Edges.namedOrgMemberships[name] = []*OrgMembership{}
 	} else {
-		u.Edges.namedOrgMemberships[name] = append(u.Edges.namedOrgMemberships[name], edges...)
+		_m.Edges.namedOrgMemberships[name] = append(_m.Edges.namedOrgMemberships[name], edges...)
 	}
 }
 
 // NamedProgramMemberships returns the ProgramMemberships named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedProgramMemberships(name string) ([]*ProgramMembership, error) {
-	if u.Edges.namedProgramMemberships == nil {
+func (_m *User) NamedProgramMemberships(name string) ([]*ProgramMembership, error) {
+	if _m.Edges.namedProgramMemberships == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedProgramMemberships[name]
+	nodes, ok := _m.Edges.namedProgramMemberships[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedProgramMemberships(name string, edges ...*ProgramMembership) {
-	if u.Edges.namedProgramMemberships == nil {
-		u.Edges.namedProgramMemberships = make(map[string][]*ProgramMembership)
+func (_m *User) appendNamedProgramMemberships(name string, edges ...*ProgramMembership) {
+	if _m.Edges.namedProgramMemberships == nil {
+		_m.Edges.namedProgramMemberships = make(map[string][]*ProgramMembership)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedProgramMemberships[name] = []*ProgramMembership{}
+		_m.Edges.namedProgramMemberships[name] = []*ProgramMembership{}
 	} else {
-		u.Edges.namedProgramMemberships[name] = append(u.Edges.namedProgramMemberships[name], edges...)
+		_m.Edges.namedProgramMemberships[name] = append(_m.Edges.namedProgramMemberships[name], edges...)
 	}
 }
 

@@ -22,58 +22,58 @@ type InternalPolicyDelete struct {
 }
 
 // Where appends a list predicates to the InternalPolicyDelete builder.
-func (ipd *InternalPolicyDelete) Where(ps ...predicate.InternalPolicy) *InternalPolicyDelete {
-	ipd.mutation.Where(ps...)
-	return ipd
+func (_d *InternalPolicyDelete) Where(ps ...predicate.InternalPolicy) *InternalPolicyDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (ipd *InternalPolicyDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, ipd.sqlExec, ipd.mutation, ipd.hooks)
+func (_d *InternalPolicyDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ipd *InternalPolicyDelete) ExecX(ctx context.Context) int {
-	n, err := ipd.Exec(ctx)
+func (_d *InternalPolicyDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (ipd *InternalPolicyDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *InternalPolicyDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(internalpolicy.Table, sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString))
-	_spec.Node.Schema = ipd.schemaConfig.InternalPolicy
-	ctx = internal.NewSchemaConfigContext(ctx, ipd.schemaConfig)
-	if ps := ipd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.InternalPolicy
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, ipd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	ipd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // InternalPolicyDeleteOne is the builder for deleting a single InternalPolicy entity.
 type InternalPolicyDeleteOne struct {
-	ipd *InternalPolicyDelete
+	_d *InternalPolicyDelete
 }
 
 // Where appends a list predicates to the InternalPolicyDelete builder.
-func (ipdo *InternalPolicyDeleteOne) Where(ps ...predicate.InternalPolicy) *InternalPolicyDeleteOne {
-	ipdo.ipd.mutation.Where(ps...)
-	return ipdo
+func (_d *InternalPolicyDeleteOne) Where(ps ...predicate.InternalPolicy) *InternalPolicyDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (ipdo *InternalPolicyDeleteOne) Exec(ctx context.Context) error {
-	n, err := ipdo.ipd.Exec(ctx)
+func (_d *InternalPolicyDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (ipdo *InternalPolicyDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ipdo *InternalPolicyDeleteOne) ExecX(ctx context.Context) {
-	if err := ipdo.Exec(ctx); err != nil {
+func (_d *InternalPolicyDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

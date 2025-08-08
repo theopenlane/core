@@ -33,40 +33,40 @@ type ControlImplementationHistoryQuery struct {
 }
 
 // Where adds a new predicate for the ControlImplementationHistoryQuery builder.
-func (cihq *ControlImplementationHistoryQuery) Where(ps ...predicate.ControlImplementationHistory) *ControlImplementationHistoryQuery {
-	cihq.predicates = append(cihq.predicates, ps...)
-	return cihq
+func (_q *ControlImplementationHistoryQuery) Where(ps ...predicate.ControlImplementationHistory) *ControlImplementationHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (cihq *ControlImplementationHistoryQuery) Limit(limit int) *ControlImplementationHistoryQuery {
-	cihq.ctx.Limit = &limit
-	return cihq
+func (_q *ControlImplementationHistoryQuery) Limit(limit int) *ControlImplementationHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (cihq *ControlImplementationHistoryQuery) Offset(offset int) *ControlImplementationHistoryQuery {
-	cihq.ctx.Offset = &offset
-	return cihq
+func (_q *ControlImplementationHistoryQuery) Offset(offset int) *ControlImplementationHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (cihq *ControlImplementationHistoryQuery) Unique(unique bool) *ControlImplementationHistoryQuery {
-	cihq.ctx.Unique = &unique
-	return cihq
+func (_q *ControlImplementationHistoryQuery) Unique(unique bool) *ControlImplementationHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (cihq *ControlImplementationHistoryQuery) Order(o ...controlimplementationhistory.OrderOption) *ControlImplementationHistoryQuery {
-	cihq.order = append(cihq.order, o...)
-	return cihq
+func (_q *ControlImplementationHistoryQuery) Order(o ...controlimplementationhistory.OrderOption) *ControlImplementationHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first ControlImplementationHistory entity from the query.
 // Returns a *NotFoundError when no ControlImplementationHistory was found.
-func (cihq *ControlImplementationHistoryQuery) First(ctx context.Context) (*ControlImplementationHistory, error) {
-	nodes, err := cihq.Limit(1).All(setContextOp(ctx, cihq.ctx, ent.OpQueryFirst))
+func (_q *ControlImplementationHistoryQuery) First(ctx context.Context) (*ControlImplementationHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (cihq *ControlImplementationHistoryQuery) First(ctx context.Context) (*Cont
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (cihq *ControlImplementationHistoryQuery) FirstX(ctx context.Context) *ControlImplementationHistory {
-	node, err := cihq.First(ctx)
+func (_q *ControlImplementationHistoryQuery) FirstX(ctx context.Context) *ControlImplementationHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (cihq *ControlImplementationHistoryQuery) FirstX(ctx context.Context) *Cont
 
 // FirstID returns the first ControlImplementationHistory ID from the query.
 // Returns a *NotFoundError when no ControlImplementationHistory ID was found.
-func (cihq *ControlImplementationHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ControlImplementationHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = cihq.Limit(1).IDs(setContextOp(ctx, cihq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (cihq *ControlImplementationHistoryQuery) FirstID(ctx context.Context) (id 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (cihq *ControlImplementationHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := cihq.FirstID(ctx)
+func (_q *ControlImplementationHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (cihq *ControlImplementationHistoryQuery) FirstIDX(ctx context.Context) str
 // Only returns a single ControlImplementationHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ControlImplementationHistory entity is found.
 // Returns a *NotFoundError when no ControlImplementationHistory entities are found.
-func (cihq *ControlImplementationHistoryQuery) Only(ctx context.Context) (*ControlImplementationHistory, error) {
-	nodes, err := cihq.Limit(2).All(setContextOp(ctx, cihq.ctx, ent.OpQueryOnly))
+func (_q *ControlImplementationHistoryQuery) Only(ctx context.Context) (*ControlImplementationHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (cihq *ControlImplementationHistoryQuery) Only(ctx context.Context) (*Contr
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (cihq *ControlImplementationHistoryQuery) OnlyX(ctx context.Context) *ControlImplementationHistory {
-	node, err := cihq.Only(ctx)
+func (_q *ControlImplementationHistoryQuery) OnlyX(ctx context.Context) *ControlImplementationHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (cihq *ControlImplementationHistoryQuery) OnlyX(ctx context.Context) *Contr
 // OnlyID is like Only, but returns the only ControlImplementationHistory ID in the query.
 // Returns a *NotSingularError when more than one ControlImplementationHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (cihq *ControlImplementationHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ControlImplementationHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = cihq.Limit(2).IDs(setContextOp(ctx, cihq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (cihq *ControlImplementationHistoryQuery) OnlyID(ctx context.Context) (id s
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (cihq *ControlImplementationHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := cihq.OnlyID(ctx)
+func (_q *ControlImplementationHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (cihq *ControlImplementationHistoryQuery) OnlyIDX(ctx context.Context) stri
 }
 
 // All executes the query and returns a list of ControlImplementationHistories.
-func (cihq *ControlImplementationHistoryQuery) All(ctx context.Context) ([]*ControlImplementationHistory, error) {
-	ctx = setContextOp(ctx, cihq.ctx, ent.OpQueryAll)
-	if err := cihq.prepareQuery(ctx); err != nil {
+func (_q *ControlImplementationHistoryQuery) All(ctx context.Context) ([]*ControlImplementationHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ControlImplementationHistory, *ControlImplementationHistoryQuery]()
-	return withInterceptors[[]*ControlImplementationHistory](ctx, cihq, qr, cihq.inters)
+	return withInterceptors[[]*ControlImplementationHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (cihq *ControlImplementationHistoryQuery) AllX(ctx context.Context) []*ControlImplementationHistory {
-	nodes, err := cihq.All(ctx)
+func (_q *ControlImplementationHistoryQuery) AllX(ctx context.Context) []*ControlImplementationHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (cihq *ControlImplementationHistoryQuery) AllX(ctx context.Context) []*Cont
 }
 
 // IDs executes the query and returns a list of ControlImplementationHistory IDs.
-func (cihq *ControlImplementationHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if cihq.ctx.Unique == nil && cihq.path != nil {
-		cihq.Unique(true)
+func (_q *ControlImplementationHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, cihq.ctx, ent.OpQueryIDs)
-	if err = cihq.Select(controlimplementationhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(controlimplementationhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (cihq *ControlImplementationHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := cihq.IDs(ctx)
+func (_q *ControlImplementationHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (cihq *ControlImplementationHistoryQuery) IDsX(ctx context.Context) []strin
 }
 
 // Count returns the count of the given query.
-func (cihq *ControlImplementationHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, cihq.ctx, ent.OpQueryCount)
-	if err := cihq.prepareQuery(ctx); err != nil {
+func (_q *ControlImplementationHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, cihq, querierCount[*ControlImplementationHistoryQuery](), cihq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ControlImplementationHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (cihq *ControlImplementationHistoryQuery) CountX(ctx context.Context) int {
-	count, err := cihq.Count(ctx)
+func (_q *ControlImplementationHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (cihq *ControlImplementationHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (cihq *ControlImplementationHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, cihq.ctx, ent.OpQueryExist)
-	switch _, err := cihq.FirstID(ctx); {
+func (_q *ControlImplementationHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (cihq *ControlImplementationHistoryQuery) Exist(ctx context.Context) (bool,
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (cihq *ControlImplementationHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := cihq.Exist(ctx)
+func (_q *ControlImplementationHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (cihq *ControlImplementationHistoryQuery) ExistX(ctx context.Context) bool 
 
 // Clone returns a duplicate of the ControlImplementationHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (cihq *ControlImplementationHistoryQuery) Clone() *ControlImplementationHistoryQuery {
-	if cihq == nil {
+func (_q *ControlImplementationHistoryQuery) Clone() *ControlImplementationHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ControlImplementationHistoryQuery{
-		config:     cihq.config,
-		ctx:        cihq.ctx.Clone(),
-		order:      append([]controlimplementationhistory.OrderOption{}, cihq.order...),
-		inters:     append([]Interceptor{}, cihq.inters...),
-		predicates: append([]predicate.ControlImplementationHistory{}, cihq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]controlimplementationhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.ControlImplementationHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       cihq.sql.Clone(),
-		path:      cihq.path,
-		modifiers: append([]func(*sql.Selector){}, cihq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (cihq *ControlImplementationHistoryQuery) Clone() *ControlImplementationHis
 //		GroupBy(controlimplementationhistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (cihq *ControlImplementationHistoryQuery) GroupBy(field string, fields ...string) *ControlImplementationHistoryGroupBy {
-	cihq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ControlImplementationHistoryGroupBy{build: cihq}
-	grbuild.flds = &cihq.ctx.Fields
+func (_q *ControlImplementationHistoryQuery) GroupBy(field string, fields ...string) *ControlImplementationHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ControlImplementationHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = controlimplementationhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (cihq *ControlImplementationHistoryQuery) GroupBy(field string, fields ...s
 //	client.ControlImplementationHistory.Query().
 //		Select(controlimplementationhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (cihq *ControlImplementationHistoryQuery) Select(fields ...string) *ControlImplementationHistorySelect {
-	cihq.ctx.Fields = append(cihq.ctx.Fields, fields...)
-	sbuild := &ControlImplementationHistorySelect{ControlImplementationHistoryQuery: cihq}
+func (_q *ControlImplementationHistoryQuery) Select(fields ...string) *ControlImplementationHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ControlImplementationHistorySelect{ControlImplementationHistoryQuery: _q}
 	sbuild.label = controlimplementationhistory.Label
-	sbuild.flds, sbuild.scan = &cihq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ControlImplementationHistorySelect configured with the given aggregations.
-func (cihq *ControlImplementationHistoryQuery) Aggregate(fns ...AggregateFunc) *ControlImplementationHistorySelect {
-	return cihq.Select().Aggregate(fns...)
+func (_q *ControlImplementationHistoryQuery) Aggregate(fns ...AggregateFunc) *ControlImplementationHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (cihq *ControlImplementationHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range cihq.inters {
+func (_q *ControlImplementationHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, cihq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range cihq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !controlimplementationhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if cihq.path != nil {
-		prev, err := cihq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		cihq.sql = prev
+		_q.sql = prev
 	}
 	if controlimplementationhistory.Policy == nil {
 		return errors.New("generated: uninitialized controlimplementationhistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := controlimplementationhistory.Policy.EvalQuery(ctx, cihq); err != nil {
+	if err := controlimplementationhistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (cihq *ControlImplementationHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ControlImplementationHistory, error) {
+func (_q *ControlImplementationHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ControlImplementationHistory, error) {
 	var (
 		nodes = []*ControlImplementationHistory{}
-		_spec = cihq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ControlImplementationHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ControlImplementationHistory{config: cihq.config}
+		node := &ControlImplementationHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = cihq.schemaConfig.ControlImplementationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, cihq.schemaConfig)
-	if len(cihq.modifiers) > 0 {
-		_spec.Modifiers = cihq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.ControlImplementationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, cihq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range cihq.loadTotal {
-		if err := cihq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (cihq *ControlImplementationHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := cihq.querySpec()
-	_spec.Node.Schema = cihq.schemaConfig.ControlImplementationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, cihq.schemaConfig)
-	if len(cihq.modifiers) > 0 {
-		_spec.Modifiers = cihq.modifiers
+func (_q *ControlImplementationHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.ControlImplementationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = cihq.ctx.Fields
-	if len(cihq.ctx.Fields) > 0 {
-		_spec.Unique = cihq.ctx.Unique != nil && *cihq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, cihq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (cihq *ControlImplementationHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ControlImplementationHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(controlimplementationhistory.Table, controlimplementationhistory.Columns, sqlgraph.NewFieldSpec(controlimplementationhistory.FieldID, field.TypeString))
-	_spec.From = cihq.sql
-	if unique := cihq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if cihq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := cihq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, controlimplementationhistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (cihq *ControlImplementationHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := cihq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := cihq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := cihq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := cihq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (cihq *ControlImplementationHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (cihq *ControlImplementationHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(cihq.driver.Dialect())
+func (_q *ControlImplementationHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(controlimplementationhistory.Table)
-	columns := cihq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = controlimplementationhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if cihq.sql != nil {
-		selector = cihq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if cihq.ctx.Unique != nil && *cihq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(cihq.schemaConfig.ControlImplementationHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, cihq.schemaConfig)
+	t1.Schema(_q.schemaConfig.ControlImplementationHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range cihq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range cihq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range cihq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := cihq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := cihq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (cihq *ControlImplementationHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *ControlImplementationHistorySelect {
-	cihq.modifiers = append(cihq.modifiers, modifiers...)
-	return cihq.Select()
+func (_q *ControlImplementationHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *ControlImplementationHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type ControlImplementationHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (cihgb *ControlImplementationHistoryGroupBy) Aggregate(fns ...AggregateFunc) *ControlImplementationHistoryGroupBy {
-	cihgb.fns = append(cihgb.fns, fns...)
-	return cihgb
+func (_g *ControlImplementationHistoryGroupBy) Aggregate(fns ...AggregateFunc) *ControlImplementationHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (cihgb *ControlImplementationHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cihgb.build.ctx, ent.OpQueryGroupBy)
-	if err := cihgb.build.prepareQuery(ctx); err != nil {
+func (_g *ControlImplementationHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ControlImplementationHistoryQuery, *ControlImplementationHistoryGroupBy](ctx, cihgb.build, cihgb, cihgb.build.inters, v)
+	return scanWithInterceptors[*ControlImplementationHistoryQuery, *ControlImplementationHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (cihgb *ControlImplementationHistoryGroupBy) sqlScan(ctx context.Context, root *ControlImplementationHistoryQuery, v any) error {
+func (_g *ControlImplementationHistoryGroupBy) sqlScan(ctx context.Context, root *ControlImplementationHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(cihgb.fns))
-	for _, fn := range cihgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*cihgb.flds)+len(cihgb.fns))
-		for _, f := range *cihgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*cihgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := cihgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type ControlImplementationHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (cihs *ControlImplementationHistorySelect) Aggregate(fns ...AggregateFunc) *ControlImplementationHistorySelect {
-	cihs.fns = append(cihs.fns, fns...)
-	return cihs
+func (_s *ControlImplementationHistorySelect) Aggregate(fns ...AggregateFunc) *ControlImplementationHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (cihs *ControlImplementationHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cihs.ctx, ent.OpQuerySelect)
-	if err := cihs.prepareQuery(ctx); err != nil {
+func (_s *ControlImplementationHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ControlImplementationHistoryQuery, *ControlImplementationHistorySelect](ctx, cihs.ControlImplementationHistoryQuery, cihs, cihs.inters, v)
+	return scanWithInterceptors[*ControlImplementationHistoryQuery, *ControlImplementationHistorySelect](ctx, _s.ControlImplementationHistoryQuery, _s, _s.inters, v)
 }
 
-func (cihs *ControlImplementationHistorySelect) sqlScan(ctx context.Context, root *ControlImplementationHistoryQuery, v any) error {
+func (_s *ControlImplementationHistorySelect) sqlScan(ctx context.Context, root *ControlImplementationHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(cihs.fns))
-	for _, fn := range cihs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*cihs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (cihs *ControlImplementationHistorySelect) sqlScan(ctx context.Context, roo
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := cihs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (cihs *ControlImplementationHistorySelect) sqlScan(ctx context.Context, roo
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (cihs *ControlImplementationHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *ControlImplementationHistorySelect {
-	cihs.modifiers = append(cihs.modifiers, modifiers...)
-	return cihs
+func (_s *ControlImplementationHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *ControlImplementationHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

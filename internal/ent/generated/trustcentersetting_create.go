@@ -23,359 +23,359 @@ type TrustCenterSettingCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tcsc *TrustCenterSettingCreate) SetCreatedAt(t time.Time) *TrustCenterSettingCreate {
-	tcsc.mutation.SetCreatedAt(t)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetCreatedAt(v time.Time) *TrustCenterSettingCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableCreatedAt(t *time.Time) *TrustCenterSettingCreate {
-	if t != nil {
-		tcsc.SetCreatedAt(*t)
+func (_c *TrustCenterSettingCreate) SetNillableCreatedAt(v *time.Time) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcsc *TrustCenterSettingCreate) SetUpdatedAt(t time.Time) *TrustCenterSettingCreate {
-	tcsc.mutation.SetUpdatedAt(t)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetUpdatedAt(v time.Time) *TrustCenterSettingCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableUpdatedAt(t *time.Time) *TrustCenterSettingCreate {
-	if t != nil {
-		tcsc.SetUpdatedAt(*t)
+func (_c *TrustCenterSettingCreate) SetNillableUpdatedAt(v *time.Time) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (tcsc *TrustCenterSettingCreate) SetCreatedBy(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetCreatedBy(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetCreatedBy(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableCreatedBy(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetCreatedBy(*s)
+func (_c *TrustCenterSettingCreate) SetNillableCreatedBy(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tcsc *TrustCenterSettingCreate) SetUpdatedBy(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetUpdatedBy(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetUpdatedBy(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableUpdatedBy(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetUpdatedBy(*s)
+func (_c *TrustCenterSettingCreate) SetNillableUpdatedBy(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tcsc *TrustCenterSettingCreate) SetDeletedAt(t time.Time) *TrustCenterSettingCreate {
-	tcsc.mutation.SetDeletedAt(t)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetDeletedAt(v time.Time) *TrustCenterSettingCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableDeletedAt(t *time.Time) *TrustCenterSettingCreate {
-	if t != nil {
-		tcsc.SetDeletedAt(*t)
+func (_c *TrustCenterSettingCreate) SetNillableDeletedAt(v *time.Time) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tcsc *TrustCenterSettingCreate) SetDeletedBy(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetDeletedBy(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetDeletedBy(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableDeletedBy(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetDeletedBy(*s)
+func (_c *TrustCenterSettingCreate) SetNillableDeletedBy(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetTrustCenterID sets the "trust_center_id" field.
-func (tcsc *TrustCenterSettingCreate) SetTrustCenterID(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetTrustCenterID(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetTrustCenterID(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
 }
 
 // SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableTrustCenterID(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetTrustCenterID(*s)
+func (_c *TrustCenterSettingCreate) SetNillableTrustCenterID(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetTitle sets the "title" field.
-func (tcsc *TrustCenterSettingCreate) SetTitle(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetTitle(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetTitle(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetTitle(v)
+	return _c
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableTitle(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetTitle(*s)
+func (_c *TrustCenterSettingCreate) SetNillableTitle(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetTitle(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetOverview sets the "overview" field.
-func (tcsc *TrustCenterSettingCreate) SetOverview(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetOverview(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetOverview(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetOverview(v)
+	return _c
 }
 
 // SetNillableOverview sets the "overview" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableOverview(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetOverview(*s)
+func (_c *TrustCenterSettingCreate) SetNillableOverview(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetOverview(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetLogoRemoteURL sets the "logo_remote_url" field.
-func (tcsc *TrustCenterSettingCreate) SetLogoRemoteURL(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetLogoRemoteURL(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetLogoRemoteURL(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetLogoRemoteURL(v)
+	return _c
 }
 
 // SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetLogoRemoteURL(*s)
+func (_c *TrustCenterSettingCreate) SetNillableLogoRemoteURL(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetLogoRemoteURL(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (tcsc *TrustCenterSettingCreate) SetLogoLocalFileID(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetLogoLocalFileID(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetLogoLocalFileID(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetLogoLocalFileID(v)
+	return _c
 }
 
 // SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetLogoLocalFileID(*s)
+func (_c *TrustCenterSettingCreate) SetNillableLogoLocalFileID(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetLogoLocalFileID(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetFaviconRemoteURL sets the "favicon_remote_url" field.
-func (tcsc *TrustCenterSettingCreate) SetFaviconRemoteURL(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetFaviconRemoteURL(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetFaviconRemoteURL(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetFaviconRemoteURL(v)
+	return _c
 }
 
 // SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableFaviconRemoteURL(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetFaviconRemoteURL(*s)
+func (_c *TrustCenterSettingCreate) SetNillableFaviconRemoteURL(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetFaviconRemoteURL(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetFaviconLocalFileID sets the "favicon_local_file_id" field.
-func (tcsc *TrustCenterSettingCreate) SetFaviconLocalFileID(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetFaviconLocalFileID(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetFaviconLocalFileID(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetFaviconLocalFileID(v)
+	return _c
 }
 
 // SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetFaviconLocalFileID(*s)
+func (_c *TrustCenterSettingCreate) SetNillableFaviconLocalFileID(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetFaviconLocalFileID(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetThemeMode sets the "theme_mode" field.
-func (tcsc *TrustCenterSettingCreate) SetThemeMode(ectm enums.TrustCenterThemeMode) *TrustCenterSettingCreate {
-	tcsc.mutation.SetThemeMode(ectm)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetThemeMode(v enums.TrustCenterThemeMode) *TrustCenterSettingCreate {
+	_c.mutation.SetThemeMode(v)
+	return _c
 }
 
 // SetNillableThemeMode sets the "theme_mode" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableThemeMode(ectm *enums.TrustCenterThemeMode) *TrustCenterSettingCreate {
-	if ectm != nil {
-		tcsc.SetThemeMode(*ectm)
+func (_c *TrustCenterSettingCreate) SetNillableThemeMode(v *enums.TrustCenterThemeMode) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetThemeMode(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetPrimaryColor sets the "primary_color" field.
-func (tcsc *TrustCenterSettingCreate) SetPrimaryColor(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetPrimaryColor(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetPrimaryColor(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetPrimaryColor(v)
+	return _c
 }
 
 // SetNillablePrimaryColor sets the "primary_color" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillablePrimaryColor(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetPrimaryColor(*s)
+func (_c *TrustCenterSettingCreate) SetNillablePrimaryColor(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetPrimaryColor(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetFont sets the "font" field.
-func (tcsc *TrustCenterSettingCreate) SetFont(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetFont(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetFont(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetFont(v)
+	return _c
 }
 
 // SetNillableFont sets the "font" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableFont(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetFont(*s)
+func (_c *TrustCenterSettingCreate) SetNillableFont(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetFont(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetForegroundColor sets the "foreground_color" field.
-func (tcsc *TrustCenterSettingCreate) SetForegroundColor(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetForegroundColor(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetForegroundColor(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetForegroundColor(v)
+	return _c
 }
 
 // SetNillableForegroundColor sets the "foreground_color" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableForegroundColor(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetForegroundColor(*s)
+func (_c *TrustCenterSettingCreate) SetNillableForegroundColor(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetForegroundColor(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetBackgroundColor sets the "background_color" field.
-func (tcsc *TrustCenterSettingCreate) SetBackgroundColor(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetBackgroundColor(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetBackgroundColor(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetBackgroundColor(v)
+	return _c
 }
 
 // SetNillableBackgroundColor sets the "background_color" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableBackgroundColor(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetBackgroundColor(*s)
+func (_c *TrustCenterSettingCreate) SetNillableBackgroundColor(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetBackgroundColor(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetAccentColor sets the "accent_color" field.
-func (tcsc *TrustCenterSettingCreate) SetAccentColor(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetAccentColor(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetAccentColor(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetAccentColor(v)
+	return _c
 }
 
 // SetNillableAccentColor sets the "accent_color" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableAccentColor(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetAccentColor(*s)
+func (_c *TrustCenterSettingCreate) SetNillableAccentColor(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetAccentColor(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tcsc *TrustCenterSettingCreate) SetID(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetID(s)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetID(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableID(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetID(*s)
+func (_c *TrustCenterSettingCreate) SetNillableID(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return tcsc
+	return _c
 }
 
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
-func (tcsc *TrustCenterSettingCreate) SetTrustCenter(t *TrustCenter) *TrustCenterSettingCreate {
-	return tcsc.SetTrustCenterID(t.ID)
+func (_c *TrustCenterSettingCreate) SetTrustCenter(v *TrustCenter) *TrustCenterSettingCreate {
+	return _c.SetTrustCenterID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (tcsc *TrustCenterSettingCreate) AddFileIDs(ids ...string) *TrustCenterSettingCreate {
-	tcsc.mutation.AddFileIDs(ids...)
-	return tcsc
+func (_c *TrustCenterSettingCreate) AddFileIDs(ids ...string) *TrustCenterSettingCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (tcsc *TrustCenterSettingCreate) AddFiles(f ...*File) *TrustCenterSettingCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *TrustCenterSettingCreate) AddFiles(v ...*File) *TrustCenterSettingCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tcsc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (tcsc *TrustCenterSettingCreate) SetLogoFileID(id string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetLogoFileID(id)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetLogoFileID(id string) *TrustCenterSettingCreate {
+	_c.mutation.SetLogoFileID(id)
+	return _c
 }
 
 // SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableLogoFileID(id *string) *TrustCenterSettingCreate {
+func (_c *TrustCenterSettingCreate) SetNillableLogoFileID(id *string) *TrustCenterSettingCreate {
 	if id != nil {
-		tcsc = tcsc.SetLogoFileID(*id)
+		_c = _c.SetLogoFileID(*id)
 	}
-	return tcsc
+	return _c
 }
 
 // SetLogoFile sets the "logo_file" edge to the File entity.
-func (tcsc *TrustCenterSettingCreate) SetLogoFile(f *File) *TrustCenterSettingCreate {
-	return tcsc.SetLogoFileID(f.ID)
+func (_c *TrustCenterSettingCreate) SetLogoFile(v *File) *TrustCenterSettingCreate {
+	return _c.SetLogoFileID(v.ID)
 }
 
 // SetFaviconFileID sets the "favicon_file" edge to the File entity by ID.
-func (tcsc *TrustCenterSettingCreate) SetFaviconFileID(id string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetFaviconFileID(id)
-	return tcsc
+func (_c *TrustCenterSettingCreate) SetFaviconFileID(id string) *TrustCenterSettingCreate {
+	_c.mutation.SetFaviconFileID(id)
+	return _c
 }
 
 // SetNillableFaviconFileID sets the "favicon_file" edge to the File entity by ID if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillableFaviconFileID(id *string) *TrustCenterSettingCreate {
+func (_c *TrustCenterSettingCreate) SetNillableFaviconFileID(id *string) *TrustCenterSettingCreate {
 	if id != nil {
-		tcsc = tcsc.SetFaviconFileID(*id)
+		_c = _c.SetFaviconFileID(*id)
 	}
-	return tcsc
+	return _c
 }
 
 // SetFaviconFile sets the "favicon_file" edge to the File entity.
-func (tcsc *TrustCenterSettingCreate) SetFaviconFile(f *File) *TrustCenterSettingCreate {
-	return tcsc.SetFaviconFileID(f.ID)
+func (_c *TrustCenterSettingCreate) SetFaviconFile(v *File) *TrustCenterSettingCreate {
+	return _c.SetFaviconFileID(v.ID)
 }
 
 // Mutation returns the TrustCenterSettingMutation object of the builder.
-func (tcsc *TrustCenterSettingCreate) Mutation() *TrustCenterSettingMutation {
-	return tcsc.mutation
+func (_c *TrustCenterSettingCreate) Mutation() *TrustCenterSettingMutation {
+	return _c.mutation
 }
 
 // Save creates the TrustCenterSetting in the database.
-func (tcsc *TrustCenterSettingCreate) Save(ctx context.Context) (*TrustCenterSetting, error) {
-	if err := tcsc.defaults(); err != nil {
+func (_c *TrustCenterSettingCreate) Save(ctx context.Context) (*TrustCenterSetting, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, tcsc.sqlSave, tcsc.mutation, tcsc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tcsc *TrustCenterSettingCreate) SaveX(ctx context.Context) *TrustCenterSetting {
-	v, err := tcsc.Save(ctx)
+func (_c *TrustCenterSettingCreate) SaveX(ctx context.Context) *TrustCenterSetting {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -383,76 +383,76 @@ func (tcsc *TrustCenterSettingCreate) SaveX(ctx context.Context) *TrustCenterSet
 }
 
 // Exec executes the query.
-func (tcsc *TrustCenterSettingCreate) Exec(ctx context.Context) error {
-	_, err := tcsc.Save(ctx)
+func (_c *TrustCenterSettingCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcsc *TrustCenterSettingCreate) ExecX(ctx context.Context) {
-	if err := tcsc.Exec(ctx); err != nil {
+func (_c *TrustCenterSettingCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tcsc *TrustCenterSettingCreate) defaults() error {
-	if _, ok := tcsc.mutation.CreatedAt(); !ok {
+func (_c *TrustCenterSettingCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if trustcentersetting.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersetting.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcentersetting.DefaultCreatedAt()
-		tcsc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := tcsc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if trustcentersetting.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersetting.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcentersetting.DefaultUpdatedAt()
-		tcsc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := tcsc.mutation.ThemeMode(); !ok {
+	if _, ok := _c.mutation.ThemeMode(); !ok {
 		v := trustcentersetting.DefaultThemeMode
-		tcsc.mutation.SetThemeMode(v)
+		_c.mutation.SetThemeMode(v)
 	}
-	if _, ok := tcsc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersetting.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersetting.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := trustcentersetting.DefaultID()
-		tcsc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tcsc *TrustCenterSettingCreate) check() error {
-	if v, ok := tcsc.mutation.TrustCenterID(); ok {
+func (_c *TrustCenterSettingCreate) check() error {
+	if v, ok := _c.mutation.TrustCenterID(); ok {
 		if err := trustcentersetting.TrustCenterIDValidator(v); err != nil {
 			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.trust_center_id": %w`, err)}
 		}
 	}
-	if v, ok := tcsc.mutation.Title(); ok {
+	if v, ok := _c.mutation.Title(); ok {
 		if err := trustcentersetting.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.title": %w`, err)}
 		}
 	}
-	if v, ok := tcsc.mutation.Overview(); ok {
+	if v, ok := _c.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
 		}
 	}
-	if v, ok := tcsc.mutation.LogoRemoteURL(); ok {
+	if v, ok := _c.mutation.LogoRemoteURL(); ok {
 		if err := trustcentersetting.LogoRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.logo_remote_url": %w`, err)}
 		}
 	}
-	if v, ok := tcsc.mutation.FaviconRemoteURL(); ok {
+	if v, ok := _c.mutation.FaviconRemoteURL(); ok {
 		if err := trustcentersetting.FaviconRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "favicon_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.favicon_remote_url": %w`, err)}
 		}
 	}
-	if v, ok := tcsc.mutation.ThemeMode(); ok {
+	if v, ok := _c.mutation.ThemeMode(); ok {
 		if err := trustcentersetting.ThemeModeValidator(v); err != nil {
 			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.theme_mode": %w`, err)}
 		}
@@ -460,12 +460,12 @@ func (tcsc *TrustCenterSettingCreate) check() error {
 	return nil
 }
 
-func (tcsc *TrustCenterSettingCreate) sqlSave(ctx context.Context) (*TrustCenterSetting, error) {
-	if err := tcsc.check(); err != nil {
+func (_c *TrustCenterSettingCreate) sqlSave(ctx context.Context) (*TrustCenterSetting, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tcsc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tcsc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -478,86 +478,86 @@ func (tcsc *TrustCenterSettingCreate) sqlSave(ctx context.Context) (*TrustCenter
 			return nil, fmt.Errorf("unexpected TrustCenterSetting.ID type: %T", _spec.ID.Value)
 		}
 	}
-	tcsc.mutation.id = &_node.ID
-	tcsc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tcsc *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph.CreateSpec) {
+func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TrustCenterSetting{config: tcsc.config}
+		_node = &TrustCenterSetting{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcentersetting.Table, sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString))
 	)
-	_spec.Schema = tcsc.schemaConfig.TrustCenterSetting
-	if id, ok := tcsc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.TrustCenterSetting
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := tcsc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(trustcentersetting.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := tcsc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(trustcentersetting.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := tcsc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(trustcentersetting.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := tcsc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcentersetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := tcsc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcentersetting.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := tcsc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(trustcentersetting.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := tcsc.mutation.Title(); ok {
+	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(trustcentersetting.FieldTitle, field.TypeString, value)
 		_node.Title = value
 	}
-	if value, ok := tcsc.mutation.Overview(); ok {
+	if value, ok := _c.mutation.Overview(); ok {
 		_spec.SetField(trustcentersetting.FieldOverview, field.TypeString, value)
 		_node.Overview = value
 	}
-	if value, ok := tcsc.mutation.LogoRemoteURL(); ok {
+	if value, ok := _c.mutation.LogoRemoteURL(); ok {
 		_spec.SetField(trustcentersetting.FieldLogoRemoteURL, field.TypeString, value)
 		_node.LogoRemoteURL = &value
 	}
-	if value, ok := tcsc.mutation.FaviconRemoteURL(); ok {
+	if value, ok := _c.mutation.FaviconRemoteURL(); ok {
 		_spec.SetField(trustcentersetting.FieldFaviconRemoteURL, field.TypeString, value)
 		_node.FaviconRemoteURL = &value
 	}
-	if value, ok := tcsc.mutation.ThemeMode(); ok {
+	if value, ok := _c.mutation.ThemeMode(); ok {
 		_spec.SetField(trustcentersetting.FieldThemeMode, field.TypeEnum, value)
 		_node.ThemeMode = value
 	}
-	if value, ok := tcsc.mutation.PrimaryColor(); ok {
+	if value, ok := _c.mutation.PrimaryColor(); ok {
 		_spec.SetField(trustcentersetting.FieldPrimaryColor, field.TypeString, value)
 		_node.PrimaryColor = value
 	}
-	if value, ok := tcsc.mutation.Font(); ok {
+	if value, ok := _c.mutation.Font(); ok {
 		_spec.SetField(trustcentersetting.FieldFont, field.TypeString, value)
 		_node.Font = value
 	}
-	if value, ok := tcsc.mutation.ForegroundColor(); ok {
+	if value, ok := _c.mutation.ForegroundColor(); ok {
 		_spec.SetField(trustcentersetting.FieldForegroundColor, field.TypeString, value)
 		_node.ForegroundColor = value
 	}
-	if value, ok := tcsc.mutation.BackgroundColor(); ok {
+	if value, ok := _c.mutation.BackgroundColor(); ok {
 		_spec.SetField(trustcentersetting.FieldBackgroundColor, field.TypeString, value)
 		_node.BackgroundColor = value
 	}
-	if value, ok := tcsc.mutation.AccentColor(); ok {
+	if value, ok := _c.mutation.AccentColor(); ok {
 		_spec.SetField(trustcentersetting.FieldAccentColor, field.TypeString, value)
 		_node.AccentColor = value
 	}
-	if nodes := tcsc.mutation.TrustCenterIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -568,14 +568,14 @@ func (tcsc *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgra
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsc.schemaConfig.TrustCenterSetting
+		edge.Schema = _c.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.TrustCenterID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tcsc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -586,13 +586,13 @@ func (tcsc *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgra
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsc.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _c.schemaConfig.TrustCenterSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tcsc.mutation.LogoFileIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.LogoFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -603,14 +603,14 @@ func (tcsc *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgra
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsc.schemaConfig.TrustCenterSetting
+		edge.Schema = _c.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.LogoLocalFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tcsc.mutation.FaviconFileIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FaviconFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -621,7 +621,7 @@ func (tcsc *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgra
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsc.schemaConfig.TrustCenterSetting
+		edge.Schema = _c.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -639,16 +639,16 @@ type TrustCenterSettingCreateBulk struct {
 }
 
 // Save creates the TrustCenterSetting entities in the database.
-func (tcscb *TrustCenterSettingCreateBulk) Save(ctx context.Context) ([]*TrustCenterSetting, error) {
-	if tcscb.err != nil {
-		return nil, tcscb.err
+func (_c *TrustCenterSettingCreateBulk) Save(ctx context.Context) ([]*TrustCenterSetting, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tcscb.builders))
-	nodes := make([]*TrustCenterSetting, len(tcscb.builders))
-	mutators := make([]Mutator, len(tcscb.builders))
-	for i := range tcscb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TrustCenterSetting, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tcscb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TrustCenterSettingMutation)
@@ -662,11 +662,11 @@ func (tcscb *TrustCenterSettingCreateBulk) Save(ctx context.Context) ([]*TrustCe
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tcscb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tcscb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -686,7 +686,7 @@ func (tcscb *TrustCenterSettingCreateBulk) Save(ctx context.Context) ([]*TrustCe
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tcscb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -694,8 +694,8 @@ func (tcscb *TrustCenterSettingCreateBulk) Save(ctx context.Context) ([]*TrustCe
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcscb *TrustCenterSettingCreateBulk) SaveX(ctx context.Context) []*TrustCenterSetting {
-	v, err := tcscb.Save(ctx)
+func (_c *TrustCenterSettingCreateBulk) SaveX(ctx context.Context) []*TrustCenterSetting {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -703,14 +703,14 @@ func (tcscb *TrustCenterSettingCreateBulk) SaveX(ctx context.Context) []*TrustCe
 }
 
 // Exec executes the query.
-func (tcscb *TrustCenterSettingCreateBulk) Exec(ctx context.Context) error {
-	_, err := tcscb.Save(ctx)
+func (_c *TrustCenterSettingCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcscb *TrustCenterSettingCreateBulk) ExecX(ctx context.Context) {
-	if err := tcscb.Exec(ctx); err != nil {
+func (_c *TrustCenterSettingCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -56,44 +56,44 @@ type NarrativeQuery struct {
 }
 
 // Where adds a new predicate for the NarrativeQuery builder.
-func (nq *NarrativeQuery) Where(ps ...predicate.Narrative) *NarrativeQuery {
-	nq.predicates = append(nq.predicates, ps...)
-	return nq
+func (_q *NarrativeQuery) Where(ps ...predicate.Narrative) *NarrativeQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (nq *NarrativeQuery) Limit(limit int) *NarrativeQuery {
-	nq.ctx.Limit = &limit
-	return nq
+func (_q *NarrativeQuery) Limit(limit int) *NarrativeQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (nq *NarrativeQuery) Offset(offset int) *NarrativeQuery {
-	nq.ctx.Offset = &offset
-	return nq
+func (_q *NarrativeQuery) Offset(offset int) *NarrativeQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (nq *NarrativeQuery) Unique(unique bool) *NarrativeQuery {
-	nq.ctx.Unique = &unique
-	return nq
+func (_q *NarrativeQuery) Unique(unique bool) *NarrativeQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (nq *NarrativeQuery) Order(o ...narrative.OrderOption) *NarrativeQuery {
-	nq.order = append(nq.order, o...)
-	return nq
+func (_q *NarrativeQuery) Order(o ...narrative.OrderOption) *NarrativeQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (nq *NarrativeQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := nq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -102,23 +102,23 @@ func (nq *NarrativeQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, narrative.OwnerTable, narrative.OwnerColumn),
 		)
-		schemaConfig := nq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Narrative
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryBlockedGroups chains the current query on the "blocked_groups" edge.
-func (nq *NarrativeQuery) QueryBlockedGroups() *GroupQuery {
-	query := (&GroupClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := nq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -127,23 +127,23 @@ func (nq *NarrativeQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, narrative.BlockedGroupsTable, narrative.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := nq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.NarrativeBlockedGroups
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEditors chains the current query on the "editors" edge.
-func (nq *NarrativeQuery) QueryEditors() *GroupQuery {
-	query := (&GroupClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := nq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -152,23 +152,23 @@ func (nq *NarrativeQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, narrative.EditorsTable, narrative.EditorsPrimaryKey...),
 		)
-		schemaConfig := nq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.NarrativeEditors
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryViewers chains the current query on the "viewers" edge.
-func (nq *NarrativeQuery) QueryViewers() *GroupQuery {
-	query := (&GroupClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) QueryViewers() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := nq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -177,23 +177,23 @@ func (nq *NarrativeQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, narrative.ViewersTable, narrative.ViewersPrimaryKey...),
 		)
-		schemaConfig := nq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.NarrativeViewers
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QuerySatisfies chains the current query on the "satisfies" edge.
-func (nq *NarrativeQuery) QuerySatisfies() *ControlQuery {
-	query := (&ControlClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) QuerySatisfies() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := nq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -202,23 +202,23 @@ func (nq *NarrativeQuery) QuerySatisfies() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, narrative.SatisfiesTable, narrative.SatisfiesPrimaryKey...),
 		)
-		schemaConfig := nq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlNarratives
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryPrograms chains the current query on the "programs" edge.
-func (nq *NarrativeQuery) QueryPrograms() *ProgramQuery {
-	query := (&ProgramClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := nq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -227,23 +227,23 @@ func (nq *NarrativeQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ProgramsTable, narrative.ProgramsPrimaryKey...),
 		)
-		schemaConfig := nq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramNarratives
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryInternalPolicies chains the current query on the "internal_policies" edge.
-func (nq *NarrativeQuery) QueryInternalPolicies() *InternalPolicyQuery {
-	query := (&InternalPolicyClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := nq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -252,23 +252,23 @@ func (nq *NarrativeQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, narrative.InternalPoliciesTable, narrative.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := nq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryProcedures chains the current query on the "procedures" edge.
-func (nq *NarrativeQuery) QueryProcedures() *ProcedureQuery {
-	query := (&ProcedureClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) QueryProcedures() *ProcedureQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := nq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -277,10 +277,10 @@ func (nq *NarrativeQuery) QueryProcedures() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ProceduresTable, narrative.ProceduresPrimaryKey...),
 		)
-		schemaConfig := nq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Procedure
 		step.Edge.Schema = schemaConfig.ProcedureNarratives
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -288,8 +288,8 @@ func (nq *NarrativeQuery) QueryProcedures() *ProcedureQuery {
 
 // First returns the first Narrative entity from the query.
 // Returns a *NotFoundError when no Narrative was found.
-func (nq *NarrativeQuery) First(ctx context.Context) (*Narrative, error) {
-	nodes, err := nq.Limit(1).All(setContextOp(ctx, nq.ctx, ent.OpQueryFirst))
+func (_q *NarrativeQuery) First(ctx context.Context) (*Narrative, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -300,8 +300,8 @@ func (nq *NarrativeQuery) First(ctx context.Context) (*Narrative, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (nq *NarrativeQuery) FirstX(ctx context.Context) *Narrative {
-	node, err := nq.First(ctx)
+func (_q *NarrativeQuery) FirstX(ctx context.Context) *Narrative {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -310,9 +310,9 @@ func (nq *NarrativeQuery) FirstX(ctx context.Context) *Narrative {
 
 // FirstID returns the first Narrative ID from the query.
 // Returns a *NotFoundError when no Narrative ID was found.
-func (nq *NarrativeQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *NarrativeQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = nq.Limit(1).IDs(setContextOp(ctx, nq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -323,8 +323,8 @@ func (nq *NarrativeQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (nq *NarrativeQuery) FirstIDX(ctx context.Context) string {
-	id, err := nq.FirstID(ctx)
+func (_q *NarrativeQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -334,8 +334,8 @@ func (nq *NarrativeQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Narrative entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Narrative entity is found.
 // Returns a *NotFoundError when no Narrative entities are found.
-func (nq *NarrativeQuery) Only(ctx context.Context) (*Narrative, error) {
-	nodes, err := nq.Limit(2).All(setContextOp(ctx, nq.ctx, ent.OpQueryOnly))
+func (_q *NarrativeQuery) Only(ctx context.Context) (*Narrative, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -350,8 +350,8 @@ func (nq *NarrativeQuery) Only(ctx context.Context) (*Narrative, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (nq *NarrativeQuery) OnlyX(ctx context.Context) *Narrative {
-	node, err := nq.Only(ctx)
+func (_q *NarrativeQuery) OnlyX(ctx context.Context) *Narrative {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -361,9 +361,9 @@ func (nq *NarrativeQuery) OnlyX(ctx context.Context) *Narrative {
 // OnlyID is like Only, but returns the only Narrative ID in the query.
 // Returns a *NotSingularError when more than one Narrative ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (nq *NarrativeQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *NarrativeQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = nq.Limit(2).IDs(setContextOp(ctx, nq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -378,8 +378,8 @@ func (nq *NarrativeQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (nq *NarrativeQuery) OnlyIDX(ctx context.Context) string {
-	id, err := nq.OnlyID(ctx)
+func (_q *NarrativeQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -387,18 +387,18 @@ func (nq *NarrativeQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Narratives.
-func (nq *NarrativeQuery) All(ctx context.Context) ([]*Narrative, error) {
-	ctx = setContextOp(ctx, nq.ctx, ent.OpQueryAll)
-	if err := nq.prepareQuery(ctx); err != nil {
+func (_q *NarrativeQuery) All(ctx context.Context) ([]*Narrative, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Narrative, *NarrativeQuery]()
-	return withInterceptors[[]*Narrative](ctx, nq, qr, nq.inters)
+	return withInterceptors[[]*Narrative](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (nq *NarrativeQuery) AllX(ctx context.Context) []*Narrative {
-	nodes, err := nq.All(ctx)
+func (_q *NarrativeQuery) AllX(ctx context.Context) []*Narrative {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -406,20 +406,20 @@ func (nq *NarrativeQuery) AllX(ctx context.Context) []*Narrative {
 }
 
 // IDs executes the query and returns a list of Narrative IDs.
-func (nq *NarrativeQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if nq.ctx.Unique == nil && nq.path != nil {
-		nq.Unique(true)
+func (_q *NarrativeQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, nq.ctx, ent.OpQueryIDs)
-	if err = nq.Select(narrative.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(narrative.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (nq *NarrativeQuery) IDsX(ctx context.Context) []string {
-	ids, err := nq.IDs(ctx)
+func (_q *NarrativeQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -427,17 +427,17 @@ func (nq *NarrativeQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (nq *NarrativeQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, nq.ctx, ent.OpQueryCount)
-	if err := nq.prepareQuery(ctx); err != nil {
+func (_q *NarrativeQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, nq, querierCount[*NarrativeQuery](), nq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*NarrativeQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (nq *NarrativeQuery) CountX(ctx context.Context) int {
-	count, err := nq.Count(ctx)
+func (_q *NarrativeQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -445,9 +445,9 @@ func (nq *NarrativeQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (nq *NarrativeQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, nq.ctx, ent.OpQueryExist)
-	switch _, err := nq.FirstID(ctx); {
+func (_q *NarrativeQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -458,8 +458,8 @@ func (nq *NarrativeQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (nq *NarrativeQuery) ExistX(ctx context.Context) bool {
-	exist, err := nq.Exist(ctx)
+func (_q *NarrativeQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -468,117 +468,117 @@ func (nq *NarrativeQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the NarrativeQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (nq *NarrativeQuery) Clone() *NarrativeQuery {
-	if nq == nil {
+func (_q *NarrativeQuery) Clone() *NarrativeQuery {
+	if _q == nil {
 		return nil
 	}
 	return &NarrativeQuery{
-		config:               nq.config,
-		ctx:                  nq.ctx.Clone(),
-		order:                append([]narrative.OrderOption{}, nq.order...),
-		inters:               append([]Interceptor{}, nq.inters...),
-		predicates:           append([]predicate.Narrative{}, nq.predicates...),
-		withOwner:            nq.withOwner.Clone(),
-		withBlockedGroups:    nq.withBlockedGroups.Clone(),
-		withEditors:          nq.withEditors.Clone(),
-		withViewers:          nq.withViewers.Clone(),
-		withSatisfies:        nq.withSatisfies.Clone(),
-		withPrograms:         nq.withPrograms.Clone(),
-		withInternalPolicies: nq.withInternalPolicies.Clone(),
-		withProcedures:       nq.withProcedures.Clone(),
+		config:               _q.config,
+		ctx:                  _q.ctx.Clone(),
+		order:                append([]narrative.OrderOption{}, _q.order...),
+		inters:               append([]Interceptor{}, _q.inters...),
+		predicates:           append([]predicate.Narrative{}, _q.predicates...),
+		withOwner:            _q.withOwner.Clone(),
+		withBlockedGroups:    _q.withBlockedGroups.Clone(),
+		withEditors:          _q.withEditors.Clone(),
+		withViewers:          _q.withViewers.Clone(),
+		withSatisfies:        _q.withSatisfies.Clone(),
+		withPrograms:         _q.withPrograms.Clone(),
+		withInternalPolicies: _q.withInternalPolicies.Clone(),
+		withProcedures:       _q.withProcedures.Clone(),
 		// clone intermediate query.
-		sql:       nq.sql.Clone(),
-		path:      nq.path,
-		modifiers: append([]func(*sql.Selector){}, nq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithOwner(opts ...func(*OrganizationQuery)) *NarrativeQuery {
-	query := (&OrganizationClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithOwner(opts ...func(*OrganizationQuery)) *NarrativeQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withOwner = query
-	return nq
+	_q.withOwner = query
+	return _q
 }
 
 // WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
 // the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *NarrativeQuery {
-	query := (&GroupClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withBlockedGroups = query
-	return nq
+	_q.withBlockedGroups = query
+	return _q
 }
 
 // WithEditors tells the query-builder to eager-load the nodes that are connected to
 // the "editors" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithEditors(opts ...func(*GroupQuery)) *NarrativeQuery {
-	query := (&GroupClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithEditors(opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withEditors = query
-	return nq
+	_q.withEditors = query
+	return _q
 }
 
 // WithViewers tells the query-builder to eager-load the nodes that are connected to
 // the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithViewers(opts ...func(*GroupQuery)) *NarrativeQuery {
-	query := (&GroupClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithViewers(opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withViewers = query
-	return nq
+	_q.withViewers = query
+	return _q
 }
 
 // WithSatisfies tells the query-builder to eager-load the nodes that are connected to
 // the "satisfies" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithSatisfies(opts ...func(*ControlQuery)) *NarrativeQuery {
-	query := (&ControlClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithSatisfies(opts ...func(*ControlQuery)) *NarrativeQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withSatisfies = query
-	return nq
+	_q.withSatisfies = query
+	return _q
 }
 
 // WithPrograms tells the query-builder to eager-load the nodes that are connected to
 // the "programs" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithPrograms(opts ...func(*ProgramQuery)) *NarrativeQuery {
-	query := (&ProgramClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithPrograms(opts ...func(*ProgramQuery)) *NarrativeQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withPrograms = query
-	return nq
+	_q.withPrograms = query
+	return _q
 }
 
 // WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
 // the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *NarrativeQuery {
-	query := (&InternalPolicyClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *NarrativeQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withInternalPolicies = query
-	return nq
+	_q.withInternalPolicies = query
+	return _q
 }
 
 // WithProcedures tells the query-builder to eager-load the nodes that are connected to
 // the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithProcedures(opts ...func(*ProcedureQuery)) *NarrativeQuery {
-	query := (&ProcedureClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithProcedures(opts ...func(*ProcedureQuery)) *NarrativeQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withProcedures = query
-	return nq
+	_q.withProcedures = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -595,10 +595,10 @@ func (nq *NarrativeQuery) WithProcedures(opts ...func(*ProcedureQuery)) *Narrati
 //		GroupBy(narrative.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (nq *NarrativeQuery) GroupBy(field string, fields ...string) *NarrativeGroupBy {
-	nq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &NarrativeGroupBy{build: nq}
-	grbuild.flds = &nq.ctx.Fields
+func (_q *NarrativeQuery) GroupBy(field string, fields ...string) *NarrativeGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &NarrativeGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = narrative.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -616,65 +616,65 @@ func (nq *NarrativeQuery) GroupBy(field string, fields ...string) *NarrativeGrou
 //	client.Narrative.Query().
 //		Select(narrative.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (nq *NarrativeQuery) Select(fields ...string) *NarrativeSelect {
-	nq.ctx.Fields = append(nq.ctx.Fields, fields...)
-	sbuild := &NarrativeSelect{NarrativeQuery: nq}
+func (_q *NarrativeQuery) Select(fields ...string) *NarrativeSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &NarrativeSelect{NarrativeQuery: _q}
 	sbuild.label = narrative.Label
-	sbuild.flds, sbuild.scan = &nq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a NarrativeSelect configured with the given aggregations.
-func (nq *NarrativeQuery) Aggregate(fns ...AggregateFunc) *NarrativeSelect {
-	return nq.Select().Aggregate(fns...)
+func (_q *NarrativeQuery) Aggregate(fns ...AggregateFunc) *NarrativeSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (nq *NarrativeQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range nq.inters {
+func (_q *NarrativeQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, nq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range nq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !narrative.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if nq.path != nil {
-		prev, err := nq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		nq.sql = prev
+		_q.sql = prev
 	}
 	if narrative.Policy == nil {
 		return errors.New("generated: uninitialized narrative.Policy (forgotten import generated/runtime?)")
 	}
-	if err := narrative.Policy.EvalQuery(ctx, nq); err != nil {
+	if err := narrative.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Narrative, error) {
+func (_q *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Narrative, error) {
 	var (
 		nodes       = []*Narrative{}
-		withFKs     = nq.withFKs
-		_spec       = nq.querySpec()
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
 		loadedTypes = [8]bool{
-			nq.withOwner != nil,
-			nq.withBlockedGroups != nil,
-			nq.withEditors != nil,
-			nq.withViewers != nil,
-			nq.withSatisfies != nil,
-			nq.withPrograms != nil,
-			nq.withInternalPolicies != nil,
-			nq.withProcedures != nil,
+			_q.withOwner != nil,
+			_q.withBlockedGroups != nil,
+			_q.withEditors != nil,
+			_q.withViewers != nil,
+			_q.withSatisfies != nil,
+			_q.withPrograms != nil,
+			_q.withInternalPolicies != nil,
+			_q.withProcedures != nil,
 		}
 	)
 	if withFKs {
@@ -684,138 +684,138 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 		return (*Narrative).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Narrative{config: nq.config}
+		node := &Narrative{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = nq.schemaConfig.Narrative
-	ctx = internal.NewSchemaConfigContext(ctx, nq.schemaConfig)
-	if len(nq.modifiers) > 0 {
-		_spec.Modifiers = nq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Narrative
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, nq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := nq.withOwner; query != nil {
-		if err := nq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Narrative, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := nq.withBlockedGroups; query != nil {
-		if err := nq.loadBlockedGroups(ctx, query, nodes,
+	if query := _q.withBlockedGroups; query != nil {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Narrative) { n.Edges.BlockedGroups = []*Group{} },
 			func(n *Narrative, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := nq.withEditors; query != nil {
-		if err := nq.loadEditors(ctx, query, nodes,
+	if query := _q.withEditors; query != nil {
+		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Narrative) { n.Edges.Editors = []*Group{} },
 			func(n *Narrative, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := nq.withViewers; query != nil {
-		if err := nq.loadViewers(ctx, query, nodes,
+	if query := _q.withViewers; query != nil {
+		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *Narrative) { n.Edges.Viewers = []*Group{} },
 			func(n *Narrative, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := nq.withSatisfies; query != nil {
-		if err := nq.loadSatisfies(ctx, query, nodes,
+	if query := _q.withSatisfies; query != nil {
+		if err := _q.loadSatisfies(ctx, query, nodes,
 			func(n *Narrative) { n.Edges.Satisfies = []*Control{} },
 			func(n *Narrative, e *Control) { n.Edges.Satisfies = append(n.Edges.Satisfies, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := nq.withPrograms; query != nil {
-		if err := nq.loadPrograms(ctx, query, nodes,
+	if query := _q.withPrograms; query != nil {
+		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Narrative) { n.Edges.Programs = []*Program{} },
 			func(n *Narrative, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := nq.withInternalPolicies; query != nil {
-		if err := nq.loadInternalPolicies(ctx, query, nodes,
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *Narrative) { n.Edges.InternalPolicies = []*InternalPolicy{} },
 			func(n *Narrative, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := nq.withProcedures; query != nil {
-		if err := nq.loadProcedures(ctx, query, nodes,
+	if query := _q.withProcedures; query != nil {
+		if err := _q.loadProcedures(ctx, query, nodes,
 			func(n *Narrative) { n.Edges.Procedures = []*Procedure{} },
 			func(n *Narrative, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range nq.withNamedBlockedGroups {
-		if err := nq.loadBlockedGroups(ctx, query, nodes,
+	for name, query := range _q.withNamedBlockedGroups {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Narrative) { n.appendNamedBlockedGroups(name) },
 			func(n *Narrative, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range nq.withNamedEditors {
-		if err := nq.loadEditors(ctx, query, nodes,
+	for name, query := range _q.withNamedEditors {
+		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Narrative) { n.appendNamedEditors(name) },
 			func(n *Narrative, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range nq.withNamedViewers {
-		if err := nq.loadViewers(ctx, query, nodes,
+	for name, query := range _q.withNamedViewers {
+		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *Narrative) { n.appendNamedViewers(name) },
 			func(n *Narrative, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range nq.withNamedSatisfies {
-		if err := nq.loadSatisfies(ctx, query, nodes,
+	for name, query := range _q.withNamedSatisfies {
+		if err := _q.loadSatisfies(ctx, query, nodes,
 			func(n *Narrative) { n.appendNamedSatisfies(name) },
 			func(n *Narrative, e *Control) { n.appendNamedSatisfies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range nq.withNamedPrograms {
-		if err := nq.loadPrograms(ctx, query, nodes,
+	for name, query := range _q.withNamedPrograms {
+		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Narrative) { n.appendNamedPrograms(name) },
 			func(n *Narrative, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range nq.withNamedInternalPolicies {
-		if err := nq.loadInternalPolicies(ctx, query, nodes,
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *Narrative) { n.appendNamedInternalPolicies(name) },
 			func(n *Narrative, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range nq.withNamedProcedures {
-		if err := nq.loadProcedures(ctx, query, nodes,
+	for name, query := range _q.withNamedProcedures {
+		if err := _q.loadProcedures(ctx, query, nodes,
 			func(n *Narrative) { n.appendNamedProcedures(name) },
 			func(n *Narrative, e *Procedure) { n.appendNamedProcedures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range nq.loadTotal {
-		if err := nq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (nq *NarrativeQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Organization)) error {
+func (_q *NarrativeQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Narrative)
 	for i := range nodes {
@@ -844,7 +844,7 @@ func (nq *NarrativeQuery) loadOwner(ctx context.Context, query *OrganizationQuer
 	}
 	return nil
 }
-func (nq *NarrativeQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Group)) error {
+func (_q *NarrativeQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Narrative)
 	nids := make(map[string]map[*Narrative]struct{})
@@ -857,7 +857,7 @@ func (nq *NarrativeQuery) loadBlockedGroups(ctx context.Context, query *GroupQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.BlockedGroupsTable)
-		joinT.Schema(nq.schemaConfig.NarrativeBlockedGroups)
+		joinT.Schema(_q.schemaConfig.NarrativeBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(narrative.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(narrative.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -906,7 +906,7 @@ func (nq *NarrativeQuery) loadBlockedGroups(ctx context.Context, query *GroupQue
 	}
 	return nil
 }
-func (nq *NarrativeQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Group)) error {
+func (_q *NarrativeQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Narrative)
 	nids := make(map[string]map[*Narrative]struct{})
@@ -919,7 +919,7 @@ func (nq *NarrativeQuery) loadEditors(ctx context.Context, query *GroupQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.EditorsTable)
-		joinT.Schema(nq.schemaConfig.NarrativeEditors)
+		joinT.Schema(_q.schemaConfig.NarrativeEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(narrative.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(narrative.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -968,7 +968,7 @@ func (nq *NarrativeQuery) loadEditors(ctx context.Context, query *GroupQuery, no
 	}
 	return nil
 }
-func (nq *NarrativeQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Group)) error {
+func (_q *NarrativeQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Narrative)
 	nids := make(map[string]map[*Narrative]struct{})
@@ -981,7 +981,7 @@ func (nq *NarrativeQuery) loadViewers(ctx context.Context, query *GroupQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.ViewersTable)
-		joinT.Schema(nq.schemaConfig.NarrativeViewers)
+		joinT.Schema(_q.schemaConfig.NarrativeViewers)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(narrative.ViewersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(narrative.ViewersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1030,7 +1030,7 @@ func (nq *NarrativeQuery) loadViewers(ctx context.Context, query *GroupQuery, no
 	}
 	return nil
 }
-func (nq *NarrativeQuery) loadSatisfies(ctx context.Context, query *ControlQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Control)) error {
+func (_q *NarrativeQuery) loadSatisfies(ctx context.Context, query *ControlQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Narrative)
 	nids := make(map[string]map[*Narrative]struct{})
@@ -1043,7 +1043,7 @@ func (nq *NarrativeQuery) loadSatisfies(ctx context.Context, query *ControlQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.SatisfiesTable)
-		joinT.Schema(nq.schemaConfig.ControlNarratives)
+		joinT.Schema(_q.schemaConfig.ControlNarratives)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(narrative.SatisfiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(narrative.SatisfiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1092,7 +1092,7 @@ func (nq *NarrativeQuery) loadSatisfies(ctx context.Context, query *ControlQuery
 	}
 	return nil
 }
-func (nq *NarrativeQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Program)) error {
+func (_q *NarrativeQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Program)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Narrative)
 	nids := make(map[string]map[*Narrative]struct{})
@@ -1105,7 +1105,7 @@ func (nq *NarrativeQuery) loadPrograms(ctx context.Context, query *ProgramQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.ProgramsTable)
-		joinT.Schema(nq.schemaConfig.ProgramNarratives)
+		joinT.Schema(_q.schemaConfig.ProgramNarratives)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(narrative.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(narrative.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1154,7 +1154,7 @@ func (nq *NarrativeQuery) loadPrograms(ctx context.Context, query *ProgramQuery,
 	}
 	return nil
 }
-func (nq *NarrativeQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *InternalPolicy)) error {
+func (_q *NarrativeQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Narrative)
 	nids := make(map[string]map[*Narrative]struct{})
@@ -1167,7 +1167,7 @@ func (nq *NarrativeQuery) loadInternalPolicies(ctx context.Context, query *Inter
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.InternalPoliciesTable)
-		joinT.Schema(nq.schemaConfig.InternalPolicyNarratives)
+		joinT.Schema(_q.schemaConfig.InternalPolicyNarratives)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(narrative.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(narrative.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1216,7 +1216,7 @@ func (nq *NarrativeQuery) loadInternalPolicies(ctx context.Context, query *Inter
 	}
 	return nil
 }
-func (nq *NarrativeQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Procedure)) error {
+func (_q *NarrativeQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Procedure)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Narrative)
 	nids := make(map[string]map[*Narrative]struct{})
@@ -1229,7 +1229,7 @@ func (nq *NarrativeQuery) loadProcedures(ctx context.Context, query *ProcedureQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.ProceduresTable)
-		joinT.Schema(nq.schemaConfig.ProcedureNarratives)
+		joinT.Schema(_q.schemaConfig.ProcedureNarratives)
 		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(narrative.ProceduresPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(narrative.ProceduresPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1279,29 +1279,29 @@ func (nq *NarrativeQuery) loadProcedures(ctx context.Context, query *ProcedureQu
 	return nil
 }
 
-func (nq *NarrativeQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := nq.querySpec()
-	_spec.Node.Schema = nq.schemaConfig.Narrative
-	ctx = internal.NewSchemaConfigContext(ctx, nq.schemaConfig)
-	if len(nq.modifiers) > 0 {
-		_spec.Modifiers = nq.modifiers
+func (_q *NarrativeQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Narrative
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = nq.ctx.Fields
-	if len(nq.ctx.Fields) > 0 {
-		_spec.Unique = nq.ctx.Unique != nil && *nq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, nq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (nq *NarrativeQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *NarrativeQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(narrative.Table, narrative.Columns, sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString))
-	_spec.From = nq.sql
-	if unique := nq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if nq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := nq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, narrative.FieldID)
 		for i := range fields {
@@ -1309,24 +1309,24 @@ func (nq *NarrativeQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if nq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(narrative.FieldOwnerID)
 		}
 	}
-	if ps := nq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := nq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := nq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := nq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -1336,146 +1336,146 @@ func (nq *NarrativeQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (nq *NarrativeQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(nq.driver.Dialect())
+func (_q *NarrativeQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(narrative.Table)
-	columns := nq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = narrative.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if nq.sql != nil {
-		selector = nq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if nq.ctx.Unique != nil && *nq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(nq.schemaConfig.Narrative)
-	ctx = internal.NewSchemaConfigContext(ctx, nq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Narrative)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range nq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range nq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range nq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := nq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := nq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (nq *NarrativeQuery) Modify(modifiers ...func(s *sql.Selector)) *NarrativeSelect {
-	nq.modifiers = append(nq.modifiers, modifiers...)
-	return nq.Select()
+func (_q *NarrativeQuery) Modify(modifiers ...func(s *sql.Selector)) *NarrativeSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *NarrativeQuery {
-	query := (&GroupClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if nq.withNamedBlockedGroups == nil {
-		nq.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	if _q.withNamedBlockedGroups == nil {
+		_q.withNamedBlockedGroups = make(map[string]*GroupQuery)
 	}
-	nq.withNamedBlockedGroups[name] = query
-	return nq
+	_q.withNamedBlockedGroups[name] = query
+	return _q
 }
 
 // WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *NarrativeQuery {
-	query := (&GroupClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if nq.withNamedEditors == nil {
-		nq.withNamedEditors = make(map[string]*GroupQuery)
+	if _q.withNamedEditors == nil {
+		_q.withNamedEditors = make(map[string]*GroupQuery)
 	}
-	nq.withNamedEditors[name] = query
-	return nq
+	_q.withNamedEditors[name] = query
+	return _q
 }
 
 // WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *NarrativeQuery {
-	query := (&GroupClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if nq.withNamedViewers == nil {
-		nq.withNamedViewers = make(map[string]*GroupQuery)
+	if _q.withNamedViewers == nil {
+		_q.withNamedViewers = make(map[string]*GroupQuery)
 	}
-	nq.withNamedViewers[name] = query
-	return nq
+	_q.withNamedViewers[name] = query
+	return _q
 }
 
 // WithNamedSatisfies tells the query-builder to eager-load the nodes that are connected to the "satisfies"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithNamedSatisfies(name string, opts ...func(*ControlQuery)) *NarrativeQuery {
-	query := (&ControlClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithNamedSatisfies(name string, opts ...func(*ControlQuery)) *NarrativeQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if nq.withNamedSatisfies == nil {
-		nq.withNamedSatisfies = make(map[string]*ControlQuery)
+	if _q.withNamedSatisfies == nil {
+		_q.withNamedSatisfies = make(map[string]*ControlQuery)
 	}
-	nq.withNamedSatisfies[name] = query
-	return nq
+	_q.withNamedSatisfies[name] = query
+	return _q
 }
 
 // WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *NarrativeQuery {
-	query := (&ProgramClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *NarrativeQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if nq.withNamedPrograms == nil {
-		nq.withNamedPrograms = make(map[string]*ProgramQuery)
+	if _q.withNamedPrograms == nil {
+		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
-	nq.withNamedPrograms[name] = query
-	return nq
+	_q.withNamedPrograms[name] = query
+	return _q
 }
 
 // WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *NarrativeQuery {
-	query := (&InternalPolicyClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *NarrativeQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if nq.withNamedInternalPolicies == nil {
-		nq.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
 	}
-	nq.withNamedInternalPolicies[name] = query
-	return nq
+	_q.withNamedInternalPolicies[name] = query
+	return _q
 }
 
 // WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *NarrativeQuery {
-	query := (&ProcedureClient{config: nq.config}).Query()
+func (_q *NarrativeQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *NarrativeQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if nq.withNamedProcedures == nil {
-		nq.withNamedProcedures = make(map[string]*ProcedureQuery)
+	if _q.withNamedProcedures == nil {
+		_q.withNamedProcedures = make(map[string]*ProcedureQuery)
 	}
-	nq.withNamedProcedures[name] = query
-	return nq
+	_q.withNamedProcedures[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -1504,41 +1504,41 @@ type NarrativeGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (ngb *NarrativeGroupBy) Aggregate(fns ...AggregateFunc) *NarrativeGroupBy {
-	ngb.fns = append(ngb.fns, fns...)
-	return ngb
+func (_g *NarrativeGroupBy) Aggregate(fns ...AggregateFunc) *NarrativeGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ngb *NarrativeGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ngb.build.ctx, ent.OpQueryGroupBy)
-	if err := ngb.build.prepareQuery(ctx); err != nil {
+func (_g *NarrativeGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*NarrativeQuery, *NarrativeGroupBy](ctx, ngb.build, ngb, ngb.build.inters, v)
+	return scanWithInterceptors[*NarrativeQuery, *NarrativeGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (ngb *NarrativeGroupBy) sqlScan(ctx context.Context, root *NarrativeQuery, v any) error {
+func (_g *NarrativeGroupBy) sqlScan(ctx context.Context, root *NarrativeQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(ngb.fns))
-	for _, fn := range ngb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*ngb.flds)+len(ngb.fns))
-		for _, f := range *ngb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*ngb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ngb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -1552,27 +1552,27 @@ type NarrativeSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ns *NarrativeSelect) Aggregate(fns ...AggregateFunc) *NarrativeSelect {
-	ns.fns = append(ns.fns, fns...)
-	return ns
+func (_s *NarrativeSelect) Aggregate(fns ...AggregateFunc) *NarrativeSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ns *NarrativeSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ns.ctx, ent.OpQuerySelect)
-	if err := ns.prepareQuery(ctx); err != nil {
+func (_s *NarrativeSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*NarrativeQuery, *NarrativeSelect](ctx, ns.NarrativeQuery, ns, ns.inters, v)
+	return scanWithInterceptors[*NarrativeQuery, *NarrativeSelect](ctx, _s.NarrativeQuery, _s, _s.inters, v)
 }
 
-func (ns *NarrativeSelect) sqlScan(ctx context.Context, root *NarrativeQuery, v any) error {
+func (_s *NarrativeSelect) sqlScan(ctx context.Context, root *NarrativeQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ns.fns))
-	for _, fn := range ns.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ns.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -1580,7 +1580,7 @@ func (ns *NarrativeSelect) sqlScan(ctx context.Context, root *NarrativeQuery, v 
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ns.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -1588,7 +1588,7 @@ func (ns *NarrativeSelect) sqlScan(ctx context.Context, root *NarrativeQuery, v 
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ns *NarrativeSelect) Modify(modifiers ...func(s *sql.Selector)) *NarrativeSelect {
-	ns.modifiers = append(ns.modifiers, modifiers...)
-	return ns
+func (_s *NarrativeSelect) Modify(modifiers ...func(s *sql.Selector)) *NarrativeSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

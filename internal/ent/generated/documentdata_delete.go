@@ -22,58 +22,58 @@ type DocumentDataDelete struct {
 }
 
 // Where appends a list predicates to the DocumentDataDelete builder.
-func (ddd *DocumentDataDelete) Where(ps ...predicate.DocumentData) *DocumentDataDelete {
-	ddd.mutation.Where(ps...)
-	return ddd
+func (_d *DocumentDataDelete) Where(ps ...predicate.DocumentData) *DocumentDataDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (ddd *DocumentDataDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, ddd.sqlExec, ddd.mutation, ddd.hooks)
+func (_d *DocumentDataDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ddd *DocumentDataDelete) ExecX(ctx context.Context) int {
-	n, err := ddd.Exec(ctx)
+func (_d *DocumentDataDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (ddd *DocumentDataDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *DocumentDataDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(documentdata.Table, sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString))
-	_spec.Node.Schema = ddd.schemaConfig.DocumentData
-	ctx = internal.NewSchemaConfigContext(ctx, ddd.schemaConfig)
-	if ps := ddd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.DocumentData
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, ddd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	ddd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // DocumentDataDeleteOne is the builder for deleting a single DocumentData entity.
 type DocumentDataDeleteOne struct {
-	ddd *DocumentDataDelete
+	_d *DocumentDataDelete
 }
 
 // Where appends a list predicates to the DocumentDataDelete builder.
-func (dddo *DocumentDataDeleteOne) Where(ps ...predicate.DocumentData) *DocumentDataDeleteOne {
-	dddo.ddd.mutation.Where(ps...)
-	return dddo
+func (_d *DocumentDataDeleteOne) Where(ps ...predicate.DocumentData) *DocumentDataDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (dddo *DocumentDataDeleteOne) Exec(ctx context.Context) error {
-	n, err := dddo.ddd.Exec(ctx)
+func (_d *DocumentDataDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (dddo *DocumentDataDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dddo *DocumentDataDeleteOne) ExecX(ctx context.Context) {
-	if err := dddo.Exec(ctx); err != nil {
+func (_d *DocumentDataDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

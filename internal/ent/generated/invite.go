@@ -124,110 +124,110 @@ func (*Invite) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Invite fields.
-func (i *Invite) assignValues(columns []string, values []any) error {
+func (_m *Invite) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
-	for j := range columns {
-		switch columns[j] {
+	for i := range columns {
+		switch columns[i] {
 		case invite.FieldID:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field id", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				i.ID = value.String
+				_m.ID = value.String
 			}
 		case invite.FieldCreatedAt:
-			if value, ok := values[j].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[j])
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				i.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case invite.FieldUpdatedAt:
-			if value, ok := values[j].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[j])
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				i.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case invite.FieldCreatedBy:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				i.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case invite.FieldUpdatedBy:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				i.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case invite.FieldDeletedAt:
-			if value, ok := values[j].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_at", values[j])
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				i.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case invite.FieldDeletedBy:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				i.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case invite.FieldOwnerID:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner_id", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				i.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case invite.FieldToken:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field token", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field token", values[i])
 			} else if value.Valid {
-				i.Token = value.String
+				_m.Token = value.String
 			}
 		case invite.FieldExpires:
-			if value, ok := values[j].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field expires", values[j])
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field expires", values[i])
 			} else if value.Valid {
-				i.Expires = value.Time
+				_m.Expires = value.Time
 			}
 		case invite.FieldRecipient:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field recipient", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field recipient", values[i])
 			} else if value.Valid {
-				i.Recipient = value.String
+				_m.Recipient = value.String
 			}
 		case invite.FieldStatus:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				i.Status = enums.InviteStatus(value.String)
+				_m.Status = enums.InviteStatus(value.String)
 			}
 		case invite.FieldRole:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field role", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field role", values[i])
 			} else if value.Valid {
-				i.Role = enums.Role(value.String)
+				_m.Role = enums.Role(value.String)
 			}
 		case invite.FieldSendAttempts:
-			if value, ok := values[j].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field send_attempts", values[j])
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field send_attempts", values[i])
 			} else if value.Valid {
-				i.SendAttempts = int(value.Int64)
+				_m.SendAttempts = int(value.Int64)
 			}
 		case invite.FieldRequestorID:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field requestor_id", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field requestor_id", values[i])
 			} else if value.Valid {
-				i.RequestorID = value.String
+				_m.RequestorID = value.String
 			}
 		case invite.FieldSecret:
-			if value, ok := values[j].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field secret", values[j])
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field secret", values[i])
 			} else if value != nil {
-				i.Secret = value
+				_m.Secret = value
 			}
 		default:
-			i.selectValues.Set(columns[j], values[j])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -235,88 +235,88 @@ func (i *Invite) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Invite.
 // This includes values selected through modifiers, order, etc.
-func (i *Invite) Value(name string) (ent.Value, error) {
-	return i.selectValues.Get(name)
+func (_m *Invite) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Invite entity.
-func (i *Invite) QueryOwner() *OrganizationQuery {
-	return NewInviteClient(i.config).QueryOwner(i)
+func (_m *Invite) QueryOwner() *OrganizationQuery {
+	return NewInviteClient(_m.config).QueryOwner(_m)
 }
 
 // QueryEvents queries the "events" edge of the Invite entity.
-func (i *Invite) QueryEvents() *EventQuery {
-	return NewInviteClient(i.config).QueryEvents(i)
+func (_m *Invite) QueryEvents() *EventQuery {
+	return NewInviteClient(_m.config).QueryEvents(_m)
 }
 
 // QueryGroups queries the "groups" edge of the Invite entity.
-func (i *Invite) QueryGroups() *GroupQuery {
-	return NewInviteClient(i.config).QueryGroups(i)
+func (_m *Invite) QueryGroups() *GroupQuery {
+	return NewInviteClient(_m.config).QueryGroups(_m)
 }
 
 // Update returns a builder for updating this Invite.
 // Note that you need to call Invite.Unwrap() before calling this method if this Invite
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (i *Invite) Update() *InviteUpdateOne {
-	return NewInviteClient(i.config).UpdateOne(i)
+func (_m *Invite) Update() *InviteUpdateOne {
+	return NewInviteClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Invite entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (i *Invite) Unwrap() *Invite {
-	_tx, ok := i.config.driver.(*txDriver)
+func (_m *Invite) Unwrap() *Invite {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Invite is not a transactional entity")
 	}
-	i.config.driver = _tx.drv
-	return i
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (i *Invite) String() string {
+func (_m *Invite) String() string {
 	var builder strings.Builder
 	builder.WriteString("Invite(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", i.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(i.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(i.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(i.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(i.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(i.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(i.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(i.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("token=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("expires=")
-	builder.WriteString(i.Expires.Format(time.ANSIC))
+	builder.WriteString(_m.Expires.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("recipient=")
-	builder.WriteString(i.Recipient)
+	builder.WriteString(_m.Recipient)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", i.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("role=")
-	builder.WriteString(fmt.Sprintf("%v", i.Role))
+	builder.WriteString(fmt.Sprintf("%v", _m.Role))
 	builder.WriteString(", ")
 	builder.WriteString("send_attempts=")
-	builder.WriteString(fmt.Sprintf("%v", i.SendAttempts))
+	builder.WriteString(fmt.Sprintf("%v", _m.SendAttempts))
 	builder.WriteString(", ")
 	builder.WriteString("requestor_id=")
-	builder.WriteString(i.RequestorID)
+	builder.WriteString(_m.RequestorID)
 	builder.WriteString(", ")
 	builder.WriteString("secret=<sensitive>")
 	builder.WriteByte(')')
@@ -325,49 +325,49 @@ func (i *Invite) String() string {
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (i *Invite) NamedEvents(name string) ([]*Event, error) {
-	if i.Edges.namedEvents == nil {
+func (_m *Invite) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := i.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (i *Invite) appendNamedEvents(name string, edges ...*Event) {
-	if i.Edges.namedEvents == nil {
-		i.Edges.namedEvents = make(map[string][]*Event)
+func (_m *Invite) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		i.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		i.Edges.namedEvents[name] = append(i.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 
 // NamedGroups returns the Groups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (i *Invite) NamedGroups(name string) ([]*Group, error) {
-	if i.Edges.namedGroups == nil {
+func (_m *Invite) NamedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := i.Edges.namedGroups[name]
+	nodes, ok := _m.Edges.namedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (i *Invite) appendNamedGroups(name string, edges ...*Group) {
-	if i.Edges.namedGroups == nil {
-		i.Edges.namedGroups = make(map[string][]*Group)
+func (_m *Invite) appendNamedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedGroups == nil {
+		_m.Edges.namedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		i.Edges.namedGroups[name] = []*Group{}
+		_m.Edges.namedGroups[name] = []*Group{}
 	} else {
-		i.Edges.namedGroups[name] = append(i.Edges.namedGroups[name], edges...)
+		_m.Edges.namedGroups[name] = append(_m.Edges.namedGroups[name], edges...)
 	}
 }
 

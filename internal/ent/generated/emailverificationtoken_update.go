@@ -27,172 +27,172 @@ type EmailVerificationTokenUpdate struct {
 }
 
 // Where appends a list predicates to the EmailVerificationTokenUpdate builder.
-func (evtu *EmailVerificationTokenUpdate) Where(ps ...predicate.EmailVerificationToken) *EmailVerificationTokenUpdate {
-	evtu.mutation.Where(ps...)
-	return evtu
+func (_u *EmailVerificationTokenUpdate) Where(ps ...predicate.EmailVerificationToken) *EmailVerificationTokenUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (evtu *EmailVerificationTokenUpdate) SetUpdatedAt(t time.Time) *EmailVerificationTokenUpdate {
-	evtu.mutation.SetUpdatedAt(t)
-	return evtu
+func (_u *EmailVerificationTokenUpdate) SetUpdatedAt(v time.Time) *EmailVerificationTokenUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (evtu *EmailVerificationTokenUpdate) ClearUpdatedAt() *EmailVerificationTokenUpdate {
-	evtu.mutation.ClearUpdatedAt()
-	return evtu
+func (_u *EmailVerificationTokenUpdate) ClearUpdatedAt() *EmailVerificationTokenUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (evtu *EmailVerificationTokenUpdate) SetUpdatedBy(s string) *EmailVerificationTokenUpdate {
-	evtu.mutation.SetUpdatedBy(s)
-	return evtu
+func (_u *EmailVerificationTokenUpdate) SetUpdatedBy(v string) *EmailVerificationTokenUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (evtu *EmailVerificationTokenUpdate) SetNillableUpdatedBy(s *string) *EmailVerificationTokenUpdate {
-	if s != nil {
-		evtu.SetUpdatedBy(*s)
+func (_u *EmailVerificationTokenUpdate) SetNillableUpdatedBy(v *string) *EmailVerificationTokenUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return evtu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (evtu *EmailVerificationTokenUpdate) ClearUpdatedBy() *EmailVerificationTokenUpdate {
-	evtu.mutation.ClearUpdatedBy()
-	return evtu
+func (_u *EmailVerificationTokenUpdate) ClearUpdatedBy() *EmailVerificationTokenUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (evtu *EmailVerificationTokenUpdate) SetDeletedAt(t time.Time) *EmailVerificationTokenUpdate {
-	evtu.mutation.SetDeletedAt(t)
-	return evtu
+func (_u *EmailVerificationTokenUpdate) SetDeletedAt(v time.Time) *EmailVerificationTokenUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (evtu *EmailVerificationTokenUpdate) SetNillableDeletedAt(t *time.Time) *EmailVerificationTokenUpdate {
-	if t != nil {
-		evtu.SetDeletedAt(*t)
+func (_u *EmailVerificationTokenUpdate) SetNillableDeletedAt(v *time.Time) *EmailVerificationTokenUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return evtu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (evtu *EmailVerificationTokenUpdate) ClearDeletedAt() *EmailVerificationTokenUpdate {
-	evtu.mutation.ClearDeletedAt()
-	return evtu
+func (_u *EmailVerificationTokenUpdate) ClearDeletedAt() *EmailVerificationTokenUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (evtu *EmailVerificationTokenUpdate) SetDeletedBy(s string) *EmailVerificationTokenUpdate {
-	evtu.mutation.SetDeletedBy(s)
-	return evtu
+func (_u *EmailVerificationTokenUpdate) SetDeletedBy(v string) *EmailVerificationTokenUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (evtu *EmailVerificationTokenUpdate) SetNillableDeletedBy(s *string) *EmailVerificationTokenUpdate {
-	if s != nil {
-		evtu.SetDeletedBy(*s)
+func (_u *EmailVerificationTokenUpdate) SetNillableDeletedBy(v *string) *EmailVerificationTokenUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return evtu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (evtu *EmailVerificationTokenUpdate) ClearDeletedBy() *EmailVerificationTokenUpdate {
-	evtu.mutation.ClearDeletedBy()
-	return evtu
+func (_u *EmailVerificationTokenUpdate) ClearDeletedBy() *EmailVerificationTokenUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (evtu *EmailVerificationTokenUpdate) SetOwnerID(s string) *EmailVerificationTokenUpdate {
-	evtu.mutation.SetOwnerID(s)
-	return evtu
+func (_u *EmailVerificationTokenUpdate) SetOwnerID(v string) *EmailVerificationTokenUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (evtu *EmailVerificationTokenUpdate) SetNillableOwnerID(s *string) *EmailVerificationTokenUpdate {
-	if s != nil {
-		evtu.SetOwnerID(*s)
+func (_u *EmailVerificationTokenUpdate) SetNillableOwnerID(v *string) *EmailVerificationTokenUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return evtu
+	return _u
 }
 
 // SetToken sets the "token" field.
-func (evtu *EmailVerificationTokenUpdate) SetToken(s string) *EmailVerificationTokenUpdate {
-	evtu.mutation.SetToken(s)
-	return evtu
+func (_u *EmailVerificationTokenUpdate) SetToken(v string) *EmailVerificationTokenUpdate {
+	_u.mutation.SetToken(v)
+	return _u
 }
 
 // SetNillableToken sets the "token" field if the given value is not nil.
-func (evtu *EmailVerificationTokenUpdate) SetNillableToken(s *string) *EmailVerificationTokenUpdate {
-	if s != nil {
-		evtu.SetToken(*s)
+func (_u *EmailVerificationTokenUpdate) SetNillableToken(v *string) *EmailVerificationTokenUpdate {
+	if v != nil {
+		_u.SetToken(*v)
 	}
-	return evtu
+	return _u
 }
 
 // SetTTL sets the "ttl" field.
-func (evtu *EmailVerificationTokenUpdate) SetTTL(t time.Time) *EmailVerificationTokenUpdate {
-	evtu.mutation.SetTTL(t)
-	return evtu
+func (_u *EmailVerificationTokenUpdate) SetTTL(v time.Time) *EmailVerificationTokenUpdate {
+	_u.mutation.SetTTL(v)
+	return _u
 }
 
 // SetNillableTTL sets the "ttl" field if the given value is not nil.
-func (evtu *EmailVerificationTokenUpdate) SetNillableTTL(t *time.Time) *EmailVerificationTokenUpdate {
-	if t != nil {
-		evtu.SetTTL(*t)
+func (_u *EmailVerificationTokenUpdate) SetNillableTTL(v *time.Time) *EmailVerificationTokenUpdate {
+	if v != nil {
+		_u.SetTTL(*v)
 	}
-	return evtu
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (evtu *EmailVerificationTokenUpdate) SetEmail(s string) *EmailVerificationTokenUpdate {
-	evtu.mutation.SetEmail(s)
-	return evtu
+func (_u *EmailVerificationTokenUpdate) SetEmail(v string) *EmailVerificationTokenUpdate {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (evtu *EmailVerificationTokenUpdate) SetNillableEmail(s *string) *EmailVerificationTokenUpdate {
-	if s != nil {
-		evtu.SetEmail(*s)
+func (_u *EmailVerificationTokenUpdate) SetNillableEmail(v *string) *EmailVerificationTokenUpdate {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return evtu
+	return _u
 }
 
 // SetSecret sets the "secret" field.
-func (evtu *EmailVerificationTokenUpdate) SetSecret(b []byte) *EmailVerificationTokenUpdate {
-	evtu.mutation.SetSecret(b)
-	return evtu
+func (_u *EmailVerificationTokenUpdate) SetSecret(v []byte) *EmailVerificationTokenUpdate {
+	_u.mutation.SetSecret(v)
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the User entity.
-func (evtu *EmailVerificationTokenUpdate) SetOwner(u *User) *EmailVerificationTokenUpdate {
-	return evtu.SetOwnerID(u.ID)
+func (_u *EmailVerificationTokenUpdate) SetOwner(v *User) *EmailVerificationTokenUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // Mutation returns the EmailVerificationTokenMutation object of the builder.
-func (evtu *EmailVerificationTokenUpdate) Mutation() *EmailVerificationTokenMutation {
-	return evtu.mutation
+func (_u *EmailVerificationTokenUpdate) Mutation() *EmailVerificationTokenMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
-func (evtu *EmailVerificationTokenUpdate) ClearOwner() *EmailVerificationTokenUpdate {
-	evtu.mutation.ClearOwner()
-	return evtu
+func (_u *EmailVerificationTokenUpdate) ClearOwner() *EmailVerificationTokenUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (evtu *EmailVerificationTokenUpdate) Save(ctx context.Context) (int, error) {
-	if err := evtu.defaults(); err != nil {
+func (_u *EmailVerificationTokenUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, evtu.sqlSave, evtu.mutation, evtu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (evtu *EmailVerificationTokenUpdate) SaveX(ctx context.Context) int {
-	affected, err := evtu.Save(ctx)
+func (_u *EmailVerificationTokenUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,114 +200,114 @@ func (evtu *EmailVerificationTokenUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (evtu *EmailVerificationTokenUpdate) Exec(ctx context.Context) error {
-	_, err := evtu.Save(ctx)
+func (_u *EmailVerificationTokenUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (evtu *EmailVerificationTokenUpdate) ExecX(ctx context.Context) {
-	if err := evtu.Exec(ctx); err != nil {
+func (_u *EmailVerificationTokenUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (evtu *EmailVerificationTokenUpdate) defaults() error {
-	if _, ok := evtu.mutation.UpdatedAt(); !ok && !evtu.mutation.UpdatedAtCleared() {
+func (_u *EmailVerificationTokenUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if emailverificationtoken.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized emailverificationtoken.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := emailverificationtoken.UpdateDefaultUpdatedAt()
-		evtu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (evtu *EmailVerificationTokenUpdate) check() error {
-	if v, ok := evtu.mutation.Token(); ok {
+func (_u *EmailVerificationTokenUpdate) check() error {
+	if v, ok := _u.mutation.Token(); ok {
 		if err := emailverificationtoken.TokenValidator(v); err != nil {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "EmailVerificationToken.token": %w`, err)}
 		}
 	}
-	if v, ok := evtu.mutation.Email(); ok {
+	if v, ok := _u.mutation.Email(); ok {
 		if err := emailverificationtoken.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "EmailVerificationToken.email": %w`, err)}
 		}
 	}
-	if v, ok := evtu.mutation.Secret(); ok {
+	if v, ok := _u.mutation.Secret(); ok {
 		if err := emailverificationtoken.SecretValidator(v); err != nil {
 			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "EmailVerificationToken.secret": %w`, err)}
 		}
 	}
-	if evtu.mutation.OwnerCleared() && len(evtu.mutation.OwnerIDs()) > 0 {
+	if _u.mutation.OwnerCleared() && len(_u.mutation.OwnerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "EmailVerificationToken.owner"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (evtu *EmailVerificationTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EmailVerificationTokenUpdate {
-	evtu.modifiers = append(evtu.modifiers, modifiers...)
-	return evtu
+func (_u *EmailVerificationTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EmailVerificationTokenUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := evtu.check(); err != nil {
-		return n, err
+func (_u *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(emailverificationtoken.Table, emailverificationtoken.Columns, sqlgraph.NewFieldSpec(emailverificationtoken.FieldID, field.TypeString))
-	if ps := evtu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if evtu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := evtu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(emailverificationtoken.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if evtu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if evtu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(emailverificationtoken.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := evtu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(emailverificationtoken.FieldUpdatedBy, field.TypeString, value)
 	}
-	if evtu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(emailverificationtoken.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := evtu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(emailverificationtoken.FieldDeletedAt, field.TypeTime, value)
 	}
-	if evtu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := evtu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(emailverificationtoken.FieldDeletedBy, field.TypeString, value)
 	}
-	if evtu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(emailverificationtoken.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := evtu.mutation.Token(); ok {
+	if value, ok := _u.mutation.Token(); ok {
 		_spec.SetField(emailverificationtoken.FieldToken, field.TypeString, value)
 	}
-	if value, ok := evtu.mutation.TTL(); ok {
+	if value, ok := _u.mutation.TTL(); ok {
 		_spec.SetField(emailverificationtoken.FieldTTL, field.TypeTime, value)
 	}
-	if value, ok := evtu.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(emailverificationtoken.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := evtu.mutation.Secret(); ok {
+	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(emailverificationtoken.FieldSecret, field.TypeBytes, value)
 	}
-	if evtu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -318,10 +318,10 @@ func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = evtu.schemaConfig.EmailVerificationToken
+		edge.Schema = _u.schemaConfig.EmailVerificationToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := evtu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -332,16 +332,16 @@ func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = evtu.schemaConfig.EmailVerificationToken
+		edge.Schema = _u.schemaConfig.EmailVerificationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = evtu.schemaConfig.EmailVerificationToken
-	ctx = internal.NewSchemaConfigContext(ctx, evtu.schemaConfig)
-	_spec.AddModifiers(evtu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, evtu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.EmailVerificationToken
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{emailverificationtoken.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -349,8 +349,8 @@ func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, e
 		}
 		return 0, err
 	}
-	evtu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // EmailVerificationTokenUpdateOne is the builder for updating a single EmailVerificationToken entity.
@@ -363,179 +363,179 @@ type EmailVerificationTokenUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (evtuo *EmailVerificationTokenUpdateOne) SetUpdatedAt(t time.Time) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.SetUpdatedAt(t)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) SetUpdatedAt(v time.Time) *EmailVerificationTokenUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedAt() *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.ClearUpdatedAt()
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) ClearUpdatedAt() *EmailVerificationTokenUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (evtuo *EmailVerificationTokenUpdateOne) SetUpdatedBy(s string) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.SetUpdatedBy(s)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) SetUpdatedBy(v string) *EmailVerificationTokenUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (evtuo *EmailVerificationTokenUpdateOne) SetNillableUpdatedBy(s *string) *EmailVerificationTokenUpdateOne {
-	if s != nil {
-		evtuo.SetUpdatedBy(*s)
+func (_u *EmailVerificationTokenUpdateOne) SetNillableUpdatedBy(v *string) *EmailVerificationTokenUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return evtuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (evtuo *EmailVerificationTokenUpdateOne) ClearUpdatedBy() *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.ClearUpdatedBy()
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) ClearUpdatedBy() *EmailVerificationTokenUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (evtuo *EmailVerificationTokenUpdateOne) SetDeletedAt(t time.Time) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.SetDeletedAt(t)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) SetDeletedAt(v time.Time) *EmailVerificationTokenUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (evtuo *EmailVerificationTokenUpdateOne) SetNillableDeletedAt(t *time.Time) *EmailVerificationTokenUpdateOne {
-	if t != nil {
-		evtuo.SetDeletedAt(*t)
+func (_u *EmailVerificationTokenUpdateOne) SetNillableDeletedAt(v *time.Time) *EmailVerificationTokenUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return evtuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (evtuo *EmailVerificationTokenUpdateOne) ClearDeletedAt() *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.ClearDeletedAt()
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) ClearDeletedAt() *EmailVerificationTokenUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (evtuo *EmailVerificationTokenUpdateOne) SetDeletedBy(s string) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.SetDeletedBy(s)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) SetDeletedBy(v string) *EmailVerificationTokenUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (evtuo *EmailVerificationTokenUpdateOne) SetNillableDeletedBy(s *string) *EmailVerificationTokenUpdateOne {
-	if s != nil {
-		evtuo.SetDeletedBy(*s)
+func (_u *EmailVerificationTokenUpdateOne) SetNillableDeletedBy(v *string) *EmailVerificationTokenUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return evtuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (evtuo *EmailVerificationTokenUpdateOne) ClearDeletedBy() *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.ClearDeletedBy()
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) ClearDeletedBy() *EmailVerificationTokenUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (evtuo *EmailVerificationTokenUpdateOne) SetOwnerID(s string) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.SetOwnerID(s)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) SetOwnerID(v string) *EmailVerificationTokenUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (evtuo *EmailVerificationTokenUpdateOne) SetNillableOwnerID(s *string) *EmailVerificationTokenUpdateOne {
-	if s != nil {
-		evtuo.SetOwnerID(*s)
+func (_u *EmailVerificationTokenUpdateOne) SetNillableOwnerID(v *string) *EmailVerificationTokenUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return evtuo
+	return _u
 }
 
 // SetToken sets the "token" field.
-func (evtuo *EmailVerificationTokenUpdateOne) SetToken(s string) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.SetToken(s)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) SetToken(v string) *EmailVerificationTokenUpdateOne {
+	_u.mutation.SetToken(v)
+	return _u
 }
 
 // SetNillableToken sets the "token" field if the given value is not nil.
-func (evtuo *EmailVerificationTokenUpdateOne) SetNillableToken(s *string) *EmailVerificationTokenUpdateOne {
-	if s != nil {
-		evtuo.SetToken(*s)
+func (_u *EmailVerificationTokenUpdateOne) SetNillableToken(v *string) *EmailVerificationTokenUpdateOne {
+	if v != nil {
+		_u.SetToken(*v)
 	}
-	return evtuo
+	return _u
 }
 
 // SetTTL sets the "ttl" field.
-func (evtuo *EmailVerificationTokenUpdateOne) SetTTL(t time.Time) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.SetTTL(t)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) SetTTL(v time.Time) *EmailVerificationTokenUpdateOne {
+	_u.mutation.SetTTL(v)
+	return _u
 }
 
 // SetNillableTTL sets the "ttl" field if the given value is not nil.
-func (evtuo *EmailVerificationTokenUpdateOne) SetNillableTTL(t *time.Time) *EmailVerificationTokenUpdateOne {
-	if t != nil {
-		evtuo.SetTTL(*t)
+func (_u *EmailVerificationTokenUpdateOne) SetNillableTTL(v *time.Time) *EmailVerificationTokenUpdateOne {
+	if v != nil {
+		_u.SetTTL(*v)
 	}
-	return evtuo
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (evtuo *EmailVerificationTokenUpdateOne) SetEmail(s string) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.SetEmail(s)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) SetEmail(v string) *EmailVerificationTokenUpdateOne {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (evtuo *EmailVerificationTokenUpdateOne) SetNillableEmail(s *string) *EmailVerificationTokenUpdateOne {
-	if s != nil {
-		evtuo.SetEmail(*s)
+func (_u *EmailVerificationTokenUpdateOne) SetNillableEmail(v *string) *EmailVerificationTokenUpdateOne {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return evtuo
+	return _u
 }
 
 // SetSecret sets the "secret" field.
-func (evtuo *EmailVerificationTokenUpdateOne) SetSecret(b []byte) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.SetSecret(b)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) SetSecret(v []byte) *EmailVerificationTokenUpdateOne {
+	_u.mutation.SetSecret(v)
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the User entity.
-func (evtuo *EmailVerificationTokenUpdateOne) SetOwner(u *User) *EmailVerificationTokenUpdateOne {
-	return evtuo.SetOwnerID(u.ID)
+func (_u *EmailVerificationTokenUpdateOne) SetOwner(v *User) *EmailVerificationTokenUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // Mutation returns the EmailVerificationTokenMutation object of the builder.
-func (evtuo *EmailVerificationTokenUpdateOne) Mutation() *EmailVerificationTokenMutation {
-	return evtuo.mutation
+func (_u *EmailVerificationTokenUpdateOne) Mutation() *EmailVerificationTokenMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
-func (evtuo *EmailVerificationTokenUpdateOne) ClearOwner() *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.ClearOwner()
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) ClearOwner() *EmailVerificationTokenUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // Where appends a list predicates to the EmailVerificationTokenUpdate builder.
-func (evtuo *EmailVerificationTokenUpdateOne) Where(ps ...predicate.EmailVerificationToken) *EmailVerificationTokenUpdateOne {
-	evtuo.mutation.Where(ps...)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) Where(ps ...predicate.EmailVerificationToken) *EmailVerificationTokenUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (evtuo *EmailVerificationTokenUpdateOne) Select(field string, fields ...string) *EmailVerificationTokenUpdateOne {
-	evtuo.fields = append([]string{field}, fields...)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) Select(field string, fields ...string) *EmailVerificationTokenUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated EmailVerificationToken entity.
-func (evtuo *EmailVerificationTokenUpdateOne) Save(ctx context.Context) (*EmailVerificationToken, error) {
-	if err := evtuo.defaults(); err != nil {
+func (_u *EmailVerificationTokenUpdateOne) Save(ctx context.Context) (*EmailVerificationToken, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, evtuo.sqlSave, evtuo.mutation, evtuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (evtuo *EmailVerificationTokenUpdateOne) SaveX(ctx context.Context) *EmailVerificationToken {
-	node, err := evtuo.Save(ctx)
+func (_u *EmailVerificationTokenUpdateOne) SaveX(ctx context.Context) *EmailVerificationToken {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -543,70 +543,70 @@ func (evtuo *EmailVerificationTokenUpdateOne) SaveX(ctx context.Context) *EmailV
 }
 
 // Exec executes the query on the entity.
-func (evtuo *EmailVerificationTokenUpdateOne) Exec(ctx context.Context) error {
-	_, err := evtuo.Save(ctx)
+func (_u *EmailVerificationTokenUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (evtuo *EmailVerificationTokenUpdateOne) ExecX(ctx context.Context) {
-	if err := evtuo.Exec(ctx); err != nil {
+func (_u *EmailVerificationTokenUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (evtuo *EmailVerificationTokenUpdateOne) defaults() error {
-	if _, ok := evtuo.mutation.UpdatedAt(); !ok && !evtuo.mutation.UpdatedAtCleared() {
+func (_u *EmailVerificationTokenUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if emailverificationtoken.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized emailverificationtoken.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := emailverificationtoken.UpdateDefaultUpdatedAt()
-		evtuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (evtuo *EmailVerificationTokenUpdateOne) check() error {
-	if v, ok := evtuo.mutation.Token(); ok {
+func (_u *EmailVerificationTokenUpdateOne) check() error {
+	if v, ok := _u.mutation.Token(); ok {
 		if err := emailverificationtoken.TokenValidator(v); err != nil {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "EmailVerificationToken.token": %w`, err)}
 		}
 	}
-	if v, ok := evtuo.mutation.Email(); ok {
+	if v, ok := _u.mutation.Email(); ok {
 		if err := emailverificationtoken.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "EmailVerificationToken.email": %w`, err)}
 		}
 	}
-	if v, ok := evtuo.mutation.Secret(); ok {
+	if v, ok := _u.mutation.Secret(); ok {
 		if err := emailverificationtoken.SecretValidator(v); err != nil {
 			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "EmailVerificationToken.secret": %w`, err)}
 		}
 	}
-	if evtuo.mutation.OwnerCleared() && len(evtuo.mutation.OwnerIDs()) > 0 {
+	if _u.mutation.OwnerCleared() && len(_u.mutation.OwnerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "EmailVerificationToken.owner"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (evtuo *EmailVerificationTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EmailVerificationTokenUpdateOne {
-	evtuo.modifiers = append(evtuo.modifiers, modifiers...)
-	return evtuo
+func (_u *EmailVerificationTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EmailVerificationTokenUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_node *EmailVerificationToken, err error) {
-	if err := evtuo.check(); err != nil {
+func (_u *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_node *EmailVerificationToken, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(emailverificationtoken.Table, emailverificationtoken.Columns, sqlgraph.NewFieldSpec(emailverificationtoken.FieldID, field.TypeString))
-	id, ok := evtuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "EmailVerificationToken.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := evtuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, emailverificationtoken.FieldID)
 		for _, f := range fields {
@@ -618,56 +618,56 @@ func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_nod
 			}
 		}
 	}
-	if ps := evtuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if evtuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := evtuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(emailverificationtoken.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if evtuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if evtuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(emailverificationtoken.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := evtuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(emailverificationtoken.FieldUpdatedBy, field.TypeString, value)
 	}
-	if evtuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(emailverificationtoken.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := evtuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(emailverificationtoken.FieldDeletedAt, field.TypeTime, value)
 	}
-	if evtuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(emailverificationtoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := evtuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(emailverificationtoken.FieldDeletedBy, field.TypeString, value)
 	}
-	if evtuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(emailverificationtoken.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := evtuo.mutation.Token(); ok {
+	if value, ok := _u.mutation.Token(); ok {
 		_spec.SetField(emailverificationtoken.FieldToken, field.TypeString, value)
 	}
-	if value, ok := evtuo.mutation.TTL(); ok {
+	if value, ok := _u.mutation.TTL(); ok {
 		_spec.SetField(emailverificationtoken.FieldTTL, field.TypeTime, value)
 	}
-	if value, ok := evtuo.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(emailverificationtoken.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := evtuo.mutation.Secret(); ok {
+	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(emailverificationtoken.FieldSecret, field.TypeBytes, value)
 	}
-	if evtuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -678,10 +678,10 @@ func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_nod
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = evtuo.schemaConfig.EmailVerificationToken
+		edge.Schema = _u.schemaConfig.EmailVerificationToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := evtuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -692,19 +692,19 @@ func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_nod
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = evtuo.schemaConfig.EmailVerificationToken
+		edge.Schema = _u.schemaConfig.EmailVerificationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = evtuo.schemaConfig.EmailVerificationToken
-	ctx = internal.NewSchemaConfigContext(ctx, evtuo.schemaConfig)
-	_spec.AddModifiers(evtuo.modifiers...)
-	_node = &EmailVerificationToken{config: evtuo.config}
+	_spec.Node.Schema = _u.schemaConfig.EmailVerificationToken
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &EmailVerificationToken{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, evtuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{emailverificationtoken.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -712,6 +712,6 @@ func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_nod
 		}
 		return nil, err
 	}
-	evtuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

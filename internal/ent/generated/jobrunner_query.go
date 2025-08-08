@@ -39,44 +39,44 @@ type JobRunnerQuery struct {
 }
 
 // Where adds a new predicate for the JobRunnerQuery builder.
-func (jrq *JobRunnerQuery) Where(ps ...predicate.JobRunner) *JobRunnerQuery {
-	jrq.predicates = append(jrq.predicates, ps...)
-	return jrq
+func (_q *JobRunnerQuery) Where(ps ...predicate.JobRunner) *JobRunnerQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (jrq *JobRunnerQuery) Limit(limit int) *JobRunnerQuery {
-	jrq.ctx.Limit = &limit
-	return jrq
+func (_q *JobRunnerQuery) Limit(limit int) *JobRunnerQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (jrq *JobRunnerQuery) Offset(offset int) *JobRunnerQuery {
-	jrq.ctx.Offset = &offset
-	return jrq
+func (_q *JobRunnerQuery) Offset(offset int) *JobRunnerQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (jrq *JobRunnerQuery) Unique(unique bool) *JobRunnerQuery {
-	jrq.ctx.Unique = &unique
-	return jrq
+func (_q *JobRunnerQuery) Unique(unique bool) *JobRunnerQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (jrq *JobRunnerQuery) Order(o ...jobrunner.OrderOption) *JobRunnerQuery {
-	jrq.order = append(jrq.order, o...)
-	return jrq
+func (_q *JobRunnerQuery) Order(o ...jobrunner.OrderOption) *JobRunnerQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (jrq *JobRunnerQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: jrq.config}).Query()
+func (_q *JobRunnerQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := jrq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := jrq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -85,23 +85,23 @@ func (jrq *JobRunnerQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, jobrunner.OwnerTable, jobrunner.OwnerColumn),
 		)
-		schemaConfig := jrq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.JobRunner
-		fromU = sqlgraph.SetNeighbors(jrq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryJobRunnerTokens chains the current query on the "job_runner_tokens" edge.
-func (jrq *JobRunnerQuery) QueryJobRunnerTokens() *JobRunnerTokenQuery {
-	query := (&JobRunnerTokenClient{config: jrq.config}).Query()
+func (_q *JobRunnerQuery) QueryJobRunnerTokens() *JobRunnerTokenQuery {
+	query := (&JobRunnerTokenClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := jrq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := jrq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -110,10 +110,10 @@ func (jrq *JobRunnerQuery) QueryJobRunnerTokens() *JobRunnerTokenQuery {
 			sqlgraph.To(jobrunnertoken.Table, jobrunnertoken.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, jobrunner.JobRunnerTokensTable, jobrunner.JobRunnerTokensPrimaryKey...),
 		)
-		schemaConfig := jrq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.JobRunnerToken
 		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
-		fromU = sqlgraph.SetNeighbors(jrq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -121,8 +121,8 @@ func (jrq *JobRunnerQuery) QueryJobRunnerTokens() *JobRunnerTokenQuery {
 
 // First returns the first JobRunner entity from the query.
 // Returns a *NotFoundError when no JobRunner was found.
-func (jrq *JobRunnerQuery) First(ctx context.Context) (*JobRunner, error) {
-	nodes, err := jrq.Limit(1).All(setContextOp(ctx, jrq.ctx, ent.OpQueryFirst))
+func (_q *JobRunnerQuery) First(ctx context.Context) (*JobRunner, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -133,8 +133,8 @@ func (jrq *JobRunnerQuery) First(ctx context.Context) (*JobRunner, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (jrq *JobRunnerQuery) FirstX(ctx context.Context) *JobRunner {
-	node, err := jrq.First(ctx)
+func (_q *JobRunnerQuery) FirstX(ctx context.Context) *JobRunner {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -143,9 +143,9 @@ func (jrq *JobRunnerQuery) FirstX(ctx context.Context) *JobRunner {
 
 // FirstID returns the first JobRunner ID from the query.
 // Returns a *NotFoundError when no JobRunner ID was found.
-func (jrq *JobRunnerQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *JobRunnerQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = jrq.Limit(1).IDs(setContextOp(ctx, jrq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -156,8 +156,8 @@ func (jrq *JobRunnerQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (jrq *JobRunnerQuery) FirstIDX(ctx context.Context) string {
-	id, err := jrq.FirstID(ctx)
+func (_q *JobRunnerQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -167,8 +167,8 @@ func (jrq *JobRunnerQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single JobRunner entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one JobRunner entity is found.
 // Returns a *NotFoundError when no JobRunner entities are found.
-func (jrq *JobRunnerQuery) Only(ctx context.Context) (*JobRunner, error) {
-	nodes, err := jrq.Limit(2).All(setContextOp(ctx, jrq.ctx, ent.OpQueryOnly))
+func (_q *JobRunnerQuery) Only(ctx context.Context) (*JobRunner, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -183,8 +183,8 @@ func (jrq *JobRunnerQuery) Only(ctx context.Context) (*JobRunner, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (jrq *JobRunnerQuery) OnlyX(ctx context.Context) *JobRunner {
-	node, err := jrq.Only(ctx)
+func (_q *JobRunnerQuery) OnlyX(ctx context.Context) *JobRunner {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -194,9 +194,9 @@ func (jrq *JobRunnerQuery) OnlyX(ctx context.Context) *JobRunner {
 // OnlyID is like Only, but returns the only JobRunner ID in the query.
 // Returns a *NotSingularError when more than one JobRunner ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (jrq *JobRunnerQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *JobRunnerQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = jrq.Limit(2).IDs(setContextOp(ctx, jrq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -211,8 +211,8 @@ func (jrq *JobRunnerQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (jrq *JobRunnerQuery) OnlyIDX(ctx context.Context) string {
-	id, err := jrq.OnlyID(ctx)
+func (_q *JobRunnerQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -220,18 +220,18 @@ func (jrq *JobRunnerQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of JobRunners.
-func (jrq *JobRunnerQuery) All(ctx context.Context) ([]*JobRunner, error) {
-	ctx = setContextOp(ctx, jrq.ctx, ent.OpQueryAll)
-	if err := jrq.prepareQuery(ctx); err != nil {
+func (_q *JobRunnerQuery) All(ctx context.Context) ([]*JobRunner, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*JobRunner, *JobRunnerQuery]()
-	return withInterceptors[[]*JobRunner](ctx, jrq, qr, jrq.inters)
+	return withInterceptors[[]*JobRunner](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (jrq *JobRunnerQuery) AllX(ctx context.Context) []*JobRunner {
-	nodes, err := jrq.All(ctx)
+func (_q *JobRunnerQuery) AllX(ctx context.Context) []*JobRunner {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -239,20 +239,20 @@ func (jrq *JobRunnerQuery) AllX(ctx context.Context) []*JobRunner {
 }
 
 // IDs executes the query and returns a list of JobRunner IDs.
-func (jrq *JobRunnerQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if jrq.ctx.Unique == nil && jrq.path != nil {
-		jrq.Unique(true)
+func (_q *JobRunnerQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, jrq.ctx, ent.OpQueryIDs)
-	if err = jrq.Select(jobrunner.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(jobrunner.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (jrq *JobRunnerQuery) IDsX(ctx context.Context) []string {
-	ids, err := jrq.IDs(ctx)
+func (_q *JobRunnerQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -260,17 +260,17 @@ func (jrq *JobRunnerQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (jrq *JobRunnerQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, jrq.ctx, ent.OpQueryCount)
-	if err := jrq.prepareQuery(ctx); err != nil {
+func (_q *JobRunnerQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, jrq, querierCount[*JobRunnerQuery](), jrq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*JobRunnerQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (jrq *JobRunnerQuery) CountX(ctx context.Context) int {
-	count, err := jrq.Count(ctx)
+func (_q *JobRunnerQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -278,9 +278,9 @@ func (jrq *JobRunnerQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (jrq *JobRunnerQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, jrq.ctx, ent.OpQueryExist)
-	switch _, err := jrq.FirstID(ctx); {
+func (_q *JobRunnerQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -291,8 +291,8 @@ func (jrq *JobRunnerQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (jrq *JobRunnerQuery) ExistX(ctx context.Context) bool {
-	exist, err := jrq.Exist(ctx)
+func (_q *JobRunnerQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -301,45 +301,45 @@ func (jrq *JobRunnerQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the JobRunnerQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (jrq *JobRunnerQuery) Clone() *JobRunnerQuery {
-	if jrq == nil {
+func (_q *JobRunnerQuery) Clone() *JobRunnerQuery {
+	if _q == nil {
 		return nil
 	}
 	return &JobRunnerQuery{
-		config:              jrq.config,
-		ctx:                 jrq.ctx.Clone(),
-		order:               append([]jobrunner.OrderOption{}, jrq.order...),
-		inters:              append([]Interceptor{}, jrq.inters...),
-		predicates:          append([]predicate.JobRunner{}, jrq.predicates...),
-		withOwner:           jrq.withOwner.Clone(),
-		withJobRunnerTokens: jrq.withJobRunnerTokens.Clone(),
+		config:              _q.config,
+		ctx:                 _q.ctx.Clone(),
+		order:               append([]jobrunner.OrderOption{}, _q.order...),
+		inters:              append([]Interceptor{}, _q.inters...),
+		predicates:          append([]predicate.JobRunner{}, _q.predicates...),
+		withOwner:           _q.withOwner.Clone(),
+		withJobRunnerTokens: _q.withJobRunnerTokens.Clone(),
 		// clone intermediate query.
-		sql:       jrq.sql.Clone(),
-		path:      jrq.path,
-		modifiers: append([]func(*sql.Selector){}, jrq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (jrq *JobRunnerQuery) WithOwner(opts ...func(*OrganizationQuery)) *JobRunnerQuery {
-	query := (&OrganizationClient{config: jrq.config}).Query()
+func (_q *JobRunnerQuery) WithOwner(opts ...func(*OrganizationQuery)) *JobRunnerQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	jrq.withOwner = query
-	return jrq
+	_q.withOwner = query
+	return _q
 }
 
 // WithJobRunnerTokens tells the query-builder to eager-load the nodes that are connected to
 // the "job_runner_tokens" edge. The optional arguments are used to configure the query builder of the edge.
-func (jrq *JobRunnerQuery) WithJobRunnerTokens(opts ...func(*JobRunnerTokenQuery)) *JobRunnerQuery {
-	query := (&JobRunnerTokenClient{config: jrq.config}).Query()
+func (_q *JobRunnerQuery) WithJobRunnerTokens(opts ...func(*JobRunnerTokenQuery)) *JobRunnerQuery {
+	query := (&JobRunnerTokenClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	jrq.withJobRunnerTokens = query
-	return jrq
+	_q.withJobRunnerTokens = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -356,10 +356,10 @@ func (jrq *JobRunnerQuery) WithJobRunnerTokens(opts ...func(*JobRunnerTokenQuery
 //		GroupBy(jobrunner.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (jrq *JobRunnerQuery) GroupBy(field string, fields ...string) *JobRunnerGroupBy {
-	jrq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &JobRunnerGroupBy{build: jrq}
-	grbuild.flds = &jrq.ctx.Fields
+func (_q *JobRunnerQuery) GroupBy(field string, fields ...string) *JobRunnerGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &JobRunnerGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = jobrunner.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -377,112 +377,112 @@ func (jrq *JobRunnerQuery) GroupBy(field string, fields ...string) *JobRunnerGro
 //	client.JobRunner.Query().
 //		Select(jobrunner.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (jrq *JobRunnerQuery) Select(fields ...string) *JobRunnerSelect {
-	jrq.ctx.Fields = append(jrq.ctx.Fields, fields...)
-	sbuild := &JobRunnerSelect{JobRunnerQuery: jrq}
+func (_q *JobRunnerQuery) Select(fields ...string) *JobRunnerSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &JobRunnerSelect{JobRunnerQuery: _q}
 	sbuild.label = jobrunner.Label
-	sbuild.flds, sbuild.scan = &jrq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a JobRunnerSelect configured with the given aggregations.
-func (jrq *JobRunnerQuery) Aggregate(fns ...AggregateFunc) *JobRunnerSelect {
-	return jrq.Select().Aggregate(fns...)
+func (_q *JobRunnerQuery) Aggregate(fns ...AggregateFunc) *JobRunnerSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (jrq *JobRunnerQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range jrq.inters {
+func (_q *JobRunnerQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, jrq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range jrq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !jobrunner.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if jrq.path != nil {
-		prev, err := jrq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		jrq.sql = prev
+		_q.sql = prev
 	}
 	if jobrunner.Policy == nil {
 		return errors.New("generated: uninitialized jobrunner.Policy (forgotten import generated/runtime?)")
 	}
-	if err := jobrunner.Policy.EvalQuery(ctx, jrq); err != nil {
+	if err := jobrunner.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (jrq *JobRunnerQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*JobRunner, error) {
+func (_q *JobRunnerQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*JobRunner, error) {
 	var (
 		nodes       = []*JobRunner{}
-		_spec       = jrq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [2]bool{
-			jrq.withOwner != nil,
-			jrq.withJobRunnerTokens != nil,
+			_q.withOwner != nil,
+			_q.withJobRunnerTokens != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*JobRunner).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &JobRunner{config: jrq.config}
+		node := &JobRunner{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = jrq.schemaConfig.JobRunner
-	ctx = internal.NewSchemaConfigContext(ctx, jrq.schemaConfig)
-	if len(jrq.modifiers) > 0 {
-		_spec.Modifiers = jrq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.JobRunner
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, jrq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := jrq.withOwner; query != nil {
-		if err := jrq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *JobRunner, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := jrq.withJobRunnerTokens; query != nil {
-		if err := jrq.loadJobRunnerTokens(ctx, query, nodes,
+	if query := _q.withJobRunnerTokens; query != nil {
+		if err := _q.loadJobRunnerTokens(ctx, query, nodes,
 			func(n *JobRunner) { n.Edges.JobRunnerTokens = []*JobRunnerToken{} },
 			func(n *JobRunner, e *JobRunnerToken) { n.Edges.JobRunnerTokens = append(n.Edges.JobRunnerTokens, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range jrq.withNamedJobRunnerTokens {
-		if err := jrq.loadJobRunnerTokens(ctx, query, nodes,
+	for name, query := range _q.withNamedJobRunnerTokens {
+		if err := _q.loadJobRunnerTokens(ctx, query, nodes,
 			func(n *JobRunner) { n.appendNamedJobRunnerTokens(name) },
 			func(n *JobRunner, e *JobRunnerToken) { n.appendNamedJobRunnerTokens(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range jrq.loadTotal {
-		if err := jrq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (jrq *JobRunnerQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*JobRunner, init func(*JobRunner), assign func(*JobRunner, *Organization)) error {
+func (_q *JobRunnerQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*JobRunner, init func(*JobRunner), assign func(*JobRunner, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*JobRunner)
 	for i := range nodes {
@@ -511,7 +511,7 @@ func (jrq *JobRunnerQuery) loadOwner(ctx context.Context, query *OrganizationQue
 	}
 	return nil
 }
-func (jrq *JobRunnerQuery) loadJobRunnerTokens(ctx context.Context, query *JobRunnerTokenQuery, nodes []*JobRunner, init func(*JobRunner), assign func(*JobRunner, *JobRunnerToken)) error {
+func (_q *JobRunnerQuery) loadJobRunnerTokens(ctx context.Context, query *JobRunnerTokenQuery, nodes []*JobRunner, init func(*JobRunner), assign func(*JobRunner, *JobRunnerToken)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*JobRunner)
 	nids := make(map[string]map[*JobRunner]struct{})
@@ -524,7 +524,7 @@ func (jrq *JobRunnerQuery) loadJobRunnerTokens(ctx context.Context, query *JobRu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(jobrunner.JobRunnerTokensTable)
-		joinT.Schema(jrq.schemaConfig.JobRunnerJobRunnerTokens)
+		joinT.Schema(_q.schemaConfig.JobRunnerJobRunnerTokens)
 		s.Join(joinT).On(s.C(jobrunnertoken.FieldID), joinT.C(jobrunner.JobRunnerTokensPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(jobrunner.JobRunnerTokensPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -574,29 +574,29 @@ func (jrq *JobRunnerQuery) loadJobRunnerTokens(ctx context.Context, query *JobRu
 	return nil
 }
 
-func (jrq *JobRunnerQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := jrq.querySpec()
-	_spec.Node.Schema = jrq.schemaConfig.JobRunner
-	ctx = internal.NewSchemaConfigContext(ctx, jrq.schemaConfig)
-	if len(jrq.modifiers) > 0 {
-		_spec.Modifiers = jrq.modifiers
+func (_q *JobRunnerQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.JobRunner
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = jrq.ctx.Fields
-	if len(jrq.ctx.Fields) > 0 {
-		_spec.Unique = jrq.ctx.Unique != nil && *jrq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, jrq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (jrq *JobRunnerQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *JobRunnerQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(jobrunner.Table, jobrunner.Columns, sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString))
-	_spec.From = jrq.sql
-	if unique := jrq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if jrq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := jrq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, jobrunner.FieldID)
 		for i := range fields {
@@ -604,24 +604,24 @@ func (jrq *JobRunnerQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if jrq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(jobrunner.FieldOwnerID)
 		}
 	}
-	if ps := jrq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := jrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := jrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := jrq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -631,62 +631,62 @@ func (jrq *JobRunnerQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (jrq *JobRunnerQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(jrq.driver.Dialect())
+func (_q *JobRunnerQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(jobrunner.Table)
-	columns := jrq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = jobrunner.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if jrq.sql != nil {
-		selector = jrq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if jrq.ctx.Unique != nil && *jrq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(jrq.schemaConfig.JobRunner)
-	ctx = internal.NewSchemaConfigContext(ctx, jrq.schemaConfig)
+	t1.Schema(_q.schemaConfig.JobRunner)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range jrq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range jrq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range jrq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := jrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := jrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (jrq *JobRunnerQuery) Modify(modifiers ...func(s *sql.Selector)) *JobRunnerSelect {
-	jrq.modifiers = append(jrq.modifiers, modifiers...)
-	return jrq.Select()
+func (_q *JobRunnerQuery) Modify(modifiers ...func(s *sql.Selector)) *JobRunnerSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedJobRunnerTokens tells the query-builder to eager-load the nodes that are connected to the "job_runner_tokens"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (jrq *JobRunnerQuery) WithNamedJobRunnerTokens(name string, opts ...func(*JobRunnerTokenQuery)) *JobRunnerQuery {
-	query := (&JobRunnerTokenClient{config: jrq.config}).Query()
+func (_q *JobRunnerQuery) WithNamedJobRunnerTokens(name string, opts ...func(*JobRunnerTokenQuery)) *JobRunnerQuery {
+	query := (&JobRunnerTokenClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if jrq.withNamedJobRunnerTokens == nil {
-		jrq.withNamedJobRunnerTokens = make(map[string]*JobRunnerTokenQuery)
+	if _q.withNamedJobRunnerTokens == nil {
+		_q.withNamedJobRunnerTokens = make(map[string]*JobRunnerTokenQuery)
 	}
-	jrq.withNamedJobRunnerTokens[name] = query
-	return jrq
+	_q.withNamedJobRunnerTokens[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -715,41 +715,41 @@ type JobRunnerGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (jrgb *JobRunnerGroupBy) Aggregate(fns ...AggregateFunc) *JobRunnerGroupBy {
-	jrgb.fns = append(jrgb.fns, fns...)
-	return jrgb
+func (_g *JobRunnerGroupBy) Aggregate(fns ...AggregateFunc) *JobRunnerGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (jrgb *JobRunnerGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, jrgb.build.ctx, ent.OpQueryGroupBy)
-	if err := jrgb.build.prepareQuery(ctx); err != nil {
+func (_g *JobRunnerGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*JobRunnerQuery, *JobRunnerGroupBy](ctx, jrgb.build, jrgb, jrgb.build.inters, v)
+	return scanWithInterceptors[*JobRunnerQuery, *JobRunnerGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (jrgb *JobRunnerGroupBy) sqlScan(ctx context.Context, root *JobRunnerQuery, v any) error {
+func (_g *JobRunnerGroupBy) sqlScan(ctx context.Context, root *JobRunnerQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(jrgb.fns))
-	for _, fn := range jrgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*jrgb.flds)+len(jrgb.fns))
-		for _, f := range *jrgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*jrgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := jrgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -763,27 +763,27 @@ type JobRunnerSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (jrs *JobRunnerSelect) Aggregate(fns ...AggregateFunc) *JobRunnerSelect {
-	jrs.fns = append(jrs.fns, fns...)
-	return jrs
+func (_s *JobRunnerSelect) Aggregate(fns ...AggregateFunc) *JobRunnerSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (jrs *JobRunnerSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, jrs.ctx, ent.OpQuerySelect)
-	if err := jrs.prepareQuery(ctx); err != nil {
+func (_s *JobRunnerSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*JobRunnerQuery, *JobRunnerSelect](ctx, jrs.JobRunnerQuery, jrs, jrs.inters, v)
+	return scanWithInterceptors[*JobRunnerQuery, *JobRunnerSelect](ctx, _s.JobRunnerQuery, _s, _s.inters, v)
 }
 
-func (jrs *JobRunnerSelect) sqlScan(ctx context.Context, root *JobRunnerQuery, v any) error {
+func (_s *JobRunnerSelect) sqlScan(ctx context.Context, root *JobRunnerQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(jrs.fns))
-	for _, fn := range jrs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*jrs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -791,7 +791,7 @@ func (jrs *JobRunnerSelect) sqlScan(ctx context.Context, root *JobRunnerQuery, v
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := jrs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -799,7 +799,7 @@ func (jrs *JobRunnerSelect) sqlScan(ctx context.Context, root *JobRunnerQuery, v
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (jrs *JobRunnerSelect) Modify(modifiers ...func(s *sql.Selector)) *JobRunnerSelect {
-	jrs.modifiers = append(jrs.modifiers, modifiers...)
-	return jrs
+func (_s *JobRunnerSelect) Modify(modifiers ...func(s *sql.Selector)) *JobRunnerSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

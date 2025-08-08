@@ -183,7 +183,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "happy path, all input except edges",
+			name: "happy path, all input except edges, you should have to have view access to a group to add it as an edge on this object",
 			request: testclient.CreateProcedureInput{
 				Name:          "Releasing a new version",
 				Details:       lo.ToPtr("instructions on how to release a new version"),
@@ -194,7 +194,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 				DelegateID:    &delegateGroup.ID,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "add editor group",
@@ -204,7 +204,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 				BlockedGroupIDs: []string{anotherGroup.ID},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "add editor group, again - ensures the same group can be added to multiple procedures",

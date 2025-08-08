@@ -22,277 +22,277 @@ type OrganizationHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (ohc *OrganizationHistoryCreate) SetHistoryTime(t time.Time) *OrganizationHistoryCreate {
-	ohc.mutation.SetHistoryTime(t)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetHistoryTime(v time.Time) *OrganizationHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableHistoryTime(t *time.Time) *OrganizationHistoryCreate {
-	if t != nil {
-		ohc.SetHistoryTime(*t)
+func (_c *OrganizationHistoryCreate) SetNillableHistoryTime(v *time.Time) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (ohc *OrganizationHistoryCreate) SetRef(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetRef(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetRef(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableRef(s *string) *OrganizationHistoryCreate {
-	if s != nil {
-		ohc.SetRef(*s)
+func (_c *OrganizationHistoryCreate) SetNillableRef(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (ohc *OrganizationHistoryCreate) SetOperation(ht history.OpType) *OrganizationHistoryCreate {
-	ohc.mutation.SetOperation(ht)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetOperation(v history.OpType) *OrganizationHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ohc *OrganizationHistoryCreate) SetCreatedAt(t time.Time) *OrganizationHistoryCreate {
-	ohc.mutation.SetCreatedAt(t)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetCreatedAt(v time.Time) *OrganizationHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableCreatedAt(t *time.Time) *OrganizationHistoryCreate {
-	if t != nil {
-		ohc.SetCreatedAt(*t)
+func (_c *OrganizationHistoryCreate) SetNillableCreatedAt(v *time.Time) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ohc *OrganizationHistoryCreate) SetUpdatedAt(t time.Time) *OrganizationHistoryCreate {
-	ohc.mutation.SetUpdatedAt(t)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetUpdatedAt(v time.Time) *OrganizationHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableUpdatedAt(t *time.Time) *OrganizationHistoryCreate {
-	if t != nil {
-		ohc.SetUpdatedAt(*t)
+func (_c *OrganizationHistoryCreate) SetNillableUpdatedAt(v *time.Time) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (ohc *OrganizationHistoryCreate) SetCreatedBy(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetCreatedBy(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetCreatedBy(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableCreatedBy(s *string) *OrganizationHistoryCreate {
-	if s != nil {
-		ohc.SetCreatedBy(*s)
+func (_c *OrganizationHistoryCreate) SetNillableCreatedBy(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ohc *OrganizationHistoryCreate) SetUpdatedBy(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetUpdatedBy(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetUpdatedBy(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableUpdatedBy(s *string) *OrganizationHistoryCreate {
-	if s != nil {
-		ohc.SetUpdatedBy(*s)
+func (_c *OrganizationHistoryCreate) SetNillableUpdatedBy(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ohc *OrganizationHistoryCreate) SetDeletedAt(t time.Time) *OrganizationHistoryCreate {
-	ohc.mutation.SetDeletedAt(t)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetDeletedAt(v time.Time) *OrganizationHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableDeletedAt(t *time.Time) *OrganizationHistoryCreate {
-	if t != nil {
-		ohc.SetDeletedAt(*t)
+func (_c *OrganizationHistoryCreate) SetNillableDeletedAt(v *time.Time) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ohc *OrganizationHistoryCreate) SetDeletedBy(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetDeletedBy(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetDeletedBy(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableDeletedBy(s *string) *OrganizationHistoryCreate {
-	if s != nil {
-		ohc.SetDeletedBy(*s)
+func (_c *OrganizationHistoryCreate) SetNillableDeletedBy(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (ohc *OrganizationHistoryCreate) SetTags(s []string) *OrganizationHistoryCreate {
-	ohc.mutation.SetTags(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetTags(v []string) *OrganizationHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (ohc *OrganizationHistoryCreate) SetName(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetName(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetName(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDisplayName sets the "display_name" field.
-func (ohc *OrganizationHistoryCreate) SetDisplayName(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetDisplayName(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetDisplayName(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetDisplayName(v)
+	return _c
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableDisplayName(s *string) *OrganizationHistoryCreate {
-	if s != nil {
-		ohc.SetDisplayName(*s)
+func (_c *OrganizationHistoryCreate) SetNillableDisplayName(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetDisplayName(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (ohc *OrganizationHistoryCreate) SetDescription(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetDescription(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetDescription(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableDescription(s *string) *OrganizationHistoryCreate {
-	if s != nil {
-		ohc.SetDescription(*s)
+func (_c *OrganizationHistoryCreate) SetNillableDescription(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetParentOrganizationID sets the "parent_organization_id" field.
-func (ohc *OrganizationHistoryCreate) SetParentOrganizationID(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetParentOrganizationID(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetParentOrganizationID(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetParentOrganizationID(v)
+	return _c
 }
 
 // SetNillableParentOrganizationID sets the "parent_organization_id" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableParentOrganizationID(s *string) *OrganizationHistoryCreate {
-	if s != nil {
-		ohc.SetParentOrganizationID(*s)
+func (_c *OrganizationHistoryCreate) SetNillableParentOrganizationID(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetParentOrganizationID(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetPersonalOrg sets the "personal_org" field.
-func (ohc *OrganizationHistoryCreate) SetPersonalOrg(b bool) *OrganizationHistoryCreate {
-	ohc.mutation.SetPersonalOrg(b)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetPersonalOrg(v bool) *OrganizationHistoryCreate {
+	_c.mutation.SetPersonalOrg(v)
+	return _c
 }
 
 // SetNillablePersonalOrg sets the "personal_org" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillablePersonalOrg(b *bool) *OrganizationHistoryCreate {
-	if b != nil {
-		ohc.SetPersonalOrg(*b)
+func (_c *OrganizationHistoryCreate) SetNillablePersonalOrg(v *bool) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetPersonalOrg(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetAvatarRemoteURL sets the "avatar_remote_url" field.
-func (ohc *OrganizationHistoryCreate) SetAvatarRemoteURL(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetAvatarRemoteURL(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetAvatarRemoteURL(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetAvatarRemoteURL(v)
+	return _c
 }
 
 // SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableAvatarRemoteURL(s *string) *OrganizationHistoryCreate {
-	if s != nil {
-		ohc.SetAvatarRemoteURL(*s)
+func (_c *OrganizationHistoryCreate) SetNillableAvatarRemoteURL(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetAvatarRemoteURL(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
-func (ohc *OrganizationHistoryCreate) SetAvatarLocalFileID(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetAvatarLocalFileID(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetAvatarLocalFileID(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetAvatarLocalFileID(v)
+	return _c
 }
 
 // SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableAvatarLocalFileID(s *string) *OrganizationHistoryCreate {
-	if s != nil {
-		ohc.SetAvatarLocalFileID(*s)
+func (_c *OrganizationHistoryCreate) SetNillableAvatarLocalFileID(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetAvatarLocalFileID(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
-func (ohc *OrganizationHistoryCreate) SetAvatarUpdatedAt(t time.Time) *OrganizationHistoryCreate {
-	ohc.mutation.SetAvatarUpdatedAt(t)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetAvatarUpdatedAt(v time.Time) *OrganizationHistoryCreate {
+	_c.mutation.SetAvatarUpdatedAt(v)
+	return _c
 }
 
 // SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableAvatarUpdatedAt(t *time.Time) *OrganizationHistoryCreate {
-	if t != nil {
-		ohc.SetAvatarUpdatedAt(*t)
+func (_c *OrganizationHistoryCreate) SetNillableAvatarUpdatedAt(v *time.Time) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetAvatarUpdatedAt(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetDedicatedDb sets the "dedicated_db" field.
-func (ohc *OrganizationHistoryCreate) SetDedicatedDb(b bool) *OrganizationHistoryCreate {
-	ohc.mutation.SetDedicatedDb(b)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetDedicatedDb(v bool) *OrganizationHistoryCreate {
+	_c.mutation.SetDedicatedDb(v)
+	return _c
 }
 
 // SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableDedicatedDb(b *bool) *OrganizationHistoryCreate {
-	if b != nil {
-		ohc.SetDedicatedDb(*b)
+func (_c *OrganizationHistoryCreate) SetNillableDedicatedDb(v *bool) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetDedicatedDb(*v)
 	}
-	return ohc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ohc *OrganizationHistoryCreate) SetID(s string) *OrganizationHistoryCreate {
-	ohc.mutation.SetID(s)
-	return ohc
+func (_c *OrganizationHistoryCreate) SetID(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableID(s *string) *OrganizationHistoryCreate {
-	if s != nil {
-		ohc.SetID(*s)
+func (_c *OrganizationHistoryCreate) SetNillableID(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return ohc
+	return _c
 }
 
 // Mutation returns the OrganizationHistoryMutation object of the builder.
-func (ohc *OrganizationHistoryCreate) Mutation() *OrganizationHistoryMutation {
-	return ohc.mutation
+func (_c *OrganizationHistoryCreate) Mutation() *OrganizationHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the OrganizationHistory in the database.
-func (ohc *OrganizationHistoryCreate) Save(ctx context.Context) (*OrganizationHistory, error) {
-	if err := ohc.defaults(); err != nil {
+func (_c *OrganizationHistoryCreate) Save(ctx context.Context) (*OrganizationHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ohc.sqlSave, ohc.mutation, ohc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ohc *OrganizationHistoryCreate) SaveX(ctx context.Context) *OrganizationHistory {
-	v, err := ohc.Save(ctx)
+func (_c *OrganizationHistoryCreate) SaveX(ctx context.Context) *OrganizationHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -300,105 +300,105 @@ func (ohc *OrganizationHistoryCreate) SaveX(ctx context.Context) *OrganizationHi
 }
 
 // Exec executes the query.
-func (ohc *OrganizationHistoryCreate) Exec(ctx context.Context) error {
-	_, err := ohc.Save(ctx)
+func (_c *OrganizationHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ohc *OrganizationHistoryCreate) ExecX(ctx context.Context) {
-	if err := ohc.Exec(ctx); err != nil {
+func (_c *OrganizationHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ohc *OrganizationHistoryCreate) defaults() error {
-	if _, ok := ohc.mutation.HistoryTime(); !ok {
+func (_c *OrganizationHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if organizationhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized organizationhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := organizationhistory.DefaultHistoryTime()
-		ohc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := ohc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if organizationhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationhistory.DefaultCreatedAt()
-		ohc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ohc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if organizationhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationhistory.DefaultUpdatedAt()
-		ohc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ohc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := organizationhistory.DefaultTags
-		ohc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := ohc.mutation.DisplayName(); !ok {
+	if _, ok := _c.mutation.DisplayName(); !ok {
 		v := organizationhistory.DefaultDisplayName
-		ohc.mutation.SetDisplayName(v)
+		_c.mutation.SetDisplayName(v)
 	}
-	if _, ok := ohc.mutation.PersonalOrg(); !ok {
+	if _, ok := _c.mutation.PersonalOrg(); !ok {
 		v := organizationhistory.DefaultPersonalOrg
-		ohc.mutation.SetPersonalOrg(v)
+		_c.mutation.SetPersonalOrg(v)
 	}
-	if _, ok := ohc.mutation.AvatarUpdatedAt(); !ok {
+	if _, ok := _c.mutation.AvatarUpdatedAt(); !ok {
 		if organizationhistory.DefaultAvatarUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationhistory.DefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationhistory.DefaultAvatarUpdatedAt()
-		ohc.mutation.SetAvatarUpdatedAt(v)
+		_c.mutation.SetAvatarUpdatedAt(v)
 	}
-	if _, ok := ohc.mutation.DedicatedDb(); !ok {
+	if _, ok := _c.mutation.DedicatedDb(); !ok {
 		v := organizationhistory.DefaultDedicatedDb
-		ohc.mutation.SetDedicatedDb(v)
+		_c.mutation.SetDedicatedDb(v)
 	}
-	if _, ok := ohc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if organizationhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized organizationhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := organizationhistory.DefaultID()
-		ohc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ohc *OrganizationHistoryCreate) check() error {
-	if _, ok := ohc.mutation.HistoryTime(); !ok {
+func (_c *OrganizationHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "OrganizationHistory.history_time"`)}
 	}
-	if _, ok := ohc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "OrganizationHistory.operation"`)}
 	}
-	if v, ok := ohc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := organizationhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "OrganizationHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := ohc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "OrganizationHistory.name"`)}
 	}
-	if _, ok := ohc.mutation.DisplayName(); !ok {
+	if _, ok := _c.mutation.DisplayName(); !ok {
 		return &ValidationError{Name: "display_name", err: errors.New(`generated: missing required field "OrganizationHistory.display_name"`)}
 	}
-	if _, ok := ohc.mutation.DedicatedDb(); !ok {
+	if _, ok := _c.mutation.DedicatedDb(); !ok {
 		return &ValidationError{Name: "dedicated_db", err: errors.New(`generated: missing required field "OrganizationHistory.dedicated_db"`)}
 	}
 	return nil
 }
 
-func (ohc *OrganizationHistoryCreate) sqlSave(ctx context.Context) (*OrganizationHistory, error) {
-	if err := ohc.check(); err != nil {
+func (_c *OrganizationHistoryCreate) sqlSave(ctx context.Context) (*OrganizationHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ohc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ohc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -411,94 +411,94 @@ func (ohc *OrganizationHistoryCreate) sqlSave(ctx context.Context) (*Organizatio
 			return nil, fmt.Errorf("unexpected OrganizationHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	ohc.mutation.id = &_node.ID
-	ohc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgraph.CreateSpec) {
+func (_c *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &OrganizationHistory{config: ohc.config}
+		_node = &OrganizationHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(organizationhistory.Table, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = ohc.schemaConfig.OrganizationHistory
-	if id, ok := ohc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.OrganizationHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ohc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(organizationhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := ohc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(organizationhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := ohc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(organizationhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := ohc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(organizationhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ohc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ohc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(organizationhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := ohc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ohc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ohc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := ohc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(organizationhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := ohc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := ohc.mutation.DisplayName(); ok {
+	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(organizationhistory.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
 	}
-	if value, ok := ohc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(organizationhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := ohc.mutation.ParentOrganizationID(); ok {
+	if value, ok := _c.mutation.ParentOrganizationID(); ok {
 		_spec.SetField(organizationhistory.FieldParentOrganizationID, field.TypeString, value)
 		_node.ParentOrganizationID = value
 	}
-	if value, ok := ohc.mutation.PersonalOrg(); ok {
+	if value, ok := _c.mutation.PersonalOrg(); ok {
 		_spec.SetField(organizationhistory.FieldPersonalOrg, field.TypeBool, value)
 		_node.PersonalOrg = value
 	}
-	if value, ok := ohc.mutation.AvatarRemoteURL(); ok {
+	if value, ok := _c.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarRemoteURL, field.TypeString, value)
 		_node.AvatarRemoteURL = &value
 	}
-	if value, ok := ohc.mutation.AvatarLocalFileID(); ok {
+	if value, ok := _c.mutation.AvatarLocalFileID(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarLocalFileID, field.TypeString, value)
 		_node.AvatarLocalFileID = &value
 	}
-	if value, ok := ohc.mutation.AvatarUpdatedAt(); ok {
+	if value, ok := _c.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
 		_node.AvatarUpdatedAt = &value
 	}
-	if value, ok := ohc.mutation.DedicatedDb(); ok {
+	if value, ok := _c.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)
 		_node.DedicatedDb = value
 	}
@@ -513,16 +513,16 @@ type OrganizationHistoryCreateBulk struct {
 }
 
 // Save creates the OrganizationHistory entities in the database.
-func (ohcb *OrganizationHistoryCreateBulk) Save(ctx context.Context) ([]*OrganizationHistory, error) {
-	if ohcb.err != nil {
-		return nil, ohcb.err
+func (_c *OrganizationHistoryCreateBulk) Save(ctx context.Context) ([]*OrganizationHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ohcb.builders))
-	nodes := make([]*OrganizationHistory, len(ohcb.builders))
-	mutators := make([]Mutator, len(ohcb.builders))
-	for i := range ohcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*OrganizationHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ohcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*OrganizationHistoryMutation)
@@ -536,11 +536,11 @@ func (ohcb *OrganizationHistoryCreateBulk) Save(ctx context.Context) ([]*Organiz
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ohcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ohcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -560,7 +560,7 @@ func (ohcb *OrganizationHistoryCreateBulk) Save(ctx context.Context) ([]*Organiz
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ohcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -568,8 +568,8 @@ func (ohcb *OrganizationHistoryCreateBulk) Save(ctx context.Context) ([]*Organiz
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ohcb *OrganizationHistoryCreateBulk) SaveX(ctx context.Context) []*OrganizationHistory {
-	v, err := ohcb.Save(ctx)
+func (_c *OrganizationHistoryCreateBulk) SaveX(ctx context.Context) []*OrganizationHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -577,14 +577,14 @@ func (ohcb *OrganizationHistoryCreateBulk) SaveX(ctx context.Context) []*Organiz
 }
 
 // Exec executes the query.
-func (ohcb *OrganizationHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := ohcb.Save(ctx)
+func (_c *OrganizationHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ohcb *OrganizationHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := ohcb.Exec(ctx); err != nil {
+func (_c *OrganizationHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

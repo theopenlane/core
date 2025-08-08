@@ -16,7 +16,7 @@ import (
 
 // AccountRolesOrganizationHandler lists roles a subject has in relation to an organization
 func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleAccountRolesOrganizationRequest, openapi.Registry)
+	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleAccountRolesOrganizationRequest, models.ExampleAccountRolesOrganizationReply, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

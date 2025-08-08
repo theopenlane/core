@@ -196,7 +196,7 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ActionPlan fields.
-func (ap *ActionPlan) assignValues(columns []string, values []any) error {
+func (_m *ActionPlan) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -206,49 +206,49 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				ap.ID = value.String
+				_m.ID = value.String
 			}
 		case actionplan.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ap.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case actionplan.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ap.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case actionplan.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				ap.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case actionplan.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				ap.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case actionplan.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ap.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case actionplan.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ap.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case actionplan.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ap.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -256,73 +256,73 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				ap.Revision = value.String
+				_m.Revision = value.String
 			}
 		case actionplan.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				ap.Name = value.String
+				_m.Name = value.String
 			}
 		case actionplan.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ap.Status = enums.DocumentStatus(value.String)
+				_m.Status = enums.DocumentStatus(value.String)
 			}
 		case actionplan.FieldActionPlanType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field action_plan_type", values[i])
 			} else if value.Valid {
-				ap.ActionPlanType = value.String
+				_m.ActionPlanType = value.String
 			}
 		case actionplan.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				ap.Details = value.String
+				_m.Details = value.String
 			}
 		case actionplan.FieldApprovalRequired:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field approval_required", values[i])
 			} else if value.Valid {
-				ap.ApprovalRequired = value.Bool
+				_m.ApprovalRequired = value.Bool
 			}
 		case actionplan.FieldReviewDue:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field review_due", values[i])
 			} else if value.Valid {
-				ap.ReviewDue = value.Time
+				_m.ReviewDue = value.Time
 			}
 		case actionplan.FieldReviewFrequency:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
-				ap.ReviewFrequency = enums.Frequency(value.String)
+				_m.ReviewFrequency = enums.Frequency(value.String)
 			}
 		case actionplan.FieldApproverID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field approver_id", values[i])
 			} else if value.Valid {
-				ap.ApproverID = value.String
+				_m.ApproverID = value.String
 			}
 		case actionplan.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
-				ap.DelegateID = value.String
+				_m.DelegateID = value.String
 			}
 		case actionplan.FieldSummary:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field summary", values[i])
 			} else if value.Valid {
-				ap.Summary = value.String
+				_m.Summary = value.String
 			}
 		case actionplan.FieldTagSuggestions:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tag_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ap.TagSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.TagSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field tag_suggestions: %w", err)
 				}
 			}
@@ -330,7 +330,7 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_tag_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ap.DismissedTagSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedTagSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_tag_suggestions: %w", err)
 				}
 			}
@@ -338,7 +338,7 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field control_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ap.ControlSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ControlSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field control_suggestions: %w", err)
 				}
 			}
@@ -346,7 +346,7 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_control_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ap.DismissedControlSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedControlSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_control_suggestions: %w", err)
 				}
 			}
@@ -354,7 +354,7 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field improvement_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ap.ImprovementSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ImprovementSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field improvement_suggestions: %w", err)
 				}
 			}
@@ -362,7 +362,7 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_improvement_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ap.DismissedImprovementSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedImprovementSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
 				}
 			}
@@ -370,42 +370,42 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				ap.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case actionplan.FieldDueDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due_date", values[i])
 			} else if value.Valid {
-				ap.DueDate = value.Time
+				_m.DueDate = value.Time
 			}
 		case actionplan.FieldPriority:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field priority", values[i])
 			} else if value.Valid {
-				ap.Priority = enums.Priority(value.String)
+				_m.Priority = enums.Priority(value.String)
 			}
 		case actionplan.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				ap.Source = value.String
+				_m.Source = value.String
 			}
 		case actionplan.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_action_plans", values[i])
 			} else if value.Valid {
-				ap.subcontrol_action_plans = new(string)
-				*ap.subcontrol_action_plans = value.String
+				_m.subcontrol_action_plans = new(string)
+				*_m.subcontrol_action_plans = value.String
 			}
 		case actionplan.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_action_plans", values[i])
 			} else if value.Valid {
-				ap.user_action_plans = new(string)
-				*ap.user_action_plans = value.String
+				_m.user_action_plans = new(string)
+				*_m.user_action_plans = value.String
 			}
 		default:
-			ap.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -413,219 +413,219 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ActionPlan.
 // This includes values selected through modifiers, order, etc.
-func (ap *ActionPlan) Value(name string) (ent.Value, error) {
-	return ap.selectValues.Get(name)
+func (_m *ActionPlan) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryApprover queries the "approver" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryApprover() *GroupQuery {
-	return NewActionPlanClient(ap.config).QueryApprover(ap)
+func (_m *ActionPlan) QueryApprover() *GroupQuery {
+	return NewActionPlanClient(_m.config).QueryApprover(_m)
 }
 
 // QueryDelegate queries the "delegate" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryDelegate() *GroupQuery {
-	return NewActionPlanClient(ap.config).QueryDelegate(ap)
+func (_m *ActionPlan) QueryDelegate() *GroupQuery {
+	return NewActionPlanClient(_m.config).QueryDelegate(_m)
 }
 
 // QueryOwner queries the "owner" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryOwner() *OrganizationQuery {
-	return NewActionPlanClient(ap.config).QueryOwner(ap)
+func (_m *ActionPlan) QueryOwner() *OrganizationQuery {
+	return NewActionPlanClient(_m.config).QueryOwner(_m)
 }
 
 // QueryRisks queries the "risks" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryRisks() *RiskQuery {
-	return NewActionPlanClient(ap.config).QueryRisks(ap)
+func (_m *ActionPlan) QueryRisks() *RiskQuery {
+	return NewActionPlanClient(_m.config).QueryRisks(_m)
 }
 
 // QueryControls queries the "controls" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryControls() *ControlQuery {
-	return NewActionPlanClient(ap.config).QueryControls(ap)
+func (_m *ActionPlan) QueryControls() *ControlQuery {
+	return NewActionPlanClient(_m.config).QueryControls(_m)
 }
 
 // QueryPrograms queries the "programs" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryPrograms() *ProgramQuery {
-	return NewActionPlanClient(ap.config).QueryPrograms(ap)
+func (_m *ActionPlan) QueryPrograms() *ProgramQuery {
+	return NewActionPlanClient(_m.config).QueryPrograms(_m)
 }
 
 // Update returns a builder for updating this ActionPlan.
 // Note that you need to call ActionPlan.Unwrap() before calling this method if this ActionPlan
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ap *ActionPlan) Update() *ActionPlanUpdateOne {
-	return NewActionPlanClient(ap.config).UpdateOne(ap)
+func (_m *ActionPlan) Update() *ActionPlanUpdateOne {
+	return NewActionPlanClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ActionPlan entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ap *ActionPlan) Unwrap() *ActionPlan {
-	_tx, ok := ap.config.driver.(*txDriver)
+func (_m *ActionPlan) Unwrap() *ActionPlan {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ActionPlan is not a transactional entity")
 	}
-	ap.config.driver = _tx.drv
-	return ap
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ap *ActionPlan) String() string {
+func (_m *ActionPlan) String() string {
 	var builder strings.Builder
 	builder.WriteString("ActionPlan(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ap.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(ap.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ap.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(ap.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(ap.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(ap.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(ap.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ap.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("revision=")
-	builder.WriteString(ap.Revision)
+	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(ap.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", ap.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("action_plan_type=")
-	builder.WriteString(ap.ActionPlanType)
+	builder.WriteString(_m.ActionPlanType)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(ap.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteString(", ")
 	builder.WriteString("approval_required=")
-	builder.WriteString(fmt.Sprintf("%v", ap.ApprovalRequired))
+	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalRequired))
 	builder.WriteString(", ")
 	builder.WriteString("review_due=")
-	builder.WriteString(ap.ReviewDue.Format(time.ANSIC))
+	builder.WriteString(_m.ReviewDue.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
-	builder.WriteString(fmt.Sprintf("%v", ap.ReviewFrequency))
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
 	builder.WriteString(", ")
 	builder.WriteString("approver_id=")
-	builder.WriteString(ap.ApproverID)
+	builder.WriteString(_m.ApproverID)
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
-	builder.WriteString(ap.DelegateID)
+	builder.WriteString(_m.DelegateID)
 	builder.WriteString(", ")
 	builder.WriteString("summary=")
-	builder.WriteString(ap.Summary)
+	builder.WriteString(_m.Summary)
 	builder.WriteString(", ")
 	builder.WriteString("tag_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ap.TagSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.TagSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_tag_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ap.DismissedTagSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedTagSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("control_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ap.ControlSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ControlSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_control_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ap.DismissedControlSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedControlSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("improvement_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ap.ImprovementSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ImprovementSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_improvement_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ap.DismissedImprovementSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedImprovementSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(ap.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("due_date=")
-	builder.WriteString(ap.DueDate.Format(time.ANSIC))
+	builder.WriteString(_m.DueDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("priority=")
-	builder.WriteString(fmt.Sprintf("%v", ap.Priority))
+	builder.WriteString(fmt.Sprintf("%v", _m.Priority))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(ap.Source)
+	builder.WriteString(_m.Source)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedRisks returns the Risks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ap *ActionPlan) NamedRisks(name string) ([]*Risk, error) {
-	if ap.Edges.namedRisks == nil {
+func (_m *ActionPlan) NamedRisks(name string) ([]*Risk, error) {
+	if _m.Edges.namedRisks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ap.Edges.namedRisks[name]
+	nodes, ok := _m.Edges.namedRisks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ap *ActionPlan) appendNamedRisks(name string, edges ...*Risk) {
-	if ap.Edges.namedRisks == nil {
-		ap.Edges.namedRisks = make(map[string][]*Risk)
+func (_m *ActionPlan) appendNamedRisks(name string, edges ...*Risk) {
+	if _m.Edges.namedRisks == nil {
+		_m.Edges.namedRisks = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		ap.Edges.namedRisks[name] = []*Risk{}
+		_m.Edges.namedRisks[name] = []*Risk{}
 	} else {
-		ap.Edges.namedRisks[name] = append(ap.Edges.namedRisks[name], edges...)
+		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
 	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ap *ActionPlan) NamedControls(name string) ([]*Control, error) {
-	if ap.Edges.namedControls == nil {
+func (_m *ActionPlan) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ap.Edges.namedControls[name]
+	nodes, ok := _m.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ap *ActionPlan) appendNamedControls(name string, edges ...*Control) {
-	if ap.Edges.namedControls == nil {
-		ap.Edges.namedControls = make(map[string][]*Control)
+func (_m *ActionPlan) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		ap.Edges.namedControls[name] = []*Control{}
+		_m.Edges.namedControls[name] = []*Control{}
 	} else {
-		ap.Edges.namedControls[name] = append(ap.Edges.namedControls[name], edges...)
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 
 // NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ap *ActionPlan) NamedPrograms(name string) ([]*Program, error) {
-	if ap.Edges.namedPrograms == nil {
+func (_m *ActionPlan) NamedPrograms(name string) ([]*Program, error) {
+	if _m.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ap.Edges.namedPrograms[name]
+	nodes, ok := _m.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ap *ActionPlan) appendNamedPrograms(name string, edges ...*Program) {
-	if ap.Edges.namedPrograms == nil {
-		ap.Edges.namedPrograms = make(map[string][]*Program)
+func (_m *ActionPlan) appendNamedPrograms(name string, edges ...*Program) {
+	if _m.Edges.namedPrograms == nil {
+		_m.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		ap.Edges.namedPrograms[name] = []*Program{}
+		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		ap.Edges.namedPrograms[name] = append(ap.Edges.namedPrograms[name], edges...)
+		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
 	}
 }
 

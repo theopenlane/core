@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -32,492 +33,507 @@ type InternalPolicyCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ipc *InternalPolicyCreate) SetCreatedAt(t time.Time) *InternalPolicyCreate {
-	ipc.mutation.SetCreatedAt(t)
-	return ipc
+func (_c *InternalPolicyCreate) SetCreatedAt(v time.Time) *InternalPolicyCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableCreatedAt(t *time.Time) *InternalPolicyCreate {
-	if t != nil {
-		ipc.SetCreatedAt(*t)
+func (_c *InternalPolicyCreate) SetNillableCreatedAt(v *time.Time) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ipc *InternalPolicyCreate) SetUpdatedAt(t time.Time) *InternalPolicyCreate {
-	ipc.mutation.SetUpdatedAt(t)
-	return ipc
+func (_c *InternalPolicyCreate) SetUpdatedAt(v time.Time) *InternalPolicyCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableUpdatedAt(t *time.Time) *InternalPolicyCreate {
-	if t != nil {
-		ipc.SetUpdatedAt(*t)
+func (_c *InternalPolicyCreate) SetNillableUpdatedAt(v *time.Time) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (ipc *InternalPolicyCreate) SetCreatedBy(s string) *InternalPolicyCreate {
-	ipc.mutation.SetCreatedBy(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetCreatedBy(v string) *InternalPolicyCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableCreatedBy(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetCreatedBy(*s)
+func (_c *InternalPolicyCreate) SetNillableCreatedBy(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ipc *InternalPolicyCreate) SetUpdatedBy(s string) *InternalPolicyCreate {
-	ipc.mutation.SetUpdatedBy(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetUpdatedBy(v string) *InternalPolicyCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableUpdatedBy(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetUpdatedBy(*s)
+func (_c *InternalPolicyCreate) SetNillableUpdatedBy(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ipc *InternalPolicyCreate) SetDeletedAt(t time.Time) *InternalPolicyCreate {
-	ipc.mutation.SetDeletedAt(t)
-	return ipc
+func (_c *InternalPolicyCreate) SetDeletedAt(v time.Time) *InternalPolicyCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableDeletedAt(t *time.Time) *InternalPolicyCreate {
-	if t != nil {
-		ipc.SetDeletedAt(*t)
+func (_c *InternalPolicyCreate) SetNillableDeletedAt(v *time.Time) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ipc *InternalPolicyCreate) SetDeletedBy(s string) *InternalPolicyCreate {
-	ipc.mutation.SetDeletedBy(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetDeletedBy(v string) *InternalPolicyCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableDeletedBy(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetDeletedBy(*s)
+func (_c *InternalPolicyCreate) SetNillableDeletedBy(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (ipc *InternalPolicyCreate) SetDisplayID(s string) *InternalPolicyCreate {
-	ipc.mutation.SetDisplayID(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetDisplayID(v string) *InternalPolicyCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (ipc *InternalPolicyCreate) SetTags(s []string) *InternalPolicyCreate {
-	ipc.mutation.SetTags(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetTags(v []string) *InternalPolicyCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetRevision sets the "revision" field.
-func (ipc *InternalPolicyCreate) SetRevision(s string) *InternalPolicyCreate {
-	ipc.mutation.SetRevision(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetRevision(v string) *InternalPolicyCreate {
+	_c.mutation.SetRevision(v)
+	return _c
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableRevision(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetRevision(*s)
+func (_c *InternalPolicyCreate) SetNillableRevision(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetRevision(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ipc *InternalPolicyCreate) SetOwnerID(s string) *InternalPolicyCreate {
-	ipc.mutation.SetOwnerID(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetOwnerID(v string) *InternalPolicyCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableOwnerID(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetOwnerID(*s)
+func (_c *InternalPolicyCreate) SetNillableOwnerID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (ipc *InternalPolicyCreate) SetName(s string) *InternalPolicyCreate {
-	ipc.mutation.SetName(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetName(v string) *InternalPolicyCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (ipc *InternalPolicyCreate) SetStatus(es enums.DocumentStatus) *InternalPolicyCreate {
-	ipc.mutation.SetStatus(es)
-	return ipc
+func (_c *InternalPolicyCreate) SetStatus(v enums.DocumentStatus) *InternalPolicyCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableStatus(es *enums.DocumentStatus) *InternalPolicyCreate {
-	if es != nil {
-		ipc.SetStatus(*es)
+func (_c *InternalPolicyCreate) SetNillableStatus(v *enums.DocumentStatus) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetPolicyType sets the "policy_type" field.
-func (ipc *InternalPolicyCreate) SetPolicyType(s string) *InternalPolicyCreate {
-	ipc.mutation.SetPolicyType(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetPolicyType(v string) *InternalPolicyCreate {
+	_c.mutation.SetPolicyType(v)
+	return _c
 }
 
 // SetNillablePolicyType sets the "policy_type" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillablePolicyType(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetPolicyType(*s)
+func (_c *InternalPolicyCreate) SetNillablePolicyType(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetPolicyType(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetDetails sets the "details" field.
-func (ipc *InternalPolicyCreate) SetDetails(s string) *InternalPolicyCreate {
-	ipc.mutation.SetDetails(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetDetails(v string) *InternalPolicyCreate {
+	_c.mutation.SetDetails(v)
+	return _c
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableDetails(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetDetails(*s)
+func (_c *InternalPolicyCreate) SetNillableDetails(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetDetails(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetApprovalRequired sets the "approval_required" field.
-func (ipc *InternalPolicyCreate) SetApprovalRequired(b bool) *InternalPolicyCreate {
-	ipc.mutation.SetApprovalRequired(b)
-	return ipc
+func (_c *InternalPolicyCreate) SetApprovalRequired(v bool) *InternalPolicyCreate {
+	_c.mutation.SetApprovalRequired(v)
+	return _c
 }
 
 // SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableApprovalRequired(b *bool) *InternalPolicyCreate {
-	if b != nil {
-		ipc.SetApprovalRequired(*b)
+func (_c *InternalPolicyCreate) SetNillableApprovalRequired(v *bool) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetApprovalRequired(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetReviewDue sets the "review_due" field.
-func (ipc *InternalPolicyCreate) SetReviewDue(t time.Time) *InternalPolicyCreate {
-	ipc.mutation.SetReviewDue(t)
-	return ipc
+func (_c *InternalPolicyCreate) SetReviewDue(v time.Time) *InternalPolicyCreate {
+	_c.mutation.SetReviewDue(v)
+	return _c
 }
 
 // SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableReviewDue(t *time.Time) *InternalPolicyCreate {
-	if t != nil {
-		ipc.SetReviewDue(*t)
+func (_c *InternalPolicyCreate) SetNillableReviewDue(v *time.Time) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetReviewDue(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetReviewFrequency sets the "review_frequency" field.
-func (ipc *InternalPolicyCreate) SetReviewFrequency(e enums.Frequency) *InternalPolicyCreate {
-	ipc.mutation.SetReviewFrequency(e)
-	return ipc
+func (_c *InternalPolicyCreate) SetReviewFrequency(v enums.Frequency) *InternalPolicyCreate {
+	_c.mutation.SetReviewFrequency(v)
+	return _c
 }
 
 // SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableReviewFrequency(e *enums.Frequency) *InternalPolicyCreate {
-	if e != nil {
-		ipc.SetReviewFrequency(*e)
+func (_c *InternalPolicyCreate) SetNillableReviewFrequency(v *enums.Frequency) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetReviewFrequency(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetApproverID sets the "approver_id" field.
-func (ipc *InternalPolicyCreate) SetApproverID(s string) *InternalPolicyCreate {
-	ipc.mutation.SetApproverID(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetApproverID(v string) *InternalPolicyCreate {
+	_c.mutation.SetApproverID(v)
+	return _c
 }
 
 // SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableApproverID(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetApproverID(*s)
+func (_c *InternalPolicyCreate) SetNillableApproverID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetApproverID(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (ipc *InternalPolicyCreate) SetDelegateID(s string) *InternalPolicyCreate {
-	ipc.mutation.SetDelegateID(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetDelegateID(v string) *InternalPolicyCreate {
+	_c.mutation.SetDelegateID(v)
+	return _c
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableDelegateID(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetDelegateID(*s)
+func (_c *InternalPolicyCreate) SetNillableDelegateID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetDelegateID(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetSummary sets the "summary" field.
-func (ipc *InternalPolicyCreate) SetSummary(s string) *InternalPolicyCreate {
-	ipc.mutation.SetSummary(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetSummary(v string) *InternalPolicyCreate {
+	_c.mutation.SetSummary(v)
+	return _c
 }
 
 // SetNillableSummary sets the "summary" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableSummary(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetSummary(*s)
+func (_c *InternalPolicyCreate) SetNillableSummary(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetSummary(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetTagSuggestions sets the "tag_suggestions" field.
-func (ipc *InternalPolicyCreate) SetTagSuggestions(s []string) *InternalPolicyCreate {
-	ipc.mutation.SetTagSuggestions(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetTagSuggestions(v []string) *InternalPolicyCreate {
+	_c.mutation.SetTagSuggestions(v)
+	return _c
 }
 
 // SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
-func (ipc *InternalPolicyCreate) SetDismissedTagSuggestions(s []string) *InternalPolicyCreate {
-	ipc.mutation.SetDismissedTagSuggestions(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetDismissedTagSuggestions(v []string) *InternalPolicyCreate {
+	_c.mutation.SetDismissedTagSuggestions(v)
+	return _c
 }
 
 // SetControlSuggestions sets the "control_suggestions" field.
-func (ipc *InternalPolicyCreate) SetControlSuggestions(s []string) *InternalPolicyCreate {
-	ipc.mutation.SetControlSuggestions(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetControlSuggestions(v []string) *InternalPolicyCreate {
+	_c.mutation.SetControlSuggestions(v)
+	return _c
 }
 
 // SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
-func (ipc *InternalPolicyCreate) SetDismissedControlSuggestions(s []string) *InternalPolicyCreate {
-	ipc.mutation.SetDismissedControlSuggestions(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetDismissedControlSuggestions(v []string) *InternalPolicyCreate {
+	_c.mutation.SetDismissedControlSuggestions(v)
+	return _c
 }
 
 // SetImprovementSuggestions sets the "improvement_suggestions" field.
-func (ipc *InternalPolicyCreate) SetImprovementSuggestions(s []string) *InternalPolicyCreate {
-	ipc.mutation.SetImprovementSuggestions(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetImprovementSuggestions(v []string) *InternalPolicyCreate {
+	_c.mutation.SetImprovementSuggestions(v)
+	return _c
 }
 
 // SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
-func (ipc *InternalPolicyCreate) SetDismissedImprovementSuggestions(s []string) *InternalPolicyCreate {
-	ipc.mutation.SetDismissedImprovementSuggestions(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetDismissedImprovementSuggestions(v []string) *InternalPolicyCreate {
+	_c.mutation.SetDismissedImprovementSuggestions(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ipc *InternalPolicyCreate) SetID(s string) *InternalPolicyCreate {
-	ipc.mutation.SetID(s)
-	return ipc
+func (_c *InternalPolicyCreate) SetID(v string) *InternalPolicyCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (ipc *InternalPolicyCreate) SetNillableID(s *string) *InternalPolicyCreate {
-	if s != nil {
-		ipc.SetID(*s)
+func (_c *InternalPolicyCreate) SetNillableID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return ipc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (ipc *InternalPolicyCreate) SetOwner(o *Organization) *InternalPolicyCreate {
-	return ipc.SetOwnerID(o.ID)
+func (_c *InternalPolicyCreate) SetOwner(v *Organization) *InternalPolicyCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (ipc *InternalPolicyCreate) AddBlockedGroupIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddBlockedGroupIDs(ids...)
-	return ipc
+func (_c *InternalPolicyCreate) AddBlockedGroupIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (ipc *InternalPolicyCreate) AddBlockedGroups(g ...*Group) *InternalPolicyCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *InternalPolicyCreate) AddBlockedGroups(v ...*Group) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipc.AddBlockedGroupIDs(ids...)
+	return _c.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (ipc *InternalPolicyCreate) AddEditorIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddEditorIDs(ids...)
-	return ipc
+func (_c *InternalPolicyCreate) AddEditorIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (ipc *InternalPolicyCreate) AddEditors(g ...*Group) *InternalPolicyCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *InternalPolicyCreate) AddEditors(v ...*Group) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipc.AddEditorIDs(ids...)
+	return _c.AddEditorIDs(ids...)
 }
 
 // SetApprover sets the "approver" edge to the Group entity.
-func (ipc *InternalPolicyCreate) SetApprover(g *Group) *InternalPolicyCreate {
-	return ipc.SetApproverID(g.ID)
+func (_c *InternalPolicyCreate) SetApprover(v *Group) *InternalPolicyCreate {
+	return _c.SetApproverID(v.ID)
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
-func (ipc *InternalPolicyCreate) SetDelegate(g *Group) *InternalPolicyCreate {
-	return ipc.SetDelegateID(g.ID)
+func (_c *InternalPolicyCreate) SetDelegate(v *Group) *InternalPolicyCreate {
+	return _c.SetDelegateID(v.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (ipc *InternalPolicyCreate) AddControlObjectiveIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddControlObjectiveIDs(ids...)
-	return ipc
+func (_c *InternalPolicyCreate) AddControlObjectiveIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddControlObjectiveIDs(ids...)
+	return _c
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (ipc *InternalPolicyCreate) AddControlObjectives(c ...*ControlObjective) *InternalPolicyCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *InternalPolicyCreate) AddControlObjectives(v ...*ControlObjective) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipc.AddControlObjectiveIDs(ids...)
+	return _c.AddControlObjectiveIDs(ids...)
+}
+
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_c *InternalPolicyCreate) AddControlImplementationIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddControlImplementationIDs(ids...)
+	return _c
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_c *InternalPolicyCreate) AddControlImplementations(v ...*ControlImplementation) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddControlImplementationIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (ipc *InternalPolicyCreate) AddControlIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddControlIDs(ids...)
-	return ipc
+func (_c *InternalPolicyCreate) AddControlIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (ipc *InternalPolicyCreate) AddControls(c ...*Control) *InternalPolicyCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *InternalPolicyCreate) AddControls(v ...*Control) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipc.AddControlIDs(ids...)
+	return _c.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (ipc *InternalPolicyCreate) AddSubcontrolIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddSubcontrolIDs(ids...)
-	return ipc
+func (_c *InternalPolicyCreate) AddSubcontrolIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddSubcontrolIDs(ids...)
+	return _c
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (ipc *InternalPolicyCreate) AddSubcontrols(s ...*Subcontrol) *InternalPolicyCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *InternalPolicyCreate) AddSubcontrols(v ...*Subcontrol) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipc.AddSubcontrolIDs(ids...)
+	return _c.AddSubcontrolIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (ipc *InternalPolicyCreate) AddProcedureIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddProcedureIDs(ids...)
-	return ipc
+func (_c *InternalPolicyCreate) AddProcedureIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddProcedureIDs(ids...)
+	return _c
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (ipc *InternalPolicyCreate) AddProcedures(p ...*Procedure) *InternalPolicyCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *InternalPolicyCreate) AddProcedures(v ...*Procedure) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipc.AddProcedureIDs(ids...)
+	return _c.AddProcedureIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
-func (ipc *InternalPolicyCreate) AddNarrativeIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddNarrativeIDs(ids...)
-	return ipc
+func (_c *InternalPolicyCreate) AddNarrativeIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddNarrativeIDs(ids...)
+	return _c
 }
 
 // AddNarratives adds the "narratives" edges to the Narrative entity.
-func (ipc *InternalPolicyCreate) AddNarratives(n ...*Narrative) *InternalPolicyCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_c *InternalPolicyCreate) AddNarratives(v ...*Narrative) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipc.AddNarrativeIDs(ids...)
+	return _c.AddNarrativeIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (ipc *InternalPolicyCreate) AddTaskIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddTaskIDs(ids...)
-	return ipc
+func (_c *InternalPolicyCreate) AddTaskIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (ipc *InternalPolicyCreate) AddTasks(t ...*Task) *InternalPolicyCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *InternalPolicyCreate) AddTasks(v ...*Task) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipc.AddTaskIDs(ids...)
+	return _c.AddTaskIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (ipc *InternalPolicyCreate) AddRiskIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddRiskIDs(ids...)
-	return ipc
+func (_c *InternalPolicyCreate) AddRiskIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddRiskIDs(ids...)
+	return _c
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (ipc *InternalPolicyCreate) AddRisks(r ...*Risk) *InternalPolicyCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_c *InternalPolicyCreate) AddRisks(v ...*Risk) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipc.AddRiskIDs(ids...)
+	return _c.AddRiskIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (ipc *InternalPolicyCreate) AddProgramIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddProgramIDs(ids...)
-	return ipc
+func (_c *InternalPolicyCreate) AddProgramIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddProgramIDs(ids...)
+	return _c
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (ipc *InternalPolicyCreate) AddPrograms(p ...*Program) *InternalPolicyCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *InternalPolicyCreate) AddPrograms(v ...*Program) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ipc.AddProgramIDs(ids...)
+	return _c.AddProgramIDs(ids...)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
-func (ipc *InternalPolicyCreate) Mutation() *InternalPolicyMutation {
-	return ipc.mutation
+func (_c *InternalPolicyCreate) Mutation() *InternalPolicyMutation {
+	return _c.mutation
 }
 
 // Save creates the InternalPolicy in the database.
-func (ipc *InternalPolicyCreate) Save(ctx context.Context) (*InternalPolicy, error) {
-	if err := ipc.defaults(); err != nil {
+func (_c *InternalPolicyCreate) Save(ctx context.Context) (*InternalPolicy, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ipc.sqlSave, ipc.mutation, ipc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ipc *InternalPolicyCreate) SaveX(ctx context.Context) *InternalPolicy {
-	v, err := ipc.Save(ctx)
+func (_c *InternalPolicyCreate) SaveX(ctx context.Context) *InternalPolicy {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -525,121 +541,121 @@ func (ipc *InternalPolicyCreate) SaveX(ctx context.Context) *InternalPolicy {
 }
 
 // Exec executes the query.
-func (ipc *InternalPolicyCreate) Exec(ctx context.Context) error {
-	_, err := ipc.Save(ctx)
+func (_c *InternalPolicyCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ipc *InternalPolicyCreate) ExecX(ctx context.Context) {
-	if err := ipc.Exec(ctx); err != nil {
+func (_c *InternalPolicyCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ipc *InternalPolicyCreate) defaults() error {
-	if _, ok := ipc.mutation.CreatedAt(); !ok {
+func (_c *InternalPolicyCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if internalpolicy.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized internalpolicy.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := internalpolicy.DefaultCreatedAt()
-		ipc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ipc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if internalpolicy.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized internalpolicy.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := internalpolicy.DefaultUpdatedAt()
-		ipc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ipc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := internalpolicy.DefaultTags
-		ipc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := ipc.mutation.Revision(); !ok {
+	if _, ok := _c.mutation.Revision(); !ok {
 		v := internalpolicy.DefaultRevision
-		ipc.mutation.SetRevision(v)
+		_c.mutation.SetRevision(v)
 	}
-	if _, ok := ipc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := internalpolicy.DefaultStatus
-		ipc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := ipc.mutation.ApprovalRequired(); !ok {
+	if _, ok := _c.mutation.ApprovalRequired(); !ok {
 		v := internalpolicy.DefaultApprovalRequired
-		ipc.mutation.SetApprovalRequired(v)
+		_c.mutation.SetApprovalRequired(v)
 	}
-	if _, ok := ipc.mutation.ReviewDue(); !ok {
+	if _, ok := _c.mutation.ReviewDue(); !ok {
 		v := internalpolicy.DefaultReviewDue
-		ipc.mutation.SetReviewDue(v)
+		_c.mutation.SetReviewDue(v)
 	}
-	if _, ok := ipc.mutation.ReviewFrequency(); !ok {
+	if _, ok := _c.mutation.ReviewFrequency(); !ok {
 		v := internalpolicy.DefaultReviewFrequency
-		ipc.mutation.SetReviewFrequency(v)
+		_c.mutation.SetReviewFrequency(v)
 	}
-	if _, ok := ipc.mutation.TagSuggestions(); !ok {
+	if _, ok := _c.mutation.TagSuggestions(); !ok {
 		v := internalpolicy.DefaultTagSuggestions
-		ipc.mutation.SetTagSuggestions(v)
+		_c.mutation.SetTagSuggestions(v)
 	}
-	if _, ok := ipc.mutation.DismissedTagSuggestions(); !ok {
+	if _, ok := _c.mutation.DismissedTagSuggestions(); !ok {
 		v := internalpolicy.DefaultDismissedTagSuggestions
-		ipc.mutation.SetDismissedTagSuggestions(v)
+		_c.mutation.SetDismissedTagSuggestions(v)
 	}
-	if _, ok := ipc.mutation.ControlSuggestions(); !ok {
+	if _, ok := _c.mutation.ControlSuggestions(); !ok {
 		v := internalpolicy.DefaultControlSuggestions
-		ipc.mutation.SetControlSuggestions(v)
+		_c.mutation.SetControlSuggestions(v)
 	}
-	if _, ok := ipc.mutation.DismissedControlSuggestions(); !ok {
+	if _, ok := _c.mutation.DismissedControlSuggestions(); !ok {
 		v := internalpolicy.DefaultDismissedControlSuggestions
-		ipc.mutation.SetDismissedControlSuggestions(v)
+		_c.mutation.SetDismissedControlSuggestions(v)
 	}
-	if _, ok := ipc.mutation.ImprovementSuggestions(); !ok {
+	if _, ok := _c.mutation.ImprovementSuggestions(); !ok {
 		v := internalpolicy.DefaultImprovementSuggestions
-		ipc.mutation.SetImprovementSuggestions(v)
+		_c.mutation.SetImprovementSuggestions(v)
 	}
-	if _, ok := ipc.mutation.DismissedImprovementSuggestions(); !ok {
+	if _, ok := _c.mutation.DismissedImprovementSuggestions(); !ok {
 		v := internalpolicy.DefaultDismissedImprovementSuggestions
-		ipc.mutation.SetDismissedImprovementSuggestions(v)
+		_c.mutation.SetDismissedImprovementSuggestions(v)
 	}
-	if _, ok := ipc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if internalpolicy.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized internalpolicy.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := internalpolicy.DefaultID()
-		ipc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ipc *InternalPolicyCreate) check() error {
-	if _, ok := ipc.mutation.DisplayID(); !ok {
+func (_c *InternalPolicyCreate) check() error {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "InternalPolicy.display_id"`)}
 	}
-	if v, ok := ipc.mutation.DisplayID(); ok {
+	if v, ok := _c.mutation.DisplayID(); ok {
 		if err := internalpolicy.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.display_id": %w`, err)}
 		}
 	}
-	if v, ok := ipc.mutation.Revision(); ok {
+	if v, ok := _c.mutation.Revision(); ok {
 		if err := internalpolicy.RevisionValidator(v); err != nil {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
 		}
 	}
-	if _, ok := ipc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "InternalPolicy.name"`)}
 	}
-	if v, ok := ipc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := internalpolicy.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.name": %w`, err)}
 		}
 	}
-	if v, ok := ipc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := internalpolicy.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.status": %w`, err)}
 		}
 	}
-	if v, ok := ipc.mutation.ReviewFrequency(); ok {
+	if v, ok := _c.mutation.ReviewFrequency(); ok {
 		if err := internalpolicy.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
 		}
@@ -647,12 +663,12 @@ func (ipc *InternalPolicyCreate) check() error {
 	return nil
 }
 
-func (ipc *InternalPolicyCreate) sqlSave(ctx context.Context) (*InternalPolicy, error) {
-	if err := ipc.check(); err != nil {
+func (_c *InternalPolicyCreate) sqlSave(ctx context.Context) (*InternalPolicy, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ipc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ipc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -665,114 +681,114 @@ func (ipc *InternalPolicyCreate) sqlSave(ctx context.Context) (*InternalPolicy, 
 			return nil, fmt.Errorf("unexpected InternalPolicy.ID type: %T", _spec.ID.Value)
 		}
 	}
-	ipc.mutation.id = &_node.ID
-	ipc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateSpec) {
+func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateSpec) {
 	var (
-		_node = &InternalPolicy{config: ipc.config}
+		_node = &InternalPolicy{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(internalpolicy.Table, sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString))
 	)
-	_spec.Schema = ipc.schemaConfig.InternalPolicy
-	if id, ok := ipc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.InternalPolicy
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ipc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(internalpolicy.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ipc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(internalpolicy.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ipc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(internalpolicy.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := ipc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(internalpolicy.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ipc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ipc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := ipc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(internalpolicy.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := ipc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(internalpolicy.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := ipc.mutation.Revision(); ok {
+	if value, ok := _c.mutation.Revision(); ok {
 		_spec.SetField(internalpolicy.FieldRevision, field.TypeString, value)
 		_node.Revision = value
 	}
-	if value, ok := ipc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(internalpolicy.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := ipc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(internalpolicy.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := ipc.mutation.PolicyType(); ok {
+	if value, ok := _c.mutation.PolicyType(); ok {
 		_spec.SetField(internalpolicy.FieldPolicyType, field.TypeString, value)
 		_node.PolicyType = value
 	}
-	if value, ok := ipc.mutation.Details(); ok {
+	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
-	if value, ok := ipc.mutation.ApprovalRequired(); ok {
+	if value, ok := _c.mutation.ApprovalRequired(); ok {
 		_spec.SetField(internalpolicy.FieldApprovalRequired, field.TypeBool, value)
 		_node.ApprovalRequired = value
 	}
-	if value, ok := ipc.mutation.ReviewDue(); ok {
+	if value, ok := _c.mutation.ReviewDue(); ok {
 		_spec.SetField(internalpolicy.FieldReviewDue, field.TypeTime, value)
 		_node.ReviewDue = value
 	}
-	if value, ok := ipc.mutation.ReviewFrequency(); ok {
+	if value, ok := _c.mutation.ReviewFrequency(); ok {
 		_spec.SetField(internalpolicy.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
 	}
-	if value, ok := ipc.mutation.Summary(); ok {
+	if value, ok := _c.mutation.Summary(); ok {
 		_spec.SetField(internalpolicy.FieldSummary, field.TypeString, value)
 		_node.Summary = value
 	}
-	if value, ok := ipc.mutation.TagSuggestions(); ok {
+	if value, ok := _c.mutation.TagSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldTagSuggestions, field.TypeJSON, value)
 		_node.TagSuggestions = value
 	}
-	if value, ok := ipc.mutation.DismissedTagSuggestions(); ok {
+	if value, ok := _c.mutation.DismissedTagSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldDismissedTagSuggestions, field.TypeJSON, value)
 		_node.DismissedTagSuggestions = value
 	}
-	if value, ok := ipc.mutation.ControlSuggestions(); ok {
+	if value, ok := _c.mutation.ControlSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldControlSuggestions, field.TypeJSON, value)
 		_node.ControlSuggestions = value
 	}
-	if value, ok := ipc.mutation.DismissedControlSuggestions(); ok {
+	if value, ok := _c.mutation.DismissedControlSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldDismissedControlSuggestions, field.TypeJSON, value)
 		_node.DismissedControlSuggestions = value
 	}
-	if value, ok := ipc.mutation.ImprovementSuggestions(); ok {
+	if value, ok := _c.mutation.ImprovementSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldImprovementSuggestions, field.TypeJSON, value)
 		_node.ImprovementSuggestions = value
 	}
-	if value, ok := ipc.mutation.DismissedImprovementSuggestions(); ok {
+	if value, ok := _c.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(internalpolicy.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 		_node.DismissedImprovementSuggestions = value
 	}
-	if nodes := ipc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -783,14 +799,14 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicy
+		edge.Schema = _c.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -801,13 +817,13 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicyBlockedGroups
+		edge.Schema = _c.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -818,13 +834,13 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicyEditors
+		edge.Schema = _c.schemaConfig.InternalPolicyEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.ApproverIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ApproverIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -835,14 +851,14 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicy
+		edge.Schema = _c.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ApproverID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.DelegateIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DelegateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -853,14 +869,14 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicy
+		edge.Schema = _c.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DelegateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -871,13 +887,30 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicyControlObjectives
+		edge.Schema = _c.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -888,13 +921,13 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicyControls
+		edge.Schema = _c.schemaConfig.InternalPolicyControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -905,13 +938,13 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicySubcontrols
+		edge.Schema = _c.schemaConfig.InternalPolicySubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -922,13 +955,13 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicyProcedures
+		edge.Schema = _c.schemaConfig.InternalPolicyProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.NarrativesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -939,13 +972,13 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicyNarratives
+		edge.Schema = _c.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -956,13 +989,13 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicyTasks
+		edge.Schema = _c.schemaConfig.InternalPolicyTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -973,13 +1006,13 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.InternalPolicyRisks
+		edge.Schema = _c.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ipc.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -990,7 +1023,7 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ipc.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _c.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1007,16 +1040,16 @@ type InternalPolicyCreateBulk struct {
 }
 
 // Save creates the InternalPolicy entities in the database.
-func (ipcb *InternalPolicyCreateBulk) Save(ctx context.Context) ([]*InternalPolicy, error) {
-	if ipcb.err != nil {
-		return nil, ipcb.err
+func (_c *InternalPolicyCreateBulk) Save(ctx context.Context) ([]*InternalPolicy, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ipcb.builders))
-	nodes := make([]*InternalPolicy, len(ipcb.builders))
-	mutators := make([]Mutator, len(ipcb.builders))
-	for i := range ipcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*InternalPolicy, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ipcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*InternalPolicyMutation)
@@ -1030,11 +1063,11 @@ func (ipcb *InternalPolicyCreateBulk) Save(ctx context.Context) ([]*InternalPoli
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ipcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ipcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -1054,7 +1087,7 @@ func (ipcb *InternalPolicyCreateBulk) Save(ctx context.Context) ([]*InternalPoli
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ipcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -1062,8 +1095,8 @@ func (ipcb *InternalPolicyCreateBulk) Save(ctx context.Context) ([]*InternalPoli
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ipcb *InternalPolicyCreateBulk) SaveX(ctx context.Context) []*InternalPolicy {
-	v, err := ipcb.Save(ctx)
+func (_c *InternalPolicyCreateBulk) SaveX(ctx context.Context) []*InternalPolicy {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1071,14 +1104,14 @@ func (ipcb *InternalPolicyCreateBulk) SaveX(ctx context.Context) []*InternalPoli
 }
 
 // Exec executes the query.
-func (ipcb *InternalPolicyCreateBulk) Exec(ctx context.Context) error {
-	_, err := ipcb.Save(ctx)
+func (_c *InternalPolicyCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ipcb *InternalPolicyCreateBulk) ExecX(ctx context.Context) {
-	if err := ipcb.Exec(ctx); err != nil {
+func (_c *InternalPolicyCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

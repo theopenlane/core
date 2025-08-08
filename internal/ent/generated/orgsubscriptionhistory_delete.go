@@ -22,58 +22,58 @@ type OrgSubscriptionHistoryDelete struct {
 }
 
 // Where appends a list predicates to the OrgSubscriptionHistoryDelete builder.
-func (oshd *OrgSubscriptionHistoryDelete) Where(ps ...predicate.OrgSubscriptionHistory) *OrgSubscriptionHistoryDelete {
-	oshd.mutation.Where(ps...)
-	return oshd
+func (_d *OrgSubscriptionHistoryDelete) Where(ps ...predicate.OrgSubscriptionHistory) *OrgSubscriptionHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (oshd *OrgSubscriptionHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, oshd.sqlExec, oshd.mutation, oshd.hooks)
+func (_d *OrgSubscriptionHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oshd *OrgSubscriptionHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := oshd.Exec(ctx)
+func (_d *OrgSubscriptionHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (oshd *OrgSubscriptionHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *OrgSubscriptionHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(orgsubscriptionhistory.Table, sqlgraph.NewFieldSpec(orgsubscriptionhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = oshd.schemaConfig.OrgSubscriptionHistory
-	ctx = internal.NewSchemaConfigContext(ctx, oshd.schemaConfig)
-	if ps := oshd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.OrgSubscriptionHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, oshd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	oshd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // OrgSubscriptionHistoryDeleteOne is the builder for deleting a single OrgSubscriptionHistory entity.
 type OrgSubscriptionHistoryDeleteOne struct {
-	oshd *OrgSubscriptionHistoryDelete
+	_d *OrgSubscriptionHistoryDelete
 }
 
 // Where appends a list predicates to the OrgSubscriptionHistoryDelete builder.
-func (oshdo *OrgSubscriptionHistoryDeleteOne) Where(ps ...predicate.OrgSubscriptionHistory) *OrgSubscriptionHistoryDeleteOne {
-	oshdo.oshd.mutation.Where(ps...)
-	return oshdo
+func (_d *OrgSubscriptionHistoryDeleteOne) Where(ps ...predicate.OrgSubscriptionHistory) *OrgSubscriptionHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (oshdo *OrgSubscriptionHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := oshdo.oshd.Exec(ctx)
+func (_d *OrgSubscriptionHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (oshdo *OrgSubscriptionHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oshdo *OrgSubscriptionHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := oshdo.Exec(ctx); err != nil {
+func (_d *OrgSubscriptionHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

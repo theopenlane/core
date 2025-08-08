@@ -74,7 +74,7 @@ func (*NarrativeHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the NarrativeHistory fields.
-func (nh *NarrativeHistory) assignValues(columns []string, values []any) error {
+func (_m *NarrativeHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -84,73 +84,73 @@ func (nh *NarrativeHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				nh.ID = value.String
+				_m.ID = value.String
 			}
 		case narrativehistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				nh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case narrativehistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				nh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case narrativehistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				nh.Operation = *value
+				_m.Operation = *value
 			}
 		case narrativehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				nh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case narrativehistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				nh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case narrativehistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				nh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case narrativehistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				nh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case narrativehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				nh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case narrativehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				nh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case narrativehistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				nh.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case narrativehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &nh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -158,28 +158,28 @@ func (nh *NarrativeHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				nh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case narrativehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				nh.Name = value.String
+				_m.Name = value.String
 			}
 		case narrativehistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				nh.Description = value.String
+				_m.Description = value.String
 			}
 		case narrativehistory.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				nh.Details = value.String
+				_m.Details = value.String
 			}
 		default:
-			nh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -187,77 +187,77 @@ func (nh *NarrativeHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the NarrativeHistory.
 // This includes values selected through modifiers, order, etc.
-func (nh *NarrativeHistory) Value(name string) (ent.Value, error) {
-	return nh.selectValues.Get(name)
+func (_m *NarrativeHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this NarrativeHistory.
 // Note that you need to call NarrativeHistory.Unwrap() before calling this method if this NarrativeHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (nh *NarrativeHistory) Update() *NarrativeHistoryUpdateOne {
-	return NewNarrativeHistoryClient(nh.config).UpdateOne(nh)
+func (_m *NarrativeHistory) Update() *NarrativeHistoryUpdateOne {
+	return NewNarrativeHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the NarrativeHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (nh *NarrativeHistory) Unwrap() *NarrativeHistory {
-	_tx, ok := nh.config.driver.(*txDriver)
+func (_m *NarrativeHistory) Unwrap() *NarrativeHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: NarrativeHistory is not a transactional entity")
 	}
-	nh.config.driver = _tx.drv
-	return nh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (nh *NarrativeHistory) String() string {
+func (_m *NarrativeHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("NarrativeHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", nh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(nh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(nh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", nh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(nh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(nh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(nh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(nh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(nh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(nh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(nh.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", nh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(nh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(nh.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(nh.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(nh.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteByte(')')
 	return builder.String()
 }

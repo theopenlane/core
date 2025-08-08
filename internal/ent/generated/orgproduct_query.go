@@ -44,44 +44,44 @@ type OrgProductQuery struct {
 }
 
 // Where adds a new predicate for the OrgProductQuery builder.
-func (opq *OrgProductQuery) Where(ps ...predicate.OrgProduct) *OrgProductQuery {
-	opq.predicates = append(opq.predicates, ps...)
-	return opq
+func (_q *OrgProductQuery) Where(ps ...predicate.OrgProduct) *OrgProductQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (opq *OrgProductQuery) Limit(limit int) *OrgProductQuery {
-	opq.ctx.Limit = &limit
-	return opq
+func (_q *OrgProductQuery) Limit(limit int) *OrgProductQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (opq *OrgProductQuery) Offset(offset int) *OrgProductQuery {
-	opq.ctx.Offset = &offset
-	return opq
+func (_q *OrgProductQuery) Offset(offset int) *OrgProductQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (opq *OrgProductQuery) Unique(unique bool) *OrgProductQuery {
-	opq.ctx.Unique = &unique
-	return opq
+func (_q *OrgProductQuery) Unique(unique bool) *OrgProductQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (opq *OrgProductQuery) Order(o ...orgproduct.OrderOption) *OrgProductQuery {
-	opq.order = append(opq.order, o...)
-	return opq
+func (_q *OrgProductQuery) Order(o ...orgproduct.OrderOption) *OrgProductQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (opq *OrgProductQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: opq.config}).Query()
+func (_q *OrgProductQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := opq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := opq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -90,23 +90,23 @@ func (opq *OrgProductQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, orgproduct.OwnerTable, orgproduct.OwnerColumn),
 		)
-		schemaConfig := opq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.OrgProduct
-		fromU = sqlgraph.SetNeighbors(opq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryOrgSubscription chains the current query on the "org_subscription" edge.
-func (opq *OrgProductQuery) QueryOrgSubscription() *OrgSubscriptionQuery {
-	query := (&OrgSubscriptionClient{config: opq.config}).Query()
+func (_q *OrgProductQuery) QueryOrgSubscription() *OrgSubscriptionQuery {
+	query := (&OrgSubscriptionClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := opq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := opq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -115,23 +115,23 @@ func (opq *OrgProductQuery) QueryOrgSubscription() *OrgSubscriptionQuery {
 			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, orgproduct.OrgSubscriptionTable, orgproduct.OrgSubscriptionColumn),
 		)
-		schemaConfig := opq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.OrgSubscription
 		step.Edge.Schema = schemaConfig.OrgProduct
-		fromU = sqlgraph.SetNeighbors(opq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryOrgPrices chains the current query on the "org_prices" edge.
-func (opq *OrgProductQuery) QueryOrgPrices() *OrgPriceQuery {
-	query := (&OrgPriceClient{config: opq.config}).Query()
+func (_q *OrgProductQuery) QueryOrgPrices() *OrgPriceQuery {
+	query := (&OrgPriceClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := opq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := opq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -140,23 +140,23 @@ func (opq *OrgProductQuery) QueryOrgPrices() *OrgPriceQuery {
 			sqlgraph.To(orgprice.Table, orgprice.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, orgproduct.OrgPricesTable, orgproduct.OrgPricesPrimaryKey...),
 		)
-		schemaConfig := opq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.OrgPrice
 		step.Edge.Schema = schemaConfig.OrgProductOrgPrices
-		fromU = sqlgraph.SetNeighbors(opq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryOrgModules chains the current query on the "org_modules" edge.
-func (opq *OrgProductQuery) QueryOrgModules() *OrgModuleQuery {
-	query := (&OrgModuleClient{config: opq.config}).Query()
+func (_q *OrgProductQuery) QueryOrgModules() *OrgModuleQuery {
+	query := (&OrgModuleClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := opq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := opq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -165,10 +165,10 @@ func (opq *OrgProductQuery) QueryOrgModules() *OrgModuleQuery {
 			sqlgraph.To(orgmodule.Table, orgmodule.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, orgproduct.OrgModulesTable, orgproduct.OrgModulesColumn),
 		)
-		schemaConfig := opq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.OrgModule
 		step.Edge.Schema = schemaConfig.OrgModule
-		fromU = sqlgraph.SetNeighbors(opq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -176,8 +176,8 @@ func (opq *OrgProductQuery) QueryOrgModules() *OrgModuleQuery {
 
 // First returns the first OrgProduct entity from the query.
 // Returns a *NotFoundError when no OrgProduct was found.
-func (opq *OrgProductQuery) First(ctx context.Context) (*OrgProduct, error) {
-	nodes, err := opq.Limit(1).All(setContextOp(ctx, opq.ctx, ent.OpQueryFirst))
+func (_q *OrgProductQuery) First(ctx context.Context) (*OrgProduct, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -188,8 +188,8 @@ func (opq *OrgProductQuery) First(ctx context.Context) (*OrgProduct, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (opq *OrgProductQuery) FirstX(ctx context.Context) *OrgProduct {
-	node, err := opq.First(ctx)
+func (_q *OrgProductQuery) FirstX(ctx context.Context) *OrgProduct {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -198,9 +198,9 @@ func (opq *OrgProductQuery) FirstX(ctx context.Context) *OrgProduct {
 
 // FirstID returns the first OrgProduct ID from the query.
 // Returns a *NotFoundError when no OrgProduct ID was found.
-func (opq *OrgProductQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *OrgProductQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = opq.Limit(1).IDs(setContextOp(ctx, opq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -211,8 +211,8 @@ func (opq *OrgProductQuery) FirstID(ctx context.Context) (id string, err error) 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (opq *OrgProductQuery) FirstIDX(ctx context.Context) string {
-	id, err := opq.FirstID(ctx)
+func (_q *OrgProductQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -222,8 +222,8 @@ func (opq *OrgProductQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single OrgProduct entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one OrgProduct entity is found.
 // Returns a *NotFoundError when no OrgProduct entities are found.
-func (opq *OrgProductQuery) Only(ctx context.Context) (*OrgProduct, error) {
-	nodes, err := opq.Limit(2).All(setContextOp(ctx, opq.ctx, ent.OpQueryOnly))
+func (_q *OrgProductQuery) Only(ctx context.Context) (*OrgProduct, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -238,8 +238,8 @@ func (opq *OrgProductQuery) Only(ctx context.Context) (*OrgProduct, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (opq *OrgProductQuery) OnlyX(ctx context.Context) *OrgProduct {
-	node, err := opq.Only(ctx)
+func (_q *OrgProductQuery) OnlyX(ctx context.Context) *OrgProduct {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -249,9 +249,9 @@ func (opq *OrgProductQuery) OnlyX(ctx context.Context) *OrgProduct {
 // OnlyID is like Only, but returns the only OrgProduct ID in the query.
 // Returns a *NotSingularError when more than one OrgProduct ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (opq *OrgProductQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *OrgProductQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = opq.Limit(2).IDs(setContextOp(ctx, opq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -266,8 +266,8 @@ func (opq *OrgProductQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (opq *OrgProductQuery) OnlyIDX(ctx context.Context) string {
-	id, err := opq.OnlyID(ctx)
+func (_q *OrgProductQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -275,18 +275,18 @@ func (opq *OrgProductQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of OrgProducts.
-func (opq *OrgProductQuery) All(ctx context.Context) ([]*OrgProduct, error) {
-	ctx = setContextOp(ctx, opq.ctx, ent.OpQueryAll)
-	if err := opq.prepareQuery(ctx); err != nil {
+func (_q *OrgProductQuery) All(ctx context.Context) ([]*OrgProduct, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*OrgProduct, *OrgProductQuery]()
-	return withInterceptors[[]*OrgProduct](ctx, opq, qr, opq.inters)
+	return withInterceptors[[]*OrgProduct](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (opq *OrgProductQuery) AllX(ctx context.Context) []*OrgProduct {
-	nodes, err := opq.All(ctx)
+func (_q *OrgProductQuery) AllX(ctx context.Context) []*OrgProduct {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -294,20 +294,20 @@ func (opq *OrgProductQuery) AllX(ctx context.Context) []*OrgProduct {
 }
 
 // IDs executes the query and returns a list of OrgProduct IDs.
-func (opq *OrgProductQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if opq.ctx.Unique == nil && opq.path != nil {
-		opq.Unique(true)
+func (_q *OrgProductQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, opq.ctx, ent.OpQueryIDs)
-	if err = opq.Select(orgproduct.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(orgproduct.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (opq *OrgProductQuery) IDsX(ctx context.Context) []string {
-	ids, err := opq.IDs(ctx)
+func (_q *OrgProductQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -315,17 +315,17 @@ func (opq *OrgProductQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (opq *OrgProductQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, opq.ctx, ent.OpQueryCount)
-	if err := opq.prepareQuery(ctx); err != nil {
+func (_q *OrgProductQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, opq, querierCount[*OrgProductQuery](), opq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*OrgProductQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (opq *OrgProductQuery) CountX(ctx context.Context) int {
-	count, err := opq.Count(ctx)
+func (_q *OrgProductQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -333,9 +333,9 @@ func (opq *OrgProductQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (opq *OrgProductQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, opq.ctx, ent.OpQueryExist)
-	switch _, err := opq.FirstID(ctx); {
+func (_q *OrgProductQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -346,8 +346,8 @@ func (opq *OrgProductQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (opq *OrgProductQuery) ExistX(ctx context.Context) bool {
-	exist, err := opq.Exist(ctx)
+func (_q *OrgProductQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -356,69 +356,69 @@ func (opq *OrgProductQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the OrgProductQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (opq *OrgProductQuery) Clone() *OrgProductQuery {
-	if opq == nil {
+func (_q *OrgProductQuery) Clone() *OrgProductQuery {
+	if _q == nil {
 		return nil
 	}
 	return &OrgProductQuery{
-		config:              opq.config,
-		ctx:                 opq.ctx.Clone(),
-		order:               append([]orgproduct.OrderOption{}, opq.order...),
-		inters:              append([]Interceptor{}, opq.inters...),
-		predicates:          append([]predicate.OrgProduct{}, opq.predicates...),
-		withOwner:           opq.withOwner.Clone(),
-		withOrgSubscription: opq.withOrgSubscription.Clone(),
-		withOrgPrices:       opq.withOrgPrices.Clone(),
-		withOrgModules:      opq.withOrgModules.Clone(),
+		config:              _q.config,
+		ctx:                 _q.ctx.Clone(),
+		order:               append([]orgproduct.OrderOption{}, _q.order...),
+		inters:              append([]Interceptor{}, _q.inters...),
+		predicates:          append([]predicate.OrgProduct{}, _q.predicates...),
+		withOwner:           _q.withOwner.Clone(),
+		withOrgSubscription: _q.withOrgSubscription.Clone(),
+		withOrgPrices:       _q.withOrgPrices.Clone(),
+		withOrgModules:      _q.withOrgModules.Clone(),
 		// clone intermediate query.
-		sql:       opq.sql.Clone(),
-		path:      opq.path,
-		modifiers: append([]func(*sql.Selector){}, opq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (opq *OrgProductQuery) WithOwner(opts ...func(*OrganizationQuery)) *OrgProductQuery {
-	query := (&OrganizationClient{config: opq.config}).Query()
+func (_q *OrgProductQuery) WithOwner(opts ...func(*OrganizationQuery)) *OrgProductQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	opq.withOwner = query
-	return opq
+	_q.withOwner = query
+	return _q
 }
 
 // WithOrgSubscription tells the query-builder to eager-load the nodes that are connected to
 // the "org_subscription" edge. The optional arguments are used to configure the query builder of the edge.
-func (opq *OrgProductQuery) WithOrgSubscription(opts ...func(*OrgSubscriptionQuery)) *OrgProductQuery {
-	query := (&OrgSubscriptionClient{config: opq.config}).Query()
+func (_q *OrgProductQuery) WithOrgSubscription(opts ...func(*OrgSubscriptionQuery)) *OrgProductQuery {
+	query := (&OrgSubscriptionClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	opq.withOrgSubscription = query
-	return opq
+	_q.withOrgSubscription = query
+	return _q
 }
 
 // WithOrgPrices tells the query-builder to eager-load the nodes that are connected to
 // the "org_prices" edge. The optional arguments are used to configure the query builder of the edge.
-func (opq *OrgProductQuery) WithOrgPrices(opts ...func(*OrgPriceQuery)) *OrgProductQuery {
-	query := (&OrgPriceClient{config: opq.config}).Query()
+func (_q *OrgProductQuery) WithOrgPrices(opts ...func(*OrgPriceQuery)) *OrgProductQuery {
+	query := (&OrgPriceClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	opq.withOrgPrices = query
-	return opq
+	_q.withOrgPrices = query
+	return _q
 }
 
 // WithOrgModules tells the query-builder to eager-load the nodes that are connected to
 // the "org_modules" edge. The optional arguments are used to configure the query builder of the edge.
-func (opq *OrgProductQuery) WithOrgModules(opts ...func(*OrgModuleQuery)) *OrgProductQuery {
-	query := (&OrgModuleClient{config: opq.config}).Query()
+func (_q *OrgProductQuery) WithOrgModules(opts ...func(*OrgModuleQuery)) *OrgProductQuery {
+	query := (&OrgModuleClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	opq.withOrgModules = query
-	return opq
+	_q.withOrgModules = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -435,10 +435,10 @@ func (opq *OrgProductQuery) WithOrgModules(opts ...func(*OrgModuleQuery)) *OrgPr
 //		GroupBy(orgproduct.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (opq *OrgProductQuery) GroupBy(field string, fields ...string) *OrgProductGroupBy {
-	opq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &OrgProductGroupBy{build: opq}
-	grbuild.flds = &opq.ctx.Fields
+func (_q *OrgProductQuery) GroupBy(field string, fields ...string) *OrgProductGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &OrgProductGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = orgproduct.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -456,55 +456,55 @@ func (opq *OrgProductQuery) GroupBy(field string, fields ...string) *OrgProductG
 //	client.OrgProduct.Query().
 //		Select(orgproduct.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (opq *OrgProductQuery) Select(fields ...string) *OrgProductSelect {
-	opq.ctx.Fields = append(opq.ctx.Fields, fields...)
-	sbuild := &OrgProductSelect{OrgProductQuery: opq}
+func (_q *OrgProductQuery) Select(fields ...string) *OrgProductSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &OrgProductSelect{OrgProductQuery: _q}
 	sbuild.label = orgproduct.Label
-	sbuild.flds, sbuild.scan = &opq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a OrgProductSelect configured with the given aggregations.
-func (opq *OrgProductQuery) Aggregate(fns ...AggregateFunc) *OrgProductSelect {
-	return opq.Select().Aggregate(fns...)
+func (_q *OrgProductQuery) Aggregate(fns ...AggregateFunc) *OrgProductSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (opq *OrgProductQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range opq.inters {
+func (_q *OrgProductQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, opq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range opq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !orgproduct.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if opq.path != nil {
-		prev, err := opq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		opq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (opq *OrgProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrgProduct, error) {
+func (_q *OrgProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrgProduct, error) {
 	var (
 		nodes       = []*OrgProduct{}
-		withFKs     = opq.withFKs
-		_spec       = opq.querySpec()
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
 		loadedTypes = [4]bool{
-			opq.withOwner != nil,
-			opq.withOrgSubscription != nil,
-			opq.withOrgPrices != nil,
-			opq.withOrgModules != nil,
+			_q.withOwner != nil,
+			_q.withOrgSubscription != nil,
+			_q.withOrgPrices != nil,
+			_q.withOrgModules != nil,
 		}
 	)
 	if withFKs {
@@ -514,74 +514,74 @@ func (opq *OrgProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		return (*OrgProduct).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &OrgProduct{config: opq.config}
+		node := &OrgProduct{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = opq.schemaConfig.OrgProduct
-	ctx = internal.NewSchemaConfigContext(ctx, opq.schemaConfig)
-	if len(opq.modifiers) > 0 {
-		_spec.Modifiers = opq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.OrgProduct
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, opq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := opq.withOwner; query != nil {
-		if err := opq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *OrgProduct, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := opq.withOrgSubscription; query != nil {
-		if err := opq.loadOrgSubscription(ctx, query, nodes, nil,
+	if query := _q.withOrgSubscription; query != nil {
+		if err := _q.loadOrgSubscription(ctx, query, nodes, nil,
 			func(n *OrgProduct, e *OrgSubscription) { n.Edges.OrgSubscription = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := opq.withOrgPrices; query != nil {
-		if err := opq.loadOrgPrices(ctx, query, nodes,
+	if query := _q.withOrgPrices; query != nil {
+		if err := _q.loadOrgPrices(ctx, query, nodes,
 			func(n *OrgProduct) { n.Edges.OrgPrices = []*OrgPrice{} },
 			func(n *OrgProduct, e *OrgPrice) { n.Edges.OrgPrices = append(n.Edges.OrgPrices, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := opq.withOrgModules; query != nil {
-		if err := opq.loadOrgModules(ctx, query, nodes,
+	if query := _q.withOrgModules; query != nil {
+		if err := _q.loadOrgModules(ctx, query, nodes,
 			func(n *OrgProduct) { n.Edges.OrgModules = []*OrgModule{} },
 			func(n *OrgProduct, e *OrgModule) { n.Edges.OrgModules = append(n.Edges.OrgModules, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range opq.withNamedOrgPrices {
-		if err := opq.loadOrgPrices(ctx, query, nodes,
+	for name, query := range _q.withNamedOrgPrices {
+		if err := _q.loadOrgPrices(ctx, query, nodes,
 			func(n *OrgProduct) { n.appendNamedOrgPrices(name) },
 			func(n *OrgProduct, e *OrgPrice) { n.appendNamedOrgPrices(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range opq.withNamedOrgModules {
-		if err := opq.loadOrgModules(ctx, query, nodes,
+	for name, query := range _q.withNamedOrgModules {
+		if err := _q.loadOrgModules(ctx, query, nodes,
 			func(n *OrgProduct) { n.appendNamedOrgModules(name) },
 			func(n *OrgProduct, e *OrgModule) { n.appendNamedOrgModules(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range opq.loadTotal {
-		if err := opq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (opq *OrgProductQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*OrgProduct, init func(*OrgProduct), assign func(*OrgProduct, *Organization)) error {
+func (_q *OrgProductQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*OrgProduct, init func(*OrgProduct), assign func(*OrgProduct, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrgProduct)
 	for i := range nodes {
@@ -610,7 +610,7 @@ func (opq *OrgProductQuery) loadOwner(ctx context.Context, query *OrganizationQu
 	}
 	return nil
 }
-func (opq *OrgProductQuery) loadOrgSubscription(ctx context.Context, query *OrgSubscriptionQuery, nodes []*OrgProduct, init func(*OrgProduct), assign func(*OrgProduct, *OrgSubscription)) error {
+func (_q *OrgProductQuery) loadOrgSubscription(ctx context.Context, query *OrgSubscriptionQuery, nodes []*OrgProduct, init func(*OrgProduct), assign func(*OrgProduct, *OrgSubscription)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrgProduct)
 	for i := range nodes {
@@ -639,7 +639,7 @@ func (opq *OrgProductQuery) loadOrgSubscription(ctx context.Context, query *OrgS
 	}
 	return nil
 }
-func (opq *OrgProductQuery) loadOrgPrices(ctx context.Context, query *OrgPriceQuery, nodes []*OrgProduct, init func(*OrgProduct), assign func(*OrgProduct, *OrgPrice)) error {
+func (_q *OrgProductQuery) loadOrgPrices(ctx context.Context, query *OrgPriceQuery, nodes []*OrgProduct, init func(*OrgProduct), assign func(*OrgProduct, *OrgPrice)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*OrgProduct)
 	nids := make(map[string]map[*OrgProduct]struct{})
@@ -652,7 +652,7 @@ func (opq *OrgProductQuery) loadOrgPrices(ctx context.Context, query *OrgPriceQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(orgproduct.OrgPricesTable)
-		joinT.Schema(opq.schemaConfig.OrgProductOrgPrices)
+		joinT.Schema(_q.schemaConfig.OrgProductOrgPrices)
 		s.Join(joinT).On(s.C(orgprice.FieldID), joinT.C(orgproduct.OrgPricesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(orgproduct.OrgPricesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -701,7 +701,7 @@ func (opq *OrgProductQuery) loadOrgPrices(ctx context.Context, query *OrgPriceQu
 	}
 	return nil
 }
-func (opq *OrgProductQuery) loadOrgModules(ctx context.Context, query *OrgModuleQuery, nodes []*OrgProduct, init func(*OrgProduct), assign func(*OrgProduct, *OrgModule)) error {
+func (_q *OrgProductQuery) loadOrgModules(ctx context.Context, query *OrgModuleQuery, nodes []*OrgProduct, init func(*OrgProduct), assign func(*OrgProduct, *OrgModule)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*OrgProduct)
 	for i := range nodes {
@@ -733,29 +733,29 @@ func (opq *OrgProductQuery) loadOrgModules(ctx context.Context, query *OrgModule
 	return nil
 }
 
-func (opq *OrgProductQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := opq.querySpec()
-	_spec.Node.Schema = opq.schemaConfig.OrgProduct
-	ctx = internal.NewSchemaConfigContext(ctx, opq.schemaConfig)
-	if len(opq.modifiers) > 0 {
-		_spec.Modifiers = opq.modifiers
+func (_q *OrgProductQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.OrgProduct
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = opq.ctx.Fields
-	if len(opq.ctx.Fields) > 0 {
-		_spec.Unique = opq.ctx.Unique != nil && *opq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, opq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (opq *OrgProductQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *OrgProductQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(orgproduct.Table, orgproduct.Columns, sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString))
-	_spec.From = opq.sql
-	if unique := opq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if opq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := opq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, orgproduct.FieldID)
 		for i := range fields {
@@ -763,27 +763,27 @@ func (opq *OrgProductQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if opq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(orgproduct.FieldOwnerID)
 		}
-		if opq.withOrgSubscription != nil {
+		if _q.withOrgSubscription != nil {
 			_spec.Node.AddColumnOnce(orgproduct.FieldSubscriptionID)
 		}
 	}
-	if ps := opq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := opq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := opq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := opq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -793,76 +793,76 @@ func (opq *OrgProductQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (opq *OrgProductQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(opq.driver.Dialect())
+func (_q *OrgProductQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(orgproduct.Table)
-	columns := opq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = orgproduct.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if opq.sql != nil {
-		selector = opq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if opq.ctx.Unique != nil && *opq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(opq.schemaConfig.OrgProduct)
-	ctx = internal.NewSchemaConfigContext(ctx, opq.schemaConfig)
+	t1.Schema(_q.schemaConfig.OrgProduct)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range opq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range opq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range opq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := opq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := opq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (opq *OrgProductQuery) Modify(modifiers ...func(s *sql.Selector)) *OrgProductSelect {
-	opq.modifiers = append(opq.modifiers, modifiers...)
-	return opq.Select()
+func (_q *OrgProductQuery) Modify(modifiers ...func(s *sql.Selector)) *OrgProductSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedOrgPrices tells the query-builder to eager-load the nodes that are connected to the "org_prices"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (opq *OrgProductQuery) WithNamedOrgPrices(name string, opts ...func(*OrgPriceQuery)) *OrgProductQuery {
-	query := (&OrgPriceClient{config: opq.config}).Query()
+func (_q *OrgProductQuery) WithNamedOrgPrices(name string, opts ...func(*OrgPriceQuery)) *OrgProductQuery {
+	query := (&OrgPriceClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if opq.withNamedOrgPrices == nil {
-		opq.withNamedOrgPrices = make(map[string]*OrgPriceQuery)
+	if _q.withNamedOrgPrices == nil {
+		_q.withNamedOrgPrices = make(map[string]*OrgPriceQuery)
 	}
-	opq.withNamedOrgPrices[name] = query
-	return opq
+	_q.withNamedOrgPrices[name] = query
+	return _q
 }
 
 // WithNamedOrgModules tells the query-builder to eager-load the nodes that are connected to the "org_modules"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (opq *OrgProductQuery) WithNamedOrgModules(name string, opts ...func(*OrgModuleQuery)) *OrgProductQuery {
-	query := (&OrgModuleClient{config: opq.config}).Query()
+func (_q *OrgProductQuery) WithNamedOrgModules(name string, opts ...func(*OrgModuleQuery)) *OrgProductQuery {
+	query := (&OrgModuleClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if opq.withNamedOrgModules == nil {
-		opq.withNamedOrgModules = make(map[string]*OrgModuleQuery)
+	if _q.withNamedOrgModules == nil {
+		_q.withNamedOrgModules = make(map[string]*OrgModuleQuery)
 	}
-	opq.withNamedOrgModules[name] = query
-	return opq
+	_q.withNamedOrgModules[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -891,41 +891,41 @@ type OrgProductGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (opgb *OrgProductGroupBy) Aggregate(fns ...AggregateFunc) *OrgProductGroupBy {
-	opgb.fns = append(opgb.fns, fns...)
-	return opgb
+func (_g *OrgProductGroupBy) Aggregate(fns ...AggregateFunc) *OrgProductGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (opgb *OrgProductGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, opgb.build.ctx, ent.OpQueryGroupBy)
-	if err := opgb.build.prepareQuery(ctx); err != nil {
+func (_g *OrgProductGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OrgProductQuery, *OrgProductGroupBy](ctx, opgb.build, opgb, opgb.build.inters, v)
+	return scanWithInterceptors[*OrgProductQuery, *OrgProductGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (opgb *OrgProductGroupBy) sqlScan(ctx context.Context, root *OrgProductQuery, v any) error {
+func (_g *OrgProductGroupBy) sqlScan(ctx context.Context, root *OrgProductQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(opgb.fns))
-	for _, fn := range opgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*opgb.flds)+len(opgb.fns))
-		for _, f := range *opgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*opgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := opgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -939,27 +939,27 @@ type OrgProductSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ops *OrgProductSelect) Aggregate(fns ...AggregateFunc) *OrgProductSelect {
-	ops.fns = append(ops.fns, fns...)
-	return ops
+func (_s *OrgProductSelect) Aggregate(fns ...AggregateFunc) *OrgProductSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ops *OrgProductSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ops.ctx, ent.OpQuerySelect)
-	if err := ops.prepareQuery(ctx); err != nil {
+func (_s *OrgProductSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OrgProductQuery, *OrgProductSelect](ctx, ops.OrgProductQuery, ops, ops.inters, v)
+	return scanWithInterceptors[*OrgProductQuery, *OrgProductSelect](ctx, _s.OrgProductQuery, _s, _s.inters, v)
 }
 
-func (ops *OrgProductSelect) sqlScan(ctx context.Context, root *OrgProductQuery, v any) error {
+func (_s *OrgProductSelect) sqlScan(ctx context.Context, root *OrgProductQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ops.fns))
-	for _, fn := range ops.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ops.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -967,7 +967,7 @@ func (ops *OrgProductSelect) sqlScan(ctx context.Context, root *OrgProductQuery,
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ops.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -975,7 +975,7 @@ func (ops *OrgProductSelect) sqlScan(ctx context.Context, root *OrgProductQuery,
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ops *OrgProductSelect) Modify(modifiers ...func(s *sql.Selector)) *OrgProductSelect {
-	ops.modifiers = append(ops.modifiers, modifiers...)
-	return ops
+func (_s *OrgProductSelect) Modify(modifiers ...func(s *sql.Selector)) *OrgProductSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

@@ -39,44 +39,44 @@ type ScheduledJobRunQuery struct {
 }
 
 // Where adds a new predicate for the ScheduledJobRunQuery builder.
-func (sjrq *ScheduledJobRunQuery) Where(ps ...predicate.ScheduledJobRun) *ScheduledJobRunQuery {
-	sjrq.predicates = append(sjrq.predicates, ps...)
-	return sjrq
+func (_q *ScheduledJobRunQuery) Where(ps ...predicate.ScheduledJobRun) *ScheduledJobRunQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (sjrq *ScheduledJobRunQuery) Limit(limit int) *ScheduledJobRunQuery {
-	sjrq.ctx.Limit = &limit
-	return sjrq
+func (_q *ScheduledJobRunQuery) Limit(limit int) *ScheduledJobRunQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (sjrq *ScheduledJobRunQuery) Offset(offset int) *ScheduledJobRunQuery {
-	sjrq.ctx.Offset = &offset
-	return sjrq
+func (_q *ScheduledJobRunQuery) Offset(offset int) *ScheduledJobRunQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (sjrq *ScheduledJobRunQuery) Unique(unique bool) *ScheduledJobRunQuery {
-	sjrq.ctx.Unique = &unique
-	return sjrq
+func (_q *ScheduledJobRunQuery) Unique(unique bool) *ScheduledJobRunQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (sjrq *ScheduledJobRunQuery) Order(o ...scheduledjobrun.OrderOption) *ScheduledJobRunQuery {
-	sjrq.order = append(sjrq.order, o...)
-	return sjrq
+func (_q *ScheduledJobRunQuery) Order(o ...scheduledjobrun.OrderOption) *ScheduledJobRunQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (sjrq *ScheduledJobRunQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: sjrq.config}).Query()
+func (_q *ScheduledJobRunQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sjrq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sjrq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -85,23 +85,23 @@ func (sjrq *ScheduledJobRunQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, scheduledjobrun.OwnerTable, scheduledjobrun.OwnerColumn),
 		)
-		schemaConfig := sjrq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.ScheduledJobRun
-		fromU = sqlgraph.SetNeighbors(sjrq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryScheduledJob chains the current query on the "scheduled_job" edge.
-func (sjrq *ScheduledJobRunQuery) QueryScheduledJob() *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: sjrq.config}).Query()
+func (_q *ScheduledJobRunQuery) QueryScheduledJob() *ScheduledJobQuery {
+	query := (&ScheduledJobClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sjrq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sjrq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -110,23 +110,23 @@ func (sjrq *ScheduledJobRunQuery) QueryScheduledJob() *ScheduledJobQuery {
 			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scheduledjobrun.ScheduledJobTable, scheduledjobrun.ScheduledJobColumn),
 		)
-		schemaConfig := sjrq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.ScheduledJob
 		step.Edge.Schema = schemaConfig.ScheduledJobRun
-		fromU = sqlgraph.SetNeighbors(sjrq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryJobRunner chains the current query on the "job_runner" edge.
-func (sjrq *ScheduledJobRunQuery) QueryJobRunner() *JobRunnerQuery {
-	query := (&JobRunnerClient{config: sjrq.config}).Query()
+func (_q *ScheduledJobRunQuery) QueryJobRunner() *JobRunnerQuery {
+	query := (&JobRunnerClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sjrq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sjrq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -135,10 +135,10 @@ func (sjrq *ScheduledJobRunQuery) QueryJobRunner() *JobRunnerQuery {
 			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scheduledjobrun.JobRunnerTable, scheduledjobrun.JobRunnerColumn),
 		)
-		schemaConfig := sjrq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.JobRunner
 		step.Edge.Schema = schemaConfig.ScheduledJobRun
-		fromU = sqlgraph.SetNeighbors(sjrq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -146,8 +146,8 @@ func (sjrq *ScheduledJobRunQuery) QueryJobRunner() *JobRunnerQuery {
 
 // First returns the first ScheduledJobRun entity from the query.
 // Returns a *NotFoundError when no ScheduledJobRun was found.
-func (sjrq *ScheduledJobRunQuery) First(ctx context.Context) (*ScheduledJobRun, error) {
-	nodes, err := sjrq.Limit(1).All(setContextOp(ctx, sjrq.ctx, ent.OpQueryFirst))
+func (_q *ScheduledJobRunQuery) First(ctx context.Context) (*ScheduledJobRun, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -158,8 +158,8 @@ func (sjrq *ScheduledJobRunQuery) First(ctx context.Context) (*ScheduledJobRun, 
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (sjrq *ScheduledJobRunQuery) FirstX(ctx context.Context) *ScheduledJobRun {
-	node, err := sjrq.First(ctx)
+func (_q *ScheduledJobRunQuery) FirstX(ctx context.Context) *ScheduledJobRun {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -168,9 +168,9 @@ func (sjrq *ScheduledJobRunQuery) FirstX(ctx context.Context) *ScheduledJobRun {
 
 // FirstID returns the first ScheduledJobRun ID from the query.
 // Returns a *NotFoundError when no ScheduledJobRun ID was found.
-func (sjrq *ScheduledJobRunQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ScheduledJobRunQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sjrq.Limit(1).IDs(setContextOp(ctx, sjrq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -181,8 +181,8 @@ func (sjrq *ScheduledJobRunQuery) FirstID(ctx context.Context) (id string, err e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (sjrq *ScheduledJobRunQuery) FirstIDX(ctx context.Context) string {
-	id, err := sjrq.FirstID(ctx)
+func (_q *ScheduledJobRunQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -192,8 +192,8 @@ func (sjrq *ScheduledJobRunQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single ScheduledJobRun entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ScheduledJobRun entity is found.
 // Returns a *NotFoundError when no ScheduledJobRun entities are found.
-func (sjrq *ScheduledJobRunQuery) Only(ctx context.Context) (*ScheduledJobRun, error) {
-	nodes, err := sjrq.Limit(2).All(setContextOp(ctx, sjrq.ctx, ent.OpQueryOnly))
+func (_q *ScheduledJobRunQuery) Only(ctx context.Context) (*ScheduledJobRun, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -208,8 +208,8 @@ func (sjrq *ScheduledJobRunQuery) Only(ctx context.Context) (*ScheduledJobRun, e
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (sjrq *ScheduledJobRunQuery) OnlyX(ctx context.Context) *ScheduledJobRun {
-	node, err := sjrq.Only(ctx)
+func (_q *ScheduledJobRunQuery) OnlyX(ctx context.Context) *ScheduledJobRun {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -219,9 +219,9 @@ func (sjrq *ScheduledJobRunQuery) OnlyX(ctx context.Context) *ScheduledJobRun {
 // OnlyID is like Only, but returns the only ScheduledJobRun ID in the query.
 // Returns a *NotSingularError when more than one ScheduledJobRun ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (sjrq *ScheduledJobRunQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ScheduledJobRunQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sjrq.Limit(2).IDs(setContextOp(ctx, sjrq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -236,8 +236,8 @@ func (sjrq *ScheduledJobRunQuery) OnlyID(ctx context.Context) (id string, err er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (sjrq *ScheduledJobRunQuery) OnlyIDX(ctx context.Context) string {
-	id, err := sjrq.OnlyID(ctx)
+func (_q *ScheduledJobRunQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,18 +245,18 @@ func (sjrq *ScheduledJobRunQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of ScheduledJobRuns.
-func (sjrq *ScheduledJobRunQuery) All(ctx context.Context) ([]*ScheduledJobRun, error) {
-	ctx = setContextOp(ctx, sjrq.ctx, ent.OpQueryAll)
-	if err := sjrq.prepareQuery(ctx); err != nil {
+func (_q *ScheduledJobRunQuery) All(ctx context.Context) ([]*ScheduledJobRun, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ScheduledJobRun, *ScheduledJobRunQuery]()
-	return withInterceptors[[]*ScheduledJobRun](ctx, sjrq, qr, sjrq.inters)
+	return withInterceptors[[]*ScheduledJobRun](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (sjrq *ScheduledJobRunQuery) AllX(ctx context.Context) []*ScheduledJobRun {
-	nodes, err := sjrq.All(ctx)
+func (_q *ScheduledJobRunQuery) AllX(ctx context.Context) []*ScheduledJobRun {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -264,20 +264,20 @@ func (sjrq *ScheduledJobRunQuery) AllX(ctx context.Context) []*ScheduledJobRun {
 }
 
 // IDs executes the query and returns a list of ScheduledJobRun IDs.
-func (sjrq *ScheduledJobRunQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if sjrq.ctx.Unique == nil && sjrq.path != nil {
-		sjrq.Unique(true)
+func (_q *ScheduledJobRunQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, sjrq.ctx, ent.OpQueryIDs)
-	if err = sjrq.Select(scheduledjobrun.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(scheduledjobrun.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (sjrq *ScheduledJobRunQuery) IDsX(ctx context.Context) []string {
-	ids, err := sjrq.IDs(ctx)
+func (_q *ScheduledJobRunQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -285,17 +285,17 @@ func (sjrq *ScheduledJobRunQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (sjrq *ScheduledJobRunQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, sjrq.ctx, ent.OpQueryCount)
-	if err := sjrq.prepareQuery(ctx); err != nil {
+func (_q *ScheduledJobRunQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, sjrq, querierCount[*ScheduledJobRunQuery](), sjrq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ScheduledJobRunQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (sjrq *ScheduledJobRunQuery) CountX(ctx context.Context) int {
-	count, err := sjrq.Count(ctx)
+func (_q *ScheduledJobRunQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -303,9 +303,9 @@ func (sjrq *ScheduledJobRunQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (sjrq *ScheduledJobRunQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, sjrq.ctx, ent.OpQueryExist)
-	switch _, err := sjrq.FirstID(ctx); {
+func (_q *ScheduledJobRunQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -316,8 +316,8 @@ func (sjrq *ScheduledJobRunQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (sjrq *ScheduledJobRunQuery) ExistX(ctx context.Context) bool {
-	exist, err := sjrq.Exist(ctx)
+func (_q *ScheduledJobRunQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -326,57 +326,57 @@ func (sjrq *ScheduledJobRunQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ScheduledJobRunQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (sjrq *ScheduledJobRunQuery) Clone() *ScheduledJobRunQuery {
-	if sjrq == nil {
+func (_q *ScheduledJobRunQuery) Clone() *ScheduledJobRunQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ScheduledJobRunQuery{
-		config:           sjrq.config,
-		ctx:              sjrq.ctx.Clone(),
-		order:            append([]scheduledjobrun.OrderOption{}, sjrq.order...),
-		inters:           append([]Interceptor{}, sjrq.inters...),
-		predicates:       append([]predicate.ScheduledJobRun{}, sjrq.predicates...),
-		withOwner:        sjrq.withOwner.Clone(),
-		withScheduledJob: sjrq.withScheduledJob.Clone(),
-		withJobRunner:    sjrq.withJobRunner.Clone(),
+		config:           _q.config,
+		ctx:              _q.ctx.Clone(),
+		order:            append([]scheduledjobrun.OrderOption{}, _q.order...),
+		inters:           append([]Interceptor{}, _q.inters...),
+		predicates:       append([]predicate.ScheduledJobRun{}, _q.predicates...),
+		withOwner:        _q.withOwner.Clone(),
+		withScheduledJob: _q.withScheduledJob.Clone(),
+		withJobRunner:    _q.withJobRunner.Clone(),
 		// clone intermediate query.
-		sql:       sjrq.sql.Clone(),
-		path:      sjrq.path,
-		modifiers: append([]func(*sql.Selector){}, sjrq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (sjrq *ScheduledJobRunQuery) WithOwner(opts ...func(*OrganizationQuery)) *ScheduledJobRunQuery {
-	query := (&OrganizationClient{config: sjrq.config}).Query()
+func (_q *ScheduledJobRunQuery) WithOwner(opts ...func(*OrganizationQuery)) *ScheduledJobRunQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sjrq.withOwner = query
-	return sjrq
+	_q.withOwner = query
+	return _q
 }
 
 // WithScheduledJob tells the query-builder to eager-load the nodes that are connected to
 // the "scheduled_job" edge. The optional arguments are used to configure the query builder of the edge.
-func (sjrq *ScheduledJobRunQuery) WithScheduledJob(opts ...func(*ScheduledJobQuery)) *ScheduledJobRunQuery {
-	query := (&ScheduledJobClient{config: sjrq.config}).Query()
+func (_q *ScheduledJobRunQuery) WithScheduledJob(opts ...func(*ScheduledJobQuery)) *ScheduledJobRunQuery {
+	query := (&ScheduledJobClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sjrq.withScheduledJob = query
-	return sjrq
+	_q.withScheduledJob = query
+	return _q
 }
 
 // WithJobRunner tells the query-builder to eager-load the nodes that are connected to
 // the "job_runner" edge. The optional arguments are used to configure the query builder of the edge.
-func (sjrq *ScheduledJobRunQuery) WithJobRunner(opts ...func(*JobRunnerQuery)) *ScheduledJobRunQuery {
-	query := (&JobRunnerClient{config: sjrq.config}).Query()
+func (_q *ScheduledJobRunQuery) WithJobRunner(opts ...func(*JobRunnerQuery)) *ScheduledJobRunQuery {
+	query := (&JobRunnerClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sjrq.withJobRunner = query
-	return sjrq
+	_q.withJobRunner = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -393,10 +393,10 @@ func (sjrq *ScheduledJobRunQuery) WithJobRunner(opts ...func(*JobRunnerQuery)) *
 //		GroupBy(scheduledjobrun.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (sjrq *ScheduledJobRunQuery) GroupBy(field string, fields ...string) *ScheduledJobRunGroupBy {
-	sjrq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ScheduledJobRunGroupBy{build: sjrq}
-	grbuild.flds = &sjrq.ctx.Fields
+func (_q *ScheduledJobRunQuery) GroupBy(field string, fields ...string) *ScheduledJobRunGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ScheduledJobRunGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = scheduledjobrun.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -414,111 +414,111 @@ func (sjrq *ScheduledJobRunQuery) GroupBy(field string, fields ...string) *Sched
 //	client.ScheduledJobRun.Query().
 //		Select(scheduledjobrun.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (sjrq *ScheduledJobRunQuery) Select(fields ...string) *ScheduledJobRunSelect {
-	sjrq.ctx.Fields = append(sjrq.ctx.Fields, fields...)
-	sbuild := &ScheduledJobRunSelect{ScheduledJobRunQuery: sjrq}
+func (_q *ScheduledJobRunQuery) Select(fields ...string) *ScheduledJobRunSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ScheduledJobRunSelect{ScheduledJobRunQuery: _q}
 	sbuild.label = scheduledjobrun.Label
-	sbuild.flds, sbuild.scan = &sjrq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ScheduledJobRunSelect configured with the given aggregations.
-func (sjrq *ScheduledJobRunQuery) Aggregate(fns ...AggregateFunc) *ScheduledJobRunSelect {
-	return sjrq.Select().Aggregate(fns...)
+func (_q *ScheduledJobRunQuery) Aggregate(fns ...AggregateFunc) *ScheduledJobRunSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (sjrq *ScheduledJobRunQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range sjrq.inters {
+func (_q *ScheduledJobRunQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, sjrq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range sjrq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !scheduledjobrun.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if sjrq.path != nil {
-		prev, err := sjrq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		sjrq.sql = prev
+		_q.sql = prev
 	}
 	if scheduledjobrun.Policy == nil {
 		return errors.New("generated: uninitialized scheduledjobrun.Policy (forgotten import generated/runtime?)")
 	}
-	if err := scheduledjobrun.Policy.EvalQuery(ctx, sjrq); err != nil {
+	if err := scheduledjobrun.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (sjrq *ScheduledJobRunQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ScheduledJobRun, error) {
+func (_q *ScheduledJobRunQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ScheduledJobRun, error) {
 	var (
 		nodes       = []*ScheduledJobRun{}
-		_spec       = sjrq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			sjrq.withOwner != nil,
-			sjrq.withScheduledJob != nil,
-			sjrq.withJobRunner != nil,
+			_q.withOwner != nil,
+			_q.withScheduledJob != nil,
+			_q.withJobRunner != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ScheduledJobRun).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ScheduledJobRun{config: sjrq.config}
+		node := &ScheduledJobRun{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = sjrq.schemaConfig.ScheduledJobRun
-	ctx = internal.NewSchemaConfigContext(ctx, sjrq.schemaConfig)
-	if len(sjrq.modifiers) > 0 {
-		_spec.Modifiers = sjrq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.ScheduledJobRun
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, sjrq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sjrq.withOwner; query != nil {
-		if err := sjrq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *ScheduledJobRun, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sjrq.withScheduledJob; query != nil {
-		if err := sjrq.loadScheduledJob(ctx, query, nodes, nil,
+	if query := _q.withScheduledJob; query != nil {
+		if err := _q.loadScheduledJob(ctx, query, nodes, nil,
 			func(n *ScheduledJobRun, e *ScheduledJob) { n.Edges.ScheduledJob = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sjrq.withJobRunner; query != nil {
-		if err := sjrq.loadJobRunner(ctx, query, nodes, nil,
+	if query := _q.withJobRunner; query != nil {
+		if err := _q.loadJobRunner(ctx, query, nodes, nil,
 			func(n *ScheduledJobRun, e *JobRunner) { n.Edges.JobRunner = e }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range sjrq.loadTotal {
-		if err := sjrq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (sjrq *ScheduledJobRunQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*ScheduledJobRun, init func(*ScheduledJobRun), assign func(*ScheduledJobRun, *Organization)) error {
+func (_q *ScheduledJobRunQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*ScheduledJobRun, init func(*ScheduledJobRun), assign func(*ScheduledJobRun, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ScheduledJobRun)
 	for i := range nodes {
@@ -547,7 +547,7 @@ func (sjrq *ScheduledJobRunQuery) loadOwner(ctx context.Context, query *Organiza
 	}
 	return nil
 }
-func (sjrq *ScheduledJobRunQuery) loadScheduledJob(ctx context.Context, query *ScheduledJobQuery, nodes []*ScheduledJobRun, init func(*ScheduledJobRun), assign func(*ScheduledJobRun, *ScheduledJob)) error {
+func (_q *ScheduledJobRunQuery) loadScheduledJob(ctx context.Context, query *ScheduledJobQuery, nodes []*ScheduledJobRun, init func(*ScheduledJobRun), assign func(*ScheduledJobRun, *ScheduledJob)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ScheduledJobRun)
 	for i := range nodes {
@@ -576,7 +576,7 @@ func (sjrq *ScheduledJobRunQuery) loadScheduledJob(ctx context.Context, query *S
 	}
 	return nil
 }
-func (sjrq *ScheduledJobRunQuery) loadJobRunner(ctx context.Context, query *JobRunnerQuery, nodes []*ScheduledJobRun, init func(*ScheduledJobRun), assign func(*ScheduledJobRun, *JobRunner)) error {
+func (_q *ScheduledJobRunQuery) loadJobRunner(ctx context.Context, query *JobRunnerQuery, nodes []*ScheduledJobRun, init func(*ScheduledJobRun), assign func(*ScheduledJobRun, *JobRunner)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ScheduledJobRun)
 	for i := range nodes {
@@ -606,29 +606,29 @@ func (sjrq *ScheduledJobRunQuery) loadJobRunner(ctx context.Context, query *JobR
 	return nil
 }
 
-func (sjrq *ScheduledJobRunQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := sjrq.querySpec()
-	_spec.Node.Schema = sjrq.schemaConfig.ScheduledJobRun
-	ctx = internal.NewSchemaConfigContext(ctx, sjrq.schemaConfig)
-	if len(sjrq.modifiers) > 0 {
-		_spec.Modifiers = sjrq.modifiers
+func (_q *ScheduledJobRunQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.ScheduledJobRun
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = sjrq.ctx.Fields
-	if len(sjrq.ctx.Fields) > 0 {
-		_spec.Unique = sjrq.ctx.Unique != nil && *sjrq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, sjrq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (sjrq *ScheduledJobRunQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ScheduledJobRunQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(scheduledjobrun.Table, scheduledjobrun.Columns, sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString))
-	_spec.From = sjrq.sql
-	if unique := sjrq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if sjrq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := sjrq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, scheduledjobrun.FieldID)
 		for i := range fields {
@@ -636,30 +636,30 @@ func (sjrq *ScheduledJobRunQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if sjrq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(scheduledjobrun.FieldOwnerID)
 		}
-		if sjrq.withScheduledJob != nil {
+		if _q.withScheduledJob != nil {
 			_spec.Node.AddColumnOnce(scheduledjobrun.FieldScheduledJobID)
 		}
-		if sjrq.withJobRunner != nil {
+		if _q.withJobRunner != nil {
 			_spec.Node.AddColumnOnce(scheduledjobrun.FieldJobRunnerID)
 		}
 	}
-	if ps := sjrq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := sjrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := sjrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := sjrq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -669,48 +669,48 @@ func (sjrq *ScheduledJobRunQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (sjrq *ScheduledJobRunQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(sjrq.driver.Dialect())
+func (_q *ScheduledJobRunQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(scheduledjobrun.Table)
-	columns := sjrq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = scheduledjobrun.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if sjrq.sql != nil {
-		selector = sjrq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if sjrq.ctx.Unique != nil && *sjrq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(sjrq.schemaConfig.ScheduledJobRun)
-	ctx = internal.NewSchemaConfigContext(ctx, sjrq.schemaConfig)
+	t1.Schema(_q.schemaConfig.ScheduledJobRun)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range sjrq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range sjrq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range sjrq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := sjrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := sjrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (sjrq *ScheduledJobRunQuery) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobRunSelect {
-	sjrq.modifiers = append(sjrq.modifiers, modifiers...)
-	return sjrq.Select()
+func (_q *ScheduledJobRunQuery) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobRunSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -739,41 +739,41 @@ type ScheduledJobRunGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (sjrgb *ScheduledJobRunGroupBy) Aggregate(fns ...AggregateFunc) *ScheduledJobRunGroupBy {
-	sjrgb.fns = append(sjrgb.fns, fns...)
-	return sjrgb
+func (_g *ScheduledJobRunGroupBy) Aggregate(fns ...AggregateFunc) *ScheduledJobRunGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sjrgb *ScheduledJobRunGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sjrgb.build.ctx, ent.OpQueryGroupBy)
-	if err := sjrgb.build.prepareQuery(ctx); err != nil {
+func (_g *ScheduledJobRunGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ScheduledJobRunQuery, *ScheduledJobRunGroupBy](ctx, sjrgb.build, sjrgb, sjrgb.build.inters, v)
+	return scanWithInterceptors[*ScheduledJobRunQuery, *ScheduledJobRunGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (sjrgb *ScheduledJobRunGroupBy) sqlScan(ctx context.Context, root *ScheduledJobRunQuery, v any) error {
+func (_g *ScheduledJobRunGroupBy) sqlScan(ctx context.Context, root *ScheduledJobRunQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(sjrgb.fns))
-	for _, fn := range sjrgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*sjrgb.flds)+len(sjrgb.fns))
-		for _, f := range *sjrgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*sjrgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sjrgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -787,27 +787,27 @@ type ScheduledJobRunSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (sjrs *ScheduledJobRunSelect) Aggregate(fns ...AggregateFunc) *ScheduledJobRunSelect {
-	sjrs.fns = append(sjrs.fns, fns...)
-	return sjrs
+func (_s *ScheduledJobRunSelect) Aggregate(fns ...AggregateFunc) *ScheduledJobRunSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sjrs *ScheduledJobRunSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sjrs.ctx, ent.OpQuerySelect)
-	if err := sjrs.prepareQuery(ctx); err != nil {
+func (_s *ScheduledJobRunSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ScheduledJobRunQuery, *ScheduledJobRunSelect](ctx, sjrs.ScheduledJobRunQuery, sjrs, sjrs.inters, v)
+	return scanWithInterceptors[*ScheduledJobRunQuery, *ScheduledJobRunSelect](ctx, _s.ScheduledJobRunQuery, _s, _s.inters, v)
 }
 
-func (sjrs *ScheduledJobRunSelect) sqlScan(ctx context.Context, root *ScheduledJobRunQuery, v any) error {
+func (_s *ScheduledJobRunSelect) sqlScan(ctx context.Context, root *ScheduledJobRunQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(sjrs.fns))
-	for _, fn := range sjrs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*sjrs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -815,7 +815,7 @@ func (sjrs *ScheduledJobRunSelect) sqlScan(ctx context.Context, root *ScheduledJ
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sjrs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -823,7 +823,7 @@ func (sjrs *ScheduledJobRunSelect) sqlScan(ctx context.Context, root *ScheduledJ
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (sjrs *ScheduledJobRunSelect) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobRunSelect {
-	sjrs.modifiers = append(sjrs.modifiers, modifiers...)
-	return sjrs
+func (_s *ScheduledJobRunSelect) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobRunSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

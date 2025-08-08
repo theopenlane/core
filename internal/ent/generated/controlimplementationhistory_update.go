@@ -28,217 +28,217 @@ type ControlImplementationHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the ControlImplementationHistoryUpdate builder.
-func (cihu *ControlImplementationHistoryUpdate) Where(ps ...predicate.ControlImplementationHistory) *ControlImplementationHistoryUpdate {
-	cihu.mutation.Where(ps...)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) Where(ps ...predicate.ControlImplementationHistory) *ControlImplementationHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cihu *ControlImplementationHistoryUpdate) SetUpdatedAt(t time.Time) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetUpdatedAt(t)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) SetUpdatedAt(v time.Time) *ControlImplementationHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (cihu *ControlImplementationHistoryUpdate) ClearUpdatedAt() *ControlImplementationHistoryUpdate {
-	cihu.mutation.ClearUpdatedAt()
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) ClearUpdatedAt() *ControlImplementationHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cihu *ControlImplementationHistoryUpdate) SetUpdatedBy(s string) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetUpdatedBy(s)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) SetUpdatedBy(v string) *ControlImplementationHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cihu *ControlImplementationHistoryUpdate) SetNillableUpdatedBy(s *string) *ControlImplementationHistoryUpdate {
-	if s != nil {
-		cihu.SetUpdatedBy(*s)
+func (_u *ControlImplementationHistoryUpdate) SetNillableUpdatedBy(v *string) *ControlImplementationHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return cihu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (cihu *ControlImplementationHistoryUpdate) ClearUpdatedBy() *ControlImplementationHistoryUpdate {
-	cihu.mutation.ClearUpdatedBy()
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) ClearUpdatedBy() *ControlImplementationHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cihu *ControlImplementationHistoryUpdate) SetDeletedAt(t time.Time) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetDeletedAt(t)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) SetDeletedAt(v time.Time) *ControlImplementationHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cihu *ControlImplementationHistoryUpdate) SetNillableDeletedAt(t *time.Time) *ControlImplementationHistoryUpdate {
-	if t != nil {
-		cihu.SetDeletedAt(*t)
+func (_u *ControlImplementationHistoryUpdate) SetNillableDeletedAt(v *time.Time) *ControlImplementationHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return cihu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (cihu *ControlImplementationHistoryUpdate) ClearDeletedAt() *ControlImplementationHistoryUpdate {
-	cihu.mutation.ClearDeletedAt()
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) ClearDeletedAt() *ControlImplementationHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cihu *ControlImplementationHistoryUpdate) SetDeletedBy(s string) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetDeletedBy(s)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) SetDeletedBy(v string) *ControlImplementationHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cihu *ControlImplementationHistoryUpdate) SetNillableDeletedBy(s *string) *ControlImplementationHistoryUpdate {
-	if s != nil {
-		cihu.SetDeletedBy(*s)
+func (_u *ControlImplementationHistoryUpdate) SetNillableDeletedBy(v *string) *ControlImplementationHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return cihu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (cihu *ControlImplementationHistoryUpdate) ClearDeletedBy() *ControlImplementationHistoryUpdate {
-	cihu.mutation.ClearDeletedBy()
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) ClearDeletedBy() *ControlImplementationHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (cihu *ControlImplementationHistoryUpdate) SetTags(s []string) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetTags(s)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) SetTags(v []string) *ControlImplementationHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (cihu *ControlImplementationHistoryUpdate) AppendTags(s []string) *ControlImplementationHistoryUpdate {
-	cihu.mutation.AppendTags(s)
-	return cihu
+// AppendTags appends value to the "tags" field.
+func (_u *ControlImplementationHistoryUpdate) AppendTags(v []string) *ControlImplementationHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (cihu *ControlImplementationHistoryUpdate) ClearTags() *ControlImplementationHistoryUpdate {
-	cihu.mutation.ClearTags()
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) ClearTags() *ControlImplementationHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (cihu *ControlImplementationHistoryUpdate) SetStatus(es enums.DocumentStatus) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetStatus(es)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) SetStatus(v enums.DocumentStatus) *ControlImplementationHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cihu *ControlImplementationHistoryUpdate) SetNillableStatus(es *enums.DocumentStatus) *ControlImplementationHistoryUpdate {
-	if es != nil {
-		cihu.SetStatus(*es)
+func (_u *ControlImplementationHistoryUpdate) SetNillableStatus(v *enums.DocumentStatus) *ControlImplementationHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return cihu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (cihu *ControlImplementationHistoryUpdate) ClearStatus() *ControlImplementationHistoryUpdate {
-	cihu.mutation.ClearStatus()
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) ClearStatus() *ControlImplementationHistoryUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetImplementationDate sets the "implementation_date" field.
-func (cihu *ControlImplementationHistoryUpdate) SetImplementationDate(t time.Time) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetImplementationDate(t)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) SetImplementationDate(v time.Time) *ControlImplementationHistoryUpdate {
+	_u.mutation.SetImplementationDate(v)
+	return _u
 }
 
 // SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (cihu *ControlImplementationHistoryUpdate) SetNillableImplementationDate(t *time.Time) *ControlImplementationHistoryUpdate {
-	if t != nil {
-		cihu.SetImplementationDate(*t)
+func (_u *ControlImplementationHistoryUpdate) SetNillableImplementationDate(v *time.Time) *ControlImplementationHistoryUpdate {
+	if v != nil {
+		_u.SetImplementationDate(*v)
 	}
-	return cihu
+	return _u
 }
 
 // ClearImplementationDate clears the value of the "implementation_date" field.
-func (cihu *ControlImplementationHistoryUpdate) ClearImplementationDate() *ControlImplementationHistoryUpdate {
-	cihu.mutation.ClearImplementationDate()
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) ClearImplementationDate() *ControlImplementationHistoryUpdate {
+	_u.mutation.ClearImplementationDate()
+	return _u
 }
 
 // SetVerified sets the "verified" field.
-func (cihu *ControlImplementationHistoryUpdate) SetVerified(b bool) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetVerified(b)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) SetVerified(v bool) *ControlImplementationHistoryUpdate {
+	_u.mutation.SetVerified(v)
+	return _u
 }
 
 // SetNillableVerified sets the "verified" field if the given value is not nil.
-func (cihu *ControlImplementationHistoryUpdate) SetNillableVerified(b *bool) *ControlImplementationHistoryUpdate {
-	if b != nil {
-		cihu.SetVerified(*b)
+func (_u *ControlImplementationHistoryUpdate) SetNillableVerified(v *bool) *ControlImplementationHistoryUpdate {
+	if v != nil {
+		_u.SetVerified(*v)
 	}
-	return cihu
+	return _u
 }
 
 // ClearVerified clears the value of the "verified" field.
-func (cihu *ControlImplementationHistoryUpdate) ClearVerified() *ControlImplementationHistoryUpdate {
-	cihu.mutation.ClearVerified()
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) ClearVerified() *ControlImplementationHistoryUpdate {
+	_u.mutation.ClearVerified()
+	return _u
 }
 
 // SetVerificationDate sets the "verification_date" field.
-func (cihu *ControlImplementationHistoryUpdate) SetVerificationDate(t time.Time) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetVerificationDate(t)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) SetVerificationDate(v time.Time) *ControlImplementationHistoryUpdate {
+	_u.mutation.SetVerificationDate(v)
+	return _u
 }
 
 // SetNillableVerificationDate sets the "verification_date" field if the given value is not nil.
-func (cihu *ControlImplementationHistoryUpdate) SetNillableVerificationDate(t *time.Time) *ControlImplementationHistoryUpdate {
-	if t != nil {
-		cihu.SetVerificationDate(*t)
+func (_u *ControlImplementationHistoryUpdate) SetNillableVerificationDate(v *time.Time) *ControlImplementationHistoryUpdate {
+	if v != nil {
+		_u.SetVerificationDate(*v)
 	}
-	return cihu
+	return _u
 }
 
 // ClearVerificationDate clears the value of the "verification_date" field.
-func (cihu *ControlImplementationHistoryUpdate) ClearVerificationDate() *ControlImplementationHistoryUpdate {
-	cihu.mutation.ClearVerificationDate()
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) ClearVerificationDate() *ControlImplementationHistoryUpdate {
+	_u.mutation.ClearVerificationDate()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (cihu *ControlImplementationHistoryUpdate) SetDetails(s string) *ControlImplementationHistoryUpdate {
-	cihu.mutation.SetDetails(s)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) SetDetails(v string) *ControlImplementationHistoryUpdate {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (cihu *ControlImplementationHistoryUpdate) SetNillableDetails(s *string) *ControlImplementationHistoryUpdate {
-	if s != nil {
-		cihu.SetDetails(*s)
+func (_u *ControlImplementationHistoryUpdate) SetNillableDetails(v *string) *ControlImplementationHistoryUpdate {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return cihu
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (cihu *ControlImplementationHistoryUpdate) ClearDetails() *ControlImplementationHistoryUpdate {
-	cihu.mutation.ClearDetails()
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) ClearDetails() *ControlImplementationHistoryUpdate {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // Mutation returns the ControlImplementationHistoryMutation object of the builder.
-func (cihu *ControlImplementationHistoryUpdate) Mutation() *ControlImplementationHistoryMutation {
-	return cihu.mutation
+func (_u *ControlImplementationHistoryUpdate) Mutation() *ControlImplementationHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (cihu *ControlImplementationHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := cihu.defaults(); err != nil {
+func (_u *ControlImplementationHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, cihu.sqlSave, cihu.mutation, cihu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cihu *ControlImplementationHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := cihu.Save(ctx)
+func (_u *ControlImplementationHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -246,33 +246,33 @@ func (cihu *ControlImplementationHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (cihu *ControlImplementationHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := cihu.Save(ctx)
+func (_u *ControlImplementationHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cihu *ControlImplementationHistoryUpdate) ExecX(ctx context.Context) {
-	if err := cihu.Exec(ctx); err != nil {
+func (_u *ControlImplementationHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cihu *ControlImplementationHistoryUpdate) defaults() error {
-	if _, ok := cihu.mutation.UpdatedAt(); !ok && !cihu.mutation.UpdatedAtCleared() {
+func (_u *ControlImplementationHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if controlimplementationhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized controlimplementationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := controlimplementationhistory.UpdateDefaultUpdatedAt()
-		cihu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cihu *ControlImplementationHistoryUpdate) check() error {
-	if v, ok := cihu.mutation.Status(); ok {
+func (_u *ControlImplementationHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := controlimplementationhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlImplementationHistory.status": %w`, err)}
 		}
@@ -281,104 +281,104 @@ func (cihu *ControlImplementationHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (cihu *ControlImplementationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationHistoryUpdate {
-	cihu.modifiers = append(cihu.modifiers, modifiers...)
-	return cihu
+func (_u *ControlImplementationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (cihu *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := cihu.check(); err != nil {
-		return n, err
+func (_u *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(controlimplementationhistory.Table, controlimplementationhistory.Columns, sqlgraph.NewFieldSpec(controlimplementationhistory.FieldID, field.TypeString))
-	if ps := cihu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if cihu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldRef, field.TypeString)
 	}
-	if cihu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := cihu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(controlimplementationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if cihu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if cihu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := cihu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(controlimplementationhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if cihu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := cihu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(controlimplementationhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if cihu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cihu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(controlimplementationhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if cihu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := cihu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(controlimplementationhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := cihu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlimplementationhistory.FieldTags, value)
 		})
 	}
-	if cihu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldTags, field.TypeJSON)
 	}
-	if cihu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := cihu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if cihu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := cihu.mutation.ImplementationDate(); ok {
+	if value, ok := _u.mutation.ImplementationDate(); ok {
 		_spec.SetField(controlimplementationhistory.FieldImplementationDate, field.TypeTime, value)
 	}
-	if cihu.mutation.ImplementationDateCleared() {
+	if _u.mutation.ImplementationDateCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldImplementationDate, field.TypeTime)
 	}
-	if value, ok := cihu.mutation.Verified(); ok {
+	if value, ok := _u.mutation.Verified(); ok {
 		_spec.SetField(controlimplementationhistory.FieldVerified, field.TypeBool, value)
 	}
-	if cihu.mutation.VerifiedCleared() {
+	if _u.mutation.VerifiedCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldVerified, field.TypeBool)
 	}
-	if value, ok := cihu.mutation.VerificationDate(); ok {
+	if value, ok := _u.mutation.VerificationDate(); ok {
 		_spec.SetField(controlimplementationhistory.FieldVerificationDate, field.TypeTime, value)
 	}
-	if cihu.mutation.VerificationDateCleared() {
+	if _u.mutation.VerificationDateCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldVerificationDate, field.TypeTime)
 	}
-	if value, ok := cihu.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(controlimplementationhistory.FieldDetails, field.TypeString, value)
 	}
-	if cihu.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDetails, field.TypeString)
 	}
-	_spec.Node.Schema = cihu.schemaConfig.ControlImplementationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, cihu.schemaConfig)
-	_spec.AddModifiers(cihu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, cihu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.ControlImplementationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{controlimplementationhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -386,8 +386,8 @@ func (cihu *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (n 
 		}
 		return 0, err
 	}
-	cihu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ControlImplementationHistoryUpdateOne is the builder for updating a single ControlImplementationHistory entity.
@@ -400,224 +400,224 @@ type ControlImplementationHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetUpdatedAt(t time.Time) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetUpdatedAt(t)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) SetUpdatedAt(v time.Time) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) ClearUpdatedAt() *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.ClearUpdatedAt()
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) ClearUpdatedAt() *ControlImplementationHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetUpdatedBy(s string) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetUpdatedBy(s)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) SetUpdatedBy(v string) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetNillableUpdatedBy(s *string) *ControlImplementationHistoryUpdateOne {
-	if s != nil {
-		cihuo.SetUpdatedBy(*s)
+func (_u *ControlImplementationHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ControlImplementationHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return cihuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) ClearUpdatedBy() *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.ClearUpdatedBy()
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) ClearUpdatedBy() *ControlImplementationHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetDeletedAt(t time.Time) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetDeletedAt(t)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) SetDeletedAt(v time.Time) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *ControlImplementationHistoryUpdateOne {
-	if t != nil {
-		cihuo.SetDeletedAt(*t)
+func (_u *ControlImplementationHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *ControlImplementationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return cihuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) ClearDeletedAt() *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.ClearDeletedAt()
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) ClearDeletedAt() *ControlImplementationHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetDeletedBy(s string) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetDeletedBy(s)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) SetDeletedBy(v string) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetNillableDeletedBy(s *string) *ControlImplementationHistoryUpdateOne {
-	if s != nil {
-		cihuo.SetDeletedBy(*s)
+func (_u *ControlImplementationHistoryUpdateOne) SetNillableDeletedBy(v *string) *ControlImplementationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return cihuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) ClearDeletedBy() *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.ClearDeletedBy()
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) ClearDeletedBy() *ControlImplementationHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetTags(s []string) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetTags(s)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) SetTags(v []string) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) AppendTags(s []string) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.AppendTags(s)
-	return cihuo
+// AppendTags appends value to the "tags" field.
+func (_u *ControlImplementationHistoryUpdateOne) AppendTags(v []string) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) ClearTags() *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.ClearTags()
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) ClearTags() *ControlImplementationHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetStatus(es enums.DocumentStatus) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetStatus(es)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) SetStatus(v enums.DocumentStatus) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetNillableStatus(es *enums.DocumentStatus) *ControlImplementationHistoryUpdateOne {
-	if es != nil {
-		cihuo.SetStatus(*es)
+func (_u *ControlImplementationHistoryUpdateOne) SetNillableStatus(v *enums.DocumentStatus) *ControlImplementationHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return cihuo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) ClearStatus() *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.ClearStatus()
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) ClearStatus() *ControlImplementationHistoryUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetImplementationDate sets the "implementation_date" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetImplementationDate(t time.Time) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetImplementationDate(t)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) SetImplementationDate(v time.Time) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.SetImplementationDate(v)
+	return _u
 }
 
 // SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetNillableImplementationDate(t *time.Time) *ControlImplementationHistoryUpdateOne {
-	if t != nil {
-		cihuo.SetImplementationDate(*t)
+func (_u *ControlImplementationHistoryUpdateOne) SetNillableImplementationDate(v *time.Time) *ControlImplementationHistoryUpdateOne {
+	if v != nil {
+		_u.SetImplementationDate(*v)
 	}
-	return cihuo
+	return _u
 }
 
 // ClearImplementationDate clears the value of the "implementation_date" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) ClearImplementationDate() *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.ClearImplementationDate()
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) ClearImplementationDate() *ControlImplementationHistoryUpdateOne {
+	_u.mutation.ClearImplementationDate()
+	return _u
 }
 
 // SetVerified sets the "verified" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetVerified(b bool) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetVerified(b)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) SetVerified(v bool) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.SetVerified(v)
+	return _u
 }
 
 // SetNillableVerified sets the "verified" field if the given value is not nil.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetNillableVerified(b *bool) *ControlImplementationHistoryUpdateOne {
-	if b != nil {
-		cihuo.SetVerified(*b)
+func (_u *ControlImplementationHistoryUpdateOne) SetNillableVerified(v *bool) *ControlImplementationHistoryUpdateOne {
+	if v != nil {
+		_u.SetVerified(*v)
 	}
-	return cihuo
+	return _u
 }
 
 // ClearVerified clears the value of the "verified" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) ClearVerified() *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.ClearVerified()
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) ClearVerified() *ControlImplementationHistoryUpdateOne {
+	_u.mutation.ClearVerified()
+	return _u
 }
 
 // SetVerificationDate sets the "verification_date" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetVerificationDate(t time.Time) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetVerificationDate(t)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) SetVerificationDate(v time.Time) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.SetVerificationDate(v)
+	return _u
 }
 
 // SetNillableVerificationDate sets the "verification_date" field if the given value is not nil.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetNillableVerificationDate(t *time.Time) *ControlImplementationHistoryUpdateOne {
-	if t != nil {
-		cihuo.SetVerificationDate(*t)
+func (_u *ControlImplementationHistoryUpdateOne) SetNillableVerificationDate(v *time.Time) *ControlImplementationHistoryUpdateOne {
+	if v != nil {
+		_u.SetVerificationDate(*v)
 	}
-	return cihuo
+	return _u
 }
 
 // ClearVerificationDate clears the value of the "verification_date" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) ClearVerificationDate() *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.ClearVerificationDate()
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) ClearVerificationDate() *ControlImplementationHistoryUpdateOne {
+	_u.mutation.ClearVerificationDate()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetDetails(s string) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.SetDetails(s)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) SetDetails(v string) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (cihuo *ControlImplementationHistoryUpdateOne) SetNillableDetails(s *string) *ControlImplementationHistoryUpdateOne {
-	if s != nil {
-		cihuo.SetDetails(*s)
+func (_u *ControlImplementationHistoryUpdateOne) SetNillableDetails(v *string) *ControlImplementationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return cihuo
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (cihuo *ControlImplementationHistoryUpdateOne) ClearDetails() *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.ClearDetails()
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) ClearDetails() *ControlImplementationHistoryUpdateOne {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // Mutation returns the ControlImplementationHistoryMutation object of the builder.
-func (cihuo *ControlImplementationHistoryUpdateOne) Mutation() *ControlImplementationHistoryMutation {
-	return cihuo.mutation
+func (_u *ControlImplementationHistoryUpdateOne) Mutation() *ControlImplementationHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ControlImplementationHistoryUpdate builder.
-func (cihuo *ControlImplementationHistoryUpdateOne) Where(ps ...predicate.ControlImplementationHistory) *ControlImplementationHistoryUpdateOne {
-	cihuo.mutation.Where(ps...)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) Where(ps ...predicate.ControlImplementationHistory) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (cihuo *ControlImplementationHistoryUpdateOne) Select(field string, fields ...string) *ControlImplementationHistoryUpdateOne {
-	cihuo.fields = append([]string{field}, fields...)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) Select(field string, fields ...string) *ControlImplementationHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ControlImplementationHistory entity.
-func (cihuo *ControlImplementationHistoryUpdateOne) Save(ctx context.Context) (*ControlImplementationHistory, error) {
-	if err := cihuo.defaults(); err != nil {
+func (_u *ControlImplementationHistoryUpdateOne) Save(ctx context.Context) (*ControlImplementationHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, cihuo.sqlSave, cihuo.mutation, cihuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cihuo *ControlImplementationHistoryUpdateOne) SaveX(ctx context.Context) *ControlImplementationHistory {
-	node, err := cihuo.Save(ctx)
+func (_u *ControlImplementationHistoryUpdateOne) SaveX(ctx context.Context) *ControlImplementationHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -625,33 +625,33 @@ func (cihuo *ControlImplementationHistoryUpdateOne) SaveX(ctx context.Context) *
 }
 
 // Exec executes the query on the entity.
-func (cihuo *ControlImplementationHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := cihuo.Save(ctx)
+func (_u *ControlImplementationHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cihuo *ControlImplementationHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := cihuo.Exec(ctx); err != nil {
+func (_u *ControlImplementationHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cihuo *ControlImplementationHistoryUpdateOne) defaults() error {
-	if _, ok := cihuo.mutation.UpdatedAt(); !ok && !cihuo.mutation.UpdatedAtCleared() {
+func (_u *ControlImplementationHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if controlimplementationhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized controlimplementationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := controlimplementationhistory.UpdateDefaultUpdatedAt()
-		cihuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cihuo *ControlImplementationHistoryUpdateOne) check() error {
-	if v, ok := cihuo.mutation.Status(); ok {
+func (_u *ControlImplementationHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := controlimplementationhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlImplementationHistory.status": %w`, err)}
 		}
@@ -660,22 +660,22 @@ func (cihuo *ControlImplementationHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (cihuo *ControlImplementationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationHistoryUpdateOne {
-	cihuo.modifiers = append(cihuo.modifiers, modifiers...)
-	return cihuo
+func (_u *ControlImplementationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (cihuo *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlImplementationHistory, err error) {
-	if err := cihuo.check(); err != nil {
+func (_u *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlImplementationHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(controlimplementationhistory.Table, controlimplementationhistory.Columns, sqlgraph.NewFieldSpec(controlimplementationhistory.FieldID, field.TypeString))
-	id, ok := cihuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "ControlImplementationHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := cihuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, controlimplementationhistory.FieldID)
 		for _, f := range fields {
@@ -687,97 +687,97 @@ func (cihuo *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context)
 			}
 		}
 	}
-	if ps := cihuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if cihuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldRef, field.TypeString)
 	}
-	if cihuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := cihuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(controlimplementationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if cihuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if cihuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := cihuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(controlimplementationhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if cihuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := cihuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(controlimplementationhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if cihuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cihuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(controlimplementationhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if cihuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := cihuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(controlimplementationhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := cihuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlimplementationhistory.FieldTags, value)
 		})
 	}
-	if cihuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldTags, field.TypeJSON)
 	}
-	if cihuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := cihuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if cihuo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := cihuo.mutation.ImplementationDate(); ok {
+	if value, ok := _u.mutation.ImplementationDate(); ok {
 		_spec.SetField(controlimplementationhistory.FieldImplementationDate, field.TypeTime, value)
 	}
-	if cihuo.mutation.ImplementationDateCleared() {
+	if _u.mutation.ImplementationDateCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldImplementationDate, field.TypeTime)
 	}
-	if value, ok := cihuo.mutation.Verified(); ok {
+	if value, ok := _u.mutation.Verified(); ok {
 		_spec.SetField(controlimplementationhistory.FieldVerified, field.TypeBool, value)
 	}
-	if cihuo.mutation.VerifiedCleared() {
+	if _u.mutation.VerifiedCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldVerified, field.TypeBool)
 	}
-	if value, ok := cihuo.mutation.VerificationDate(); ok {
+	if value, ok := _u.mutation.VerificationDate(); ok {
 		_spec.SetField(controlimplementationhistory.FieldVerificationDate, field.TypeTime, value)
 	}
-	if cihuo.mutation.VerificationDateCleared() {
+	if _u.mutation.VerificationDateCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldVerificationDate, field.TypeTime)
 	}
-	if value, ok := cihuo.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(controlimplementationhistory.FieldDetails, field.TypeString, value)
 	}
-	if cihuo.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDetails, field.TypeString)
 	}
-	_spec.Node.Schema = cihuo.schemaConfig.ControlImplementationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, cihuo.schemaConfig)
-	_spec.AddModifiers(cihuo.modifiers...)
-	_node = &ControlImplementationHistory{config: cihuo.config}
+	_spec.Node.Schema = _u.schemaConfig.ControlImplementationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &ControlImplementationHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, cihuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{controlimplementationhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -785,6 +785,6 @@ func (cihuo *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context)
 		}
 		return nil, err
 	}
-	cihuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

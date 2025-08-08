@@ -25,296 +25,296 @@ type PersonalAccessTokenCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (patc *PersonalAccessTokenCreate) SetCreatedAt(t time.Time) *PersonalAccessTokenCreate {
-	patc.mutation.SetCreatedAt(t)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetCreatedAt(v time.Time) *PersonalAccessTokenCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableCreatedAt(t *time.Time) *PersonalAccessTokenCreate {
-	if t != nil {
-		patc.SetCreatedAt(*t)
+func (_c *PersonalAccessTokenCreate) SetNillableCreatedAt(v *time.Time) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (patc *PersonalAccessTokenCreate) SetUpdatedAt(t time.Time) *PersonalAccessTokenCreate {
-	patc.mutation.SetUpdatedAt(t)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetUpdatedAt(v time.Time) *PersonalAccessTokenCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableUpdatedAt(t *time.Time) *PersonalAccessTokenCreate {
-	if t != nil {
-		patc.SetUpdatedAt(*t)
+func (_c *PersonalAccessTokenCreate) SetNillableUpdatedAt(v *time.Time) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (patc *PersonalAccessTokenCreate) SetCreatedBy(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetCreatedBy(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetCreatedBy(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableCreatedBy(s *string) *PersonalAccessTokenCreate {
-	if s != nil {
-		patc.SetCreatedBy(*s)
+func (_c *PersonalAccessTokenCreate) SetNillableCreatedBy(v *string) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (patc *PersonalAccessTokenCreate) SetUpdatedBy(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetUpdatedBy(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetUpdatedBy(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableUpdatedBy(s *string) *PersonalAccessTokenCreate {
-	if s != nil {
-		patc.SetUpdatedBy(*s)
+func (_c *PersonalAccessTokenCreate) SetNillableUpdatedBy(v *string) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (patc *PersonalAccessTokenCreate) SetDeletedAt(t time.Time) *PersonalAccessTokenCreate {
-	patc.mutation.SetDeletedAt(t)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetDeletedAt(v time.Time) *PersonalAccessTokenCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableDeletedAt(t *time.Time) *PersonalAccessTokenCreate {
-	if t != nil {
-		patc.SetDeletedAt(*t)
+func (_c *PersonalAccessTokenCreate) SetNillableDeletedAt(v *time.Time) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (patc *PersonalAccessTokenCreate) SetDeletedBy(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetDeletedBy(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetDeletedBy(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableDeletedBy(s *string) *PersonalAccessTokenCreate {
-	if s != nil {
-		patc.SetDeletedBy(*s)
+func (_c *PersonalAccessTokenCreate) SetNillableDeletedBy(v *string) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (patc *PersonalAccessTokenCreate) SetTags(s []string) *PersonalAccessTokenCreate {
-	patc.mutation.SetTags(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetTags(v []string) *PersonalAccessTokenCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (patc *PersonalAccessTokenCreate) SetOwnerID(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetOwnerID(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetOwnerID(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (patc *PersonalAccessTokenCreate) SetName(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetName(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetName(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetToken sets the "token" field.
-func (patc *PersonalAccessTokenCreate) SetToken(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetToken(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetToken(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetToken(v)
+	return _c
 }
 
 // SetNillableToken sets the "token" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableToken(s *string) *PersonalAccessTokenCreate {
-	if s != nil {
-		patc.SetToken(*s)
+func (_c *PersonalAccessTokenCreate) SetNillableToken(v *string) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetToken(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (patc *PersonalAccessTokenCreate) SetExpiresAt(t time.Time) *PersonalAccessTokenCreate {
-	patc.mutation.SetExpiresAt(t)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetExpiresAt(v time.Time) *PersonalAccessTokenCreate {
+	_c.mutation.SetExpiresAt(v)
+	return _c
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableExpiresAt(t *time.Time) *PersonalAccessTokenCreate {
-	if t != nil {
-		patc.SetExpiresAt(*t)
+func (_c *PersonalAccessTokenCreate) SetNillableExpiresAt(v *time.Time) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetExpiresAt(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (patc *PersonalAccessTokenCreate) SetDescription(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetDescription(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetDescription(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableDescription(s *string) *PersonalAccessTokenCreate {
-	if s != nil {
-		patc.SetDescription(*s)
+func (_c *PersonalAccessTokenCreate) SetNillableDescription(v *string) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetScopes sets the "scopes" field.
-func (patc *PersonalAccessTokenCreate) SetScopes(s []string) *PersonalAccessTokenCreate {
-	patc.mutation.SetScopes(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetScopes(v []string) *PersonalAccessTokenCreate {
+	_c.mutation.SetScopes(v)
+	return _c
 }
 
 // SetSSOAuthorizations sets the "sso_authorizations" field.
-func (patc *PersonalAccessTokenCreate) SetSSOAuthorizations(mam models.SSOAuthorizationMap) *PersonalAccessTokenCreate {
-	patc.mutation.SetSSOAuthorizations(mam)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetSSOAuthorizations(v models.SSOAuthorizationMap) *PersonalAccessTokenCreate {
+	_c.mutation.SetSSOAuthorizations(v)
+	return _c
 }
 
 // SetLastUsedAt sets the "last_used_at" field.
-func (patc *PersonalAccessTokenCreate) SetLastUsedAt(t time.Time) *PersonalAccessTokenCreate {
-	patc.mutation.SetLastUsedAt(t)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetLastUsedAt(v time.Time) *PersonalAccessTokenCreate {
+	_c.mutation.SetLastUsedAt(v)
+	return _c
 }
 
 // SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableLastUsedAt(t *time.Time) *PersonalAccessTokenCreate {
-	if t != nil {
-		patc.SetLastUsedAt(*t)
+func (_c *PersonalAccessTokenCreate) SetNillableLastUsedAt(v *time.Time) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetLastUsedAt(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetIsActive sets the "is_active" field.
-func (patc *PersonalAccessTokenCreate) SetIsActive(b bool) *PersonalAccessTokenCreate {
-	patc.mutation.SetIsActive(b)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetIsActive(v bool) *PersonalAccessTokenCreate {
+	_c.mutation.SetIsActive(v)
+	return _c
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableIsActive(b *bool) *PersonalAccessTokenCreate {
-	if b != nil {
-		patc.SetIsActive(*b)
+func (_c *PersonalAccessTokenCreate) SetNillableIsActive(v *bool) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetIsActive(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetRevokedReason sets the "revoked_reason" field.
-func (patc *PersonalAccessTokenCreate) SetRevokedReason(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetRevokedReason(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetRevokedReason(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetRevokedReason(v)
+	return _c
 }
 
 // SetNillableRevokedReason sets the "revoked_reason" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableRevokedReason(s *string) *PersonalAccessTokenCreate {
-	if s != nil {
-		patc.SetRevokedReason(*s)
+func (_c *PersonalAccessTokenCreate) SetNillableRevokedReason(v *string) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetRevokedReason(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetRevokedBy sets the "revoked_by" field.
-func (patc *PersonalAccessTokenCreate) SetRevokedBy(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetRevokedBy(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetRevokedBy(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetRevokedBy(v)
+	return _c
 }
 
 // SetNillableRevokedBy sets the "revoked_by" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableRevokedBy(s *string) *PersonalAccessTokenCreate {
-	if s != nil {
-		patc.SetRevokedBy(*s)
+func (_c *PersonalAccessTokenCreate) SetNillableRevokedBy(v *string) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetRevokedBy(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetRevokedAt sets the "revoked_at" field.
-func (patc *PersonalAccessTokenCreate) SetRevokedAt(t time.Time) *PersonalAccessTokenCreate {
-	patc.mutation.SetRevokedAt(t)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetRevokedAt(v time.Time) *PersonalAccessTokenCreate {
+	_c.mutation.SetRevokedAt(v)
+	return _c
 }
 
 // SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableRevokedAt(t *time.Time) *PersonalAccessTokenCreate {
-	if t != nil {
-		patc.SetRevokedAt(*t)
+func (_c *PersonalAccessTokenCreate) SetNillableRevokedAt(v *time.Time) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetRevokedAt(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (patc *PersonalAccessTokenCreate) SetID(s string) *PersonalAccessTokenCreate {
-	patc.mutation.SetID(s)
-	return patc
+func (_c *PersonalAccessTokenCreate) SetID(v string) *PersonalAccessTokenCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (patc *PersonalAccessTokenCreate) SetNillableID(s *string) *PersonalAccessTokenCreate {
-	if s != nil {
-		patc.SetID(*s)
+func (_c *PersonalAccessTokenCreate) SetNillableID(v *string) *PersonalAccessTokenCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return patc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the User entity.
-func (patc *PersonalAccessTokenCreate) SetOwner(u *User) *PersonalAccessTokenCreate {
-	return patc.SetOwnerID(u.ID)
+func (_c *PersonalAccessTokenCreate) SetOwner(v *User) *PersonalAccessTokenCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
-func (patc *PersonalAccessTokenCreate) AddOrganizationIDs(ids ...string) *PersonalAccessTokenCreate {
-	patc.mutation.AddOrganizationIDs(ids...)
-	return patc
+func (_c *PersonalAccessTokenCreate) AddOrganizationIDs(ids ...string) *PersonalAccessTokenCreate {
+	_c.mutation.AddOrganizationIDs(ids...)
+	return _c
 }
 
 // AddOrganizations adds the "organizations" edges to the Organization entity.
-func (patc *PersonalAccessTokenCreate) AddOrganizations(o ...*Organization) *PersonalAccessTokenCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *PersonalAccessTokenCreate) AddOrganizations(v ...*Organization) *PersonalAccessTokenCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return patc.AddOrganizationIDs(ids...)
+	return _c.AddOrganizationIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (patc *PersonalAccessTokenCreate) AddEventIDs(ids ...string) *PersonalAccessTokenCreate {
-	patc.mutation.AddEventIDs(ids...)
-	return patc
+func (_c *PersonalAccessTokenCreate) AddEventIDs(ids ...string) *PersonalAccessTokenCreate {
+	_c.mutation.AddEventIDs(ids...)
+	return _c
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (patc *PersonalAccessTokenCreate) AddEvents(e ...*Event) *PersonalAccessTokenCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *PersonalAccessTokenCreate) AddEvents(v ...*Event) *PersonalAccessTokenCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return patc.AddEventIDs(ids...)
+	return _c.AddEventIDs(ids...)
 }
 
 // Mutation returns the PersonalAccessTokenMutation object of the builder.
-func (patc *PersonalAccessTokenCreate) Mutation() *PersonalAccessTokenMutation {
-	return patc.mutation
+func (_c *PersonalAccessTokenCreate) Mutation() *PersonalAccessTokenMutation {
+	return _c.mutation
 }
 
 // Save creates the PersonalAccessToken in the database.
-func (patc *PersonalAccessTokenCreate) Save(ctx context.Context) (*PersonalAccessToken, error) {
-	if err := patc.defaults(); err != nil {
+func (_c *PersonalAccessTokenCreate) Save(ctx context.Context) (*PersonalAccessToken, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, patc.sqlSave, patc.mutation, patc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (patc *PersonalAccessTokenCreate) SaveX(ctx context.Context) *PersonalAccessToken {
-	v, err := patc.Save(ctx)
+func (_c *PersonalAccessTokenCreate) SaveX(ctx context.Context) *PersonalAccessToken {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -322,87 +322,87 @@ func (patc *PersonalAccessTokenCreate) SaveX(ctx context.Context) *PersonalAcces
 }
 
 // Exec executes the query.
-func (patc *PersonalAccessTokenCreate) Exec(ctx context.Context) error {
-	_, err := patc.Save(ctx)
+func (_c *PersonalAccessTokenCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (patc *PersonalAccessTokenCreate) ExecX(ctx context.Context) {
-	if err := patc.Exec(ctx); err != nil {
+func (_c *PersonalAccessTokenCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (patc *PersonalAccessTokenCreate) defaults() error {
-	if _, ok := patc.mutation.CreatedAt(); !ok {
+func (_c *PersonalAccessTokenCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if personalaccesstoken.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized personalaccesstoken.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := personalaccesstoken.DefaultCreatedAt()
-		patc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := patc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if personalaccesstoken.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized personalaccesstoken.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := personalaccesstoken.DefaultUpdatedAt()
-		patc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := patc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := personalaccesstoken.DefaultTags
-		patc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := patc.mutation.Token(); !ok {
+	if _, ok := _c.mutation.Token(); !ok {
 		if personalaccesstoken.DefaultToken == nil {
 			return fmt.Errorf("generated: uninitialized personalaccesstoken.DefaultToken (forgotten import generated/runtime?)")
 		}
 		v := personalaccesstoken.DefaultToken()
-		patc.mutation.SetToken(v)
+		_c.mutation.SetToken(v)
 	}
-	if _, ok := patc.mutation.IsActive(); !ok {
+	if _, ok := _c.mutation.IsActive(); !ok {
 		v := personalaccesstoken.DefaultIsActive
-		patc.mutation.SetIsActive(v)
+		_c.mutation.SetIsActive(v)
 	}
-	if _, ok := patc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if personalaccesstoken.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized personalaccesstoken.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := personalaccesstoken.DefaultID()
-		patc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (patc *PersonalAccessTokenCreate) check() error {
-	if _, ok := patc.mutation.OwnerID(); !ok {
+func (_c *PersonalAccessTokenCreate) check() error {
+	if _, ok := _c.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "PersonalAccessToken.owner_id"`)}
 	}
-	if _, ok := patc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "PersonalAccessToken.name"`)}
 	}
-	if v, ok := patc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := personalaccesstoken.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "PersonalAccessToken.name": %w`, err)}
 		}
 	}
-	if _, ok := patc.mutation.Token(); !ok {
+	if _, ok := _c.mutation.Token(); !ok {
 		return &ValidationError{Name: "token", err: errors.New(`generated: missing required field "PersonalAccessToken.token"`)}
 	}
-	if len(patc.mutation.OwnerIDs()) == 0 {
+	if len(_c.mutation.OwnerIDs()) == 0 {
 		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "PersonalAccessToken.owner"`)}
 	}
 	return nil
 }
 
-func (patc *PersonalAccessTokenCreate) sqlSave(ctx context.Context) (*PersonalAccessToken, error) {
-	if err := patc.check(); err != nil {
+func (_c *PersonalAccessTokenCreate) sqlSave(ctx context.Context) (*PersonalAccessToken, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := patc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, patc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -415,94 +415,94 @@ func (patc *PersonalAccessTokenCreate) sqlSave(ctx context.Context) (*PersonalAc
 			return nil, fmt.Errorf("unexpected PersonalAccessToken.ID type: %T", _spec.ID.Value)
 		}
 	}
-	patc.mutation.id = &_node.ID
-	patc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlgraph.CreateSpec) {
+func (_c *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlgraph.CreateSpec) {
 	var (
-		_node = &PersonalAccessToken{config: patc.config}
+		_node = &PersonalAccessToken{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(personalaccesstoken.Table, sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString))
 	)
-	_spec.Schema = patc.schemaConfig.PersonalAccessToken
-	if id, ok := patc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.PersonalAccessToken
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := patc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := patc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := patc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(personalaccesstoken.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := patc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(personalaccesstoken.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := patc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := patc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := patc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(personalaccesstoken.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := patc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(personalaccesstoken.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := patc.mutation.Token(); ok {
+	if value, ok := _c.mutation.Token(); ok {
 		_spec.SetField(personalaccesstoken.FieldToken, field.TypeString, value)
 		_node.Token = value
 	}
-	if value, ok := patc.mutation.ExpiresAt(); ok {
+	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldExpiresAt, field.TypeTime, value)
 		_node.ExpiresAt = &value
 	}
-	if value, ok := patc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(personalaccesstoken.FieldDescription, field.TypeString, value)
 		_node.Description = &value
 	}
-	if value, ok := patc.mutation.Scopes(); ok {
+	if value, ok := _c.mutation.Scopes(); ok {
 		_spec.SetField(personalaccesstoken.FieldScopes, field.TypeJSON, value)
 		_node.Scopes = value
 	}
-	if value, ok := patc.mutation.SSOAuthorizations(); ok {
+	if value, ok := _c.mutation.SSOAuthorizations(); ok {
 		_spec.SetField(personalaccesstoken.FieldSSOAuthorizations, field.TypeJSON, value)
 		_node.SSOAuthorizations = value
 	}
-	if value, ok := patc.mutation.LastUsedAt(); ok {
+	if value, ok := _c.mutation.LastUsedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldLastUsedAt, field.TypeTime, value)
 		_node.LastUsedAt = &value
 	}
-	if value, ok := patc.mutation.IsActive(); ok {
+	if value, ok := _c.mutation.IsActive(); ok {
 		_spec.SetField(personalaccesstoken.FieldIsActive, field.TypeBool, value)
 		_node.IsActive = value
 	}
-	if value, ok := patc.mutation.RevokedReason(); ok {
+	if value, ok := _c.mutation.RevokedReason(); ok {
 		_spec.SetField(personalaccesstoken.FieldRevokedReason, field.TypeString, value)
 		_node.RevokedReason = &value
 	}
-	if value, ok := patc.mutation.RevokedBy(); ok {
+	if value, ok := _c.mutation.RevokedBy(); ok {
 		_spec.SetField(personalaccesstoken.FieldRevokedBy, field.TypeString, value)
 		_node.RevokedBy = &value
 	}
-	if value, ok := patc.mutation.RevokedAt(); ok {
+	if value, ok := _c.mutation.RevokedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldRevokedAt, field.TypeTime, value)
 		_node.RevokedAt = &value
 	}
-	if nodes := patc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -513,14 +513,14 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patc.schemaConfig.PersonalAccessToken
+		edge.Schema = _c.schemaConfig.PersonalAccessToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := patc.mutation.OrganizationsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrganizationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -531,13 +531,13 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patc.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _c.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := patc.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -548,7 +548,7 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patc.schemaConfig.PersonalAccessTokenEvents
+		edge.Schema = _c.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -565,16 +565,16 @@ type PersonalAccessTokenCreateBulk struct {
 }
 
 // Save creates the PersonalAccessToken entities in the database.
-func (patcb *PersonalAccessTokenCreateBulk) Save(ctx context.Context) ([]*PersonalAccessToken, error) {
-	if patcb.err != nil {
-		return nil, patcb.err
+func (_c *PersonalAccessTokenCreateBulk) Save(ctx context.Context) ([]*PersonalAccessToken, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(patcb.builders))
-	nodes := make([]*PersonalAccessToken, len(patcb.builders))
-	mutators := make([]Mutator, len(patcb.builders))
-	for i := range patcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*PersonalAccessToken, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := patcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*PersonalAccessTokenMutation)
@@ -588,11 +588,11 @@ func (patcb *PersonalAccessTokenCreateBulk) Save(ctx context.Context) ([]*Person
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, patcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, patcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -612,7 +612,7 @@ func (patcb *PersonalAccessTokenCreateBulk) Save(ctx context.Context) ([]*Person
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, patcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -620,8 +620,8 @@ func (patcb *PersonalAccessTokenCreateBulk) Save(ctx context.Context) ([]*Person
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (patcb *PersonalAccessTokenCreateBulk) SaveX(ctx context.Context) []*PersonalAccessToken {
-	v, err := patcb.Save(ctx)
+func (_c *PersonalAccessTokenCreateBulk) SaveX(ctx context.Context) []*PersonalAccessToken {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -629,14 +629,14 @@ func (patcb *PersonalAccessTokenCreateBulk) SaveX(ctx context.Context) []*Person
 }
 
 // Exec executes the query.
-func (patcb *PersonalAccessTokenCreateBulk) Exec(ctx context.Context) error {
-	_, err := patcb.Save(ctx)
+func (_c *PersonalAccessTokenCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (patcb *PersonalAccessTokenCreateBulk) ExecX(ctx context.Context) {
-	if err := patcb.Exec(ctx); err != nil {
+func (_c *PersonalAccessTokenCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

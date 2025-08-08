@@ -95,7 +95,7 @@ func (*TFASetting) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TFASetting fields.
-func (ts *TFASetting) assignValues(columns []string, values []any) error {
+func (_m *TFASetting) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -105,68 +105,68 @@ func (ts *TFASetting) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				ts.ID = value.String
+				_m.ID = value.String
 			}
 		case tfasetting.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ts.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case tfasetting.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ts.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case tfasetting.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				ts.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case tfasetting.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				ts.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case tfasetting.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ts.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case tfasetting.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ts.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case tfasetting.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				ts.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case tfasetting.FieldTfaSecret:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field tfa_secret", values[i])
 			} else if value.Valid {
-				ts.TfaSecret = new(string)
-				*ts.TfaSecret = value.String
+				_m.TfaSecret = new(string)
+				*_m.TfaSecret = value.String
 			}
 		case tfasetting.FieldVerified:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field verified", values[i])
 			} else if value.Valid {
-				ts.Verified = value.Bool
+				_m.Verified = value.Bool
 			}
 		case tfasetting.FieldRecoveryCodes:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field recovery_codes", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ts.RecoveryCodes); err != nil {
+				if err := json.Unmarshal(*value, &_m.RecoveryCodes); err != nil {
 					return fmt.Errorf("unmarshal field recovery_codes: %w", err)
 				}
 			}
@@ -174,22 +174,22 @@ func (ts *TFASetting) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field phone_otp_allowed", values[i])
 			} else if value.Valid {
-				ts.PhoneOtpAllowed = value.Bool
+				_m.PhoneOtpAllowed = value.Bool
 			}
 		case tfasetting.FieldEmailOtpAllowed:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field email_otp_allowed", values[i])
 			} else if value.Valid {
-				ts.EmailOtpAllowed = value.Bool
+				_m.EmailOtpAllowed = value.Bool
 			}
 		case tfasetting.FieldTotpAllowed:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field totp_allowed", values[i])
 			} else if value.Valid {
-				ts.TotpAllowed = value.Bool
+				_m.TotpAllowed = value.Bool
 			}
 		default:
-			ts.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -197,78 +197,78 @@ func (ts *TFASetting) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TFASetting.
 // This includes values selected through modifiers, order, etc.
-func (ts *TFASetting) Value(name string) (ent.Value, error) {
-	return ts.selectValues.Get(name)
+func (_m *TFASetting) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the TFASetting entity.
-func (ts *TFASetting) QueryOwner() *UserQuery {
-	return NewTFASettingClient(ts.config).QueryOwner(ts)
+func (_m *TFASetting) QueryOwner() *UserQuery {
+	return NewTFASettingClient(_m.config).QueryOwner(_m)
 }
 
 // Update returns a builder for updating this TFASetting.
 // Note that you need to call TFASetting.Unwrap() before calling this method if this TFASetting
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ts *TFASetting) Update() *TFASettingUpdateOne {
-	return NewTFASettingClient(ts.config).UpdateOne(ts)
+func (_m *TFASetting) Update() *TFASettingUpdateOne {
+	return NewTFASettingClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TFASetting entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ts *TFASetting) Unwrap() *TFASetting {
-	_tx, ok := ts.config.driver.(*txDriver)
+func (_m *TFASetting) Unwrap() *TFASetting {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: TFASetting is not a transactional entity")
 	}
-	ts.config.driver = _tx.drv
-	return ts
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ts *TFASetting) String() string {
+func (_m *TFASetting) String() string {
 	var builder strings.Builder
 	builder.WriteString("TFASetting(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ts.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(ts.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ts.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(ts.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(ts.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(ts.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(ts.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(ts.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
-	if v := ts.TfaSecret; v != nil {
+	if v := _m.TfaSecret; v != nil {
 		builder.WriteString("tfa_secret=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("verified=")
-	builder.WriteString(fmt.Sprintf("%v", ts.Verified))
+	builder.WriteString(fmt.Sprintf("%v", _m.Verified))
 	builder.WriteString(", ")
 	builder.WriteString("recovery_codes=")
-	builder.WriteString(fmt.Sprintf("%v", ts.RecoveryCodes))
+	builder.WriteString(fmt.Sprintf("%v", _m.RecoveryCodes))
 	builder.WriteString(", ")
 	builder.WriteString("phone_otp_allowed=")
-	builder.WriteString(fmt.Sprintf("%v", ts.PhoneOtpAllowed))
+	builder.WriteString(fmt.Sprintf("%v", _m.PhoneOtpAllowed))
 	builder.WriteString(", ")
 	builder.WriteString("email_otp_allowed=")
-	builder.WriteString(fmt.Sprintf("%v", ts.EmailOtpAllowed))
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailOtpAllowed))
 	builder.WriteString(", ")
 	builder.WriteString("totp_allowed=")
-	builder.WriteString(fmt.Sprintf("%v", ts.TotpAllowed))
+	builder.WriteString(fmt.Sprintf("%v", _m.TotpAllowed))
 	builder.WriteByte(')')
 	return builder.String()
 }

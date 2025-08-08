@@ -35,499 +35,499 @@ type FileCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (fc *FileCreate) SetCreatedAt(t time.Time) *FileCreate {
-	fc.mutation.SetCreatedAt(t)
-	return fc
+func (_c *FileCreate) SetCreatedAt(v time.Time) *FileCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (fc *FileCreate) SetNillableCreatedAt(t *time.Time) *FileCreate {
-	if t != nil {
-		fc.SetCreatedAt(*t)
+func (_c *FileCreate) SetNillableCreatedAt(v *time.Time) *FileCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (fc *FileCreate) SetUpdatedAt(t time.Time) *FileCreate {
-	fc.mutation.SetUpdatedAt(t)
-	return fc
+func (_c *FileCreate) SetUpdatedAt(v time.Time) *FileCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fc *FileCreate) SetNillableUpdatedAt(t *time.Time) *FileCreate {
-	if t != nil {
-		fc.SetUpdatedAt(*t)
+func (_c *FileCreate) SetNillableUpdatedAt(v *time.Time) *FileCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (fc *FileCreate) SetCreatedBy(s string) *FileCreate {
-	fc.mutation.SetCreatedBy(s)
-	return fc
+func (_c *FileCreate) SetCreatedBy(v string) *FileCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (fc *FileCreate) SetNillableCreatedBy(s *string) *FileCreate {
-	if s != nil {
-		fc.SetCreatedBy(*s)
+func (_c *FileCreate) SetNillableCreatedBy(v *string) *FileCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (fc *FileCreate) SetUpdatedBy(s string) *FileCreate {
-	fc.mutation.SetUpdatedBy(s)
-	return fc
+func (_c *FileCreate) SetUpdatedBy(v string) *FileCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fc *FileCreate) SetNillableUpdatedBy(s *string) *FileCreate {
-	if s != nil {
-		fc.SetUpdatedBy(*s)
+func (_c *FileCreate) SetNillableUpdatedBy(v *string) *FileCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (fc *FileCreate) SetDeletedAt(t time.Time) *FileCreate {
-	fc.mutation.SetDeletedAt(t)
-	return fc
+func (_c *FileCreate) SetDeletedAt(v time.Time) *FileCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (fc *FileCreate) SetNillableDeletedAt(t *time.Time) *FileCreate {
-	if t != nil {
-		fc.SetDeletedAt(*t)
+func (_c *FileCreate) SetNillableDeletedAt(v *time.Time) *FileCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (fc *FileCreate) SetDeletedBy(s string) *FileCreate {
-	fc.mutation.SetDeletedBy(s)
-	return fc
+func (_c *FileCreate) SetDeletedBy(v string) *FileCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (fc *FileCreate) SetNillableDeletedBy(s *string) *FileCreate {
-	if s != nil {
-		fc.SetDeletedBy(*s)
+func (_c *FileCreate) SetNillableDeletedBy(v *string) *FileCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (fc *FileCreate) SetTags(s []string) *FileCreate {
-	fc.mutation.SetTags(s)
-	return fc
+func (_c *FileCreate) SetTags(v []string) *FileCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetProvidedFileName sets the "provided_file_name" field.
-func (fc *FileCreate) SetProvidedFileName(s string) *FileCreate {
-	fc.mutation.SetProvidedFileName(s)
-	return fc
+func (_c *FileCreate) SetProvidedFileName(v string) *FileCreate {
+	_c.mutation.SetProvidedFileName(v)
+	return _c
 }
 
 // SetProvidedFileExtension sets the "provided_file_extension" field.
-func (fc *FileCreate) SetProvidedFileExtension(s string) *FileCreate {
-	fc.mutation.SetProvidedFileExtension(s)
-	return fc
+func (_c *FileCreate) SetProvidedFileExtension(v string) *FileCreate {
+	_c.mutation.SetProvidedFileExtension(v)
+	return _c
 }
 
 // SetProvidedFileSize sets the "provided_file_size" field.
-func (fc *FileCreate) SetProvidedFileSize(i int64) *FileCreate {
-	fc.mutation.SetProvidedFileSize(i)
-	return fc
+func (_c *FileCreate) SetProvidedFileSize(v int64) *FileCreate {
+	_c.mutation.SetProvidedFileSize(v)
+	return _c
 }
 
 // SetNillableProvidedFileSize sets the "provided_file_size" field if the given value is not nil.
-func (fc *FileCreate) SetNillableProvidedFileSize(i *int64) *FileCreate {
-	if i != nil {
-		fc.SetProvidedFileSize(*i)
+func (_c *FileCreate) SetNillableProvidedFileSize(v *int64) *FileCreate {
+	if v != nil {
+		_c.SetProvidedFileSize(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetPersistedFileSize sets the "persisted_file_size" field.
-func (fc *FileCreate) SetPersistedFileSize(i int64) *FileCreate {
-	fc.mutation.SetPersistedFileSize(i)
-	return fc
+func (_c *FileCreate) SetPersistedFileSize(v int64) *FileCreate {
+	_c.mutation.SetPersistedFileSize(v)
+	return _c
 }
 
 // SetNillablePersistedFileSize sets the "persisted_file_size" field if the given value is not nil.
-func (fc *FileCreate) SetNillablePersistedFileSize(i *int64) *FileCreate {
-	if i != nil {
-		fc.SetPersistedFileSize(*i)
+func (_c *FileCreate) SetNillablePersistedFileSize(v *int64) *FileCreate {
+	if v != nil {
+		_c.SetPersistedFileSize(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetDetectedMimeType sets the "detected_mime_type" field.
-func (fc *FileCreate) SetDetectedMimeType(s string) *FileCreate {
-	fc.mutation.SetDetectedMimeType(s)
-	return fc
+func (_c *FileCreate) SetDetectedMimeType(v string) *FileCreate {
+	_c.mutation.SetDetectedMimeType(v)
+	return _c
 }
 
 // SetNillableDetectedMimeType sets the "detected_mime_type" field if the given value is not nil.
-func (fc *FileCreate) SetNillableDetectedMimeType(s *string) *FileCreate {
-	if s != nil {
-		fc.SetDetectedMimeType(*s)
+func (_c *FileCreate) SetNillableDetectedMimeType(v *string) *FileCreate {
+	if v != nil {
+		_c.SetDetectedMimeType(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetMd5Hash sets the "md5_hash" field.
-func (fc *FileCreate) SetMd5Hash(s string) *FileCreate {
-	fc.mutation.SetMd5Hash(s)
-	return fc
+func (_c *FileCreate) SetMd5Hash(v string) *FileCreate {
+	_c.mutation.SetMd5Hash(v)
+	return _c
 }
 
 // SetNillableMd5Hash sets the "md5_hash" field if the given value is not nil.
-func (fc *FileCreate) SetNillableMd5Hash(s *string) *FileCreate {
-	if s != nil {
-		fc.SetMd5Hash(*s)
+func (_c *FileCreate) SetNillableMd5Hash(v *string) *FileCreate {
+	if v != nil {
+		_c.SetMd5Hash(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetDetectedContentType sets the "detected_content_type" field.
-func (fc *FileCreate) SetDetectedContentType(s string) *FileCreate {
-	fc.mutation.SetDetectedContentType(s)
-	return fc
+func (_c *FileCreate) SetDetectedContentType(v string) *FileCreate {
+	_c.mutation.SetDetectedContentType(v)
+	return _c
 }
 
 // SetStoreKey sets the "store_key" field.
-func (fc *FileCreate) SetStoreKey(s string) *FileCreate {
-	fc.mutation.SetStoreKey(s)
-	return fc
+func (_c *FileCreate) SetStoreKey(v string) *FileCreate {
+	_c.mutation.SetStoreKey(v)
+	return _c
 }
 
 // SetNillableStoreKey sets the "store_key" field if the given value is not nil.
-func (fc *FileCreate) SetNillableStoreKey(s *string) *FileCreate {
-	if s != nil {
-		fc.SetStoreKey(*s)
+func (_c *FileCreate) SetNillableStoreKey(v *string) *FileCreate {
+	if v != nil {
+		_c.SetStoreKey(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetCategoryType sets the "category_type" field.
-func (fc *FileCreate) SetCategoryType(s string) *FileCreate {
-	fc.mutation.SetCategoryType(s)
-	return fc
+func (_c *FileCreate) SetCategoryType(v string) *FileCreate {
+	_c.mutation.SetCategoryType(v)
+	return _c
 }
 
 // SetNillableCategoryType sets the "category_type" field if the given value is not nil.
-func (fc *FileCreate) SetNillableCategoryType(s *string) *FileCreate {
-	if s != nil {
-		fc.SetCategoryType(*s)
+func (_c *FileCreate) SetNillableCategoryType(v *string) *FileCreate {
+	if v != nil {
+		_c.SetCategoryType(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetURI sets the "uri" field.
-func (fc *FileCreate) SetURI(s string) *FileCreate {
-	fc.mutation.SetURI(s)
-	return fc
+func (_c *FileCreate) SetURI(v string) *FileCreate {
+	_c.mutation.SetURI(v)
+	return _c
 }
 
 // SetNillableURI sets the "uri" field if the given value is not nil.
-func (fc *FileCreate) SetNillableURI(s *string) *FileCreate {
-	if s != nil {
-		fc.SetURI(*s)
+func (_c *FileCreate) SetNillableURI(v *string) *FileCreate {
+	if v != nil {
+		_c.SetURI(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetStorageScheme sets the "storage_scheme" field.
-func (fc *FileCreate) SetStorageScheme(s string) *FileCreate {
-	fc.mutation.SetStorageScheme(s)
-	return fc
+func (_c *FileCreate) SetStorageScheme(v string) *FileCreate {
+	_c.mutation.SetStorageScheme(v)
+	return _c
 }
 
 // SetNillableStorageScheme sets the "storage_scheme" field if the given value is not nil.
-func (fc *FileCreate) SetNillableStorageScheme(s *string) *FileCreate {
-	if s != nil {
-		fc.SetStorageScheme(*s)
+func (_c *FileCreate) SetNillableStorageScheme(v *string) *FileCreate {
+	if v != nil {
+		_c.SetStorageScheme(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetStorageVolume sets the "storage_volume" field.
-func (fc *FileCreate) SetStorageVolume(s string) *FileCreate {
-	fc.mutation.SetStorageVolume(s)
-	return fc
+func (_c *FileCreate) SetStorageVolume(v string) *FileCreate {
+	_c.mutation.SetStorageVolume(v)
+	return _c
 }
 
 // SetNillableStorageVolume sets the "storage_volume" field if the given value is not nil.
-func (fc *FileCreate) SetNillableStorageVolume(s *string) *FileCreate {
-	if s != nil {
-		fc.SetStorageVolume(*s)
+func (_c *FileCreate) SetNillableStorageVolume(v *string) *FileCreate {
+	if v != nil {
+		_c.SetStorageVolume(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetStoragePath sets the "storage_path" field.
-func (fc *FileCreate) SetStoragePath(s string) *FileCreate {
-	fc.mutation.SetStoragePath(s)
-	return fc
+func (_c *FileCreate) SetStoragePath(v string) *FileCreate {
+	_c.mutation.SetStoragePath(v)
+	return _c
 }
 
 // SetNillableStoragePath sets the "storage_path" field if the given value is not nil.
-func (fc *FileCreate) SetNillableStoragePath(s *string) *FileCreate {
-	if s != nil {
-		fc.SetStoragePath(*s)
+func (_c *FileCreate) SetNillableStoragePath(v *string) *FileCreate {
+	if v != nil {
+		_c.SetStoragePath(*v)
 	}
-	return fc
+	return _c
 }
 
 // SetFileContents sets the "file_contents" field.
-func (fc *FileCreate) SetFileContents(b []byte) *FileCreate {
-	fc.mutation.SetFileContents(b)
-	return fc
+func (_c *FileCreate) SetFileContents(v []byte) *FileCreate {
+	_c.mutation.SetFileContents(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (fc *FileCreate) SetID(s string) *FileCreate {
-	fc.mutation.SetID(s)
-	return fc
+func (_c *FileCreate) SetID(v string) *FileCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (fc *FileCreate) SetNillableID(s *string) *FileCreate {
-	if s != nil {
-		fc.SetID(*s)
+func (_c *FileCreate) SetNillableID(v *string) *FileCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return fc
+	return _c
 }
 
 // AddUserIDs adds the "user" edge to the User entity by IDs.
-func (fc *FileCreate) AddUserIDs(ids ...string) *FileCreate {
-	fc.mutation.AddUserIDs(ids...)
-	return fc
+func (_c *FileCreate) AddUserIDs(ids ...string) *FileCreate {
+	_c.mutation.AddUserIDs(ids...)
+	return _c
 }
 
 // AddUser adds the "user" edges to the User entity.
-func (fc *FileCreate) AddUser(u ...*User) *FileCreate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_c *FileCreate) AddUser(v ...*User) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddUserIDs(ids...)
+	return _c.AddUserIDs(ids...)
 }
 
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
-func (fc *FileCreate) AddOrganizationIDs(ids ...string) *FileCreate {
-	fc.mutation.AddOrganizationIDs(ids...)
-	return fc
+func (_c *FileCreate) AddOrganizationIDs(ids ...string) *FileCreate {
+	_c.mutation.AddOrganizationIDs(ids...)
+	return _c
 }
 
 // AddOrganization adds the "organization" edges to the Organization entity.
-func (fc *FileCreate) AddOrganization(o ...*Organization) *FileCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *FileCreate) AddOrganization(v ...*Organization) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddOrganizationIDs(ids...)
+	return _c.AddOrganizationIDs(ids...)
 }
 
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
-func (fc *FileCreate) AddGroupIDs(ids ...string) *FileCreate {
-	fc.mutation.AddGroupIDs(ids...)
-	return fc
+func (_c *FileCreate) AddGroupIDs(ids ...string) *FileCreate {
+	_c.mutation.AddGroupIDs(ids...)
+	return _c
 }
 
 // AddGroups adds the "groups" edges to the Group entity.
-func (fc *FileCreate) AddGroups(g ...*Group) *FileCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *FileCreate) AddGroups(v ...*Group) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddGroupIDs(ids...)
+	return _c.AddGroupIDs(ids...)
 }
 
 // AddContactIDs adds the "contact" edge to the Contact entity by IDs.
-func (fc *FileCreate) AddContactIDs(ids ...string) *FileCreate {
-	fc.mutation.AddContactIDs(ids...)
-	return fc
+func (_c *FileCreate) AddContactIDs(ids ...string) *FileCreate {
+	_c.mutation.AddContactIDs(ids...)
+	return _c
 }
 
 // AddContact adds the "contact" edges to the Contact entity.
-func (fc *FileCreate) AddContact(c ...*Contact) *FileCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *FileCreate) AddContact(v ...*Contact) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddContactIDs(ids...)
+	return _c.AddContactIDs(ids...)
 }
 
 // AddEntityIDs adds the "entity" edge to the Entity entity by IDs.
-func (fc *FileCreate) AddEntityIDs(ids ...string) *FileCreate {
-	fc.mutation.AddEntityIDs(ids...)
-	return fc
+func (_c *FileCreate) AddEntityIDs(ids ...string) *FileCreate {
+	_c.mutation.AddEntityIDs(ids...)
+	return _c
 }
 
 // AddEntity adds the "entity" edges to the Entity entity.
-func (fc *FileCreate) AddEntity(e ...*Entity) *FileCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *FileCreate) AddEntity(v ...*Entity) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddEntityIDs(ids...)
+	return _c.AddEntityIDs(ids...)
 }
 
 // AddUserSettingIDs adds the "user_setting" edge to the UserSetting entity by IDs.
-func (fc *FileCreate) AddUserSettingIDs(ids ...string) *FileCreate {
-	fc.mutation.AddUserSettingIDs(ids...)
-	return fc
+func (_c *FileCreate) AddUserSettingIDs(ids ...string) *FileCreate {
+	_c.mutation.AddUserSettingIDs(ids...)
+	return _c
 }
 
 // AddUserSetting adds the "user_setting" edges to the UserSetting entity.
-func (fc *FileCreate) AddUserSetting(u ...*UserSetting) *FileCreate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_c *FileCreate) AddUserSetting(v ...*UserSetting) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddUserSettingIDs(ids...)
+	return _c.AddUserSettingIDs(ids...)
 }
 
 // AddOrganizationSettingIDs adds the "organization_setting" edge to the OrganizationSetting entity by IDs.
-func (fc *FileCreate) AddOrganizationSettingIDs(ids ...string) *FileCreate {
-	fc.mutation.AddOrganizationSettingIDs(ids...)
-	return fc
+func (_c *FileCreate) AddOrganizationSettingIDs(ids ...string) *FileCreate {
+	_c.mutation.AddOrganizationSettingIDs(ids...)
+	return _c
 }
 
 // AddOrganizationSetting adds the "organization_setting" edges to the OrganizationSetting entity.
-func (fc *FileCreate) AddOrganizationSetting(o ...*OrganizationSetting) *FileCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *FileCreate) AddOrganizationSetting(v ...*OrganizationSetting) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddOrganizationSettingIDs(ids...)
+	return _c.AddOrganizationSettingIDs(ids...)
 }
 
 // AddTemplateIDs adds the "template" edge to the Template entity by IDs.
-func (fc *FileCreate) AddTemplateIDs(ids ...string) *FileCreate {
-	fc.mutation.AddTemplateIDs(ids...)
-	return fc
+func (_c *FileCreate) AddTemplateIDs(ids ...string) *FileCreate {
+	_c.mutation.AddTemplateIDs(ids...)
+	return _c
 }
 
 // AddTemplate adds the "template" edges to the Template entity.
-func (fc *FileCreate) AddTemplate(t ...*Template) *FileCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *FileCreate) AddTemplate(v ...*Template) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddTemplateIDs(ids...)
+	return _c.AddTemplateIDs(ids...)
 }
 
 // AddDocumentIDs adds the "document" edge to the DocumentData entity by IDs.
-func (fc *FileCreate) AddDocumentIDs(ids ...string) *FileCreate {
-	fc.mutation.AddDocumentIDs(ids...)
-	return fc
+func (_c *FileCreate) AddDocumentIDs(ids ...string) *FileCreate {
+	_c.mutation.AddDocumentIDs(ids...)
+	return _c
 }
 
 // AddDocument adds the "document" edges to the DocumentData entity.
-func (fc *FileCreate) AddDocument(d ...*DocumentData) *FileCreate {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_c *FileCreate) AddDocument(v ...*DocumentData) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddDocumentIDs(ids...)
+	return _c.AddDocumentIDs(ids...)
 }
 
 // AddProgramIDs adds the "program" edge to the Program entity by IDs.
-func (fc *FileCreate) AddProgramIDs(ids ...string) *FileCreate {
-	fc.mutation.AddProgramIDs(ids...)
-	return fc
+func (_c *FileCreate) AddProgramIDs(ids ...string) *FileCreate {
+	_c.mutation.AddProgramIDs(ids...)
+	return _c
 }
 
 // AddProgram adds the "program" edges to the Program entity.
-func (fc *FileCreate) AddProgram(p ...*Program) *FileCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *FileCreate) AddProgram(v ...*Program) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddProgramIDs(ids...)
+	return _c.AddProgramIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (fc *FileCreate) AddEvidenceIDs(ids ...string) *FileCreate {
-	fc.mutation.AddEvidenceIDs(ids...)
-	return fc
+func (_c *FileCreate) AddEvidenceIDs(ids ...string) *FileCreate {
+	_c.mutation.AddEvidenceIDs(ids...)
+	return _c
 }
 
 // AddEvidence adds the "evidence" edges to the Evidence entity.
-func (fc *FileCreate) AddEvidence(e ...*Evidence) *FileCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *FileCreate) AddEvidence(v ...*Evidence) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddEvidenceIDs(ids...)
+	return _c.AddEvidenceIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (fc *FileCreate) AddEventIDs(ids ...string) *FileCreate {
-	fc.mutation.AddEventIDs(ids...)
-	return fc
+func (_c *FileCreate) AddEventIDs(ids ...string) *FileCreate {
+	_c.mutation.AddEventIDs(ids...)
+	return _c
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (fc *FileCreate) AddEvents(e ...*Event) *FileCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *FileCreate) AddEvents(v ...*Event) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddEventIDs(ids...)
+	return _c.AddEventIDs(ids...)
 }
 
 // AddTrustCenterSettingIDs adds the "trust_center_setting" edge to the TrustCenterSetting entity by IDs.
-func (fc *FileCreate) AddTrustCenterSettingIDs(ids ...string) *FileCreate {
-	fc.mutation.AddTrustCenterSettingIDs(ids...)
-	return fc
+func (_c *FileCreate) AddTrustCenterSettingIDs(ids ...string) *FileCreate {
+	_c.mutation.AddTrustCenterSettingIDs(ids...)
+	return _c
 }
 
 // AddTrustCenterSetting adds the "trust_center_setting" edges to the TrustCenterSetting entity.
-func (fc *FileCreate) AddTrustCenterSetting(t ...*TrustCenterSetting) *FileCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *FileCreate) AddTrustCenterSetting(v ...*TrustCenterSetting) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddTrustCenterSettingIDs(ids...)
+	return _c.AddTrustCenterSettingIDs(ids...)
 }
 
 // AddSubprocessorIDs adds the "subprocessor" edge to the Subprocessor entity by IDs.
-func (fc *FileCreate) AddSubprocessorIDs(ids ...string) *FileCreate {
-	fc.mutation.AddSubprocessorIDs(ids...)
-	return fc
+func (_c *FileCreate) AddSubprocessorIDs(ids ...string) *FileCreate {
+	_c.mutation.AddSubprocessorIDs(ids...)
+	return _c
 }
 
 // AddSubprocessor adds the "subprocessor" edges to the Subprocessor entity.
-func (fc *FileCreate) AddSubprocessor(s ...*Subprocessor) *FileCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *FileCreate) AddSubprocessor(v ...*Subprocessor) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return fc.AddSubprocessorIDs(ids...)
+	return _c.AddSubprocessorIDs(ids...)
 }
 
 // Mutation returns the FileMutation object of the builder.
-func (fc *FileCreate) Mutation() *FileMutation {
-	return fc.mutation
+func (_c *FileCreate) Mutation() *FileMutation {
+	return _c.mutation
 }
 
 // Save creates the File in the database.
-func (fc *FileCreate) Save(ctx context.Context) (*File, error) {
-	if err := fc.defaults(); err != nil {
+func (_c *FileCreate) Save(ctx context.Context) (*File, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, fc.sqlSave, fc.mutation, fc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (fc *FileCreate) SaveX(ctx context.Context) *File {
-	v, err := fc.Save(ctx)
+func (_c *FileCreate) SaveX(ctx context.Context) *File {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -535,78 +535,78 @@ func (fc *FileCreate) SaveX(ctx context.Context) *File {
 }
 
 // Exec executes the query.
-func (fc *FileCreate) Exec(ctx context.Context) error {
-	_, err := fc.Save(ctx)
+func (_c *FileCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fc *FileCreate) ExecX(ctx context.Context) {
-	if err := fc.Exec(ctx); err != nil {
+func (_c *FileCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (fc *FileCreate) defaults() error {
-	if _, ok := fc.mutation.CreatedAt(); !ok {
+func (_c *FileCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if file.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized file.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := file.DefaultCreatedAt()
-		fc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := fc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if file.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized file.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := file.DefaultUpdatedAt()
-		fc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := fc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := file.DefaultTags
-		fc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := fc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if file.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized file.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := file.DefaultID()
-		fc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (fc *FileCreate) check() error {
-	if _, ok := fc.mutation.ProvidedFileName(); !ok {
+func (_c *FileCreate) check() error {
+	if _, ok := _c.mutation.ProvidedFileName(); !ok {
 		return &ValidationError{Name: "provided_file_name", err: errors.New(`generated: missing required field "File.provided_file_name"`)}
 	}
-	if _, ok := fc.mutation.ProvidedFileExtension(); !ok {
+	if _, ok := _c.mutation.ProvidedFileExtension(); !ok {
 		return &ValidationError{Name: "provided_file_extension", err: errors.New(`generated: missing required field "File.provided_file_extension"`)}
 	}
-	if v, ok := fc.mutation.ProvidedFileSize(); ok {
+	if v, ok := _c.mutation.ProvidedFileSize(); ok {
 		if err := file.ProvidedFileSizeValidator(v); err != nil {
 			return &ValidationError{Name: "provided_file_size", err: fmt.Errorf(`generated: validator failed for field "File.provided_file_size": %w`, err)}
 		}
 	}
-	if v, ok := fc.mutation.PersistedFileSize(); ok {
+	if v, ok := _c.mutation.PersistedFileSize(); ok {
 		if err := file.PersistedFileSizeValidator(v); err != nil {
 			return &ValidationError{Name: "persisted_file_size", err: fmt.Errorf(`generated: validator failed for field "File.persisted_file_size": %w`, err)}
 		}
 	}
-	if _, ok := fc.mutation.DetectedContentType(); !ok {
+	if _, ok := _c.mutation.DetectedContentType(); !ok {
 		return &ValidationError{Name: "detected_content_type", err: errors.New(`generated: missing required field "File.detected_content_type"`)}
 	}
 	return nil
 }
 
-func (fc *FileCreate) sqlSave(ctx context.Context) (*File, error) {
-	if err := fc.check(); err != nil {
+func (_c *FileCreate) sqlSave(ctx context.Context) (*File, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := fc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, fc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -619,106 +619,106 @@ func (fc *FileCreate) sqlSave(ctx context.Context) (*File, error) {
 			return nil, fmt.Errorf("unexpected File.ID type: %T", _spec.ID.Value)
 		}
 	}
-	fc.mutation.id = &_node.ID
-	fc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
+func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 	var (
-		_node = &File{config: fc.config}
+		_node = &File{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(file.Table, sqlgraph.NewFieldSpec(file.FieldID, field.TypeString))
 	)
-	_spec.Schema = fc.schemaConfig.File
-	if id, ok := fc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.File
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := fc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(file.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := fc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(file.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := fc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(file.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := fc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(file.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := fc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(file.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := fc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(file.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := fc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(file.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := fc.mutation.ProvidedFileName(); ok {
+	if value, ok := _c.mutation.ProvidedFileName(); ok {
 		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
 		_node.ProvidedFileName = value
 	}
-	if value, ok := fc.mutation.ProvidedFileExtension(); ok {
+	if value, ok := _c.mutation.ProvidedFileExtension(); ok {
 		_spec.SetField(file.FieldProvidedFileExtension, field.TypeString, value)
 		_node.ProvidedFileExtension = value
 	}
-	if value, ok := fc.mutation.ProvidedFileSize(); ok {
+	if value, ok := _c.mutation.ProvidedFileSize(); ok {
 		_spec.SetField(file.FieldProvidedFileSize, field.TypeInt64, value)
 		_node.ProvidedFileSize = value
 	}
-	if value, ok := fc.mutation.PersistedFileSize(); ok {
+	if value, ok := _c.mutation.PersistedFileSize(); ok {
 		_spec.SetField(file.FieldPersistedFileSize, field.TypeInt64, value)
 		_node.PersistedFileSize = value
 	}
-	if value, ok := fc.mutation.DetectedMimeType(); ok {
+	if value, ok := _c.mutation.DetectedMimeType(); ok {
 		_spec.SetField(file.FieldDetectedMimeType, field.TypeString, value)
 		_node.DetectedMimeType = value
 	}
-	if value, ok := fc.mutation.Md5Hash(); ok {
+	if value, ok := _c.mutation.Md5Hash(); ok {
 		_spec.SetField(file.FieldMd5Hash, field.TypeString, value)
 		_node.Md5Hash = value
 	}
-	if value, ok := fc.mutation.DetectedContentType(); ok {
+	if value, ok := _c.mutation.DetectedContentType(); ok {
 		_spec.SetField(file.FieldDetectedContentType, field.TypeString, value)
 		_node.DetectedContentType = value
 	}
-	if value, ok := fc.mutation.StoreKey(); ok {
+	if value, ok := _c.mutation.StoreKey(); ok {
 		_spec.SetField(file.FieldStoreKey, field.TypeString, value)
 		_node.StoreKey = value
 	}
-	if value, ok := fc.mutation.CategoryType(); ok {
+	if value, ok := _c.mutation.CategoryType(); ok {
 		_spec.SetField(file.FieldCategoryType, field.TypeString, value)
 		_node.CategoryType = value
 	}
-	if value, ok := fc.mutation.URI(); ok {
+	if value, ok := _c.mutation.URI(); ok {
 		_spec.SetField(file.FieldURI, field.TypeString, value)
 		_node.URI = value
 	}
-	if value, ok := fc.mutation.StorageScheme(); ok {
+	if value, ok := _c.mutation.StorageScheme(); ok {
 		_spec.SetField(file.FieldStorageScheme, field.TypeString, value)
 		_node.StorageScheme = value
 	}
-	if value, ok := fc.mutation.StorageVolume(); ok {
+	if value, ok := _c.mutation.StorageVolume(); ok {
 		_spec.SetField(file.FieldStorageVolume, field.TypeString, value)
 		_node.StorageVolume = value
 	}
-	if value, ok := fc.mutation.StoragePath(); ok {
+	if value, ok := _c.mutation.StoragePath(); ok {
 		_spec.SetField(file.FieldStoragePath, field.TypeString, value)
 		_node.StoragePath = value
 	}
-	if value, ok := fc.mutation.FileContents(); ok {
+	if value, ok := _c.mutation.FileContents(); ok {
 		_spec.SetField(file.FieldFileContents, field.TypeBytes, value)
 		_node.FileContents = value
 	}
-	if nodes := fc.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -729,13 +729,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.UserFiles
+		edge.Schema = _c.schemaConfig.UserFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -746,13 +746,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.OrganizationFiles
+		edge.Schema = _c.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.GroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -763,13 +763,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.GroupFiles
+		edge.Schema = _c.schemaConfig.GroupFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.ContactIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ContactIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -780,13 +780,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.ContactFiles
+		edge.Schema = _c.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.EntityIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EntityIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -797,13 +797,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.EntityFiles
+		edge.Schema = _c.schemaConfig.EntityFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.UserSettingIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UserSettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -814,13 +814,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.UserSettingFiles
+		edge.Schema = _c.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.OrganizationSettingIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrganizationSettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -831,13 +831,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.OrganizationSettingFiles
+		edge.Schema = _c.schemaConfig.OrganizationSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.TemplateIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -848,13 +848,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.TemplateFiles
+		edge.Schema = _c.schemaConfig.TemplateFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.DocumentIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DocumentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -865,13 +865,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.DocumentDataFiles
+		edge.Schema = _c.schemaConfig.DocumentDataFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -882,13 +882,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.ProgramFiles
+		edge.Schema = _c.schemaConfig.ProgramFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.EvidenceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -899,13 +899,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.EvidenceFiles
+		edge.Schema = _c.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -916,13 +916,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.FileEvents
+		edge.Schema = _c.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.TrustCenterSettingIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TrustCenterSettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -933,13 +933,13 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _c.schemaConfig.TrustCenterSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.SubprocessorIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubprocessorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -950,7 +950,7 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.SubprocessorFiles
+		edge.Schema = _c.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -967,16 +967,16 @@ type FileCreateBulk struct {
 }
 
 // Save creates the File entities in the database.
-func (fcb *FileCreateBulk) Save(ctx context.Context) ([]*File, error) {
-	if fcb.err != nil {
-		return nil, fcb.err
+func (_c *FileCreateBulk) Save(ctx context.Context) ([]*File, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(fcb.builders))
-	nodes := make([]*File, len(fcb.builders))
-	mutators := make([]Mutator, len(fcb.builders))
-	for i := range fcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*File, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := fcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*FileMutation)
@@ -990,11 +990,11 @@ func (fcb *FileCreateBulk) Save(ctx context.Context) ([]*File, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, fcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, fcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -1014,7 +1014,7 @@ func (fcb *FileCreateBulk) Save(ctx context.Context) ([]*File, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, fcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -1022,8 +1022,8 @@ func (fcb *FileCreateBulk) Save(ctx context.Context) ([]*File, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fcb *FileCreateBulk) SaveX(ctx context.Context) []*File {
-	v, err := fcb.Save(ctx)
+func (_c *FileCreateBulk) SaveX(ctx context.Context) []*File {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1031,14 +1031,14 @@ func (fcb *FileCreateBulk) SaveX(ctx context.Context) []*File {
 }
 
 // Exec executes the query.
-func (fcb *FileCreateBulk) Exec(ctx context.Context) error {
-	_, err := fcb.Save(ctx)
+func (_c *FileCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fcb *FileCreateBulk) ExecX(ctx context.Context) {
-	if err := fcb.Exec(ctx); err != nil {
+func (_c *FileCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

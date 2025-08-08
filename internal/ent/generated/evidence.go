@@ -68,6 +68,8 @@ type EvidenceEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// ControlObjectives holds the value of the control_objectives edge.
 	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
+	// ControlImplementations holds the value of the control_implementations edge.
+	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -80,16 +82,17 @@ type EvidenceEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
-	namedControlObjectives map[string][]*ControlObjective
-	namedControls          map[string][]*Control
-	namedSubcontrols       map[string][]*Subcontrol
-	namedFiles             map[string][]*File
-	namedPrograms          map[string][]*Program
-	namedTasks             map[string][]*Task
+	namedControlObjectives      map[string][]*ControlObjective
+	namedControlImplementations map[string][]*ControlImplementation
+	namedControls               map[string][]*Control
+	namedSubcontrols            map[string][]*Subcontrol
+	namedFiles                  map[string][]*File
+	namedPrograms               map[string][]*Program
+	namedTasks                  map[string][]*Task
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -112,10 +115,19 @@ func (e EvidenceEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 	return nil, &NotLoadedError{edge: "control_objectives"}
 }
 
+// ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
+// was not loaded in eager-loading.
+func (e EvidenceEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
+	if e.loadedTypes[2] {
+		return e.ControlImplementations, nil
+	}
+	return nil, &NotLoadedError{edge: "control_implementations"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -124,7 +136,7 @@ func (e EvidenceEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -133,7 +145,7 @@ func (e EvidenceEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -142,7 +154,7 @@ func (e EvidenceEdges) FilesOrErr() ([]*File, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -151,7 +163,7 @@ func (e EvidenceEdges) ProgramsOrErr() ([]*Program, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -179,7 +191,7 @@ func (*Evidence) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Evidence fields.
-func (e *Evidence) assignValues(columns []string, values []any) error {
+func (_m *Evidence) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -189,55 +201,55 @@ func (e *Evidence) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				e.ID = value.String
+				_m.ID = value.String
 			}
 		case evidence.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				e.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case evidence.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				e.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case evidence.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				e.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case evidence.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				e.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case evidence.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				e.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case evidence.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				e.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case evidence.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				e.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case evidence.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &e.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -245,64 +257,64 @@ func (e *Evidence) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				e.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case evidence.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				e.Name = value.String
+				_m.Name = value.String
 			}
 		case evidence.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				e.Description = value.String
+				_m.Description = value.String
 			}
 		case evidence.FieldCollectionProcedure:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field collection_procedure", values[i])
 			} else if value.Valid {
-				e.CollectionProcedure = value.String
+				_m.CollectionProcedure = value.String
 			}
 		case evidence.FieldCreationDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field creation_date", values[i])
 			} else if value.Valid {
-				e.CreationDate = value.Time
+				_m.CreationDate = value.Time
 			}
 		case evidence.FieldRenewalDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field renewal_date", values[i])
 			} else if value.Valid {
-				e.RenewalDate = value.Time
+				_m.RenewalDate = value.Time
 			}
 		case evidence.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				e.Source = value.String
+				_m.Source = value.String
 			}
 		case evidence.FieldIsAutomated:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_automated", values[i])
 			} else if value.Valid {
-				e.IsAutomated = value.Bool
+				_m.IsAutomated = value.Bool
 			}
 		case evidence.FieldURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field url", values[i])
 			} else if value.Valid {
-				e.URL = value.String
+				_m.URL = value.String
 			}
 		case evidence.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				e.Status = enums.EvidenceStatus(value.String)
+				_m.Status = enums.EvidenceStatus(value.String)
 			}
 		default:
-			e.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -310,266 +322,295 @@ func (e *Evidence) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Evidence.
 // This includes values selected through modifiers, order, etc.
-func (e *Evidence) Value(name string) (ent.Value, error) {
-	return e.selectValues.Get(name)
+func (_m *Evidence) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Evidence entity.
-func (e *Evidence) QueryOwner() *OrganizationQuery {
-	return NewEvidenceClient(e.config).QueryOwner(e)
+func (_m *Evidence) QueryOwner() *OrganizationQuery {
+	return NewEvidenceClient(_m.config).QueryOwner(_m)
 }
 
 // QueryControlObjectives queries the "control_objectives" edge of the Evidence entity.
-func (e *Evidence) QueryControlObjectives() *ControlObjectiveQuery {
-	return NewEvidenceClient(e.config).QueryControlObjectives(e)
+func (_m *Evidence) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewEvidenceClient(_m.config).QueryControlObjectives(_m)
+}
+
+// QueryControlImplementations queries the "control_implementations" edge of the Evidence entity.
+func (_m *Evidence) QueryControlImplementations() *ControlImplementationQuery {
+	return NewEvidenceClient(_m.config).QueryControlImplementations(_m)
 }
 
 // QueryControls queries the "controls" edge of the Evidence entity.
-func (e *Evidence) QueryControls() *ControlQuery {
-	return NewEvidenceClient(e.config).QueryControls(e)
+func (_m *Evidence) QueryControls() *ControlQuery {
+	return NewEvidenceClient(_m.config).QueryControls(_m)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the Evidence entity.
-func (e *Evidence) QuerySubcontrols() *SubcontrolQuery {
-	return NewEvidenceClient(e.config).QuerySubcontrols(e)
+func (_m *Evidence) QuerySubcontrols() *SubcontrolQuery {
+	return NewEvidenceClient(_m.config).QuerySubcontrols(_m)
 }
 
 // QueryFiles queries the "files" edge of the Evidence entity.
-func (e *Evidence) QueryFiles() *FileQuery {
-	return NewEvidenceClient(e.config).QueryFiles(e)
+func (_m *Evidence) QueryFiles() *FileQuery {
+	return NewEvidenceClient(_m.config).QueryFiles(_m)
 }
 
 // QueryPrograms queries the "programs" edge of the Evidence entity.
-func (e *Evidence) QueryPrograms() *ProgramQuery {
-	return NewEvidenceClient(e.config).QueryPrograms(e)
+func (_m *Evidence) QueryPrograms() *ProgramQuery {
+	return NewEvidenceClient(_m.config).QueryPrograms(_m)
 }
 
 // QueryTasks queries the "tasks" edge of the Evidence entity.
-func (e *Evidence) QueryTasks() *TaskQuery {
-	return NewEvidenceClient(e.config).QueryTasks(e)
+func (_m *Evidence) QueryTasks() *TaskQuery {
+	return NewEvidenceClient(_m.config).QueryTasks(_m)
 }
 
 // Update returns a builder for updating this Evidence.
 // Note that you need to call Evidence.Unwrap() before calling this method if this Evidence
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (e *Evidence) Update() *EvidenceUpdateOne {
-	return NewEvidenceClient(e.config).UpdateOne(e)
+func (_m *Evidence) Update() *EvidenceUpdateOne {
+	return NewEvidenceClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Evidence entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (e *Evidence) Unwrap() *Evidence {
-	_tx, ok := e.config.driver.(*txDriver)
+func (_m *Evidence) Unwrap() *Evidence {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Evidence is not a transactional entity")
 	}
-	e.config.driver = _tx.drv
-	return e
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (e *Evidence) String() string {
+func (_m *Evidence) String() string {
 	var builder strings.Builder
 	builder.WriteString("Evidence(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", e.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(e.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(e.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(e.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(e.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(e.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(e.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(e.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", e.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(e.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(e.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(e.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("collection_procedure=")
-	builder.WriteString(e.CollectionProcedure)
+	builder.WriteString(_m.CollectionProcedure)
 	builder.WriteString(", ")
 	builder.WriteString("creation_date=")
-	builder.WriteString(e.CreationDate.Format(time.ANSIC))
+	builder.WriteString(_m.CreationDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("renewal_date=")
-	builder.WriteString(e.RenewalDate.Format(time.ANSIC))
+	builder.WriteString(_m.RenewalDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(e.Source)
+	builder.WriteString(_m.Source)
 	builder.WriteString(", ")
 	builder.WriteString("is_automated=")
-	builder.WriteString(fmt.Sprintf("%v", e.IsAutomated))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsAutomated))
 	builder.WriteString(", ")
 	builder.WriteString("url=")
-	builder.WriteString(e.URL)
+	builder.WriteString(_m.URL)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", e.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Evidence) NamedControlObjectives(name string) ([]*ControlObjective, error) {
-	if e.Edges.namedControlObjectives == nil {
+func (_m *Evidence) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if _m.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedControlObjectives[name]
+	nodes, ok := _m.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Evidence) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
-	if e.Edges.namedControlObjectives == nil {
-		e.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
+func (_m *Evidence) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if _m.Edges.namedControlObjectives == nil {
+		_m.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedControlObjectives[name] = []*ControlObjective{}
+		_m.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		e.Edges.namedControlObjectives[name] = append(e.Edges.namedControlObjectives[name], edges...)
+		_m.Edges.namedControlObjectives[name] = append(_m.Edges.namedControlObjectives[name], edges...)
+	}
+}
+
+// NamedControlImplementations returns the ControlImplementations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Evidence) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControlImplementations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Evidence) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementations == nil {
+		_m.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
+	} else {
+		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
 	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Evidence) NamedControls(name string) ([]*Control, error) {
-	if e.Edges.namedControls == nil {
+func (_m *Evidence) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedControls[name]
+	nodes, ok := _m.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Evidence) appendNamedControls(name string, edges ...*Control) {
-	if e.Edges.namedControls == nil {
-		e.Edges.namedControls = make(map[string][]*Control)
+func (_m *Evidence) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedControls[name] = []*Control{}
+		_m.Edges.namedControls[name] = []*Control{}
 	} else {
-		e.Edges.namedControls[name] = append(e.Edges.namedControls[name], edges...)
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 
 // NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Evidence) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if e.Edges.namedSubcontrols == nil {
+func (_m *Evidence) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedSubcontrols[name]
+	nodes, ok := _m.Edges.namedSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Evidence) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if e.Edges.namedSubcontrols == nil {
-		e.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+func (_m *Evidence) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
-		e.Edges.namedSubcontrols[name] = append(e.Edges.namedSubcontrols[name], edges...)
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Evidence) NamedFiles(name string) ([]*File, error) {
-	if e.Edges.namedFiles == nil {
+func (_m *Evidence) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Evidence) appendNamedFiles(name string, edges ...*File) {
-	if e.Edges.namedFiles == nil {
-		e.Edges.namedFiles = make(map[string][]*File)
+func (_m *Evidence) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		e.Edges.namedFiles[name] = append(e.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 
 // NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Evidence) NamedPrograms(name string) ([]*Program, error) {
-	if e.Edges.namedPrograms == nil {
+func (_m *Evidence) NamedPrograms(name string) ([]*Program, error) {
+	if _m.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedPrograms[name]
+	nodes, ok := _m.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Evidence) appendNamedPrograms(name string, edges ...*Program) {
-	if e.Edges.namedPrograms == nil {
-		e.Edges.namedPrograms = make(map[string][]*Program)
+func (_m *Evidence) appendNamedPrograms(name string, edges ...*Program) {
+	if _m.Edges.namedPrograms == nil {
+		_m.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedPrograms[name] = []*Program{}
+		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		e.Edges.namedPrograms[name] = append(e.Edges.namedPrograms[name], edges...)
+		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
 	}
 }
 
 // NamedTasks returns the Tasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Evidence) NamedTasks(name string) ([]*Task, error) {
-	if e.Edges.namedTasks == nil {
+func (_m *Evidence) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedTasks[name]
+	nodes, ok := _m.Edges.namedTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Evidence) appendNamedTasks(name string, edges ...*Task) {
-	if e.Edges.namedTasks == nil {
-		e.Edges.namedTasks = make(map[string][]*Task)
+func (_m *Evidence) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedTasks[name] = []*Task{}
+		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
-		e.Edges.namedTasks[name] = append(e.Edges.namedTasks[name], edges...)
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 

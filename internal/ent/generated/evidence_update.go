@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -34,501 +35,537 @@ type EvidenceUpdate struct {
 }
 
 // Where appends a list predicates to the EvidenceUpdate builder.
-func (eu *EvidenceUpdate) Where(ps ...predicate.Evidence) *EvidenceUpdate {
-	eu.mutation.Where(ps...)
-	return eu
+func (_u *EvidenceUpdate) Where(ps ...predicate.Evidence) *EvidenceUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (eu *EvidenceUpdate) SetUpdatedAt(t time.Time) *EvidenceUpdate {
-	eu.mutation.SetUpdatedAt(t)
-	return eu
+func (_u *EvidenceUpdate) SetUpdatedAt(v time.Time) *EvidenceUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (eu *EvidenceUpdate) ClearUpdatedAt() *EvidenceUpdate {
-	eu.mutation.ClearUpdatedAt()
-	return eu
+func (_u *EvidenceUpdate) ClearUpdatedAt() *EvidenceUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (eu *EvidenceUpdate) SetUpdatedBy(s string) *EvidenceUpdate {
-	eu.mutation.SetUpdatedBy(s)
-	return eu
+func (_u *EvidenceUpdate) SetUpdatedBy(v string) *EvidenceUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableUpdatedBy(s *string) *EvidenceUpdate {
-	if s != nil {
-		eu.SetUpdatedBy(*s)
+func (_u *EvidenceUpdate) SetNillableUpdatedBy(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (eu *EvidenceUpdate) ClearUpdatedBy() *EvidenceUpdate {
-	eu.mutation.ClearUpdatedBy()
-	return eu
+func (_u *EvidenceUpdate) ClearUpdatedBy() *EvidenceUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (eu *EvidenceUpdate) SetDeletedAt(t time.Time) *EvidenceUpdate {
-	eu.mutation.SetDeletedAt(t)
-	return eu
+func (_u *EvidenceUpdate) SetDeletedAt(v time.Time) *EvidenceUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableDeletedAt(t *time.Time) *EvidenceUpdate {
-	if t != nil {
-		eu.SetDeletedAt(*t)
+func (_u *EvidenceUpdate) SetNillableDeletedAt(v *time.Time) *EvidenceUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (eu *EvidenceUpdate) ClearDeletedAt() *EvidenceUpdate {
-	eu.mutation.ClearDeletedAt()
-	return eu
+func (_u *EvidenceUpdate) ClearDeletedAt() *EvidenceUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (eu *EvidenceUpdate) SetDeletedBy(s string) *EvidenceUpdate {
-	eu.mutation.SetDeletedBy(s)
-	return eu
+func (_u *EvidenceUpdate) SetDeletedBy(v string) *EvidenceUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableDeletedBy(s *string) *EvidenceUpdate {
-	if s != nil {
-		eu.SetDeletedBy(*s)
+func (_u *EvidenceUpdate) SetNillableDeletedBy(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (eu *EvidenceUpdate) ClearDeletedBy() *EvidenceUpdate {
-	eu.mutation.ClearDeletedBy()
-	return eu
+func (_u *EvidenceUpdate) ClearDeletedBy() *EvidenceUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (eu *EvidenceUpdate) SetTags(s []string) *EvidenceUpdate {
-	eu.mutation.SetTags(s)
-	return eu
+func (_u *EvidenceUpdate) SetTags(v []string) *EvidenceUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (eu *EvidenceUpdate) AppendTags(s []string) *EvidenceUpdate {
-	eu.mutation.AppendTags(s)
-	return eu
+// AppendTags appends value to the "tags" field.
+func (_u *EvidenceUpdate) AppendTags(v []string) *EvidenceUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (eu *EvidenceUpdate) ClearTags() *EvidenceUpdate {
-	eu.mutation.ClearTags()
-	return eu
+func (_u *EvidenceUpdate) ClearTags() *EvidenceUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (eu *EvidenceUpdate) SetName(s string) *EvidenceUpdate {
-	eu.mutation.SetName(s)
-	return eu
+func (_u *EvidenceUpdate) SetName(v string) *EvidenceUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableName(s *string) *EvidenceUpdate {
-	if s != nil {
-		eu.SetName(*s)
+func (_u *EvidenceUpdate) SetNillableName(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return eu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (eu *EvidenceUpdate) SetDescription(s string) *EvidenceUpdate {
-	eu.mutation.SetDescription(s)
-	return eu
+func (_u *EvidenceUpdate) SetDescription(v string) *EvidenceUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableDescription(s *string) *EvidenceUpdate {
-	if s != nil {
-		eu.SetDescription(*s)
+func (_u *EvidenceUpdate) SetNillableDescription(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (eu *EvidenceUpdate) ClearDescription() *EvidenceUpdate {
-	eu.mutation.ClearDescription()
-	return eu
+func (_u *EvidenceUpdate) ClearDescription() *EvidenceUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetCollectionProcedure sets the "collection_procedure" field.
-func (eu *EvidenceUpdate) SetCollectionProcedure(s string) *EvidenceUpdate {
-	eu.mutation.SetCollectionProcedure(s)
-	return eu
+func (_u *EvidenceUpdate) SetCollectionProcedure(v string) *EvidenceUpdate {
+	_u.mutation.SetCollectionProcedure(v)
+	return _u
 }
 
 // SetNillableCollectionProcedure sets the "collection_procedure" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableCollectionProcedure(s *string) *EvidenceUpdate {
-	if s != nil {
-		eu.SetCollectionProcedure(*s)
+func (_u *EvidenceUpdate) SetNillableCollectionProcedure(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetCollectionProcedure(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearCollectionProcedure clears the value of the "collection_procedure" field.
-func (eu *EvidenceUpdate) ClearCollectionProcedure() *EvidenceUpdate {
-	eu.mutation.ClearCollectionProcedure()
-	return eu
+func (_u *EvidenceUpdate) ClearCollectionProcedure() *EvidenceUpdate {
+	_u.mutation.ClearCollectionProcedure()
+	return _u
 }
 
 // SetCreationDate sets the "creation_date" field.
-func (eu *EvidenceUpdate) SetCreationDate(t time.Time) *EvidenceUpdate {
-	eu.mutation.SetCreationDate(t)
-	return eu
+func (_u *EvidenceUpdate) SetCreationDate(v time.Time) *EvidenceUpdate {
+	_u.mutation.SetCreationDate(v)
+	return _u
 }
 
 // SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableCreationDate(t *time.Time) *EvidenceUpdate {
-	if t != nil {
-		eu.SetCreationDate(*t)
+func (_u *EvidenceUpdate) SetNillableCreationDate(v *time.Time) *EvidenceUpdate {
+	if v != nil {
+		_u.SetCreationDate(*v)
 	}
-	return eu
+	return _u
 }
 
 // SetRenewalDate sets the "renewal_date" field.
-func (eu *EvidenceUpdate) SetRenewalDate(t time.Time) *EvidenceUpdate {
-	eu.mutation.SetRenewalDate(t)
-	return eu
+func (_u *EvidenceUpdate) SetRenewalDate(v time.Time) *EvidenceUpdate {
+	_u.mutation.SetRenewalDate(v)
+	return _u
 }
 
 // SetNillableRenewalDate sets the "renewal_date" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableRenewalDate(t *time.Time) *EvidenceUpdate {
-	if t != nil {
-		eu.SetRenewalDate(*t)
+func (_u *EvidenceUpdate) SetNillableRenewalDate(v *time.Time) *EvidenceUpdate {
+	if v != nil {
+		_u.SetRenewalDate(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearRenewalDate clears the value of the "renewal_date" field.
-func (eu *EvidenceUpdate) ClearRenewalDate() *EvidenceUpdate {
-	eu.mutation.ClearRenewalDate()
-	return eu
+func (_u *EvidenceUpdate) ClearRenewalDate() *EvidenceUpdate {
+	_u.mutation.ClearRenewalDate()
+	return _u
 }
 
 // SetSource sets the "source" field.
-func (eu *EvidenceUpdate) SetSource(s string) *EvidenceUpdate {
-	eu.mutation.SetSource(s)
-	return eu
+func (_u *EvidenceUpdate) SetSource(v string) *EvidenceUpdate {
+	_u.mutation.SetSource(v)
+	return _u
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableSource(s *string) *EvidenceUpdate {
-	if s != nil {
-		eu.SetSource(*s)
+func (_u *EvidenceUpdate) SetNillableSource(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetSource(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearSource clears the value of the "source" field.
-func (eu *EvidenceUpdate) ClearSource() *EvidenceUpdate {
-	eu.mutation.ClearSource()
-	return eu
+func (_u *EvidenceUpdate) ClearSource() *EvidenceUpdate {
+	_u.mutation.ClearSource()
+	return _u
 }
 
 // SetIsAutomated sets the "is_automated" field.
-func (eu *EvidenceUpdate) SetIsAutomated(b bool) *EvidenceUpdate {
-	eu.mutation.SetIsAutomated(b)
-	return eu
+func (_u *EvidenceUpdate) SetIsAutomated(v bool) *EvidenceUpdate {
+	_u.mutation.SetIsAutomated(v)
+	return _u
 }
 
 // SetNillableIsAutomated sets the "is_automated" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableIsAutomated(b *bool) *EvidenceUpdate {
-	if b != nil {
-		eu.SetIsAutomated(*b)
+func (_u *EvidenceUpdate) SetNillableIsAutomated(v *bool) *EvidenceUpdate {
+	if v != nil {
+		_u.SetIsAutomated(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearIsAutomated clears the value of the "is_automated" field.
-func (eu *EvidenceUpdate) ClearIsAutomated() *EvidenceUpdate {
-	eu.mutation.ClearIsAutomated()
-	return eu
+func (_u *EvidenceUpdate) ClearIsAutomated() *EvidenceUpdate {
+	_u.mutation.ClearIsAutomated()
+	return _u
 }
 
 // SetURL sets the "url" field.
-func (eu *EvidenceUpdate) SetURL(s string) *EvidenceUpdate {
-	eu.mutation.SetURL(s)
-	return eu
+func (_u *EvidenceUpdate) SetURL(v string) *EvidenceUpdate {
+	_u.mutation.SetURL(v)
+	return _u
 }
 
 // SetNillableURL sets the "url" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableURL(s *string) *EvidenceUpdate {
-	if s != nil {
-		eu.SetURL(*s)
+func (_u *EvidenceUpdate) SetNillableURL(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetURL(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearURL clears the value of the "url" field.
-func (eu *EvidenceUpdate) ClearURL() *EvidenceUpdate {
-	eu.mutation.ClearURL()
-	return eu
+func (_u *EvidenceUpdate) ClearURL() *EvidenceUpdate {
+	_u.mutation.ClearURL()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (eu *EvidenceUpdate) SetStatus(es enums.EvidenceStatus) *EvidenceUpdate {
-	eu.mutation.SetStatus(es)
-	return eu
+func (_u *EvidenceUpdate) SetStatus(v enums.EvidenceStatus) *EvidenceUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (eu *EvidenceUpdate) SetNillableStatus(es *enums.EvidenceStatus) *EvidenceUpdate {
-	if es != nil {
-		eu.SetStatus(*es)
+func (_u *EvidenceUpdate) SetNillableStatus(v *enums.EvidenceStatus) *EvidenceUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (eu *EvidenceUpdate) ClearStatus() *EvidenceUpdate {
-	eu.mutation.ClearStatus()
-	return eu
+func (_u *EvidenceUpdate) ClearStatus() *EvidenceUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (eu *EvidenceUpdate) AddControlObjectiveIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.AddControlObjectiveIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) AddControlObjectiveIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddControlObjectiveIDs(ids...)
+	return _u
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (eu *EvidenceUpdate) AddControlObjectives(c ...*ControlObjective) *EvidenceUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EvidenceUpdate) AddControlObjectives(v ...*ControlObjective) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddControlObjectiveIDs(ids...)
+	return _u.AddControlObjectiveIDs(ids...)
+}
+
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_u *EvidenceUpdate) AddControlImplementationIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddControlImplementationIDs(ids...)
+	return _u
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_u *EvidenceUpdate) AddControlImplementations(v ...*ControlImplementation) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlImplementationIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (eu *EvidenceUpdate) AddControlIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.AddControlIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) AddControlIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (eu *EvidenceUpdate) AddControls(c ...*Control) *EvidenceUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EvidenceUpdate) AddControls(v ...*Control) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (eu *EvidenceUpdate) AddSubcontrolIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.AddSubcontrolIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) AddSubcontrolIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (eu *EvidenceUpdate) AddSubcontrols(s ...*Subcontrol) *EvidenceUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *EvidenceUpdate) AddSubcontrols(v ...*Subcontrol) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (eu *EvidenceUpdate) AddFileIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.AddFileIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) AddFileIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (eu *EvidenceUpdate) AddFiles(f ...*File) *EvidenceUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *EvidenceUpdate) AddFiles(v ...*File) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (eu *EvidenceUpdate) AddProgramIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.AddProgramIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) AddProgramIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (eu *EvidenceUpdate) AddPrograms(p ...*Program) *EvidenceUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *EvidenceUpdate) AddPrograms(v ...*Program) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (eu *EvidenceUpdate) AddTaskIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.AddTaskIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) AddTaskIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (eu *EvidenceUpdate) AddTasks(t ...*Task) *EvidenceUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *EvidenceUpdate) AddTasks(v ...*Task) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddTaskIDs(ids...)
+	return _u.AddTaskIDs(ids...)
 }
 
 // Mutation returns the EvidenceMutation object of the builder.
-func (eu *EvidenceUpdate) Mutation() *EvidenceMutation {
-	return eu.mutation
+func (_u *EvidenceUpdate) Mutation() *EvidenceMutation {
+	return _u.mutation
 }
 
 // ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
-func (eu *EvidenceUpdate) ClearControlObjectives() *EvidenceUpdate {
-	eu.mutation.ClearControlObjectives()
-	return eu
+func (_u *EvidenceUpdate) ClearControlObjectives() *EvidenceUpdate {
+	_u.mutation.ClearControlObjectives()
+	return _u
 }
 
 // RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
-func (eu *EvidenceUpdate) RemoveControlObjectiveIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.RemoveControlObjectiveIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) RemoveControlObjectiveIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveControlObjectiveIDs(ids...)
+	return _u
 }
 
 // RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
-func (eu *EvidenceUpdate) RemoveControlObjectives(c ...*ControlObjective) *EvidenceUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EvidenceUpdate) RemoveControlObjectives(v ...*ControlObjective) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveControlObjectiveIDs(ids...)
+	return _u.RemoveControlObjectiveIDs(ids...)
+}
+
+// ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
+func (_u *EvidenceUpdate) ClearControlImplementations() *EvidenceUpdate {
+	_u.mutation.ClearControlImplementations()
+	return _u
+}
+
+// RemoveControlImplementationIDs removes the "control_implementations" edge to ControlImplementation entities by IDs.
+func (_u *EvidenceUpdate) RemoveControlImplementationIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveControlImplementationIDs(ids...)
+	return _u
+}
+
+// RemoveControlImplementations removes "control_implementations" edges to ControlImplementation entities.
+func (_u *EvidenceUpdate) RemoveControlImplementations(v ...*ControlImplementation) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlImplementationIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (eu *EvidenceUpdate) ClearControls() *EvidenceUpdate {
-	eu.mutation.ClearControls()
-	return eu
+func (_u *EvidenceUpdate) ClearControls() *EvidenceUpdate {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (eu *EvidenceUpdate) RemoveControlIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.RemoveControlIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) RemoveControlIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (eu *EvidenceUpdate) RemoveControls(c ...*Control) *EvidenceUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EvidenceUpdate) RemoveControls(v ...*Control) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (eu *EvidenceUpdate) ClearSubcontrols() *EvidenceUpdate {
-	eu.mutation.ClearSubcontrols()
-	return eu
+func (_u *EvidenceUpdate) ClearSubcontrols() *EvidenceUpdate {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (eu *EvidenceUpdate) RemoveSubcontrolIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.RemoveSubcontrolIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) RemoveSubcontrolIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (eu *EvidenceUpdate) RemoveSubcontrols(s ...*Subcontrol) *EvidenceUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *EvidenceUpdate) RemoveSubcontrols(v ...*Subcontrol) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (eu *EvidenceUpdate) ClearFiles() *EvidenceUpdate {
-	eu.mutation.ClearFiles()
-	return eu
+func (_u *EvidenceUpdate) ClearFiles() *EvidenceUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (eu *EvidenceUpdate) RemoveFileIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.RemoveFileIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) RemoveFileIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (eu *EvidenceUpdate) RemoveFiles(f ...*File) *EvidenceUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *EvidenceUpdate) RemoveFiles(v ...*File) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (eu *EvidenceUpdate) ClearPrograms() *EvidenceUpdate {
-	eu.mutation.ClearPrograms()
-	return eu
+func (_u *EvidenceUpdate) ClearPrograms() *EvidenceUpdate {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (eu *EvidenceUpdate) RemoveProgramIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.RemoveProgramIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) RemoveProgramIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (eu *EvidenceUpdate) RemovePrograms(p ...*Program) *EvidenceUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *EvidenceUpdate) RemovePrograms(v ...*Program) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
-func (eu *EvidenceUpdate) ClearTasks() *EvidenceUpdate {
-	eu.mutation.ClearTasks()
-	return eu
+func (_u *EvidenceUpdate) ClearTasks() *EvidenceUpdate {
+	_u.mutation.ClearTasks()
+	return _u
 }
 
 // RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
-func (eu *EvidenceUpdate) RemoveTaskIDs(ids ...string) *EvidenceUpdate {
-	eu.mutation.RemoveTaskIDs(ids...)
-	return eu
+func (_u *EvidenceUpdate) RemoveTaskIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
 }
 
 // RemoveTasks removes "tasks" edges to Task entities.
-func (eu *EvidenceUpdate) RemoveTasks(t ...*Task) *EvidenceUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *EvidenceUpdate) RemoveTasks(v ...*Task) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveTaskIDs(ids...)
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (eu *EvidenceUpdate) Save(ctx context.Context) (int, error) {
-	if err := eu.defaults(); err != nil {
+func (_u *EvidenceUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, eu.sqlSave, eu.mutation, eu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (eu *EvidenceUpdate) SaveX(ctx context.Context) int {
-	affected, err := eu.Save(ctx)
+func (_u *EvidenceUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -536,43 +573,43 @@ func (eu *EvidenceUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (eu *EvidenceUpdate) Exec(ctx context.Context) error {
-	_, err := eu.Save(ctx)
+func (_u *EvidenceUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (eu *EvidenceUpdate) ExecX(ctx context.Context) {
-	if err := eu.Exec(ctx); err != nil {
+func (_u *EvidenceUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (eu *EvidenceUpdate) defaults() error {
-	if _, ok := eu.mutation.UpdatedAt(); !ok && !eu.mutation.UpdatedAtCleared() {
+func (_u *EvidenceUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if evidence.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized evidence.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := evidence.UpdateDefaultUpdatedAt()
-		eu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (eu *EvidenceUpdate) check() error {
-	if v, ok := eu.mutation.Name(); ok {
+func (_u *EvidenceUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := evidence.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Evidence.name": %w`, err)}
 		}
 	}
-	if v, ok := eu.mutation.URL(); ok {
+	if v, ok := _u.mutation.URL(); ok {
 		if err := evidence.URLValidator(v); err != nil {
 			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "Evidence.url": %w`, err)}
 		}
 	}
-	if v, ok := eu.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := evidence.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Evidence.status": %w`, err)}
 		}
@@ -581,113 +618,113 @@ func (eu *EvidenceUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (eu *EvidenceUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceUpdate {
-	eu.modifiers = append(eu.modifiers, modifiers...)
-	return eu
+func (_u *EvidenceUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := eu.check(); err != nil {
-		return n, err
+func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(evidence.Table, evidence.Columns, sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString))
-	if ps := eu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if eu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(evidence.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := eu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(evidence.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if eu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(evidence.FieldUpdatedAt, field.TypeTime)
 	}
-	if eu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(evidence.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := eu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(evidence.FieldUpdatedBy, field.TypeString, value)
 	}
-	if eu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(evidence.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := eu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(evidence.FieldDeletedAt, field.TypeTime, value)
 	}
-	if eu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(evidence.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := eu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(evidence.FieldDeletedBy, field.TypeString, value)
 	}
-	if eu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(evidence.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := eu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(evidence.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := eu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, evidence.FieldTags, value)
 		})
 	}
-	if eu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidence.FieldTags, field.TypeJSON)
 	}
-	if value, ok := eu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidence.FieldName, field.TypeString, value)
 	}
-	if value, ok := eu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(evidence.FieldDescription, field.TypeString, value)
 	}
-	if eu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(evidence.FieldDescription, field.TypeString)
 	}
-	if value, ok := eu.mutation.CollectionProcedure(); ok {
+	if value, ok := _u.mutation.CollectionProcedure(); ok {
 		_spec.SetField(evidence.FieldCollectionProcedure, field.TypeString, value)
 	}
-	if eu.mutation.CollectionProcedureCleared() {
+	if _u.mutation.CollectionProcedureCleared() {
 		_spec.ClearField(evidence.FieldCollectionProcedure, field.TypeString)
 	}
-	if value, ok := eu.mutation.CreationDate(); ok {
+	if value, ok := _u.mutation.CreationDate(); ok {
 		_spec.SetField(evidence.FieldCreationDate, field.TypeTime, value)
 	}
-	if value, ok := eu.mutation.RenewalDate(); ok {
+	if value, ok := _u.mutation.RenewalDate(); ok {
 		_spec.SetField(evidence.FieldRenewalDate, field.TypeTime, value)
 	}
-	if eu.mutation.RenewalDateCleared() {
+	if _u.mutation.RenewalDateCleared() {
 		_spec.ClearField(evidence.FieldRenewalDate, field.TypeTime)
 	}
-	if value, ok := eu.mutation.Source(); ok {
+	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(evidence.FieldSource, field.TypeString, value)
 	}
-	if eu.mutation.SourceCleared() {
+	if _u.mutation.SourceCleared() {
 		_spec.ClearField(evidence.FieldSource, field.TypeString)
 	}
-	if value, ok := eu.mutation.IsAutomated(); ok {
+	if value, ok := _u.mutation.IsAutomated(); ok {
 		_spec.SetField(evidence.FieldIsAutomated, field.TypeBool, value)
 	}
-	if eu.mutation.IsAutomatedCleared() {
+	if _u.mutation.IsAutomatedCleared() {
 		_spec.ClearField(evidence.FieldIsAutomated, field.TypeBool)
 	}
-	if value, ok := eu.mutation.URL(); ok {
+	if value, ok := _u.mutation.URL(); ok {
 		_spec.SetField(evidence.FieldURL, field.TypeString, value)
 	}
-	if eu.mutation.URLCleared() {
+	if _u.mutation.URLCleared() {
 		_spec.ClearField(evidence.FieldURL, field.TypeString)
 	}
-	if value, ok := eu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(evidence.FieldStatus, field.TypeEnum, value)
 	}
-	if eu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(evidence.FieldStatus, field.TypeEnum)
 	}
-	if eu.mutation.ControlObjectivesCleared() {
+	if _u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -698,10 +735,10 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceControlObjectives
+		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !eu.mutation.ControlObjectivesCleared() {
+	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -712,13 +749,13 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceControlObjectives
+		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -729,13 +766,61 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceControlObjectives
+		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.ControlsCleared() {
+	if _u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ControlImplementationsTable,
+			Columns: []string{evidence.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ControlImplementationsTable,
+			Columns: []string{evidence.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ControlImplementationsTable,
+			Columns: []string{evidence.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -746,10 +831,10 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceControls
+		edge.Schema = _u.schemaConfig.EvidenceControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedControlsIDs(); len(nodes) > 0 && !eu.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -760,13 +845,13 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceControls
+		edge.Schema = _u.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -777,13 +862,13 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceControls
+		edge.Schema = _u.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -794,10 +879,10 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceSubcontrols
+		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !eu.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -808,13 +893,13 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceSubcontrols
+		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -825,13 +910,13 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceSubcontrols
+		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -842,10 +927,10 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceFiles
+		edge.Schema = _u.schemaConfig.EvidenceFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !eu.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -856,13 +941,13 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceFiles
+		edge.Schema = _u.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -873,13 +958,13 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EvidenceFiles
+		edge.Schema = _u.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -890,10 +975,10 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !eu.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -904,13 +989,13 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -921,13 +1006,13 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.TasksCleared() {
+	if _u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -938,10 +1023,10 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.TaskEvidence
+		edge.Schema = _u.schemaConfig.TaskEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedTasksIDs(); len(nodes) > 0 && !eu.mutation.TasksCleared() {
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -952,13 +1037,13 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.TaskEvidence
+		edge.Schema = _u.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -969,16 +1054,16 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.TaskEvidence
+		edge.Schema = _u.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = eu.schemaConfig.Evidence
-	ctx = internal.NewSchemaConfigContext(ctx, eu.schemaConfig)
-	_spec.AddModifiers(eu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, eu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Evidence
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{evidence.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -986,8 +1071,8 @@ func (eu *EvidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	eu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // EvidenceUpdateOne is the builder for updating a single Evidence entity.
@@ -1000,508 +1085,544 @@ type EvidenceUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (euo *EvidenceUpdateOne) SetUpdatedAt(t time.Time) *EvidenceUpdateOne {
-	euo.mutation.SetUpdatedAt(t)
-	return euo
+func (_u *EvidenceUpdateOne) SetUpdatedAt(v time.Time) *EvidenceUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (euo *EvidenceUpdateOne) ClearUpdatedAt() *EvidenceUpdateOne {
-	euo.mutation.ClearUpdatedAt()
-	return euo
+func (_u *EvidenceUpdateOne) ClearUpdatedAt() *EvidenceUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (euo *EvidenceUpdateOne) SetUpdatedBy(s string) *EvidenceUpdateOne {
-	euo.mutation.SetUpdatedBy(s)
-	return euo
+func (_u *EvidenceUpdateOne) SetUpdatedBy(v string) *EvidenceUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableUpdatedBy(s *string) *EvidenceUpdateOne {
-	if s != nil {
-		euo.SetUpdatedBy(*s)
+func (_u *EvidenceUpdateOne) SetNillableUpdatedBy(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (euo *EvidenceUpdateOne) ClearUpdatedBy() *EvidenceUpdateOne {
-	euo.mutation.ClearUpdatedBy()
-	return euo
+func (_u *EvidenceUpdateOne) ClearUpdatedBy() *EvidenceUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (euo *EvidenceUpdateOne) SetDeletedAt(t time.Time) *EvidenceUpdateOne {
-	euo.mutation.SetDeletedAt(t)
-	return euo
+func (_u *EvidenceUpdateOne) SetDeletedAt(v time.Time) *EvidenceUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableDeletedAt(t *time.Time) *EvidenceUpdateOne {
-	if t != nil {
-		euo.SetDeletedAt(*t)
+func (_u *EvidenceUpdateOne) SetNillableDeletedAt(v *time.Time) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (euo *EvidenceUpdateOne) ClearDeletedAt() *EvidenceUpdateOne {
-	euo.mutation.ClearDeletedAt()
-	return euo
+func (_u *EvidenceUpdateOne) ClearDeletedAt() *EvidenceUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (euo *EvidenceUpdateOne) SetDeletedBy(s string) *EvidenceUpdateOne {
-	euo.mutation.SetDeletedBy(s)
-	return euo
+func (_u *EvidenceUpdateOne) SetDeletedBy(v string) *EvidenceUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableDeletedBy(s *string) *EvidenceUpdateOne {
-	if s != nil {
-		euo.SetDeletedBy(*s)
+func (_u *EvidenceUpdateOne) SetNillableDeletedBy(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (euo *EvidenceUpdateOne) ClearDeletedBy() *EvidenceUpdateOne {
-	euo.mutation.ClearDeletedBy()
-	return euo
+func (_u *EvidenceUpdateOne) ClearDeletedBy() *EvidenceUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (euo *EvidenceUpdateOne) SetTags(s []string) *EvidenceUpdateOne {
-	euo.mutation.SetTags(s)
-	return euo
+func (_u *EvidenceUpdateOne) SetTags(v []string) *EvidenceUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (euo *EvidenceUpdateOne) AppendTags(s []string) *EvidenceUpdateOne {
-	euo.mutation.AppendTags(s)
-	return euo
+// AppendTags appends value to the "tags" field.
+func (_u *EvidenceUpdateOne) AppendTags(v []string) *EvidenceUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (euo *EvidenceUpdateOne) ClearTags() *EvidenceUpdateOne {
-	euo.mutation.ClearTags()
-	return euo
+func (_u *EvidenceUpdateOne) ClearTags() *EvidenceUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (euo *EvidenceUpdateOne) SetName(s string) *EvidenceUpdateOne {
-	euo.mutation.SetName(s)
-	return euo
+func (_u *EvidenceUpdateOne) SetName(v string) *EvidenceUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableName(s *string) *EvidenceUpdateOne {
-	if s != nil {
-		euo.SetName(*s)
+func (_u *EvidenceUpdateOne) SetNillableName(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return euo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (euo *EvidenceUpdateOne) SetDescription(s string) *EvidenceUpdateOne {
-	euo.mutation.SetDescription(s)
-	return euo
+func (_u *EvidenceUpdateOne) SetDescription(v string) *EvidenceUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableDescription(s *string) *EvidenceUpdateOne {
-	if s != nil {
-		euo.SetDescription(*s)
+func (_u *EvidenceUpdateOne) SetNillableDescription(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (euo *EvidenceUpdateOne) ClearDescription() *EvidenceUpdateOne {
-	euo.mutation.ClearDescription()
-	return euo
+func (_u *EvidenceUpdateOne) ClearDescription() *EvidenceUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetCollectionProcedure sets the "collection_procedure" field.
-func (euo *EvidenceUpdateOne) SetCollectionProcedure(s string) *EvidenceUpdateOne {
-	euo.mutation.SetCollectionProcedure(s)
-	return euo
+func (_u *EvidenceUpdateOne) SetCollectionProcedure(v string) *EvidenceUpdateOne {
+	_u.mutation.SetCollectionProcedure(v)
+	return _u
 }
 
 // SetNillableCollectionProcedure sets the "collection_procedure" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableCollectionProcedure(s *string) *EvidenceUpdateOne {
-	if s != nil {
-		euo.SetCollectionProcedure(*s)
+func (_u *EvidenceUpdateOne) SetNillableCollectionProcedure(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetCollectionProcedure(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearCollectionProcedure clears the value of the "collection_procedure" field.
-func (euo *EvidenceUpdateOne) ClearCollectionProcedure() *EvidenceUpdateOne {
-	euo.mutation.ClearCollectionProcedure()
-	return euo
+func (_u *EvidenceUpdateOne) ClearCollectionProcedure() *EvidenceUpdateOne {
+	_u.mutation.ClearCollectionProcedure()
+	return _u
 }
 
 // SetCreationDate sets the "creation_date" field.
-func (euo *EvidenceUpdateOne) SetCreationDate(t time.Time) *EvidenceUpdateOne {
-	euo.mutation.SetCreationDate(t)
-	return euo
+func (_u *EvidenceUpdateOne) SetCreationDate(v time.Time) *EvidenceUpdateOne {
+	_u.mutation.SetCreationDate(v)
+	return _u
 }
 
 // SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableCreationDate(t *time.Time) *EvidenceUpdateOne {
-	if t != nil {
-		euo.SetCreationDate(*t)
+func (_u *EvidenceUpdateOne) SetNillableCreationDate(v *time.Time) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetCreationDate(*v)
 	}
-	return euo
+	return _u
 }
 
 // SetRenewalDate sets the "renewal_date" field.
-func (euo *EvidenceUpdateOne) SetRenewalDate(t time.Time) *EvidenceUpdateOne {
-	euo.mutation.SetRenewalDate(t)
-	return euo
+func (_u *EvidenceUpdateOne) SetRenewalDate(v time.Time) *EvidenceUpdateOne {
+	_u.mutation.SetRenewalDate(v)
+	return _u
 }
 
 // SetNillableRenewalDate sets the "renewal_date" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableRenewalDate(t *time.Time) *EvidenceUpdateOne {
-	if t != nil {
-		euo.SetRenewalDate(*t)
+func (_u *EvidenceUpdateOne) SetNillableRenewalDate(v *time.Time) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetRenewalDate(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearRenewalDate clears the value of the "renewal_date" field.
-func (euo *EvidenceUpdateOne) ClearRenewalDate() *EvidenceUpdateOne {
-	euo.mutation.ClearRenewalDate()
-	return euo
+func (_u *EvidenceUpdateOne) ClearRenewalDate() *EvidenceUpdateOne {
+	_u.mutation.ClearRenewalDate()
+	return _u
 }
 
 // SetSource sets the "source" field.
-func (euo *EvidenceUpdateOne) SetSource(s string) *EvidenceUpdateOne {
-	euo.mutation.SetSource(s)
-	return euo
+func (_u *EvidenceUpdateOne) SetSource(v string) *EvidenceUpdateOne {
+	_u.mutation.SetSource(v)
+	return _u
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableSource(s *string) *EvidenceUpdateOne {
-	if s != nil {
-		euo.SetSource(*s)
+func (_u *EvidenceUpdateOne) SetNillableSource(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetSource(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearSource clears the value of the "source" field.
-func (euo *EvidenceUpdateOne) ClearSource() *EvidenceUpdateOne {
-	euo.mutation.ClearSource()
-	return euo
+func (_u *EvidenceUpdateOne) ClearSource() *EvidenceUpdateOne {
+	_u.mutation.ClearSource()
+	return _u
 }
 
 // SetIsAutomated sets the "is_automated" field.
-func (euo *EvidenceUpdateOne) SetIsAutomated(b bool) *EvidenceUpdateOne {
-	euo.mutation.SetIsAutomated(b)
-	return euo
+func (_u *EvidenceUpdateOne) SetIsAutomated(v bool) *EvidenceUpdateOne {
+	_u.mutation.SetIsAutomated(v)
+	return _u
 }
 
 // SetNillableIsAutomated sets the "is_automated" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableIsAutomated(b *bool) *EvidenceUpdateOne {
-	if b != nil {
-		euo.SetIsAutomated(*b)
+func (_u *EvidenceUpdateOne) SetNillableIsAutomated(v *bool) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetIsAutomated(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearIsAutomated clears the value of the "is_automated" field.
-func (euo *EvidenceUpdateOne) ClearIsAutomated() *EvidenceUpdateOne {
-	euo.mutation.ClearIsAutomated()
-	return euo
+func (_u *EvidenceUpdateOne) ClearIsAutomated() *EvidenceUpdateOne {
+	_u.mutation.ClearIsAutomated()
+	return _u
 }
 
 // SetURL sets the "url" field.
-func (euo *EvidenceUpdateOne) SetURL(s string) *EvidenceUpdateOne {
-	euo.mutation.SetURL(s)
-	return euo
+func (_u *EvidenceUpdateOne) SetURL(v string) *EvidenceUpdateOne {
+	_u.mutation.SetURL(v)
+	return _u
 }
 
 // SetNillableURL sets the "url" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableURL(s *string) *EvidenceUpdateOne {
-	if s != nil {
-		euo.SetURL(*s)
+func (_u *EvidenceUpdateOne) SetNillableURL(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetURL(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearURL clears the value of the "url" field.
-func (euo *EvidenceUpdateOne) ClearURL() *EvidenceUpdateOne {
-	euo.mutation.ClearURL()
-	return euo
+func (_u *EvidenceUpdateOne) ClearURL() *EvidenceUpdateOne {
+	_u.mutation.ClearURL()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (euo *EvidenceUpdateOne) SetStatus(es enums.EvidenceStatus) *EvidenceUpdateOne {
-	euo.mutation.SetStatus(es)
-	return euo
+func (_u *EvidenceUpdateOne) SetStatus(v enums.EvidenceStatus) *EvidenceUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (euo *EvidenceUpdateOne) SetNillableStatus(es *enums.EvidenceStatus) *EvidenceUpdateOne {
-	if es != nil {
-		euo.SetStatus(*es)
+func (_u *EvidenceUpdateOne) SetNillableStatus(v *enums.EvidenceStatus) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (euo *EvidenceUpdateOne) ClearStatus() *EvidenceUpdateOne {
-	euo.mutation.ClearStatus()
-	return euo
+func (_u *EvidenceUpdateOne) ClearStatus() *EvidenceUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (euo *EvidenceUpdateOne) AddControlObjectiveIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.AddControlObjectiveIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) AddControlObjectiveIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddControlObjectiveIDs(ids...)
+	return _u
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (euo *EvidenceUpdateOne) AddControlObjectives(c ...*ControlObjective) *EvidenceUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EvidenceUpdateOne) AddControlObjectives(v ...*ControlObjective) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddControlObjectiveIDs(ids...)
+	return _u.AddControlObjectiveIDs(ids...)
+}
+
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_u *EvidenceUpdateOne) AddControlImplementationIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddControlImplementationIDs(ids...)
+	return _u
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_u *EvidenceUpdateOne) AddControlImplementations(v ...*ControlImplementation) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlImplementationIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (euo *EvidenceUpdateOne) AddControlIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.AddControlIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) AddControlIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (euo *EvidenceUpdateOne) AddControls(c ...*Control) *EvidenceUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EvidenceUpdateOne) AddControls(v ...*Control) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (euo *EvidenceUpdateOne) AddSubcontrolIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.AddSubcontrolIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) AddSubcontrolIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (euo *EvidenceUpdateOne) AddSubcontrols(s ...*Subcontrol) *EvidenceUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *EvidenceUpdateOne) AddSubcontrols(v ...*Subcontrol) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (euo *EvidenceUpdateOne) AddFileIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.AddFileIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) AddFileIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (euo *EvidenceUpdateOne) AddFiles(f ...*File) *EvidenceUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *EvidenceUpdateOne) AddFiles(v ...*File) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (euo *EvidenceUpdateOne) AddProgramIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.AddProgramIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) AddProgramIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (euo *EvidenceUpdateOne) AddPrograms(p ...*Program) *EvidenceUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *EvidenceUpdateOne) AddPrograms(v ...*Program) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (euo *EvidenceUpdateOne) AddTaskIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.AddTaskIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) AddTaskIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (euo *EvidenceUpdateOne) AddTasks(t ...*Task) *EvidenceUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *EvidenceUpdateOne) AddTasks(v ...*Task) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddTaskIDs(ids...)
+	return _u.AddTaskIDs(ids...)
 }
 
 // Mutation returns the EvidenceMutation object of the builder.
-func (euo *EvidenceUpdateOne) Mutation() *EvidenceMutation {
-	return euo.mutation
+func (_u *EvidenceUpdateOne) Mutation() *EvidenceMutation {
+	return _u.mutation
 }
 
 // ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
-func (euo *EvidenceUpdateOne) ClearControlObjectives() *EvidenceUpdateOne {
-	euo.mutation.ClearControlObjectives()
-	return euo
+func (_u *EvidenceUpdateOne) ClearControlObjectives() *EvidenceUpdateOne {
+	_u.mutation.ClearControlObjectives()
+	return _u
 }
 
 // RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
-func (euo *EvidenceUpdateOne) RemoveControlObjectiveIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.RemoveControlObjectiveIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) RemoveControlObjectiveIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveControlObjectiveIDs(ids...)
+	return _u
 }
 
 // RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
-func (euo *EvidenceUpdateOne) RemoveControlObjectives(c ...*ControlObjective) *EvidenceUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EvidenceUpdateOne) RemoveControlObjectives(v ...*ControlObjective) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveControlObjectiveIDs(ids...)
+	return _u.RemoveControlObjectiveIDs(ids...)
+}
+
+// ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
+func (_u *EvidenceUpdateOne) ClearControlImplementations() *EvidenceUpdateOne {
+	_u.mutation.ClearControlImplementations()
+	return _u
+}
+
+// RemoveControlImplementationIDs removes the "control_implementations" edge to ControlImplementation entities by IDs.
+func (_u *EvidenceUpdateOne) RemoveControlImplementationIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveControlImplementationIDs(ids...)
+	return _u
+}
+
+// RemoveControlImplementations removes "control_implementations" edges to ControlImplementation entities.
+func (_u *EvidenceUpdateOne) RemoveControlImplementations(v ...*ControlImplementation) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlImplementationIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (euo *EvidenceUpdateOne) ClearControls() *EvidenceUpdateOne {
-	euo.mutation.ClearControls()
-	return euo
+func (_u *EvidenceUpdateOne) ClearControls() *EvidenceUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (euo *EvidenceUpdateOne) RemoveControlIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.RemoveControlIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) RemoveControlIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (euo *EvidenceUpdateOne) RemoveControls(c ...*Control) *EvidenceUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EvidenceUpdateOne) RemoveControls(v ...*Control) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (euo *EvidenceUpdateOne) ClearSubcontrols() *EvidenceUpdateOne {
-	euo.mutation.ClearSubcontrols()
-	return euo
+func (_u *EvidenceUpdateOne) ClearSubcontrols() *EvidenceUpdateOne {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (euo *EvidenceUpdateOne) RemoveSubcontrolIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.RemoveSubcontrolIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) RemoveSubcontrolIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (euo *EvidenceUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *EvidenceUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *EvidenceUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (euo *EvidenceUpdateOne) ClearFiles() *EvidenceUpdateOne {
-	euo.mutation.ClearFiles()
-	return euo
+func (_u *EvidenceUpdateOne) ClearFiles() *EvidenceUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (euo *EvidenceUpdateOne) RemoveFileIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.RemoveFileIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) RemoveFileIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (euo *EvidenceUpdateOne) RemoveFiles(f ...*File) *EvidenceUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *EvidenceUpdateOne) RemoveFiles(v ...*File) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (euo *EvidenceUpdateOne) ClearPrograms() *EvidenceUpdateOne {
-	euo.mutation.ClearPrograms()
-	return euo
+func (_u *EvidenceUpdateOne) ClearPrograms() *EvidenceUpdateOne {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (euo *EvidenceUpdateOne) RemoveProgramIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.RemoveProgramIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) RemoveProgramIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (euo *EvidenceUpdateOne) RemovePrograms(p ...*Program) *EvidenceUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *EvidenceUpdateOne) RemovePrograms(v ...*Program) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
-func (euo *EvidenceUpdateOne) ClearTasks() *EvidenceUpdateOne {
-	euo.mutation.ClearTasks()
-	return euo
+func (_u *EvidenceUpdateOne) ClearTasks() *EvidenceUpdateOne {
+	_u.mutation.ClearTasks()
+	return _u
 }
 
 // RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
-func (euo *EvidenceUpdateOne) RemoveTaskIDs(ids ...string) *EvidenceUpdateOne {
-	euo.mutation.RemoveTaskIDs(ids...)
-	return euo
+func (_u *EvidenceUpdateOne) RemoveTaskIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
 }
 
 // RemoveTasks removes "tasks" edges to Task entities.
-func (euo *EvidenceUpdateOne) RemoveTasks(t ...*Task) *EvidenceUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *EvidenceUpdateOne) RemoveTasks(v ...*Task) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveTaskIDs(ids...)
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // Where appends a list predicates to the EvidenceUpdate builder.
-func (euo *EvidenceUpdateOne) Where(ps ...predicate.Evidence) *EvidenceUpdateOne {
-	euo.mutation.Where(ps...)
-	return euo
+func (_u *EvidenceUpdateOne) Where(ps ...predicate.Evidence) *EvidenceUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (euo *EvidenceUpdateOne) Select(field string, fields ...string) *EvidenceUpdateOne {
-	euo.fields = append([]string{field}, fields...)
-	return euo
+func (_u *EvidenceUpdateOne) Select(field string, fields ...string) *EvidenceUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Evidence entity.
-func (euo *EvidenceUpdateOne) Save(ctx context.Context) (*Evidence, error) {
-	if err := euo.defaults(); err != nil {
+func (_u *EvidenceUpdateOne) Save(ctx context.Context) (*Evidence, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, euo.sqlSave, euo.mutation, euo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (euo *EvidenceUpdateOne) SaveX(ctx context.Context) *Evidence {
-	node, err := euo.Save(ctx)
+func (_u *EvidenceUpdateOne) SaveX(ctx context.Context) *Evidence {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1509,43 +1630,43 @@ func (euo *EvidenceUpdateOne) SaveX(ctx context.Context) *Evidence {
 }
 
 // Exec executes the query on the entity.
-func (euo *EvidenceUpdateOne) Exec(ctx context.Context) error {
-	_, err := euo.Save(ctx)
+func (_u *EvidenceUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (euo *EvidenceUpdateOne) ExecX(ctx context.Context) {
-	if err := euo.Exec(ctx); err != nil {
+func (_u *EvidenceUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (euo *EvidenceUpdateOne) defaults() error {
-	if _, ok := euo.mutation.UpdatedAt(); !ok && !euo.mutation.UpdatedAtCleared() {
+func (_u *EvidenceUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if evidence.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized evidence.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := evidence.UpdateDefaultUpdatedAt()
-		euo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (euo *EvidenceUpdateOne) check() error {
-	if v, ok := euo.mutation.Name(); ok {
+func (_u *EvidenceUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := evidence.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Evidence.name": %w`, err)}
 		}
 	}
-	if v, ok := euo.mutation.URL(); ok {
+	if v, ok := _u.mutation.URL(); ok {
 		if err := evidence.URLValidator(v); err != nil {
 			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "Evidence.url": %w`, err)}
 		}
 	}
-	if v, ok := euo.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := evidence.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Evidence.status": %w`, err)}
 		}
@@ -1554,22 +1675,22 @@ func (euo *EvidenceUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (euo *EvidenceUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceUpdateOne {
-	euo.modifiers = append(euo.modifiers, modifiers...)
-	return euo
+func (_u *EvidenceUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err error) {
-	if err := euo.check(); err != nil {
+func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(evidence.Table, evidence.Columns, sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString))
-	id, ok := euo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Evidence.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := euo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, evidence.FieldID)
 		for _, f := range fields {
@@ -1581,103 +1702,103 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 			}
 		}
 	}
-	if ps := euo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if euo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(evidence.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := euo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(evidence.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if euo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(evidence.FieldUpdatedAt, field.TypeTime)
 	}
-	if euo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(evidence.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := euo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(evidence.FieldUpdatedBy, field.TypeString, value)
 	}
-	if euo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(evidence.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := euo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(evidence.FieldDeletedAt, field.TypeTime, value)
 	}
-	if euo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(evidence.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := euo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(evidence.FieldDeletedBy, field.TypeString, value)
 	}
-	if euo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(evidence.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := euo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(evidence.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := euo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, evidence.FieldTags, value)
 		})
 	}
-	if euo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidence.FieldTags, field.TypeJSON)
 	}
-	if value, ok := euo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidence.FieldName, field.TypeString, value)
 	}
-	if value, ok := euo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(evidence.FieldDescription, field.TypeString, value)
 	}
-	if euo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(evidence.FieldDescription, field.TypeString)
 	}
-	if value, ok := euo.mutation.CollectionProcedure(); ok {
+	if value, ok := _u.mutation.CollectionProcedure(); ok {
 		_spec.SetField(evidence.FieldCollectionProcedure, field.TypeString, value)
 	}
-	if euo.mutation.CollectionProcedureCleared() {
+	if _u.mutation.CollectionProcedureCleared() {
 		_spec.ClearField(evidence.FieldCollectionProcedure, field.TypeString)
 	}
-	if value, ok := euo.mutation.CreationDate(); ok {
+	if value, ok := _u.mutation.CreationDate(); ok {
 		_spec.SetField(evidence.FieldCreationDate, field.TypeTime, value)
 	}
-	if value, ok := euo.mutation.RenewalDate(); ok {
+	if value, ok := _u.mutation.RenewalDate(); ok {
 		_spec.SetField(evidence.FieldRenewalDate, field.TypeTime, value)
 	}
-	if euo.mutation.RenewalDateCleared() {
+	if _u.mutation.RenewalDateCleared() {
 		_spec.ClearField(evidence.FieldRenewalDate, field.TypeTime)
 	}
-	if value, ok := euo.mutation.Source(); ok {
+	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(evidence.FieldSource, field.TypeString, value)
 	}
-	if euo.mutation.SourceCleared() {
+	if _u.mutation.SourceCleared() {
 		_spec.ClearField(evidence.FieldSource, field.TypeString)
 	}
-	if value, ok := euo.mutation.IsAutomated(); ok {
+	if value, ok := _u.mutation.IsAutomated(); ok {
 		_spec.SetField(evidence.FieldIsAutomated, field.TypeBool, value)
 	}
-	if euo.mutation.IsAutomatedCleared() {
+	if _u.mutation.IsAutomatedCleared() {
 		_spec.ClearField(evidence.FieldIsAutomated, field.TypeBool)
 	}
-	if value, ok := euo.mutation.URL(); ok {
+	if value, ok := _u.mutation.URL(); ok {
 		_spec.SetField(evidence.FieldURL, field.TypeString, value)
 	}
-	if euo.mutation.URLCleared() {
+	if _u.mutation.URLCleared() {
 		_spec.ClearField(evidence.FieldURL, field.TypeString)
 	}
-	if value, ok := euo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(evidence.FieldStatus, field.TypeEnum, value)
 	}
-	if euo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(evidence.FieldStatus, field.TypeEnum)
 	}
-	if euo.mutation.ControlObjectivesCleared() {
+	if _u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1688,10 +1809,10 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceControlObjectives
+		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !euo.mutation.ControlObjectivesCleared() {
+	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1702,13 +1823,13 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceControlObjectives
+		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1719,13 +1840,61 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceControlObjectives
+		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.ControlsCleared() {
+	if _u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ControlImplementationsTable,
+			Columns: []string{evidence.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ControlImplementationsTable,
+			Columns: []string{evidence.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ControlImplementationsTable,
+			Columns: []string{evidence.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1736,10 +1905,10 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceControls
+		edge.Schema = _u.schemaConfig.EvidenceControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !euo.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1750,13 +1919,13 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceControls
+		edge.Schema = _u.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1767,13 +1936,13 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceControls
+		edge.Schema = _u.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1784,10 +1953,10 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceSubcontrols
+		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !euo.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1798,13 +1967,13 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceSubcontrols
+		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1815,13 +1984,13 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceSubcontrols
+		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1832,10 +2001,10 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceFiles
+		edge.Schema = _u.schemaConfig.EvidenceFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !euo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1846,13 +2015,13 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceFiles
+		edge.Schema = _u.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1863,13 +2032,13 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EvidenceFiles
+		edge.Schema = _u.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1880,10 +2049,10 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !euo.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1894,13 +2063,13 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1911,13 +2080,13 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.TasksCleared() {
+	if _u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1928,10 +2097,10 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.TaskEvidence
+		edge.Schema = _u.schemaConfig.TaskEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !euo.mutation.TasksCleared() {
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1942,13 +2111,13 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.TaskEvidence
+		edge.Schema = _u.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1959,19 +2128,19 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.TaskEvidence
+		edge.Schema = _u.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = euo.schemaConfig.Evidence
-	ctx = internal.NewSchemaConfigContext(ctx, euo.schemaConfig)
-	_spec.AddModifiers(euo.modifiers...)
-	_node = &Evidence{config: euo.config}
+	_spec.Node.Schema = _u.schemaConfig.Evidence
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Evidence{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, euo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{evidence.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1979,6 +2148,6 @@ func (euo *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err
 		}
 		return nil, err
 	}
-	euo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

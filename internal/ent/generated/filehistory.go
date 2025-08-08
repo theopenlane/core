@@ -94,7 +94,7 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the FileHistory fields.
-func (fh *FileHistory) assignValues(columns []string, values []any) error {
+func (_m *FileHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -104,67 +104,67 @@ func (fh *FileHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				fh.ID = value.String
+				_m.ID = value.String
 			}
 		case filehistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				fh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case filehistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				fh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case filehistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				fh.Operation = *value
+				_m.Operation = *value
 			}
 		case filehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				fh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case filehistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				fh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case filehistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				fh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case filehistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				fh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case filehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				fh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case filehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				fh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case filehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &fh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -172,88 +172,88 @@ func (fh *FileHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field provided_file_name", values[i])
 			} else if value.Valid {
-				fh.ProvidedFileName = value.String
+				_m.ProvidedFileName = value.String
 			}
 		case filehistory.FieldProvidedFileExtension:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field provided_file_extension", values[i])
 			} else if value.Valid {
-				fh.ProvidedFileExtension = value.String
+				_m.ProvidedFileExtension = value.String
 			}
 		case filehistory.FieldProvidedFileSize:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field provided_file_size", values[i])
 			} else if value.Valid {
-				fh.ProvidedFileSize = value.Int64
+				_m.ProvidedFileSize = value.Int64
 			}
 		case filehistory.FieldPersistedFileSize:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field persisted_file_size", values[i])
 			} else if value.Valid {
-				fh.PersistedFileSize = value.Int64
+				_m.PersistedFileSize = value.Int64
 			}
 		case filehistory.FieldDetectedMimeType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field detected_mime_type", values[i])
 			} else if value.Valid {
-				fh.DetectedMimeType = value.String
+				_m.DetectedMimeType = value.String
 			}
 		case filehistory.FieldMd5Hash:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field md5_hash", values[i])
 			} else if value.Valid {
-				fh.Md5Hash = value.String
+				_m.Md5Hash = value.String
 			}
 		case filehistory.FieldDetectedContentType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field detected_content_type", values[i])
 			} else if value.Valid {
-				fh.DetectedContentType = value.String
+				_m.DetectedContentType = value.String
 			}
 		case filehistory.FieldStoreKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field store_key", values[i])
 			} else if value.Valid {
-				fh.StoreKey = value.String
+				_m.StoreKey = value.String
 			}
 		case filehistory.FieldCategoryType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category_type", values[i])
 			} else if value.Valid {
-				fh.CategoryType = value.String
+				_m.CategoryType = value.String
 			}
 		case filehistory.FieldURI:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field uri", values[i])
 			} else if value.Valid {
-				fh.URI = value.String
+				_m.URI = value.String
 			}
 		case filehistory.FieldStorageScheme:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_scheme", values[i])
 			} else if value.Valid {
-				fh.StorageScheme = value.String
+				_m.StorageScheme = value.String
 			}
 		case filehistory.FieldStorageVolume:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_volume", values[i])
 			} else if value.Valid {
-				fh.StorageVolume = value.String
+				_m.StorageVolume = value.String
 			}
 		case filehistory.FieldStoragePath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_path", values[i])
 			} else if value.Valid {
-				fh.StoragePath = value.String
+				_m.StoragePath = value.String
 			}
 		case filehistory.FieldFileContents:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field file_contents", values[i])
 			} else if value != nil {
-				fh.FileContents = *value
+				_m.FileContents = *value
 			}
 		default:
-			fh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -261,104 +261,104 @@ func (fh *FileHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the FileHistory.
 // This includes values selected through modifiers, order, etc.
-func (fh *FileHistory) Value(name string) (ent.Value, error) {
-	return fh.selectValues.Get(name)
+func (_m *FileHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this FileHistory.
 // Note that you need to call FileHistory.Unwrap() before calling this method if this FileHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (fh *FileHistory) Update() *FileHistoryUpdateOne {
-	return NewFileHistoryClient(fh.config).UpdateOne(fh)
+func (_m *FileHistory) Update() *FileHistoryUpdateOne {
+	return NewFileHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the FileHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (fh *FileHistory) Unwrap() *FileHistory {
-	_tx, ok := fh.config.driver.(*txDriver)
+func (_m *FileHistory) Unwrap() *FileHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: FileHistory is not a transactional entity")
 	}
-	fh.config.driver = _tx.drv
-	return fh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (fh *FileHistory) String() string {
+func (_m *FileHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("FileHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", fh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(fh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(fh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", fh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(fh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(fh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(fh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(fh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", fh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_name=")
-	builder.WriteString(fh.ProvidedFileName)
+	builder.WriteString(_m.ProvidedFileName)
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_extension=")
-	builder.WriteString(fh.ProvidedFileExtension)
+	builder.WriteString(_m.ProvidedFileExtension)
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_size=")
-	builder.WriteString(fmt.Sprintf("%v", fh.ProvidedFileSize))
+	builder.WriteString(fmt.Sprintf("%v", _m.ProvidedFileSize))
 	builder.WriteString(", ")
 	builder.WriteString("persisted_file_size=")
-	builder.WriteString(fmt.Sprintf("%v", fh.PersistedFileSize))
+	builder.WriteString(fmt.Sprintf("%v", _m.PersistedFileSize))
 	builder.WriteString(", ")
 	builder.WriteString("detected_mime_type=")
-	builder.WriteString(fh.DetectedMimeType)
+	builder.WriteString(_m.DetectedMimeType)
 	builder.WriteString(", ")
 	builder.WriteString("md5_hash=")
-	builder.WriteString(fh.Md5Hash)
+	builder.WriteString(_m.Md5Hash)
 	builder.WriteString(", ")
 	builder.WriteString("detected_content_type=")
-	builder.WriteString(fh.DetectedContentType)
+	builder.WriteString(_m.DetectedContentType)
 	builder.WriteString(", ")
 	builder.WriteString("store_key=")
-	builder.WriteString(fh.StoreKey)
+	builder.WriteString(_m.StoreKey)
 	builder.WriteString(", ")
 	builder.WriteString("category_type=")
-	builder.WriteString(fh.CategoryType)
+	builder.WriteString(_m.CategoryType)
 	builder.WriteString(", ")
 	builder.WriteString("uri=")
-	builder.WriteString(fh.URI)
+	builder.WriteString(_m.URI)
 	builder.WriteString(", ")
 	builder.WriteString("storage_scheme=")
-	builder.WriteString(fh.StorageScheme)
+	builder.WriteString(_m.StorageScheme)
 	builder.WriteString(", ")
 	builder.WriteString("storage_volume=")
-	builder.WriteString(fh.StorageVolume)
+	builder.WriteString(_m.StorageVolume)
 	builder.WriteString(", ")
 	builder.WriteString("storage_path=")
-	builder.WriteString(fh.StoragePath)
+	builder.WriteString(_m.StoragePath)
 	builder.WriteString(", ")
 	builder.WriteString("file_contents=")
-	builder.WriteString(fmt.Sprintf("%v", fh.FileContents))
+	builder.WriteString(fmt.Sprintf("%v", _m.FileContents))
 	builder.WriteByte(')')
 	return builder.String()
 }

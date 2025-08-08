@@ -27,151 +27,151 @@ type EntityTypeHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the EntityTypeHistoryUpdate builder.
-func (ethu *EntityTypeHistoryUpdate) Where(ps ...predicate.EntityTypeHistory) *EntityTypeHistoryUpdate {
-	ethu.mutation.Where(ps...)
-	return ethu
+func (_u *EntityTypeHistoryUpdate) Where(ps ...predicate.EntityTypeHistory) *EntityTypeHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ethu *EntityTypeHistoryUpdate) SetUpdatedAt(t time.Time) *EntityTypeHistoryUpdate {
-	ethu.mutation.SetUpdatedAt(t)
-	return ethu
+func (_u *EntityTypeHistoryUpdate) SetUpdatedAt(v time.Time) *EntityTypeHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ethu *EntityTypeHistoryUpdate) ClearUpdatedAt() *EntityTypeHistoryUpdate {
-	ethu.mutation.ClearUpdatedAt()
-	return ethu
+func (_u *EntityTypeHistoryUpdate) ClearUpdatedAt() *EntityTypeHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ethu *EntityTypeHistoryUpdate) SetUpdatedBy(s string) *EntityTypeHistoryUpdate {
-	ethu.mutation.SetUpdatedBy(s)
-	return ethu
+func (_u *EntityTypeHistoryUpdate) SetUpdatedBy(v string) *EntityTypeHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ethu *EntityTypeHistoryUpdate) SetNillableUpdatedBy(s *string) *EntityTypeHistoryUpdate {
-	if s != nil {
-		ethu.SetUpdatedBy(*s)
+func (_u *EntityTypeHistoryUpdate) SetNillableUpdatedBy(v *string) *EntityTypeHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ethu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ethu *EntityTypeHistoryUpdate) ClearUpdatedBy() *EntityTypeHistoryUpdate {
-	ethu.mutation.ClearUpdatedBy()
-	return ethu
+func (_u *EntityTypeHistoryUpdate) ClearUpdatedBy() *EntityTypeHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ethu *EntityTypeHistoryUpdate) SetDeletedAt(t time.Time) *EntityTypeHistoryUpdate {
-	ethu.mutation.SetDeletedAt(t)
-	return ethu
+func (_u *EntityTypeHistoryUpdate) SetDeletedAt(v time.Time) *EntityTypeHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ethu *EntityTypeHistoryUpdate) SetNillableDeletedAt(t *time.Time) *EntityTypeHistoryUpdate {
-	if t != nil {
-		ethu.SetDeletedAt(*t)
+func (_u *EntityTypeHistoryUpdate) SetNillableDeletedAt(v *time.Time) *EntityTypeHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ethu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ethu *EntityTypeHistoryUpdate) ClearDeletedAt() *EntityTypeHistoryUpdate {
-	ethu.mutation.ClearDeletedAt()
-	return ethu
+func (_u *EntityTypeHistoryUpdate) ClearDeletedAt() *EntityTypeHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ethu *EntityTypeHistoryUpdate) SetDeletedBy(s string) *EntityTypeHistoryUpdate {
-	ethu.mutation.SetDeletedBy(s)
-	return ethu
+func (_u *EntityTypeHistoryUpdate) SetDeletedBy(v string) *EntityTypeHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ethu *EntityTypeHistoryUpdate) SetNillableDeletedBy(s *string) *EntityTypeHistoryUpdate {
-	if s != nil {
-		ethu.SetDeletedBy(*s)
+func (_u *EntityTypeHistoryUpdate) SetNillableDeletedBy(v *string) *EntityTypeHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ethu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ethu *EntityTypeHistoryUpdate) ClearDeletedBy() *EntityTypeHistoryUpdate {
-	ethu.mutation.ClearDeletedBy()
-	return ethu
+func (_u *EntityTypeHistoryUpdate) ClearDeletedBy() *EntityTypeHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ethu *EntityTypeHistoryUpdate) SetTags(s []string) *EntityTypeHistoryUpdate {
-	ethu.mutation.SetTags(s)
-	return ethu
+func (_u *EntityTypeHistoryUpdate) SetTags(v []string) *EntityTypeHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ethu *EntityTypeHistoryUpdate) AppendTags(s []string) *EntityTypeHistoryUpdate {
-	ethu.mutation.AppendTags(s)
-	return ethu
+// AppendTags appends value to the "tags" field.
+func (_u *EntityTypeHistoryUpdate) AppendTags(v []string) *EntityTypeHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ethu *EntityTypeHistoryUpdate) ClearTags() *EntityTypeHistoryUpdate {
-	ethu.mutation.ClearTags()
-	return ethu
+func (_u *EntityTypeHistoryUpdate) ClearTags() *EntityTypeHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ethu *EntityTypeHistoryUpdate) SetOwnerID(s string) *EntityTypeHistoryUpdate {
-	ethu.mutation.SetOwnerID(s)
-	return ethu
+func (_u *EntityTypeHistoryUpdate) SetOwnerID(v string) *EntityTypeHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ethu *EntityTypeHistoryUpdate) SetNillableOwnerID(s *string) *EntityTypeHistoryUpdate {
-	if s != nil {
-		ethu.SetOwnerID(*s)
+func (_u *EntityTypeHistoryUpdate) SetNillableOwnerID(v *string) *EntityTypeHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return ethu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (ethu *EntityTypeHistoryUpdate) ClearOwnerID() *EntityTypeHistoryUpdate {
-	ethu.mutation.ClearOwnerID()
-	return ethu
+func (_u *EntityTypeHistoryUpdate) ClearOwnerID() *EntityTypeHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ethu *EntityTypeHistoryUpdate) SetName(s string) *EntityTypeHistoryUpdate {
-	ethu.mutation.SetName(s)
-	return ethu
+func (_u *EntityTypeHistoryUpdate) SetName(v string) *EntityTypeHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ethu *EntityTypeHistoryUpdate) SetNillableName(s *string) *EntityTypeHistoryUpdate {
-	if s != nil {
-		ethu.SetName(*s)
+func (_u *EntityTypeHistoryUpdate) SetNillableName(v *string) *EntityTypeHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ethu
+	return _u
 }
 
 // Mutation returns the EntityTypeHistoryMutation object of the builder.
-func (ethu *EntityTypeHistoryUpdate) Mutation() *EntityTypeHistoryMutation {
-	return ethu.mutation
+func (_u *EntityTypeHistoryUpdate) Mutation() *EntityTypeHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ethu *EntityTypeHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := ethu.defaults(); err != nil {
+func (_u *EntityTypeHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, ethu.sqlSave, ethu.mutation, ethu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ethu *EntityTypeHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := ethu.Save(ctx)
+func (_u *EntityTypeHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,102 +179,102 @@ func (ethu *EntityTypeHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ethu *EntityTypeHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := ethu.Save(ctx)
+func (_u *EntityTypeHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ethu *EntityTypeHistoryUpdate) ExecX(ctx context.Context) {
-	if err := ethu.Exec(ctx); err != nil {
+func (_u *EntityTypeHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ethu *EntityTypeHistoryUpdate) defaults() error {
-	if _, ok := ethu.mutation.UpdatedAt(); !ok && !ethu.mutation.UpdatedAtCleared() {
+func (_u *EntityTypeHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if entitytypehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized entitytypehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := entitytypehistory.UpdateDefaultUpdatedAt()
-		ethu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ethu *EntityTypeHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeHistoryUpdate {
-	ethu.modifiers = append(ethu.modifiers, modifiers...)
-	return ethu
+func (_u *EntityTypeHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ethu *EntityTypeHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *EntityTypeHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entitytypehistory.Table, entitytypehistory.Columns, sqlgraph.NewFieldSpec(entitytypehistory.FieldID, field.TypeString))
-	if ps := ethu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ethu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(entitytypehistory.FieldRef, field.TypeString)
 	}
-	if ethu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(entitytypehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ethu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(entitytypehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ethu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entitytypehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ethu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(entitytypehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ethu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(entitytypehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ethu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(entitytypehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ethu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(entitytypehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ethu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(entitytypehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ethu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(entitytypehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ethu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(entitytypehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ethu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(entitytypehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ethu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, entitytypehistory.FieldTags, value)
 		})
 	}
-	if ethu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entitytypehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ethu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(entitytypehistory.FieldOwnerID, field.TypeString, value)
 	}
-	if ethu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(entitytypehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := ethu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entitytypehistory.FieldName, field.TypeString, value)
 	}
-	_spec.Node.Schema = ethu.schemaConfig.EntityTypeHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ethu.schemaConfig)
-	_spec.AddModifiers(ethu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, ethu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.EntityTypeHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entitytypehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -282,8 +282,8 @@ func (ethu *EntityTypeHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 		}
 		return 0, err
 	}
-	ethu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // EntityTypeHistoryUpdateOne is the builder for updating a single EntityTypeHistory entity.
@@ -296,158 +296,158 @@ type EntityTypeHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ethuo *EntityTypeHistoryUpdateOne) SetUpdatedAt(t time.Time) *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.SetUpdatedAt(t)
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) SetUpdatedAt(v time.Time) *EntityTypeHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ethuo *EntityTypeHistoryUpdateOne) ClearUpdatedAt() *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.ClearUpdatedAt()
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) ClearUpdatedAt() *EntityTypeHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ethuo *EntityTypeHistoryUpdateOne) SetUpdatedBy(s string) *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.SetUpdatedBy(s)
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) SetUpdatedBy(v string) *EntityTypeHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ethuo *EntityTypeHistoryUpdateOne) SetNillableUpdatedBy(s *string) *EntityTypeHistoryUpdateOne {
-	if s != nil {
-		ethuo.SetUpdatedBy(*s)
+func (_u *EntityTypeHistoryUpdateOne) SetNillableUpdatedBy(v *string) *EntityTypeHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ethuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ethuo *EntityTypeHistoryUpdateOne) ClearUpdatedBy() *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.ClearUpdatedBy()
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) ClearUpdatedBy() *EntityTypeHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ethuo *EntityTypeHistoryUpdateOne) SetDeletedAt(t time.Time) *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.SetDeletedAt(t)
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) SetDeletedAt(v time.Time) *EntityTypeHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ethuo *EntityTypeHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *EntityTypeHistoryUpdateOne {
-	if t != nil {
-		ethuo.SetDeletedAt(*t)
+func (_u *EntityTypeHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *EntityTypeHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ethuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ethuo *EntityTypeHistoryUpdateOne) ClearDeletedAt() *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.ClearDeletedAt()
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) ClearDeletedAt() *EntityTypeHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ethuo *EntityTypeHistoryUpdateOne) SetDeletedBy(s string) *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.SetDeletedBy(s)
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) SetDeletedBy(v string) *EntityTypeHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ethuo *EntityTypeHistoryUpdateOne) SetNillableDeletedBy(s *string) *EntityTypeHistoryUpdateOne {
-	if s != nil {
-		ethuo.SetDeletedBy(*s)
+func (_u *EntityTypeHistoryUpdateOne) SetNillableDeletedBy(v *string) *EntityTypeHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ethuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ethuo *EntityTypeHistoryUpdateOne) ClearDeletedBy() *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.ClearDeletedBy()
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) ClearDeletedBy() *EntityTypeHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ethuo *EntityTypeHistoryUpdateOne) SetTags(s []string) *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.SetTags(s)
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) SetTags(v []string) *EntityTypeHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ethuo *EntityTypeHistoryUpdateOne) AppendTags(s []string) *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.AppendTags(s)
-	return ethuo
+// AppendTags appends value to the "tags" field.
+func (_u *EntityTypeHistoryUpdateOne) AppendTags(v []string) *EntityTypeHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ethuo *EntityTypeHistoryUpdateOne) ClearTags() *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.ClearTags()
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) ClearTags() *EntityTypeHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ethuo *EntityTypeHistoryUpdateOne) SetOwnerID(s string) *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.SetOwnerID(s)
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) SetOwnerID(v string) *EntityTypeHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ethuo *EntityTypeHistoryUpdateOne) SetNillableOwnerID(s *string) *EntityTypeHistoryUpdateOne {
-	if s != nil {
-		ethuo.SetOwnerID(*s)
+func (_u *EntityTypeHistoryUpdateOne) SetNillableOwnerID(v *string) *EntityTypeHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return ethuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (ethuo *EntityTypeHistoryUpdateOne) ClearOwnerID() *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.ClearOwnerID()
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) ClearOwnerID() *EntityTypeHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ethuo *EntityTypeHistoryUpdateOne) SetName(s string) *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.SetName(s)
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) SetName(v string) *EntityTypeHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ethuo *EntityTypeHistoryUpdateOne) SetNillableName(s *string) *EntityTypeHistoryUpdateOne {
-	if s != nil {
-		ethuo.SetName(*s)
+func (_u *EntityTypeHistoryUpdateOne) SetNillableName(v *string) *EntityTypeHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ethuo
+	return _u
 }
 
 // Mutation returns the EntityTypeHistoryMutation object of the builder.
-func (ethuo *EntityTypeHistoryUpdateOne) Mutation() *EntityTypeHistoryMutation {
-	return ethuo.mutation
+func (_u *EntityTypeHistoryUpdateOne) Mutation() *EntityTypeHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the EntityTypeHistoryUpdate builder.
-func (ethuo *EntityTypeHistoryUpdateOne) Where(ps ...predicate.EntityTypeHistory) *EntityTypeHistoryUpdateOne {
-	ethuo.mutation.Where(ps...)
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) Where(ps ...predicate.EntityTypeHistory) *EntityTypeHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ethuo *EntityTypeHistoryUpdateOne) Select(field string, fields ...string) *EntityTypeHistoryUpdateOne {
-	ethuo.fields = append([]string{field}, fields...)
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) Select(field string, fields ...string) *EntityTypeHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated EntityTypeHistory entity.
-func (ethuo *EntityTypeHistoryUpdateOne) Save(ctx context.Context) (*EntityTypeHistory, error) {
-	if err := ethuo.defaults(); err != nil {
+func (_u *EntityTypeHistoryUpdateOne) Save(ctx context.Context) (*EntityTypeHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ethuo.sqlSave, ethuo.mutation, ethuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ethuo *EntityTypeHistoryUpdateOne) SaveX(ctx context.Context) *EntityTypeHistory {
-	node, err := ethuo.Save(ctx)
+func (_u *EntityTypeHistoryUpdateOne) SaveX(ctx context.Context) *EntityTypeHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -455,44 +455,44 @@ func (ethuo *EntityTypeHistoryUpdateOne) SaveX(ctx context.Context) *EntityTypeH
 }
 
 // Exec executes the query on the entity.
-func (ethuo *EntityTypeHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := ethuo.Save(ctx)
+func (_u *EntityTypeHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ethuo *EntityTypeHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := ethuo.Exec(ctx); err != nil {
+func (_u *EntityTypeHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ethuo *EntityTypeHistoryUpdateOne) defaults() error {
-	if _, ok := ethuo.mutation.UpdatedAt(); !ok && !ethuo.mutation.UpdatedAtCleared() {
+func (_u *EntityTypeHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if entitytypehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized entitytypehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := entitytypehistory.UpdateDefaultUpdatedAt()
-		ethuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ethuo *EntityTypeHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeHistoryUpdateOne {
-	ethuo.modifiers = append(ethuo.modifiers, modifiers...)
-	return ethuo
+func (_u *EntityTypeHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ethuo *EntityTypeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityTypeHistory, err error) {
+func (_u *EntityTypeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityTypeHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entitytypehistory.Table, entitytypehistory.Columns, sqlgraph.NewFieldSpec(entitytypehistory.FieldID, field.TypeString))
-	id, ok := ethuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "EntityTypeHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ethuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, entitytypehistory.FieldID)
 		for _, f := range fields {
@@ -504,73 +504,73 @@ func (ethuo *EntityTypeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *En
 			}
 		}
 	}
-	if ps := ethuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ethuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(entitytypehistory.FieldRef, field.TypeString)
 	}
-	if ethuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(entitytypehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ethuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(entitytypehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ethuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entitytypehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ethuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(entitytypehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ethuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(entitytypehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ethuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(entitytypehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ethuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(entitytypehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ethuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(entitytypehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ethuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(entitytypehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ethuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(entitytypehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ethuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(entitytypehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ethuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, entitytypehistory.FieldTags, value)
 		})
 	}
-	if ethuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entitytypehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ethuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(entitytypehistory.FieldOwnerID, field.TypeString, value)
 	}
-	if ethuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(entitytypehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := ethuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entitytypehistory.FieldName, field.TypeString, value)
 	}
-	_spec.Node.Schema = ethuo.schemaConfig.EntityTypeHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ethuo.schemaConfig)
-	_spec.AddModifiers(ethuo.modifiers...)
-	_node = &EntityTypeHistory{config: ethuo.config}
+	_spec.Node.Schema = _u.schemaConfig.EntityTypeHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &EntityTypeHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ethuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entitytypehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -578,6 +578,6 @@ func (ethuo *EntityTypeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *En
 		}
 		return nil, err
 	}
-	ethuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

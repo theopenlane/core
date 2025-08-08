@@ -22,58 +22,58 @@ type JobRunnerRegistrationTokenDelete struct {
 }
 
 // Where appends a list predicates to the JobRunnerRegistrationTokenDelete builder.
-func (jrrtd *JobRunnerRegistrationTokenDelete) Where(ps ...predicate.JobRunnerRegistrationToken) *JobRunnerRegistrationTokenDelete {
-	jrrtd.mutation.Where(ps...)
-	return jrrtd
+func (_d *JobRunnerRegistrationTokenDelete) Where(ps ...predicate.JobRunnerRegistrationToken) *JobRunnerRegistrationTokenDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (jrrtd *JobRunnerRegistrationTokenDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, jrrtd.sqlExec, jrrtd.mutation, jrrtd.hooks)
+func (_d *JobRunnerRegistrationTokenDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jrrtd *JobRunnerRegistrationTokenDelete) ExecX(ctx context.Context) int {
-	n, err := jrrtd.Exec(ctx)
+func (_d *JobRunnerRegistrationTokenDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (jrrtd *JobRunnerRegistrationTokenDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *JobRunnerRegistrationTokenDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(jobrunnerregistrationtoken.Table, sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString))
-	_spec.Node.Schema = jrrtd.schemaConfig.JobRunnerRegistrationToken
-	ctx = internal.NewSchemaConfigContext(ctx, jrrtd.schemaConfig)
-	if ps := jrrtd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.JobRunnerRegistrationToken
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, jrrtd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	jrrtd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // JobRunnerRegistrationTokenDeleteOne is the builder for deleting a single JobRunnerRegistrationToken entity.
 type JobRunnerRegistrationTokenDeleteOne struct {
-	jrrtd *JobRunnerRegistrationTokenDelete
+	_d *JobRunnerRegistrationTokenDelete
 }
 
 // Where appends a list predicates to the JobRunnerRegistrationTokenDelete builder.
-func (jrrtdo *JobRunnerRegistrationTokenDeleteOne) Where(ps ...predicate.JobRunnerRegistrationToken) *JobRunnerRegistrationTokenDeleteOne {
-	jrrtdo.jrrtd.mutation.Where(ps...)
-	return jrrtdo
+func (_d *JobRunnerRegistrationTokenDeleteOne) Where(ps ...predicate.JobRunnerRegistrationToken) *JobRunnerRegistrationTokenDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (jrrtdo *JobRunnerRegistrationTokenDeleteOne) Exec(ctx context.Context) error {
-	n, err := jrrtdo.jrrtd.Exec(ctx)
+func (_d *JobRunnerRegistrationTokenDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (jrrtdo *JobRunnerRegistrationTokenDeleteOne) Exec(ctx context.Context) err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jrrtdo *JobRunnerRegistrationTokenDeleteOne) ExecX(ctx context.Context) {
-	if err := jrrtdo.Exec(ctx); err != nil {
+func (_d *JobRunnerRegistrationTokenDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
