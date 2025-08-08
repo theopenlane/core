@@ -90,7 +90,7 @@ require (
 	github.com/tink-crypto/tink-go/v2 v2.4.0
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/vektra/mockery/v3 v3.5.1
+	github.com/vektra/mockery/v3 v3.5.2
 	github.com/windmill-labs/windmill-go-client v1.518.1
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
