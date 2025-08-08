@@ -8,7 +8,6 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -95,9 +94,6 @@ func (i Integration) Interceptors() []ent.Interceptor {
 // Policy of the Integration
 func (i Integration) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(),
-		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures(i.Features()...),
 			policy.CheckOrgWriteAccess(),

@@ -3,7 +3,6 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -136,9 +135,6 @@ func (ProgramMembership) Interceptors() []ent.Interceptor {
 // // Policy of the ProgramMembership
 func (p ProgramMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(),
-		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures(p.Features()...),
 			entfga.CheckEditAccess[*generated.ProgramMembershipMutation](),

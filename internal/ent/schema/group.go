@@ -5,7 +5,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -206,9 +205,6 @@ func (Group) Hooks() []ent.Hook {
 // Policy of the group
 func (g Group) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(),
-		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures(g.Features()...),
 			policy.CheckCreateAccess(),
