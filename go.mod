@@ -96,11 +96,11 @@ require (
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	gocloud.dev v0.43.0
-	golang.org/x/crypto v0.40.0
+	golang.org/x/crypto v0.41.0
 	golang.org/x/oauth2 v0.30.0
-	golang.org/x/term v0.33.0
+	golang.org/x/term v0.34.0
 	golang.org/x/text v0.28.0
-	golang.org/x/tools v0.35.0
+	golang.org/x/tools v0.36.0
 	gotest.tools/gotestsum v1.12.3
 	gotest.tools/v3 v3.5.2
 )
@@ -642,9 +642,9 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792 // indirect
 	golang.org/x/mod v0.27.0
-	golang.org/x/net v0.42.0 // indirect
+	golang.org/x/net v0.43.0 // indirect
 	golang.org/x/sync v0.16.0
-	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/time v0.12.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/api v0.244.0
