@@ -480,7 +480,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.36.1 // indirect
+	ariga.io/atlas v0.35.0 // indirect
 	cloud.google.com/go/auth v0.16.3 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
 	cloud.google.com/go/compute/metadata v0.7.0 // indirect
