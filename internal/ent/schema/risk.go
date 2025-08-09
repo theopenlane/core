@@ -6,12 +6,14 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -192,19 +194,36 @@ func (r Risk) Mixin() []ent.Mixin {
 	}.getMixins(r)
 }
 
+func (Risk) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
+	}
+}
+
 // Annotations of the Risk
-func (Risk) Annotations() []schema.Annotation {
+func (r Risk) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}
 }
 
+// Interceptors of the Risk
+func (r Risk) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(r.Features()...),
+	}
+}
+
 // Policy of the Risk
-func (Risk) Policy() ent.Policy {
+func (r Risk) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(r.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.RiskMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.RiskMutation](),

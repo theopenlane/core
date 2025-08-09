@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
@@ -18,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/entx/accessmap"
 )
@@ -161,10 +163,15 @@ func (Group) Indexes() []ent.Index {
 	}
 }
 
+func (Group) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the Group
-func (Group) Annotations() []schema.Annotation {
+func (g Group) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		// Delete groups members when groups are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{
@@ -179,8 +186,9 @@ func (Group) Annotations() []schema.Annotation {
 }
 
 // Interceptors of the Group
-func (Group) Interceptors() []ent.Interceptor {
+func (g Group) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(g.Features()...),
 		interceptors.FilterQueryResults[generated.Group](),
 	}
 }
@@ -195,9 +203,10 @@ func (Group) Hooks() []ent.Hook {
 }
 
 // Policy of the group
-func (Group) Policy() ent.Policy {
+func (g Group) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(g.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.GroupMutation](),
 		),

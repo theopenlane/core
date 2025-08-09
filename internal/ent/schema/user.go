@@ -251,7 +251,7 @@ func (u User) Edges() []ent.Edge {
 }
 
 // Annotations of the User
-func (User) Annotations() []schema.Annotation {
+func (u User) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		// Delete users from groups and orgs when the user is deleted
 		entx.CascadeThroughAnnotationField(
@@ -266,7 +266,6 @@ func (User) Annotations() []schema.Annotation {
 				},
 			},
 		),
-		entx.Features("base"),
 	}
 }
 
@@ -298,7 +297,7 @@ func (User) Hooks() []ent.Hook {
 }
 
 // Interceptors of the User.
-func (User) Interceptors() []ent.Interceptor {
+func (u User) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.TraverseUser(),
 	}

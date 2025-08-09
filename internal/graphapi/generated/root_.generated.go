@@ -94562,7 +94562,7 @@ type SubscriberBulkCreatePayload {
         ID of the task
         """
         id: ID!
-    ):  Task!
+    ):  Task
 }
 
 

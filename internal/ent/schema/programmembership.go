@@ -8,13 +8,14 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/accessmap"
 )
@@ -89,10 +90,15 @@ func (p ProgramMembership) Edges() []ent.Edge {
 	}
 }
 
+func (ProgramMembership) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the ProgramMembership
-func (ProgramMembership) Annotations() []schema.Annotation {
+func (p ProgramMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance"),
 		entfga.MembershipChecks("program"),
 	}
 }
@@ -121,14 +127,16 @@ func (ProgramMembership) Hooks() []ent.Hook {
 // Interceptors of the ProgramMembership
 func (ProgramMembership) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(ProgramMembership{}.Features()...),
 		interceptors.FilterListQuery(),
 	}
 }
 
 // // Policy of the ProgramMembership
-func (ProgramMembership) Policy() ent.Policy {
+func (p ProgramMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(p.Features()...),
 			entfga.CheckEditAccess[*generated.ProgramMembershipMutation](),
 		),
 	)

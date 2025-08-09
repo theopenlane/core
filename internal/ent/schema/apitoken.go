@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/utils/keygen"
@@ -129,10 +128,15 @@ func (a APIToken) Mixin() []ent.Mixin {
 	}.getMixins(a)
 }
 
+func (APIToken) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the APIToken
-func (APIToken) Annotations() []schema.Annotation {
+func (a APIToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -148,17 +152,19 @@ func (APIToken) Hooks() []ent.Hook {
 }
 
 // Interceptors of the APIToken
-func (APIToken) Interceptors() []ent.Interceptor {
+func (a APIToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(a.Features()...),
 		interceptors.InterceptorAPIToken(),
 	}
 }
 
 // Policy of the APIToken
-func (APIToken) Policy() ent.Policy {
+func (a APIToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
+			rule.DenyIfMissingAllFeatures(a.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

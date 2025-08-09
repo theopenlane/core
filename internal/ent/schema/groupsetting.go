@@ -6,13 +6,14 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -74,10 +75,15 @@ func (g GroupSetting) Edges() []ent.Edge {
 	}
 }
 
+func (GroupSetting) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the GroupSetting
-func (GroupSetting) Annotations() []schema.Annotation {
+func (g GroupSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entfga.SettingsChecks("group"),
 	}
 }
@@ -90,7 +96,7 @@ func (GroupSetting) Hooks() []ent.Hook {
 }
 
 // Interceptors of the GroupSetting
-func (GroupSetting) Interceptors() []ent.Interceptor {
+func (g GroupSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorGroupSetting(),
 	}
@@ -104,9 +110,11 @@ func (GroupSetting) Mixin() []ent.Mixin {
 }
 
 // Policy defines the privacy policy of the GroupSetting
-func (GroupSetting) Policy() ent.Policy {
+func (g GroupSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(g.Features()...),
 			entfga.CheckEditAccess[*generated.GroupSettingMutation](),
 		),
 	)

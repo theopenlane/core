@@ -6,9 +6,11 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 )
@@ -107,10 +109,15 @@ func (ScheduledJobRun) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
+func (ScheduledJobRun) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the ScheduledJobRun
-func (ScheduledJobRun) Annotations() []schema.Annotation {
+func (s ScheduledJobRun) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -123,14 +130,20 @@ func (ScheduledJobRun) Hooks() []ent.Hook {
 }
 
 // Interceptors of the ScheduledJobRun
-func (ScheduledJobRun) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
+func (s ScheduledJobRun) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(s.Features()...),
+	}
 }
 
 // Policy of the ScheduledJobRun
-func (ScheduledJobRun) Policy() ent.Policy {
+// add the new policy here, the default post-policy is to deny all
+// so you need to ensure there are rules in place to allow the actions you want
+func (s ScheduledJobRun) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(s.Features()...),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),

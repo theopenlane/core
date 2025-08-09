@@ -2,31 +2,53 @@ package interceptors
 
 import (
 	"context"
+	"strings"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 
-	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/99designs/gqlgen/graphql"
+	entintercept "github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/pkg/models"
+	"github.com/vektah/gqlparser/v2/ast"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
-// InterceptorRequireFeature ensures the organization has the given feature
-// enabled before executing the query.
-func InterceptorRequireFeature(feature string) ent.Interceptor {
-	return InterceptorRequireAnyFeature(feature)
-}
+func InterceptorFeatures(features ...models.OrgModule) ent.Interceptor {
+	return entintercept.TraverseFunc(func(ctx context.Context, q entintercept.Query) error {
+		ok, err := rule.HasAllFeatures(ctx, features...)
+		if err != nil || !ok {
 
-// InterceptorRequireAnyFeature ensures the organization has at least one of the
-// provided features enabled before executing the query. It can be used with any
-// query type and does not rely on the query value.
-func InterceptorRequireAnyFeature(features ...string) ent.Interceptor {
-	return intercept.TraverseFunc(func(ctx context.Context, _ intercept.Query) error {
-		ok, err := rule.HasAnyFeature(ctx, features...)
-		if err != nil {
-			return err
-		}
+			if err == nil {
+				err = ErrFeatureNotEnabled
+			}
 
-		if !ok {
-			return ErrFeatureNotEnabled
+			// force an evaluation to false always
+			// so the data to be returned will always be empty or not found
+			q.WhereP(func(s *sql.Selector) {
+				s.Where(sql.ExprP("1=0"))
+			})
+
+			entity := strings.ToLower(q.Type())
+			if !strings.HasSuffix(entity, "s") {
+				entity += "s"
+			}
+
+			path := graphql.GetPath(ctx)
+
+			if len(path) == 0 {
+				path = ast.Path{ast.PathName(entity)}
+			} else if lastName, ok := path[len(path)-1].(ast.PathName); !ok || string(lastName) != entity {
+				path = append(path, ast.PathName(entity))
+			}
+
+			graphql.AddError(ctx, &gqlerror.Error{
+				Err:     gqlerrors.NewCustomError(gqlerrors.NoAccessToModule, ErrFeatureNotEnabled.Error(), err),
+				Message: ErrFeatureNotEnabled.Error(),
+				Path:    path,
+			})
 		}
 
 		return nil

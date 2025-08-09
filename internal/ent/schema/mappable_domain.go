@@ -4,17 +4,17 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // MappableDomain holds the schema definition for the MappableDomain entity
@@ -84,10 +84,12 @@ func (MappableDomain) Indexes() []ent.Index {
 }
 
 // Policy of the MappableDomain
-func (MappableDomain) Policy() ent.Policy {
+func (e MappableDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
+			rule.DenyIfMissingAllFeatures(e.Features()...),
 			privacy.AlwaysDenyRule(),
 		),
 	)
@@ -98,9 +100,15 @@ func (MappableDomain) Hooks() []ent.Hook {
 	return []ent.Hook{}
 }
 
-// Annotations of the MappableDomain
-func (MappableDomain) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("trust-center"),
+func (MappableDomain) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
+	}
+}
+
+// Interceptors of the MappableDomain
+func (e MappableDomain) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }

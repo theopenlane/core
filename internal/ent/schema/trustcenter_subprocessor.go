@@ -11,6 +11,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -100,9 +102,11 @@ func (TrustCenterSubprocessor) Hooks() []ent.Hook {
 }
 
 // Policy of the TrustCenterSubprocessor
-func (TrustCenterSubprocessor) Policy() ent.Policy {
+func (t TrustCenterSubprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(t.Features()...),
 			entfga.CheckEditAccess[*generated.TrustCenterSubprocessorMutation](),
 		),
 	)
@@ -116,15 +120,21 @@ func (TrustCenterSubprocessor) Indexes() []ent.Index {
 	}
 }
 
+func (TrustCenterSubprocessor) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
+	}
+}
+
 // Annotations of the TrustCenterSubprocessor
-func (TrustCenterSubprocessor) Annotations() []schema.Annotation {
+func (t TrustCenterSubprocessor) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
 	}
 }
 
 // Interceptors of the TrustCenterSubprocessor
-func (TrustCenterSubprocessor) Interceptors() []ent.Interceptor {
+func (t TrustCenterSubprocessor) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorTrustCenterChild(),
 	}

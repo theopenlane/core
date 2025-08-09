@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -129,10 +129,15 @@ func (JobResult) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
+func (JobResult) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the JobResult
-func (JobResult) Annotations() []schema.Annotation {
+func (j JobResult) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -150,9 +155,14 @@ func (JobResult) Interceptors() []ent.Interceptor {
 }
 
 // Policy of the JobResult
-func (JobResult) Policy() ent.Policy {
+func (j JobResult) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(j.Features()...),
+			policy.CheckCreateAccess(),
+			// entfga.CheckEditAccess[*generated.JobResultMutation](),
+			policy.CheckCreateAccess(),
+			// entfga.CheckEditAccess[*generated.JobResultMutation](),
 			// only system admin tokens should be posting back job results
 			rule.AllowMutationIfSystemAdmin(),
 		),

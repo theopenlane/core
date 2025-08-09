@@ -6,12 +6,14 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ActionPlan defines the actionplan schema.
@@ -83,18 +85,31 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 		}}.getMixins(a)
 }
 
+func (ActionPlan) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the ActionPlan
-func (ActionPlan) Annotations() []schema.Annotation {
+func (a ActionPlan) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }
 
+// Interceptors of the ActionPlan
+func (a ActionPlan) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(a.Features()...),
+	}
+}
+
 // Policy of the ActionPlan
-func (ActionPlan) Policy() ent.Policy {
+func (a ActionPlan) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(a.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ActionPlanMutation](),
 		),

@@ -12,8 +12,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -122,11 +123,23 @@ func (m MappedControl) Mixin() []ent.Mixin {
 	}.getMixins(m)
 }
 
+func (MappedControl) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the MappedControl
-func (MappedControl) Annotations() []schema.Annotation {
+func (m MappedControl) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance"),
 		entfga.SelfAccessChecks(),
+	}
+}
+
+// Interceptors of the MappedControl
+func (m MappedControl) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(m.Features()...),
 	}
 }
 
@@ -140,18 +153,12 @@ func (MappedControl) Hooks() []ent.Hook {
 	}
 }
 
-// Interceptors of the MappedControl
-func (MappedControl) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		// mapped controls are org owned, but we need to ensure the groups are filtered as well
-		interceptors.FilterQueryResults[generated.MappedControl](),
-	}
-}
-
 // Policy of the MappedControl
-func (MappedControl) Policy() ent.Policy {
+func (m MappedControl) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(m.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.MappedControlMutation](),
 		),

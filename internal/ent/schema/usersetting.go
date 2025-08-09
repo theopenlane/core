@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -118,10 +117,8 @@ func (u UserSetting) Edges() []ent.Edge {
 }
 
 // Annotations of the UserSetting
-func (UserSetting) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("base"),
-	}
+func (u UserSetting) Annotations() []schema.Annotation {
+	return []schema.Annotation{}
 }
 
 // Hooks of the UserSetting.
@@ -132,7 +129,7 @@ func (UserSetting) Hooks() []ent.Hook {
 }
 
 // Interceptors of the UserSetting.
-func (UserSetting) Interceptors() []ent.Interceptor {
+func (u UserSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorUserSetting(),
 	}

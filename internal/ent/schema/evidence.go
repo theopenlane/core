@@ -13,9 +13,12 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Evidence holds the schema definition for the Evidence entity
@@ -122,10 +125,15 @@ func (e Evidence) Edges() []ent.Edge {
 	}
 }
 
+func (Evidence) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the Evidence
-func (Evidence) Annotations() []schema.Annotation {
+func (e Evidence) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features(entx.ModuleCompliance, entx.ModuleContinuousComplianceAutomation),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}
@@ -138,10 +146,19 @@ func (Evidence) Hooks() []ent.Hook {
 	}
 }
 
+// Interceptors of the Evidence
+func (e Evidence) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(e.Features()...),
+	}
+}
+
 // Policy of the Evidence
-func (Evidence) Policy() ent.Policy {
+func (e Evidence) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(e.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.EvidenceMutation](),
 		),

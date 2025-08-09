@@ -58,6 +58,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	require.NoError(t, err)
 
 	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
+	suite.enableModules(recipientCtx, recipient.ID, userSetting.Edges.DefaultOrg.ID, models.AllOrgModules)
 
 	testCases := []struct {
 		name     string
@@ -142,7 +143,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			assert.Equal(t, testUser1.OrganizationID, user.User.Setting.DefaultOrg.ID)
 
-			// Test the user was added to the group
+			// test the user was added to the group
 			group, err := suite.api.GetGroupByID(recipientCtx, group.ID)
 			require.NoError(t, err)
 			assert.NotNil(t, group)

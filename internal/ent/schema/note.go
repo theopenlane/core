@@ -6,13 +6,16 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Note holds the schema definition for the Note entity
@@ -73,10 +76,15 @@ func (n Note) Edges() []ent.Edge {
 	}
 }
 
+func (Note) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the Note
-func (Note) Annotations() []schema.Annotation {
+func (n Note) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entfga.SelfAccessChecks(),
 		// skip generating the schema for this type, this schema is used through extended types
 		entx.SchemaGenSkip(true),
@@ -84,10 +92,19 @@ func (Note) Annotations() []schema.Annotation {
 	}
 }
 
+// Interceptors of the Note
+func (n Note) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(n.Features()...),
+	}
+}
+
 // Policy of the Note
-func (Note) Policy() ent.Policy {
+func (n Note) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(n.Features()...),
 			entfga.CheckEditAccess[*generated.NoteMutation](),
 		),
 	)

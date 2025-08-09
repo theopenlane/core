@@ -311,6 +311,65 @@ func TestQueryControlsMultipleOrgCheck(t *testing.T) {
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(testUserCtxUpdate, t)
 }
 
+func TestMutationCreateControlNoModuleAccess(t *testing.T) {
+
+	testUser := suite.userBuilder(context.Background(), t, models.CatalogBaseModule)
+
+	userWithAccess := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+
+	testCases := []struct {
+		name        string
+		request     testclient.CreateControlInput
+		client      *testclient.TestClient
+		ctx         context.Context
+		expectedErr string
+		hasError    bool
+	}{
+		{
+			name: "user with no module access cannot create control",
+			request: testclient.CreateControlInput{
+				RefCode: "A-1",
+			},
+			client:      suite.client.api,
+			ctx:         testUser.UserCtx,
+			expectedErr: "control not found",
+		},
+		{
+			name: "user with no module access cannot create control",
+			request: testclient.CreateControlInput{
+				RefCode: "A-1",
+			},
+			client: suite.client.api,
+			ctx:    userWithAccess.UserCtx,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateControl(tc.ctx, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
+
+			assert.Check(t, len(resp.CreateControl.Control.ID) != 0)
+			assert.Check(t, is.Equal(tc.request.RefCode, resp.CreateControl.Control.RefCode))
+
+			assert.Check(t, len(resp.CreateControl.Control.DisplayID) != 0)
+			assert.Check(t, is.Contains(resp.CreateControl.Control.DisplayID, "CTL-"))
+
+			assert.Check(t, len(resp.CreateControl.Control.RefCode) != 0)
+			assert.Check(t, is.Equal(tc.request.RefCode, resp.CreateControl.Control.RefCode))
+
+		})
+	}
+}
+
 func TestMutationCreateControl(t *testing.T) {
 	program1 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)

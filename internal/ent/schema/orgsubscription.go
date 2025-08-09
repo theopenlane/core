@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx"
 )
 
 // OrgSubscription holds the schema definition for the OrgSubscription entity
@@ -121,9 +120,8 @@ func (o OrgSubscription) Mixin() []ent.Mixin {
 }
 
 // Annotations of the OrgSubscription
-func (OrgSubscription) Annotations() []schema.Annotation {
+func (o OrgSubscription) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		// since we only have queries, we can just use the interceptors for queries and can skip the fga generated checks
@@ -131,7 +129,7 @@ func (OrgSubscription) Annotations() []schema.Annotation {
 }
 
 // Interceptors of the OrgSubscription
-func (OrgSubscription) Interceptors() []ent.Interceptor {
+func (o OrgSubscription) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorSubscriptionURL(),
 	}

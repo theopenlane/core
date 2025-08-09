@@ -7,15 +7,16 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -69,6 +70,12 @@ func (Onboarding) Fields() []ent.Field {
 	}
 }
 
+func (Onboarding) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Mixin of the Onboarding
 func (Onboarding) Mixin() []ent.Mixin {
 	return []ent.Mixin{
@@ -93,14 +100,20 @@ func (o Onboarding) Edges() []ent.Edge {
 }
 
 // Annotations of the Onboarding
-func (Onboarding) Annotations() []schema.Annotation {
+func (o Onboarding) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entgql.Mutations(entgql.MutationCreate()),
 		// don't store the history of the onboarding
 		history.Annotations{
 			Exclude: true,
 		},
+	}
+}
+
+// Interceptors of the Onboarding
+func (o Onboarding) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(o.Features()...),
 	}
 }
 
@@ -112,7 +125,7 @@ func (Onboarding) Hooks() []ent.Hook {
 }
 
 // Policy of the Onboarding
-func (Onboarding) Policy() ent.Policy {
+func (o Onboarding) Policy() ent.Policy {
 	// add the new policy here, the default post-policy is to deny all
 	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
@@ -124,6 +137,7 @@ func (Onboarding) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
+			rule.DenyIfMissingAllFeatures(o.Features()...),
 			privacy.AlwaysAllowRule(), // Allow all other users (e.g. a user with a JWT should be able to create a new org)
 		),
 	)
