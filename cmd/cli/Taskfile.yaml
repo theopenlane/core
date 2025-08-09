@@ -11,42 +11,55 @@ tasks:
     silent: true
     cmds:
       - task --list
-  # === Core Development Tasks ===
+
+  # === Generate Tasks ===
   generate:
     desc: generates a new cli cmd
     interactive: true
     cmds:
       - go run ../../pkg/gencmd/generate/main.go generate
 
+  generate:ro:
+    desc: generates a new cli cmd with only the read cmds
+    interactive: true
+    cmds:
+      - go run ../../pkg/gencmd/generate/main.go generate --read-only
+
+  generate:enum:
+    desc: generates a new enum
+    interactive: true
+    cmds:
+      - go run ../../pkg/genenum/cmd/main.go
   generate:enum:
     desc: generates a new enum
     interactive: true
     cmds:
       - go run ../../pkg/genenum/cmd/main.go
 
-  # === Basic User Management ===
-  user:register:
-    desc: register and verify a new user
-    aliases: [register]
-    cmds:
-      - curl http://localhost:17608/v1/verify?token={{.VERIFY_TOKEN}}
+  generate:all:history:
+    desc: generates a new cli cmd for all missing history commands from the query/ directory
     vars:
-      VERIFY_TOKEN:
-        sh: go run main.go register --email="{{ .EMAIL_ADDRESS | default .DEFAULT_USER_EMAIL }}" --first-name="Test" --last-name="User" --password="mattisthebest1234" | jq -r .token
-
-  user:login:
-    desc: login an existing user
-    aliases: [login]
-    env:
-      CORE_PASSWORD: mattisthebest1234
+      SCHEMAS:
+        sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
     cmds:
-      - go run main.go login -u {{ .EMAIL_ADDRESS | default .DEFAULT_USER_EMAIL }}
+      - for: {var: SCHEMAS, as: SCHEMA}
+        cmd: go run ../../pkg/gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only
 
+  generate:all:history:force:
+    desc: regenerates the cli cmd for all history commands from the query/ directory, this will overwrite any changes made to the generated files
+    vars:
+      SCHEMAS:
+        sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
+    cmds:
+      - for: {var: SCHEMAS, as: SCHEMA}
+        cmd: go run ../../pkg/gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only --force
+
+  # === Organization Management ===
   org:create:
-    desc: create an organization for the current user
-    aliases: [org]
+    desc: creates an organization against a running local instance of the server - see the CLI help commands for other variables
+    aliases: [createorg]
     cmds:
-      - go run main.go org create -n {{ .ORG_NAME | default .DEFAULT_ORG_NAME }} -d "Test organization"
+      - go run main.go org create -n {{ .ORG_NAME | default .DEFAULT_ORG_NAME }} -d "my meow org"
 
   org:get:
     output: true
@@ -54,6 +67,26 @@ tasks:
     desc: a task to get the current organization
     cmds:
       - go run main.go org get -c -z json | jq -r '.organization.id'
+
+  # === User Management ===
+  user:verify:
+    desc: a task to register a user, parse out the token response, and submit it to the verify endpoint
+    aliases: [verifyuser]
+    cmds:
+      - curl http://localhost:17608/v1/verify?token={{.VERIFY_TOKEN}}
+    vars:
+      VERIFY_TOKEN:
+        sh: go run main.go register --email="{{ .EMAIL_ADDRESS | default .DEFAULT_USER_EMAIL }}" --first-name="matt" --last-name="anderson" --password="mattisthebest1234" | jq -r .token
+
+  user:all:another:
+    desc: a task to register, verify, and login another user
+    cmds:
+      - task: verifyuser
+        vars:
+          EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
 
   user:setup:
     desc: complete user setup with default privileges
@@ -63,22 +96,67 @@ tasks:
       - task: org:create
       - task: token:create
 
-  # === Admin Setup (for Impersonation) ===
-  admin:setup:
-    desc: complete admin user setup with system admin privileges
+  user:all:
+    desc: a task to register, verify, and login a new user
     cmds:
-      - task: user:register
-        vars:
-          EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
-      - task: user:login
-        vars:
-          EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
-      - task: org:create
-        vars:
-          ORG_NAME: "admin-org"
+      - task: verifyuser
+      - task: login
+      - task: createorg
+      - task: program:create
       - task: token:create
-      - task: admin:grant:fga
+      - task: pat:create
+      - task: orgsub:get
 
+  user:all:admin:
+    desc: a task to register, verify, and login a new user as as system admin
+    cmds:
+      - task: verifyuser
+        vars:
+          EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
+      - task: login:admin
+      - task: createorg
+        vars:
+          ORG_NAME: admin-org
+      - task: token:create
+      - task: pat:create
+      - task: :fga:add:admin
+
+  # === Login ===
+  login:creds:
+    desc: a task to login the verified user
+    aliases: [login]
+    env:
+      CORE_PASSWORD: mattisthebest1234
+    cmds:
+      - go run main.go login -u {{ .EMAIL_ADDRESS | default .DEFAULT_USER_EMAIL }}
+
+  login:another:
+    desc: a task to login another user
+    cmds:
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
+
+  login:admin:
+    desc: a task to login as the system admin
+    cmds:
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
+
+  login:google:
+    desc: a task to login with google oauth
+    aliases: [google]
+    cmds:
+      - go run main.go login -o google
+
+  login:github:
+    desc: a task to login with google oauth
+    aliases: [github]
+    cmds:
+      - go run main.go login -o github
+
+  # === Token Management ===
   token:create:
     desc: create PAT for the user
     cmds:
@@ -117,7 +195,7 @@ tasks:
       - echo "OPENLANE_SYSTEM_ADMIN_TOKEN=$(go run main.go pat get -z json | jq -r '.personalAccessTokens.edges[-1].node.token')" > .env-admin-token
 
   # === Target User Setup (for Impersonation Testing) ===
-  target:setup:
+  impersonation:target:setup:
     desc: create target users for impersonation testing
     cmds:
       - task: user:register
@@ -139,7 +217,7 @@ tasks:
         vars:
           ORG_NAME: "target2-org"
 
-  target:list:
+  impersonation:target:list:
     desc: list available target users for impersonation
     env:
       CORE_PASSWORD: mattisthebest1234
@@ -147,28 +225,7 @@ tasks:
       - task: user:login
         vars:
           EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
-      - go run main.go user get -z json | jq -r '.users.edges[] | "  " + .node.id + " - " + .node.email'
-
-  # === Impersonation Demo ===
-  demo:impersonation:
-    desc: open the impersonation demo UI
-    cmds:
-      - open "../../demo/impersonation/index.html" || echo "Open the file manually in your browser"
-
-  demo:setup:all:
-    desc: complete setup for impersonation demo (admin + targets)
-    cmds:
-      - task: admin:setup
-      - task: target:setup
-      - task: admin:token:store
-
-  # === Quick Start ===
-  quickstart:
-    desc: quick setup and demo launch
-    aliases: [start]
-    cmds:
-      - task: demo:setup:all
-      - task: demo:impersonation
+      - go run main.go user get -z json | jq -r '.users.edges[] | "  " + .node.id + " - " + .node.email
 
   # === Testing Utilities ===
   test:connection:
@@ -191,17 +248,7 @@ tasks:
       - rm -f .env-admin-token
 
 
-  # === Legacy/Advanced (Hidden) ===
-  generate:all:history:
-    desc: generates cli commands for all history schemas
-    internal: true
-    vars:
-      SCHEMAS:
-        sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
-    cmds:
-      - for: {var: SCHEMAS, as: SCHEMA}
-        cmd: go run ../../pkg/gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only
-
+  # === Template Generation ===
   template:create:
     desc: create root templates for all models
     internal: true
@@ -211,3 +258,39 @@ tasks:
     cmds:
       - for: {var: MODELS, as: MODEL}
         cmd: go run main.go template create -n {{ .MODEL }} -t ROOTTEMPLATE --jsonconfig="../../jsonschema/models/{{ .MODEL }}/generate/{{ .MODEL }}.json"
+
+  # === Organization Settings ===
+  orgsetting:get:
+    desc: gets the org setting
+    aliases: [getorgsetting]
+    cmds:
+      - go run main.go organization-setting get
+
+  orgsub:get:
+    desc: gets the org subscription
+    aliases: [getorgsub]
+    cmds:
+      - go run main.go org-subscription get
+
+  orgsetting:enforce-sso:
+    desc: update the default organization to enforce SSO using the local OIDC server
+    vars:
+      CLIENT_ID: local-client
+      CLIENT_SECRET: local-client-secret
+      DISCOVERY_URL: http://localhost:5556/dex/.well-known/openid-configuration
+      SETTING_ID:
+        sh: go run main.go organization-setting get -z json | jq -r '.organizationSettings.edges[0].node.id'
+    cmds:
+      - go run main.go organization-setting update --id {{.SETTING_ID}} --client-id {{.CLIENT_ID}} --client-secret {{.CLIENT_SECRET}} --discovery-url {{.DISCOVERY_URL}} --identity-provider OKTA --enforce-sso
+
+  user:all:sso:
+    desc: run user:all and enforce SSO for the organization
+    cmds:
+      - task: user:all
+      - task: orgsetting:enforce-sso
+
+  # === Programs ===
+  program:create:
+    desc: creates an program against a running local instance of the server
+    cmds:
+      - go run main.go program create -n "mitb program" -d "program for mitb"
