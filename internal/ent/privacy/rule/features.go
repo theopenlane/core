@@ -136,12 +136,12 @@ func AllowIfHasFeature(feature string) privacy.QueryMutationRule {
 }
 
 // HasAnyFeature checks if any of the provided features are enabled for the organization
-func HasAnyFeature(ctx context.Context, feats ...models.OrgModule) (bool, error) {
+func HasAnyFeature(ctx context.Context, feats ...models.OrgModule) (bool, models.OrgModule, error) {
 	return checkFeatures(ctx, false, feats...)
 }
 
 // HasAllFeatures checks if all of the provided features are enabled for the organization
-func HasAllFeatures(ctx context.Context, feats ...models.OrgModule) (bool, error) {
+func HasAllFeatures(ctx context.Context, feats ...models.OrgModule) (bool, models.OrgModule, error) {
 	return checkFeatures(ctx, true, feats...)
 }
 
@@ -149,14 +149,14 @@ func HasAllFeatures(ctx context.Context, feats ...models.OrgModule) (bool, error
 // If requireAll is true, all features must be enabled.
 //
 // If false, at least one must be enabled.
-func checkFeatures(ctx context.Context, requireAll bool, feats ...models.OrgModule) (bool, error) {
+func checkFeatures(ctx context.Context, requireAll bool, feats ...models.OrgModule) (bool, models.OrgModule, error) {
 	enabled, err := orgFeatures(ctx)
 	if err != nil {
-		return false, err
+		return false, models.OrgModule(""), err
 	}
 
 	if len(enabled) == 0 {
-		return true, nil
+		return true, models.OrgModule(""), nil
 	}
 
 	enabledSet := make(map[string]struct{}, len(enabled))
@@ -169,26 +169,27 @@ func checkFeatures(ctx context.Context, requireAll bool, feats ...models.OrgModu
 		// all features must be enabled
 		for _, f := range feats {
 			if _, ok := enabledSet[string(f)]; !ok {
-				return false, nil
+				return false, f, nil
 			}
 		}
-		return true, nil
+		return true, models.OrgModule(""), nil
 	}
 
 	// at least one feature must be enabled
 	for _, f := range feats {
 		if _, ok := enabledSet[string(f)]; ok {
-			return true, nil
+			return true, models.OrgModule(""), nil
 		}
 	}
 
-	return false, nil
+	// return the first feature by default
+	return false, feats[0], nil
 }
 
 // AllowIfHasAnyFeature allows the operation if any of the provided features are enabled
 func AllowIfHasAnyFeature(features ...models.OrgModule) privacy.QueryMutationRule {
 	return privacy.ContextQueryMutationRule(func(ctx context.Context) error {
-		ok, err := HasAnyFeature(ctx, features...)
+		ok, _, err := HasAnyFeature(ctx, features...)
 		if err != nil {
 			return err
 		}
@@ -204,7 +205,7 @@ func AllowIfHasAnyFeature(features ...models.OrgModule) privacy.QueryMutationRul
 // AllowIfHasAllFeatures allows the operation if all of the provided features are enabled
 func AllowIfHasAllFeatures(features ...models.OrgModule) privacy.QueryMutationRule {
 	return privacy.ContextQueryMutationRule(func(ctx context.Context) error {
-		ok, err := HasAllFeatures(ctx, features...)
+		ok, _, err := HasAllFeatures(ctx, features...)
 		if err != nil {
 			return err
 		}
@@ -271,7 +272,7 @@ func DenyIfMissingAllFeatures(features ...models.OrgModule) privacy.MutationRule
 			return privacy.Skip
 		}
 
-		ok, err := HasAllFeatures(ctx, features...)
+		ok, _, err := HasAllFeatures(ctx, features...)
 		if err != nil {
 			return err
 		}

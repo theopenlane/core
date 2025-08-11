@@ -18,7 +18,7 @@ import (
 
 func InterceptorFeatures(features ...models.OrgModule) ent.Interceptor {
 	return entintercept.TraverseFunc(func(ctx context.Context, q entintercept.Query) error {
-		ok, err := rule.HasAllFeatures(ctx, features...)
+		ok, module, err := rule.HasAllFeatures(ctx, features...)
 		if err != nil || !ok {
 
 			if err == nil {
@@ -45,7 +45,7 @@ func InterceptorFeatures(features ...models.OrgModule) ent.Interceptor {
 			}
 
 			graphql.AddError(ctx, &gqlerror.Error{
-				Err:     gqlerrors.NewCustomError(gqlerrors.NoAccessToModule, ErrFeatureNotEnabled.Error(), err),
+				Err:     gqlerrors.NewCustomErrorWithModule(gqlerrors.NoAccessToModule, ErrFeatureNotEnabled.Error(), err, module),
 				Message: ErrFeatureNotEnabled.Error(),
 				Path:    path,
 			})

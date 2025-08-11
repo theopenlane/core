@@ -52,11 +52,11 @@ func TestHasFeature(t *testing.T) {
 func TestHasAnyFeature(t *testing.T) {
 	ctx := setupContext("org2", []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule})
 
-	ok, err := rule.HasAnyFeature(ctx, models.CatalogBaseModule, models.CatalogEntityManagementModule)
+	ok, _, err := rule.HasAnyFeature(ctx, models.CatalogBaseModule, models.CatalogEntityManagementModule)
 	require.NoError(t, err)
 	assert.True(t, ok)
 
-	ok, err = rule.HasAnyFeature(ctx, models.CatalogEntityManagementModule)
+	ok, _, err = rule.HasAnyFeature(ctx, models.CatalogEntityManagementModule)
 	require.NoError(t, err)
 	assert.False(t, ok)
 }
@@ -64,23 +64,23 @@ func TestHasAnyFeature(t *testing.T) {
 func TestHasAllFeatures(t *testing.T) {
 	ctx := setupContext("org3", []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule})
 
-	ok, err := rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogComplianceModule)
+	ok, _, err := rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogComplianceModule)
 	require.NoError(t, err)
 	assert.True(t, ok)
 
-	ok, err = rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogEntityManagementModule)
+	ok, _, err = rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogEntityManagementModule)
 	require.NoError(t, err)
 	assert.True(t, ok)
 
-	ok, err = rule.HasAllFeatures(ctx, models.CatalogComplianceModule)
+	ok, _, err = rule.HasAllFeatures(ctx, models.CatalogComplianceModule)
 	require.NoError(t, err)
 	assert.True(t, ok)
 
-	ok, err = rule.HasAllFeatures(ctx, models.CatalogTrustCenterModule)
+	ok, _, err = rule.HasAllFeatures(ctx, models.CatalogTrustCenterModule)
 	require.NoError(t, err)
 	assert.False(t, ok)
 
-	ok, err = rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule)
+	ok, _, err = rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule)
 	require.NoError(t, err)
 	assert.True(t, ok)
 }
@@ -246,7 +246,7 @@ func TestDenyIfMissingAllFeatures_EdgeCases(t *testing.T) {
 
 	t.Run("no features to check should skip", func(t *testing.T) {
 		ctx := setupContext("test-org", []models.OrgModule{})
-        featureRule := rule.DenyIfMissingAllFeatures()
+		featureRule := rule.DenyIfMissingAllFeatures()
 		err := featureRule.EvalMutation(ctx, mockMutation)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "skip rule")
