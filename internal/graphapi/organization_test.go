@@ -7,6 +7,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -503,12 +504,13 @@ func TestMutationCreateOrganization(t *testing.T) {
 
 			// ensure managed groups are created
 			// groups and programs require the compliance module which is not added by default
-			// managedGroups, err := suite.client.api.GetGroups(newCtx, &testclient.GroupWhereInput{
-			// 	IsManaged: lo.ToPtr(true),
-			// })
-			//
-			// // admins, viewers, all users should be created
-			// assert.Check(t, is.Len(managedGroups.Groups.Edges, 3))
+			_, err = suite.client.api.GetGroups(newCtx, &testclient.GroupWhereInput{
+				IsManaged: lo.ToPtr(true),
+			})
+
+			// while group is in the base module, this query includes programs and others
+			// which are in other modules
+			assert.Assert(t, err != nil)
 
 			// cleanup org
 			(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: resp.CreateOrganization.Organization.ID}).MustDelete(orgUser.UserCtx, t)

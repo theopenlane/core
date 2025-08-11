@@ -94545,14 +94545,14 @@ func (t *GetAllTasks) GetTasks() *GetAllTasks_Tasks {
 }
 
 type GetTaskByID struct {
-	Task *GetTaskByID_Task "json:\"task,omitempty\" graphql:\"task\""
+	Task GetTaskByID_Task "json:\"task\" graphql:\"task\""
 }
 
 func (t *GetTaskByID) GetTask() *GetTaskByID_Task {
 	if t == nil {
 		t = &GetTaskByID{}
 	}
-	return t.Task
+	return &t.Task
 }
 
 type GetTasks struct {

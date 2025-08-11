@@ -94562,7 +94562,7 @@ type SubscriberBulkCreatePayload {
         ID of the task
         """
         id: ID!
-    ):  Task
+    ):  Task!
 }
 
 
@@ -94684,7 +94684,8 @@ type TaskBulkUpdatePayload {
     IDs of the updated tasks
     """
     updatedIDs: [ID!]
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/template.graphql", Input: `extend type Query {
     """
     Look up template by ID
