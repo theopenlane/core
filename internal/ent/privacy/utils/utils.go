@@ -103,7 +103,7 @@ func CheckContains(s []string, e []string) bool {
 func GetIntersection(s1 []string, s2 []string) []string {
 	m := SliceToMap(s1)
 
-	var intersection []string
+	intersection := make([]string, 0)
 	for _, item := range s2 {
 		if _, exists := m[item]; exists {
 			intersection = append(intersection, item)
