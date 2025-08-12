@@ -100,13 +100,18 @@ func CheckContains(s []string, e []string) bool {
 }
 
 // GetIntersection returns the results that are included in both slices
+// removing any duplicates
 func GetIntersection(s1 []string, s2 []string) []string {
 	m := SliceToMap(s1)
 
+	set := make(map[string]any)
 	intersection := make([]string, 0)
 	for _, item := range s2 {
 		if _, exists := m[item]; exists {
-			intersection = append(intersection, item)
+			if _, seen := set[item]; !seen {
+				set[item] = struct{}{}
+				intersection = append(intersection, item)
+			}
 		}
 	}
 
