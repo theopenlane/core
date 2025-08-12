@@ -234,6 +234,8 @@ func (Task) Hooks() []ent.Hook {
 func (Task) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			// all users should be allowed to create a task
+			policy.AllowCreate(),
 			entfga.CheckEditAccess[*generated.TaskMutation](),
 		),
 	)

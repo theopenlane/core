@@ -137,19 +137,7 @@ func HasAnyFeature(ctx context.Context, feats ...string) (bool, error) {
 		return false, err
 	}
 
-	enabledSet := make(map[string]struct{}, len(enabled))
-
-	for _, f := range enabled {
-		enabledSet[f] = struct{}{}
-	}
-
-	for _, f := range feats {
-		if _, ok := enabledSet[f]; ok {
-			return true, nil
-		}
-	}
-
-	return false, nil
+	return utils.CheckContains(enabled, feats), nil
 }
 
 // AllowIfHasAnyFeature allows the operation if any of the provided features are enabled

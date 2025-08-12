@@ -405,20 +405,20 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "controls": {
+	ObjectType:      "control",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "subcontrols": {
+	ObjectType:      "subcontrol",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "control_objectives": {
 	ObjectType:      "control_objective",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "control_implementations": {
 	ObjectType:      "control_implementation",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "controls": {
-	ObjectType:      "control",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "subcontrols": {
-	ObjectType:      "subcontrol",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "files": {

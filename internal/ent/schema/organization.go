@@ -16,7 +16,6 @@ import (
 
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -466,7 +465,7 @@ func (Organization) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.HasOrgMutationAccess(), // Requires edit for Update, and delete for Delete mutations
-			privacy.AlwaysAllowRule(),   // Allow all other users (e.g. a user with a JWT should be able to create a new org)
+			policy.AllowCreate(),        // Allow all other users (e.g. a user with a JWT should be able to create a new org)
 		),
 	)
 }

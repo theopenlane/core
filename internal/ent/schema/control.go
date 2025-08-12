@@ -175,7 +175,9 @@ func (Control) Policy() ent.Policy {
 			// controls to unlink the standard that might belong to an organization
 			rule.AllowMutationIfSystemAdmin(),
 			rule.AllowIfContextAllowRule(),
-			rule.CanCreateObjectsUnderParent[*generated.ControlMutation](rule.ProgramParent), // if mutation contains program_id, check access
+			policy.CanCreateObjectsUnderParents([]string{
+				Program{}.PluralName(),
+			}),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ControlMutation](),
 		),

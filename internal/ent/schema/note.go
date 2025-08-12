@@ -88,6 +88,7 @@ func (Note) Annotations() []schema.Annotation {
 func (Note) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.AllowCreate(),
 			entfga.CheckEditAccess[*generated.NoteMutation](),
 		),
 	)

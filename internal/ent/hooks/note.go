@@ -7,6 +7,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -32,7 +33,7 @@ func HookNoteFiles() ent.Hook {
 }
 
 // checkNoteFiles checks if note files are provided and sets the local file ID(s)
-func checkNoteFiles[T GenericMutation](ctx context.Context, m T) (context.Context, error) {
+func checkNoteFiles[T utils.GenericMutation](ctx context.Context, m T) (context.Context, error) {
 	key := "noteFiles"
 
 	// get the file from the context, if it exists

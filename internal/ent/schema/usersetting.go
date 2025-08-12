@@ -8,7 +8,6 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -140,15 +139,14 @@ func (UserSetting) Interceptors() []ent.Interceptor {
 
 func (UserSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.AllowCreate(),
+		),
 		policy.WithOnMutationRules(
 			ent.OpUpdateOne|ent.OpUpdate,
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.VerifyToken](),
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OauthTooToken](),
 			rule.AllowIfSelf(),
-		),
-		policy.WithOnMutationRules(
-			ent.OpCreate,
-			privacy.AlwaysAllowRule(),
 		),
 	)
 }

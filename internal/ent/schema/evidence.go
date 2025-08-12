@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -112,10 +113,27 @@ func (e Evidence) Mixin() []ent.Mixin {
 // Edges of the Evidence
 func (e Evidence) Edges() []ent.Edge {
 	return []ent.Edge{
+		// users with only view access should be able to link
+		// controls to the evidence
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Control{}.Name()),
+			},
+		}),
+		// users with only view access should be able to link
+		// subcontrols to the evidence
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: Subcontrol{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Subcontrol{}.Name()),
+			},
+		}),
+		// all other edges require edit access to make the association
 		defaultEdgeToWithPagination(e, ControlObjective{}),
 		defaultEdgeToWithPagination(e, ControlImplementation{}),
-		defaultEdgeToWithPagination(e, Control{}),
-		defaultEdgeToWithPagination(e, Subcontrol{}),
 		defaultEdgeToWithPagination(e, File{}),
 		defaultEdgeFromWithPagination(e, Program{}),
 		defaultEdgeFromWithPagination(e, Task{}),
@@ -142,7 +160,18 @@ func (Evidence) Hooks() []ent.Hook {
 func (Evidence) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
+			// to create evidence under specific objects, this needs to run
+			// before the generic CheckCreateAccess because that will
+			// return a privacy.Deny, this will only return a privacy.Skip
+			// if there are no parents
+			policy.CanCreateObjectsUnderParents([]string{
+				Program{}.PluralName(),
+				Control{}.PluralName(),
+				Subcontrol{}.PluralName(),
+				Task{}.PluralName(),
+			}),
+			policy.CheckCreateAccess(), // generic create access on the organization level
+			// users without org level can_create_evidence should be able
 			entfga.CheckEditAccess[*generated.EvidenceMutation](),
 		),
 	)

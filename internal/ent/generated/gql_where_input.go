@@ -21059,14 +21059,6 @@ type EvidenceWhereInput struct {
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
-	// "control_objectives" edge predicates.
-	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
-	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
-
-	// "control_implementations" edge predicates.
-	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
-	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
-
 	// "controls" edge predicates.
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -21074,6 +21066,14 @@ type EvidenceWhereInput struct {
 	// "subcontrols" edge predicates.
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+
+	// "control_objectives" edge predicates.
+	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
+	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
+
+	// "control_implementations" edge predicates.
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
 
 	// "files" edge predicates.
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
@@ -21745,42 +21745,6 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 		}
 		predicates = append(predicates, evidence.HasOwnerWith(with...))
 	}
-	if i.HasControlObjectives != nil {
-		p := evidence.HasControlObjectives()
-		if !*i.HasControlObjectives {
-			p = evidence.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasControlObjectivesWith) > 0 {
-		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
-		for _, w := range i.HasControlObjectivesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlObjectivesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, evidence.HasControlObjectivesWith(with...))
-	}
-	if i.HasControlImplementations != nil {
-		p := evidence.HasControlImplementations()
-		if !*i.HasControlImplementations {
-			p = evidence.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasControlImplementationsWith) > 0 {
-		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
-		for _, w := range i.HasControlImplementationsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlImplementationsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, evidence.HasControlImplementationsWith(with...))
-	}
 	if i.HasControls != nil {
 		p := evidence.HasControls()
 		if !*i.HasControls {
@@ -21816,6 +21780,42 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, evidence.HasSubcontrolsWith(with...))
+	}
+	if i.HasControlObjectives != nil {
+		p := evidence.HasControlObjectives()
+		if !*i.HasControlObjectives {
+			p = evidence.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlObjectivesWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		for _, w := range i.HasControlObjectivesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlObjectivesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, evidence.HasControlObjectivesWith(with...))
+	}
+	if i.HasControlImplementations != nil {
+		p := evidence.HasControlImplementations()
+		if !*i.HasControlImplementations {
+			p = evidence.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlImplementationsWith) > 0 {
+		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		for _, w := range i.HasControlImplementationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlImplementationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, evidence.HasControlImplementationsWith(with...))
 	}
 	if i.HasFiles != nil {
 		p := evidence.HasFiles()
