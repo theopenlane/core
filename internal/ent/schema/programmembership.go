@@ -90,7 +90,7 @@ func (p ProgramMembership) Edges() []ent.Edge {
 	}
 }
 
-func (ProgramMembership) Features() []models.OrgModule {
+func (ProgramMembership) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 	}
@@ -125,9 +125,8 @@ func (ProgramMembership) Hooks() []ent.Hook {
 }
 
 // Interceptors of the ProgramMembership
-func (ProgramMembership) Interceptors() []ent.Interceptor {
+func (p ProgramMembership) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(ProgramMembership{}.Features()...),
 		interceptors.FilterListQuery(),
 	}
 }
@@ -136,7 +135,8 @@ func (ProgramMembership) Interceptors() []ent.Interceptor {
 func (p ProgramMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(p.Features()...),
+			rule.CanCreateObjectsUnderParent[*generated.ProgramMembershipMutation](rule.ProgramParent), // if mutation contains program_id, check access
+			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ProgramMembershipMutation](),
 		),
 	)

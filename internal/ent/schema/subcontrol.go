@@ -14,7 +14,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -145,20 +144,11 @@ func (Subcontrol) Hooks() []ent.Hook {
 	}
 }
 
-// Interceptors of the Subcontrol
-func (s Subcontrol) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(s.Features()...),
-	}
-}
-
 // Policy of the Subcontrol
 func (s Subcontrol) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
-			rule.DenyIfMissingAllFeatures(s.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.SubcontrolMutation](rule.ControlParent), // if mutation contains control_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.SubcontrolMutation](),
@@ -167,8 +157,12 @@ func (s Subcontrol) Policy() ent.Policy {
 }
 
 // Annotations of the Standard
-func (Subcontrol) Features() []models.OrgModule {
+func (Subcontrol) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
 	}
 }

@@ -129,7 +129,7 @@ func (JobResult) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
-func (JobResult) Features() []models.OrgModule {
+func (JobResult) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 	}
@@ -158,7 +158,6 @@ func (JobResult) Interceptors() []ent.Interceptor {
 func (j JobResult) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(j.Features()...),
 			policy.CheckCreateAccess(),
 			// entfga.CheckEditAccess[*generated.JobResultMutation](),
 			policy.CheckCreateAccess(),

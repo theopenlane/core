@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -92,7 +91,7 @@ func (n Narrative) Mixin() []ent.Mixin {
 	}.getMixins(n)
 }
 
-func (Narrative) Features() []models.OrgModule {
+func (Narrative) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 		models.CatalogPolicyManagementAddon,
@@ -106,19 +105,10 @@ func (n Narrative) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the Narrative
-func (n Narrative) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(n.Features()...),
-	}
-}
-
 // Policy of the Narrative
 func (n Narrative) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(n.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.NarrativeMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.NarrativeMutation](),

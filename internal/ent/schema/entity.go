@@ -12,9 +12,7 @@ import (
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -138,26 +136,19 @@ func (Entity) Hooks() []ent.Hook {
 	}
 }
 
-// Interceptors of the Entity
-func (e Entity) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(e.Features()...),
-	}
-}
-
 // Policy of the Entity
 func (e Entity) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(e.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
 }
 
-func (Entity) Features() []models.OrgModule {
+func (Entity) Modules() []models.OrgModule {
 	return []models.OrgModule{
+		models.CatalogBaseModule,
 		models.CatalogEntityManagementModule,
 	}
 }

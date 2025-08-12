@@ -13,9 +13,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
@@ -215,12 +213,11 @@ func (t Task) Edges() []ent.Edge {
 	}
 }
 
-func (Task) Features() []models.OrgModule {
+func (Task) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 		models.CatalogPolicyManagementAddon,
 		models.CatalogRiskManagementAddon,
-		models.CatalogBaseModule,
 		models.CatalogEntityManagementModule,
 	}
 }
@@ -241,18 +238,10 @@ func (Task) Hooks() []ent.Hook {
 	}
 }
 
-// Interceptors of the Task
-func (t Task) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(t.Features()...),
-	}
-}
-
 // Policy of the Task
 func (t Task) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(t.Features()...),
 			entfga.CheckEditAccess[*generated.TaskMutation](),
 		),
 	)

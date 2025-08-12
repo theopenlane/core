@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -155,11 +154,10 @@ func (TrustCenterSetting) Hooks() []ent.Hook {
 	}
 }
 
+// Policy of the TrustCenterSetting
 func (t TrustCenterSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(t.Features()...),
 			entfga.CheckEditAccess[*generated.TrustCenterSettingMutation](),
 		),
 	)
@@ -172,7 +170,7 @@ func (TrustCenterSetting) Indexes() []ent.Index {
 	}
 }
 
-func (TrustCenterSetting) Features() []models.OrgModule {
+func (TrustCenterSetting) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
 	}

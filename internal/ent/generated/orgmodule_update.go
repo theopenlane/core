@@ -148,13 +148,13 @@ func (_u *OrgModuleUpdate) ClearOwnerID() *OrgModuleUpdate {
 }
 
 // SetModule sets the "module" field.
-func (_u *OrgModuleUpdate) SetModule(v string) *OrgModuleUpdate {
+func (_u *OrgModuleUpdate) SetModule(v models.OrgModule) *OrgModuleUpdate {
 	_u.mutation.SetModule(v)
 	return _u
 }
 
 // SetNillableModule sets the "module" field if the given value is not nil.
-func (_u *OrgModuleUpdate) SetNillableModule(v *string) *OrgModuleUpdate {
+func (_u *OrgModuleUpdate) SetNillableModule(v *models.OrgModule) *OrgModuleUpdate {
 	if v != nil {
 		_u.SetModule(*v)
 	}
@@ -475,6 +475,11 @@ func (_u *OrgModuleUpdate) check() error {
 	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := orgmodule.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "OrgModule.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Module(); ok {
+		if err := orgmodule.ModuleValidator(string(v)); err != nil {
+			return &ValidationError{Name: "module", err: fmt.Errorf(`generated: validator failed for field "OrgModule.module": %w`, err)}
 		}
 	}
 	return nil
@@ -874,13 +879,13 @@ func (_u *OrgModuleUpdateOne) ClearOwnerID() *OrgModuleUpdateOne {
 }
 
 // SetModule sets the "module" field.
-func (_u *OrgModuleUpdateOne) SetModule(v string) *OrgModuleUpdateOne {
+func (_u *OrgModuleUpdateOne) SetModule(v models.OrgModule) *OrgModuleUpdateOne {
 	_u.mutation.SetModule(v)
 	return _u
 }
 
 // SetNillableModule sets the "module" field if the given value is not nil.
-func (_u *OrgModuleUpdateOne) SetNillableModule(v *string) *OrgModuleUpdateOne {
+func (_u *OrgModuleUpdateOne) SetNillableModule(v *models.OrgModule) *OrgModuleUpdateOne {
 	if v != nil {
 		_u.SetModule(*v)
 	}
@@ -1214,6 +1219,11 @@ func (_u *OrgModuleUpdateOne) check() error {
 	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := orgmodule.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "OrgModule.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Module(); ok {
+		if err := orgmodule.ModuleValidator(string(v)); err != nil {
+			return &ValidationError{Name: "module", err: fmt.Errorf(`generated: validator failed for field "OrgModule.module": %w`, err)}
 		}
 	}
 	return nil

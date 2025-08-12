@@ -7,6 +7,9 @@ package main
 import (
 	"embed"
 	"fmt"
+	"go/ast"
+	"go/parser"
+	"go/token"
 	"os"
 	"path/filepath"
 	"strings"
@@ -96,7 +99,6 @@ func main() {
 			genhooks.GenQuery(graphQueryDir),
 			genhooks.GenQuery(graphSimpleQueryDir),
 			genhooks.GenSearchSchema(graphSchemaDir, graphQueryDir),
-			genhooks.GenFeatureMap(featureMapDir),
 			accessMapExt.Hook(),
 		},
 		Package: "github.com/theopenlane/core/internal/ent/generated",
@@ -237,6 +239,12 @@ func preRun() (*history.Extension, *entfga.AuthzExtension) {
 		log.Fatal().Err(err).Msg("generating ExportType enum")
 	}
 
+	log.Info().Msg("pre-run: generating feature modules")
+
+	if err := generateModulePerSchema(); err != nil {
+		log.Fatal().Err(err).Msg("generating feature modules")
+	}
+
 	return historyExt, entfgaExt
 }
 
@@ -361,6 +369,180 @@ func generateEnum(name string, values []string) error {
 	return nil
 }
 
+// generateModulePerSchema walks through the schema files, parses them
+// and generates a static file containing the schema and it's associated modules
+func generateModulePerSchema() error {
+	if err := os.MkdirAll(featureMapDir, 0755); err != nil {
+		return fmt.Errorf("creating feature map directory: %w", err)
+	}
+
+	schemaFiles, err := filepath.Glob(filepath.Join(schemaPath, "*.go"))
+	if err != nil {
+		return fmt.Errorf("finding schema files: %w", err)
+	}
+
+	type moduleEntry struct {
+		SchemaName string
+		Modules    []string
+	}
+
+	var entries []moduleEntry
+
+	for _, schemaFile := range schemaFiles {
+		fileName := filepath.Base(schemaFile)
+
+		if strings.Contains(fileName, "history") ||
+			strings.Contains(fileName, "mixin") ||
+			strings.Contains(fileName, "default") {
+			continue
+		}
+
+		schemaName, modules := parseSchemaInfo(schemaFile)
+		if schemaName != "" && len(modules) > 0 {
+			entries = append(entries, moduleEntry{
+				SchemaName: strcase.UpperCamelCase(schemaName),
+				Modules:    modules,
+			})
+		}
+	}
+
+	funcMap := template.FuncMap{
+		"quote": func(s string) string { return fmt.Sprintf("%q", s) },
+	}
+
+	tmpl, err := template.New("featuremap").Funcs(funcMap).Parse(featureMapTemplate)
+	if err != nil {
+		return fmt.Errorf("parsing feature map template: %w", err)
+	}
+
+	outputPath := filepath.Join(featureMapDir, "features.go")
+	file, err := os.Create(outputPath)
+	if err != nil {
+		return fmt.Errorf("creating feature map file: %w", err)
+	}
+
+	defer file.Close()
+
+	data := struct {
+		Entries []moduleEntry
+	}{
+		Entries: entries,
+	}
+
+	if err := tmpl.Execute(file, data); err != nil {
+		return fmt.Errorf("executing feature map template: %w", err)
+	}
+
+	log.Info().Str("file", outputPath).Msg("generated local feature map")
+	return nil
+}
+
+func parseSchemaInfo(filePath string) (string, []string) {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		log.Debug().Str("file", filePath).Err(err).Msg("could not read schema file")
+		return "", nil
+	}
+
+	fset := token.NewFileSet()
+	file, err := parser.ParseFile(fset, filePath, content, parser.ParseComments)
+	if err != nil {
+		log.Debug().Str("file", filePath).Err(err).Msg("could not parse schema file")
+		return "", nil
+	}
+
+	var schemaName string
+	var modules []string
+
+	// retrieve the Name() and Modules() methods
+	ast.Inspect(file, func(n ast.Node) bool {
+		if funcDecl, ok := n.(*ast.FuncDecl); ok {
+			if funcDecl.Recv != nil && len(funcDecl.Recv.List) > 0 {
+				if ident, ok := funcDecl.Recv.List[0].Type.(*ast.Ident); ok {
+					receiverType := ident.Name
+
+					if funcDecl.Name.Name == "Name" && schemaName == "" {
+						schemaName = extractNameFromMethod(funcDecl, file)
+					}
+
+					if funcDecl.Name.Name == "Modules" && receiverType != "" {
+						modules = extractModules(funcDecl)
+					}
+				}
+			}
+		}
+		return true
+	})
+
+	return schemaName, modules
+}
+
+// extractNameFromMethod extracts the schema name from the Name() method
+func extractNameFromMethod(funcDecl *ast.FuncDecl, file *ast.File) string {
+	var name string
+
+	ast.Inspect(funcDecl.Body, func(n ast.Node) bool {
+		if returnStmt, ok := n.(*ast.ReturnStmt); ok {
+			if len(returnStmt.Results) > 0 {
+				switch result := returnStmt.Results[0].(type) {
+				case *ast.BasicLit:
+					name = strings.Trim(result.Value, `"`)
+				case *ast.Ident:
+					name = retrieveConstantValue(result.Name, file)
+				}
+			}
+		}
+		return name == ""
+	})
+
+	return name
+}
+
+// retrieveConstantValue resolves a constant value from the file
+func retrieveConstantValue(constName string, file *ast.File) string {
+	for _, decl := range file.Decls {
+		if genDecl, ok := decl.(*ast.GenDecl); ok && genDecl.Tok == token.CONST {
+			for _, spec := range genDecl.Specs {
+				if valueSpec, ok := spec.(*ast.ValueSpec); ok {
+					for i, name := range valueSpec.Names {
+						if name.Name == constName && i < len(valueSpec.Values) {
+							if basicLit, ok := valueSpec.Values[i].(*ast.BasicLit); ok {
+								return strings.Trim(basicLit.Value, `"`)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return ""
+}
+
+func extractModules(funcDecl *ast.FuncDecl) []string {
+	var modules []string
+
+	ast.Inspect(funcDecl.Body, func(n ast.Node) bool {
+		if returnStmt, ok := n.(*ast.ReturnStmt); ok {
+			if len(returnStmt.Results) > 0 {
+				if compositeLit, ok := returnStmt.Results[0].(*ast.CompositeLit); ok {
+					for _, elt := range compositeLit.Elts {
+						if selectorExpr, ok := elt.(*ast.SelectorExpr); ok {
+							if x, ok := selectorExpr.X.(*ast.Ident); ok {
+								if x.Name == "models" && strings.HasPrefix(selectorExpr.Sel.Name, "Catalog") {
+									modules = append(modules, selectorExpr.Sel.Name)
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return true
+	})
+
+	return modules
+}
+
 var (
 	//go:embed templates/entgql/*.tmpl
 	_entqlTemplates embed.FS
@@ -427,6 +609,19 @@ func (r *{{ .Name }}) UnmarshalGQL(v interface{}) error {
 	*r = {{ .Name }}(str)
 
 	return nil
+}
+`
+
+	// featureMapTemplate is the template for generating feature map files
+	featureMapTemplate = `// code generated by local feature mapping, DO NOT EDIT.
+package ent
+
+import "github.com/theopenlane/core/pkg/models"
+
+var FeatureOfType = map[string][]models.OrgModule{
+{{- range .Entries }}
+	{{ .SchemaName | quote }}: { {{- range $i, $module := .Modules }}{{if $i}}, {{end}}models.{{ $module }}{{- end }} },
+{{- end }}
 }
 `
 )

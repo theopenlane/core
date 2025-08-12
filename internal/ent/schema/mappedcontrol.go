@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -123,7 +122,7 @@ func (m MappedControl) Mixin() []ent.Mixin {
 	}.getMixins(m)
 }
 
-func (MappedControl) Features() []models.OrgModule {
+func (MappedControl) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 	}
@@ -133,13 +132,6 @@ func (MappedControl) Features() []models.OrgModule {
 func (m MappedControl) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-	}
-}
-
-// Interceptors of the MappedControl
-func (m MappedControl) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(m.Features()...),
 	}
 }
 
@@ -158,7 +150,7 @@ func (m MappedControl) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(m.Features()...),
+			rule.CanCreateObjectsUnderParent[*generated.MappedControlMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.MappedControlMutation](),
 		),

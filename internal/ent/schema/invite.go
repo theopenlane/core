@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -136,7 +135,7 @@ func (i Invite) Edges() []ent.Edge {
 	}
 }
 
-func (Invite) Features() []models.OrgModule {
+func (Invite) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -148,13 +147,6 @@ func (i Invite) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
-	}
-}
-
-// Interceptors of the Invite
-func (i Invite) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(i.Features()...),
 	}
 }
 
@@ -175,7 +167,6 @@ func (i Invite) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
-			rule.DenyIfMissingAllFeatures(i.Features()...),
 			rule.CanInviteUsers(),
 			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationAfterApplyingOwnerFilter(),

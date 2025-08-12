@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
@@ -104,9 +103,7 @@ func (TrustCenterSubprocessor) Hooks() []ent.Hook {
 // Policy of the TrustCenterSubprocessor
 func (t TrustCenterSubprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(t.Features()...),
 			entfga.CheckEditAccess[*generated.TrustCenterSubprocessorMutation](),
 		),
 	)
@@ -120,7 +117,7 @@ func (TrustCenterSubprocessor) Indexes() []ent.Index {
 	}
 }
 
-func (TrustCenterSubprocessor) Features() []models.OrgModule {
+func (TrustCenterSubprocessor) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
 	}

@@ -128,7 +128,7 @@ func (a APIToken) Mixin() []ent.Mixin {
 	}.getMixins(a)
 }
 
-func (APIToken) Features() []models.OrgModule {
+func (APIToken) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -154,7 +154,6 @@ func (APIToken) Hooks() []ent.Hook {
 // Interceptors of the APIToken
 func (a APIToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(a.Features()...),
 		interceptors.InterceptorAPIToken(),
 	}
 }
@@ -164,7 +163,6 @@ func (a APIToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
-			rule.DenyIfMissingAllFeatures(a.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

@@ -9,9 +9,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -85,9 +83,13 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 		}}.getMixins(a)
 }
 
-func (ActionPlan) Features() []models.OrgModule {
+func (ActionPlan) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
 	}
 }
 
@@ -98,18 +100,10 @@ func (a ActionPlan) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the ActionPlan
-func (a ActionPlan) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(a.Features()...),
-	}
-}
-
 // Policy of the ActionPlan
 func (a ActionPlan) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(a.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ActionPlanMutation](),
 		),

@@ -15,7 +15,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -124,7 +123,7 @@ func (w Webauthn) Mixin() []ent.Mixin {
 	}
 }
 
-func (Webauthn) Features() []models.OrgModule {
+func (Webauthn) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -150,7 +149,6 @@ func (w Webauthn) Annotations() []schema.Annotation {
 func (w Webauthn) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(w.Features()...),
 			privacy.AlwaysAllowRule(),
 		),
 	)

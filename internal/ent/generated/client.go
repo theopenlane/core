@@ -4812,14 +4812,12 @@ func (c *DNSVerificationHistoryClient) GetX(ctx context.Context, id string) *DNS
 
 // Hooks returns the client hooks.
 func (c *DNSVerificationHistoryClient) Hooks() []Hook {
-	hooks := c.hooks.DNSVerificationHistory
-	return append(hooks[:len(hooks):len(hooks)], dnsverificationhistory.Hooks[:]...)
+	return c.hooks.DNSVerificationHistory
 }
 
 // Interceptors returns the client interceptors.
 func (c *DNSVerificationHistoryClient) Interceptors() []Interceptor {
-	inters := c.inters.DNSVerificationHistory
-	return append(inters[:len(inters):len(inters)], dnsverificationhistory.Interceptors[:]...)
+	return c.inters.DNSVerificationHistory
 }
 
 func (c *DNSVerificationHistoryClient) mutate(ctx context.Context, m *DNSVerificationHistoryMutation) (Value, error) {
@@ -6468,8 +6466,7 @@ func (c *EventClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *EventClient) Interceptors() []Interceptor {
-	inters := c.inters.Event
-	return append(inters[:len(inters):len(inters)], event.Interceptors[:]...)
+	return c.inters.Event
 }
 
 func (c *EventClient) mutate(ctx context.Context, m *EventMutation) (Value, error) {

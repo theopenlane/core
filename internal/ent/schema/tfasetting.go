@@ -107,7 +107,7 @@ func (TFASetting) Hooks() []ent.Hook {
 	}
 }
 
-func (TFASetting) Features() []models.OrgModule {
+func (TFASetting) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -130,7 +130,6 @@ func (t TFASetting) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.AllowIfSelf(),
-			rule.DenyIfMissingAllFeatures(t.Features()...),
 		),
 	)
 }

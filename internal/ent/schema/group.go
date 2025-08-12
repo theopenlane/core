@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/entx/accessmap"
 )
@@ -163,7 +162,7 @@ func (Group) Indexes() []ent.Index {
 	}
 }
 
-func (Group) Features() []models.OrgModule {
+func (Group) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -188,7 +187,6 @@ func (g Group) Annotations() []schema.Annotation {
 // Interceptors of the Group
 func (g Group) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(g.Features()...),
 		interceptors.FilterQueryResults[generated.Group](),
 	}
 }
@@ -202,11 +200,10 @@ func (Group) Hooks() []ent.Hook {
 	}
 }
 
-// Policy of the group
+// Policy of the Group
 func (g Group) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(g.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.GroupMutation](),
 		),

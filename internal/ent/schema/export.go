@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -101,7 +100,7 @@ func (e Export) Mixin() []ent.Mixin {
 	}.getMixins(e)
 }
 
-func (Export) Features() []models.OrgModule {
+func (Export) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -116,13 +115,6 @@ func (e Export) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the Export
-func (e Export) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(e.Features()...),
-	}
-}
-
 // Policy of the Export
 func (e Export) Policy() ent.Policy {
 	return policy.NewPolicy(
@@ -130,7 +122,6 @@ func (e Export) Policy() ent.Policy {
 			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithOnMutationRules(ent.OpCreate,
-			rule.DenyIfMissingAllFeatures(e.Features()...),
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithOnMutationRules(ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne,

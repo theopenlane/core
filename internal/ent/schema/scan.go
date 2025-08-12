@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -65,25 +64,17 @@ func (s Scan) Edges() []ent.Edge {
 	}
 }
 
-// Interceptors of the Scan
-func (s Scan) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(s.Features()...),
-	}
-}
-
+// Policy of the Scan
 func (s Scan) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(s.Features()...),
 			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationIfSystemAdmin(),
 		),
 	)
 }
 
-func (Scan) Features() []models.OrgModule {
+func (Scan) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogVulnerabilityManagementModule,
 	}

@@ -168,7 +168,7 @@ func StripeSubscriptionItemToOrgModule(item *stripe.SubscriptionItem) *ent.OrgMo
 	}
 
 	return &ent.OrgModule{
-		Module:          moduleKey,
+		Module:          models.OrgModule(moduleKey),
 		Price:           price,
 		StripePriceID:   item.Price.ID,
 		Status:          status,
@@ -346,7 +346,7 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 
 // OrgModuleSetter defines the methods needed to set OrgModule fields on ent builders
 type OrgModuleSetter[T any] interface {
-	SetModule(string) T
+	SetModule(models.OrgModule) T
 	SetPrice(models.Price) T
 	SetStripePriceID(string) T
 	SetStatus(string) T
@@ -386,7 +386,7 @@ func ApplyStripeSubscriptionItem[T OrgModuleSetter[T]](b T, item *stripe.Subscri
 		status = "active"
 	}
 
-	b.SetModule(moduleKey)
+	b.SetModule(models.OrgModule(moduleKey))
 	b.SetPrice(price)
 	b.SetStripePriceID(item.Price.ID)
 	b.SetStatus(status)

@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -175,9 +174,13 @@ func (p Program) Edges() []ent.Edge {
 	}
 }
 
-func (Program) Features() []models.OrgModule {
+func (Program) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
 	}
 }
 
@@ -207,16 +210,14 @@ func (Program) Hooks() []ent.Hook {
 // Interceptors of the Program
 func (p Program) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(p.Features()...),
 		interceptors.FilterQueryResults[generated.Program](),
 	}
 }
 
-// Policy of the program
+// Policy of the Program
 func (p Program) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(p.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ProgramMutation](),
 		),

@@ -101,7 +101,7 @@ func (JobRunner) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
-func (JobRunner) Features() []models.OrgModule {
+func (JobRunner) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 	}
@@ -127,7 +127,6 @@ func (JobRunner) Hooks() []ent.Hook {
 // Interceptors of the JobRunner
 func (j JobRunner) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(j.Features()...),
 		interceptors.InterceptorJobRunnerFilterSystemOwned(),
 	}
 }
@@ -138,7 +137,6 @@ func (j JobRunner) Policy() ent.Policy {
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
-			rule.DenyIfMissingAllFeatures(j.Features()...),
 			rule.SystemOwnedJobRunner(),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckCreateAccess(),

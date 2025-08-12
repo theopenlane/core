@@ -168,13 +168,6 @@ func (Control) Hooks() []ent.Hook {
 	}
 }
 
-// Interceptors of the Control
-func (c Control) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(c.Features()...),
-	}
-}
-
 // Policy of the Control
 func (c Control) Policy() ent.Policy {
 	return policy.NewPolicy(
@@ -183,7 +176,6 @@ func (c Control) Policy() ent.Policy {
 			// controls to unlink the standard that might belong to an organization
 			rule.AllowMutationIfSystemAdmin(),
 			rule.AllowIfContextAllowRule(),
-			rule.DenyIfMissingAllFeatures(c.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ControlMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ControlMutation](),
@@ -191,9 +183,13 @@ func (c Control) Policy() ent.Policy {
 	)
 }
 
-func (Control) Features() []models.OrgModule {
+func (Control) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
 	}
 }
 

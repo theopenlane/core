@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -42,6 +43,8 @@ func (OrgModule) PluralName() string {
 func (OrgModule) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("module").
+			GoType(models.OrgModule("")).
+			NotEmpty().
 			Comment("module key this record represents"),
 		field.JSON("price", models.Price{}).
 			Optional(),
@@ -103,5 +106,12 @@ func (OrgModule) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
+	}
+}
+
+// Hooks of the OrgModule
+func (OrgModule) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookOrgModule(),
 	}
 }

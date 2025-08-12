@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // File defines the file schema.
@@ -121,7 +120,7 @@ func (f File) Mixin() []ent.Mixin {
 	}.getMixins(f)
 }
 
-func (File) Features() []models.OrgModule {
+func (File) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -152,7 +151,6 @@ func (f File) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.FileMutation](),
 		),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(f.Features()...),
 			privacy.AlwaysAllowRule(),
 		),
 	)

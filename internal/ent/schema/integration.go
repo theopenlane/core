@@ -8,9 +8,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 )
@@ -84,24 +82,16 @@ func (i Integration) Mixin() []ent.Mixin {
 	}.getMixins(i)
 }
 
-// Interceptors of the Integration
-func (i Integration) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(i.Features()...),
-	}
-}
-
 // Policy of the Integration
 func (i Integration) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(i.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
 }
 
-func (Integration) Features() []models.OrgModule {
+func (Integration) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}

@@ -58,7 +58,9 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	require.NoError(t, err)
 
 	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
-	suite.enableModules(recipientCtx, recipient.ID, userSetting.Edges.DefaultOrg.ID, models.AllOrgModules)
+
+	suite.enableModules(recipientCtx, recipient.ID, userSetting.Edges.DefaultOrg.ID,
+		[]models.OrgModule{models.CatalogBaseModule})
 
 	testCases := []struct {
 		name     string

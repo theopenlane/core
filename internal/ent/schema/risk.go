@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -194,12 +193,11 @@ func (r Risk) Mixin() []ent.Mixin {
 	}.getMixins(r)
 }
 
-func (Risk) Features() []models.OrgModule {
+func (Risk) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 		models.CatalogPolicyManagementAddon,
 		models.CatalogRiskManagementAddon,
-		models.CatalogBaseModule,
 		models.CatalogEntityManagementModule,
 	}
 }
@@ -212,18 +210,10 @@ func (r Risk) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the Risk
-func (r Risk) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(r.Features()...),
-	}
-}
-
 // Policy of the Risk
 func (r Risk) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(r.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.RiskMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.RiskMutation](),

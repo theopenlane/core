@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hush"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -89,7 +88,7 @@ func (h Hush) Edges() []ent.Edge {
 	}
 }
 
-func (Hush) Features() []models.OrgModule {
+func (Hush) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -115,20 +114,15 @@ func (Hush) Hooks() []ent.Hook {
 // Interceptors of the Hush
 func (h Hush) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(h.Features()...),
 		interceptors.InterceptorHush(),
 	}
 }
 
-// Policy of the Hush - restricts access to organization members with write access
+// Policy of the Hush
 func (h Hush) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			// restrict read access to hush secrets to organization members with write access
-			policy.CheckOrgEditAccess(),
-		),
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(h.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

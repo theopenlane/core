@@ -106,7 +106,7 @@ func (b *subscriptionBuilder) SetPaymentMethodAdded(bm bool) *subscriptionBuilde
 
 // moduleBuilder defines the methods needed to set OrgModule fields on ent builders
 type moduleBuilder struct {
-	module          string
+	module          models.OrgModule
 	price           models.Price
 	stripePriceID   string
 	status          string
@@ -114,12 +114,12 @@ type moduleBuilder struct {
 	moduleLookupKey string
 }
 
-func (b *moduleBuilder) SetModule(m string) *moduleBuilder          { b.module = m; return b }
-func (b *moduleBuilder) SetPrice(p models.Price) *moduleBuilder     { b.price = p; return b }
-func (b *moduleBuilder) SetStripePriceID(id string) *moduleBuilder  { b.stripePriceID = id; return b }
-func (b *moduleBuilder) SetStatus(s string) *moduleBuilder          { b.status = s; return b }
-func (b *moduleBuilder) SetVisibility(v string) *moduleBuilder      { b.visibility = v; return b }
-func (b *moduleBuilder) SetModuleLookupKey(k string) *moduleBuilder { b.moduleLookupKey = k; return b }
+func (b *moduleBuilder) SetModule(m models.OrgModule) *moduleBuilder { b.module = m; return b }
+func (b *moduleBuilder) SetPrice(p models.Price) *moduleBuilder      { b.price = p; return b }
+func (b *moduleBuilder) SetStripePriceID(id string) *moduleBuilder   { b.stripePriceID = id; return b }
+func (b *moduleBuilder) SetStatus(s string) *moduleBuilder           { b.status = s; return b }
+func (b *moduleBuilder) SetVisibility(v string) *moduleBuilder       { b.visibility = v; return b }
+func (b *moduleBuilder) SetModuleLookupKey(k string) *moduleBuilder  { b.moduleLookupKey = k; return b }
 
 func TestStripePriceToOrgPrice(t *testing.T) {
 	p := &stripe.Price{
@@ -366,7 +366,7 @@ func TestApplyStripeSubscriptionItem(t *testing.T) {
 	got := ApplyStripeSubscriptionItem(b, item)
 
 	expected := &moduleBuilder{
-		module:          "mod1",
+		module:          models.OrgModule("mod1"),
 		price:           models.Price{Amount: 30, Interval: "month", Currency: "usd"},
 		stripePriceID:   "price_123",
 		status:          "active",

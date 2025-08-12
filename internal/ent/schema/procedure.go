@@ -75,12 +75,11 @@ func (p Procedure) Mixin() []ent.Mixin {
 	}.getMixins(p)
 }
 
-func (Procedure) Features() []models.OrgModule {
+func (Procedure) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 		models.CatalogPolicyManagementAddon,
 		models.CatalogRiskManagementAddon,
-		models.CatalogBaseModule,
 		models.CatalogEntityManagementModule,
 	}
 }
@@ -106,7 +105,6 @@ func (Procedure) Hooks() []ent.Hook {
 // Interceptors of the Procedure
 func (p Procedure) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(p.Features()...),
 		// procedures are org owned, but we need to ensure the groups are filtered as well
 		interceptors.FilterQueryResults[generated.Procedure](),
 	}
@@ -117,7 +115,6 @@ func (p Procedure) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(p.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ProcedureMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ProcedureMutation](),

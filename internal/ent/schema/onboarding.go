@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -70,7 +69,7 @@ func (Onboarding) Fields() []ent.Field {
 	}
 }
 
-func (Onboarding) Features() []models.OrgModule {
+func (Onboarding) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -110,13 +109,6 @@ func (o Onboarding) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the Onboarding
-func (o Onboarding) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(o.Features()...),
-	}
-}
-
 // Hooks of the Onboarding
 func (Onboarding) Hooks() []ent.Hook {
 	return []ent.Hook{
@@ -126,18 +118,12 @@ func (Onboarding) Hooks() []ent.Hook {
 
 // Policy of the Onboarding
 func (o Onboarding) Policy() ent.Policy {
-	// add the new policy here, the default post-policy is to deny all
-	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			// this data should not be queried, so we deny all queries except
-			// those explicitly allowed from internal services
-			rule.AllowIfContextAllowRule(),
 			privacy.AlwaysDenyRule(), // deny all queries by default
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
-			rule.DenyIfMissingAllFeatures(o.Features()...),
 			privacy.AlwaysAllowRule(), // Allow all other users (e.g. a user with a JWT should be able to create a new org)
 		),
 	)

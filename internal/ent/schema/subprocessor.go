@@ -114,10 +114,8 @@ func (Subprocessor) Hooks() []ent.Hook {
 // Policy of the Subprocessor
 func (t Subprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.SystemOwnedSubprocessor(),
-			rule.DenyIfMissingAllFeatures(t.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -131,7 +129,7 @@ func (Subprocessor) Indexes() []ent.Index {
 	}
 }
 
-func (Subprocessor) Features() []models.OrgModule {
+func (Subprocessor) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
 	}

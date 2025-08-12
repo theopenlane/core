@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -126,9 +125,7 @@ func (TrustCenter) Hooks() []ent.Hook {
 // Policy of the TrustCenter
 func (t TrustCenter) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(t.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -142,7 +139,7 @@ func (TrustCenter) Indexes() []ent.Index {
 	}
 }
 
-func (TrustCenter) Features() []models.OrgModule {
+func (TrustCenter) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
 	}

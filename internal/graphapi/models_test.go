@@ -506,19 +506,20 @@ func (o *OrganizationBuilder) enableModules(ctx context.Context, t *testing.T, o
 		n, err := o.client.db.OrgModule.Update().
 			Where(
 				orgmodule.OwnerID(orgID),
-				orgmodule.Module(string(feature)),
+				orgmodule.Module(feature),
 			).
-			SetActive(true).Save(newCtx)
+			SetActive(true).
+			Save(newCtx)
 		assert.NilError(t, err)
 
 		// if no rows were updated, the module doesn't exist - create it
 		if n == 0 {
-			_, err := o.client.db.OrgModule.Create().
+			err = o.client.db.OrgModule.Create().
 				SetOwnerID(orgID).
-				SetModule(string(feature)).
+				SetModule(feature).
 				SetActive(true).
 				SetPrice(models.Price{Amount: 0, Interval: "month"}).
-				Save(newCtx)
+				Exec(newCtx)
 			assert.NilError(t, err)
 		}
 	}

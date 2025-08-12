@@ -49,7 +49,7 @@ func syncSubscriptionItemsWithStripe(ctx context.Context, sub *stripe.Subscripti
 			return err
 		}
 
-		zerolog.Ctx(ctx).Info().Str("module_name", mod.Module).Msg("org module created")
+		zerolog.Ctx(ctx).Info().Str("module_name", mod.Module.String()).Msg("org module created")
 	}
 
 	return nil

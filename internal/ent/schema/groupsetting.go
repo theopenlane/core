@@ -9,11 +9,8 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -75,7 +72,7 @@ func (g GroupSetting) Edges() []ent.Edge {
 	}
 }
 
-func (GroupSetting) Features() []models.OrgModule {
+func (GroupSetting) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -107,15 +104,4 @@ func (GroupSetting) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 	}.getMixins(GroupSetting{})
-}
-
-// Policy defines the privacy policy of the GroupSetting
-func (g GroupSetting) Policy() ent.Policy {
-	return policy.NewPolicy(
-		policy.WithQueryRules(),
-		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(g.Features()...),
-			entfga.CheckEditAccess[*generated.GroupSettingMutation](),
-		),
-	)
 }

@@ -154,7 +154,7 @@ func (p PersonalAccessToken) Mixin() []ent.Mixin {
 	}.getMixins(p)
 }
 
-func (p PersonalAccessToken) Features() []models.OrgModule {
+func (p PersonalAccessToken) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -189,7 +189,6 @@ func (p PersonalAccessToken) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.AllowIfContextAllowRule(),
-			rule.DenyIfMissingAllFeatures(p.Features()...),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 			privacy.AlwaysAllowRule(),
 		},

@@ -128,7 +128,6 @@ func (e CustomDomain) Policy() ent.Policy {
 		),
 		policy.WithOnMutationRules(
 			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete,
-			rule.DenyIfMissingAllFeatures(e.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -142,7 +141,7 @@ func (CustomDomain) Hooks() []ent.Hook {
 	}
 }
 
-func (CustomDomain) Features() []models.OrgModule {
+func (CustomDomain) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
 	}

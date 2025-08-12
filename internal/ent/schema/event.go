@@ -9,10 +9,8 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -71,7 +69,7 @@ func (e Event) Edges() []ent.Edge {
 	}
 }
 
-func (Event) Features() []models.OrgModule {
+func (Event) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -96,22 +94,12 @@ func (Event) Mixin() []ent.Mixin {
 	}
 }
 
-// Interceptors of the Event
-func (e Event) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(e.Features()...),
-	}
-}
-
 // Policy of the Event
 func (e Event) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			// allow after interceptors are properly added
 			privacy.AlwaysDenyRule(),
-		),
-		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(e.Features()...),
 		),
 	)
 }

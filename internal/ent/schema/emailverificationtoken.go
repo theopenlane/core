@@ -91,7 +91,7 @@ func (e EmailVerificationToken) Mixin() []ent.Mixin {
 	}
 }
 
-func (EmailVerificationToken) Features() []models.OrgModule {
+func (EmailVerificationToken) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
@@ -134,7 +134,6 @@ func (e EmailVerificationToken) Policy() ent.Policy {
 		policy.WithOnMutationRules(
 			ent.OpCreate,
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.ResetToken](),
-			rule.DenyIfMissingAllFeatures(e.Features()...),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 		),
 		policy.WithOnMutationRules(

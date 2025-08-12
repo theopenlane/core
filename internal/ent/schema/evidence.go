@@ -13,7 +13,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -125,9 +124,10 @@ func (e Evidence) Edges() []ent.Edge {
 	}
 }
 
-func (Evidence) Features() []models.OrgModule {
+func (Evidence) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
 	}
 }
 
@@ -146,19 +146,11 @@ func (Evidence) Hooks() []ent.Hook {
 	}
 }
 
-// Interceptors of the Evidence
-func (e Evidence) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(e.Features()...),
-	}
-}
-
 // Policy of the Evidence
 func (e Evidence) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(e.Features()...),
+			rule.CanCreateObjectsUnderParent[*generated.EvidenceMutation](rule.ControlParent), // if mutation contains control_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.EvidenceMutation](),
 		),

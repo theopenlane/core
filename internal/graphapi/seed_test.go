@@ -88,7 +88,7 @@ type OrgModuleBuilder struct {
 	client *client
 
 	OwnerID string
-	Module  string
+	Module  models.OrgModule
 	Active  bool
 }
 

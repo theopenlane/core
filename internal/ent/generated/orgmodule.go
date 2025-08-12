@@ -38,7 +38,7 @@ type OrgModule struct {
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// module key this record represents
-	Module string `json:"module,omitempty"`
+	Module models.OrgModule `json:"module,omitempty"`
 	// Price holds the value of the "price" field.
 	Price models.Price `json:"price,omitempty"`
 	// StripePriceID holds the value of the "stripe_price_id" field.
@@ -212,7 +212,7 @@ func (_m *OrgModule) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field module", values[i])
 			} else if value.Valid {
-				_m.Module = value.String
+				_m.Module = models.OrgModule(value.String)
 			}
 		case orgmodule.FieldPrice:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -352,7 +352,7 @@ func (_m *OrgModule) String() string {
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("module=")
-	builder.WriteString(_m.Module)
+	builder.WriteString(fmt.Sprintf("%v", _m.Module))
 	builder.WriteString(", ")
 	builder.WriteString("price=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Price))

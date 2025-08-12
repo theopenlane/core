@@ -81,7 +81,7 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 	}.getMixins(i)
 }
 
-func (InternalPolicy) Features() []models.OrgModule {
+func (InternalPolicy) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 		models.CatalogPolicyManagementAddon,
@@ -118,7 +118,6 @@ func (InternalPolicy) Interceptors() []ent.Interceptor {
 func (i InternalPolicy) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(i.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.InternalPolicyMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.InternalPolicyMutation](),

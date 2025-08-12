@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -109,7 +108,7 @@ func (ControlImplementation) Hooks() []ent.Hook {
 	}
 }
 
-func (ControlImplementation) Features() []models.OrgModule {
+func (ControlImplementation) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 	}
@@ -122,18 +121,10 @@ func (c ControlImplementation) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the ControlImplementation
-func (c ControlImplementation) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(c.Features()...),
-	}
-}
-
 // Policy of the ControlImplementation
 func (c ControlImplementation) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(c.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.ControlsParent),    // if mutation contains control_id, check access
 			rule.CanCreateObjectsUnderParent[*generated.ControlImplementationMutation](rule.SubcontrolsParent), // if mutation contains subcontrol_id, check access
 			policy.CheckCreateAccess(),

@@ -157,7 +157,7 @@ func (suite *HandlerTestSuite) enableModules(ctx context.Context, userID, orgID 
 	for _, feature := range features {
 		_, err := suite.db.OrgModule.Create().
 			SetOwnerID(orgID).
-			SetModule(string(feature)).
+			SetModule(feature).
 			SetActive(true).
 			SetPrice(models.Price{Amount: 0, Interval: "month"}).
 			Save(newCtx)

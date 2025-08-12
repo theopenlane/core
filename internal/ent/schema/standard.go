@@ -156,7 +156,6 @@ func (Standard) Hooks() []ent.Hook {
 // Interceptors of the Standard
 func (s Standard) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(s.Features()...),
 		interceptors.TraverseStandard(),
 	}
 }
@@ -164,18 +163,20 @@ func (s Standard) Interceptors() []ent.Interceptor {
 // Policy of the Standard
 func (s Standard) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.SystemOwnedStandards(), // checks for the system owned field
-			rule.DenyIfMissingAllFeatures(s.Features()...),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
 }
 
-func (Standard) Features() []models.OrgModule {
+func (Standard) Modules() []models.OrgModule {
 	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
 		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
 	}
 }
