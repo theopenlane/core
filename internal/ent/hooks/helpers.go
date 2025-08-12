@@ -11,15 +11,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
 
-// GenericMutation is an interface for getting a mutation ID and type
-type GenericMutation interface {
-	ID() (id string, exists bool)
-	IDs(ctx context.Context) ([]string, error)
-	Type() string
-	Op() ent.Op
-	Client() *generated.Client
-}
-
 // isDeleteOp checks if the mutation is a deletion operation.
 // which includes soft delete, delete, and delete one.
 func isDeleteOp(ctx context.Context, m ent.Mutation) bool {

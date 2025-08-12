@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/entx"
@@ -245,7 +246,7 @@ func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 }
 
 // generateFlowPath generates a unique random flow path based on the ent config
-func generateFlowPath(ctx context.Context, mutation GenericMutation) (string, error) {
+func generateFlowPath(ctx context.Context, mutation utils.GenericMutation) (string, error) {
 	entConfig := mutation.Client().EntConfig
 	if entConfig == nil {
 		log.Error().Msg("ent config is required, but not set, unable to create scheduled job")
@@ -275,7 +276,7 @@ func generateFlowPath(ctx context.Context, mutation GenericMutation) (string, er
 	return fmt.Sprintf("f/%s/%s_%s", folderName, flowType, strings.ToLower(ulids.New().String())), nil
 }
 
-func getCustomerFolderName(ctx context.Context, mutation GenericMutation) (string, error) {
+func getCustomerFolderName(ctx context.Context, mutation utils.GenericMutation) (string, error) {
 	// get organization name
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {

@@ -276,36 +276,6 @@ func (_c *EvidenceCreate) SetOwner(v *Organization) *EvidenceCreate {
 	return _c.SetOwnerID(v.ID)
 }
 
-// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (_c *EvidenceCreate) AddControlObjectiveIDs(ids ...string) *EvidenceCreate {
-	_c.mutation.AddControlObjectiveIDs(ids...)
-	return _c
-}
-
-// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (_c *EvidenceCreate) AddControlObjectives(v ...*ControlObjective) *EvidenceCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddControlObjectiveIDs(ids...)
-}
-
-// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
-func (_c *EvidenceCreate) AddControlImplementationIDs(ids ...string) *EvidenceCreate {
-	_c.mutation.AddControlImplementationIDs(ids...)
-	return _c
-}
-
-// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
-func (_c *EvidenceCreate) AddControlImplementations(v ...*ControlImplementation) *EvidenceCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddControlImplementationIDs(ids...)
-}
-
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_c *EvidenceCreate) AddControlIDs(ids ...string) *EvidenceCreate {
 	_c.mutation.AddControlIDs(ids...)
@@ -334,6 +304,36 @@ func (_c *EvidenceCreate) AddSubcontrols(v ...*Subcontrol) *EvidenceCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddSubcontrolIDs(ids...)
+}
+
+// AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
+func (_c *EvidenceCreate) AddControlObjectiveIDs(ids ...string) *EvidenceCreate {
+	_c.mutation.AddControlObjectiveIDs(ids...)
+	return _c
+}
+
+// AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
+func (_c *EvidenceCreate) AddControlObjectives(v ...*ControlObjective) *EvidenceCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddControlObjectiveIDs(ids...)
+}
+
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_c *EvidenceCreate) AddControlImplementationIDs(ids ...string) *EvidenceCreate {
+	_c.mutation.AddControlImplementationIDs(ids...)
+	return _c
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_c *EvidenceCreate) AddControlImplementations(v ...*ControlImplementation) *EvidenceCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddControlImplementationIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -623,40 +623,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   evidence.ControlObjectivesTable,
-			Columns: evidence.ControlObjectivesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.EvidenceControlObjectives
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   evidence.ControlImplementationsTable,
-			Columns: []string{evidence.ControlImplementationsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.ControlImplementation
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -686,6 +652,40 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.EvidenceSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   evidence.ControlObjectivesTable,
+			Columns: evidence.ControlObjectivesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.EvidenceControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ControlImplementationsTable,
+			Columns: []string{evidence.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

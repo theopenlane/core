@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -138,9 +137,11 @@ func (ControlObjective) Annotations() []schema.Annotation {
 func (ControlObjective) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ProgramParent),     // if mutation contains program_id, check access
-			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ControlsParent),    // if mutation contains control_id, check access
-			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.SubcontrolsParent), // if mutation contains subcontrol_id, check access
+			policy.CanCreateObjectsUnderParents([]string{
+				Program{}.PluralName(),
+				Control{}.PluralName(),
+				Subcontrol{}.PluralName(),
+			}),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ControlObjectiveMutation](),
 		),

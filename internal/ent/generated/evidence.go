@@ -66,14 +66,14 @@ type Evidence struct {
 type EvidenceEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// ControlObjectives holds the value of the control_objectives edge.
-	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
-	// ControlImplementations holds the value of the control_implementations edge.
-	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// ControlObjectives holds the value of the control_objectives edge.
+	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
+	// ControlImplementations holds the value of the control_implementations edge.
+	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// Programs holds the value of the programs edge.
@@ -86,10 +86,10 @@ type EvidenceEdges struct {
 	// totalCount holds the count of the edges above.
 	totalCount [8]map[string]int
 
-	namedControlObjectives      map[string][]*ControlObjective
-	namedControlImplementations map[string][]*ControlImplementation
 	namedControls               map[string][]*Control
 	namedSubcontrols            map[string][]*Subcontrol
+	namedControlObjectives      map[string][]*ControlObjective
+	namedControlImplementations map[string][]*ControlImplementation
 	namedFiles                  map[string][]*File
 	namedPrograms               map[string][]*Program
 	namedTasks                  map[string][]*Task
@@ -106,28 +106,10 @@ func (e EvidenceEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
-// was not loaded in eager-loading.
-func (e EvidenceEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[1] {
-		return e.ControlObjectives, nil
-	}
-	return nil, &NotLoadedError{edge: "control_objectives"}
-}
-
-// ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
-// was not loaded in eager-loading.
-func (e EvidenceEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[2] {
-		return e.ControlImplementations, nil
-	}
-	return nil, &NotLoadedError{edge: "control_implementations"}
-}
-
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[1] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -136,10 +118,28 @@ func (e EvidenceEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[2] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
+// ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
+// was not loaded in eager-loading.
+func (e EvidenceEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
+	if e.loadedTypes[3] {
+		return e.ControlObjectives, nil
+	}
+	return nil, &NotLoadedError{edge: "control_objectives"}
+}
+
+// ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
+// was not loaded in eager-loading.
+func (e EvidenceEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
+	if e.loadedTypes[4] {
+		return e.ControlImplementations, nil
+	}
+	return nil, &NotLoadedError{edge: "control_implementations"}
 }
 
 // FilesOrErr returns the Files value or an error if the edge
@@ -331,16 +331,6 @@ func (_m *Evidence) QueryOwner() *OrganizationQuery {
 	return NewEvidenceClient(_m.config).QueryOwner(_m)
 }
 
-// QueryControlObjectives queries the "control_objectives" edge of the Evidence entity.
-func (_m *Evidence) QueryControlObjectives() *ControlObjectiveQuery {
-	return NewEvidenceClient(_m.config).QueryControlObjectives(_m)
-}
-
-// QueryControlImplementations queries the "control_implementations" edge of the Evidence entity.
-func (_m *Evidence) QueryControlImplementations() *ControlImplementationQuery {
-	return NewEvidenceClient(_m.config).QueryControlImplementations(_m)
-}
-
 // QueryControls queries the "controls" edge of the Evidence entity.
 func (_m *Evidence) QueryControls() *ControlQuery {
 	return NewEvidenceClient(_m.config).QueryControls(_m)
@@ -349,6 +339,16 @@ func (_m *Evidence) QueryControls() *ControlQuery {
 // QuerySubcontrols queries the "subcontrols" edge of the Evidence entity.
 func (_m *Evidence) QuerySubcontrols() *SubcontrolQuery {
 	return NewEvidenceClient(_m.config).QuerySubcontrols(_m)
+}
+
+// QueryControlObjectives queries the "control_objectives" edge of the Evidence entity.
+func (_m *Evidence) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewEvidenceClient(_m.config).QueryControlObjectives(_m)
+}
+
+// QueryControlImplementations queries the "control_implementations" edge of the Evidence entity.
+func (_m *Evidence) QueryControlImplementations() *ControlImplementationQuery {
+	return NewEvidenceClient(_m.config).QueryControlImplementations(_m)
 }
 
 // QueryFiles queries the "files" edge of the Evidence entity.
@@ -446,54 +446,6 @@ func (_m *Evidence) String() string {
 	return builder.String()
 }
 
-// NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Evidence) NamedControlObjectives(name string) ([]*ControlObjective, error) {
-	if _m.Edges.namedControlObjectives == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedControlObjectives[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Evidence) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
-	if _m.Edges.namedControlObjectives == nil {
-		_m.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedControlObjectives[name] = []*ControlObjective{}
-	} else {
-		_m.Edges.namedControlObjectives[name] = append(_m.Edges.namedControlObjectives[name], edges...)
-	}
-}
-
-// NamedControlImplementations returns the ControlImplementations named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Evidence) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
-	if _m.Edges.namedControlImplementations == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedControlImplementations[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Evidence) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
-	if _m.Edges.namedControlImplementations == nil {
-		_m.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
-	} else {
-		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
-	}
-}
-
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *Evidence) NamedControls(name string) ([]*Control, error) {
@@ -539,6 +491,54 @@ func (_m *Evidence) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
 		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
 		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
+	}
+}
+
+// NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Evidence) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if _m.Edges.namedControlObjectives == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControlObjectives[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Evidence) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if _m.Edges.namedControlObjectives == nil {
+		_m.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControlObjectives[name] = []*ControlObjective{}
+	} else {
+		_m.Edges.namedControlObjectives[name] = append(_m.Edges.namedControlObjectives[name], edges...)
+	}
+}
+
+// NamedControlImplementations returns the ControlImplementations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Evidence) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControlImplementations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Evidence) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementations == nil {
+		_m.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
+	} else {
+		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
 	}
 }
 

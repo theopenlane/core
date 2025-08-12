@@ -3,12 +3,22 @@ package utils
 import (
 	"context"
 
+	"entgo.io/ent"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
+
+// GenericMutation is an interface for getting a mutation ID and type
+type GenericMutation interface {
+	ID() (id string, exists bool)
+	IDs(ctx context.Context) ([]string, error)
+	Type() string
+	Op() ent.Op
+	Client() *generated.Client
+}
 
 // NewMutationPolicyWithoutNil is creating a new slice of `privacy.MutationPolicy` by
 // removing any `nil` values from the input `source` slice. It iterates over each item in the source slice and appends it to the new slice only if it is not `nil` - the new slice is then returned
@@ -64,4 +74,41 @@ func AuthzClient(ctx context.Context, m generated.Mutation) *fgax.Client {
 	}
 
 	return nil
+}
+
+// SliceToMap converts a slice of strings to a map for faster lookups
+func SliceToMap(s []string) map[string]any {
+	m := make(map[string]any)
+	for _, t := range s {
+		m[t] = struct{}{}
+	}
+
+	return m
+}
+
+// CheckContains checks if any of the elements in `e` are contained in `s`
+func CheckContains(s []string, e []string) bool {
+	m := SliceToMap(s)
+
+	for _, item := range e {
+		if _, exists := m[item]; exists {
+			return true
+		}
+	}
+
+	return false
+}
+
+// GetIntersection returns the results that are included in both slices
+func GetIntersection(s1 []string, s2 []string) []string {
+	m := SliceToMap(s1)
+
+	var intersection []string
+	for _, item := range s2 {
+		if _, exists := m[item]; exists {
+			intersection = append(intersection, item)
+		}
+	}
+
+	return intersection
 }
