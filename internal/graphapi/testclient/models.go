@@ -4603,10 +4603,10 @@ type CreateEvidenceInput struct {
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
 	Status                   *enums.EvidenceStatus `json:"status,omitempty"`
 	OwnerID                  *string               `json:"ownerID,omitempty"`
-	ControlObjectiveIDs      []string              `json:"controlObjectiveIDs,omitempty"`
-	ControlImplementationIDs []string              `json:"controlImplementationIDs,omitempty"`
 	ControlIDs               []string              `json:"controlIDs,omitempty"`
 	SubcontrolIDs            []string              `json:"subcontrolIDs,omitempty"`
+	ControlObjectiveIDs      []string              `json:"controlObjectiveIDs,omitempty"`
+	ControlImplementationIDs []string              `json:"controlImplementationIDs,omitempty"`
 	FileIDs                  []string              `json:"fileIDs,omitempty"`
 	ProgramIDs               []string              `json:"programIDs,omitempty"`
 	TaskIDs                  []string              `json:"taskIDs,omitempty"`
@@ -8201,10 +8201,10 @@ type Evidence struct {
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
 	Status                 *enums.EvidenceStatus            `json:"status,omitempty"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
-	ControlObjectives      *ControlObjectiveConnection      `json:"controlObjectives"`
-	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	Controls               *ControlConnection               `json:"controls"`
 	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
+	ControlObjectives      *ControlObjectiveConnection      `json:"controlObjectives"`
+	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	Files                  *FileConnection                  `json:"files"`
 	Programs               *ProgramConnection               `json:"programs"`
 	Tasks                  *TaskConnection                  `json:"tasks"`
@@ -8782,18 +8782,18 @@ type EvidenceWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-	// control_objectives edge predicates
-	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
-	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
-	// control_implementations edge predicates
-	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
-	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 	// subcontrols edge predicates
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// control_objectives edge predicates
+	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
+	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
+	// control_implementations edge predicates
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
@@ -28461,18 +28461,18 @@ type UpdateEvidenceInput struct {
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
 	Status                         *enums.EvidenceStatus `json:"status,omitempty"`
 	ClearStatus                    *bool                 `json:"clearStatus,omitempty"`
-	AddControlObjectiveIDs         []string              `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs      []string              `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjectives         *bool                 `json:"clearControlObjectives,omitempty"`
-	AddControlImplementationIDs    []string              `json:"addControlImplementationIDs,omitempty"`
-	RemoveControlImplementationIDs []string              `json:"removeControlImplementationIDs,omitempty"`
-	ClearControlImplementations    *bool                 `json:"clearControlImplementations,omitempty"`
 	AddControlIDs                  []string              `json:"addControlIDs,omitempty"`
 	RemoveControlIDs               []string              `json:"removeControlIDs,omitempty"`
 	ClearControls                  *bool                 `json:"clearControls,omitempty"`
 	AddSubcontrolIDs               []string              `json:"addSubcontrolIDs,omitempty"`
 	RemoveSubcontrolIDs            []string              `json:"removeSubcontrolIDs,omitempty"`
 	ClearSubcontrols               *bool                 `json:"clearSubcontrols,omitempty"`
+	AddControlObjectiveIDs         []string              `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs      []string              `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives         *bool                 `json:"clearControlObjectives,omitempty"`
+	AddControlImplementationIDs    []string              `json:"addControlImplementationIDs,omitempty"`
+	RemoveControlImplementationIDs []string              `json:"removeControlImplementationIDs,omitempty"`
+	ClearControlImplementations    *bool                 `json:"clearControlImplementations,omitempty"`
 	AddFileIDs                     []string              `json:"addFileIDs,omitempty"`
 	RemoveFileIDs                  []string              `json:"removeFileIDs,omitempty"`
 	ClearFiles                     *bool                 `json:"clearFiles,omitempty"`

@@ -7853,10 +7853,10 @@ input CreateEvidenceInput {
 	"""
 	status: EvidenceEvidenceStatus
 	ownerID: ID
-	controlObjectiveIDs: [ID!]
-	controlImplementationIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
+	controlObjectiveIDs: [ID!]
+	controlImplementationIDs: [ID!]
 	fileIDs: [ID!]
 	programIDs: [ID!]
 	taskIDs: [ID!]
@@ -13693,68 +13693,6 @@ type Evidence implements Node {
 	"""
 	status: EvidenceEvidenceStatus
 	owner: Organization
-	controlObjectives(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for ControlObjectives returned from the connection.
-		"""
-		orderBy: [ControlObjectiveOrder!]
-
-		"""
-		Filtering options for ControlObjectives returned from the connection.
-		"""
-		where: ControlObjectiveWhereInput
-	): ControlObjectiveConnection!
-	controlImplementations(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for ControlImplementations returned from the connection.
-		"""
-		orderBy: [ControlImplementationOrder!]
-
-		"""
-		Filtering options for ControlImplementations returned from the connection.
-		"""
-		where: ControlImplementationWhereInput
-	): ControlImplementationConnection!
 	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -13817,6 +13755,68 @@ type Evidence implements Node {
 		"""
 		where: SubcontrolWhereInput
 	): SubcontrolConnection!
+	controlObjectives(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlObjectives returned from the connection.
+		"""
+		orderBy: [ControlObjectiveOrder!]
+
+		"""
+		Filtering options for ControlObjectives returned from the connection.
+		"""
+		where: ControlObjectiveWhereInput
+	): ControlObjectiveConnection!
+	controlImplementations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlImplementations returned from the connection.
+		"""
+		orderBy: [ControlImplementationOrder!]
+
+		"""
+		Filtering options for ControlImplementations returned from the connection.
+		"""
+		where: ControlImplementationWhereInput
+	): ControlImplementationConnection!
 	files(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -14679,16 +14679,6 @@ input EvidenceWhereInput {
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
 	"""
-	control_objectives edge predicates
-	"""
-	hasControlObjectives: Boolean
-	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
-	"""
-	control_implementations edge predicates
-	"""
-	hasControlImplementations: Boolean
-	hasControlImplementationsWith: [ControlImplementationWhereInput!]
-	"""
 	controls edge predicates
 	"""
 	hasControls: Boolean
@@ -14698,6 +14688,16 @@ input EvidenceWhereInput {
 	"""
 	hasSubcontrols: Boolean
 	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
+	control_objectives edge predicates
+	"""
+	hasControlObjectives: Boolean
+	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
+	"""
+	control_implementations edge predicates
+	"""
+	hasControlImplementations: Boolean
+	hasControlImplementationsWith: [ControlImplementationWhereInput!]
 	"""
 	files edge predicates
 	"""
@@ -57150,18 +57150,18 @@ input UpdateEvidenceInput {
 	"""
 	status: EvidenceEvidenceStatus
 	clearStatus: Boolean
-	addControlObjectiveIDs: [ID!]
-	removeControlObjectiveIDs: [ID!]
-	clearControlObjectives: Boolean
-	addControlImplementationIDs: [ID!]
-	removeControlImplementationIDs: [ID!]
-	clearControlImplementations: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
+	addControlObjectiveIDs: [ID!]
+	removeControlObjectiveIDs: [ID!]
+	clearControlObjectives: Boolean
+	addControlImplementationIDs: [ID!]
+	removeControlImplementationIDs: [ID!]
+	clearControlImplementations: Boolean
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
