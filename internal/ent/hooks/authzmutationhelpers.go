@@ -222,7 +222,7 @@ func removeTuplesByRelation(ctx context.Context, m ent.Mutation, objectID string
 // to get the id, requiring the mutation be executed first
 // For updates, it will use the `IDs()` function to get the IDs by querying the database and
 // returning the entity ids that match the mutation's predicate.
-func GetObjectIDsFromMutation(ctx context.Context, m GenericMutation, v ent.Value) ([]string, error) {
+func GetObjectIDsFromMutation(ctx context.Context, m utils.GenericMutation, v ent.Value) ([]string, error) {
 	if m.Op().Is(ent.OpCreate) {
 		id, err := GetObjectIDFromEntValue(v)
 		if err != nil {
@@ -451,7 +451,7 @@ func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID stri
 }
 
 // getOrgMemberID gets the org member id for the user in the organization if they are a member
-func getOrgMemberID(ctx context.Context, m GenericMutation, userID string, orgID string) (string, error) {
+func getOrgMemberID(ctx context.Context, m utils.GenericMutation, userID string, orgID string) (string, error) {
 	// ensure user is a member of the organization
 	orgMemberID, err := m.Client().OrgMembership.Query().
 		Where(orgmembership.UserID(userID)).

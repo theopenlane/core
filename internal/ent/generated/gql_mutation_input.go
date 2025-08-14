@@ -3024,10 +3024,10 @@ type CreateEvidenceInput struct {
 	URL                      *string
 	Status                   *enums.EvidenceStatus
 	OwnerID                  *string
-	ControlObjectiveIDs      []string
-	ControlImplementationIDs []string
 	ControlIDs               []string
 	SubcontrolIDs            []string
+	ControlObjectiveIDs      []string
+	ControlImplementationIDs []string
 	FileIDs                  []string
 	ProgramIDs               []string
 	TaskIDs                  []string
@@ -3066,17 +3066,17 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	if v := i.ControlObjectiveIDs; len(v) > 0 {
-		m.AddControlObjectiveIDs(v...)
-	}
-	if v := i.ControlImplementationIDs; len(v) > 0 {
-		m.AddControlImplementationIDs(v...)
-	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.ControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
+	}
+	if v := i.ControlImplementationIDs; len(v) > 0 {
+		m.AddControlImplementationIDs(v...)
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
@@ -3116,18 +3116,18 @@ type UpdateEvidenceInput struct {
 	URL                            *string
 	ClearStatus                    bool
 	Status                         *enums.EvidenceStatus
-	ClearControlObjectives         bool
-	AddControlObjectiveIDs         []string
-	RemoveControlObjectiveIDs      []string
-	ClearControlImplementations    bool
-	AddControlImplementationIDs    []string
-	RemoveControlImplementationIDs []string
 	ClearControls                  bool
 	AddControlIDs                  []string
 	RemoveControlIDs               []string
 	ClearSubcontrols               bool
 	AddSubcontrolIDs               []string
 	RemoveSubcontrolIDs            []string
+	ClearControlObjectives         bool
+	AddControlObjectiveIDs         []string
+	RemoveControlObjectiveIDs      []string
+	ClearControlImplementations    bool
+	AddControlImplementationIDs    []string
+	RemoveControlImplementationIDs []string
 	ClearFiles                     bool
 	AddFileIDs                     []string
 	RemoveFileIDs                  []string
@@ -3198,24 +3198,6 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
-	if i.ClearControlObjectives {
-		m.ClearControlObjectives()
-	}
-	if v := i.AddControlObjectiveIDs; len(v) > 0 {
-		m.AddControlObjectiveIDs(v...)
-	}
-	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
-		m.RemoveControlObjectiveIDs(v...)
-	}
-	if i.ClearControlImplementations {
-		m.ClearControlImplementations()
-	}
-	if v := i.AddControlImplementationIDs; len(v) > 0 {
-		m.AddControlImplementationIDs(v...)
-	}
-	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
-		m.RemoveControlImplementationIDs(v...)
-	}
 	if i.ClearControls {
 		m.ClearControls()
 	}
@@ -3233,6 +3215,24 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearControlObjectives {
+		m.ClearControlObjectives()
+	}
+	if v := i.AddControlObjectiveIDs; len(v) > 0 {
+		m.AddControlObjectiveIDs(v...)
+	}
+	if v := i.RemoveControlObjectiveIDs; len(v) > 0 {
+		m.RemoveControlObjectiveIDs(v...)
+	}
+	if i.ClearControlImplementations {
+		m.ClearControlImplementations()
+	}
+	if v := i.AddControlImplementationIDs; len(v) > 0 {
+		m.AddControlImplementationIDs(v...)
+	}
+	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
+		m.RemoveControlImplementationIDs(v...)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()

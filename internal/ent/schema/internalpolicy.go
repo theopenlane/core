@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // InternalPolicy defines the policy schema.
@@ -118,7 +117,9 @@ func (InternalPolicy) Interceptors() []ent.Interceptor {
 func (i InternalPolicy) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.CanCreateObjectsUnderParent[*generated.InternalPolicyMutation](rule.ProgramParent), // if mutation contains program_id, check access
+			policy.CanCreateObjectsUnderParents([]string{
+				Program{}.PluralName(),
+			}),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.InternalPolicyMutation](),
 		),

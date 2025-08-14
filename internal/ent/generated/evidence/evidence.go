@@ -56,14 +56,14 @@ const (
 	FieldStatus = "status"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
-	EdgeControlObjectives = "control_objectives"
-	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
-	EdgeControlImplementations = "control_implementations"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
+	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
+	EdgeControlObjectives = "control_objectives"
+	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
+	EdgeControlImplementations = "control_implementations"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
@@ -79,6 +79,16 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "evidence_controls"
+	// ControlsInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlsInverseTable = "controls"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "evidence_subcontrols"
+	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolsInverseTable = "subcontrols"
 	// ControlObjectivesTable is the table that holds the control_objectives relation/edge. The primary key declared below.
 	ControlObjectivesTable = "evidence_control_objectives"
 	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
@@ -91,16 +101,6 @@ const (
 	ControlImplementationsInverseTable = "control_implementations"
 	// ControlImplementationsColumn is the table column denoting the control_implementations relation/edge.
 	ControlImplementationsColumn = "evidence_control_implementations"
-	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
-	ControlsTable = "evidence_controls"
-	// ControlsInverseTable is the table name for the Control entity.
-	// It exists in this package in order to avoid circular dependency with the "control" package.
-	ControlsInverseTable = "controls"
-	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
-	SubcontrolsTable = "evidence_subcontrols"
-	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
-	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
-	SubcontrolsInverseTable = "subcontrols"
 	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
 	FilesTable = "evidence_files"
 	// FilesInverseTable is the table name for the File entity.
@@ -142,15 +142,15 @@ var Columns = []string{
 }
 
 var (
-	// ControlObjectivesPrimaryKey and ControlObjectivesColumn2 are the table columns denoting the
-	// primary key for the control_objectives relation (M2M).
-	ControlObjectivesPrimaryKey = []string{"evidence_id", "control_objective_id"}
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"evidence_id", "control_id"}
 	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
 	// primary key for the subcontrols relation (M2M).
 	SubcontrolsPrimaryKey = []string{"evidence_id", "subcontrol_id"}
+	// ControlObjectivesPrimaryKey and ControlObjectivesColumn2 are the table columns denoting the
+	// primary key for the control_objectives relation (M2M).
+	ControlObjectivesPrimaryKey = []string{"evidence_id", "control_objective_id"}
 	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
 	// primary key for the files relation (M2M).
 	FilesPrimaryKey = []string{"evidence_id", "file_id"}
@@ -319,34 +319,6 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByControlObjectivesCount orders the results by control_objectives count.
-func ByControlObjectivesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlObjectivesStep(), opts...)
-	}
-}
-
-// ByControlObjectives orders the results by control_objectives terms.
-func ByControlObjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlObjectivesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByControlImplementationsCount orders the results by control_implementations count.
-func ByControlImplementationsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlImplementationsStep(), opts...)
-	}
-}
-
-// ByControlImplementations orders the results by control_implementations terms.
-func ByControlImplementations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlImplementationsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByControlsCount orders the results by controls count.
 func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -372,6 +344,34 @@ func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
 func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByControlObjectivesCount orders the results by control_objectives count.
+func ByControlObjectivesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlObjectivesStep(), opts...)
+	}
+}
+
+// ByControlObjectives orders the results by control_objectives terms.
+func ByControlObjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlObjectivesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByControlImplementationsCount orders the results by control_implementations count.
+func ByControlImplementationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlImplementationsStep(), opts...)
+	}
+}
+
+// ByControlImplementations orders the results by control_implementations terms.
+func ByControlImplementations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlImplementationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -423,20 +423,6 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
-func newControlObjectivesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlObjectivesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectivesTable, ControlObjectivesPrimaryKey...),
-	)
-}
-func newControlImplementationsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlImplementationsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ControlImplementationsTable, ControlImplementationsColumn),
-	)
-}
 func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -449,6 +435,20 @@ func newSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
+	)
+}
+func newControlObjectivesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlObjectivesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectivesTable, ControlObjectivesPrimaryKey...),
+	)
+}
+func newControlImplementationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlImplementationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ControlImplementationsTable, ControlImplementationsColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

@@ -278,10 +278,7 @@ func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Quer
 	// filter the results based on the allowed ids
 	// this must be done in the same order as the original list
 	// to maintain the order of the results
-	allowed := make(map[string]struct{}, len(allowedIDs))
-	for _, id := range allowedIDs {
-		allowed[id] = struct{}{}
-	}
+	allowed := utils.SliceToMap(allowedIDs)
 
 	filteredResults := make([]*T, 0, len(allowedIDs))
 	for _, item := range listResults {

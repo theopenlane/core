@@ -5727,31 +5727,6 @@ var (
 			},
 		},
 	}
-	// EvidenceControlObjectivesColumns holds the columns for the "evidence_control_objectives" table.
-	EvidenceControlObjectivesColumns = []*schema.Column{
-		{Name: "evidence_id", Type: field.TypeString},
-		{Name: "control_objective_id", Type: field.TypeString},
-	}
-	// EvidenceControlObjectivesTable holds the schema information for the "evidence_control_objectives" table.
-	EvidenceControlObjectivesTable = &schema.Table{
-		Name:       "evidence_control_objectives",
-		Columns:    EvidenceControlObjectivesColumns,
-		PrimaryKey: []*schema.Column{EvidenceControlObjectivesColumns[0], EvidenceControlObjectivesColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "evidence_control_objectives_evidence_id",
-				Columns:    []*schema.Column{EvidenceControlObjectivesColumns[0]},
-				RefColumns: []*schema.Column{EvidencesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "evidence_control_objectives_control_objective_id",
-				Columns:    []*schema.Column{EvidenceControlObjectivesColumns[1]},
-				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// EvidenceControlsColumns holds the columns for the "evidence_controls" table.
 	EvidenceControlsColumns = []*schema.Column{
 		{Name: "evidence_id", Type: field.TypeString},
@@ -5798,6 +5773,31 @@ var (
 				Symbol:     "evidence_subcontrols_subcontrol_id",
 				Columns:    []*schema.Column{EvidenceSubcontrolsColumns[1]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// EvidenceControlObjectivesColumns holds the columns for the "evidence_control_objectives" table.
+	EvidenceControlObjectivesColumns = []*schema.Column{
+		{Name: "evidence_id", Type: field.TypeString},
+		{Name: "control_objective_id", Type: field.TypeString},
+	}
+	// EvidenceControlObjectivesTable holds the schema information for the "evidence_control_objectives" table.
+	EvidenceControlObjectivesTable = &schema.Table{
+		Name:       "evidence_control_objectives",
+		Columns:    EvidenceControlObjectivesColumns,
+		PrimaryKey: []*schema.Column{EvidenceControlObjectivesColumns[0], EvidenceControlObjectivesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "evidence_control_objectives_evidence_id",
+				Columns:    []*schema.Column{EvidenceControlObjectivesColumns[0]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "evidence_control_objectives_control_objective_id",
+				Columns:    []*schema.Column{EvidenceControlObjectivesColumns[1]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -7965,9 +7965,9 @@ var (
 		EntityDocumentsTable,
 		EntityFilesTable,
 		EntityAssetsTable,
-		EvidenceControlObjectivesTable,
 		EvidenceControlsTable,
 		EvidenceSubcontrolsTable,
+		EvidenceControlObjectivesTable,
 		EvidenceFilesTable,
 		FileEventsTable,
 		GroupEventsTable,
@@ -8389,12 +8389,12 @@ func init() {
 	EntityFilesTable.ForeignKeys[1].RefTable = FilesTable
 	EntityAssetsTable.ForeignKeys[0].RefTable = EntitiesTable
 	EntityAssetsTable.ForeignKeys[1].RefTable = AssetsTable
-	EvidenceControlObjectivesTable.ForeignKeys[0].RefTable = EvidencesTable
-	EvidenceControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	EvidenceControlsTable.ForeignKeys[0].RefTable = EvidencesTable
 	EvidenceControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	EvidenceSubcontrolsTable.ForeignKeys[0].RefTable = EvidencesTable
 	EvidenceSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
+	EvidenceControlObjectivesTable.ForeignKeys[0].RefTable = EvidencesTable
+	EvidenceControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	EvidenceFilesTable.ForeignKeys[0].RefTable = EvidencesTable
 	EvidenceFilesTable.ForeignKeys[1].RefTable = FilesTable
 	FileEventsTable.ForeignKeys[0].RefTable = FilesTable

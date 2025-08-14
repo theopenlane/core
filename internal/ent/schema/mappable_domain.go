@@ -9,7 +9,6 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -88,7 +87,6 @@ func (e MappableDomain) Policy() ent.Policy {
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
-			privacy.AlwaysDenyRule(),
 		),
 	)
 }

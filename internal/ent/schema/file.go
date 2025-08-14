@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -151,7 +150,7 @@ func (f File) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.FileMutation](),
 		),
 		policy.WithMutationRules(
-			privacy.AlwaysAllowRule(),
+			policy.AllowCreate(),
 		),
 	)
 }

@@ -6611,44 +6611,6 @@ func (c *EvidenceClient) QueryOwner(_m *Evidence) *OrganizationQuery {
 	return query
 }
 
-// QueryControlObjectives queries the control_objectives edge of a Evidence.
-func (c *EvidenceClient) QueryControlObjectives(_m *Evidence) *ControlObjectiveQuery {
-	query := (&ControlObjectiveClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(evidence.Table, evidence.FieldID, id),
-			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, evidence.ControlObjectivesTable, evidence.ControlObjectivesPrimaryKey...),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryControlImplementations queries the control_implementations edge of a Evidence.
-func (c *EvidenceClient) QueryControlImplementations(_m *Evidence) *ControlImplementationQuery {
-	query := (&ControlImplementationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(evidence.Table, evidence.FieldID, id),
-			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, evidence.ControlImplementationsTable, evidence.ControlImplementationsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.ControlImplementation
-		step.Edge.Schema = schemaConfig.ControlImplementation
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryControls queries the controls edge of a Evidence.
 func (c *EvidenceClient) QueryControls(_m *Evidence) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
@@ -6681,6 +6643,44 @@ func (c *EvidenceClient) QuerySubcontrols(_m *Evidence) *SubcontrolQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlObjectives queries the control_objectives edge of a Evidence.
+func (c *EvidenceClient) QueryControlObjectives(_m *Evidence) *ControlObjectiveQuery {
+	query := (&ControlObjectiveClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, evidence.ControlObjectivesTable, evidence.ControlObjectivesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlImplementations queries the control_implementations edge of a Evidence.
+func (c *EvidenceClient) QueryControlImplementations(_m *Evidence) *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, evidence.ControlImplementationsTable, evidence.ControlImplementationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementation
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

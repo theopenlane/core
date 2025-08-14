@@ -90,6 +90,8 @@ func (d DocumentData) Annotations() []schema.Annotation {
 func (d DocumentData) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			// TODO: this should ensure the correct access for creation
+			// it currently only checks edit access
 			entfga.CheckEditAccess[*generated.DocumentDataMutation](),
 		),
 	)

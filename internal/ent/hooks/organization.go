@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/catalog"
 	cataloggen "github.com/theopenlane/core/pkg/catalog/gencatalog"
@@ -219,7 +220,7 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 }
 
 // createOrgSubscription creates the default organization subscription for a new org
-func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) (*generated.OrgSubscription, error) {
+func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m utils.GenericMutation) (*generated.OrgSubscription, error) {
 	// ensure we can always pull the org subscription for the organization
 	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
 
@@ -253,7 +254,7 @@ const (
 )
 
 // defaultOrgSubscription is the default way to create an org subscription when an organization is first created
-func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) (*generated.OrgSubscription, error) {
+func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m utils.GenericMutation) (*generated.OrgSubscription, error) {
 	subs, err := m.Client().OrgSubscription.Create().
 		SetStripeSubscriptionID(subscriptionPendingUpdate).
 		SetOwnerID(orgCreated.ID).
@@ -610,7 +611,7 @@ func withTrial() orgModuleOption {
 }
 
 // createDefaultOrgModulesProductsPrices creates default OrgModule, OrgProduct, and OrgPrice for base and compliance modules
-func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *generated.Organization, m GenericMutation, orgSubs *generated.OrgSubscription, opts ...orgModuleOption) ([]string, error) {
+func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *generated.Organization, m utils.GenericMutation, orgSubs *generated.OrgSubscription, opts ...orgModuleOption) ([]string, error) {
 	cfg := orgModuleConfig{}
 
 	for _, opt := range opts {

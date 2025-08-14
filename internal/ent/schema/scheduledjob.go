@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -158,10 +157,12 @@ func (ScheduledJob) Interceptors() []ent.Interceptor {
 func (ScheduledJob) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CanCreateObjectsUnderParents([]string{
+				Control{}.PluralName(),
+				Subcontrol{}.PluralName(),
+			}),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
-			rule.CanCreateObjectsUnderParent[*generated.ControlMutation](rule.ControlsParent),       // if mutation contains control_id, check access
-			rule.CanCreateObjectsUnderParent[*generated.SubcontrolMutation](rule.SubcontrolsParent), // if mutation contains subcontrol_id, check access
 		),
 	)
 }

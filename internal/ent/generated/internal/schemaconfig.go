@@ -60,9 +60,9 @@ type SchemaConfig struct {
 	EntityTypeHistory                  string // EntityTypeHistory table.
 	Event                              string // Event table.
 	Evidence                           string // Evidence table.
-	EvidenceControlObjectives          string // Evidence-control_objectives->ControlObjective table.
 	EvidenceControls                   string // Evidence-controls->Control table.
 	EvidenceSubcontrols                string // Evidence-subcontrols->Subcontrol table.
+	EvidenceControlObjectives          string // Evidence-control_objectives->ControlObjective table.
 	EvidenceFiles                      string // Evidence-files->File table.
 	EvidenceHistory                    string // EvidenceHistory table.
 	Export                             string // Export table.

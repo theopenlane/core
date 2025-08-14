@@ -7,6 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -19,7 +20,7 @@ type MutationWithRevision interface {
 	OldRevision(ctx context.Context) (string, error)
 	SetRevision(s string)
 
-	GenericMutation
+	utils.GenericMutation
 }
 
 // HookRevisionUpdate is a hook that runs on update mutations

@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Narrative defines the narrative schema
@@ -109,7 +108,9 @@ func (n Narrative) Annotations() []schema.Annotation {
 func (n Narrative) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.CanCreateObjectsUnderParent[*generated.NarrativeMutation](rule.ProgramParent), // if mutation contains program_id, check access
+			policy.CanCreateObjectsUnderParents([]string{
+				Program{}.PluralName(),
+			}),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.NarrativeMutation](),
 		),

@@ -4499,30 +4499,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"control_objectives",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   evidence.ControlObjectivesTable,
-			Columns: evidence.ControlObjectivesPrimaryKey,
-			Bidi:    false,
-		},
-		"Evidence",
-		"ControlObjective",
-	)
-	graph.MustAddE(
-		"control_implementations",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   evidence.ControlImplementationsTable,
-			Columns: []string{evidence.ControlImplementationsColumn},
-			Bidi:    false,
-		},
-		"Evidence",
-		"ControlImplementation",
-	)
-	graph.MustAddE(
 		"controls",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4545,6 +4521,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Evidence",
 		"Subcontrol",
+	)
+	graph.MustAddE(
+		"control_objectives",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   evidence.ControlObjectivesTable,
+			Columns: evidence.ControlObjectivesPrimaryKey,
+			Bidi:    false,
+		},
+		"Evidence",
+		"ControlObjective",
+	)
+	graph.MustAddE(
+		"control_implementations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ControlImplementationsTable,
+			Columns: []string{evidence.ControlImplementationsColumn},
+			Bidi:    false,
+		},
+		"Evidence",
+		"ControlImplementation",
 	)
 	graph.MustAddE(
 		"files",
@@ -13341,34 +13341,6 @@ func (f *EvidenceFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	})))
 }
 
-// WhereHasControlObjectives applies a predicate to check if query has an edge control_objectives.
-func (f *EvidenceFilter) WhereHasControlObjectives() {
-	f.Where(entql.HasEdge("control_objectives"))
-}
-
-// WhereHasControlObjectivesWith applies a predicate to check if query has an edge control_objectives with a given conditions (other predicates).
-func (f *EvidenceFilter) WhereHasControlObjectivesWith(preds ...predicate.ControlObjective) {
-	f.Where(entql.HasEdgeWith("control_objectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasControlImplementations applies a predicate to check if query has an edge control_implementations.
-func (f *EvidenceFilter) WhereHasControlImplementations() {
-	f.Where(entql.HasEdge("control_implementations"))
-}
-
-// WhereHasControlImplementationsWith applies a predicate to check if query has an edge control_implementations with a given conditions (other predicates).
-func (f *EvidenceFilter) WhereHasControlImplementationsWith(preds ...predicate.ControlImplementation) {
-	f.Where(entql.HasEdgeWith("control_implementations", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasControls applies a predicate to check if query has an edge controls.
 func (f *EvidenceFilter) WhereHasControls() {
 	f.Where(entql.HasEdge("controls"))
@@ -13391,6 +13363,34 @@ func (f *EvidenceFilter) WhereHasSubcontrols() {
 // WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
 func (f *EvidenceFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
 	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControlObjectives applies a predicate to check if query has an edge control_objectives.
+func (f *EvidenceFilter) WhereHasControlObjectives() {
+	f.Where(entql.HasEdge("control_objectives"))
+}
+
+// WhereHasControlObjectivesWith applies a predicate to check if query has an edge control_objectives with a given conditions (other predicates).
+func (f *EvidenceFilter) WhereHasControlObjectivesWith(preds ...predicate.ControlObjective) {
+	f.Where(entql.HasEdgeWith("control_objectives", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControlImplementations applies a predicate to check if query has an edge control_implementations.
+func (f *EvidenceFilter) WhereHasControlImplementations() {
+	f.Where(entql.HasEdge("control_implementations"))
+}
+
+// WhereHasControlImplementationsWith applies a predicate to check if query has an edge control_implementations with a given conditions (other predicates).
+func (f *EvidenceFilter) WhereHasControlImplementationsWith(preds ...predicate.ControlImplementation) {
+	f.Where(entql.HasEdgeWith("control_implementations", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

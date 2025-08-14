@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -121,8 +120,8 @@ func (e Export) Policy() ent.Policy {
 		policy.WithQueryRules(
 			rule.AllowQueryIfSystemAdmin(),
 		),
-		policy.WithOnMutationRules(ent.OpCreate,
-			privacy.AlwaysAllowRule(),
+		policy.WithMutationRules(
+			policy.AllowCreate(),
 		),
 		policy.WithOnMutationRules(ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne,
 			rule.AllowMutationIfSystemAdmin(),

@@ -101,5 +101,6 @@ func (e Event) Policy() ent.Policy {
 			// allow after interceptors are properly added
 			privacy.AlwaysDenyRule(),
 		),
+		policy.WithMutationRules(),
 	)
 }

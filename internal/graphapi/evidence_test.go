@@ -222,6 +222,9 @@ func TestMutationCreateEvidence(t *testing.T) {
 	subcontrol1 := (&SubcontrolBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 	subcontrol2 := (&SubcontrolBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
+	// create a task for view only user
+	taskViewOnly := (&TaskBuilder{client: suite.client}).MustNew(viewOnlyUser.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     testclient.CreateEvidenceInput
@@ -236,7 +239,26 @@ func TestMutationCreateEvidence(t *testing.T) {
 				Name: "Test Evidence",
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
+		},
+		{
+			name: "happy path, view only user should be able to associate evidence to a task they can edit",
+			request: testclient.CreateEvidenceInput{
+				Name:    "Test Evidence",
+				TaskIDs: []string{taskViewOnly.ID},
+			},
+			client: suite.client.api,
+			ctx:    viewOnlyUser.UserCtx,
+		},
+		{
+			name: "happy path, view only user should be able to associate evidence to a task they can edit and control they can view",
+			request: testclient.CreateEvidenceInput{
+				Name:       "Test Evidence",
+				TaskIDs:    []string{taskViewOnly.ID},
+				ControlIDs: []string{control1.ID},
+			},
+			client: suite.client.api,
+			ctx:    viewOnlyUser.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -325,9 +347,19 @@ func TestMutationCreateEvidence(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "user not authorized, not enough permissions",
+			name: "user not authorized, not enough permissions and no linked objects",
 			request: testclient.CreateEvidenceInput{
 				Name: "Test Evidence",
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "user not authorized, not enough permissions and edit access to linked task",
+			request: testclient.CreateEvidenceInput{
+				Name:    "Test Evidence",
+				TaskIDs: []string{task.ID},
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -488,7 +520,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, subcontrol1.ControlID, subcontrol2.ControlID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlObjectiveDeleteOne]{client: suite.client.db.ControlObjective, IDs: []string{controlObjective1.ID, controlObjective2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task.ID, taskViewOnly.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
