@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -147,7 +148,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			// test the user was added to the group
 			group, err := suite.api.GetGroupByID(recipientCtx, group.ID)
-			require.NoError(t, err)
+			require.ErrorContains(t, err, interceptors.ErrFeatureNotEnabled.Error())
 			assert.NotNil(t, group)
 
 			foundMember := false

@@ -283,7 +283,9 @@ func (_c *DNSVerificationHistoryCreate) Mutation() *DNSVerificationHistoryMutati
 
 // Save creates the DNSVerificationHistory in the database.
 func (_c *DNSVerificationHistoryCreate) Save(ctx context.Context) (*DNSVerificationHistory, error) {
-	_c.defaults()
+	if err := _c.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -310,16 +312,25 @@ func (_c *DNSVerificationHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_c *DNSVerificationHistoryCreate) defaults() {
+func (_c *DNSVerificationHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.HistoryTime(); !ok {
+		if dnsverificationhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := dnsverificationhistory.DefaultHistoryTime()
 		_c.mutation.SetHistoryTime(v)
 	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
+		if dnsverificationhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := dnsverificationhistory.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
 	}
 	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		if dnsverificationhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := dnsverificationhistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
@@ -336,9 +347,13 @@ func (_c *DNSVerificationHistoryCreate) defaults() {
 		_c.mutation.SetAcmeChallengeStatus(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
+		if dnsverificationhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := dnsverificationhistory.DefaultID()
 		_c.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

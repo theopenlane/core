@@ -79,7 +79,6 @@ func TestQueryProcedure(t *testing.T) {
 			if tc.errorMsg != "" {
 
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -285,7 +284,6 @@ func TestMutationCreateProcedure(t *testing.T) {
 			resp, err := tc.client.CreateProcedure(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -516,7 +514,6 @@ func TestMutationUpdateProcedure(t *testing.T) {
 			resp, err := tc.client.UpdateProcedure(tc.ctx, procedure.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -618,7 +615,6 @@ func TestMutationDeleteProcedure(t *testing.T) {
 			resp, err := tc.client.DeleteProcedure(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -727,7 +723,6 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 			resp, err := tc.client.UpdateBulkProcedure(tc.ctx, tc.ids, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

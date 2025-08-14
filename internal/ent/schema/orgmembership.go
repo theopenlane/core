@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -85,7 +86,7 @@ func (o OrgMembership) Edges() []ent.Edge {
 }
 
 // Annotations of the OrgMembership
-func (o OrgMembership) Annotations() []schema.Annotation {
+func (OrgMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.MembershipChecks("organization"),
 		// Delete groups + program members when orgmembership is deleted
@@ -127,26 +128,29 @@ func (OrgMembership) Hooks() []ent.Hook {
 }
 
 // Interceptors of the OrgMembership
-func (o OrgMembership) Interceptors() []ent.Interceptor {
+func (OrgMembership) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorOrgMember(),
 		interceptors.TraverseOrgMembers(),
 	}
 }
 
-func (o OrgMembership) Modules() []models.OrgModule {
+// Policy of the OrgMembership
+func (OrgMembership) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithOnMutationRules(
+			ent.OpDelete|ent.OpDeleteOne,
+			rule.AllowSelfOrgMembershipDelete(),
+		),
+		policy.WithMutationRules(
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
+			entfga.CheckEditAccess[*generated.OrgMembershipMutation](),
+		),
+	)
+}
+
+func (OrgMembership) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
 	}
-}
-
-// Policy of the OrgMembership
-func (o OrgMembership) Policy() ent.Policy {
-	return policy.NewPolicy(
-		policy.WithMutationRules(
-			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
-			policy.CheckOrgWriteAccess(),
-			rule.AllowMutationAfterApplyingOwnerFilter(),
-		),
-	)
 }

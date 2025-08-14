@@ -8,6 +8,8 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -121,4 +123,13 @@ func (DNSVerification) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
 	}
+}
+
+// Policy of the DNSVerification
+func (DNSVerification) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			rule.AllowMutationIfSystemAdmin(),
+		),
+	)
 }

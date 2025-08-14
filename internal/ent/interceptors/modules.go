@@ -9,7 +9,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/internal/ent/generated"
 	entintercept "github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	features "github.com/theopenlane/core/internal/entitlements/features"
@@ -23,16 +22,19 @@ type moduleInterceptorKey struct{}
 
 // InterceptorModules usese the query type to automatically validate the modules
 // from the auto generated pipeline
-func InterceptorModules() ent.Interceptor {
+func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 	return entintercept.TraverseFunc(func(ctx context.Context, q entintercept.Query) error {
-		// prevent infinite recursion. HasAllFeatures calls the OrgModule queries in some scenarios.
-		// This prevents a scenario where it is called over and over again
+
+		if !modulesEnabled {
+			return nil
+		}
+
 		if _, ok := contextx.From[moduleInterceptorKey](ctx); ok {
 			return nil
 		}
 
-		if q.Type() == generated.TypeOrgModule {
-			ctx = contextx.With(ctx, moduleInterceptorKey{})
+		if rule.ShouldSkipFeatureCheck(ctx) {
+			return nil
 		}
 
 		schemaFeatures, exists := features.FeatureOfType[q.Type()]
@@ -40,7 +42,10 @@ func InterceptorModules() ent.Interceptor {
 			return nil
 		}
 
-		ok, module, err := rule.HasAllFeatures(ctx, schemaFeatures...)
+		// prevent infinite recursion. HasAllFeatures calls the OrgModule queries in some scenarios.
+		// This prevents a scenario where this interceptor is called again when already inside this function
+		ctxWithKey := contextx.With(ctx, moduleInterceptorKey{})
+		ok, module, err := rule.HasAllFeatures(ctxWithKey, schemaFeatures...)
 		if err != nil || !ok {
 
 			if err == nil {

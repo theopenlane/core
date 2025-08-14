@@ -6,10 +6,12 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/utils/contextx"
 
+	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
 
@@ -203,3 +205,105 @@ func TestDenyIfMissingAllModules_BypassScenarios(t *testing.T) {
 		assert.Contains(t, err.Error(), "skip rule")
 	})
 }
+
+func TestModulesEnabled(t *testing.T) {
+	tests := []struct {
+		title       string
+		modules     []models.OrgModule
+		shouldAllow bool
+		expectedErr string
+	}{
+		{
+			title:       "Base module enabled should allow",
+			modules:     []models.OrgModule{models.CatalogBaseModule},
+			shouldAllow: true,
+		},
+		{
+			title:       "Multiple modules enabled should allow",
+			modules:     []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule},
+			shouldAllow: true,
+		},
+		{
+			title:       "No modules enabled should allow (fallback behavior)",
+			modules:     []models.OrgModule{},
+			shouldAllow: true,
+		},
+		{
+			title:       "Wrong module enabled should deny",
+			modules:     []models.OrgModule{models.CatalogComplianceModule}, // missing base module for export
+			shouldAllow: false,
+			expectedErr: "features are not enabled",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.title, func(t *testing.T) {
+			ctx := setupContext(t, "test-org", tt.modules)
+			mutation := createExportMutation(t)
+
+			rule := rule.DenyIfMissingAllModules()
+			err := rule.EvalMutation(ctx, mutation)
+
+			if tt.shouldAllow {
+				require.Error(t, err)
+				assert.Contains(t, err.Error(), "skip rule")
+			} else {
+				require.Error(t, err)
+				assert.Contains(t, err.Error(), tt.expectedErr)
+				assert.NotContains(t, err.Error(), "skip rule")
+			}
+		})
+	}
+}
+
+func TestModulesDisabled(t *testing.T) {
+	client := generated.NewClient()
+	client.EntConfig = &entconfig.Config{
+		Modules: entconfig.Modules{
+			Enabled: false,
+		},
+	}
+
+	mutation := &mockMutation{
+		client:       client,
+		mutationType: "Export",
+	}
+
+	ctx := setupContext(t, "test-org", []models.OrgModule{})
+	rule := rule.DenyIfMissingAllModules()
+
+	err := rule.EvalMutation(ctx, mutation)
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "skip rule")
+}
+
+type mockMutation struct {
+	client       *generated.Client
+	mutationType string
+}
+
+func (m *mockMutation) Op() ent.Op                                                   { return ent.OpCreate }
+func (m *mockMutation) Type() string                                                 { return m.mutationType }
+func (m *mockMutation) Fields() []string                                             { return []string{} }
+func (m *mockMutation) Field(name string) (ent.Value, bool)                          { return nil, false }
+func (m *mockMutation) OldField(ctx context.Context, name string) (ent.Value, error) { return nil, nil }
+func (m *mockMutation) SetField(name string, value ent.Value) error                  { return nil }
+func (m *mockMutation) AddedFields() []string                                        { return []string{} }
+func (m *mockMutation) AddedField(name string) (ent.Value, bool)                     { return nil, false }
+func (m *mockMutation) AddField(name string, value ent.Value) error                  { return nil }
+func (m *mockMutation) ClearedFields() []string                                      { return []string{} }
+func (m *mockMutation) FieldCleared(name string) bool                                { return false }
+func (m *mockMutation) ClearField(name string) error                                 { return nil }
+func (m *mockMutation) RemovedEdges() []string                                       { return []string{} }
+func (m *mockMutation) RemovedIDs(name string) []ent.Value                           { return []ent.Value{} }
+func (m *mockMutation) ClearedEdges() []string                                       { return []string{} }
+func (m *mockMutation) EdgeCleared(name string) bool                                 { return false }
+func (m *mockMutation) ClearEdge(name string) error                                  { return nil }
+func (m *mockMutation) AddedEdges() []string                                         { return []string{} }
+func (m *mockMutation) AddedIDs(name string) []ent.Value                             { return []ent.Value{} }
+func (m *mockMutation) Where(ps ...func(s *sql.Selector))                            {}
+func (m *mockMutation) WhereP(...func(*sql.Selector))                                {}
+func (m *mockMutation) ResetEdge(name string) error                                  { return nil }
+func (m *mockMutation) ResetField(name string) error                                 { return nil }
+func (m *mockMutation) Client() *generated.Client                                    { return m.client }

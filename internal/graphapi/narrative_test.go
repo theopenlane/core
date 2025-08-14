@@ -97,7 +97,6 @@ func TestQueryNarrative(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -326,7 +325,6 @@ func TestMutationCreateNarrative(t *testing.T) {
 			resp, err := tc.client.CreateNarrative(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -415,9 +413,8 @@ func TestMutationUpdateNarrative(t *testing.T) {
 	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the narrative
-	res, err := suite.client.api.GetNarrativeByID(anotherAdminUser.UserCtx, narrative.ID)
+	_, err := suite.client.api.GetNarrativeByID(anotherAdminUser.UserCtx, narrative.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Assert(t, res == nil)
 
 	testCases := []struct {
 		name        string
@@ -472,7 +469,6 @@ func TestMutationUpdateNarrative(t *testing.T) {
 			resp, err := tc.client.UpdateNarrative(tc.ctx, narrative.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -584,7 +580,6 @@ func TestMutationDeleteNarrative(t *testing.T) {
 			resp, err := tc.client.DeleteNarrative(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

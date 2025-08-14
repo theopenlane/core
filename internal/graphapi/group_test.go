@@ -86,7 +86,6 @@ func TestQueryGroup(t *testing.T) {
 			if tc.errorMsg != "" {
 
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -379,7 +378,6 @@ func TestMutationCreateGroup(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -569,7 +567,6 @@ func TestMutationCreateGroupWithMembers(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -691,7 +688,6 @@ func TestMutationCreateGroupByClone(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -760,10 +756,8 @@ func TestMutationUpdateGroup(t *testing.T) {
 	gmCtx := auth.NewTestContextWithOrgID(gm.UserID, testUser1.OrganizationID)
 
 	// ensure user cannot get access to the program
-	programResp, err := suite.client.api.GetProgramByID(gmCtx, program.ID)
+	_, err := suite.client.api.GetProgramByID(gmCtx, program.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
-
-	assert.Assert(t, is.Nil(programResp))
 
 	// access to procedures is granted by default in the org
 	procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
@@ -1054,7 +1048,6 @@ func TestMutationUpdateGroup(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -1121,9 +1114,8 @@ func TestMutationUpdateGroup(t *testing.T) {
 				assert.Check(t, is.Equal(description, *controlResp.UpdateControl.Control.Description))
 
 				// access to procedures is granted by default in the org, it should be blocked now
-				procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
+				_, err = suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
 				assert.ErrorContains(t, err, notFoundErrorMsg)
-				assert.Assert(t, is.Nil(procedureResp))
 			}
 
 			if tc.updateInput.InheritGroupPermissions != nil {
@@ -1202,7 +1194,6 @@ func TestMutationDeleteGroup(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

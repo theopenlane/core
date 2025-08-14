@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -490,6 +491,12 @@ func (_q *GroupMembershipQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if groupmembership.Policy == nil {
+		return errors.New("generated: uninitialized groupmembership.Policy (forgotten import generated/runtime?)")
+	}
+	if err := groupmembership.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

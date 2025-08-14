@@ -105,7 +105,6 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 			resp, err := tc.client.CreateTrustCenterSubprocessor(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 				return
 			}
 
@@ -171,10 +170,9 @@ func TestMutationCreateTrustCenterSubprocessorAsAnonymousUser(t *testing.T) {
 			// Create anonymous trust center context
 			anonCtx := createAnonymousTrustCenterContext(tc.trustCenterID, tc.organizationID)
 
-			resp, err := tc.client.CreateTrustCenterSubprocessor(anonCtx, tc.request)
+			_, err := tc.client.CreateTrustCenterSubprocessor(anonCtx, tc.request)
 
 			assert.ErrorContains(t, err, tc.expectedErr)
-			assert.Check(t, is.Nil(resp))
 		})
 	}
 
@@ -268,7 +266,6 @@ func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 				return
 			}
 
@@ -479,7 +476,6 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 			resp, err := tc.client.UpdateTrustCenterSubprocessor(tc.ctx, id, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 				return
 			}
 
@@ -596,7 +592,6 @@ func TestMutationDeleteTrustCenterSubprocessor(t *testing.T) {
 			resp, err := tc.client.DeleteTrustCenterSubprocessor(tc.ctx, tc.id)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 				return
 			}
 

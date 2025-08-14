@@ -1104,14 +1104,27 @@ func init() {
 	// customdomainhistory.DefaultID holds the default value on creation for the id field.
 	customdomainhistory.DefaultID = customdomainhistoryDescID.Default.(func() string)
 	dnsverificationMixin := schema.DNSVerification{}.Mixin()
+	dnsverification.Policy = privacy.NewPolicies(schema.DNSVerification{})
+	dnsverification.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := dnsverification.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	dnsverificationMixinHooks0 := dnsverificationMixin[0].Hooks()
 	dnsverificationMixinHooks1 := dnsverificationMixin[1].Hooks()
 	dnsverificationMixinHooks2 := dnsverificationMixin[2].Hooks()
 	dnsverificationMixinHooks6 := dnsverificationMixin[6].Hooks()
-	dnsverification.Hooks[0] = dnsverificationMixinHooks0[0]
-	dnsverification.Hooks[1] = dnsverificationMixinHooks1[0]
-	dnsverification.Hooks[2] = dnsverificationMixinHooks2[0]
-	dnsverification.Hooks[3] = dnsverificationMixinHooks6[0]
+
+	dnsverification.Hooks[1] = dnsverificationMixinHooks0[0]
+
+	dnsverification.Hooks[2] = dnsverificationMixinHooks1[0]
+
+	dnsverification.Hooks[3] = dnsverificationMixinHooks2[0]
+
+	dnsverification.Hooks[4] = dnsverificationMixinHooks6[0]
 	dnsverificationMixinInters1 := dnsverificationMixin[1].Interceptors()
 	dnsverificationMixinInters2 := dnsverificationMixin[2].Interceptors()
 	dnsverificationMixinInters6 := dnsverificationMixin[6].Interceptors()
@@ -1214,6 +1227,17 @@ func init() {
 	dnsverificationDescID := dnsverificationMixinFields3[0].Descriptor()
 	// dnsverification.DefaultID holds the default value on creation for the id field.
 	dnsverification.DefaultID = dnsverificationDescID.Default.(func() string)
+	dnsverificationhistory.Policy = privacy.NewPolicies(schema.DNSVerificationHistory{})
+	dnsverificationhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := dnsverificationhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	dnsverificationhistoryInters := schema.DNSVerificationHistory{}.Interceptors()
+	dnsverificationhistory.Interceptors[0] = dnsverificationhistoryInters[0]
 	dnsverificationhistoryFields := schema.DNSVerificationHistory{}.Fields()
 	_ = dnsverificationhistoryFields
 	// dnsverificationhistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -2172,13 +2196,26 @@ func init() {
 	// grouphistory.DefaultID holds the default value on creation for the id field.
 	grouphistory.DefaultID = grouphistoryDescID.Default.(func() string)
 	groupmembershipMixin := schema.GroupMembership{}.Mixin()
+	groupmembership.Policy = privacy.NewPolicies(schema.GroupMembership{})
+	groupmembership.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := groupmembership.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	groupmembershipMixinHooks0 := groupmembershipMixin[0].Hooks()
 	groupmembershipMixinHooks1 := groupmembershipMixin[1].Hooks()
 	groupmembershipHooks := schema.GroupMembership{}.Hooks()
-	groupmembership.Hooks[0] = groupmembershipMixinHooks0[0]
-	groupmembership.Hooks[1] = groupmembershipMixinHooks1[0]
-	groupmembership.Hooks[2] = groupmembershipHooks[0]
-	groupmembership.Hooks[3] = groupmembershipHooks[1]
+
+	groupmembership.Hooks[1] = groupmembershipMixinHooks0[0]
+
+	groupmembership.Hooks[2] = groupmembershipMixinHooks1[0]
+
+	groupmembership.Hooks[3] = groupmembershipHooks[0]
+
+	groupmembership.Hooks[4] = groupmembershipHooks[1]
 	groupmembershipMixinInters1 := groupmembershipMixin[1].Interceptors()
 	groupmembershipInters := schema.GroupMembership{}.Interceptors()
 	groupmembership.Interceptors[0] = groupmembershipMixinInters1[0]
@@ -2330,7 +2367,6 @@ func init() {
 	hushMixinHooks1 := hushMixin[1].Hooks()
 	hushMixinHooks2 := hushMixin[2].Hooks()
 	hushMixinHooks5 := hushMixin[5].Hooks()
-	hushHooks := schema.Hush{}.Hooks()
 
 	hush.Hooks[1] = hushMixinHooks0[0]
 
@@ -2339,16 +2375,12 @@ func init() {
 	hush.Hooks[3] = hushMixinHooks2[0]
 
 	hush.Hooks[4] = hushMixinHooks5[0]
-
-	hush.Hooks[5] = hushHooks[0]
 	hushMixinInters1 := hushMixin[1].Interceptors()
 	hushMixinInters2 := hushMixin[2].Interceptors()
 	hushMixinInters5 := hushMixin[5].Interceptors()
-	hushInters := schema.Hush{}.Interceptors()
 	hush.Interceptors[0] = hushMixinInters1[0]
 	hush.Interceptors[1] = hushMixinInters2[0]
 	hush.Interceptors[2] = hushMixinInters5[0]
-	hush.Interceptors[3] = hushInters[0]
 	hushMixinFields0 := hushMixin[0].Fields()
 	_ = hushMixinFields0
 	hushMixinFields3 := hushMixin[3].Fields()
@@ -3354,9 +3386,11 @@ func init() {
 	mappedcontrolMixinInters1 := mappedcontrolMixin[1].Interceptors()
 	mappedcontrolMixinInters2 := mappedcontrolMixin[2].Interceptors()
 	mappedcontrolMixinInters6 := mappedcontrolMixin[6].Interceptors()
+	mappedcontrolInters := schema.MappedControl{}.Interceptors()
 	mappedcontrol.Interceptors[0] = mappedcontrolMixinInters1[0]
 	mappedcontrol.Interceptors[1] = mappedcontrolMixinInters2[0]
 	mappedcontrol.Interceptors[2] = mappedcontrolMixinInters6[0]
+	mappedcontrol.Interceptors[3] = mappedcontrolInters[0]
 	mappedcontrolMixinFields0 := mappedcontrolMixin[0].Fields()
 	_ = mappedcontrolMixinFields0
 	mappedcontrolMixinFields3 := mappedcontrolMixin[3].Fields()

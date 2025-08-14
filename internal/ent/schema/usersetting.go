@@ -115,11 +115,6 @@ func (u UserSetting) Edges() []ent.Edge {
 	}
 }
 
-// Annotations of the UserSetting
-func (u UserSetting) Annotations() []schema.Annotation {
-	return []schema.Annotation{}
-}
-
 // Hooks of the UserSetting.
 func (UserSetting) Hooks() []ent.Hook {
 	return []ent.Hook{
@@ -128,7 +123,7 @@ func (UserSetting) Hooks() []ent.Hook {
 }
 
 // Interceptors of the UserSetting.
-func (u UserSetting) Interceptors() []ent.Interceptor {
+func (UserSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorUserSetting(),
 	}

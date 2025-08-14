@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"errors"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
@@ -17,6 +16,10 @@ func HookOrgModule() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrgModuleFunc(func(ctx context.Context, omm *generated.OrgModuleMutation) (generated.Value, error) {
 
+			if !omm.EntConfig.Modules.Enabled {
+				return next.Mutate(ctx, omm)
+			}
+
 			v, err := next.Mutate(ctx, omm)
 			if err != nil {
 				return nil, err
@@ -24,12 +27,12 @@ func HookOrgModule() ent.Hook {
 
 			orgID, ok := omm.OwnerID()
 			if !ok || orgID == "" {
-				return v, errors.New("ownber id not exists")
+				return v, ErrOwnerIDNotExists
 			}
 
 			orgModule, ok := v.(*generated.OrgModule)
 			if !ok {
-				return v, errors.New("ownber id not exists")
+				return v, ErrOwnerIDNotExists
 			}
 
 			feats := []models.OrgModule{orgModule.Module}

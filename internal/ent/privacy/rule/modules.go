@@ -3,6 +3,7 @@ package rule
 import (
 	"context"
 	"slices"
+	"strings"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -229,18 +230,13 @@ func AllowIfHasAllFeatures(features ...models.OrgModule) privacy.QueryMutationRu
 	})
 }
 
-// shouldSkipFeatureCheck determines if feature checking should be bypassed based on context
-func shouldSkipFeatureCheck(ctx context.Context) bool {
+// ShouldSkipFeatureCheck determines if module access checks should be bypassed based
+// on the available context
+func ShouldSkipFeatureCheck(ctx context.Context) bool {
 	if auth.IsSystemAdminFromContext(ctx) {
 		return true
 	}
 
-	// check for bypass
-	// For unauthenticated users, this interceptor
-	// will still run when a query is done to fetch the data such as an api
-	// token or personal access token
-	// And would lead to a situation where the features cannot be
-	// retrieved from the database and a failure occurrs
 	if _, allowCtx := privacy.DecisionFromContext(ctx); allowCtx {
 		return true
 	}
@@ -272,12 +268,21 @@ func shouldSkipFeatureCheck(ctx context.Context) bool {
 // DenyIfMissingAllModules acts as a prerequisite check - denies if features missing, Allows if present
 func DenyIfMissingAllModules() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
-		schemaFeatures, exists := features.FeatureOfType[m.Type()]
-		if !exists {
-			return privacy.Denyf("no feature avaialable for this schema")
+
+		if mut, ok := m.(interface{ Client() *generated.Client }); ok {
+			if client := mut.Client(); client != nil && client.EntConfig != nil && !client.EntConfig.Modules.Enabled {
+				return privacy.Skip
+			}
 		}
 
-		if shouldSkipFeatureCheck(ctx) {
+		mutationType := m.Type()
+
+		if strings.HasSuffix(mutationType, "History") || ShouldSkipFeatureCheck(ctx) {
+			return privacy.Skip
+		}
+
+		schemaFeatures, exists := features.FeatureOfType[m.Type()]
+		if !exists {
 			return privacy.Skip
 		}
 

@@ -11,8 +11,10 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/accessmap"
 )
@@ -131,4 +133,13 @@ func (GroupMembership) Hooks() []ent.Hook {
 		hooks.HookGroupMembers(),
 		hooks.HookMembershipSelf("group_memberships"),
 	}
+}
+
+// Policy of the GroupMembership
+func (GroupMembership) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			entfga.CheckEditAccess[*generated.GroupMembershipMutation](),
+		),
+	)
 }

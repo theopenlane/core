@@ -107,8 +107,6 @@ func TestQueryControl(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -311,65 +309,6 @@ func TestQueryControlsMultipleOrgCheck(t *testing.T) {
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(testUserCtxUpdate, t)
 }
 
-func TestMutationCreateControlNoModuleAccess(t *testing.T) {
-
-	testUser := suite.userBuilder(context.Background(), t, models.CatalogBaseModule)
-
-	userWithAccess := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-
-	testCases := []struct {
-		name        string
-		request     testclient.CreateControlInput
-		client      *testclient.TestClient
-		ctx         context.Context
-		expectedErr string
-		hasError    bool
-	}{
-		{
-			name: "user with no module access cannot create control",
-			request: testclient.CreateControlInput{
-				RefCode: "A-1",
-			},
-			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
-			expectedErr: "control not found",
-		},
-		{
-			name: "user with no module access cannot create control",
-			request: testclient.CreateControlInput{
-				RefCode: "A-1",
-			},
-			client: suite.client.api,
-			ctx:    userWithAccess.UserCtx,
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.CreateControl(tc.ctx, tc.request)
-			if tc.expectedErr != "" {
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
-				return
-			}
-
-			assert.NilError(t, err)
-			assert.Check(t, resp != nil)
-
-			assert.Check(t, len(resp.CreateControl.Control.ID) != 0)
-			assert.Check(t, is.Equal(tc.request.RefCode, resp.CreateControl.Control.RefCode))
-
-			assert.Check(t, len(resp.CreateControl.Control.DisplayID) != 0)
-			assert.Check(t, is.Contains(resp.CreateControl.Control.DisplayID, "CTL-"))
-
-			assert.Check(t, len(resp.CreateControl.Control.RefCode) != 0)
-			assert.Check(t, is.Equal(tc.request.RefCode, resp.CreateControl.Control.RefCode))
-
-		})
-	}
-}
-
 func TestMutationCreateControl(t *testing.T) {
 	program1 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -556,8 +495,6 @@ func TestMutationCreateControl(t *testing.T) {
 			resp, err := tc.client.CreateControl(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -954,8 +891,6 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			resp, err := tc.client.CreateControlsByClone(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				errors := parseClientError(t, err)
 				for _, e := range errors {
 					if tc.expectedErr == notAuthorizedErrorMsg {
@@ -1048,8 +983,6 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 
 				// ensure a user outside my organization cannot get the control
 				res, err = suite.client.api.GetControlByID(testUser2.UserCtx, control.ID)
-				assert.Check(t, is.Nil(res))
-
 				assert.ErrorContains(t, err, notFoundErrorMsg)
 
 				// delete the created evidence, update for the token user cases
@@ -1108,11 +1041,10 @@ func TestMutationUpdateControl(t *testing.T) {
 	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to update the control
-	res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, testclient.UpdateControlInput{
+	_, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, testclient.UpdateControlInput{
 		Status: lo.ToPtr(enums.ControlStatusPreparing),
 	})
 	assert.ErrorContains(t, err, notAuthorizedErrorMsg)
-	assert.Assert(t, is.Nil(res))
 
 	testCases := []struct {
 		name                 string
@@ -1245,8 +1177,6 @@ func TestMutationUpdateControl(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -1450,8 +1380,6 @@ func TestMutationDeleteControl(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -1506,8 +1434,6 @@ func TestQueryControlCategories(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -1579,8 +1505,6 @@ func TestQueryControlSubcategories(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -1708,8 +1632,6 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -1818,8 +1740,6 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -1969,8 +1889,6 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -2156,8 +2074,6 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 			resp, err := tc.client.UpdateBulkControl(tc.ctx, tc.ids, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 

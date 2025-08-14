@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -411,6 +412,12 @@ func (_q *DNSVerificationQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if dnsverification.Policy == nil {
+		return errors.New("generated: uninitialized dnsverification.Policy (forgotten import generated/runtime?)")
+	}
+	if err := dnsverification.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

@@ -99,3 +99,9 @@ func (OrgPrice) Annotations() []schema.Annotation {
 		},
 	}
 }
+
+func (OrgPrice) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}

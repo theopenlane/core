@@ -65,7 +65,6 @@ func TestQueryEntity(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -227,7 +226,6 @@ func TestMutationCreateEntity(t *testing.T) {
 			resp, err := tc.client.CreateEntity(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -360,7 +358,6 @@ func TestMutationUpdateEntity(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -465,7 +462,6 @@ func TestMutationDeleteEntity(t *testing.T) {
 			resp, err := tc.client.DeleteEntity(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

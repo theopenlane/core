@@ -7,9 +7,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/hush"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -88,12 +86,6 @@ func (h Hush) Edges() []ent.Edge {
 	}
 }
 
-func (Hush) Modules() []models.OrgModule {
-	return []models.OrgModule{
-		models.CatalogBaseModule,
-	}
-}
-
 // Mixin of the Hush shhhh
 func (h Hush) Mixin() []ent.Mixin {
 	return mixinConfig{
@@ -104,26 +96,20 @@ func (h Hush) Mixin() []ent.Mixin {
 	}.getMixins(h)
 }
 
-// Hooks of the Hush
-func (Hush) Hooks() []ent.Hook {
-	return []ent.Hook{
-		hooks.HookHush(),
-	}
-}
-
-// Interceptors of the Hush
-func (h Hush) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorHush(),
-	}
-}
-
-// Policy of the Hush
-func (h Hush) Policy() ent.Policy {
+// Policy of the Hush - restricts access to organization members with write access
+func (Hush) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
+		policy.WithQueryRules(
+			// restrict read access to hush secrets to organization members with write access
+			policy.CheckOrgEditAccess(),
+		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+func (Hush) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
 }

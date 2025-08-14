@@ -213,17 +213,8 @@ func (t Task) Edges() []ent.Edge {
 	}
 }
 
-func (Task) Modules() []models.OrgModule {
-	return []models.OrgModule{
-		models.CatalogComplianceModule,
-		models.CatalogPolicyManagementAddon,
-		models.CatalogRiskManagementAddon,
-		models.CatalogEntityManagementModule,
-	}
-}
-
 // Annotations of the Task
-func (t Task) Annotations() []schema.Annotation {
+func (Task) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
@@ -239,7 +230,7 @@ func (Task) Hooks() []ent.Hook {
 }
 
 // Policy of the Task
-func (t Task) Policy() ent.Policy {
+func (Task) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			// all users should be allowed to create a task
@@ -247,4 +238,13 @@ func (t Task) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.TaskMutation](),
 		),
 	)
+}
+
+func (Task) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
+		models.CatalogEntityManagementModule,
+	}
 }

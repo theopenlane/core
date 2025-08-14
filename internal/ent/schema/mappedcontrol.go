@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
@@ -122,14 +122,8 @@ func (m MappedControl) Mixin() []ent.Mixin {
 	}.getMixins(m)
 }
 
-func (MappedControl) Modules() []models.OrgModule {
-	return []models.OrgModule{
-		models.CatalogComplianceModule,
-	}
-}
-
 // Annotations of the MappedControl
-func (m MappedControl) Annotations() []schema.Annotation {
+func (MappedControl) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 	}
@@ -145,14 +139,26 @@ func (MappedControl) Hooks() []ent.Hook {
 	}
 }
 
+// Interceptors of the MappedControl
+func (MappedControl) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		// mapped controls are org owned, but we need to ensure the groups are filtered as well
+		interceptors.FilterQueryResults[generated.MappedControl](),
+	}
+}
+
 // Policy of the MappedControl
-func (m MappedControl) Policy() ent.Policy {
+func (MappedControl) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.CanCreateObjectsUnderParent[*generated.MappedControlMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.MappedControlMutation](),
 		),
 	)
+}
+
+func (MappedControl) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
 }

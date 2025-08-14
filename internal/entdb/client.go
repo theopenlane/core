@@ -151,7 +151,13 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 
 	db.Intercept(interceptors.QueryLogger())
 	db.Intercept(BlockInterceptor())
-	db.Intercept(interceptors.InterceptorModules())
+
+	modulesEnabled := true
+	if db.EntConfig != nil {
+		modulesEnabled = db.EntConfig.Modules.Enabled
+	}
+
+	db.Intercept(interceptors.InterceptorModules(modulesEnabled))
 
 	// adds default hooks for all edge permissions
 	db.Use(hooks.HookEdgePermissions())
@@ -249,8 +255,11 @@ func (c *client) runAtlasMigrations(ctx context.Context) error {
 // EnablePostgresExtensions enables the postgres extensions
 // needed when running migrations
 func EnablePostgresExtensions(db *sql.DB) error {
+	timeout, cancelFn := context.WithTimeout(context.Background(), time.Second)
+	defer cancelFn()
+
 	for _, ext := range postgresExtensions {
-		if _, err := db.Exec(fmt.Sprintf(`CREATE EXTENSION IF NOT EXISTS %s WITH SCHEMA public;`, ext)); err != nil {
+		if _, err := db.ExecContext(timeout, fmt.Sprintf(`CREATE EXTENSION IF NOT EXISTS %s WITH SCHEMA public;`, ext)); err != nil {
 			return fmt.Errorf("could not enable %s extension: %w", ext, err)
 		}
 	}
