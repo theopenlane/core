@@ -1904,6 +1904,8 @@ func adminSearchTrustCenterCompliances(ctx context.Context, query string, after 
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
+				trustcentercompliance.StandardIDContainsFold(query),    // search by StandardID
+				trustcentercompliance.TrustCenterIDContainsFold(query), // search by TrustCenterID
 			),
 		)
 

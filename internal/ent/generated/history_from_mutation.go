@@ -10697,6 +10697,14 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromCreate(ctx context.Cont
 		create = create.SetTags(tags)
 	}
 
+	if standardID, exists := m.StandardID(); exists {
+		create = create.SetStandardID(standardID)
+	}
+
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -10770,6 +10778,18 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetTags(trustcentercompliance.Tags)
 		}
 
+		if standardID, exists := m.StandardID(); exists {
+			create = create.SetStandardID(standardID)
+		} else {
+			create = create.SetStandardID(trustcentercompliance.StandardID)
+		}
+
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(trustcentercompliance.TrustCenterID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -10812,6 +10832,8 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetDeletedAt(trustcentercompliance.DeletedAt).
 			SetDeletedBy(trustcentercompliance.DeletedBy).
 			SetTags(trustcentercompliance.Tags).
+			SetStandardID(trustcentercompliance.StandardID).
+			SetTrustCenterID(trustcentercompliance.TrustCenterID).
 			Save(ctx)
 		if err != nil {
 			return err

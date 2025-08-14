@@ -9641,23 +9641,24 @@ func (c *ScheduledJobRunUpdateOne) SetInput(i UpdateScheduledJobRunInput) *Sched
 
 // CreateStandardInput represents a mutation input for creating standards.
 type CreateStandardInput struct {
-	Tags                 []string
-	Revision             *string
-	Name                 string
-	ShortName            *string
-	Framework            *string
-	Description          *string
-	GoverningBodyLogoURL *string
-	GoverningBody        *string
-	Domains              []string
-	Link                 *string
-	Status               *enums.StandardStatus
-	IsPublic             *bool
-	FreeToUse            *bool
-	StandardType         *string
-	Version              *string
-	OwnerID              *string
-	ControlIDs           []string
+	Tags                     []string
+	Revision                 *string
+	Name                     string
+	ShortName                *string
+	Framework                *string
+	Description              *string
+	GoverningBodyLogoURL     *string
+	GoverningBody            *string
+	Domains                  []string
+	Link                     *string
+	Status                   *enums.StandardStatus
+	IsPublic                 *bool
+	FreeToUse                *bool
+	StandardType             *string
+	Version                  *string
+	OwnerID                  *string
+	ControlIDs               []string
+	TrustCenterComplianceIDs []string
 }
 
 // Mutate applies the CreateStandardInput on the StandardMutation builder.
@@ -9711,6 +9712,9 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.TrustCenterComplianceIDs; len(v) > 0 {
+		m.AddTrustCenterComplianceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateStandardInput on the StandardCreate builder.
@@ -9721,42 +9725,45 @@ func (c *StandardCreate) SetInput(i CreateStandardInput) *StandardCreate {
 
 // UpdateStandardInput represents a mutation input for updating standards.
 type UpdateStandardInput struct {
-	ClearTags                 bool
-	Tags                      []string
-	AppendTags                []string
-	ClearRevision             bool
-	Revision                  *string
-	Name                      *string
-	ClearShortName            bool
-	ShortName                 *string
-	ClearFramework            bool
-	Framework                 *string
-	ClearDescription          bool
-	Description               *string
-	ClearGoverningBodyLogoURL bool
-	GoverningBodyLogoURL      *string
-	ClearGoverningBody        bool
-	GoverningBody             *string
-	ClearDomains              bool
-	Domains                   []string
-	AppendDomains             []string
-	ClearLink                 bool
-	Link                      *string
-	ClearStatus               bool
-	Status                    *enums.StandardStatus
-	ClearIsPublic             bool
-	IsPublic                  *bool
-	ClearFreeToUse            bool
-	FreeToUse                 *bool
-	ClearStandardType         bool
-	StandardType              *string
-	ClearVersion              bool
-	Version                   *string
-	ClearOwner                bool
-	OwnerID                   *string
-	ClearControls             bool
-	AddControlIDs             []string
-	RemoveControlIDs          []string
+	ClearTags                      bool
+	Tags                           []string
+	AppendTags                     []string
+	ClearRevision                  bool
+	Revision                       *string
+	Name                           *string
+	ClearShortName                 bool
+	ShortName                      *string
+	ClearFramework                 bool
+	Framework                      *string
+	ClearDescription               bool
+	Description                    *string
+	ClearGoverningBodyLogoURL      bool
+	GoverningBodyLogoURL           *string
+	ClearGoverningBody             bool
+	GoverningBody                  *string
+	ClearDomains                   bool
+	Domains                        []string
+	AppendDomains                  []string
+	ClearLink                      bool
+	Link                           *string
+	ClearStatus                    bool
+	Status                         *enums.StandardStatus
+	ClearIsPublic                  bool
+	IsPublic                       *bool
+	ClearFreeToUse                 bool
+	FreeToUse                      *bool
+	ClearStandardType              bool
+	StandardType                   *string
+	ClearVersion                   bool
+	Version                        *string
+	ClearOwner                     bool
+	OwnerID                        *string
+	ClearControls                  bool
+	AddControlIDs                  []string
+	RemoveControlIDs               []string
+	ClearTrustCenterCompliances    bool
+	AddTrustCenterComplianceIDs    []string
+	RemoveTrustCenterComplianceIDs []string
 }
 
 // Mutate applies the UpdateStandardInput on the StandardMutation builder.
@@ -9868,6 +9875,15 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearTrustCenterCompliances {
+		m.ClearTrustCenterCompliances()
+	}
+	if v := i.AddTrustCenterComplianceIDs; len(v) > 0 {
+		m.AddTrustCenterComplianceIDs(v...)
+	}
+	if v := i.RemoveTrustCenterComplianceIDs; len(v) > 0 {
+		m.RemoveTrustCenterComplianceIDs(v...)
 	}
 }
 
@@ -11106,6 +11122,7 @@ type CreateTrustCenterInput struct {
 	CustomDomainID             *string
 	SettingID                  *string
 	TrustCenterSubprocessorIDs []string
+	TrustCenterComplianceIDs   []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -11124,6 +11141,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.TrustCenterSubprocessorIDs; len(v) > 0 {
 		m.AddTrustCenterSubprocessorIDs(v...)
+	}
+	if v := i.TrustCenterComplianceIDs; len(v) > 0 {
+		m.AddTrustCenterComplianceIDs(v...)
 	}
 }
 
@@ -11147,6 +11167,9 @@ type UpdateTrustCenterInput struct {
 	ClearTrustCenterSubprocessors    bool
 	AddTrustCenterSubprocessorIDs    []string
 	RemoveTrustCenterSubprocessorIDs []string
+	ClearTrustCenterCompliances      bool
+	AddTrustCenterComplianceIDs      []string
+	RemoveTrustCenterComplianceIDs   []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -11187,6 +11210,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.RemoveTrustCenterSubprocessorIDs; len(v) > 0 {
 		m.RemoveTrustCenterSubprocessorIDs(v...)
 	}
+	if i.ClearTrustCenterCompliances {
+		m.ClearTrustCenterCompliances()
+	}
+	if v := i.AddTrustCenterComplianceIDs; len(v) > 0 {
+		m.AddTrustCenterComplianceIDs(v...)
+	}
+	if v := i.RemoveTrustCenterComplianceIDs; len(v) > 0 {
+		m.RemoveTrustCenterComplianceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateTrustCenterInput on the TrustCenterUpdate builder.
@@ -11203,7 +11235,9 @@ func (c *TrustCenterUpdateOne) SetInput(i UpdateTrustCenterInput) *TrustCenterUp
 
 // CreateTrustCenterComplianceInput represents a mutation input for creating trustcentercompliances.
 type CreateTrustCenterComplianceInput struct {
-	Tags []string
+	Tags          []string
+	TrustCenterID *string
+	StandardID    string
 }
 
 // Mutate applies the CreateTrustCenterComplianceInput on the TrustCenterComplianceMutation builder.
@@ -11211,6 +11245,10 @@ func (i *CreateTrustCenterComplianceInput) Mutate(m *TrustCenterComplianceMutati
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	m.SetStandardID(i.StandardID)
 }
 
 // SetInput applies the change-set in the CreateTrustCenterComplianceInput on the TrustCenterComplianceCreate builder.
@@ -11221,9 +11259,12 @@ func (c *TrustCenterComplianceCreate) SetInput(i CreateTrustCenterComplianceInpu
 
 // UpdateTrustCenterComplianceInput represents a mutation input for updating trustcentercompliances.
 type UpdateTrustCenterComplianceInput struct {
-	ClearTags  bool
-	Tags       []string
-	AppendTags []string
+	ClearTags        bool
+	Tags             []string
+	AppendTags       []string
+	ClearTrustCenter bool
+	TrustCenterID    *string
+	StandardID       *string
 }
 
 // Mutate applies the UpdateTrustCenterComplianceInput on the TrustCenterComplianceMutation builder.
@@ -11236,6 +11277,15 @@ func (i *UpdateTrustCenterComplianceInput) Mutate(m *TrustCenterComplianceMutati
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	if v := i.StandardID; v != nil {
+		m.SetStandardID(*v)
 	}
 }
 

@@ -68,6 +68,8 @@ const (
 	EdgeOwner = "owner"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
+	// EdgeTrustCenterCompliances holds the string denoting the trust_center_compliances edge name in mutations.
+	EdgeTrustCenterCompliances = "trust_center_compliances"
 	// Table holds the table name of the standard in the database.
 	Table = "standards"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -84,6 +86,13 @@ const (
 	ControlsInverseTable = "controls"
 	// ControlsColumn is the table column denoting the controls relation/edge.
 	ControlsColumn = "standard_id"
+	// TrustCenterCompliancesTable is the table that holds the trust_center_compliances relation/edge.
+	TrustCenterCompliancesTable = "trust_center_compliances"
+	// TrustCenterCompliancesInverseTable is the table name for the TrustCenterCompliance entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentercompliance" package.
+	TrustCenterCompliancesInverseTable = "trust_center_compliances"
+	// TrustCenterCompliancesColumn is the table column denoting the trust_center_compliances relation/edge.
+	TrustCenterCompliancesColumn = "standard_id"
 )
 
 // Columns holds all SQL columns for standard fields.
@@ -130,7 +139,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [10]ent.Hook
+	Hooks        [11]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -306,6 +315,20 @@ func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustCenterCompliancesCount orders the results by trust_center_compliances count.
+func ByTrustCenterCompliancesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterCompliancesStep(), opts...)
+	}
+}
+
+// ByTrustCenterCompliances orders the results by trust_center_compliances terms.
+func ByTrustCenterCompliances(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterCompliancesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -318,6 +341,13 @@ func newControlsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
+	)
+}
+func newTrustCenterCompliancesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterCompliancesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterCompliancesTable, TrustCenterCompliancesColumn),
 	)
 }
 
