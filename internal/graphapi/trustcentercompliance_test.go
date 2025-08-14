@@ -9,7 +9,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -24,14 +24,14 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateTrustCenterComplianceInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateTrustCenterComplianceInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input with standard and trust center",
-			request: openlaneclient.CreateTrustCenterComplianceInput{
+			request: testclient.CreateTrustCenterComplianceInput{
 				StandardID:    standard1.ID,
 				TrustCenterID: &trustCenter1.ID,
 			},
@@ -40,7 +40,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 		},
 		{
 			name: "happy path, with trust center and tags",
-			request: openlaneclient.CreateTrustCenterComplianceInput{
+			request: testclient.CreateTrustCenterComplianceInput{
 				StandardID:    standard1.ID,
 				TrustCenterID: &trustCenter1.ID,
 				Tags:          []string{"compliance", "test"},
@@ -50,7 +50,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 		},
 		{
 			name: "happy path, using public standard",
-			request: openlaneclient.CreateTrustCenterComplianceInput{
+			request: testclient.CreateTrustCenterComplianceInput{
 				StandardID:    publicStandard.ID,
 				TrustCenterID: &trustCenter1.ID,
 				Tags:          []string{"public", "compliance"},
@@ -60,7 +60,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 		},
 		{
 			name: "happy path, using personal access token",
-			request: openlaneclient.CreateTrustCenterComplianceInput{
+			request: testclient.CreateTrustCenterComplianceInput{
 				StandardID:    standard1.ID,
 				TrustCenterID: &trustCenter1.ID,
 				Tags:          []string{"pat", "test"},
@@ -70,7 +70,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateTrustCenterComplianceInput{
+			request: testclient.CreateTrustCenterComplianceInput{
 				StandardID:    standard1.ID,
 				TrustCenterID: &trustCenter1.ID,
 				Tags:          []string{"api", "token"},
@@ -80,17 +80,17 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 		},
 		{
 			name: "user not authorized, different org standard",
-			request: openlaneclient.CreateTrustCenterComplianceInput{
+			request: testclient.CreateTrustCenterComplianceInput{
 				StandardID:    standard2.ID,
 				TrustCenterID: &trustCenter1.ID,
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "user not authorized, different org trust center",
-			request: openlaneclient.CreateTrustCenterComplianceInput{
+			request: testclient.CreateTrustCenterComplianceInput{
 				StandardID:    standard1.ID,
 				TrustCenterID: &trustCenter2.ID,
 			},
@@ -100,7 +100,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateTrustCenterComplianceInput{
+			request: testclient.CreateTrustCenterComplianceInput{
 				StandardID:    standard1.ID,
 				TrustCenterID: &trustCenter1.ID,
 			},
@@ -110,7 +110,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 		},
 		{
 			name: "missing required field",
-			request: openlaneclient.CreateTrustCenterComplianceInput{
+			request: testclient.CreateTrustCenterComplianceInput{
 				Tags: []string{"missing", "standard"},
 			},
 			client:      suite.client.api,
@@ -119,17 +119,17 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 		},
 		{
 			name: "invalid standard id",
-			request: openlaneclient.CreateTrustCenterComplianceInput{
+			request: testclient.CreateTrustCenterComplianceInput{
 				StandardID:    "invalid-id",
 				TrustCenterID: &trustCenter1.ID,
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "constraint failed",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "invalid trust center id",
-			request: openlaneclient.CreateTrustCenterComplianceInput{
+			request: testclient.CreateTrustCenterComplianceInput{
 				StandardID:    standard1.ID,
 				TrustCenterID: lo.ToPtr("invalid-id"),
 			},
@@ -203,7 +203,7 @@ func TestQueryTrustCenterCompliance(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -323,7 +323,7 @@ func TestQueryTrustCenterCompliances(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -437,7 +437,7 @@ func TestMutationDeleteTrustCenterCompliance(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

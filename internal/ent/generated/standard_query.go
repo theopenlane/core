@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -24,15 +25,17 @@ import (
 // StandardQuery is the builder for querying Standard entities.
 type StandardQuery struct {
 	config
-	ctx               *QueryContext
-	order             []standard.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.Standard
-	withOwner         *OrganizationQuery
-	withControls      *ControlQuery
-	loadTotal         []func(context.Context, []*Standard) error
-	modifiers         []func(*sql.Selector)
-	withNamedControls map[string]*ControlQuery
+	ctx                             *QueryContext
+	order                           []standard.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.Standard
+	withOwner                       *OrganizationQuery
+	withControls                    *ControlQuery
+	withTrustCenterCompliances      *TrustCenterComplianceQuery
+	loadTotal                       []func(context.Context, []*Standard) error
+	modifiers                       []func(*sql.Selector)
+	withNamedControls               map[string]*ControlQuery
+	withNamedTrustCenterCompliances map[string]*TrustCenterComplianceQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -113,6 +116,31 @@ func (_q *StandardQuery) QueryControls() *ControlQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.Control
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTrustCenterCompliances chains the current query on the "trust_center_compliances" edge.
+func (_q *StandardQuery) QueryTrustCenterCompliances() *TrustCenterComplianceQuery {
+	query := (&TrustCenterComplianceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, selector),
+			sqlgraph.To(trustcentercompliance.Table, trustcentercompliance.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, standard.TrustCenterCompliancesTable, standard.TrustCenterCompliancesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterCompliance
+		step.Edge.Schema = schemaConfig.TrustCenterCompliance
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -306,13 +334,14 @@ func (_q *StandardQuery) Clone() *StandardQuery {
 		return nil
 	}
 	return &StandardQuery{
-		config:       _q.config,
-		ctx:          _q.ctx.Clone(),
-		order:        append([]standard.OrderOption{}, _q.order...),
-		inters:       append([]Interceptor{}, _q.inters...),
-		predicates:   append([]predicate.Standard{}, _q.predicates...),
-		withOwner:    _q.withOwner.Clone(),
-		withControls: _q.withControls.Clone(),
+		config:                     _q.config,
+		ctx:                        _q.ctx.Clone(),
+		order:                      append([]standard.OrderOption{}, _q.order...),
+		inters:                     append([]Interceptor{}, _q.inters...),
+		predicates:                 append([]predicate.Standard{}, _q.predicates...),
+		withOwner:                  _q.withOwner.Clone(),
+		withControls:               _q.withControls.Clone(),
+		withTrustCenterCompliances: _q.withTrustCenterCompliances.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -339,6 +368,17 @@ func (_q *StandardQuery) WithControls(opts ...func(*ControlQuery)) *StandardQuer
 		opt(query)
 	}
 	_q.withControls = query
+	return _q
+}
+
+// WithTrustCenterCompliances tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_compliances" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *StandardQuery) WithTrustCenterCompliances(opts ...func(*TrustCenterComplianceQuery)) *StandardQuery {
+	query := (&TrustCenterComplianceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustCenterCompliances = query
 	return _q
 }
 
@@ -426,9 +466,10 @@ func (_q *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	var (
 		nodes       = []*Standard{}
 		_spec       = _q.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			_q.withOwner != nil,
 			_q.withControls != nil,
+			_q.withTrustCenterCompliances != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -467,10 +508,26 @@ func (_q *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 			return nil, err
 		}
 	}
+	if query := _q.withTrustCenterCompliances; query != nil {
+		if err := _q.loadTrustCenterCompliances(ctx, query, nodes,
+			func(n *Standard) { n.Edges.TrustCenterCompliances = []*TrustCenterCompliance{} },
+			func(n *Standard, e *TrustCenterCompliance) {
+				n.Edges.TrustCenterCompliances = append(n.Edges.TrustCenterCompliances, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedControls {
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Standard) { n.appendNamedControls(name) },
 			func(n *Standard, e *Control) { n.appendNamedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTrustCenterCompliances {
+		if err := _q.loadTrustCenterCompliances(ctx, query, nodes,
+			func(n *Standard) { n.appendNamedTrustCenterCompliances(name) },
+			func(n *Standard, e *TrustCenterCompliance) { n.appendNamedTrustCenterCompliances(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -526,6 +583,36 @@ func (_q *StandardQuery) loadControls(ctx context.Context, query *ControlQuery, 
 	}
 	query.Where(predicate.Control(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(standard.ControlsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.StandardID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "standard_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *StandardQuery) loadTrustCenterCompliances(ctx context.Context, query *TrustCenterComplianceQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *TrustCenterCompliance)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Standard)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(trustcentercompliance.FieldStandardID)
+	}
+	query.Where(predicate.TrustCenterCompliance(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(standard.TrustCenterCompliancesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -654,6 +741,20 @@ func (_q *StandardQuery) WithNamedControls(name string, opts ...func(*ControlQue
 		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
 	_q.withNamedControls[name] = query
+	return _q
+}
+
+// WithNamedTrustCenterCompliances tells the query-builder to eager-load the nodes that are connected to the "trust_center_compliances"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *StandardQuery) WithNamedTrustCenterCompliances(name string, opts ...func(*TrustCenterComplianceQuery)) *StandardQuery {
+	query := (&TrustCenterComplianceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTrustCenterCompliances == nil {
+		_q.withNamedTrustCenterCompliances = make(map[string]*TrustCenterComplianceQuery)
+	}
+	_q.withNamedTrustCenterCompliances[name] = query
 	return _q
 }
 

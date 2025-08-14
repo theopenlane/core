@@ -3023,13 +3023,15 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterCompliance",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentercompliance.FieldCreatedAt: {Type: field.TypeTime, Column: trustcentercompliance.FieldCreatedAt},
-			trustcentercompliance.FieldUpdatedAt: {Type: field.TypeTime, Column: trustcentercompliance.FieldUpdatedAt},
-			trustcentercompliance.FieldCreatedBy: {Type: field.TypeString, Column: trustcentercompliance.FieldCreatedBy},
-			trustcentercompliance.FieldUpdatedBy: {Type: field.TypeString, Column: trustcentercompliance.FieldUpdatedBy},
-			trustcentercompliance.FieldDeletedAt: {Type: field.TypeTime, Column: trustcentercompliance.FieldDeletedAt},
-			trustcentercompliance.FieldDeletedBy: {Type: field.TypeString, Column: trustcentercompliance.FieldDeletedBy},
-			trustcentercompliance.FieldTags:      {Type: field.TypeJSON, Column: trustcentercompliance.FieldTags},
+			trustcentercompliance.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcentercompliance.FieldCreatedAt},
+			trustcentercompliance.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcentercompliance.FieldUpdatedAt},
+			trustcentercompliance.FieldCreatedBy:     {Type: field.TypeString, Column: trustcentercompliance.FieldCreatedBy},
+			trustcentercompliance.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcentercompliance.FieldUpdatedBy},
+			trustcentercompliance.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcentercompliance.FieldDeletedAt},
+			trustcentercompliance.FieldDeletedBy:     {Type: field.TypeString, Column: trustcentercompliance.FieldDeletedBy},
+			trustcentercompliance.FieldTags:          {Type: field.TypeJSON, Column: trustcentercompliance.FieldTags},
+			trustcentercompliance.FieldStandardID:    {Type: field.TypeString, Column: trustcentercompliance.FieldStandardID},
+			trustcentercompliance.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentercompliance.FieldTrustCenterID},
 		},
 	}
 	graph.Nodes[98] = &sqlgraph.Node{
@@ -3043,16 +3045,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterComplianceHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentercompliancehistory.FieldHistoryTime: {Type: field.TypeTime, Column: trustcentercompliancehistory.FieldHistoryTime},
-			trustcentercompliancehistory.FieldRef:         {Type: field.TypeString, Column: trustcentercompliancehistory.FieldRef},
-			trustcentercompliancehistory.FieldOperation:   {Type: field.TypeEnum, Column: trustcentercompliancehistory.FieldOperation},
-			trustcentercompliancehistory.FieldCreatedAt:   {Type: field.TypeTime, Column: trustcentercompliancehistory.FieldCreatedAt},
-			trustcentercompliancehistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: trustcentercompliancehistory.FieldUpdatedAt},
-			trustcentercompliancehistory.FieldCreatedBy:   {Type: field.TypeString, Column: trustcentercompliancehistory.FieldCreatedBy},
-			trustcentercompliancehistory.FieldUpdatedBy:   {Type: field.TypeString, Column: trustcentercompliancehistory.FieldUpdatedBy},
-			trustcentercompliancehistory.FieldDeletedAt:   {Type: field.TypeTime, Column: trustcentercompliancehistory.FieldDeletedAt},
-			trustcentercompliancehistory.FieldDeletedBy:   {Type: field.TypeString, Column: trustcentercompliancehistory.FieldDeletedBy},
-			trustcentercompliancehistory.FieldTags:        {Type: field.TypeJSON, Column: trustcentercompliancehistory.FieldTags},
+			trustcentercompliancehistory.FieldHistoryTime:   {Type: field.TypeTime, Column: trustcentercompliancehistory.FieldHistoryTime},
+			trustcentercompliancehistory.FieldRef:           {Type: field.TypeString, Column: trustcentercompliancehistory.FieldRef},
+			trustcentercompliancehistory.FieldOperation:     {Type: field.TypeEnum, Column: trustcentercompliancehistory.FieldOperation},
+			trustcentercompliancehistory.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcentercompliancehistory.FieldCreatedAt},
+			trustcentercompliancehistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcentercompliancehistory.FieldUpdatedAt},
+			trustcentercompliancehistory.FieldCreatedBy:     {Type: field.TypeString, Column: trustcentercompliancehistory.FieldCreatedBy},
+			trustcentercompliancehistory.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcentercompliancehistory.FieldUpdatedBy},
+			trustcentercompliancehistory.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcentercompliancehistory.FieldDeletedAt},
+			trustcentercompliancehistory.FieldDeletedBy:     {Type: field.TypeString, Column: trustcentercompliancehistory.FieldDeletedBy},
+			trustcentercompliancehistory.FieldTags:          {Type: field.TypeJSON, Column: trustcentercompliancehistory.FieldTags},
+			trustcentercompliancehistory.FieldStandardID:    {Type: field.TypeString, Column: trustcentercompliancehistory.FieldStandardID},
+			trustcentercompliancehistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentercompliancehistory.FieldTrustCenterID},
 		},
 	}
 	graph.Nodes[99] = &sqlgraph.Node{
@@ -7847,6 +7851,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Control",
 	)
 	graph.MustAddE(
+		"trust_center_compliances",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterCompliancesTable,
+			Columns: []string{standard.TrustCenterCompliancesColumn},
+			Bidi:    false,
+		},
+		"Standard",
+		"TrustCenterCompliance",
+	)
+	graph.MustAddE(
 		"evidence",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -8373,6 +8389,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenter",
 		"TrustCenterSubprocessor",
+	)
+	graph.MustAddE(
+		"trust_center_compliances",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterCompliancesTable,
+			Columns: []string{trustcenter.TrustCenterCompliancesColumn},
+			Bidi:    false,
+		},
+		"TrustCenter",
+		"TrustCenterCompliance",
+	)
+	graph.MustAddE(
+		"trust_center",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.TrustCenterTable,
+			Columns: []string{trustcentercompliance.TrustCenterColumn},
+			Bidi:    false,
+		},
+		"TrustCenterCompliance",
+		"TrustCenter",
+	)
+	graph.MustAddE(
+		"standard",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.StandardTable,
+			Columns: []string{trustcentercompliance.StandardColumn},
+			Bidi:    false,
+		},
+		"TrustCenterCompliance",
+		"Standard",
 	)
 	graph.MustAddE(
 		"trust_center",
@@ -24382,6 +24434,20 @@ func (f *StandardFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	})))
 }
 
+// WhereHasTrustCenterCompliances applies a predicate to check if query has an edge trust_center_compliances.
+func (f *StandardFilter) WhereHasTrustCenterCompliances() {
+	f.Where(entql.HasEdge("trust_center_compliances"))
+}
+
+// WhereHasTrustCenterCompliancesWith applies a predicate to check if query has an edge trust_center_compliances with a given conditions (other predicates).
+func (f *StandardFilter) WhereHasTrustCenterCompliancesWith(preds ...predicate.TrustCenterCompliance) {
+	f.Where(entql.HasEdgeWith("trust_center_compliances", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *StandardHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -26603,6 +26669,20 @@ func (f *TrustCenterFilter) WhereHasTrustCenterSubprocessorsWith(preds ...predic
 	})))
 }
 
+// WhereHasTrustCenterCompliances applies a predicate to check if query has an edge trust_center_compliances.
+func (f *TrustCenterFilter) WhereHasTrustCenterCompliances() {
+	f.Where(entql.HasEdge("trust_center_compliances"))
+}
+
+// WhereHasTrustCenterCompliancesWith applies a predicate to check if query has an edge trust_center_compliances with a given conditions (other predicates).
+func (f *TrustCenterFilter) WhereHasTrustCenterCompliancesWith(preds ...predicate.TrustCenterCompliance) {
+	f.Where(entql.HasEdgeWith("trust_center_compliances", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *TrustCenterComplianceQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -26676,6 +26756,44 @@ func (f *TrustCenterComplianceFilter) WhereDeletedBy(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *TrustCenterComplianceFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(trustcentercompliance.FieldTags))
+}
+
+// WhereStandardID applies the entql string predicate on the standard_id field.
+func (f *TrustCenterComplianceFilter) WhereStandardID(p entql.StringP) {
+	f.Where(p.Field(trustcentercompliance.FieldStandardID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TrustCenterComplianceFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(trustcentercompliance.FieldTrustCenterID))
+}
+
+// WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
+func (f *TrustCenterComplianceFilter) WhereHasTrustCenter() {
+	f.Where(entql.HasEdge("trust_center"))
+}
+
+// WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
+func (f *TrustCenterComplianceFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
+	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasStandard applies a predicate to check if query has an edge standard.
+func (f *TrustCenterComplianceFilter) WhereHasStandard() {
+	f.Where(entql.HasEdge("standard"))
+}
+
+// WhereHasStandardWith applies a predicate to check if query has an edge standard with a given conditions (other predicates).
+func (f *TrustCenterComplianceFilter) WhereHasStandardWith(preds ...predicate.Standard) {
+	f.Where(entql.HasEdgeWith("standard", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -26766,6 +26884,16 @@ func (f *TrustCenterComplianceHistoryFilter) WhereDeletedBy(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *TrustCenterComplianceHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(trustcentercompliancehistory.FieldTags))
+}
+
+// WhereStandardID applies the entql string predicate on the standard_id field.
+func (f *TrustCenterComplianceHistoryFilter) WhereStandardID(p entql.StringP) {
+	f.Where(p.Field(trustcentercompliancehistory.FieldStandardID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TrustCenterComplianceHistoryFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(trustcentercompliancehistory.FieldTrustCenterID))
 }
 
 // addPredicate implements the predicateAdder interface.

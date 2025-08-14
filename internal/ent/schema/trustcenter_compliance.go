@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -75,6 +76,9 @@ func (t TrustCenterCompliance) Edges() []ent.Edge {
 			edgeSchema: Standard{},
 			field:      "standard_id",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Standard{}.Name()),
+			},
 		}),
 	}
 }

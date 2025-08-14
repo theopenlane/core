@@ -10,6 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 )
 
@@ -31,8 +33,50 @@ type TrustCenterCompliance struct {
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
-	Tags         []string `json:"tags,omitempty"`
+	Tags []string `json:"tags,omitempty"`
+	// ID of the standard
+	StandardID string `json:"standard_id,omitempty"`
+	// ID of the trust center
+	TrustCenterID string `json:"trust_center_id,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the TrustCenterComplianceQuery when eager-loading is set.
+	Edges        TrustCenterComplianceEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// TrustCenterComplianceEdges holds the relations/edges for other nodes in the graph.
+type TrustCenterComplianceEdges struct {
+	// TrustCenter holds the value of the trust_center edge.
+	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
+	// Standard holds the value of the standard edge.
+	Standard *Standard `json:"standard,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [2]bool
+	// totalCount holds the count of the edges above.
+	totalCount [2]map[string]int
+}
+
+// TrustCenterOrErr returns the TrustCenter value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterComplianceEdges) TrustCenterOrErr() (*TrustCenter, error) {
+	if e.TrustCenter != nil {
+		return e.TrustCenter, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: trustcenter.Label}
+	}
+	return nil, &NotLoadedError{edge: "trust_center"}
+}
+
+// StandardOrErr returns the Standard value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterComplianceEdges) StandardOrErr() (*Standard, error) {
+	if e.Standard != nil {
+		return e.Standard, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: standard.Label}
+	}
+	return nil, &NotLoadedError{edge: "standard"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -42,7 +86,7 @@ func (*TrustCenterCompliance) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentercompliance.FieldTags:
 			values[i] = new([]byte)
-		case trustcentercompliance.FieldID, trustcentercompliance.FieldCreatedBy, trustcentercompliance.FieldUpdatedBy, trustcentercompliance.FieldDeletedBy:
+		case trustcentercompliance.FieldID, trustcentercompliance.FieldCreatedBy, trustcentercompliance.FieldUpdatedBy, trustcentercompliance.FieldDeletedBy, trustcentercompliance.FieldStandardID, trustcentercompliance.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case trustcentercompliance.FieldCreatedAt, trustcentercompliance.FieldUpdatedAt, trustcentercompliance.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -111,6 +155,18 @@ func (_m *TrustCenterCompliance) assignValues(columns []string, values []any) er
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case trustcentercompliance.FieldStandardID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field standard_id", values[i])
+			} else if value.Valid {
+				_m.StandardID = value.String
+			}
+		case trustcentercompliance.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -122,6 +178,16 @@ func (_m *TrustCenterCompliance) assignValues(columns []string, values []any) er
 // This includes values selected through modifiers, order, etc.
 func (_m *TrustCenterCompliance) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryTrustCenter queries the "trust_center" edge of the TrustCenterCompliance entity.
+func (_m *TrustCenterCompliance) QueryTrustCenter() *TrustCenterQuery {
+	return NewTrustCenterComplianceClient(_m.config).QueryTrustCenter(_m)
+}
+
+// QueryStandard queries the "standard" edge of the TrustCenterCompliance entity.
+func (_m *TrustCenterCompliance) QueryStandard() *StandardQuery {
+	return NewTrustCenterComplianceClient(_m.config).QueryStandard(_m)
 }
 
 // Update returns a builder for updating this TrustCenterCompliance.
@@ -167,6 +233,12 @@ func (_m *TrustCenterCompliance) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("standard_id=")
+	builder.WriteString(_m.StandardID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }
