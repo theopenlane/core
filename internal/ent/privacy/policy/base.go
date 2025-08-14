@@ -19,7 +19,7 @@ var prePolicy = privacy.Policy{
 	Mutation: privacy.MutationPolicy{
 		// allow internal requests (used in tests) to proceed to mutate tables
 		rule.AllowIfInternalRequest(),
-		// rule.DenyIfMissingAllModules(),
+		rule.DenyIfMissingAllModules(),
 	},
 }
 

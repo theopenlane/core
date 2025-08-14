@@ -391,8 +391,7 @@ func generateModulePerSchema() error {
 	for _, schemaFile := range schemaFiles {
 		fileName := filepath.Base(schemaFile)
 
-		if strings.Contains(fileName, "history") ||
-			strings.Contains(fileName, "mixin") ||
+		if strings.Contains(fileName, "mixin") ||
 			strings.Contains(fileName, "default") {
 			continue
 		}
@@ -400,7 +399,7 @@ func generateModulePerSchema() error {
 		schemaName, modules := parseSchemaInfo(schemaFile)
 		if schemaName != "" && len(modules) > 0 {
 			entries = append(entries, moduleEntry{
-				SchemaName: strcase.UpperCamelCase(schemaName),
+				SchemaName: schemaName,
 				Modules:    modules,
 			})
 		}
@@ -459,13 +458,13 @@ func parseSchemaInfo(filePath string) (string, []string) {
 		if funcDecl, ok := n.(*ast.FuncDecl); ok {
 			if funcDecl.Recv != nil && len(funcDecl.Recv.List) > 0 {
 				if ident, ok := funcDecl.Recv.List[0].Type.(*ast.Ident); ok {
-					receiverType := ident.Name
+					receiver := ident.Name
 
 					if funcDecl.Name.Name == "Name" && schemaName == "" {
-						schemaName = extractNameFromMethod(funcDecl, file)
+						schemaName = receiver
 					}
 
-					if funcDecl.Name.Name == "Modules" && receiverType != "" {
+					if funcDecl.Name.Name == "Modules" && receiver != "" {
 						modules = extractModules(funcDecl)
 					}
 				}
@@ -475,47 +474,6 @@ func parseSchemaInfo(filePath string) (string, []string) {
 	})
 
 	return schemaName, modules
-}
-
-// extractNameFromMethod extracts the schema name from the Name() method
-func extractNameFromMethod(funcDecl *ast.FuncDecl, file *ast.File) string {
-	var name string
-
-	ast.Inspect(funcDecl.Body, func(n ast.Node) bool {
-		if returnStmt, ok := n.(*ast.ReturnStmt); ok {
-			if len(returnStmt.Results) > 0 {
-				switch result := returnStmt.Results[0].(type) {
-				case *ast.BasicLit:
-					name = strings.Trim(result.Value, `"`)
-				case *ast.Ident:
-					name = retrieveConstantValue(result.Name, file)
-				}
-			}
-		}
-		return name == ""
-	})
-
-	return name
-}
-
-// retrieveConstantValue resolves a constant value from the file
-func retrieveConstantValue(constName string, file *ast.File) string {
-	for _, decl := range file.Decls {
-		if genDecl, ok := decl.(*ast.GenDecl); ok && genDecl.Tok == token.CONST {
-			for _, spec := range genDecl.Specs {
-				if valueSpec, ok := spec.(*ast.ValueSpec); ok {
-					for i, name := range valueSpec.Names {
-						if name.Name == constName && i < len(valueSpec.Values) {
-							if basicLit, ok := valueSpec.Values[i].(*ast.BasicLit); ok {
-								return strings.Trim(basicLit.Value, `"`)
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	return ""
 }
 
 func extractModules(funcDecl *ast.FuncDecl) []string {

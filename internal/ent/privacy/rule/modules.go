@@ -160,7 +160,7 @@ func HasAllFeatures(ctx context.Context, feats ...models.OrgModule) (bool, model
 // If requireAll is true, all features must be enabled.
 //
 // If false, at least one must be enabled.
-func checkFeatures(ctx context.Context, requireAll bool, feats ...models.OrgModule) (bool, models.OrgModule, error) {
+func checkFeatures(ctx context.Context, requireAll bool, modules ...models.OrgModule) (bool, models.OrgModule, error) {
 	enabled, err := orgFeatures(ctx)
 	if err != nil {
 		return false, models.OrgModule(""), err
@@ -178,7 +178,7 @@ func checkFeatures(ctx context.Context, requireAll bool, feats ...models.OrgModu
 
 	if requireAll {
 		// all features must be enabled
-		for _, f := range feats {
+		for _, f := range modules {
 			if _, ok := enabledSet[string(f)]; !ok {
 				return false, f, nil
 			}
@@ -187,14 +187,14 @@ func checkFeatures(ctx context.Context, requireAll bool, feats ...models.OrgModu
 	}
 
 	// at least one feature must be enabled
-	for _, f := range feats {
+	for _, f := range modules {
 		if _, ok := enabledSet[string(f)]; ok {
 			return true, models.OrgModule(""), nil
 		}
 	}
 
 	// return the first feature by default
-	return false, feats[0], nil
+	return false, modules[0], nil
 }
 
 // AllowIfHasAnyFeature allows the operation if any of the provided features are enabled

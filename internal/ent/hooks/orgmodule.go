@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"errors"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
@@ -21,26 +22,17 @@ func HookOrgModule() ent.Hook {
 				return nil, err
 			}
 
-			ids, err := omm.IDs(ctx)
-			if err != nil {
-				return nil, err
-			}
-
 			orgID, ok := omm.OwnerID()
-			if !ok && orgID != "" {
-				return nil, err
+			if !ok || orgID == "" {
+				return v, errors.New("ownber id not exists")
 			}
 
-			var feats = make([]models.OrgModule, 0, len(ids))
-
-			for _, id := range ids {
-				module, err := omm.Client().OrgModule.Get(ctx, id)
-				if err != nil {
-					return nil, err
-				}
-
-				feats = append(feats, module.Module)
+			orgModule, ok := v.(*generated.OrgModule)
+			if !ok {
+				return v, errors.New("ownber id not exists")
 			}
+
+			feats := []models.OrgModule{orgModule.Module}
 
 			if err := createFeatureTuples(ctx, omm.Authz, orgID, feats); err != nil {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("error creating feature tuples")

@@ -151,7 +151,7 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 
 	db.Intercept(interceptors.QueryLogger())
 	db.Intercept(BlockInterceptor())
-	// db.Intercept(interceptors.InterceptorModules())
+	db.Intercept(interceptors.InterceptorModules())
 
 	// adds default hooks for all edge permissions
 	db.Use(hooks.HookEdgePermissions())

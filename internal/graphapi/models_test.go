@@ -33,7 +33,6 @@ import (
 
 type OrganizationBuilder struct {
 	client   *client
-	UserID   string
 	Features []models.OrgModule
 
 	// Fields
@@ -499,9 +498,6 @@ func (o *OrganizationBuilder) enableModules(ctx context.Context, t *testing.T, o
 	_, err := o.client.db.Authz.WriteTupleKeys(ctx, tuples, nil)
 	assert.NilError(t, err)
 
-	// create a context with the organization ID properly set for authentication
-	newCtx := auth.NewTestContextWithOrgID(o.UserID, orgID)
-
 	for _, feature := range features {
 		n, err := o.client.db.OrgModule.Update().
 			Where(
@@ -509,17 +505,17 @@ func (o *OrganizationBuilder) enableModules(ctx context.Context, t *testing.T, o
 				orgmodule.Module(feature),
 			).
 			SetActive(true).
-			Save(newCtx)
+			Save(ctx)
 		assert.NilError(t, err)
 
-		// if no rows were updated, the module doesn't exist - create it
+		// if no rows were updated, the module wasn't created - create it now
 		if n == 0 {
 			err = o.client.db.OrgModule.Create().
 				SetOwnerID(orgID).
 				SetModule(feature).
 				SetActive(true).
 				SetPrice(models.Price{Amount: 0, Interval: "month"}).
-				Exec(newCtx)
+				Exec(ctx)
 			assert.NilError(t, err)
 		}
 	}
