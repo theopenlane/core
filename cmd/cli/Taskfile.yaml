@@ -173,7 +173,7 @@ tasks:
       STORE_ID:
         sh: fga store list --api-token={{ .FGA_API_TOKEN }} | jq -r '.stores.[].id'
       USER_ID:
-        sh: ../../openlane-cli user get -z json --host {{ .OPENLANE_API_HOST }} | jq -r '.self.id'
+        sh: go run main.go user get -z json --host {{ .OPENLANE_API_HOST }} | jq -r '.self.id'
     cmds:
       - fga tuple write --store-id={{ .STORE_ID }} user:{{ .USER_ID }} system_admin system:openlane_core --api-token={{ .FGA_API_TOKEN }}
 
@@ -256,7 +256,7 @@ tasks:
       MODELS:
         sh: ls -d ../../jsonschema/models/* | cut -f5 -d'/'
     cmds:
-      - for: {var: MODELS, as: MODEL}
+      - for: { var: MODELS, as: MODEL }
         cmd: go run main.go template create -n {{ .MODEL }} -t ROOTTEMPLATE --jsonconfig="../../jsonschema/models/{{ .MODEL }}/generate/{{ .MODEL }}.json"
 
   # === Organization Settings ===

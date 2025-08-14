@@ -6,11 +6,18 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // TrustCenterCompliance holds the schema definition for the TrustCenterCompliance entity
@@ -40,7 +47,15 @@ func (TrustCenterCompliance) PluralName() string {
 
 // Fields of the TrustCenterCompliance
 func (TrustCenterCompliance) Fields() []ent.Field {
-	return []ent.Field{}
+	return []ent.Field{
+		field.String("standard_id").
+			Comment("ID of the standard").
+			NotEmpty(),
+		field.String("trust_center_id").
+			Comment("ID of the trust center").
+			NotEmpty().
+			Optional(),
+	}
 }
 
 // Mixin of the TrustCenterCompliance
@@ -50,37 +65,58 @@ func (t TrustCenterCompliance) Mixin() []ent.Mixin {
 
 // Edges of the TrustCenterCompliance
 func (t TrustCenterCompliance) Edges() []ent.Edge {
-	return []ent.Edge{}
+	return []ent.Edge{
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: TrustCenter{},
+			field:      "trust_center_id",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Standard{},
+			field:      "standard_id",
+			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Standard{}.Name()),
+			},
+		}),
+	}
 }
 
 // Hooks of the TrustCenterCompliance
 func (TrustCenterCompliance) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookTrustCenterComplianceAuthz(),
+	}
 }
 
 // Policy of the TrustCenterCompliance
 func (TrustCenterCompliance) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysDenyRule(),
-		),
 		policy.WithMutationRules(
-			privacy.AlwaysDenyRule(),
+			entfga.CheckEditAccess[*generated.TrustCenterComplianceMutation](),
 		),
 	)
 }
 
 // Indexes of the TrustCenterCompliance
 func (TrustCenterCompliance) Indexes() []ent.Index {
-	return []ent.Index{}
+	return []ent.Index{
+		index.Fields("standard_id", "trust_center_id").
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+	}
 }
 
 // Annotations of the TrustCenterCompliance
 func (TrustCenterCompliance) Annotations() []schema.Annotation {
-	return []schema.Annotation{}
+	return []schema.Annotation{
+		entfga.SettingsChecks("trust_center"),
+	}
 }
 
 // Interceptors of the TrustCenterCompliance
 func (TrustCenterCompliance) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
+	return []ent.Interceptor{
+		interceptors.InterceptorTrustCenterChild(),
+	}
 }
