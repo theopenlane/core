@@ -4615,12 +4615,38 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "standard_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterCompliancesTable holds the schema information for the "trust_center_compliances" table.
 	TrustCenterCompliancesTable = &schema.Table{
 		Name:       "trust_center_compliances",
 		Columns:    TrustCenterCompliancesColumns,
 		PrimaryKey: []*schema.Column{TrustCenterCompliancesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "trust_center_compliances_standards_trust_center_compliances",
+				Columns:    []*schema.Column{TrustCenterCompliancesColumns[8]},
+				RefColumns: []*schema.Column{StandardsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "trust_center_compliances_trust_centers_trust_center_compliances",
+				Columns:    []*schema.Column{TrustCenterCompliancesColumns[9]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentercompliance_standard_id_trust_center_id",
+				Unique:  true,
+				Columns: []*schema.Column{TrustCenterCompliancesColumns[8], TrustCenterCompliancesColumns[9]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
 	}
 	// TrustCenterComplianceHistoryColumns holds the columns for the "trust_center_compliance_history" table.
 	TrustCenterComplianceHistoryColumns = []*schema.Column{
@@ -4635,6 +4661,8 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "standard_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterComplianceHistoryTable holds the schema information for the "trust_center_compliance_history" table.
 	TrustCenterComplianceHistoryTable = &schema.Table{
@@ -8308,6 +8336,8 @@ func init() {
 	}
 	TrustCentersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TrustCentersTable.ForeignKeys[1].RefTable = CustomDomainsTable
+	TrustCenterCompliancesTable.ForeignKeys[0].RefTable = StandardsTable
+	TrustCenterCompliancesTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterComplianceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_compliance_history",
 	}

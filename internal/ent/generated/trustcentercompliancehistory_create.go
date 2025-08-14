@@ -145,6 +145,26 @@ func (_c *TrustCenterComplianceHistoryCreate) SetTags(v []string) *TrustCenterCo
 	return _c
 }
 
+// SetStandardID sets the "standard_id" field.
+func (_c *TrustCenterComplianceHistoryCreate) SetStandardID(v string) *TrustCenterComplianceHistoryCreate {
+	_c.mutation.SetStandardID(v)
+	return _c
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *TrustCenterComplianceHistoryCreate) SetTrustCenterID(v string) *TrustCenterComplianceHistoryCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *TrustCenterComplianceHistoryCreate) SetNillableTrustCenterID(v *string) *TrustCenterComplianceHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterComplianceHistoryCreate) SetID(v string) *TrustCenterComplianceHistoryCreate {
 	_c.mutation.SetID(v)
@@ -244,6 +264,9 @@ func (_c *TrustCenterComplianceHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterComplianceHistory.operation": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.StandardID(); !ok {
+		return &ValidationError{Name: "standard_id", err: errors.New(`generated: missing required field "TrustCenterComplianceHistory.standard_id"`)}
+	}
 	return nil
 }
 
@@ -319,6 +342,14 @@ func (_c *TrustCenterComplianceHistoryCreate) createSpec() (*TrustCenterComplian
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(trustcentercompliancehistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.StandardID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldStandardID, field.TypeString, value)
+		_node.StandardID = value
+	}
+	if value, ok := _c.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
 	}
 	return _node, _spec
 }
