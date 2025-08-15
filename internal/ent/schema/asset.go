@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 )
 
@@ -72,7 +73,15 @@ func (a Asset) Edges() []ent.Edge {
 	}
 }
 
-func (Asset) Policy() ent.Policy {
+func (a Asset) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
+	}
+}
+
+// Policy of the Asset
+func (a Asset) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
@@ -81,10 +90,8 @@ func (Asset) Policy() ent.Policy {
 }
 
 // Annotations of the Asset
-func (Asset) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("asset-management"),
-	}
+func (a Asset) Annotations() []schema.Annotation {
+	return []schema.Annotation{}
 }
 
 // Indexes of the Asset

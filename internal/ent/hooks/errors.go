@@ -71,6 +71,8 @@ var (
 	ErrFutureTimeNotAllowed = errors.New("time cannot be in the future")
 	// ErrFieldRequired is returned when a field is required but not provided
 	ErrFieldRequired = errors.New("field is required but not provided")
+	// ErrOwnerIDNotExists is returned when an owner_id cannot be found
+	ErrOwnerIDNotExists = errors.New("owner_id is required")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

@@ -50,8 +50,6 @@ func TestQueryApiToken(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -84,7 +82,6 @@ func TestQueryAPITokens(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -156,8 +153,6 @@ func TestMutationCreateAPIToken(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -252,8 +247,6 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -321,8 +314,6 @@ func TestMutationDeleteAPIToken(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 

@@ -3,14 +3,13 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/hush"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Hush maps configured integrations (github, slack, etc.) to organizations
@@ -87,13 +86,6 @@ func (h Hush) Edges() []ent.Edge {
 	}
 }
 
-// Annotations of the Hushhh
-func (Hush) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("base"),
-	}
-}
-
 // Mixin of the Hush shhhh
 func (h Hush) Mixin() []ent.Mixin {
 	return mixinConfig{
@@ -115,4 +107,9 @@ func (Hush) Policy() ent.Policy {
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+func (Hush) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
 }

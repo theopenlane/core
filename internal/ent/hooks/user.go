@@ -153,15 +153,9 @@ func HookUser() ent.Hook {
 					return nil, err
 				}
 
-				modulesCreated, err := createDefaultOrgModulesProductsPrices(ctx, org, m, orgSubs, withPersonalOrg())
+				_, err = createDefaultOrgModulesProductsPrices(ctx, org, m, orgSubs, withPersonalOrg())
 				if err != nil {
 					return nil, err
-				}
-
-				if m.Client().EntitlementManager != nil {
-					if err := createFeatureTuples(ctx, m.Authz, org.ID, modulesCreated); err != nil {
-						return nil, err
-					}
 				}
 
 				// send a welcome email to the user

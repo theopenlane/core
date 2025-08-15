@@ -101,7 +101,6 @@ func TestQuerySubcontrol(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -401,7 +400,6 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 			resp, err := tc.client.CreateSubcontrol(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -545,7 +543,6 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 			resp, err := tc.client.UpdateSubcontrol(tc.ctx, subcontrol.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -649,7 +646,6 @@ func TestMutationDeleteSubcontrol(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

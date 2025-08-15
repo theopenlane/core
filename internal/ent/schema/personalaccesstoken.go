@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/utils/keygen"
@@ -155,13 +154,18 @@ func (p PersonalAccessToken) Mixin() []ent.Mixin {
 	}.getMixins(p)
 }
 
+func (p PersonalAccessToken) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the PersonalAccessToken
-func (PersonalAccessToken) Annotations() []schema.Annotation {
+func (p PersonalAccessToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		history.Annotations{
 			Exclude: true,
 		},
-		entx.Features("base"),
 	}
 }
 
@@ -174,14 +178,14 @@ func (PersonalAccessToken) Hooks() []ent.Hook {
 }
 
 // Interceptors of the PersonalAccessToken
-func (PersonalAccessToken) Interceptors() []ent.Interceptor {
+func (p PersonalAccessToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorPat(),
 	}
 }
 
 // Policy of the PersonalAccessToken
-func (PersonalAccessToken) Policy() ent.Policy {
+func (p PersonalAccessToken) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.AllowIfContextAllowRule(),

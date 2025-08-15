@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 var (
@@ -59,6 +60,9 @@ func (e NotFoundError) Message() string {
 	return fmt.Sprintf("%s not found", e.ObjectType)
 }
 
+// Module implements the CustomErrorType interface
+func (e NotFoundError) Module() models.OrgModule { return "" }
+
 // newPermissionDeniedError returns a NotFoundError
 func newNotFoundError(o string) NotFoundError {
 	return NotFoundError{
@@ -84,6 +88,11 @@ func (e NotAuthorizedError) Error() string {
 // Message returns the NotAuthorizedError in string format
 func (e NotAuthorizedError) Message() string {
 	return "you do not have permission to perform this action, please contact your organization owner"
+}
+
+// Module implements the CustomErrorType interface
+func (e NotAuthorizedError) Module() models.OrgModule {
+	return ""
 }
 
 // newPermissionDeniedError returns a NotAuthorizedError
@@ -115,6 +124,11 @@ func (e *AlreadyExistsError) Message() string {
 // Error returns the AlreadyExistsError in string format
 func (e *AlreadyExistsError) Error() string {
 	return fmt.Sprintf("%s already exists", e.ObjectType)
+}
+
+// Module implements the CustomErrorType interface
+func (e *AlreadyExistsError) Module() models.OrgModule {
+	return ""
 }
 
 // newAlreadyExistsError returns a AlreadyExistsError
@@ -156,6 +170,11 @@ func (e *ForeignKeyError) Error() string {
 	return fmt.Sprintf("constraint failed, unable to complete the %s because the '%s' record does not exist", e.Action, e.ObjectType)
 }
 
+// Module implements the CustomErrorType interface
+func (e *ForeignKeyError) Module() models.OrgModule {
+	return ""
+}
+
 // newForeignKeyError returns a ForeignKeyError
 func newForeignKeyError(action, objecttype string) *ForeignKeyError {
 	return &ForeignKeyError{
@@ -184,6 +203,11 @@ func (e *ValidationError) Message() string {
 // Error returns the ValidationError in string format, by removing the "generated: " prefix
 func (e *ValidationError) Error() string {
 	return strings.ReplaceAll(e.ErrMsg, "generated: ", "")
+}
+
+// Module implements the CustomErrorType interface
+func (e *ValidationError) Module() models.OrgModule {
+	return ""
 }
 
 // newValidationError returns a ValidationError

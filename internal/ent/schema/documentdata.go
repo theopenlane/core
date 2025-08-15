@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -73,16 +73,21 @@ func (d DocumentData) Edges() []ent.Edge {
 	}
 }
 
+func (DocumentData) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the DocumentData
-func (DocumentData) Annotations() []schema.Annotation {
+func (d DocumentData) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entfga.SelfAccessChecks(),
 	}
 }
 
 // Policy of the DocumentData
-func (DocumentData) Policy() ent.Policy {
+func (d DocumentData) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			// TODO: this should ensure the correct access for creation

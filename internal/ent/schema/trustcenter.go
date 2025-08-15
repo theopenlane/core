@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
@@ -122,7 +123,7 @@ func (TrustCenter) Hooks() []ent.Hook {
 }
 
 // Policy of the TrustCenter
-func (TrustCenter) Policy() ent.Policy {
+func (t TrustCenter) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
@@ -138,15 +139,21 @@ func (TrustCenter) Indexes() []ent.Index {
 	}
 }
 
+func (TrustCenter) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
+	}
+}
+
 // Annotations of the TrustCenter
-func (TrustCenter) Annotations() []schema.Annotation {
+func (t TrustCenter) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 	}
 }
 
 // Interceptors of the TrustCenter
-func (TrustCenter) Interceptors() []ent.Interceptor {
+func (t TrustCenter) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorTrustCenter(),
 	}

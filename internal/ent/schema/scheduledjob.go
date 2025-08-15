@@ -134,7 +134,6 @@ func (ScheduledJob) Indexes() []ent.Index {
 // Annotations of the ScheduledJob
 func (ScheduledJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		// this schema shouldn't be need to be searchable, most results would be the job template,
 		// not the scheduled job itself
 		entx.SchemaSearchable(false),
@@ -165,4 +164,10 @@ func (ScheduledJob) Policy() ent.Policy {
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+
+func (ScheduledJob) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
 }

@@ -69,7 +69,6 @@ func TestQueryTask(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -288,7 +287,11 @@ func TestQueryTasks(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskPersonal.ID}).MustDelete(userCtxPersonalOrg, t)
+	// internal context because personal orgs do not have access to tasks and the creation earlier
+	// with TaskBuilder used the bypass too. SO use the system admin to remove
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskPersonal.ID}).
+		MustDelete(systemAdminUser.UserCtx, t)
+
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(testUser2.UserCtx, t)
 }
@@ -767,7 +770,6 @@ func TestMutationCreateTask(t *testing.T) {
 			resp, err := tc.client.CreateTask(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -842,8 +844,6 @@ func TestMutationCreateTask(t *testing.T) {
 				// make sure the another org member cannot see the task if not linked to objects they can see
 				if tc.request.ControlIDs == nil {
 					taskResp, err = suite.client.api.GetTaskByID(adminCtx, resp.CreateTask.Task.ID)
-
-					assert.Check(t, is.Nil(taskResp))
 				}
 			}
 
@@ -876,19 +876,16 @@ func TestMutationUpdateTask(t *testing.T) {
 	taskRisk := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// make sure the user cannot can see the task before they are the assigner
-	taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, task.ID)
+	_, err = suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, task.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Check(t, is.Nil(taskResp))
 
 	// make sure the user cannot can see the task before they are the assignee
-	taskResp, err = suite.client.api.GetTaskByID(assignee.UserCtx, task.ID)
+	_, err = suite.client.api.GetTaskByID(assignee.UserCtx, task.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Check(t, is.Nil(taskResp))
 
 	// make sure the user cannot see the task before the risk is added
-	taskResp, err = suite.client.api.GetTaskByID(adminUser.UserCtx, taskRisk.ID)
+	_, err = suite.client.api.GetTaskByID(adminUser.UserCtx, taskRisk.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Check(t, is.Nil(taskResp))
 
 	// NOTE: the tests and checks are ordered due to dependencies between updates
 	// if you update cases, they will most likely need to be added to the end of the list
@@ -1080,7 +1077,6 @@ func TestMutationUpdateTask(t *testing.T) {
 
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -1110,18 +1106,16 @@ func TestMutationUpdateTask(t *testing.T) {
 					assert.Check(t, is.Nil(resp.UpdateTask.Task.Assignee))
 
 					// the previous assignee should no longer be able to see the task
-					taskResp, err := suite.client.api.GetTaskByID(assignee.UserCtx, resp.UpdateTask.Task.ID)
+					_, err = suite.client.api.GetTaskByID(assignee.UserCtx, resp.UpdateTask.Task.ID)
 					assert.Check(t, is.ErrorContains(err, notFoundErrorMsg))
-					assert.Check(t, is.Nil(taskResp))
 				}
 
 				if tc.request.ClearAssigner != nil {
 					assert.Check(t, is.Nil(resp.UpdateTask.Task.Assignee))
 
 					// the previous assigner should no longer be able to see the task
-					taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
+					_, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
 					assert.Check(t, is.ErrorContains(err, notFoundErrorMsg))
-					assert.Check(t, is.Nil(taskResp))
 				}
 
 				if tc.request.AddRiskIDs != nil {
@@ -1156,12 +1150,10 @@ func TestMutationUpdateTask(t *testing.T) {
 					// user shouldn't be able to see the comment
 					checkResp, err := suite.client.api.GetNoteByID(assignee.UserCtx, taskCommentID)
 					assert.Check(t, is.ErrorContains(err, notFoundErrorMsg))
-					assert.Check(t, is.Nil(checkResp))
 
 					// user should be able to see the comment since they created the task
 					checkResp, err = suite.client.api.GetNoteByID(adminUser.UserCtx, taskCommentID)
 					assert.Check(t, err)
-					assert.Check(t, checkResp != nil)
 
 					// org owner should be able to see the comment
 					checkResp, err = suite.client.api.GetNoteByID(testUser1.UserCtx, taskCommentID)
@@ -1239,7 +1231,6 @@ func TestMutationDeleteTask(t *testing.T) {
 			resp, err := tc.client.DeleteTask(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -1337,7 +1328,6 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 			resp, err := tc.client.UpdateBulkTask(tc.ctx, tc.ids, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

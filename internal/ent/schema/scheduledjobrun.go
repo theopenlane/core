@@ -8,7 +8,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 )
@@ -107,10 +107,15 @@ func (ScheduledJobRun) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
+func (ScheduledJobRun) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the ScheduledJobRun
-func (ScheduledJobRun) Annotations() []schema.Annotation {
+func (s ScheduledJobRun) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -122,13 +127,8 @@ func (ScheduledJobRun) Hooks() []ent.Hook {
 	return []ent.Hook{}
 }
 
-// Interceptors of the ScheduledJobRun
-func (ScheduledJobRun) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the ScheduledJobRun
-func (ScheduledJobRun) Policy() ent.Policy {
+func (s ScheduledJobRun) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),

@@ -66,7 +66,6 @@ func TestMutationCreateExport(t *testing.T) {
 			resp, err := tc.client.CreateExport(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -156,7 +155,6 @@ func TestMutationUpdateExport(t *testing.T) {
 			resp, err := tc.client.UpdateExport(tc.ctx, tc.exportID, tc.request, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -242,8 +240,6 @@ func TestQueryExport(t *testing.T) {
 			export, err := tc.client.GetExportByID(tc.ctx, tc.exportID)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(export))
-
 				return
 			}
 

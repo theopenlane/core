@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/rout"
 
@@ -126,7 +127,7 @@ func (Contact) Hooks() []ent.Hook {
 }
 
 // Policy of the Contact
-func (Contact) Policy() ent.Policy {
+func (c Contact) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
@@ -134,9 +135,14 @@ func (Contact) Policy() ent.Policy {
 	)
 }
 
-// Annotations of the Contact
-func (Contact) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("entity-management"),
+func (Contact) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
 	}
+}
+
+// Annotations of the Contact
+func (c Contact) Annotations() []schema.Annotation {
+	return []schema.Annotation{}
 }

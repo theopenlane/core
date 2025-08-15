@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -16,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -92,7 +92,6 @@ func (p ProgramMembership) Edges() []ent.Edge {
 // Annotations of the ProgramMembership
 func (ProgramMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance"),
 		entfga.MembershipChecks("program"),
 	}
 }
@@ -132,4 +131,10 @@ func (ProgramMembership) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.ProgramMembershipMutation](),
 		),
 	)
+}
+
+func (ProgramMembership) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
 }

@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
@@ -73,10 +74,18 @@ func (p Procedure) Mixin() []ent.Mixin {
 	}.getMixins(p)
 }
 
+func (Procedure) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
+		models.CatalogEntityManagementModule,
+	}
+}
+
 // Annotations of the Procedure
-func (Procedure) Annotations() []schema.Annotation {
+func (p Procedure) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}
@@ -93,7 +102,7 @@ func (Procedure) Hooks() []ent.Hook {
 }
 
 // Interceptors of the Procedure
-func (Procedure) Interceptors() []ent.Interceptor {
+func (p Procedure) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		// procedures are org owned, but we need to ensure the groups are filtered as well
 		interceptors.FilterQueryResults[generated.Procedure](),
@@ -101,8 +110,9 @@ func (Procedure) Interceptors() []ent.Interceptor {
 }
 
 // Policy of the Procedure
-func (Procedure) Policy() ent.Policy {
+func (p Procedure) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CanCreateObjectsUnderParents([]string{
 				Program{}.PluralName(),

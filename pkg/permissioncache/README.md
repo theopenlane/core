@@ -8,7 +8,8 @@ and can be fetched with `GetX` or written with `SetX`.
 
 ```go
 c := features.NewCache(redisClient, permissioncache.WithCacheTTL(time.Minute))
-err := c.SetFeatures(ctx, "org1", []string{"evidence", "search"})
+features := []models.OrgModule{models.OrgModule("evidence"), models.OrgModule("search")}
+err := c.SetFeatures(ctx, "org1", features)
 if err != nil {
     return err
 }

@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Subscriber holds the schema definition for the Subscriber entity
@@ -165,4 +166,10 @@ func (Subscriber) Policy() ent.Policy {
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+
+func (Subscriber) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
 }

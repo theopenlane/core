@@ -171,3 +171,9 @@ func (JobTemplate) Policy() ent.Policy {
 		),
 	)
 }
+
+func (JobTemplate) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}

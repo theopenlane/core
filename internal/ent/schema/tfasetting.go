@@ -7,12 +7,12 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // TFASetting holds the schema definition for the TFASetting entity
@@ -107,18 +107,23 @@ func (TFASetting) Hooks() []ent.Hook {
 	}
 }
 
+func (TFASetting) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the TFASetting
-func (TFASetting) Annotations() []schema.Annotation {
+func (t TFASetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		history.Annotations{
 			Exclude: true,
 		},
-		entx.Features("base"),
 	}
 }
 
 // Policy of the TFASetting
-func (TFASetting) Policy() ent.Policy {
+func (t TFASetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowIfSelf(),

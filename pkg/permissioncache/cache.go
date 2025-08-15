@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 const (
@@ -50,8 +51,22 @@ func WithCacheTTL(ttl time.Duration) CacheOptions {
 }
 
 // GetFeatures retrieves the feature list for an organization.
-func (c *Cache) GetFeatures(ctx context.Context, orgID string) ([]string, error) {
-	return c.get(ctx, c.featureKey(orgID))
+func (c *Cache) GetFeatures(ctx context.Context, orgID string) ([]models.OrgModule, error) {
+	strs, err := c.get(ctx, c.featureKey(orgID))
+	if err != nil {
+		return nil, err
+	}
+
+	if strs == nil {
+		return nil, nil
+	}
+
+	features := make([]models.OrgModule, 0, len(strs))
+	for _, s := range strs {
+		features = append(features, models.OrgModule(s))
+	}
+
+	return features, nil
 }
 
 // GetRoles retrieves the role for a subject ID.
@@ -74,8 +89,13 @@ func (c *Cache) HasOrgAccess(ctx context.Context, subjectID, orgID string) (bool
 }
 
 // SetFeatures stores the feature list for an organization.
-func (c *Cache) SetFeatures(ctx context.Context, orgID string, values []string) error {
-	return c.set(ctx, c.featureKey(orgID), values)
+func (c *Cache) SetFeatures(ctx context.Context, orgID string, values []models.OrgModule) error {
+	features := make([]string, 0, len(values))
+	for _, feature := range values {
+		features = append(features, feature.String())
+	}
+
+	return c.set(ctx, c.featureKey(orgID), features)
 }
 
 // SetRole stores the role for a subject ID.

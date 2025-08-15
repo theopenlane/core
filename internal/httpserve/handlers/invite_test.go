@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -58,6 +59,9 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	require.NoError(t, err)
 
 	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
+
+	suite.enableModules(recipientCtx, recipient.ID, userSetting.Edges.DefaultOrg.ID,
+		[]models.OrgModule{models.CatalogBaseModule})
 
 	testCases := []struct {
 		name     string
@@ -142,9 +146,9 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			assert.Equal(t, testUser1.OrganizationID, user.User.Setting.DefaultOrg.ID)
 
-			// Test the user was added to the group
+			// test the user was added to the group
 			group, err := suite.api.GetGroupByID(recipientCtx, group.ID)
-			require.NoError(t, err)
+			require.ErrorContains(t, err, interceptors.ErrFeatureNotEnabled.Error())
 			assert.NotNil(t, group)
 
 			foundMember := false

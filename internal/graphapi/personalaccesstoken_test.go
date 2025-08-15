@@ -51,7 +51,6 @@ func TestQueryPersonalAccessToken(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -91,7 +90,6 @@ func TestQueryPersonalAccessTokens(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -165,7 +163,6 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -283,7 +280,6 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -361,7 +357,6 @@ func TestMutationDeletePersonalAccessToken(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

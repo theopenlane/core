@@ -94,9 +94,8 @@ func (PasswordResetToken) Indexes() []ent.Index {
 }
 
 // Annotations of the PasswordResetToken
-func (PasswordResetToken) Annotations() []schema.Annotation {
+func (p PasswordResetToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entgql.Skip(entgql.SkipAll),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
@@ -114,7 +113,7 @@ func (PasswordResetToken) Hooks() []ent.Hook {
 }
 
 // Policy of the PasswordResetToken
-func (PasswordResetToken) Policy() ent.Policy {
+func (p PasswordResetToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowAfterApplyingPrivacyTokenFilter[*token.ResetToken](),

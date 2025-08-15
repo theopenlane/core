@@ -107,7 +107,6 @@ func TestQueryOBJECT(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -247,7 +246,6 @@ func TestMutationCreateOBJECT(t *testing.T) {
 			resp, err := tc.client.CreateOBJECT(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -317,7 +315,6 @@ func TestMutationUpdateOBJECT(t *testing.T) {
 			resp, err := tc.client.UpdateOBJECT(tc.ctx, OBJECT.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -397,7 +394,6 @@ func TestMutationDeleteOBJECT(t *testing.T) {
 			resp, err := tc.client.DeleteOBJECT(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

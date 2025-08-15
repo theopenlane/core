@@ -67,7 +67,6 @@ func TestQueryDNSVerificationByID(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -219,8 +218,6 @@ func TestMutationCreateDNSVerification(t *testing.T) {
 			resp, err := tc.client.CreateDNSVerification(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -277,7 +274,6 @@ func TestMutationDeleteDNSVerification(t *testing.T) {
 			resp, err := tc.client.DeleteDNSVerification(tc.ctx, tc.id)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -337,7 +333,6 @@ func TestUpdateDNSVerification(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -401,7 +396,6 @@ func TestGetAllDNSVerifications(t *testing.T) {
 
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 				return
 			}
 

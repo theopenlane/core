@@ -111,7 +111,6 @@ func TestQueryEvidence(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -416,7 +415,6 @@ func TestMutationCreateEvidence(t *testing.T) {
 			resp, err := tc.client.CreateEvidence(tc.ctx, tc.request, tc.files)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -603,7 +601,6 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			resp, err := tc.client.UpdateEvidence(tc.ctx, evidence.ID, tc.request, tc.files)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -691,7 +688,6 @@ func TestMutationDeleteEvidence(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

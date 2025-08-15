@@ -28,88 +28,6 @@ Config contains the configuration for the core server
 |[**integrationOauthProvider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations<br/>||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "server": {
-        "tls": {},
-        "cors": {
-            "prefixes": {}
-        },
-        "secure": {},
-        "redirects": {
-            "redirects": {}
-        },
-        "cacheControl": {
-            "noCacheHeaders": {}
-        },
-        "mime": {},
-        "graphPool": {},
-        "csrfProtection": {},
-        "fieldLevelEncryption": {}
-    },
-    "entConfig": {
-        "summarizer": {
-            "llm": {
-                "anthropic": {},
-                "mistral": {},
-                "gemini": {},
-                "huggingFace": {},
-                "ollama": {},
-                "cloudflare": {},
-                "openai": {}
-            }
-        },
-        "windmill": {}
-    },
-    "auth": {
-        "token": {
-            "keys": {}
-        },
-        "providers": {
-            "github": {},
-            "google": {},
-            "webauthn": {}
-        }
-    },
-    "authz": {
-        "credentials": {}
-    },
-    "db": {},
-    "jobQueue": {
-        "riverConf": {
-            "Logger": {},
-            "PeriodicJobs": [
-                {}
-            ],
-            "Queues": {},
-            "Test": {},
-            "Workers": {}
-        }
-    },
-    "redis": {},
-    "tracer": {
-        "stdout": {},
-        "otlp": {}
-    },
-    "email": {
-        "urls": {}
-    },
-    "sessions": {},
-    "totp": {},
-    "ratelimit": {},
-    "objectStorage": {},
-    "subscription": {},
-    "keywatcher": {},
-    "slack": {},
-    "integrationOauthProvider": {
-        "github": {},
-        "slack": {}
-    }
-}
-```
-
 <a name="server"></a>
 ## server: object
 
@@ -144,28 +62,6 @@ Server settings for the echo server
 |[**fieldLevelEncryption**](#serverfieldlevelencryption)|`object`||no|
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "tls": {},
-    "cors": {
-        "prefixes": {}
-    },
-    "secure": {},
-    "redirects": {
-        "redirects": {}
-    },
-    "cacheControl": {
-        "noCacheHeaders": {}
-    },
-    "mime": {},
-    "graphPool": {},
-    "csrfProtection": {},
-    "fieldLevelEncryption": {}
-}
-```
-
 <a name="servertls"></a>
 ### server\.tls: object
 
@@ -198,14 +94,6 @@ Config holds the cors configuration settings
 |**cookieInsecure**|`boolean`|CookieInsecure sets the cookie to be insecure<br/>||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "prefixes": {}
-}
-```
-
 <a name="servercorsprefixes"></a>
 #### server\.cors\.prefixes: object
 
@@ -263,14 +151,6 @@ Config contains the types used in executing redirects via the redirect middlewar
 |**code**|`integer`|Code is the HTTP status code to use for the redirect<br/>||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "redirects": {}
-}
-```
-
 <a name="serverredirectsredirects"></a>
 #### server\.redirects\.redirects: object
 
@@ -295,14 +175,6 @@ Config is the config values for the cache-control middleware
 |[**etagHeaders**](#servercachecontroletagheaders)|`string[]`|||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "noCacheHeaders": {}
-}
-```
-
 <a name="servercachecontrolnocacheheaders"></a>
 #### server\.cacheControl\.noCacheHeaders: object
 
@@ -391,27 +263,9 @@ Config holds the configuration for the ent server
 |[**summarizer**](#entconfigsummarizer)|`object`|Summarizer holds configuration for the text summarization functionality<br/>||
 |[**windmill**](#entconfigwindmill)|`object`|Windmill holds configuration for the Windmill workflow automation platform<br/>||
 |**maxPoolSize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
+|[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "summarizer": {
-        "llm": {
-            "anthropic": {},
-            "mistral": {},
-            "gemini": {},
-            "huggingFace": {},
-            "ollama": {},
-            "cloudflare": {},
-            "openai": {}
-        }
-    },
-    "windmill": {}
-}
-```
-
 <a name="entconfigentitytypes"></a>
 ### entConfig\.entityTypes: array
 
@@ -433,22 +287,6 @@ Summarizer holds configuration for the text summarization functionality
 |**maximumSentences**|`integer`|MaximumSentences specifies the maximum number of sentences in the summary<br/>||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "llm": {
-        "anthropic": {},
-        "mistral": {},
-        "gemini": {},
-        "huggingFace": {},
-        "ollama": {},
-        "cloudflare": {},
-        "openai": {}
-    }
-}
-```
-
 <a name="entconfigsummarizerllm"></a>
 #### entConfig\.summarizer\.llm: object
 
@@ -469,20 +307,6 @@ SummarizerLLM contains configuration for multiple LLM providers
 |[**openai**](#entconfigsummarizerllmopenai)|`object`|OpenAIConfig contains OpenAI specific configuration<br/>||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "anthropic": {},
-    "mistral": {},
-    "gemini": {},
-    "huggingFace": {},
-    "ollama": {},
-    "cloudflare": {},
-    "openai": {}
-}
-```
-
 <a name="entconfigsummarizerllmanthropic"></a>
 ##### entConfig\.summarizer\.llm\.anthropic: object
 
@@ -613,6 +437,19 @@ Windmill holds configuration for the Windmill workflow automation platform
 |**onSuccessScript**|`string`|OnSuccessScript script to run when a scheduled job succeeds<br/>||
 
 **Additional Properties:** not allowed  
+<a name="entconfigmodules"></a>
+### entConfig\.modules: object
+
+Modules settings for features access
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates whether to check and verify module access<br/>||
+
+**Additional Properties:** not allowed  
 <a name="auth"></a>
 ## auth: object
 
@@ -629,21 +466,6 @@ Auth settings including oauth2 providers and token configuration
 |[**providers**](#authproviders)|`object`|OauthProviderConfig represents the configuration for OAuth providers such as Github and Google<br/>|no|
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "token": {
-        "keys": {}
-    },
-    "providers": {
-        "github": {},
-        "google": {},
-        "webauthn": {}
-    }
-}
-```
-
 <a name="authtoken"></a>
 ### auth\.token: object
 
@@ -663,14 +485,6 @@ Auth settings including oauth2 providers and token configuration
 |**generateKeys**|`boolean`||no|
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "keys": {}
-}
-```
-
 <a name="authtokenkeys"></a>
 #### auth\.token\.keys: object
 
@@ -702,16 +516,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |[**webauthn**](#authproviderswebauthn)|`object`||yes|
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "github": {},
-    "google": {},
-    "webauthn": {}
-}
-```
-
 <a name="authprovidersgithub"></a>
 #### auth\.providers\.github: object
 
@@ -793,14 +597,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**ignoreDuplicateKeyError**|`boolean`|ignore duplicate key error<br/>|no|
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "credentials": {}
-}
-```
-
 <a name="authzcredentials"></a>
 ### authz\.credentials: object
 
@@ -849,22 +645,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |[**riverConf**](#jobqueueriverconf)|`object`|||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "riverConf": {
-        "Logger": {},
-        "PeriodicJobs": [
-            {}
-        ],
-        "Queues": {},
-        "Test": {},
-        "Workers": {}
-    }
-}
-```
-
 <a name="jobqueueriverconf"></a>
 ### jobQueue\.riverConf: object
 
@@ -903,20 +683,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |[**WorkerMiddleware**](#jobqueueriverconfworkermiddleware)|`array`|||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "Logger": {},
-    "PeriodicJobs": [
-        {}
-    ],
-    "Queues": {},
-    "Test": {},
-    "Workers": {}
-}
-```
-
 <a name="jobqueueriverconfjobinsertmiddleware"></a>
 #### jobQueue\.riverConf\.JobInsertMiddleware: array
 
@@ -942,14 +708,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 #### jobQueue\.riverConf\.PeriodicJobs: array
 
 **Items**
-
-**Example**
-
-```json
-[
-    {}
-]
-```
 
 <a name="jobqueueriverconfqueues"></a>
 #### jobQueue\.riverConf\.Queues: object
@@ -1028,15 +786,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |[**otlp**](#tracerotlp)|`object`|||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "stdout": {},
-    "otlp": {}
-}
-```
-
 <a name="tracerstdout"></a>
 ### tracer\.stdout: object
 
@@ -1087,14 +836,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**templatesPath**|`string`|||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "urls": {}
-}
-```
-
 <a name="emailurls"></a>
 ### email\.urls: object
 
@@ -1261,15 +1002,6 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |[**slack**](#integrationoauthproviderslack)|`object`|IntegrationProviderConfig contains OAuth configuration for a specific integration provider<br/>||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "github": {},
-    "slack": {}
-}
-```
-
 <a name="integrationoauthprovidergithub"></a>
 ### integrationOauthProvider\.github: object
 

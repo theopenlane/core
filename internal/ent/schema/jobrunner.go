@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
@@ -100,10 +101,15 @@ func (JobRunner) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
+func (JobRunner) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the JobRunner
-func (JobRunner) Annotations() []schema.Annotation {
+func (j JobRunner) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -119,15 +125,16 @@ func (JobRunner) Hooks() []ent.Hook {
 }
 
 // Interceptors of the JobRunner
-func (JobRunner) Interceptors() []ent.Interceptor {
+func (j JobRunner) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorJobRunnerFilterSystemOwned(),
 	}
 }
 
 // Policy of the JobRunner
-func (JobRunner) Policy() ent.Policy {
+func (j JobRunner) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
 			rule.SystemOwnedJobRunner(),

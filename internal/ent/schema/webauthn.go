@@ -4,16 +4,17 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
+	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -122,8 +123,14 @@ func (w Webauthn) Mixin() []ent.Mixin {
 	}
 }
 
+func (Webauthn) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the Webauthn
-func (Webauthn) Annotations() []schema.Annotation {
+func (w Webauthn) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 
@@ -135,12 +142,16 @@ func (Webauthn) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
-		entx.Features("base"),
 	}
 }
 
-func (Webauthn) Edges() []ent.Edge {
-	return []ent.Edge{}
+// Policy of the Webauthn
+func (w Webauthn) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			privacy.AlwaysAllowRule(),
+		),
+	)
 }
 
 func (Webauthn) Hooks() []ent.Hook {

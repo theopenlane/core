@@ -142,7 +142,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [4]ent.Hook
+	Hooks        [5]ent.Hook
 	Interceptors [3]ent.Interceptor
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -154,6 +154,8 @@ var (
 	DefaultTags []string
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
+	// ModuleValidator is a validator for the "module" field. It is called by the builders before save.
+	ModuleValidator func(string) error
 	// DefaultActive holds the default value on creation for the "active" field.
 	DefaultActive bool
 	// DefaultID holds the default value on creation for the "id" field.

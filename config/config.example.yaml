@@ -87,6 +87,8 @@ email:
 entConfig:
     entityTypes: null
     maxPoolSize: 100
+    modules:
+        enabled: true
     summarizer:
         llm:
             anthropic:

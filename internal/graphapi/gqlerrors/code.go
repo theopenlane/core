@@ -18,4 +18,7 @@ const (
 	MaxAttemptsErrorCode = "MAX_ATTEMPTS"
 	// BadRequestErrorCode is the error code for bad request errors
 	BadRequestErrorCode = "BAD_REQUEST"
+	// NoAccessToModule is the error code for when an org has no access to a
+	// specifc schema and module
+	NoAccessToModule = "MODULE_NO_ACCESS"
 )

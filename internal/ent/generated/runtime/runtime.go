@@ -2272,27 +2272,14 @@ func init() {
 	// groupmembershiphistory.DefaultID holds the default value on creation for the id field.
 	groupmembershiphistory.DefaultID = groupmembershiphistoryDescID.Default.(func() string)
 	groupsettingMixin := schema.GroupSetting{}.Mixin()
-	groupsetting.Policy = privacy.NewPolicies(schema.GroupSetting{})
-	groupsetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := groupsetting.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	groupsettingMixinHooks0 := groupsettingMixin[0].Hooks()
 	groupsettingMixinHooks1 := groupsettingMixin[1].Hooks()
 	groupsettingMixinHooks2 := groupsettingMixin[2].Hooks()
 	groupsettingHooks := schema.GroupSetting{}.Hooks()
-
-	groupsetting.Hooks[1] = groupsettingMixinHooks0[0]
-
-	groupsetting.Hooks[2] = groupsettingMixinHooks1[0]
-
-	groupsetting.Hooks[3] = groupsettingMixinHooks2[0]
-
-	groupsetting.Hooks[4] = groupsettingHooks[0]
+	groupsetting.Hooks[0] = groupsettingMixinHooks0[0]
+	groupsetting.Hooks[1] = groupsettingMixinHooks1[0]
+	groupsetting.Hooks[2] = groupsettingMixinHooks2[0]
+	groupsetting.Hooks[3] = groupsettingHooks[0]
 	groupsettingMixinInters1 := groupsettingMixin[1].Interceptors()
 	groupsettingMixinInters2 := groupsettingMixin[2].Interceptors()
 	groupsettingInters := schema.GroupSetting{}.Interceptors()
@@ -3823,10 +3810,12 @@ func init() {
 	orgmoduleMixinHooks1 := orgmoduleMixin[1].Hooks()
 	orgmoduleMixinHooks2 := orgmoduleMixin[2].Hooks()
 	orgmoduleMixinHooks5 := orgmoduleMixin[5].Hooks()
+	orgmoduleHooks := schema.OrgModule{}.Hooks()
 	orgmodule.Hooks[0] = orgmoduleMixinHooks0[0]
 	orgmodule.Hooks[1] = orgmoduleMixinHooks1[0]
 	orgmodule.Hooks[2] = orgmoduleMixinHooks2[0]
 	orgmodule.Hooks[3] = orgmoduleMixinHooks5[0]
+	orgmodule.Hooks[4] = orgmoduleHooks[0]
 	orgmoduleMixinInters1 := orgmoduleMixin[1].Interceptors()
 	orgmoduleMixinInters2 := orgmoduleMixin[2].Interceptors()
 	orgmoduleMixinInters5 := orgmoduleMixin[5].Interceptors()
@@ -3861,6 +3850,10 @@ func init() {
 	orgmoduleDescOwnerID := orgmoduleMixinFields5[0].Descriptor()
 	// orgmodule.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	orgmodule.OwnerIDValidator = orgmoduleDescOwnerID.Validators[0].(func(string) error)
+	// orgmoduleDescModule is the schema descriptor for module field.
+	orgmoduleDescModule := orgmoduleFields[0].Descriptor()
+	// orgmodule.ModuleValidator is a validator for the "module" field. It is called by the builders before save.
+	orgmodule.ModuleValidator = orgmoduleDescModule.Validators[0].(func(string) error)
 	// orgmoduleDescActive is the schema descriptor for active field.
 	orgmoduleDescActive := orgmoduleFields[5].Descriptor()
 	// orgmodule.DefaultActive holds the default value on creation for the active field.
@@ -6857,12 +6850,24 @@ func init() {
 	// usersettinghistory.DefaultID holds the default value on creation for the id field.
 	usersettinghistory.DefaultID = usersettinghistoryDescID.Default.(func() string)
 	webauthnMixin := schema.Webauthn{}.Mixin()
+	webauthn.Policy = privacy.NewPolicies(schema.Webauthn{})
+	webauthn.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := webauthn.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	webauthnMixinHooks0 := webauthnMixin[0].Hooks()
 	webauthnMixinHooks3 := webauthnMixin[3].Hooks()
 	webauthnHooks := schema.Webauthn{}.Hooks()
-	webauthn.Hooks[0] = webauthnMixinHooks0[0]
-	webauthn.Hooks[1] = webauthnMixinHooks3[0]
-	webauthn.Hooks[2] = webauthnHooks[0]
+
+	webauthn.Hooks[1] = webauthnMixinHooks0[0]
+
+	webauthn.Hooks[2] = webauthnMixinHooks3[0]
+
+	webauthn.Hooks[3] = webauthnHooks[0]
 	webauthnMixinInters3 := webauthnMixin[3].Interceptors()
 	webauthn.Interceptors[0] = webauthnMixinInters3[0]
 	webauthnMixinFields0 := webauthnMixin[0].Fields()

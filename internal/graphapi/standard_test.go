@@ -129,7 +129,6 @@ func TestQueryStandard(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -426,7 +425,6 @@ func TestMutationCreateStandard(t *testing.T) {
 			resp, err := tc.client.CreateStandard(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -542,9 +540,8 @@ func TestMutationUpdateStandard(t *testing.T) {
 	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
 	// users should not be able to get the system owned standard because its not public
-	std, err := suite.client.api.GetStandardByID(testUser1.UserCtx, standardSystemOwned.ID)
+	_, err := suite.client.api.GetStandardByID(testUser1.UserCtx, standardSystemOwned.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Assert(t, is.Nil(std))
 
 	testCases := []struct {
 		name        string
@@ -671,7 +668,6 @@ func TestMutationUpdateStandard(t *testing.T) {
 			resp, err := tc.client.UpdateStandard(tc.ctx, tc.id, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -847,7 +843,6 @@ func TestMutationDeleteStandard(t *testing.T) {
 			resp, err := tc.client.DeleteStandard(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

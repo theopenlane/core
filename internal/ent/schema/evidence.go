@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Evidence holds the schema definition for the Evidence entity
@@ -140,10 +141,16 @@ func (e Evidence) Edges() []ent.Edge {
 	}
 }
 
+func (Evidence) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+	}
+}
+
 // Annotations of the Evidence
-func (Evidence) Annotations() []schema.Annotation {
+func (e Evidence) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features(entx.ModuleCompliance, entx.ModuleContinuousComplianceAutomation),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}

@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 )
@@ -50,8 +51,7 @@ type testUserDetails struct {
 	UserCtx context.Context
 }
 
-// userBuilder creates a new test user and returns the details
-func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T) testUserDetails {
+func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, features ...models.OrgModule) testUserDetails {
 	testUser := testUserDetails{}
 
 	// create a test user
@@ -67,8 +67,11 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T) test
 	// setup user context with the personal org
 	userCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
 
+	// ensure the personal org has modules enabled so org-owned interceptors don't block operations
+	// (&OrganizationBuilder{client: suite.client, Features: features}).enableModules(userCtx, t, testUser.PersonalOrgID)
+
 	// create a non-personal test organization
-	testOrg := (&OrganizationBuilder{client: suite.client}).MustNew(userCtx, t)
+	testOrg := (&OrganizationBuilder{client: suite.client, Features: features}).MustNew(userCtx, t)
 	testUser.OrganizationID = testOrg.ID
 
 	// setup user context with the org (and not the personal org)
@@ -79,6 +82,31 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T) test
 	testUser.GroupID = testGroup.ID
 
 	return testUser
+}
+
+type OrgModuleBuilder struct {
+	client *client
+
+	OwnerID string
+	Module  models.OrgModule
+	Active  bool
+}
+
+func (om *OrgModuleBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgModule {
+	ctx = setContext(ctx, om.client.db)
+
+	if om.Module == "" {
+		om.Module = "test_module"
+	}
+
+	orgModule, err := om.client.db.OrgModule.Create().
+		SetOwnerID(om.OwnerID).
+		SetModule(om.Module).
+		SetActive(om.Active).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	return orgModule
 }
 
 // setupTestData creates test users and sets up the clients with the necessary tokens

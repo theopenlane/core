@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -12,6 +13,9 @@ const (
 	ExtensionCodeKey = "code"
 	// ExtensionMessageKey is the key for the error message in the extensions
 	ExtensionMessageKey = "message"
+	// ExtensionModuleKey is the key for the module that is required to get access to
+	// the feature behind the graphql query
+	ExtensionModuleKey = "module"
 )
 
 // CustomErrorType is an interface that defines a custom error type
@@ -21,6 +25,8 @@ type CustomErrorType interface {
 	Code() string
 	// Message returns the detailed error message for the error in the gql extensions
 	Message() string
+	// Module returns the module that failed checks for the query to succeed
+	Module() models.OrgModule
 }
 
 var _ CustomErrorType = (*CustomError)(nil)
@@ -30,6 +36,7 @@ type CustomError struct {
 	code    string
 	message string
 	err     error
+	module  models.OrgModule
 }
 
 // Error satisfies the CustomErrorType interface
@@ -45,6 +52,21 @@ func (e CustomError) Code() string {
 // Message satisfies the CustomErrorType interface
 func (e CustomError) Message() string {
 	return e.message
+}
+
+// Module satisfies the CustomError interface
+func (e CustomError) Module() models.OrgModule {
+	return e.module
+}
+
+// NewCustomErrorWithModule creates a custom error with the given code, error and module
+func NewCustomErrorWithModule(code, message string, err error, module models.OrgModule) CustomError {
+	return CustomError{
+		code:    code,
+		message: message,
+		err:     err,
+		module:  module,
+	}
 }
 
 // NewCustomError creates a new CustomError with the given code and error
@@ -89,6 +111,11 @@ func ErrorPresenter(ctx context.Context, e error) *gqlerror.Error {
 	// add the message to the extensions if it is not empty
 	if customError.Message() != "" {
 		err.Extensions[ExtensionMessageKey] = customError.Message()
+	}
+
+	// add the module
+	if customError.Module().String() != "" {
+		err.Extensions[ExtensionModuleKey] = customError.Module()
 	}
 
 	return err

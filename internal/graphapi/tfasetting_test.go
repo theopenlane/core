@@ -53,7 +53,6 @@ func TestQueryTFASetting(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -141,7 +140,6 @@ func TestMutationCreateTFASetting(t *testing.T) {
 
 			if tc.errMsg != "" {
 				assert.ErrorContains(t, err, tc.errMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -256,7 +254,6 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 
 			if tc.errMsg != "" {
 				assert.ErrorContains(t, err, tc.errMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

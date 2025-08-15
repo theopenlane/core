@@ -3,7 +3,6 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Standard defines the standard schema.
@@ -154,14 +154,14 @@ func (Standard) Hooks() []ent.Hook {
 }
 
 // Interceptors of the Standard
-func (Standard) Interceptors() []ent.Interceptor {
+func (s Standard) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.TraverseStandard(),
 	}
 }
 
 // Policy of the Standard
-func (Standard) Policy() ent.Policy {
+func (s Standard) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.SystemOwnedStandards(), // checks for the system owned field
@@ -171,9 +171,12 @@ func (Standard) Policy() ent.Policy {
 	)
 }
 
-// Annotations of the Standard
-func (Standard) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("compliance"),
+func (Standard) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
 	}
 }

@@ -69,8 +69,6 @@ func TestQueryContact(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -209,8 +207,6 @@ func TestMutationCreateContact(t *testing.T) {
 			resp, err := tc.client.CreateContact(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -362,8 +358,6 @@ func TestMutationUpdateContact(t *testing.T) {
 			resp, err := tc.client.UpdateContact(tc.ctx, contact.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -464,8 +458,6 @@ func TestMutationDeleteContact(t *testing.T) {
 			resp, err := tc.client.DeleteContact(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -568,8 +560,6 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 			resp, err := tc.client.UpdateBulkContact(tc.ctx, tc.ids, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 

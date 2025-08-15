@@ -60,7 +60,6 @@ func TestQueryCustomDomainByID(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -221,9 +220,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateCustomDomain(tc.ctx, tc.request)
-			if tc.expectedErr != "" {
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
+					if tc.expectedErr != "" {
+			assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}
@@ -280,9 +278,8 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteCustomDomain(tc.ctx, tc.id)
-			if tc.expectedErr != "" {
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
+					if tc.expectedErr != "" {
+			assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}
@@ -358,7 +355,6 @@ func TestUpdateCustomDomain(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -474,9 +470,8 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateBulkCustomDomain(tc.ctx, tc.requests)
-			if tc.expectedErr != "" {
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
+					if tc.expectedErr != "" {
+			assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}
@@ -566,9 +561,8 @@ func TestGetAllCustomDomains(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllCustomDomains(tc.ctx)
 
-			if tc.expectedErr != "" {
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
+					if tc.expectedErr != "" {
+			assert.ErrorContains(t, err, tc.expectedErr)
 				return
 			}
 

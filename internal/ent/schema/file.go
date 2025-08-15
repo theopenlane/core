@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -119,16 +119,21 @@ func (f File) Mixin() []ent.Mixin {
 	}.getMixins(f)
 }
 
+func (File) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the File
-func (File) Annotations() []schema.Annotation {
+func (f File) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }
 
 // Interceptors of the File
-func (File) Interceptors() []ent.Interceptor {
+func (f File) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorPresignedURL(),
 		interceptors.InterceptorFile(), // filter on the organization id
@@ -136,8 +141,9 @@ func (File) Interceptors() []ent.Interceptor {
 }
 
 // Policy of the File
-func (File) Policy() ent.Policy {
+func (f File) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithOnMutationRules(
 			// check permissions on delete and update operations, creation is handled by the parent object
 			ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne,
