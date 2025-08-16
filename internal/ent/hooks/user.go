@@ -147,15 +147,17 @@ func HookUser() ent.Hook {
 					return nil, err
 				}
 
-				// create a subscription for the personal org and add default modules
-				orgSubs, err := createOrgSubscription(ctx, org, m)
-				if err != nil {
-					return nil, err
-				}
+				if m.EntConfig.Modules.Enabled {
+					// create a subscription for the personal org and add default modules
+					orgSubs, err := createOrgSubscription(ctx, org, m)
+					if err != nil {
+						return nil, err
+					}
 
-				_, err = createDefaultOrgModulesProductsPrices(ctx, org, m, orgSubs, withPersonalOrg())
-				if err != nil {
-					return nil, err
+					_, err = createDefaultOrgModulesProductsPrices(ctx, org, m, orgSubs, withPersonalOrg())
+					if err != nil {
+						return nil, err
+					}
 				}
 
 				// send a welcome email to the user

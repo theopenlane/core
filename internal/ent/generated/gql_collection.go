@@ -30318,6 +30318,11 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, organization.FieldDedicatedDb)
 				fieldSeen[organization.FieldDedicatedDb] = struct{}{}
 			}
+		case "stripeCustomerID":
+			if _, ok := fieldSeen[organization.FieldStripeCustomerID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldStripeCustomerID)
+				fieldSeen[organization.FieldStripeCustomerID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -30487,6 +30492,11 @@ func (_q *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[organizationhistory.FieldDedicatedDb]; !ok {
 				selectedFields = append(selectedFields, organizationhistory.FieldDedicatedDb)
 				fieldSeen[organizationhistory.FieldDedicatedDb] = struct{}{}
+			}
+		case "stripeCustomerID":
+			if _, ok := fieldSeen[organizationhistory.FieldStripeCustomerID]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldStripeCustomerID)
+				fieldSeen[organizationhistory.FieldStripeCustomerID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

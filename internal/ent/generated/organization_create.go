@@ -278,6 +278,20 @@ func (_c *OrganizationCreate) SetNillableDedicatedDb(v *bool) *OrganizationCreat
 	return _c
 }
 
+// SetStripeCustomerID sets the "stripe_customer_id" field.
+func (_c *OrganizationCreate) SetStripeCustomerID(v string) *OrganizationCreate {
+	_c.mutation.SetStripeCustomerID(v)
+	return _c
+}
+
+// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
+func (_c *OrganizationCreate) SetNillableStripeCustomerID(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetStripeCustomerID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *OrganizationCreate) SetID(v string) *OrganizationCreate {
 	_c.mutation.SetID(v)
@@ -1510,6 +1524,10 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
 		_node.DedicatedDb = value
+	}
+	if value, ok := _c.mutation.StripeCustomerID(); ok {
+		_spec.SetField(organization.FieldStripeCustomerID, field.TypeString, value)
+		_node.StripeCustomerID = &value
 	}
 	if nodes := _c.mutation.ControlCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

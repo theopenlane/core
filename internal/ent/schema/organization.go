@@ -122,6 +122,17 @@ func (Organization) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationUpdateInput, entgql.SkipOrderField),
 			),
+		field.String("stripe_customer_id").
+			Comment("the customer ID this organization is associated to").
+			Optional().
+			Nillable().
+			Unique().
+			// Immutable().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput |
+					entgql.SkipWhereInput | entgql.SkipOrderField),
+			).
+			Optional(),
 	}
 }
 

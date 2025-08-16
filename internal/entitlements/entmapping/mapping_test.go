@@ -1,6 +1,7 @@
 package entmapping
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -112,6 +113,7 @@ type moduleBuilder struct {
 	status          string
 	visibility      string
 	moduleLookupKey string
+	active          bool
 }
 
 func (b *moduleBuilder) SetModule(m models.OrgModule) *moduleBuilder { b.module = m; return b }
@@ -120,6 +122,7 @@ func (b *moduleBuilder) SetStripePriceID(id string) *moduleBuilder   { b.stripeP
 func (b *moduleBuilder) SetStatus(s string) *moduleBuilder           { b.status = s; return b }
 func (b *moduleBuilder) SetVisibility(v string) *moduleBuilder       { b.visibility = v; return b }
 func (b *moduleBuilder) SetModuleLookupKey(k string) *moduleBuilder  { b.moduleLookupKey = k; return b }
+func (b *moduleBuilder) SetActive(a bool) *moduleBuilder             { b.active = a; return b }
 
 func TestStripePriceToOrgPrice(t *testing.T) {
 	p := &stripe.Price{
@@ -331,7 +334,7 @@ func TestApplyStripeSubscription(t *testing.T) {
 		stripeSubscriptionID:     "sub_123",
 		stripeSubscriptionStatus: "active",
 		active:                   true,
-		stripeCustomerID:         "cus_123",
+		stripeCustomerID:         "",
 		productTier:              "Pro",
 		stripeProductTierID:      "prod_123",
 		productPrice:             models.Price{Amount: 20, Interval: "year", Currency: "usd"},
@@ -363,7 +366,7 @@ func TestApplyStripeSubscriptionItem(t *testing.T) {
 	}
 
 	b := &moduleBuilder{}
-	got := ApplyStripeSubscriptionItem(b, item)
+	got := ApplyStripeSubscriptionItem(context.Background(), b, item, nil, "active")
 
 	expected := &moduleBuilder{
 		module:          models.OrgModule("mod1"),
@@ -372,6 +375,7 @@ func TestApplyStripeSubscriptionItem(t *testing.T) {
 		status:          "active",
 		visibility:      "public",
 		moduleLookupKey: "lookup",
+		active:          false,
 	}
 
 	require.Equal(t, b, got)

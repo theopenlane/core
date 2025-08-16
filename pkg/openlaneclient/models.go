@@ -17046,7 +17046,9 @@ type Organization struct {
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// Whether the organization has a dedicated database
-	DedicatedDb                   bool                                  `json:"dedicatedDb"`
+	DedicatedDb bool `json:"dedicatedDb"`
+	// the customer ID this organization is associated to
+	StripeCustomerID              *string                               `json:"stripeCustomerID,omitempty"`
 	ControlCreators               *GroupConnection                      `json:"controlCreators"`
 	ControlImplementationCreators *GroupConnection                      `json:"controlImplementationCreators"`
 	ControlObjectiveCreators      *GroupConnection                      `json:"controlObjectiveCreators"`
@@ -17178,6 +17180,8 @@ type OrganizationHistory struct {
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicatedDb"`
+	// the customer ID this organization is associated to
+	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
 }
 
 func (OrganizationHistory) IsNode() {}
@@ -29122,8 +29126,11 @@ type UpdateOrganizationInput struct {
 	AvatarRemoteURL      *string `json:"avatarRemoteURL,omitempty"`
 	ClearAvatarRemoteURL *bool   `json:"clearAvatarRemoteURL,omitempty"`
 	// The time the user's (local) avatar was last updated
-	AvatarUpdatedAt                       *time.Time                      `json:"avatarUpdatedAt,omitempty"`
-	ClearAvatarUpdatedAt                  *bool                           `json:"clearAvatarUpdatedAt,omitempty"`
+	AvatarUpdatedAt      *time.Time `json:"avatarUpdatedAt,omitempty"`
+	ClearAvatarUpdatedAt *bool      `json:"clearAvatarUpdatedAt,omitempty"`
+	// the customer ID this organization is associated to
+	StripeCustomerID                      *string                         `json:"stripeCustomerID,omitempty"`
+	ClearStripeCustomerID                 *bool                           `json:"clearStripeCustomerID,omitempty"`
 	AddControlCreatorIDs                  []string                        `json:"addControlCreatorIDs,omitempty"`
 	RemoveControlCreatorIDs               []string                        `json:"removeControlCreatorIDs,omitempty"`
 	ClearControlCreators                  *bool                           `json:"clearControlCreators,omitempty"`

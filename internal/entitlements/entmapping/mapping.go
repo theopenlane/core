@@ -1,7 +1,9 @@
 package entmapping
 
 import (
+	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/stripe/stripe-go/v82"
@@ -277,7 +279,6 @@ type OrgSubscriptionSetter[T any] interface {
 	SetStripeSubscriptionID(string) T
 	SetStripeSubscriptionStatus(string) T
 	SetActive(bool) T
-	SetStripeCustomerID(string) T
 	SetProductTier(string) T
 	SetStripeProductTierID(string) T
 	SetProductPrice(models.Price) T
@@ -325,10 +326,6 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 	b.SetStripeSubscriptionStatus(status)
 	b.SetActive(entitlements.IsSubscriptionActive(sub.Status))
 
-	if sub.Customer != nil {
-		b.SetStripeCustomerID(sub.Customer.ID)
-	}
-
 	b.SetProductTier(productName)
 	b.SetStripeProductTierID(productID)
 	b.SetProductPrice(price)
@@ -352,10 +349,12 @@ type OrgModuleSetter[T any] interface {
 	SetStatus(string) T
 	SetVisibility(string) T
 	SetModuleLookupKey(string) T
+	SetActive(bool) T
 }
 
 // ApplyStripeSubscriptionItem sets fields on the ent builder from the stripe.SubscriptionItem
-func ApplyStripeSubscriptionItem[T OrgModuleSetter[T]](b T, item *stripe.SubscriptionItem) T {
+func ApplyStripeSubscriptionItem[T OrgModuleSetter[T]](ctx context.Context, b T, item *stripe.SubscriptionItem,
+	client *entitlements.StripeClient, status string) T {
 	if item == nil || item.Price == nil {
 		return b
 	}
@@ -371,26 +370,24 @@ func ApplyStripeSubscriptionItem[T OrgModuleSetter[T]](b T, item *stripe.Subscri
 		Currency: string(item.Price.Currency),
 	}
 
-	moduleKey := ""
-	if item.Price.Product != nil && item.Price.Product.Metadata != nil {
-		moduleKey = item.Price.Product.Metadata["module"]
+	productMetadata := getProductMetadata(ctx, item.Price.Product, client)
+	if moduleKey := strings.TrimSpace(productMetadata["module"]); moduleKey != "" {
+		b.SetModule(models.OrgModule(moduleKey))
 	}
 
-	visibility := ""
-	if v, ok := item.Price.Metadata["visibility"]; ok {
-		visibility = v
+	if visibility := strings.TrimSpace(item.Price.Metadata["visibility"]); visibility != "" {
+		b.SetVisibility(visibility)
 	}
 
-	status := "inactive"
-	if item.Price.Active {
-		status = "active"
+	switch status {
+	case string(stripe.SubscriptionStatusCanceled), string(stripe.SubscriptionStatusPastDue),
+		string(stripe.SubscriptionStatusPaused):
+		b.SetActive(false)
 	}
 
-	b.SetModule(models.OrgModule(moduleKey))
 	b.SetPrice(price)
 	b.SetStripePriceID(item.Price.ID)
 	b.SetStatus(status)
-	b.SetVisibility(visibility)
 	b.SetModuleLookupKey(item.Price.LookupKey)
 
 	return b
@@ -411,4 +408,25 @@ func PopulatePricesForOrganizationCustomer(o *entitlements.OrganizationCustomer)
 	}
 
 	return o
+}
+
+func getProductMetadata(ctx context.Context, product *stripe.Product, client *entitlements.StripeClient) map[string]string {
+	if product == nil {
+		return nil
+	}
+
+	if product.Metadata != nil {
+		return product.Metadata
+	}
+
+	if client == nil {
+		return nil
+	}
+
+	fullProduct, err := client.FindProductByID(ctx, product.ID)
+	if err != nil || fullProduct == nil {
+		return nil
+	}
+
+	return fullProduct.Metadata
 }

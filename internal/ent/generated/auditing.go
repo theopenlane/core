@@ -2139,6 +2139,9 @@ func (_m *OrganizationHistory) changes(new *OrganizationHistory) []Change {
 	if !reflect.DeepEqual(_m.DedicatedDb, new.DedicatedDb) {
 		changes = append(changes, NewChange(organizationhistory.FieldDedicatedDb, _m.DedicatedDb, new.DedicatedDb))
 	}
+	if !reflect.DeepEqual(_m.StripeCustomerID, new.StripeCustomerID) {
+		changes = append(changes, NewChange(organizationhistory.FieldStripeCustomerID, _m.StripeCustomerID, new.StripeCustomerID))
+	}
 	return changes
 }
 

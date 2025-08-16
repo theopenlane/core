@@ -142,6 +142,11 @@ func DedicatedDb(v bool) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldDedicatedDb, v))
 }
 
+// StripeCustomerID applies equality check predicate on the "stripe_customer_id" field. It's identical to StripeCustomerIDEQ.
+func StripeCustomerID(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldStripeCustomerID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldCreatedAt, v))
@@ -1035,6 +1040,81 @@ func DedicatedDbEQ(v bool) predicate.Organization {
 // DedicatedDbNEQ applies the NEQ predicate on the "dedicated_db" field.
 func DedicatedDbNEQ(v bool) predicate.Organization {
 	return predicate.Organization(sql.FieldNEQ(FieldDedicatedDb, v))
+}
+
+// StripeCustomerIDEQ applies the EQ predicate on the "stripe_customer_id" field.
+func StripeCustomerIDEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldStripeCustomerID, v))
+}
+
+// StripeCustomerIDNEQ applies the NEQ predicate on the "stripe_customer_id" field.
+func StripeCustomerIDNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldStripeCustomerID, v))
+}
+
+// StripeCustomerIDIn applies the In predicate on the "stripe_customer_id" field.
+func StripeCustomerIDIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldStripeCustomerID, vs...))
+}
+
+// StripeCustomerIDNotIn applies the NotIn predicate on the "stripe_customer_id" field.
+func StripeCustomerIDNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldStripeCustomerID, vs...))
+}
+
+// StripeCustomerIDGT applies the GT predicate on the "stripe_customer_id" field.
+func StripeCustomerIDGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldStripeCustomerID, v))
+}
+
+// StripeCustomerIDGTE applies the GTE predicate on the "stripe_customer_id" field.
+func StripeCustomerIDGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldStripeCustomerID, v))
+}
+
+// StripeCustomerIDLT applies the LT predicate on the "stripe_customer_id" field.
+func StripeCustomerIDLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldStripeCustomerID, v))
+}
+
+// StripeCustomerIDLTE applies the LTE predicate on the "stripe_customer_id" field.
+func StripeCustomerIDLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldStripeCustomerID, v))
+}
+
+// StripeCustomerIDContains applies the Contains predicate on the "stripe_customer_id" field.
+func StripeCustomerIDContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldStripeCustomerID, v))
+}
+
+// StripeCustomerIDHasPrefix applies the HasPrefix predicate on the "stripe_customer_id" field.
+func StripeCustomerIDHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldStripeCustomerID, v))
+}
+
+// StripeCustomerIDHasSuffix applies the HasSuffix predicate on the "stripe_customer_id" field.
+func StripeCustomerIDHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldStripeCustomerID, v))
+}
+
+// StripeCustomerIDIsNil applies the IsNil predicate on the "stripe_customer_id" field.
+func StripeCustomerIDIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldStripeCustomerID))
+}
+
+// StripeCustomerIDNotNil applies the NotNil predicate on the "stripe_customer_id" field.
+func StripeCustomerIDNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldStripeCustomerID))
+}
+
+// StripeCustomerIDEqualFold applies the EqualFold predicate on the "stripe_customer_id" field.
+func StripeCustomerIDEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldStripeCustomerID, v))
+}
+
+// StripeCustomerIDContainsFold applies the ContainsFold predicate on the "stripe_customer_id" field.
+func StripeCustomerIDContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldStripeCustomerID, v))
 }
 
 // HasControlCreators applies the HasEdge predicate on the "control_creators" edge.

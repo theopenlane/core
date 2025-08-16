@@ -11,6 +11,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/enttest"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -88,11 +89,19 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 
 	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
+	entCfg := &entconfig.Config{
+		EntityTypes: []string{},
+		Modules: entconfig.Modules{
+			Enabled: true,
+		},
+	}
+
 	opts := []generated.Option{
 		generated.Authz(*fgaClient),
 		generated.TokenManager(tm),
 		generated.SessionConfig(&sessionConfig),
 		generated.Emailer(&emailtemplates.Config{}),
+		generated.EntConfig(entCfg),
 	}
 
 	suite.tf = entdb.NewTestFixture()

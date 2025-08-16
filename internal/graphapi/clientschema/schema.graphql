@@ -30914,6 +30914,10 @@ type Organization implements Node {
 	Whether the organization has a dedicated database
 	"""
 	dedicatedDb: Boolean!
+	"""
+	the customer ID this organization is associated to
+	"""
+	stripeCustomerID: String
 	controlCreators(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -32881,6 +32885,10 @@ type OrganizationHistory implements Node {
 	Whether the organization has a dedicated database
 	"""
 	dedicatedDb: Boolean!
+	"""
+	the customer ID this organization is associated to
+	"""
+	stripeCustomerID: String
 }
 """
 A connection to a list of items.
@@ -57998,6 +58006,11 @@ input UpdateOrganizationInput {
 	"""
 	avatarUpdatedAt: Time
 	clearAvatarUpdatedAt: Boolean
+	"""
+	the customer ID this organization is associated to
+	"""
+	stripeCustomerID: String
+	clearStripeCustomerID: Boolean
 	addControlCreatorIDs: [ID!]
 	removeControlCreatorIDs: [ID!]
 	clearControlCreators: Boolean

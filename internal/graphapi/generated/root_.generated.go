@@ -2947,6 +2947,7 @@ type ComplexityRoot struct {
 		Setting                       func(childComplexity int) int
 		StandardCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Standards                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		StripeCustomerID              func(childComplexity int) int
 		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Subprocessors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
 		Subscribers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
@@ -2998,6 +2999,7 @@ type ComplexityRoot struct {
 		Operation         func(childComplexity int) int
 		PersonalOrg       func(childComplexity int) int
 		Ref               func(childComplexity int) int
+		StripeCustomerID  func(childComplexity int) int
 		Tags              func(childComplexity int) int
 		UpdatedAt         func(childComplexity int) int
 		UpdatedBy         func(childComplexity int) int
@@ -20889,6 +20891,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Standards(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.StandardOrder), args["where"].(*generated.StandardWhereInput)), true
 
+	case "Organization.stripeCustomerID":
+		if e.complexity.Organization.StripeCustomerID == nil {
+			break
+		}
+
+		return e.complexity.Organization.StripeCustomerID(childComplexity), true
+
 	case "Organization.subcontrols":
 		if e.complexity.Organization.Subcontrols == nil {
 			break
@@ -21159,6 +21168,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationHistory.Ref(childComplexity), true
+
+	case "OrganizationHistory.stripeCustomerID":
+		if e.complexity.OrganizationHistory.StripeCustomerID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationHistory.StripeCustomerID(childComplexity), true
 
 	case "OrganizationHistory.tags":
 		if e.complexity.OrganizationHistory.Tags == nil {
@@ -62726,6 +62742,10 @@ type Organization implements Node {
   Whether the organization has a dedicated database
   """
   dedicatedDb: Boolean!
+  """
+  the customer ID this organization is associated to
+  """
+  stripeCustomerID: String
   controlCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -64666,6 +64686,10 @@ type OrganizationHistory implements Node {
   Whether the organization has a dedicated database
   """
   dedicatedDb: Boolean!
+  """
+  the customer ID this organization is associated to
+  """
+  stripeCustomerID: String
 }
 """
 A connection to a list of items.
@@ -85651,6 +85675,11 @@ input UpdateOrganizationInput {
   """
   avatarUpdatedAt: Time
   clearAvatarUpdatedAt: Boolean
+  """
+  the customer ID this organization is associated to
+  """
+  stripeCustomerID: String
+  clearStripeCustomerID: Boolean
   addControlCreatorIDs: [ID!]
   removeControlCreatorIDs: [ID!]
   clearControlCreators: Boolean

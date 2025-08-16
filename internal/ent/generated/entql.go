@@ -2025,6 +2025,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organization.FieldAvatarLocalFileID:    {Type: field.TypeString, Column: organization.FieldAvatarLocalFileID},
 			organization.FieldAvatarUpdatedAt:      {Type: field.TypeTime, Column: organization.FieldAvatarUpdatedAt},
 			organization.FieldDedicatedDb:          {Type: field.TypeBool, Column: organization.FieldDedicatedDb},
+			organization.FieldStripeCustomerID:     {Type: field.TypeString, Column: organization.FieldStripeCustomerID},
 		},
 	}
 	graph.Nodes[66] = &sqlgraph.Node{
@@ -2057,6 +2058,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationhistory.FieldAvatarLocalFileID:    {Type: field.TypeString, Column: organizationhistory.FieldAvatarLocalFileID},
 			organizationhistory.FieldAvatarUpdatedAt:      {Type: field.TypeTime, Column: organizationhistory.FieldAvatarUpdatedAt},
 			organizationhistory.FieldDedicatedDb:          {Type: field.TypeBool, Column: organizationhistory.FieldDedicatedDb},
+			organizationhistory.FieldStripeCustomerID:     {Type: field.TypeString, Column: organizationhistory.FieldStripeCustomerID},
 		},
 	}
 	graph.Nodes[67] = &sqlgraph.Node{
@@ -19905,6 +19907,11 @@ func (f *OrganizationFilter) WhereDedicatedDb(p entql.BoolP) {
 	f.Where(p.Field(organization.FieldDedicatedDb))
 }
 
+// WhereStripeCustomerID applies the entql string predicate on the stripe_customer_id field.
+func (f *OrganizationFilter) WhereStripeCustomerID(p entql.StringP) {
+	f.Where(p.Field(organization.FieldStripeCustomerID))
+}
+
 // WhereHasControlCreators applies a predicate to check if query has an edge control_creators.
 func (f *OrganizationFilter) WhereHasControlCreators() {
 	f.Where(entql.HasEdge("control_creators"))
@@ -20976,6 +20983,11 @@ func (f *OrganizationHistoryFilter) WhereAvatarUpdatedAt(p entql.TimeP) {
 // WhereDedicatedDb applies the entql bool predicate on the dedicated_db field.
 func (f *OrganizationHistoryFilter) WhereDedicatedDb(p entql.BoolP) {
 	f.Where(p.Field(organizationhistory.FieldDedicatedDb))
+}
+
+// WhereStripeCustomerID applies the entql string predicate on the stripe_customer_id field.
+func (f *OrganizationHistoryFilter) WhereStripeCustomerID(p entql.StringP) {
+	f.Where(p.Field(organizationhistory.FieldStripeCustomerID))
 }
 
 // addPredicate implements the predicateAdder interface.

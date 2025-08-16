@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	_ "embed"
 	"encoding/hex"
+	"fmt"
 	"io/fs"
 	"maps"
 	"os"
@@ -288,11 +289,41 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 		}
 
 		if prod == nil {
-			prod, err = sc.CreateProduct(ctx, f.DisplayName, f.Description, map[string]string{ManagedByKey: ManagedByValue})
+			metadata := map[string]string{
+				ManagedByKey: ManagedByValue,
+				"module":     name,
+			}
+			prod, err = sc.CreateProduct(ctx, f.DisplayName, f.Description, metadata)
 			if err != nil {
 				return f, ErrFailedToCreateProduct
 			}
 
+			prodMap[f.DisplayName] = prod
+		} else if prod.Metadata == nil || prod.Metadata["module"] == "" {
+			// Product exists, check if it has the module metadata
+			// Need to update the product metadata
+			existingMetadata := make(map[string]string)
+			if prod.Metadata != nil {
+				for k, v := range prod.Metadata {
+					existingMetadata[k] = v
+				}
+			}
+
+			// Add missing metadata
+			existingMetadata[ManagedByKey] = ManagedByValue
+			existingMetadata["module"] = name
+
+			// Update the product with the new metadata
+			updateParams := &stripe.ProductUpdateParams{}
+			updateParams = sc.UpdateProductWithOptions(updateParams,
+				entitlements.WithUpdateProductMetadata(existingMetadata))
+
+			updatedProd, err := sc.UpdateProductWithParams(ctx, prod.ID, updateParams)
+			if err != nil {
+				return f, fmt.Errorf("failed to update product metadata: %w", err)
+			}
+
+			prod = updatedProd
 			prodMap[f.DisplayName] = prod
 		}
 

@@ -3816,6 +3816,7 @@ func init() {
 	orgmodule.Hooks[2] = orgmoduleMixinHooks2[0]
 	orgmodule.Hooks[3] = orgmoduleMixinHooks5[0]
 	orgmodule.Hooks[4] = orgmoduleHooks[0]
+	orgmodule.Hooks[5] = orgmoduleHooks[1]
 	orgmoduleMixinInters1 := orgmoduleMixin[1].Interceptors()
 	orgmoduleMixinInters2 := orgmoduleMixin[2].Interceptors()
 	orgmoduleMixinInters5 := orgmoduleMixin[5].Interceptors()

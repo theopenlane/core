@@ -236,6 +236,26 @@ func (_u *OrganizationHistoryUpdate) SetNillableDedicatedDb(v *bool) *Organizati
 	return _u
 }
 
+// SetStripeCustomerID sets the "stripe_customer_id" field.
+func (_u *OrganizationHistoryUpdate) SetStripeCustomerID(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetStripeCustomerID(v)
+	return _u
+}
+
+// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
+func (_u *OrganizationHistoryUpdate) SetNillableStripeCustomerID(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetStripeCustomerID(*v)
+	}
+	return _u
+}
+
+// ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
+func (_u *OrganizationHistoryUpdate) ClearStripeCustomerID() *OrganizationHistoryUpdate {
+	_u.mutation.ClearStripeCustomerID()
+	return _u
+}
+
 // Mutation returns the OrganizationHistoryMutation object of the builder.
 func (_u *OrganizationHistoryUpdate) Mutation() *OrganizationHistoryMutation {
 	return _u.mutation
@@ -387,6 +407,12 @@ func (_u *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if value, ok := _u.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.StripeCustomerID(); ok {
+		_spec.SetField(organizationhistory.FieldStripeCustomerID, field.TypeString, value)
+	}
+	if _u.mutation.StripeCustomerIDCleared() {
+		_spec.ClearField(organizationhistory.FieldStripeCustomerID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrganizationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -616,6 +642,26 @@ func (_u *OrganizationHistoryUpdateOne) SetNillableDedicatedDb(v *bool) *Organiz
 	return _u
 }
 
+// SetStripeCustomerID sets the "stripe_customer_id" field.
+func (_u *OrganizationHistoryUpdateOne) SetStripeCustomerID(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetStripeCustomerID(v)
+	return _u
+}
+
+// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
+func (_u *OrganizationHistoryUpdateOne) SetNillableStripeCustomerID(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetStripeCustomerID(*v)
+	}
+	return _u
+}
+
+// ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
+func (_u *OrganizationHistoryUpdateOne) ClearStripeCustomerID() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearStripeCustomerID()
+	return _u
+}
+
 // Mutation returns the OrganizationHistoryMutation object of the builder.
 func (_u *OrganizationHistoryUpdateOne) Mutation() *OrganizationHistoryMutation {
 	return _u.mutation
@@ -797,6 +843,12 @@ func (_u *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	}
 	if value, ok := _u.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.StripeCustomerID(); ok {
+		_spec.SetField(organizationhistory.FieldStripeCustomerID, field.TypeString, value)
+	}
+	if _u.mutation.StripeCustomerIDCleared() {
+		_spec.ClearField(organizationhistory.FieldStripeCustomerID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrganizationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

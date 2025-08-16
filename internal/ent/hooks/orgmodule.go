@@ -47,6 +47,54 @@ func HookOrgModule() ent.Hook {
 	}, ent.OpCreate)
 }
 
+func HookOrgModuleUpdate() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.OrgModuleFunc(func(ctx context.Context, omm *generated.OrgModuleMutation) (generated.Value, error) {
+			if !omm.EntConfig.Modules.Enabled {
+				return next.Mutate(ctx, omm)
+			}
+
+			op := omm.Op()
+
+			if op == ent.OpUpdateOne {
+				if active, _ := omm.Active(); active {
+					return next.Mutate(ctx, omm)
+				}
+			}
+
+			id, exists := omm.ID()
+			if !exists {
+				return next.Mutate(ctx, omm)
+			}
+
+			moduleToDelete, err := omm.Client().OrgModule.Get(ctx, id)
+			if err != nil {
+				return nil, err
+			}
+
+			v, err := next.Mutate(ctx, omm)
+			if err != nil {
+				return nil, err
+			}
+
+			deleteTuple := fgax.GetTupleKey(fgax.TupleRequest{
+				SubjectID:   moduleToDelete.OwnerID,
+				SubjectType: generated.TypeOrganization,
+				ObjectID:    moduleToDelete.Module.String(),
+				ObjectType:  "feature",
+				Relation:    "enabled",
+			})
+
+			_, err = omm.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{deleteTuple})
+			if err != nil {
+				return nil, err
+			}
+
+			return v, nil
+		})
+	}, ent.OpUpdateOne|ent.OpDeleteOne)
+}
+
 // createFeatureTuples writes default feature tuples to FGA and inserts them into
 // the feature cache if available.
 func createFeatureTuples(ctx context.Context, authz fgax.Client, orgID string, feats []models.OrgModule) error {

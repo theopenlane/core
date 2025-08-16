@@ -187,3 +187,9 @@ func (sc *StripeClient) FindProductByName(ctx context.Context, name string) (*st
 
 	return nil, nil
 }
+
+// FindProductByID retrieves a product directly by its ID from Stripe
+// It returns the product or nil if not found
+func (sc *StripeClient) FindProductByID(ctx context.Context, id string) (*stripe.Product, error) {
+	return sc.Client.V1Products.Retrieve(ctx, id, &stripe.ProductRetrieveParams{})
+}

@@ -70,7 +70,6 @@ func (OrgSubscription) Fields() []ent.Field {
 			Default(true),
 		field.String("stripe_customer_id").
 			Comment("the customer ID the subscription is associated to").
-			Unique().
 			Optional(),
 		field.Time("expires_at").
 			Comment("the time the subscription is set to expire; only populated if subscription is cancelled").

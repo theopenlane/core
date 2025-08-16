@@ -303,11 +303,6 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
-	orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
-	if err != nil {
-		return err
-	}
-
 	// create default entity types, if configured
 	if err := createEntityTypes(ctx, orgCreated.ID, m); err != nil {
 		return err
@@ -320,9 +315,21 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
-	_, err = createDefaultOrgModulesProductsPrices(ctx, orgCreated, m, orgSubs, withTrial())
-	if err != nil {
-		return err
+	if m.EntConfig.Modules.Enabled {
+		orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
+		if err != nil {
+			return err
+		}
+
+		// create default entity types, if configured
+		if err := createEntityTypes(ctx, orgCreated.ID, m); err != nil {
+			return err
+		}
+
+		_, err = createDefaultOrgModulesProductsPrices(ctx, orgCreated, m, orgSubs, withTrial())
+		if err != nil {
+			return err
+		}
 	}
 
 	// reset the original org id in the auth context if it was previously set

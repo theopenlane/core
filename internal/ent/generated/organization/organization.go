@@ -47,6 +47,8 @@ const (
 	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldDedicatedDb holds the string denoting the dedicated_db field in the database.
 	FieldDedicatedDb = "dedicated_db"
+	// FieldStripeCustomerID holds the string denoting the stripe_customer_id field in the database.
+	FieldStripeCustomerID = "stripe_customer_id"
 	// EdgeControlCreators holds the string denoting the control_creators edge name in mutations.
 	EdgeControlCreators = "control_creators"
 	// EdgeControlImplementationCreators holds the string denoting the control_implementation_creators edge name in mutations.
@@ -659,6 +661,7 @@ var Columns = []string{
 	FieldAvatarLocalFileID,
 	FieldAvatarUpdatedAt,
 	FieldDedicatedDb,
+	FieldStripeCustomerID,
 }
 
 var (
@@ -804,6 +807,11 @@ func ByAvatarUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDedicatedDb orders the results by the dedicated_db field.
 func ByDedicatedDb(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDedicatedDb, opts...).ToFunc()
+}
+
+// ByStripeCustomerID orders the results by the stripe_customer_id field.
+func ByStripeCustomerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStripeCustomerID, opts...).ToFunc()
 }
 
 // ByControlCreatorsCount orders the results by control_creators count.

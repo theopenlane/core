@@ -2960,7 +2960,7 @@ var (
 		{Name: "stripe_product_tier_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "stripe_customer_id", Type: field.TypeString, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "days_until_due", Type: field.TypeString, Nullable: true},
@@ -3051,6 +3051,7 @@ var (
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
+		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 	}
@@ -3062,13 +3063,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organizations_organizations_children",
-				Columns:    []*schema.Column{OrganizationsColumns[15]},
+				Columns:    []*schema.Column{OrganizationsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "organizations_files_avatar_file",
-				Columns:    []*schema.Column{OrganizationsColumns[16]},
+				Columns:    []*schema.Column{OrganizationsColumns[17]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3106,6 +3107,7 @@ var (
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
+		{Name: "stripe_customer_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrganizationHistoryTable holds the schema information for the "organization_history" table.
 	OrganizationHistoryTable = &schema.Table{

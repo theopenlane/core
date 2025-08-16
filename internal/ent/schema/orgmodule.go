@@ -113,5 +113,6 @@ func (OrgModule) Annotations() []schema.Annotation {
 func (OrgModule) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookOrgModule(),
+		hooks.HookOrgModuleUpdate(),
 	}
 }
