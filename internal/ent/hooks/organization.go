@@ -321,11 +321,6 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 			return err
 		}
 
-		// create default entity types, if configured
-		if err := createEntityTypes(ctx, orgCreated.ID, m); err != nil {
-			return err
-		}
-
 		_, err = createDefaultOrgModulesProductsPrices(ctx, orgCreated, m, orgSubs, withTrial())
 		if err != nil {
 			return err

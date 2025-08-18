@@ -183,6 +183,6 @@ func (OrganizationSetting) Policy() ent.Policy {
 
 func (OrganizationSetting) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogComplianceModule,
+		models.CatalogBaseModule,
 	}
 }

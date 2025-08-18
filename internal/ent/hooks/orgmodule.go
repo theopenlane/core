@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"fmt"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
@@ -27,12 +28,12 @@ func HookOrgModule() ent.Hook {
 
 			orgID, ok := omm.OwnerID()
 			if !ok || orgID == "" {
-				return v, ErrOwnerIDNotExists
+				return v, fmt.Errorf("%w: owner_id", ErrFieldRequired)
 			}
 
 			orgModule, ok := v.(*generated.OrgModule)
 			if !ok {
-				return v, ErrOwnerIDNotExists
+				return v, fmt.Errorf("%w: owner_id", ErrFieldRequired)
 			}
 
 			feats := []models.OrgModule{orgModule.Module}

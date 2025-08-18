@@ -2,7 +2,6 @@ package rule
 
 import (
 	"context"
-	"fmt"
 	"slices"
 	"strings"
 
@@ -282,7 +281,6 @@ func DenyIfMissingAllModules() privacy.MutationRule {
 			return privacy.Skip
 		}
 
-		fmt.Println(m.Type(), "MUTATION")
 		schemaFeatures, exists := features.FeatureOfType[m.Type()]
 		if !exists {
 			return privacy.Skip

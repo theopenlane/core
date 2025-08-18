@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
@@ -83,10 +85,6 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standa
 		return nil, err
 	}
 
-	if std.IsPublic {
-		ctx = allowCtx
-	}
-
 	return r.cloneControls(ctx, controls, programID)
 }
 
@@ -108,6 +106,25 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// track subcontrols to create
 	subcontrolsToCreate := []subcontrolToCreate{}
 
+	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil || ac.OrganizationID == "" {
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	orgID := ac.OrganizationID
+
+	// check if the organization has the required modules for Control entities before the parallel execution
+	// this prevents the database connection issues that occur when multiple goroutines all try to check modules
+	// simultaneously since each ( may ) query the db multiple times
+	hasModules, _, err := rule.HasAllFeatures(ctx, schema.Control{}.Modules()...)
+	if err != nil {
+		return nil, err
+	}
+
+	if !hasModules {
+		return nil, generated.ErrPermissionDenied
+	}
+
 	// do this in a go-routine to allow multiple controls to be cloned in parallel, use pond for this
 	// we cannot use a transaction here because we are running multiple go-routines
 	// and transactions cannot be used across go-routines
@@ -116,13 +133,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		errors []error
 		mu     sync.Mutex
 	)
-
-	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil || ac.OrganizationID == "" {
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	orgID := ac.OrganizationID
 
 	wherePredicate := []predicate.Control{}
 	for _, c := range controlsToClone {
@@ -175,8 +185,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		}
 	}
 
-	// check the program ID now, so controls inserts do not need to do a check to FGA on the parent
-	ctrlCtx := ctx
+	// check program access if a program is specified
 	if programID != nil {
 		allow, err := r.db.Authz.CheckAccess(ctx, fgax.AccessCheck{
 			ObjectType:  generated.TypeProgram,
@@ -189,10 +198,12 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			return nil, err
 		}
 
-		if allow {
-			ctrlCtx = privacy.DecisionContext(ctx, privacy.Allow)
+		if !allow {
+			return nil, generated.ErrPermissionDenied
 		}
 	}
+
+	ctrlCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	// create a function for each control to clone
 	// this will allow us to run the cloning in parallel
@@ -278,7 +289,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			Where(
 				control.IDIn(existingControlIDs...)).
 			AddProgramIDs(*programID).
-			Exec(ctrlCtx); err != nil {
+			Exec(ctx); err != nil {
 
 			return nil, err
 		}

@@ -1,36 +1,14 @@
 package interceptors
 
 import (
-	"context"
 	"testing"
-	"time"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/permissioncache"
-	"github.com/theopenlane/core/pkg/testutils"
 )
-
-func setupInterceptorContext(t *testing.T, org string, feats []models.OrgModule) context.Context {
-	t.Helper()
-	ctx := context.Background()
-	r := testutils.NewRedisClient()
-	cache := permissioncache.NewCache(r, permissioncache.WithCacheTTL(time.Minute))
-
-	_ = cache.SetFeatures(ctx, org, feats)
-	ctx = permissioncache.WithCache(ctx, cache)
-	ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{OrganizationID: org})
-
-	ctx = graphql.WithFieldContext(ctx, &graphql.FieldContext{})
-
-	return ctx
-}
 
 func testInterceptorLogic(client *generated.Client) bool {
 	if client != nil && client.EntConfig != nil && !client.EntConfig.Modules.Enabled {

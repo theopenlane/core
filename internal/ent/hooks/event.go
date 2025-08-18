@@ -446,7 +446,10 @@ func handleOrganizationCreated(event soiree.Event) error {
 	allowCtx := privacy.DecisionContext(event.Context(), privacy.Allow)
 	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
 
-	org, err := client.Organization.Get(allowCtx, lo.ValueOr(event.Properties(), "ID", "").(string))
+	org, err := client.Organization.Query().
+		Where(organization.ID(lo.ValueOr(event.Properties(), "ID", "").(string))).
+		WithSetting().
+		Only(allowCtx)
 	if err != nil {
 		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization")
 
@@ -460,7 +463,7 @@ func handleOrganizationCreated(event soiree.Event) error {
 
 	orgCustomer := &entitlements.OrganizationCustomer{OrganizationSubscriptionID: orgSubs.ID}
 
-	orgCustomer, err = updateOrgCustomerWithSubscription(allowCtx, orgSubs, client, orgCustomer)
+	orgCustomer, err = updateOrgCustomerWithSubscription(allowCtx, orgSubs, orgCustomer, org)
 	if err != nil {
 		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization from subscription")
 
@@ -538,16 +541,10 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 
 // updateOrgCustomerWithSubscription updates the organization customer with the subscription data
 // by querying the organization and organization settings
-func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgSubscription, client any, o *entitlements.OrganizationCustomer) (*entitlements.OrganizationCustomer, error) {
+func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgSubscription,
+	o *entitlements.OrganizationCustomer, org *entgen.Organization) (*entitlements.OrganizationCustomer, error) {
 	if orgSubs == nil {
 		return nil, ErrNoSubscriptions
-	}
-
-	org, err := client.(*entgen.Client).Organization.Query().Where(organization.ID(orgSubs.OwnerID)).WithSetting().Only(ctx)
-	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Msgf("Failed to fetch organization by organization ID %s", orgSubs.OwnerID)
-
-		return nil, err
 	}
 
 	if org.Edges.Setting != nil {

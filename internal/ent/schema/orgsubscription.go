@@ -68,9 +68,6 @@ func (OrgSubscription) Fields() []ent.Field {
 				entgql.OrderField("active"),
 			).
 			Default(true),
-		field.String("stripe_customer_id").
-			Comment("the customer ID the subscription is associated to").
-			Optional(),
 		field.Time("expires_at").
 			Comment("the time the subscription is set to expire; only populated if subscription is cancelled").
 			Annotations(
