@@ -153,9 +153,6 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 			Type:             entconfig.SummarizerTypeLexrank,
 			MaximumSentences: 60,
 		},
-		Modules: entconfig.Modules{
-			Enabled: true,
-		},
 	}
 
 	summarizerClient, err := summarizer.NewSummarizer(*entCfg)
