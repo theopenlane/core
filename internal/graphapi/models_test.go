@@ -1746,7 +1746,7 @@ func (tccb *TrustCenterComplianceBuilder) MustNew(ctx context.Context, t *testin
 	}
 
 	trustCenterCompliance, err := mutation.Save(ctx)
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	return trustCenterCompliance
 }
