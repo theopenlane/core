@@ -155,13 +155,9 @@ func (JobResult) Interceptors() []ent.Interceptor {
 }
 
 // Policy of the JobResult
-func (j JobResult) Policy() ent.Policy {
+func (JobResult) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
-			// entfga.CheckEditAccess[*generated.JobResultMutation](),
-			policy.CheckCreateAccess(),
-			// entfga.CheckEditAccess[*generated.JobResultMutation](),
 			// only system admin tokens should be posting back job results
 			rule.AllowMutationIfSystemAdmin(),
 		),

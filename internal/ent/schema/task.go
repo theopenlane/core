@@ -242,9 +242,6 @@ func (Task) Policy() ent.Policy {
 
 func (Task) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogComplianceModule,
-		models.CatalogPolicyManagementAddon,
-		models.CatalogRiskManagementAddon,
-		models.CatalogEntityManagementModule,
+		models.CatalogBaseModule,
 	}
 }

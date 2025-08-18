@@ -459,7 +459,7 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 
 		log.Debug().Str("subscription_id", orgSubscription.ID).Msg("OrgSubscription updated successfully")
 
-		if err := h.clearFeatureCache(ctx, orgSubscription.OwnerID, stripeOrgSubscription.FeatureLookupKeys); err != nil {
+		if err := h.clearFeatureCache(ctx, orgSubscription.OwnerID); err != nil {
 			log.Error().Err(err).Msg("failed to ensure feature tuples")
 		}
 	}
@@ -508,7 +508,7 @@ func (h *Handler) createOrUpdateOrgSubscriptionWithStripe(ctx context.Context, s
 
 		log.Debug().Str("subscription_id", orgSubscription.ID).Str("stripe_subscription_id", subscription.ID).Msg("OrgSubscription created successfully")
 
-		if err := h.clearFeatureCache(ctx, orgSubscription.OwnerID, stripeSub.FeatureLookupKeys); err != nil {
+		if err := h.clearFeatureCache(ctx, orgSubscription.OwnerID); err != nil {
 			log.Error().Err(err).Msg("failed to ensure feature tuples")
 		}
 	}
@@ -516,8 +516,7 @@ func (h *Handler) createOrUpdateOrgSubscriptionWithStripe(ctx context.Context, s
 	return &orgSubscription.OwnerID, h.syncSubscriptionItemsWithStripe(ctx, subscription)
 }
 
-func (h *Handler) clearFeatureCache(ctx context.Context, orgID string, _ []string) error {
-
+func (h *Handler) clearFeatureCache(ctx context.Context, orgID string) error {
 	if h.RedisClient != nil {
 		key := "features:" + orgID
 		pipe := h.RedisClient.TxPipeline()

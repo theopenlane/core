@@ -62,6 +62,45 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 
 			path := graphql.GetPath(ctx)
 
+			// {
+			//    "message": "task not found",
+			//    "path": [
+			//      "task"
+			//    ],
+			//    "extensions": {
+			//      "code": "NOT_FOUND",
+			//      "message": "task not found"
+			//    }
+			//  },
+			//  {
+			//    "message": "feature not enabled for organization",
+			//    "path": [
+			//      "organizations",
+			//      "tasks"
+			//    ],
+			//    "extensions": {
+			//      "code": "MODULE_NO_ACCESS",
+			//      "message": "feature not enabled for organization"
+			//    }
+			//  },
+			//  {
+			//    "message": "feature not enabled for organization",
+			//    "path": [
+			//      "organizations",
+			//      "programs"
+			//    ],
+			//    "extensions": {
+			//      "code": "MODULE_NO_ACCESS",
+			//      "message": "feature not enabled for organization"
+			//    }
+			//  }
+			//
+			//  we want to be able to show the user the exact nodes and schemas they don't have
+			//  access to. So this constructs the path array in the above json . it could be ["task"] alone
+			//  which means the task schema cannot be accessed
+			//
+			//  or it could be ["organization","tasks"] which means a query like { org { tasks {}}} was
+			//  requested and the tasks section could not be retrieved
 			if len(path) == 0 {
 				path = ast.Path{ast.PathName(entity)}
 			} else if lastName, ok := path[len(path)-1].(ast.PathName); !ok || string(lastName) != entity {

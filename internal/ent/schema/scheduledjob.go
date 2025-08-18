@@ -168,6 +168,6 @@ func (ScheduledJob) Policy() ent.Policy {
 
 func (ScheduledJob) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogComplianceModule,
 	}
 }

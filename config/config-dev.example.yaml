@@ -126,7 +126,7 @@ ratelimit:
 
 entConfig:
   modules:
-    enabled: true
+    enabled: false
   entityTypes:
     - vendor
     - account
