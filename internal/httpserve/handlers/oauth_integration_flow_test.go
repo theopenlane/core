@@ -472,7 +472,7 @@ func (suite *HandlerTestSuite) TestOAuthCookieConfiguration() {
 		confirmedUser: true,
 	})
 
-	t.Run("OAuth cookies should be set with SameSiteNone", func(t *testing.T) {
+	t.Run("OAuth cookies should be set with SameSiteLax in Test", func(t *testing.T) {
 		request := models.OAuthFlowRequest{
 			Provider: "github",
 		}
@@ -509,9 +509,9 @@ func (suite *HandlerTestSuite) TestOAuthCookieConfiguration() {
 		require.NotNil(t, oauthUserCookie, "oauth_user_id cookie should be set")
 
 		// Verify OAuth cookies have proper SameSite configuration
-		assert.Equal(t, http.SameSiteNoneMode, oauthStateCookie.SameSite)
-		assert.Equal(t, http.SameSiteNoneMode, oauthOrgCookie.SameSite)
-		assert.Equal(t, http.SameSiteNoneMode, oauthUserCookie.SameSite)
+		assert.Equal(t, http.SameSiteLaxMode, oauthStateCookie.SameSite)
+		assert.Equal(t, http.SameSiteLaxMode, oauthOrgCookie.SameSite)
+		assert.Equal(t, http.SameSiteLaxMode, oauthUserCookie.SameSite)
 
 		// Verify OAuth cookies are HttpOnly for security
 		assert.True(t, oauthStateCookie.HttpOnly)
@@ -600,7 +600,7 @@ func (suite *HandlerTestSuite) createTestTokens(ctx context.Context, integration
 		SaveX(ctx)
 }
 
-// TestStartOAuthFlowCookieHandling tests that the OAuth start flow properly sets cookies with SameSiteNone
+// TestStartOAuthFlowCookieHandling tests that the OAuth start flow properly sets cookies with SameSiteLax
 func (suite *HandlerTestSuite) TestStartOAuthFlowCookieHandling() {
 	t := suite.T()
 
@@ -617,7 +617,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlowCookieHandling() {
 		confirmedUser: true,
 	})
 
-	t.Run("sets OAuth cookies with SameSiteNone", func(t *testing.T) {
+	t.Run("sets OAuth cookies with SameSiteLax", func(t *testing.T) {
 		request := models.OAuthFlowRequest{
 			Provider: "github",
 		}
@@ -646,7 +646,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlowCookieHandling() {
 		// Parse response to get cookies
 		cookies := rec.Result().Cookies()
 
-		// Verify OAuth-specific cookies are set with SameSiteNone
+		// Verify OAuth-specific cookies are set with SameSiteLax
 		var oauthStateCookie, oauthOrgCookie, oauthUserCookie *http.Cookie
 		var authAccessCookie, authRefreshCookie *http.Cookie
 
@@ -667,25 +667,25 @@ func (suite *HandlerTestSuite) TestStartOAuthFlowCookieHandling() {
 
 		// Verify OAuth cookies are set with proper SameSite policy
 		require.NotNil(t, oauthStateCookie, "oauth_state cookie should be set")
-		assert.Equal(t, http.SameSiteNoneMode, oauthStateCookie.SameSite, "oauth_state should have SameSiteNone")
+		assert.Equal(t, http.SameSiteLaxMode, oauthStateCookie.SameSite, "oauth_state should have SameSiteLax")
 		assert.True(t, oauthStateCookie.HttpOnly, "oauth_state should be HttpOnly")
 		assert.False(t, oauthStateCookie.Secure, "oauth_state should not be Secure in test mode")
 
 		require.NotNil(t, oauthOrgCookie, "oauth_org_id cookie should be set")
-		assert.Equal(t, http.SameSiteNoneMode, oauthOrgCookie.SameSite, "oauth_org_id should have SameSiteNone")
+		assert.Equal(t, http.SameSiteLaxMode, oauthOrgCookie.SameSite, "oauth_org_id should have SameSiteLax")
 		assert.Equal(t, testUser.OrganizationID, oauthOrgCookie.Value, "oauth_org_id should match user's org")
 
 		require.NotNil(t, oauthUserCookie, "oauth_user_id cookie should be set")
-		assert.Equal(t, http.SameSiteNoneMode, oauthUserCookie.SameSite, "oauth_user_id should have SameSiteNone")
+		assert.Equal(t, http.SameSiteLaxMode, oauthUserCookie.SameSite, "oauth_user_id should have SameSiteLax")
 		assert.Equal(t, testUser.UserInfo.ID, oauthUserCookie.Value, "oauth_user_id should match user's ID")
 
-		// Verify auth cookies are re-set with SameSiteNone for OAuth compatibility
+		// Verify auth cookies are re-set with SameSiteLax for OAuth compatibility
 		require.NotNil(t, authAccessCookie, "access token cookie should be re-set")
-		assert.Equal(t, http.SameSiteNoneMode, authAccessCookie.SameSite, "access token should have SameSiteNone for OAuth")
+		assert.Equal(t, http.SameSiteLaxMode, authAccessCookie.SameSite, "access token should have SameSiteLax for OAuth")
 		assert.Equal(t, "test_access_token", authAccessCookie.Value, "access token value should be preserved")
 
 		require.NotNil(t, authRefreshCookie, "refresh token cookie should be re-set")
-		assert.Equal(t, http.SameSiteNoneMode, authRefreshCookie.SameSite, "refresh token should have SameSiteNone for OAuth")
+		assert.Equal(t, http.SameSiteLaxMode, authRefreshCookie.SameSite, "refresh token should have SameSiteLax for OAuth")
 		assert.Equal(t, "test_refresh_token", authRefreshCookie.Value, "refresh token value should be preserved")
 	})
 
@@ -718,7 +718,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlowCookieHandling() {
 		}
 
 		require.NotNil(t, oauthStateCookie, "oauth_state cookie should be set even without auth cookies")
-		assert.Equal(t, http.SameSiteNoneMode, oauthStateCookie.SameSite, "oauth_state should have SameSiteNone")
+		assert.Equal(t, http.SameSiteLaxMode, oauthStateCookie.SameSite, "oauth_state should have SameSiteLax")
 	})
 }
 
@@ -754,17 +754,17 @@ func (suite *HandlerTestSuite) TestOAuthCallbackWithCookies() {
 		req.AddCookie(&http.Cookie{
 			Name:     "oauth_state",
 			Value:    validState,
-			SameSite: http.SameSiteNoneMode,
+			SameSite: http.SameSiteLaxMode,
 		})
 		req.AddCookie(&http.Cookie{
 			Name:     "oauth_org_id",
 			Value:    orgID,
-			SameSite: http.SameSiteNoneMode,
+			SameSite: http.SameSiteLaxMode,
 		})
 		req.AddCookie(&http.Cookie{
 			Name:     "oauth_user_id",
 			Value:    testUser.UserInfo.ID,
-			SameSite: http.SameSiteNoneMode,
+			SameSite: http.SameSiteLaxMode,
 		})
 
 		rec := httptest.NewRecorder()
