@@ -47,7 +47,7 @@ require (
 	github.com/knadh/koanf/v2 v2.2.2
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.13.4
-	github.com/lestrrat-go/httprc/v3 v3.0.0
+	github.com/lestrrat-go/httprc/v3 v3.0.1
 	github.com/lestrrat-go/jwx/v3 v3.0.10
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
@@ -59,10 +59,10 @@ require (
 	github.com/openfga/go-sdk v0.7.1
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.3
-	github.com/projectdiscovery/cdncheck v1.1.31
+	github.com/projectdiscovery/cdncheck v1.1.32
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
-	github.com/projectdiscovery/utils v0.4.22
+	github.com/projectdiscovery/utils v0.4.23
 	github.com/prometheus/client_golang v1.23.0
 	github.com/ravilushqa/otelgqlgen v0.19.0
 	github.com/redis/go-redis/v9 v9.12.1
@@ -90,7 +90,7 @@ require (
 	github.com/tink-crypto/tink-go/v2 v2.4.0
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/vektra/mockery/v3 v3.5.2
+	github.com/vektra/mockery/v3 v3.5.3
 	github.com/windmill-labs/windmill-go-client v1.518.1
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
@@ -349,23 +349,23 @@ require (
 	github.com/projectdiscovery/blackrock v0.0.1 // indirect
 	github.com/projectdiscovery/chaos-client v0.5.2 // indirect
 	github.com/projectdiscovery/dsl v0.5.0 // indirect
-	github.com/projectdiscovery/fastdialer v0.4.1 // indirect
+	github.com/projectdiscovery/fastdialer v0.4.4 // indirect
 	github.com/projectdiscovery/gologger v1.1.54 // indirect
 	github.com/projectdiscovery/gostruct v0.0.2 // indirect
-	github.com/projectdiscovery/hmap v0.0.91 // indirect
+	github.com/projectdiscovery/hmap v0.0.92 // indirect
 	github.com/projectdiscovery/machineid v0.0.0-20240226150047-2e2c51e35983 // indirect
 	github.com/projectdiscovery/mapcidr v1.1.34 // indirect
 	github.com/projectdiscovery/networkpolicy v0.1.18 // indirect
 	github.com/projectdiscovery/ratelimit v0.0.81 // indirect
-	github.com/projectdiscovery/retryabledns v1.0.103 // indirect
-	github.com/projectdiscovery/retryablehttp-go v1.0.118 // indirect
+	github.com/projectdiscovery/retryabledns v1.0.105 // indirect
+	github.com/projectdiscovery/retryablehttp-go v1.0.119 // indirect
 	github.com/quasilyte/go-ruleguard v0.4.4 // indirect
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22 // indirect
 	github.com/quasilyte/gogrep v0.5.0 // indirect
 	github.com/quasilyte/regex/syntax v0.0.0-20210819130434-b3f0c404a727 // indirect
 	github.com/quasilyte/stdinfo v0.0.0-20220114132959-f7386bf02567 // indirect
 	github.com/raeperd/recvcheck v0.2.0 // indirect
-	github.com/refraction-networking/utls v1.7.0 // indirect
+	github.com/refraction-networking/utls v1.7.1 // indirect
 	github.com/remeh/sizedwaitgroup v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/rs/xid v1.6.0 // indirect
@@ -586,7 +586,7 @@ require (
 	github.com/pquerna/otp v1.5.0
 	github.com/projectdiscovery/katana v1.2.1
 	github.com/projectdiscovery/subfinder/v2 v2.8.0
-	github.com/projectdiscovery/wappalyzergo v0.2.41
+	github.com/projectdiscovery/wappalyzergo v0.2.42
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.65.0 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
