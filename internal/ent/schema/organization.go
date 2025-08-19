@@ -128,7 +128,7 @@ func (Organization) Fields() []ent.Field {
 			Nillable().
 			Unique().
 			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput |
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput |
 					entgql.SkipWhereInput | entgql.SkipOrderField),
 			),
 	}

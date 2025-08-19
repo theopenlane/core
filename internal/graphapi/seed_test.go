@@ -2,12 +2,12 @@ package graphapi_test
 
 import (
 	"context"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"gotest.tools/v3/assert"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -60,7 +60,7 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, feat
 
 	// get the personal org for the user
 	testPersonalOrg, err := testUser.UserInfo.Edges.Setting.DefaultOrg(ctx)
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	testUser.PersonalOrgID = testPersonalOrg.ID
 
@@ -84,30 +84,8 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, feat
 	return testUser
 }
 
-type OrgModuleBuilder struct {
-	client *client
-
-	OwnerID string
-	Module  models.OrgModule
-	Active  bool
-}
-
-func (om *OrgModuleBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgModule {
-	ctx = setContext(ctx, om.client.db)
-
-	if om.Module == "" {
-		om.Module = "test_module"
-	}
-
-	orgModule, err := om.client.db.OrgModule.Create().
-		SetOwnerID(om.OwnerID).
-		SetModule(om.Module).
-		SetActive(om.Active).
-		Save(ctx)
-	assert.NilError(t, err)
-
-	return orgModule
-}
+var seedOnce sync.Once
+var seedErr error
 
 // setupTestData creates test users and sets up the clients with the necessary tokens
 // this includes three users, two with personal orgs and organizations, and one that is a member of the first user's organization
@@ -115,28 +93,34 @@ func (om *OrgModuleBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgM
 // all data using this should be cleaned up after each test to ensure no conflicts between tests
 // if there are potential conflicts, new users should be created for the test
 func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
-	// create system admin user
-	systemAdminUser = suite.systemAdminBuilder(ctx, t)
+	t.Helper()
+	seedOnce.Do(func() {
+		// create system admin user
+		systemAdminUser = suite.systemAdminBuilder(ctx, t)
 
-	// create test users
-	testUserCreator = suite.userBuilder(ctx, t)
-	testUser1 = suite.userBuilder(ctx, t)
-	testUser2 = suite.userBuilder(ctx, t)
+		// create test users
+		testUserCreator = suite.userBuilder(ctx, t)
 
-	// setup two test users that are members of the organization
-	viewOnlyUser = suite.userBuilder(ctx, t)
-	viewOnlyUser2 = suite.userBuilder(ctx, t)
+		testUser1 = suite.userBuilder(ctx, t)
+		testUser2 = suite.userBuilder(ctx, t)
 
-	// add the user to the organization
-	suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser1.OrganizationID)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser2, enums.RoleAdmin, testUser1.OrganizationID)
+		// setup two test users that are members of the organization
+		viewOnlyUser = suite.userBuilder(ctx, t)
+		viewOnlyUser2 = suite.userBuilder(ctx, t)
 
-	// setup a test user that is an admin of an organization
-	adminUser = suite.userBuilder(ctx, t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &adminUser, enums.RoleAdmin, testUser1.OrganizationID)
+		// add the user to the organization
+		suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser1.OrganizationID)
+		suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser2, enums.RoleAdmin, testUser1.OrganizationID)
 
-	suite.client.apiWithPAT = suite.setupPatClient(testUser1, t)
-	suite.client.apiWithToken = suite.setupAPITokenClient(testUser1.UserCtx, t)
+		// setup a test user that is an admin of an organization
+		adminUser = suite.userBuilder(ctx, t)
+		suite.addUserToOrganization(testUser1.UserCtx, t, &adminUser, enums.RoleAdmin, testUser1.OrganizationID)
+
+		suite.client.apiWithPAT = suite.setupPatClient(testUser1, t)
+		suite.client.apiWithToken = suite.setupAPITokenClient(testUser1.UserCtx, t)
+	})
+
+	requireNoError(seedErr)
 }
 
 func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) *testclient.TestClient {
@@ -148,7 +132,7 @@ func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) 
 	}
 
 	apiClientPat, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderPAT))
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	return apiClientPat
 }
@@ -162,7 +146,7 @@ func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing
 	}
 
 	apiClientToken, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	return apiClientToken
 }
@@ -192,7 +176,7 @@ func (suite *GraphTestSuite) systemAdminBuilder(ctx context.Context, t *testing.
 
 	// add system admin relation for user
 	_, err := suite.client.db.Authz.WriteTupleKeys(context.Background(), []fgax.TupleKey{fgax.GetTupleKey(req)}, nil)
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	// set the user as a system admin
 	newUser.UserCtx = auth.NewTestContextForSystemAdmin(newUser.ID, newUser.OrganizationID)

@@ -10,6 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/Yamashou/gqlgenc/clientv2"
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/mock"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"gotest.tools/v3/assert"
@@ -76,6 +77,7 @@ func TestMain(m *testing.M) {
 
 	// Create a new testing.T instance
 	// Note: this is only to seed data; you should not use this instance for actual tests
+	// this also cannot be used with a t.FailNow(), you must os.Exit when using this t
 	t := &testing.T{}
 
 	// Setup code here (e.g., initialize database connection)
@@ -116,7 +118,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// setup fga client
 	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	c := &client{
 		fga: fgaClient,
@@ -133,7 +135,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	}
 
 	tm, err := coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	sm := coreutils.CreateSessionManager()
 	rc := coreutils.NewRedisClient()
@@ -159,7 +161,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	}
 
 	summarizerClient, err := summarizer.NewSummarizer(*entCfg)
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	pool := soiree.NewPondPool(
 		soiree.WithMaxWorkers(100), //nolint:mnd
@@ -183,10 +185,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	c.objectStore, err = coreutils.MockObjectManager(t, objmw.Upload)
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	// set the validation function
 	c.objectStore.ValidationFunc = objmw.MimeTypeValidator
@@ -194,7 +196,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	// assign values
 	c.db = db
 	c.api, err = coreutils.TestClient(c.db, c.objectStore)
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	suite.client = c
 }
@@ -202,14 +204,14 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
 	// close the database connection
 	err := suite.client.db.Close()
-	assert.NilError(t, err)
+	requireNoError(err)
 
 	// close the database container
 	testutils.TeardownFixture(suite.tf)
 
 	// terminate all fga containers
 	err = suite.ofgaTF.TeardownFixture()
-	assert.NilError(t, err)
+	requireNoError(err)
 }
 
 // expectUpload sets up the mock object store to expect an upload and related operations
@@ -296,4 +298,12 @@ func assertErrorMessage(t *testing.T, err *gqlerror.Error, msg string) {
 	t.Helper()
 
 	assert.Equal(t, msg, openlaneclient.GetErrorMessage(err))
+}
+
+func requireNoError(err error) {
+	if err != nil {
+		log.Error().Err(err).Send()
+
+		os.Exit(1)
+	}
 }

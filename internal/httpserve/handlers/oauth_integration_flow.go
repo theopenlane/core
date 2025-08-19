@@ -50,6 +50,12 @@ func wrapTokenError(operation, provider string, err error) error {
 	return fmt.Errorf("failed to %s token for %s: %w", operation, provider, err)
 }
 
+var (
+	oauthStateCookieName  = "oauth_state"
+	oauthOrgIDCookieName  = "oauth_org_id"
+	oauthUserIDCookieName = "oauth_user_id"
+)
+
 // StartOAuthFlow initiates the OAuth flow for a third-party integration
 func (h *Handler) StartOAuthFlow(ctx echo.Context, openapi *OpenAPIContext) error {
 	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleOAuthFlowRequest, models.ExampleOAuthFlowResponse, openapi.Registry)
@@ -76,17 +82,12 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapi *OpenAPIContext) erro
 		return h.BadRequest(ctx, ErrInvalidProvider, openapi)
 	}
 
-	// Set up cookie config with SameSiteNoneMode for OAuth flow to work with external redirects
-	cfg := sessions.CookieConfig{
-		Path:     "/",
-		HTTPOnly: true,
-		SameSite: http.SameSiteNoneMode, // Required for OAuth redirects from external providers
-		Secure:   !h.IsTest,             // Must be true with SameSiteNone in production
-	}
+	// Set up cookie config that will work in either prod, test, or development mode
+	cfg := h.getOauthCookieConfig()
 
 	// Set the org ID and user ID as cookies for the OAuth flow
-	sessions.SetCookie(respWrite, orgID, "oauth_org_id", cfg)
-	sessions.SetCookie(respWrite, user.SubjectID, "oauth_user_id", cfg)
+	sessions.SetCookie(respWrite, orgID, oauthOrgIDCookieName, cfg)
+	sessions.SetCookie(respWrite, user.SubjectID, oauthUserIDCookieName, cfg)
 
 	// Re-set existing auth cookies with SameSiteNone for OAuth compatibility
 	if accessCookie, err := sessions.GetCookie(ctx.Request(), auth.AccessTokenCookie); err == nil {
@@ -104,7 +105,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapi *OpenAPIContext) erro
 	}
 
 	// Set the state as a cookie for validation in callback
-	sessions.SetCookie(respWrite, state, "oauth_state", cfg)
+	sessions.SetCookie(respWrite, state, oauthStateCookieName, cfg)
 
 	// Build OAuth authorization URL
 	config := provider.Config
@@ -143,28 +144,32 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	}
 
 	// Validate state matches what was set in the cookie
-	stateCookie, err := sessions.GetCookie(ctx.Request(), "oauth_state")
+	stateCookie, err := sessions.GetCookie(ctx.Request(), oauthStateCookieName)
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to get oauth_state cookie")
+		log.Error().Err(err).Msg("failed to get oauth_state cookie")
 		return h.BadRequest(ctx, ErrInvalidState, openapi)
 	}
 
 	if in.State != stateCookie.Value {
+		log.Error().Str("payload state", in.State).Str("cookie state", stateCookie.Value).Msg("State cookies do not match")
+
 		return h.BadRequest(ctx, ErrInvalidState, openapi)
 	}
 
 	// Get org ID and user ID from cookies
-	orgCookie, err := sessions.GetCookie(ctx.Request(), "oauth_org_id")
+	orgCookie, err := sessions.GetCookie(ctx.Request(), oauthOrgIDCookieName)
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to get oauth_org_id cookie")
+		log.Error().Err(err).Msg("failed to get oauth_org_id cookie")
 
 		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapi)
 	}
 
 	orgID := orgCookie.Value
 
-	_, err = sessions.GetCookie(ctx.Request(), "oauth_user_id")
+	_, err = sessions.GetCookie(ctx.Request(), oauthUserIDCookieName)
 	if err != nil {
+		log.Error().Err(err).Msg("failed to get oauth_user_id cookie")
+
 		return h.BadRequest(ctx, ErrMissingUserContext, openapi)
 	}
 
@@ -177,6 +182,8 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	// Validate state and extract provider from state
 	_, provider, err := h.validateOAuthState(in.State)
 	if err != nil {
+		log.Error().Err(err).Msg("failed to validate oauth state")
+
 		return h.BadRequest(ctx, ErrInvalidState, openapi)
 	}
 
@@ -216,9 +223,9 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	}
 
 	// Clean up the OAuth cookies after successful completion (like SSO handler)
-	sessions.RemoveCookie(respWrite, "oauth_state", sessions.CookieConfig{Path: "/"})
-	sessions.RemoveCookie(respWrite, "oauth_org_id", sessions.CookieConfig{Path: "/"})
-	sessions.RemoveCookie(respWrite, "oauth_user_id", sessions.CookieConfig{Path: "/"})
+	sessions.RemoveCookie(respWrite, oauthStateCookieName, sessions.CookieConfig{Path: "/"})
+	sessions.RemoveCookie(respWrite, oauthOrgIDCookieName, sessions.CookieConfig{Path: "/"})
+	sessions.RemoveCookie(respWrite, oauthUserIDCookieName, sessions.CookieConfig{Path: "/"})
 
 	// Redirect to configured success URL with integration details
 	helper := NewIntegrationHelper(provider, "")
@@ -282,7 +289,7 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 		// Create new integration
 		integration, err = h.DBClient.Integration.Create().SetOwnerID(orgID).SetName(integrationName).SetDescription(helperWithUser.Description()).SetKind(provider).Save(systemCtx)
 		if err != nil {
-			zerolog.Ctx(systemCtx).Error().Msgf("Failed to create integration for org %s and provider %s: %v", orgID, provider, err)
+			zerolog.Ctx(systemCtx).Error().Msgf("failed to create integration for org %s and provider %s: %v", orgID, provider, err)
 
 			return nil, wrapIntegrationError("create", err)
 		}
@@ -290,7 +297,7 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 		// Update existing integration
 		integration, err = integration.Update().SetName(integrationName).SetDescription(helperWithUser.Description()).Save(systemCtx)
 		if err != nil {
-			zerolog.Ctx(systemCtx).Error().Msgf("Failed to update integration for org %s and provider %s: %v", orgID, provider, err)
+			zerolog.Ctx(systemCtx).Error().Msgf("failed to update integration for org %s and provider %s: %v", orgID, provider, err)
 
 			return nil, wrapIntegrationError("update", err)
 		}
@@ -655,4 +662,23 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapi *Open
 	}
 
 	return h.Success(ctx, out)
+}
+
+// getOauthCookieConfig returns the cookie configuration for OAuth cookies
+// that is dependent on if the environment is test/dev or production
+func (h *Handler) getOauthCookieConfig() sessions.CookieConfig {
+	secure := !h.IsTest && !h.IsDev
+	sameSite := http.SameSiteNoneMode
+	if !secure {
+		sameSite = http.SameSiteLaxMode
+	}
+
+	cfg := sessions.CookieConfig{
+		Path:     "/",
+		HTTPOnly: true,
+		Secure:   secure, // Must be true with SameSiteNone in production
+		SameSite: sameSite,
+	}
+
+	return cfg
 }
