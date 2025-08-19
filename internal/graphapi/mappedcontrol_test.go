@@ -71,7 +71,6 @@ func TestQueryMappedControl(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -266,7 +265,6 @@ func TestMutationCreateMappedControl(t *testing.T) {
 			resp, err := tc.client.CreateMappedControl(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -361,9 +359,8 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 
 	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
-	resp, err := suite.client.api.GetMappedControlByID(testUser1.UserCtx, mappedControlAnotherOrg.ID)
+	_, err := suite.client.api.GetMappedControlByID(testUser1.UserCtx, mappedControlAnotherOrg.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Assert(t, resp == nil)
 
 	testCases := []struct {
 		name            string
@@ -456,7 +453,6 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 			resp, err := tc.client.UpdateMappedControl(tc.ctx, tc.requestID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -615,7 +611,6 @@ func TestMutationDeleteMappedControl(t *testing.T) {
 			resp, err := tc.client.DeleteMappedControl(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

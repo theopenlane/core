@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -103,8 +104,9 @@ func OwnerID(v string) predicate.OrgModule {
 }
 
 // Module applies equality check predicate on the "module" field. It's identical to ModuleEQ.
-func Module(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldEQ(FieldModule, v))
+func Module(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldEQ(FieldModule, vc))
 }
 
 // StripePriceID applies equality check predicate on the "stripe_price_id" field. It's identical to StripePriceIDEQ.
@@ -603,68 +605,87 @@ func OwnerIDContainsFold(v string) predicate.OrgModule {
 }
 
 // ModuleEQ applies the EQ predicate on the "module" field.
-func ModuleEQ(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldEQ(FieldModule, v))
+func ModuleEQ(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldEQ(FieldModule, vc))
 }
 
 // ModuleNEQ applies the NEQ predicate on the "module" field.
-func ModuleNEQ(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldNEQ(FieldModule, v))
+func ModuleNEQ(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldNEQ(FieldModule, vc))
 }
 
 // ModuleIn applies the In predicate on the "module" field.
-func ModuleIn(vs ...string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldIn(FieldModule, vs...))
+func ModuleIn(vs ...models.OrgModule) predicate.OrgModule {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = string(vs[i])
+	}
+	return predicate.OrgModule(sql.FieldIn(FieldModule, v...))
 }
 
 // ModuleNotIn applies the NotIn predicate on the "module" field.
-func ModuleNotIn(vs ...string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldNotIn(FieldModule, vs...))
+func ModuleNotIn(vs ...models.OrgModule) predicate.OrgModule {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = string(vs[i])
+	}
+	return predicate.OrgModule(sql.FieldNotIn(FieldModule, v...))
 }
 
 // ModuleGT applies the GT predicate on the "module" field.
-func ModuleGT(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldGT(FieldModule, v))
+func ModuleGT(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldGT(FieldModule, vc))
 }
 
 // ModuleGTE applies the GTE predicate on the "module" field.
-func ModuleGTE(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldGTE(FieldModule, v))
+func ModuleGTE(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldGTE(FieldModule, vc))
 }
 
 // ModuleLT applies the LT predicate on the "module" field.
-func ModuleLT(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldLT(FieldModule, v))
+func ModuleLT(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldLT(FieldModule, vc))
 }
 
 // ModuleLTE applies the LTE predicate on the "module" field.
-func ModuleLTE(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldLTE(FieldModule, v))
+func ModuleLTE(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldLTE(FieldModule, vc))
 }
 
 // ModuleContains applies the Contains predicate on the "module" field.
-func ModuleContains(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldContains(FieldModule, v))
+func ModuleContains(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldContains(FieldModule, vc))
 }
 
 // ModuleHasPrefix applies the HasPrefix predicate on the "module" field.
-func ModuleHasPrefix(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldHasPrefix(FieldModule, v))
+func ModuleHasPrefix(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldHasPrefix(FieldModule, vc))
 }
 
 // ModuleHasSuffix applies the HasSuffix predicate on the "module" field.
-func ModuleHasSuffix(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldHasSuffix(FieldModule, v))
+func ModuleHasSuffix(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldHasSuffix(FieldModule, vc))
 }
 
 // ModuleEqualFold applies the EqualFold predicate on the "module" field.
-func ModuleEqualFold(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldEqualFold(FieldModule, v))
+func ModuleEqualFold(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldEqualFold(FieldModule, vc))
 }
 
 // ModuleContainsFold applies the ContainsFold predicate on the "module" field.
-func ModuleContainsFold(v string) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldContainsFold(FieldModule, v))
+func ModuleContainsFold(v models.OrgModule) predicate.OrgModule {
+	vc := string(v)
+	return predicate.OrgModule(sql.FieldContainsFold(FieldModule, vc))
 }
 
 // PriceIsNil applies the IsNil predicate on the "price" field.

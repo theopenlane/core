@@ -11,23 +11,29 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
 	"github.com/samber/lo"
+	"gotest.tools/v3/assert"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 )
 
 type OrganizationBuilder struct {
-	client *client
+	client   *client
+	Features []models.OrgModule
 
 	// Fields
 	Name           string
@@ -423,7 +429,10 @@ func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, t *testing.T) {
 // setContext is a helper function to set the context for the client
 // setting privacy to allow and adding the client to the context
 func setContext(ctx context.Context, db *ent.Client) context.Context {
-	return ent.NewContext(rule.WithInternalContext(ctx), db)
+	ctx = ent.NewContext(rule.WithInternalContext(ctx), db)
+
+	// add the GraphQL response context to prevent panics from interceptors that call graphql.AddError
+	return graphql.WithResponseContext(ctx, gqlerrors.ErrorPresenter, graphql.DefaultRecover)
 }
 
 // MustNew organization builder is used to create, without authz checks, orgs in the database
@@ -461,7 +470,56 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 		requireNoError(err)
 	}
 
+	o.enableModules(ctx, t, org.ID)
+
 	return org
+}
+
+// enableModules enables the selected organization modules for the given organization
+func (o *OrganizationBuilder) enableModules(ctx context.Context, t *testing.T, orgID string) {
+
+	features := o.Features
+
+	if len(o.Features) == 0 {
+		features = models.AllOrgModules
+	}
+
+	tuples := make([]fgax.TupleKey, 0, len(features))
+	for _, feature := range features {
+		tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   orgID,
+			SubjectType: generated.TypeOrganization,
+			ObjectID:    string(feature),
+			ObjectType:  "feature",
+			Relation:    "enabled",
+		}))
+	}
+
+	_, err := o.client.db.Authz.WriteTupleKeys(ctx, tuples, nil)
+	assert.NilError(t, err)
+
+	for _, feature := range features {
+		n, err := o.client.db.OrgModule.Update().
+			Where(
+				orgmodule.OwnerID(orgID),
+				orgmodule.Module(feature),
+			).
+			SetActive(true).
+			Save(ctx)
+		assert.NilError(t, err)
+
+		// if no rows were updated, the module wasn't created - create it now
+		if n == 0 {
+			err = o.client.db.OrgModule.Create().
+				SetOwnerID(orgID).
+				SetModule(feature).
+				SetActive(true).
+				SetPrice(models.Price{Amount: 0, Interval: "month"}).
+				Exec(ctx)
+			assert.NilError(t, err)
+		}
+	}
+
 }
 
 // MustNew user builder is used to create, without authz checks, users in the database

@@ -244,20 +244,6 @@ func (_c *OrgSubscriptionHistoryCreate) SetNillableActive(v *bool) *OrgSubscript
 	return _c
 }
 
-// SetStripeCustomerID sets the "stripe_customer_id" field.
-func (_c *OrgSubscriptionHistoryCreate) SetStripeCustomerID(v string) *OrgSubscriptionHistoryCreate {
-	_c.mutation.SetStripeCustomerID(v)
-	return _c
-}
-
-// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
-func (_c *OrgSubscriptionHistoryCreate) SetNillableStripeCustomerID(v *string) *OrgSubscriptionHistoryCreate {
-	if v != nil {
-		_c.SetStripeCustomerID(*v)
-	}
-	return _c
-}
-
 // SetExpiresAt sets the "expires_at" field.
 func (_c *OrgSubscriptionHistoryCreate) SetExpiresAt(v time.Time) *OrgSubscriptionHistoryCreate {
 	_c.mutation.SetExpiresAt(v)
@@ -296,20 +282,6 @@ func (_c *OrgSubscriptionHistoryCreate) SetDaysUntilDue(v string) *OrgSubscripti
 func (_c *OrgSubscriptionHistoryCreate) SetNillableDaysUntilDue(v *string) *OrgSubscriptionHistoryCreate {
 	if v != nil {
 		_c.SetDaysUntilDue(*v)
-	}
-	return _c
-}
-
-// SetPaymentMethodAdded sets the "payment_method_added" field.
-func (_c *OrgSubscriptionHistoryCreate) SetPaymentMethodAdded(v bool) *OrgSubscriptionHistoryCreate {
-	_c.mutation.SetPaymentMethodAdded(v)
-	return _c
-}
-
-// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (_c *OrgSubscriptionHistoryCreate) SetNillablePaymentMethodAdded(v *bool) *OrgSubscriptionHistoryCreate {
-	if v != nil {
-		_c.SetPaymentMethodAdded(*v)
 	}
 	return _c
 }
@@ -521,10 +493,6 @@ func (_c *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory, *
 		_spec.SetField(orgsubscriptionhistory.FieldActive, field.TypeBool, value)
 		_node.Active = value
 	}
-	if value, ok := _c.mutation.StripeCustomerID(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldStripeCustomerID, field.TypeString, value)
-		_node.StripeCustomerID = value
-	}
 	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldExpiresAt, field.TypeTime, value)
 		_node.ExpiresAt = &value
@@ -536,10 +504,6 @@ func (_c *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory, *
 	if value, ok := _c.mutation.DaysUntilDue(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString, value)
 		_node.DaysUntilDue = &value
-	}
-	if value, ok := _c.mutation.PaymentMethodAdded(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool, value)
-		_node.PaymentMethodAdded = &value
 	}
 	if value, ok := _c.mutation.Features(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)

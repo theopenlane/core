@@ -157,6 +157,8 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 		return h.BadRequest(ctx, err, openapi)
 	}
 
+	userCtx = token.NewContextWithWebauthnCreationContextKey(userCtx)
+
 	// get webauthn session data from the session
 	webauthnData := sessionData.(map[string]any)[sessions.WebAuthnKey]
 

@@ -139,7 +139,6 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 		OrganizationSubscriptionID: sub.ID,
 		OrganizationName:           org.Name,
 		PersonalOrg:                org.PersonalOrg,
-		StripeCustomerID:           sub.StripeCustomerID,
 		ContactInfo: entitlements.ContactInfo{
 			Email:      org.Edges.Setting.BillingEmail,
 			Phone:      org.Edges.Setting.BillingPhone,
@@ -156,7 +155,7 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 		return fmt.Errorf("stripe customer: %w", err)
 	}
 
-	if sub.StripeSubscriptionID == "" || sub.StripeCustomerID == "" {
+	if sub.StripeSubscriptionID == "" {
 		if err := r.updateSubscription(ctx, cust); err != nil {
 			return err
 		}
@@ -200,7 +199,6 @@ func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.Org
 
 	update := r.db.OrgSubscription.UpdateOneID(c.OrganizationSubscriptionID).
 		SetStripeSubscriptionID(c.StripeSubscriptionID).
-		SetStripeCustomerID(c.StripeCustomerID).
 		SetStripeSubscriptionStatus(c.Subscription.Status).
 		SetActive(active).
 		SetProductTier(productName).
@@ -231,11 +229,11 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 		sub = org.Edges.OrgSubscriptions[0]
 	}
 
-	customerMissing := sub == nil || sub.StripeCustomerID == ""
-	subscriptionMissing := sub == nil || sub.StripeSubscriptionID == ""
+	customerMissing := sub == nil
+	subscriptionMissing := sub == nil
 
 	if !customerMissing {
-		if _, err := r.stripe.GetCustomerByStripeID(ctx, sub.StripeCustomerID); err != nil {
+		if _, err := r.stripe.GetCustomerByStripeID(ctx, *org.StripeCustomerID); err != nil {
 			customerMissing = true
 		}
 	}

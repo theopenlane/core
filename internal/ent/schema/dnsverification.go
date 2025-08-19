@@ -4,16 +4,14 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // DNSVerification holds the schema definition for the DNSVerification
@@ -116,6 +114,17 @@ func (DNSVerification) Indexes() []ent.Index {
 	}
 }
 
+func (DNSVerification) Hooks() []ent.Hook {
+	// TODO(acookin): delete hook to remove the record from cloudflare
+	return []ent.Hook{}
+}
+
+func (DNSVerification) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
+	}
+}
+
 // Policy of the DNSVerification
 func (DNSVerification) Policy() ent.Policy {
 	return policy.NewPolicy(
@@ -123,16 +132,4 @@ func (DNSVerification) Policy() ent.Policy {
 			rule.AllowMutationIfSystemAdmin(),
 		),
 	)
-}
-
-func (DNSVerification) Hooks() []ent.Hook {
-	// TODO(acookin): delete hook to remove the record from cloudflare
-	return []ent.Hook{}
-}
-
-// Annotations of the DNSVerification
-func (DNSVerification) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("trust-center"),
-	}
 }

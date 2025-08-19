@@ -24530,11 +24530,6 @@ func (_q *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, orgsubscription.FieldActive)
 				fieldSeen[orgsubscription.FieldActive] = struct{}{}
 			}
-		case "stripeCustomerID":
-			if _, ok := fieldSeen[orgsubscription.FieldStripeCustomerID]; !ok {
-				selectedFields = append(selectedFields, orgsubscription.FieldStripeCustomerID)
-				fieldSeen[orgsubscription.FieldStripeCustomerID] = struct{}{}
-			}
 		case "expiresAt":
 			if _, ok := fieldSeen[orgsubscription.FieldExpiresAt]; !ok {
 				selectedFields = append(selectedFields, orgsubscription.FieldExpiresAt)
@@ -24549,11 +24544,6 @@ func (_q *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[orgsubscription.FieldDaysUntilDue]; !ok {
 				selectedFields = append(selectedFields, orgsubscription.FieldDaysUntilDue)
 				fieldSeen[orgsubscription.FieldDaysUntilDue] = struct{}{}
-			}
-		case "paymentMethodAdded":
-			if _, ok := fieldSeen[orgsubscription.FieldPaymentMethodAdded]; !ok {
-				selectedFields = append(selectedFields, orgsubscription.FieldPaymentMethodAdded)
-				fieldSeen[orgsubscription.FieldPaymentMethodAdded] = struct{}{}
 			}
 		case "features":
 			if _, ok := fieldSeen[orgsubscription.FieldFeatures]; !ok {
@@ -24724,11 +24714,6 @@ func (_q *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNode
 				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldActive)
 				fieldSeen[orgsubscriptionhistory.FieldActive] = struct{}{}
 			}
-		case "stripeCustomerID":
-			if _, ok := fieldSeen[orgsubscriptionhistory.FieldStripeCustomerID]; !ok {
-				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldStripeCustomerID)
-				fieldSeen[orgsubscriptionhistory.FieldStripeCustomerID] = struct{}{}
-			}
 		case "expiresAt":
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldExpiresAt]; !ok {
 				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldExpiresAt)
@@ -24743,11 +24728,6 @@ func (_q *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNode
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldDaysUntilDue]; !ok {
 				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldDaysUntilDue)
 				fieldSeen[orgsubscriptionhistory.FieldDaysUntilDue] = struct{}{}
-			}
-		case "paymentMethodAdded":
-			if _, ok := fieldSeen[orgsubscriptionhistory.FieldPaymentMethodAdded]; !ok {
-				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldPaymentMethodAdded)
-				fieldSeen[orgsubscriptionhistory.FieldPaymentMethodAdded] = struct{}{}
 			}
 		case "features":
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldFeatures]; !ok {
@@ -30318,6 +30298,11 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, organization.FieldDedicatedDb)
 				fieldSeen[organization.FieldDedicatedDb] = struct{}{}
 			}
+		case "stripeCustomerID":
+			if _, ok := fieldSeen[organization.FieldStripeCustomerID]; !ok {
+				selectedFields = append(selectedFields, organization.FieldStripeCustomerID)
+				fieldSeen[organization.FieldStripeCustomerID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -30487,6 +30472,11 @@ func (_q *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[organizationhistory.FieldDedicatedDb]; !ok {
 				selectedFields = append(selectedFields, organizationhistory.FieldDedicatedDb)
 				fieldSeen[organizationhistory.FieldDedicatedDb] = struct{}{}
+			}
+		case "stripeCustomerID":
+			if _, ok := fieldSeen[organizationhistory.FieldStripeCustomerID]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldStripeCustomerID)
+				fieldSeen[organizationhistory.FieldStripeCustomerID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -30795,6 +30785,11 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldComplianceWebhookToken)
 				fieldSeen[organizationsetting.FieldComplianceWebhookToken] = struct{}{}
 			}
+		case "paymentMethodAdded":
+			if _, ok := fieldSeen[organizationsetting.FieldPaymentMethodAdded]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldPaymentMethodAdded)
+				fieldSeen[organizationsetting.FieldPaymentMethodAdded] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -31014,6 +31009,11 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 			if _, ok := fieldSeen[organizationsettinghistory.FieldComplianceWebhookToken]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldComplianceWebhookToken)
 				fieldSeen[organizationsettinghistory.FieldComplianceWebhookToken] = struct{}{}
+			}
+		case "paymentMethodAdded":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldPaymentMethodAdded]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldPaymentMethodAdded)
+				fieldSeen[organizationsettinghistory.FieldPaymentMethodAdded] = struct{}{}
 			}
 		case "id":
 		case "__typename":

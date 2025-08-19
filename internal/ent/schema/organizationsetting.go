@@ -4,15 +4,11 @@ import (
 	"net/mail"
 	"regexp"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/utils/keygen"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -20,6 +16,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/utils/keygen"
 )
 
 // OrganizationSetting holds the schema definition for the OrganizationSetting entity
@@ -126,6 +124,14 @@ func (OrganizationSetting) Fields() []ent.Field {
 				token := keygen.PrefixedSecret("tola_wsec")
 				return token
 			}),
+		field.Bool("payment_method_added").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput |
+					entgql.SkipMutationUpdateInput |
+					entgql.SkipWhereInput | entgql.SkipOrderField),
+			).
+			Default(false).
+			Comment("whether or not a payment method has been added to the account"),
 	}
 }
 
@@ -143,9 +149,8 @@ func (o OrganizationSetting) Edges() []ent.Edge {
 }
 
 // Annotations of the OrganizationSetting
-func (OrganizationSetting) Annotations() []schema.Annotation {
+func (o OrganizationSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entfga.SettingsChecks("organization"),
 	}
 }
@@ -159,7 +164,7 @@ func (OrganizationSetting) Hooks() []ent.Hook {
 }
 
 // Interceptors of the OrganizationSetting
-func (OrganizationSetting) Interceptors() []ent.Interceptor {
+func (o OrganizationSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorOrganizationSetting(),
 	}
@@ -181,4 +186,10 @@ func (OrganizationSetting) Policy() ent.Policy {
 			policy.CheckOrgWriteAccess(), // access based on auth context
 		),
 	)
+}
+
+func (OrganizationSetting) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
 }

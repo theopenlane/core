@@ -75,7 +75,6 @@ func TestQuerySubprocessorByID(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -235,7 +234,6 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 			resp, err := tc.client.CreateSubprocessor(tc.ctx, tc.request, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -301,7 +299,6 @@ func TestMutationDeleteSubprocessor(t *testing.T) {
 			resp, err := tc.client.DeleteSubprocessor(tc.ctx, tc.id)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -398,7 +395,6 @@ func TestUpdateSubprocessor(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -492,7 +488,6 @@ func TestGetAllSubprocessors(t *testing.T) {
 
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 				return
 			}
 

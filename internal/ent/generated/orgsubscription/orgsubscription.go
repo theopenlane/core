@@ -43,16 +43,12 @@ const (
 	FieldStripeSubscriptionStatus = "stripe_subscription_status"
 	// FieldActive holds the string denoting the active field in the database.
 	FieldActive = "active"
-	// FieldStripeCustomerID holds the string denoting the stripe_customer_id field in the database.
-	FieldStripeCustomerID = "stripe_customer_id"
 	// FieldExpiresAt holds the string denoting the expires_at field in the database.
 	FieldExpiresAt = "expires_at"
 	// FieldTrialExpiresAt holds the string denoting the trial_expires_at field in the database.
 	FieldTrialExpiresAt = "trial_expires_at"
 	// FieldDaysUntilDue holds the string denoting the days_until_due field in the database.
 	FieldDaysUntilDue = "days_until_due"
-	// FieldPaymentMethodAdded holds the string denoting the payment_method_added field in the database.
-	FieldPaymentMethodAdded = "payment_method_added"
 	// FieldFeatures holds the string denoting the features field in the database.
 	FieldFeatures = "features"
 	// FieldFeatureLookupKeys holds the string denoting the feature_lookup_keys field in the database.
@@ -121,11 +117,9 @@ var Columns = []string{
 	FieldStripeProductTierID,
 	FieldStripeSubscriptionStatus,
 	FieldActive,
-	FieldStripeCustomerID,
 	FieldExpiresAt,
 	FieldTrialExpiresAt,
 	FieldDaysUntilDue,
-	FieldPaymentMethodAdded,
 	FieldFeatures,
 	FieldFeatureLookupKeys,
 }
@@ -238,11 +232,6 @@ func ByActive(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActive, opts...).ToFunc()
 }
 
-// ByStripeCustomerID orders the results by the stripe_customer_id field.
-func ByStripeCustomerID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStripeCustomerID, opts...).ToFunc()
-}
-
 // ByExpiresAt orders the results by the expires_at field.
 func ByExpiresAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExpiresAt, opts...).ToFunc()
@@ -256,11 +245,6 @@ func ByTrialExpiresAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDaysUntilDue orders the results by the days_until_due field.
 func ByDaysUntilDue(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDaysUntilDue, opts...).ToFunc()
-}
-
-// ByPaymentMethodAdded orders the results by the payment_method_added field.
-func ByPaymentMethodAdded(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPaymentMethodAdded, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
@@ -144,7 +145,7 @@ func (Subcontrol) Hooks() []ent.Hook {
 }
 
 // Policy of the Subcontrol
-func (Subcontrol) Policy() ent.Policy {
+func (s Subcontrol) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
@@ -158,8 +159,8 @@ func (Subcontrol) Policy() ent.Policy {
 }
 
 // Annotations of the Standard
-func (Subcontrol) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("compliance"),
+func (Subcontrol) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
 	}
 }

@@ -163,6 +163,11 @@ func ComplianceWebhookToken(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldEQ(FieldComplianceWebhookToken, v))
 }
 
+// PaymentMethodAdded applies equality check predicate on the "payment_method_added" field. It's identical to PaymentMethodAddedEQ.
+func PaymentMethodAdded(v bool) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldEQ(FieldPaymentMethodAdded, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldEQ(FieldCreatedAt, v))
@@ -1501,6 +1506,16 @@ func ComplianceWebhookTokenEqualFold(v string) predicate.OrganizationSetting {
 // ComplianceWebhookTokenContainsFold applies the ContainsFold predicate on the "compliance_webhook_token" field.
 func ComplianceWebhookTokenContainsFold(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldContainsFold(FieldComplianceWebhookToken, v))
+}
+
+// PaymentMethodAddedEQ applies the EQ predicate on the "payment_method_added" field.
+func PaymentMethodAddedEQ(v bool) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldEQ(FieldPaymentMethodAdded, v))
+}
+
+// PaymentMethodAddedNEQ applies the NEQ predicate on the "payment_method_added" field.
+func PaymentMethodAddedNEQ(v bool) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldNEQ(FieldPaymentMethodAdded, v))
 }
 
 // HasOrganization applies the HasEdge predicate on the "organization" edge.

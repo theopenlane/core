@@ -7,7 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -99,10 +99,15 @@ func (e Export) Mixin() []ent.Mixin {
 	}.getMixins(e)
 }
 
+func (Export) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the Export
-func (Export) Annotations() []schema.Annotation {
+func (e Export) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features(entx.ModuleBase),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -110,7 +115,7 @@ func (Export) Annotations() []schema.Annotation {
 }
 
 // Policy of the Export
-func (Export) Policy() ent.Policy {
+func (e Export) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowQueryIfSystemAdmin(),

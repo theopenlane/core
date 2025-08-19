@@ -4,7 +4,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -13,7 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // MappableDomain holds the schema definition for the MappableDomain entity
@@ -83,8 +82,9 @@ func (MappableDomain) Indexes() []ent.Index {
 }
 
 // Policy of the MappableDomain
-func (MappableDomain) Policy() ent.Policy {
+func (e MappableDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
 		),
@@ -96,9 +96,8 @@ func (MappableDomain) Hooks() []ent.Hook {
 	return []ent.Hook{}
 }
 
-// Annotations of the MappableDomain
-func (MappableDomain) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("trust-center"),
+func (MappableDomain) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
 	}
 }

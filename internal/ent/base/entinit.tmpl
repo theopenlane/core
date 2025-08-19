@@ -110,6 +110,11 @@ func ({{ $name }}) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{}
 }
 
+// Modules this schema has access to
+func ({{ $name }}) Modules() []models.OrgModule {
+	return []models.OrgModule{}
+}
+
 // Policy of the {{ $name }}
 func ({{ $name }}) Policy() ent.Policy {
 	// add the new policy here, the default post-policy is to deny all

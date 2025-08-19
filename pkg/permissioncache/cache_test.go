@@ -7,6 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/permissioncache"
 	"github.com/theopenlane/core/pkg/testutils"
 )
@@ -16,12 +17,13 @@ func TestCacheSetGet(t *testing.T) {
 	r := testutils.NewRedisClient()
 	c := permissioncache.NewCache(r, permissioncache.WithCacheTTL(time.Minute))
 
-	err := c.SetFeatures(ctx, "org1", []string{"a", "b"})
+	features := []models.OrgModule{models.OrgModule("a"), models.OrgModule("b")}
+	err := c.SetFeatures(ctx, "org1", features)
 	assert.NoError(t, err)
 
 	vals, err := c.GetFeatures(ctx, "org1")
 	assert.NoError(t, err)
-	assert.ElementsMatch(t, []string{"a", "b"}, vals)
+	assert.ElementsMatch(t, features, vals)
 }
 
 func TestCacheNil(t *testing.T) {
@@ -32,7 +34,8 @@ func TestCacheNil(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Nil(t, vals)
 
-	err = c.SetFeatures(ctx, "org", []string{"x"})
+	features := []models.OrgModule{models.OrgModule("x")}
+	err = c.SetFeatures(ctx, "org", features)
 	assert.NoError(t, err)
 }
 

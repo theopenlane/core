@@ -113,6 +113,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_identityProviderLoginEnforced(ctx, field)
 			case "complianceWebhookToken":
 				return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
+			case "paymentMethodAdded":
+				return ec.fieldContext_OrganizationSetting_paymentMethodAdded(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
@@ -211,6 +213,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_identityProviderLoginEnforced(ctx, field)
 			case "complianceWebhookToken":
 				return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
+			case "paymentMethodAdded":
+				return ec.fieldContext_OrganizationSetting_paymentMethodAdded(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
@@ -353,6 +357,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_identityProviderLoginEnforced(ctx, field)
 			case "complianceWebhookToken":
 				return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
+			case "paymentMethodAdded":
+				return ec.fieldContext_OrganizationSetting_paymentMethodAdded(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":

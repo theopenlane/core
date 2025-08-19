@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -129,10 +129,15 @@ func (JobResult) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
+func (JobResult) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the JobResult
-func (JobResult) Annotations() []schema.Annotation {
+func (j JobResult) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		history.Annotations{
 			Exclude: true,
 		},

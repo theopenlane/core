@@ -202,6 +202,10 @@ coreConfiguration:
       onSuccessScript: ""  # @schema type:string
     # -- MaxPoolSize is the max pond pool workers that can be used by the ent client
     maxPoolSize: 100  # @schema type:integer; default:100
+    # -- Modules contains the configuration for the module system
+    modules:
+      # -- Enabled indicates whether to check and verify module access
+      enabled: true  # @schema type:boolean; default:true
   # -- Auth contains the authentication token settings and provider(s)
   auth:
     # -- Enabled authentication on the server, not recommended to disable

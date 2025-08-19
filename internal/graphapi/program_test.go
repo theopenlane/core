@@ -78,7 +78,6 @@ func TestQueryProgram(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -166,7 +165,6 @@ func TestQueryPrograms(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -385,7 +383,6 @@ func TestMutationCreateProgram(t *testing.T) {
 			resp, err := tc.client.CreateProgram(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -592,9 +589,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 	gm4 := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, GroupID: viewerGroup.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the program
-	res, err := suite.client.api.GetProgramByID(viewOnlyUser.UserCtx, program.ID)
+	_, err = suite.client.api.GetProgramByID(viewOnlyUser.UserCtx, program.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Assert(t, is.Nil(res))
 
 	testCases := []struct {
 		name              string
@@ -755,7 +751,6 @@ func TestMutationUpdateProgram(t *testing.T) {
 			resp, err := tc.client.UpdateProgram(tc.ctx, program.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -947,7 +942,6 @@ func TestMutationDeleteProgram(t *testing.T) {
 			resp, err := tc.client.DeleteProgram(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

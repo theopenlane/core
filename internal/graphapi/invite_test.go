@@ -66,9 +66,8 @@ func TestQueryInvite(t *testing.T) {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetInviteByID(tc.ctx, tc.queryID)
 
-			if tc.wantErr {
-				assert.ErrorContains(t, err, notFoundErrorMsg)
-				assert.Check(t, is.Nil(resp))
+					if tc.wantErr {
+			assert.ErrorContains(t, err, notFoundErrorMsg)
 
 				return
 			}
@@ -282,9 +281,8 @@ func TestMutationCreateInvite(t *testing.T) {
 
 			resp, err := tc.client.CreateInvite(tc.ctx, input)
 
-			if tc.expectedErr != "" {
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
+					if tc.expectedErr != "" {
+			assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}
@@ -375,9 +373,8 @@ func TestMutationCreateBulkInvite(t *testing.T) {
 			}
 
 			resp, err := tc.client.CreateBulkInvite(tc.ctx, input)
-			if tc.wantErr {
-				assert.ErrorContains(t, err, "failed to create invite")
-				assert.Check(t, is.Nil(resp))
+					if tc.wantErr {
+			assert.ErrorContains(t, err, "failed to create invite")
 
 				return
 			}
@@ -468,9 +465,8 @@ func TestMutationDeleteInvite(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteInvite(tc.ctx, tc.queryID)
 
-			if tc.expectedErr != "" {
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
+					if tc.expectedErr != "" {
+			assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}

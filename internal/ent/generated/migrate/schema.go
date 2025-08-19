@@ -2960,11 +2960,9 @@ var (
 		{Name: "stripe_product_tier_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "days_until_due", Type: field.TypeString, Nullable: true},
-		{Name: "payment_method_added", Type: field.TypeBool, Nullable: true},
 		{Name: "features", Type: field.TypeJSON, Nullable: true},
 		{Name: "feature_lookup_keys", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -2977,7 +2975,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_subscriptions_organizations_org_subscriptions",
-				Columns:    []*schema.Column{OrgSubscriptionsColumns[21]},
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2986,7 +2984,7 @@ var (
 			{
 				Name:    "orgsubscription_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrgSubscriptionsColumns[21]},
+				Columns: []*schema.Column{OrgSubscriptionsColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3013,11 +3011,9 @@ var (
 		{Name: "stripe_product_tier_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "stripe_customer_id", Type: field.TypeString, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "days_until_due", Type: field.TypeString, Nullable: true},
-		{Name: "payment_method_added", Type: field.TypeBool, Nullable: true},
 		{Name: "features", Type: field.TypeJSON, Nullable: true},
 		{Name: "feature_lookup_keys", Type: field.TypeJSON, Nullable: true},
 	}
@@ -3051,6 +3047,7 @@ var (
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
+		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 	}
@@ -3062,13 +3059,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organizations_organizations_children",
-				Columns:    []*schema.Column{OrganizationsColumns[15]},
+				Columns:    []*schema.Column{OrganizationsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "organizations_files_avatar_file",
-				Columns:    []*schema.Column{OrganizationsColumns[16]},
+				Columns:    []*schema.Column{OrganizationsColumns[17]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3106,6 +3103,7 @@ var (
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
+		{Name: "stripe_customer_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrganizationHistoryTable holds the schema information for the "organization_history" table.
 	OrganizationHistoryTable = &schema.Table{
@@ -3147,6 +3145,7 @@ var (
 		{Name: "oidc_discovery_endpoint", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
 		{Name: "compliance_webhook_token", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "payment_method_added", Type: field.TypeBool, Default: false},
 		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
 	}
 	// OrganizationSettingsTable holds the schema information for the "organization_settings" table.
@@ -3157,7 +3156,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[25]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[26]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3194,6 +3193,7 @@ var (
 		{Name: "oidc_discovery_endpoint", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
 		{Name: "compliance_webhook_token", Type: field.TypeString, Nullable: true},
+		{Name: "payment_method_added", Type: field.TypeBool, Default: false},
 	}
 	// OrganizationSettingHistoryTable holds the schema information for the "organization_setting_history" table.
 	OrganizationSettingHistoryTable = &schema.Table{

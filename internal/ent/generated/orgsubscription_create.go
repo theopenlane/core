@@ -214,20 +214,6 @@ func (_c *OrgSubscriptionCreate) SetNillableActive(v *bool) *OrgSubscriptionCrea
 	return _c
 }
 
-// SetStripeCustomerID sets the "stripe_customer_id" field.
-func (_c *OrgSubscriptionCreate) SetStripeCustomerID(v string) *OrgSubscriptionCreate {
-	_c.mutation.SetStripeCustomerID(v)
-	return _c
-}
-
-// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
-func (_c *OrgSubscriptionCreate) SetNillableStripeCustomerID(v *string) *OrgSubscriptionCreate {
-	if v != nil {
-		_c.SetStripeCustomerID(*v)
-	}
-	return _c
-}
-
 // SetExpiresAt sets the "expires_at" field.
 func (_c *OrgSubscriptionCreate) SetExpiresAt(v time.Time) *OrgSubscriptionCreate {
 	_c.mutation.SetExpiresAt(v)
@@ -266,20 +252,6 @@ func (_c *OrgSubscriptionCreate) SetDaysUntilDue(v string) *OrgSubscriptionCreat
 func (_c *OrgSubscriptionCreate) SetNillableDaysUntilDue(v *string) *OrgSubscriptionCreate {
 	if v != nil {
 		_c.SetDaysUntilDue(*v)
-	}
-	return _c
-}
-
-// SetPaymentMethodAdded sets the "payment_method_added" field.
-func (_c *OrgSubscriptionCreate) SetPaymentMethodAdded(v bool) *OrgSubscriptionCreate {
-	_c.mutation.SetPaymentMethodAdded(v)
-	return _c
-}
-
-// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (_c *OrgSubscriptionCreate) SetNillablePaymentMethodAdded(v *bool) *OrgSubscriptionCreate {
-	if v != nil {
-		_c.SetPaymentMethodAdded(*v)
 	}
 	return _c
 }
@@ -542,10 +514,6 @@ func (_c *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Creat
 		_spec.SetField(orgsubscription.FieldActive, field.TypeBool, value)
 		_node.Active = value
 	}
-	if value, ok := _c.mutation.StripeCustomerID(); ok {
-		_spec.SetField(orgsubscription.FieldStripeCustomerID, field.TypeString, value)
-		_node.StripeCustomerID = value
-	}
 	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscription.FieldExpiresAt, field.TypeTime, value)
 		_node.ExpiresAt = &value
@@ -557,10 +525,6 @@ func (_c *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Creat
 	if value, ok := _c.mutation.DaysUntilDue(); ok {
 		_spec.SetField(orgsubscription.FieldDaysUntilDue, field.TypeString, value)
 		_node.DaysUntilDue = &value
-	}
-	if value, ok := _c.mutation.PaymentMethodAdded(); ok {
-		_spec.SetField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool, value)
-		_node.PaymentMethodAdded = &value
 	}
 	if value, ok := _c.mutation.Features(); ok {
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)

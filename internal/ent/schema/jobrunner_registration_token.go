@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/keygen"
@@ -114,8 +115,14 @@ func (JobRunnerRegistrationToken) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
+func (JobRunnerRegistrationToken) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the JobRunnerRegistrationToken
-func (JobRunnerRegistrationToken) Annotations() []schema.Annotation {
+func (j JobRunnerRegistrationToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		history.Annotations{
 			Exclude: true,
@@ -131,21 +138,19 @@ func (JobRunnerRegistrationToken) Hooks() []ent.Hook {
 }
 
 // Interceptors of the JobRunnerRegistrationToken
-func (JobRunnerRegistrationToken) Interceptors() []ent.Interceptor {
+func (j JobRunnerRegistrationToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorJobRunnerRegistrationToken(),
 	}
 }
 
 // Policy of the JobRunnerRegistrationToken
-func (JobRunnerRegistrationToken) Policy() ent.Policy {
+func (j JobRunnerRegistrationToken) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.AllowAfterApplyingPrivacyTokenFilter[*token.JobRunnerRegistrationToken](),
-		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
 			rule.AllowIfContextAllowRule(),
+			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

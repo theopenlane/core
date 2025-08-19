@@ -56,8 +56,10 @@ type OrganizationHistory struct {
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
 	// Whether the organization has a dedicated database
-	DedicatedDb  bool `json:"dedicated_db,omitempty"`
-	selectValues sql.SelectValues
+	DedicatedDb bool `json:"dedicated_db,omitempty"`
+	// the stripe customer ID this organization is associated to
+	StripeCustomerID *string `json:"stripe_customer_id,omitempty"`
+	selectValues     sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -71,7 +73,7 @@ func (*OrganizationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case organizationhistory.FieldPersonalOrg, organizationhistory.FieldDedicatedDb:
 			values[i] = new(sql.NullBool)
-		case organizationhistory.FieldID, organizationhistory.FieldRef, organizationhistory.FieldCreatedBy, organizationhistory.FieldUpdatedBy, organizationhistory.FieldDeletedBy, organizationhistory.FieldName, organizationhistory.FieldDisplayName, organizationhistory.FieldDescription, organizationhistory.FieldParentOrganizationID, organizationhistory.FieldAvatarRemoteURL, organizationhistory.FieldAvatarLocalFileID:
+		case organizationhistory.FieldID, organizationhistory.FieldRef, organizationhistory.FieldCreatedBy, organizationhistory.FieldUpdatedBy, organizationhistory.FieldDeletedBy, organizationhistory.FieldName, organizationhistory.FieldDisplayName, organizationhistory.FieldDescription, organizationhistory.FieldParentOrganizationID, organizationhistory.FieldAvatarRemoteURL, organizationhistory.FieldAvatarLocalFileID, organizationhistory.FieldStripeCustomerID:
 			values[i] = new(sql.NullString)
 		case organizationhistory.FieldHistoryTime, organizationhistory.FieldCreatedAt, organizationhistory.FieldUpdatedAt, organizationhistory.FieldDeletedAt, organizationhistory.FieldAvatarUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -215,6 +217,13 @@ func (_m *OrganizationHistory) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.DedicatedDb = value.Bool
 			}
+		case organizationhistory.FieldStripeCustomerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stripe_customer_id", values[i])
+			} else if value.Valid {
+				_m.StripeCustomerID = new(string)
+				*_m.StripeCustomerID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -313,6 +322,11 @@ func (_m *OrganizationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("dedicated_db=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DedicatedDb))
+	builder.WriteString(", ")
+	if v := _m.StripeCustomerID; v != nil {
+		builder.WriteString("stripe_customer_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 )
 
@@ -63,7 +64,8 @@ func (s Scan) Edges() []ent.Edge {
 	}
 }
 
-func (Scan) Policy() ent.Policy {
+// Policy of the Scan
+func (s Scan) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
@@ -72,9 +74,13 @@ func (Scan) Policy() ent.Policy {
 	)
 }
 
+func (Scan) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogVulnerabilityManagementModule,
+	}
+}
+
 // Annotations of the Scan
 func (Scan) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("scanning"),
-	}
+	return []schema.Annotation{}
 }

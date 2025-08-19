@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -94,10 +94,15 @@ func (g GroupMembership) Edges() []ent.Edge {
 	}
 }
 
+func (GroupMembership) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the GroupMembership
-func (GroupMembership) Annotations() []schema.Annotation {
+func (g GroupMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entfga.MembershipChecks("group"),
 	}
 }
@@ -116,7 +121,7 @@ func (GroupMembership) Mixin() []ent.Mixin {
 }
 
 // Interceptors of the GroupMembership
-func (GroupMembership) Interceptors() []ent.Interceptor {
+func (g GroupMembership) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.FilterListQuery(),
 	}

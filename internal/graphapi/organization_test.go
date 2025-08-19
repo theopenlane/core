@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -95,7 +96,6 @@ func TestQueryOrganization(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -437,8 +437,6 @@ func TestMutationCreateOrganization(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -496,18 +494,22 @@ func TestMutationCreateOrganization(t *testing.T) {
 			et, err := suite.client.api.GetEntityTypes(newCtx, &testclient.EntityTypeWhereInput{
 				OwnerID: &resp.CreateOrganization.Organization.ID,
 			})
-			assert.NilError(t, err)
+			// entity type modules are not added to a new org by default
+			// so fetching it should return an error with the feature not available
+			assert.ErrorContains(t, err, interceptors.ErrFeatureNotEnabled.Error())
 
-			assert.Assert(t, is.Len(et.EntityTypes.Edges, 1))
-			assert.Check(t, is.Equal("vendor", et.EntityTypes.Edges[0].Node.Name))
-			assert.Check(t, is.Equal(resp.CreateOrganization.Organization.ID, *et.EntityTypes.Edges[0].Node.OwnerID))
+			assert.Assert(t, is.Len(et.EntityTypes.Edges, 0))
 
 			// ensure managed groups are created
+			// groups and programs require the compliance module which is not added by default
 			managedGroups, err := suite.client.api.GetGroups(newCtx, &testclient.GroupWhereInput{
 				IsManaged: lo.ToPtr(true),
 			})
 
-			// admins, viewers, all users should be created
+			assert.ErrorContains(t, err, interceptors.ErrFeatureNotEnabled.Error())
+
+			// while group is in the base module, this query includes programs and others
+			// which are in other modules
 			assert.Check(t, is.Len(managedGroups.Groups.Edges, 3))
 
 			// cleanup org
@@ -807,7 +809,6 @@ func TestMutationUpdateOrganization(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -905,7 +906,6 @@ func TestMutationDeleteOrganization(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -929,15 +929,14 @@ func TestMutationDeleteOrganization(t *testing.T) {
 			// allow ctx to ensure the org no longer exists after deletion
 			allowCtx := ent.NewContext(rule.WithInternalContext(reqCtx), suite.client.db)
 
-			o, err := suite.client.api.GetOrganizationByID(allowCtx, tc.orgID)
-			assert.Assert(t, is.Nil(o))
+			_, err = suite.client.api.GetOrganizationByID(allowCtx, tc.orgID)
 			assert.ErrorContains(t, err, notFoundErrorMsg)
 
 			// tuples and entity are deleted, so we need to skip soft delete and privacy checks
 			ctx := entx.SkipSoftDelete(reqCtx)
 			ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-			o, err = suite.client.api.GetOrganizationByID(ctx, tc.orgID)
+			o, err := suite.client.api.GetOrganizationByID(ctx, tc.orgID)
 			assert.NilError(t, err)
 			assert.Assert(t, o != nil)
 
@@ -971,26 +970,22 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 	// make sure the deletedID matches the ID we wanted to delete
 	assert.Check(t, is.Equal(org.ID, resp.DeleteOrganization.DeletedID))
 
-	o, err := suite.client.api.GetOrganizationByID(reqCtx, org.ID)
+	_, err = suite.client.api.GetOrganizationByID(reqCtx, org.ID)
 
-	assert.Assert(t, is.Nil(o))
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
-	co, err := suite.client.api.GetOrganizationByID(reqCtx, childOrg.ID)
+	_, err = suite.client.api.GetOrganizationByID(reqCtx, childOrg.ID)
 
-	assert.Assert(t, is.Nil(co))
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
-	g, err := suite.client.api.GetGroupByID(reqCtx, group1.ID)
-
-	assert.Assert(t, is.Nil(g))
+	_, err = suite.client.api.GetGroupByID(reqCtx, group1.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	// allow after tuples have been deleted
 	ctx := privacy.DecisionContext(reqCtx, privacy.Allow)
 	ctx = entx.SkipSoftDelete(ctx)
 
-	o, err = suite.client.api.GetOrganizationByID(ctx, org.ID)
+	o, err := suite.client.api.GetOrganizationByID(ctx, org.ID)
 
 	assert.NilError(t, err)
 	assert.Equal(t, o.Organization.ID, org.ID)
@@ -999,7 +994,7 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 	ctx = entx.SkipSoftDelete(ctx)
 
-	co, err = suite.client.api.GetOrganizationByID(ctx, childOrg.ID)
+	co, err := suite.client.api.GetOrganizationByID(ctx, childOrg.ID)
 	assert.NilError(t, err)
 
 	assert.Equal(t, co.Organization.ID, childOrg.ID)

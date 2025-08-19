@@ -171,6 +171,11 @@ func ComplianceWebhookToken(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldComplianceWebhookToken, v))
 }
 
+// PaymentMethodAdded applies equality check predicate on the "payment_method_added" field. It's identical to PaymentMethodAddedEQ.
+func PaymentMethodAdded(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldPaymentMethodAdded, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1644,6 +1649,16 @@ func ComplianceWebhookTokenEqualFold(v string) predicate.OrganizationSettingHist
 // ComplianceWebhookTokenContainsFold applies the ContainsFold predicate on the "compliance_webhook_token" field.
 func ComplianceWebhookTokenContainsFold(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldComplianceWebhookToken, v))
+}
+
+// PaymentMethodAddedEQ applies the EQ predicate on the "payment_method_added" field.
+func PaymentMethodAddedEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldPaymentMethodAdded, v))
+}
+
+// PaymentMethodAddedNEQ applies the NEQ predicate on the "payment_method_added" field.
+func PaymentMethodAddedNEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldPaymentMethodAdded, v))
 }
 
 // And groups predicates with the AND operator between them.

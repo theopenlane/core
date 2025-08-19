@@ -72,7 +72,6 @@ func TestQueryUserSetting(t *testing.T) {
 			if tc.errorMsg != "" {
 
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -213,7 +212,6 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

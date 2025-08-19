@@ -499,6 +499,10 @@
         "maxPoolSize": {
           "type": "integer",
           "description": "MaxPoolSize is the max pond pool workers that can be used by the ent client"
+        },
+        "modules": {
+          "$ref": "#/$defs/entconfig.Modules",
+          "description": "Modules contains the configuration for the module system"
         }
       },
       "additionalProperties": false,
@@ -569,6 +573,17 @@
       "additionalProperties": false,
       "type": "object",
       "description": "MistralConfig contains Mistral specific configuration"
+    },
+    "entconfig.Modules": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates whether to check and verify module access"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Modules settings for features access"
     },
     "entconfig.OllamaConfig": {
       "properties": {

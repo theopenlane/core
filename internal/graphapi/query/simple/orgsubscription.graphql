@@ -23,7 +23,6 @@ query GetAllOrgSubscriptions {
         paymentMethodAdded
         productPrice
         productTier
-        stripeCustomerID
         stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
@@ -49,7 +48,6 @@ query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
     paymentMethodAdded
     productPrice
     productTier
-    stripeCustomerID
     stripeProductTierID
     stripeSubscriptionID
     stripeSubscriptionStatus
@@ -83,7 +81,6 @@ query GetOrgSubscriptions($first: Int, $last: Int, $where: OrgSubscriptionWhereI
         paymentMethodAdded
         productPrice
         productTier
-        stripeCustomerID
         stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus

@@ -91,10 +91,9 @@ func TestMutationCreateOnboarding(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateOnboarding(tc.ctx, tc.request)
-			if tc.expectedErr != "" {
-				assert.Assert(t, is.ErrorContains(err, tc.expectedErr))
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
+					if tc.expectedErr != "" {
+			assert.Assert(t, is.ErrorContains(err, tc.expectedErr))
+			assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}

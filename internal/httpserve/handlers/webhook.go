@@ -14,12 +14,12 @@ import (
 	"github.com/stripe/stripe-go/v82/webhook"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -162,6 +162,13 @@ func unmarshalEventData[T interface{}](e *stripe.Event) (*T, error) {
 // HandleEvent unmarshals event data and triggers a corresponding function to be executed based on case match
 func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 	switch e.Type {
+	case stripe.EventTypeCustomerSubscriptionCreated:
+		subscription, err := unmarshalEventData[stripe.Subscription](e)
+		if err != nil {
+			return err
+		}
+
+		return h.handleSubscriptionCreated(c, subscription)
 	case stripe.EventTypeCustomerSubscriptionUpdated:
 		subscription, err := unmarshalEventData[stripe.Subscription](e)
 		if err != nil {
@@ -254,7 +261,7 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 		return
 	}
 
-	if err = syncSubscriptionItemsWithStripe(ctx, s); err != nil {
+	if err = h.syncSubscriptionItemsWithStripe(ctx, s); err != nil {
 		return
 	}
 
@@ -264,6 +271,23 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 	}
 
 	return h.invalidatePersonalAccessTokens(ctx, *ownerID)
+}
+
+// handleSubscriptionCreated handles subscription created events for new subscriptions
+func (h *Handler) handleSubscriptionCreated(ctx context.Context, s *stripe.Subscription) error {
+	if s.Customer == nil {
+		log.Error().Msg("subscription has no customer, cannot proceed")
+
+		return ErrSubscriberNotFound
+	}
+
+	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
+	if err != nil {
+		return err
+	}
+
+	_, err = h.createOrUpdateOrgSubscriptionWithStripe(ctx, s, customer)
+	return err
 }
 
 // handleSubscriptionUpdated handles subscription updated events
@@ -284,7 +308,7 @@ func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subsc
 		return err
 	}
 
-	return syncSubscriptionItemsWithStripe(ctx, s)
+	return h.syncSubscriptionItemsWithStripe(ctx, s)
 }
 
 // handleTrialWillEnd handles trial will end events, currently just calls handleSubscriptionUpdated
@@ -300,8 +324,18 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 		return nil
 	}
 
-	return transaction.FromContext(ctx).OrgSubscription.Update().
-		Where(orgsubscription.StripeCustomerID(paymentMethod.Customer.ID)).
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	org, err := transaction.FromContext(ctx).Organization.Query().
+		Where(organization.StripeCustomerID(paymentMethod.Customer.ID)).
+		Only(allowCtx)
+	if err != nil {
+		log.Error().Err(err).Msg("could not fetch organization by stripe customer id")
+		return err
+	}
+
+	return transaction.FromContext(ctx).OrganizationSetting.Update().
+		Where(organizationsetting.OrganizationID(org.ID)).
 		SetPaymentMethodAdded(true).
 		Exec(ctx)
 }
@@ -405,18 +439,6 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 		log.Debug().Str("subscription_id", orgSubscription.ID).Str("days_until_due", *stripeOrgSubscription.DaysUntilDue).Msg("days until due changed")
 	}
 
-	if stripeOrgSubscription.PaymentMethodAdded != nil && orgSubscription.PaymentMethodAdded != stripeOrgSubscription.PaymentMethodAdded {
-		mutation.SetPaymentMethodAdded(*stripeOrgSubscription.PaymentMethodAdded)
-
-		changed = true
-
-		if orgSubscription.PaymentMethodAdded != nil {
-			log.Debug().Str("subscription_id", orgSubscription.ID).Bool("payment_method_added", *orgSubscription.PaymentMethodAdded).Msg("payment method added changed")
-		} else {
-			log.Debug().Str("subscription_id", orgSubscription.ID).Msg("payment method added changed but was previously nil")
-		}
-	}
-
 	if orgSubscription.Active != stripeOrgSubscription.Active {
 		mutation.SetActive(stripeOrgSubscription.Active)
 
@@ -436,7 +458,7 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 
 		log.Debug().Str("subscription_id", orgSubscription.ID).Msg("OrgSubscription updated successfully")
 
-		if err := h.ensureFeatureTuples(ctx, orgSubscription.OwnerID, stripeOrgSubscription.FeatureLookupKeys); err != nil {
+		if err := h.clearFeatureCache(ctx, orgSubscription.OwnerID); err != nil {
 			log.Error().Err(err).Msg("failed to ensure feature tuples")
 		}
 	}
@@ -444,30 +466,59 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 	return &orgSubscription.OwnerID, nil
 }
 
-// ensureFeatureTuples checks that feature tuples exist for the organization and creates
-// them in FGA and the feature cache when missing.
-func (h *Handler) ensureFeatureTuples(ctx context.Context, orgID string, feats []string) error {
-	tuples := make([]fgax.TupleKey, 0, len(feats))
-	for _, f := range feats {
-		tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
-			SubjectID:   orgID,
-			SubjectType: ent.TypeOrganization,
-			ObjectID:    f,
-			ObjectType:  "feature",
-			Relation:    "enabled",
-		}))
+func (h *Handler) createOrUpdateOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
+
+	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+
+	stripeSub := em.StripeSubscriptionToOrgSubscription(subscription, entitlements.MapStripeCustomer(customer))
+
+	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().
+		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).
+		Only(allowCtx)
+	if err != nil && !ent.IsNotFound(err) {
+		log.Error().Err(err).Msg("failed to query org subscription")
+		return nil, err
 	}
 
-	if _, err := h.DBClient.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-		return err
+	if ent.IsNotFound(err) {
+		log.Debug().Str("stripe_subscription_id", subscription.ID).Msg("creating new org subscription from stripe")
+
+		orgID := customer.Metadata["organization_id"]
+		if orgID == "" {
+			log.Error().Str("customer_id", customer.ID).Msg("organization_id not found in customer metadata")
+			return nil, ErrSubscriberNotFound
+		}
+
+		orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Create().
+			SetOwnerID(orgID).
+			SetStripeSubscriptionID(subscription.ID).
+			SetProductTier(stripeSub.ProductTier).
+			SetProductPrice(stripeSub.ProductPrice).
+			SetNillableTrialExpiresAt(stripeSub.TrialExpiresAt).
+			SetNillableDaysUntilDue(stripeSub.DaysUntilDue).
+			SetActive(stripeSub.Active).
+			Save(allowCtx)
+
+		if err != nil {
+			log.Error().Err(err).Msg("failed to create OrgSubscription")
+			return nil, err
+		}
+
+		log.Debug().Str("subscription_id", orgSubscription.ID).Str("stripe_subscription_id", subscription.ID).Msg("OrgSubscription created successfully")
+
+		if err := h.clearFeatureCache(ctx, orgSubscription.OwnerID); err != nil {
+			log.Error().Err(err).Msg("failed to ensure feature tuples")
+		}
 	}
 
+	return &orgSubscription.OwnerID, h.syncSubscriptionItemsWithStripe(ctx, subscription)
+}
+
+func (h *Handler) clearFeatureCache(ctx context.Context, orgID string) error {
 	if h.RedisClient != nil {
 		key := "features:" + orgID
 		pipe := h.RedisClient.TxPipeline()
 		pipe.Del(ctx, key)
-		pipe.SAdd(ctx, key, feats)
-		pipe.Expire(ctx, key, 5*time.Minute) // nolint:mnd
 		_, _ = pipe.Exec(ctx)
 	}
 

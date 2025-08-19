@@ -5,7 +5,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -13,7 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 const (
@@ -88,17 +87,18 @@ func (EntityType) Indexes() []ent.Index {
 }
 
 // Policy of the EntityType
-func (EntityType) Policy() ent.Policy {
+func (e EntityType) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),
 	)
 }
 
-// Annotations of the EntityType
-func (EntityType) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("entity-management"),
+func (EntityType) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
 	}
 }

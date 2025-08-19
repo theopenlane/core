@@ -21,8 +21,17 @@ import (
 	_ "github.com/jackc/pgx/v5"
 	"gocloud.dev/secrets"
 
+	"github.com/theopenlane/core/internal/ent/entconfig"
+	"github.com/theopenlane/core/internal/entitlements/genfeatures"
+	"github.com/theopenlane/core/internal/genhelpers"
+	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/summarizer"
+	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/genhooks"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/entfga"
@@ -30,16 +39,6 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
-
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/summarizer"
-	"github.com/theopenlane/core/pkg/windmill"
-	"github.com/theopenlane/entx/accessmap"
-
-	"github.com/theopenlane/core/internal/genhelpers"
 )
 
 const (
@@ -96,7 +95,6 @@ func main() {
 			genhooks.GenQuery(graphQueryDir),
 			genhooks.GenQuery(graphSimpleQueryDir),
 			genhooks.GenSearchSchema(graphSchemaDir, graphQueryDir),
-			genhooks.GenFeatureMap(featureMapDir),
 			accessMapExt.Hook(),
 		},
 		Package: "github.com/theopenlane/core/internal/ent/generated",
@@ -235,6 +233,12 @@ func preRun() (*history.Extension, *entfga.AuthzExtension) {
 
 	if err := generateExportTypeEnum(exportableSchemas); err != nil {
 		log.Fatal().Err(err).Msg("generating ExportType enum")
+	}
+
+	log.Info().Msg("pre-run: generating feature modules")
+
+	if err := genfeatures.GenerateModulePerSchema(schemaPath, featureMapDir); err != nil {
+		log.Fatal().Err(err).Msg("generating feature modules")
 	}
 
 	return historyExt, entfgaExt

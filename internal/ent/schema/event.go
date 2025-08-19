@@ -5,13 +5,13 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Event holds the schema definition for the Event entity
@@ -69,10 +69,15 @@ func (e Event) Edges() []ent.Edge {
 	}
 }
 
+func (Event) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the Event
-func (Event) Annotations() []schema.Annotation {
+func (e Event) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -90,7 +95,7 @@ func (Event) Mixin() []ent.Mixin {
 }
 
 // Policy of the Event
-func (Event) Policy() ent.Policy {
+func (e Event) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			// allow after interceptors are properly added

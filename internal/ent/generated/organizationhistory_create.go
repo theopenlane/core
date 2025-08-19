@@ -263,6 +263,20 @@ func (_c *OrganizationHistoryCreate) SetNillableDedicatedDb(v *bool) *Organizati
 	return _c
 }
 
+// SetStripeCustomerID sets the "stripe_customer_id" field.
+func (_c *OrganizationHistoryCreate) SetStripeCustomerID(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetStripeCustomerID(v)
+	return _c
+}
+
+// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
+func (_c *OrganizationHistoryCreate) SetNillableStripeCustomerID(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetStripeCustomerID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *OrganizationHistoryCreate) SetID(v string) *OrganizationHistoryCreate {
 	_c.mutation.SetID(v)
@@ -501,6 +515,10 @@ func (_c *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgra
 	if value, ok := _c.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)
 		_node.DedicatedDb = value
+	}
+	if value, ok := _c.mutation.StripeCustomerID(); ok {
+		_spec.SetField(organizationhistory.FieldStripeCustomerID, field.TypeString, value)
+		_node.StripeCustomerID = &value
 	}
 	return _node, _spec
 }

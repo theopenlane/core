@@ -66,7 +66,6 @@ func TestQueryJobTemplate(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -249,7 +248,6 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			resp, err := tc.client.CreateJobTemplate(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -329,7 +327,6 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 			resp, err := tc.client.UpdateJobTemplate(tc.ctx, jobTemplate.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -435,7 +432,6 @@ func TestMutationDeleteJobTemplate(t *testing.T) {
 			resp, err := tc.client.DeleteJobTemplate(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

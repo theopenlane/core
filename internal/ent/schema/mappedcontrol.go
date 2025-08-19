@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -125,7 +125,6 @@ func (m MappedControl) Mixin() []ent.Mixin {
 // Annotations of the MappedControl
 func (MappedControl) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance"),
 		entfga.SelfAccessChecks(),
 	}
 }
@@ -156,4 +155,10 @@ func (MappedControl) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.MappedControlMutation](),
 		),
 	)
+}
+
+func (MappedControl) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
 }

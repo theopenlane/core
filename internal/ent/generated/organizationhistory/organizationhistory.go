@@ -55,6 +55,8 @@ const (
 	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldDedicatedDb holds the string denoting the dedicated_db field in the database.
 	FieldDedicatedDb = "dedicated_db"
+	// FieldStripeCustomerID holds the string denoting the stripe_customer_id field in the database.
+	FieldStripeCustomerID = "stripe_customer_id"
 	// Table holds the table name of the organizationhistory in the database.
 	Table = "organization_history"
 )
@@ -81,6 +83,7 @@ var Columns = []string{
 	FieldAvatarLocalFileID,
 	FieldAvatarUpdatedAt,
 	FieldDedicatedDb,
+	FieldStripeCustomerID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -232,6 +235,11 @@ func ByAvatarUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDedicatedDb orders the results by the dedicated_db field.
 func ByDedicatedDb(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDedicatedDb, opts...).ToFunc()
+}
+
+// ByStripeCustomerID orders the results by the stripe_customer_id field.
+func ByStripeCustomerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStripeCustomerID, opts...).ToFunc()
 }
 
 var (

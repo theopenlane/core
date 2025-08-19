@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
@@ -168,7 +169,7 @@ func (Control) Hooks() []ent.Hook {
 }
 
 // Policy of the Control
-func (Control) Policy() ent.Policy {
+func (c Control) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			// when an admin deletes a standard, we updated
@@ -184,10 +185,15 @@ func (Control) Policy() ent.Policy {
 	)
 }
 
+func (Control) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the Control
-func (Control) Annotations() []schema.Annotation {
+func (c Control) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features(entx.ModuleCompliance, entx.ModuleContinuousComplianceAutomation),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}

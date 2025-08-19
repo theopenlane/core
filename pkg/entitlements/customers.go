@@ -83,9 +83,9 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 	return customers, nil
 }
 
-// createCustomerAndSubscription handles the case where no customer exists by creating
+// CreateCustomerAndSubscription handles the case where no customer exists by creating
 // both the customer and their initial subscription
-func (sc *StripeClient) createCustomerAndSubscription(ctx context.Context, o *OrganizationCustomer) error {
+func (sc *StripeClient) CreateCustomerAndSubscription(ctx context.Context, o *OrganizationCustomer) error {
 	customer, err := sc.CreateCustomer(ctx, o)
 	if err != nil {
 		return err
@@ -121,7 +121,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 	switch len(customers) {
 	case 0:
-		return sc.createCustomerAndSubscription(ctx, o)
+		return sc.CreateCustomerAndSubscription(ctx, o)
 	case 1:
 		o.StripeCustomerID = customers[0].ID
 		o.StripeSubscriptionID = customers[0].Subscriptions.Data[0].ID
@@ -236,24 +236,14 @@ func (sc *StripeClient) DeleteCustomer(ctx context.Context, id string) error {
 // we do not delete the customer record in stripe for record / references
 // we also do not delete the subscription record in stripe for record / references
 // a cancelled active subscription will set to cancel at period end, a trialing subscription will be set to end immediately
-func (sc *StripeClient) FindAndDeactivateCustomerSubscription(ctx context.Context, orgID string) error {
-	customers, err := sc.SearchCustomers(ctx, fmt.Sprintf("name: '%s'", orgID))
+func (sc *StripeClient) FindAndDeactivateCustomerSubscription(ctx context.Context, customerID string) error {
+	customer, err := sc.GetCustomerByStripeID(ctx, customerID)
 	if err != nil {
 		return err
 	}
 
-	if len(customers) == 0 {
-		log.Warn().Str("organization_id", orgID).Msg("no customer found, skipping deactivation")
-		return nil
-	}
-
-	if len(customers) > 1 {
-		log.Error().Err(ErrFoundMultipleCustomers).Str("organization_id", orgID).Interface("customers", customers).Msg("found multiple customers, skipping deactivation")
-		return ErrFoundMultipleCustomers
-	}
-
-	for _, subs := range customers[0].Subscriptions.Data {
-		// Skip subscriptions that are already inactive
+	for _, subs := range customer.Subscriptions.Data {
+		// skip subscriptions that are already inactive
 		if subs.Status == stripe.SubscriptionStatusCanceled || subs.Status == stripe.SubscriptionStatusIncompleteExpired {
 			log.Debug().Str("subscription_id", subs.ID).Msg("subscription already inactive, skipping")
 			return nil

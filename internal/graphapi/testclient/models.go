@@ -16438,16 +16438,12 @@ type OrgSubscription struct {
 	StripeSubscriptionStatus *string `json:"stripeSubscriptionStatus,omitempty"`
 	// indicates if the subscription is active
 	Active bool `json:"active"`
-	// the customer ID the subscription is associated to
-	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// the time the trial is set to expire
 	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty"`
 	// number of days until there is a due payment
 	DaysUntilDue *string `json:"daysUntilDue,omitempty"`
-	// whether or not a payment method has been added to the account
-	PaymentMethodAdded *bool `json:"paymentMethodAdded,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
@@ -16505,16 +16501,12 @@ type OrgSubscriptionHistory struct {
 	StripeSubscriptionStatus *string `json:"stripeSubscriptionStatus,omitempty"`
 	// indicates if the subscription is active
 	Active bool `json:"active"`
-	// the customer ID the subscription is associated to
-	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// the time the trial is set to expire
 	TrialExpiresAt *time.Time `json:"trialExpiresAt,omitempty"`
 	// number of days until there is a due payment
 	DaysUntilDue *string `json:"daysUntilDue,omitempty"`
-	// whether or not a payment method has been added to the account
-	PaymentMethodAdded *bool `json:"paymentMethodAdded,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
@@ -16733,22 +16725,6 @@ type OrgSubscriptionHistoryWhereInput struct {
 	// active field predicates
 	Active    *bool `json:"active,omitempty"`
 	ActiveNeq *bool `json:"activeNEQ,omitempty"`
-	// stripe_customer_id field predicates
-	StripeCustomerID             *string  `json:"stripeCustomerID,omitempty"`
-	StripeCustomerIdneq          *string  `json:"stripeCustomerIDNEQ,omitempty"`
-	StripeCustomerIDIn           []string `json:"stripeCustomerIDIn,omitempty"`
-	StripeCustomerIDNotIn        []string `json:"stripeCustomerIDNotIn,omitempty"`
-	StripeCustomerIdgt           *string  `json:"stripeCustomerIDGT,omitempty"`
-	StripeCustomerIdgte          *string  `json:"stripeCustomerIDGTE,omitempty"`
-	StripeCustomerIdlt           *string  `json:"stripeCustomerIDLT,omitempty"`
-	StripeCustomerIdlte          *string  `json:"stripeCustomerIDLTE,omitempty"`
-	StripeCustomerIDContains     *string  `json:"stripeCustomerIDContains,omitempty"`
-	StripeCustomerIDHasPrefix    *string  `json:"stripeCustomerIDHasPrefix,omitempty"`
-	StripeCustomerIDHasSuffix    *string  `json:"stripeCustomerIDHasSuffix,omitempty"`
-	StripeCustomerIDIsNil        *bool    `json:"stripeCustomerIDIsNil,omitempty"`
-	StripeCustomerIDNotNil       *bool    `json:"stripeCustomerIDNotNil,omitempty"`
-	StripeCustomerIDEqualFold    *string  `json:"stripeCustomerIDEqualFold,omitempty"`
-	StripeCustomerIDContainsFold *string  `json:"stripeCustomerIDContainsFold,omitempty"`
 	// expires_at field predicates
 	ExpiresAt       *time.Time   `json:"expiresAt,omitempty"`
 	ExpiresAtNeq    *time.Time   `json:"expiresAtNEQ,omitempty"`
@@ -16787,11 +16763,6 @@ type OrgSubscriptionHistoryWhereInput struct {
 	DaysUntilDueNotNil       *bool    `json:"daysUntilDueNotNil,omitempty"`
 	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
 	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
-	// payment_method_added field predicates
-	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
-	PaymentMethodAddedNeq    *bool `json:"paymentMethodAddedNEQ,omitempty"`
-	PaymentMethodAddedIsNil  *bool `json:"paymentMethodAddedIsNil,omitempty"`
-	PaymentMethodAddedNotNil *bool `json:"paymentMethodAddedNotNil,omitempty"`
 }
 
 // Ordering options for OrgSubscription connections
@@ -16956,22 +16927,6 @@ type OrgSubscriptionWhereInput struct {
 	// active field predicates
 	Active    *bool `json:"active,omitempty"`
 	ActiveNeq *bool `json:"activeNEQ,omitempty"`
-	// stripe_customer_id field predicates
-	StripeCustomerID             *string  `json:"stripeCustomerID,omitempty"`
-	StripeCustomerIdneq          *string  `json:"stripeCustomerIDNEQ,omitempty"`
-	StripeCustomerIDIn           []string `json:"stripeCustomerIDIn,omitempty"`
-	StripeCustomerIDNotIn        []string `json:"stripeCustomerIDNotIn,omitempty"`
-	StripeCustomerIdgt           *string  `json:"stripeCustomerIDGT,omitempty"`
-	StripeCustomerIdgte          *string  `json:"stripeCustomerIDGTE,omitempty"`
-	StripeCustomerIdlt           *string  `json:"stripeCustomerIDLT,omitempty"`
-	StripeCustomerIdlte          *string  `json:"stripeCustomerIDLTE,omitempty"`
-	StripeCustomerIDContains     *string  `json:"stripeCustomerIDContains,omitempty"`
-	StripeCustomerIDHasPrefix    *string  `json:"stripeCustomerIDHasPrefix,omitempty"`
-	StripeCustomerIDHasSuffix    *string  `json:"stripeCustomerIDHasSuffix,omitempty"`
-	StripeCustomerIDIsNil        *bool    `json:"stripeCustomerIDIsNil,omitempty"`
-	StripeCustomerIDNotNil       *bool    `json:"stripeCustomerIDNotNil,omitempty"`
-	StripeCustomerIDEqualFold    *string  `json:"stripeCustomerIDEqualFold,omitempty"`
-	StripeCustomerIDContainsFold *string  `json:"stripeCustomerIDContainsFold,omitempty"`
 	// expires_at field predicates
 	ExpiresAt       *time.Time   `json:"expiresAt,omitempty"`
 	ExpiresAtNeq    *time.Time   `json:"expiresAtNEQ,omitempty"`
@@ -17010,11 +16965,6 @@ type OrgSubscriptionWhereInput struct {
 	DaysUntilDueNotNil       *bool    `json:"daysUntilDueNotNil,omitempty"`
 	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
 	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
-	// payment_method_added field predicates
-	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
-	PaymentMethodAddedNeq    *bool `json:"paymentMethodAddedNEQ,omitempty"`
-	PaymentMethodAddedIsNil  *bool `json:"paymentMethodAddedIsNil,omitempty"`
-	PaymentMethodAddedNotNil *bool `json:"paymentMethodAddedNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -17046,7 +16996,9 @@ type Organization struct {
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// Whether the organization has a dedicated database
-	DedicatedDb                   bool                                  `json:"dedicatedDb"`
+	DedicatedDb bool `json:"dedicatedDb"`
+	// the stripe customer ID this organization is associated to
+	StripeCustomerID              *string                               `json:"stripeCustomerID,omitempty"`
 	ControlCreators               *GroupConnection                      `json:"controlCreators"`
 	ControlImplementationCreators *GroupConnection                      `json:"controlImplementationCreators"`
 	ControlObjectiveCreators      *GroupConnection                      `json:"controlObjectiveCreators"`
@@ -17178,6 +17130,8 @@ type OrganizationHistory struct {
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicatedDb"`
+	// the stripe customer ID this organization is associated to
+	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
 }
 
 func (OrganizationHistory) IsNode() {}
@@ -17440,9 +17394,11 @@ type OrganizationSetting struct {
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identityProviderLoginEnforced"`
 	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken *string         `json:"complianceWebhookToken,omitempty"`
-	Organization           *Organization   `json:"organization,omitempty"`
-	Files                  *FileConnection `json:"files"`
+	ComplianceWebhookToken *string `json:"complianceWebhookToken,omitempty"`
+	// whether or not a payment method has been added to the account
+	PaymentMethodAdded bool            `json:"paymentMethodAdded"`
+	Organization       *Organization   `json:"organization,omitempty"`
+	Files              *FileConnection `json:"files"`
 }
 
 func (OrganizationSetting) IsNode() {}
@@ -17530,6 +17486,8 @@ type OrganizationSettingHistory struct {
 	IdentityProviderLoginEnforced bool `json:"identityProviderLoginEnforced"`
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken *string `json:"complianceWebhookToken,omitempty"`
+	// whether or not a payment method has been added to the account
+	PaymentMethodAdded bool `json:"paymentMethodAdded"`
 }
 
 func (OrganizationSettingHistory) IsNode() {}

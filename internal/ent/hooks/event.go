@@ -24,6 +24,7 @@ import (
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	catalog "github.com/theopenlane/core/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -211,7 +212,8 @@ func emitEventOn() func(context.Context, entgen.Mutation) bool {
 				}
 			}
 		case entgen.TypeOrganization:
-			if m.Op().Is(ent.OpDelete) || m.Op().Is(ent.OpDeleteOne) {
+			switch m.Op() {
+			case ent.OpDelete, ent.OpDeleteOne, ent.OpCreate:
 				return true
 			}
 		case entgen.TypeSubscriber:
@@ -232,6 +234,7 @@ func emitEventOn() func(context.Context, entgen.Mutation) bool {
 var OrganizationSettingUpdateOne = fmt.Sprintf("%s.%s", entgen.TypeOrganizationSetting, entgen.OpUpdateOne.String())
 var OrgSubscriptionCreate = fmt.Sprintf("%s.%s", entgen.TypeOrgSubscription, entgen.OpCreate.String())
 var OrganizationDelete = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDelete.String())
+var OrganizationCreate = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpCreate.String())
 var OrganizationDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDeleteOne.String())
 var SubscriberCreate = fmt.Sprintf("%s.%s", entgen.TypeSubscriber, entgen.OpCreate.String())
 var UserCreate = fmt.Sprintf("%s.%s", entgen.TypeUser, entgen.OpCreate.String())
@@ -243,7 +246,7 @@ func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
 
 // RegisterListeners is currently used to globally register what listeners get applied on the entdb client
 func RegisterListeners(e *Eventer) error {
-	_, err := e.Emitter.On(OrgSubscriptionCreate, handleOrgSubscriptionCreated)
+	_, err := e.Emitter.On(OrganizationCreate, handleOrganizationCreated)
 	if err != nil {
 		log.Error().Err(ErrFailedToRegisterListener)
 		return err
@@ -404,7 +407,22 @@ func handleOrganizationDelete(event soiree.Event) error {
 		return nil
 	}
 
-	if err := entMgr.FindAndDeactivateCustomerSubscription(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string)); err != nil {
+	// setup the context to allow the creation of a customer subscription without any restrictions
+	allowCtx := privacy.DecisionContext(event.Context(), privacy.Allow)
+	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
+
+	org, err := client.Organization.Get(allowCtx, lo.ValueOr(event.Properties(), "ID", "").(string))
+	if err != nil {
+		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization")
+
+		return err
+	}
+
+	if org.StripeCustomerID == nil {
+		return nil
+	}
+
+	if err := entMgr.FindAndDeactivateCustomerSubscription(event.Context(), *org.StripeCustomerID); err != nil {
 		zerolog.Ctx(event.Context()).Error().Err(err).Msg("Failed to deactivate customer subscription")
 
 		return err
@@ -413,8 +431,8 @@ func handleOrganizationDelete(event soiree.Event) error {
 	return nil
 }
 
-// handleOrgSubscriptionCreated checks for the creation of an organization subscription and creates a customer in Stripe
-func handleOrgSubscriptionCreated(event soiree.Event) error {
+// handleOrganizationCreated checks for the creation of an organization subscription and creates a customer in Stripe
+func handleOrganizationCreated(event soiree.Event) error {
 	client := event.Client().(*entgen.Client)
 	entMgr := client.EntitlementManager
 
@@ -428,27 +446,36 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 	allowCtx := privacy.DecisionContext(event.Context(), privacy.Allow)
 	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
 
-	orgSubs, err := client.OrgSubscription.Get(allowCtx, lo.ValueOr(event.Properties(), "ID", "").(string))
+	org, err := client.Organization.Query().
+		Where(organization.ID(lo.ValueOr(event.Properties(), "ID", "").(string))).
+		WithSetting().
+		Only(allowCtx)
 	if err != nil {
-		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization subscription")
+		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization")
 
+		return err
+	}
+
+	orgSubs, err := client.OrgSubscription.Query().Where(orgsubscription.OwnerID(org.ID)).First(allowCtx)
+	if err != nil {
 		return err
 	}
 
 	orgCustomer := &entitlements.OrganizationCustomer{OrganizationSubscriptionID: orgSubs.ID}
 
-	orgCustomer, err = updateOrgCustomerWithSubscription(allowCtx, orgSubs, client, orgCustomer)
+	orgCustomer, err = updateOrgCustomerWithSubscription(allowCtx, orgSubs, orgCustomer, org)
 	if err != nil {
 		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization from subscription")
 
 		return nil
 	}
+
 	// personalOrg flag is set by updateOrgCustomerWithSubscription so compute pricing afterwards
 	orgCustomer = catalog.PopulatePricesForOrganizationCustomer(orgCustomer)
 
 	zerolog.Ctx(event.Context()).Debug().Msgf("Prices attached to organization customer: %+v", orgCustomer.Prices)
 
-	if err = entMgr.FindOrCreateCustomer(allowCtx, orgCustomer); err != nil {
+	if err = entMgr.CreateCustomerAndSubscription(allowCtx, orgCustomer); err != nil {
 		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to create customer")
 
 		return err
@@ -486,9 +513,17 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 
 	active := customer.Status == string(stripe.SubscriptionStatusActive) || customer.Status == string(stripe.SubscriptionStatusTrialing)
 
-	update := client.(*entgen.Client).OrgSubscription.UpdateOneID(customer.OrganizationSubscriptionID).
-		SetStripeSubscriptionID(customer.StripeSubscriptionID).
+	c := client.(*entgen.Client)
+
+	err := c.Organization.UpdateOneID(customer.OrganizationID).
 		SetStripeCustomerID(customer.StripeCustomerID).
+		Exec(ctx)
+	if err != nil {
+		return err
+	}
+
+	update := c.OrgSubscription.UpdateOneID(customer.OrganizationSubscriptionID).
+		SetStripeSubscriptionID(customer.StripeSubscriptionID).
 		SetStripeSubscriptionStatus(customer.Subscription.Status).
 		SetActive(active)
 
@@ -506,16 +541,10 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 
 // updateOrgCustomerWithSubscription updates the organization customer with the subscription data
 // by querying the organization and organization settings
-func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgSubscription, client any, o *entitlements.OrganizationCustomer) (*entitlements.OrganizationCustomer, error) {
+func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgSubscription,
+	o *entitlements.OrganizationCustomer, org *entgen.Organization) (*entitlements.OrganizationCustomer, error) {
 	if orgSubs == nil {
 		return nil, ErrNoSubscriptions
-	}
-
-	org, err := client.(*entgen.Client).Organization.Query().Where(organization.ID(orgSubs.OwnerID)).WithSetting().Only(ctx)
-	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Msgf("Failed to fetch organization by organization ID %s", orgSubs.OwnerID)
-
-		return nil, err
 	}
 
 	if org.Edges.Setting != nil {
@@ -592,8 +621,8 @@ func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID s
 	}
 
 	stripeCustomerID := ""
-	if len(org.Edges.OrgSubscriptions) > 0 {
-		stripeCustomerID = org.Edges.OrgSubscriptions[0].StripeCustomerID
+	if org.StripeCustomerID != nil {
+		stripeCustomerID = *org.StripeCustomerID
 	}
 
 	return &entitlements.OrganizationCustomer{

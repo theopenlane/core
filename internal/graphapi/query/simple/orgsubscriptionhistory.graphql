@@ -26,7 +26,6 @@ query GetAllOrgSubscriptionHistories {
         productPrice
         productTier
         ref
-        stripeCustomerID
         stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
@@ -65,7 +64,6 @@ query GetOrgSubscriptionHistories($first: Int, $last: Int, $where: OrgSubscripti
         productPrice
         productTier
         ref
-        stripeCustomerID
         stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus

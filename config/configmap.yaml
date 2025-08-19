@@ -92,6 +92,7 @@ data:
   CORE_ENTCONFIG_WINDMILL_ONFAILURESCRIPT: {{ .Values.openlane.coreConfiguration.entConfig.windmill.onFailureScript }}
   CORE_ENTCONFIG_WINDMILL_ONSUCCESSSCRIPT: {{ .Values.openlane.coreConfiguration.entConfig.windmill.onSuccessScript }}
   CORE_ENTCONFIG_MAXPOOLSIZE: {{ .Values.openlane.coreConfiguration.entConfig.maxPoolSize | default "100" }}
+  CORE_ENTCONFIG_MODULES_ENABLED: {{ .Values.openlane.coreConfiguration.entConfig.modules.enabled | default "true" }}
   CORE_AUTH_ENABLED: {{ .Values.openlane.coreConfiguration.auth.enabled | default "true" }}
   CORE_AUTH_TOKEN_KID: {{ .Values.openlane.coreConfiguration.auth.token.kid }}
 {{- if .Values.openlane.coreConfiguration.auth.token.audience }}

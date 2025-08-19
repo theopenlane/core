@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ControlObjective defines the controlobjective schema.
@@ -125,16 +126,22 @@ func (c ControlObjective) Mixin() []ent.Mixin {
 	}.getMixins(c)
 }
 
+func (ControlObjective) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+	}
+}
+
 // Annotations of the ControlObjective
-func (ControlObjective) Annotations() []schema.Annotation {
+func (c ControlObjective) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }
 
 // Policy of the ControlObjective
-func (ControlObjective) Policy() ent.Policy {
+func (c ControlObjective) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CanCreateObjectsUnderParents([]string{

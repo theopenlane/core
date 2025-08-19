@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
@@ -191,17 +192,23 @@ func (r Risk) Mixin() []ent.Mixin {
 	}.getMixins(r)
 }
 
+func (Risk) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogRiskManagementAddon,
+	}
+}
+
 // Annotations of the Risk
-func (Risk) Annotations() []schema.Annotation {
+func (r Risk) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}
 }
 
 // Policy of the Risk
-func (Risk) Policy() ent.Policy {
+func (r Risk) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CanCreateObjectsUnderParents([]string{

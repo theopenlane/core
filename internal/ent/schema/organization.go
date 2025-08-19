@@ -122,6 +122,15 @@ func (Organization) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationUpdateInput, entgql.SkipOrderField),
 			),
+		field.String("stripe_customer_id").
+			Comment("the stripe customer ID this organization is associated to").
+			Optional().
+			Nillable().
+			Unique().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput |
+					entgql.SkipWhereInput | entgql.SkipOrderField),
+			),
 	}
 }
 
@@ -429,9 +438,8 @@ func (Organization) Indexes() []ent.Index {
 }
 
 // Annotations of the Organization
-func (Organization) Annotations() []schema.Annotation {
+func (o Organization) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features(entx.ModuleBase),
 		// Delete org members when orgs are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{
@@ -471,7 +479,7 @@ func (Organization) Policy() ent.Policy {
 }
 
 // Interceptors of the Organization
-func (Organization) Interceptors() []ent.Interceptor {
+func (o Organization) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorOrganization(),
 	}

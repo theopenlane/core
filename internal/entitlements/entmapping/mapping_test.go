@@ -1,12 +1,12 @@
 package entmapping
 
 import (
+	"context"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
-
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
@@ -58,7 +58,6 @@ type subscriptionBuilder struct {
 	daysUntilDue             string
 	features                 []string
 	featureLookupKeys        []string
-	paymentMethodAdded       bool
 }
 
 func (b *subscriptionBuilder) SetStripeSubscriptionID(id string) *subscriptionBuilder {
@@ -99,27 +98,25 @@ func (b *subscriptionBuilder) SetFeatureLookupKeys(f []string) *subscriptionBuil
 	b.featureLookupKeys = f
 	return b
 }
-func (b *subscriptionBuilder) SetPaymentMethodAdded(bm bool) *subscriptionBuilder {
-	b.paymentMethodAdded = bm
-	return b
-}
 
 // moduleBuilder defines the methods needed to set OrgModule fields on ent builders
 type moduleBuilder struct {
-	module          string
+	module          models.OrgModule
 	price           models.Price
 	stripePriceID   string
 	status          string
 	visibility      string
 	moduleLookupKey string
+	active          bool
 }
 
-func (b *moduleBuilder) SetModule(m string) *moduleBuilder          { b.module = m; return b }
-func (b *moduleBuilder) SetPrice(p models.Price) *moduleBuilder     { b.price = p; return b }
-func (b *moduleBuilder) SetStripePriceID(id string) *moduleBuilder  { b.stripePriceID = id; return b }
-func (b *moduleBuilder) SetStatus(s string) *moduleBuilder          { b.status = s; return b }
-func (b *moduleBuilder) SetVisibility(v string) *moduleBuilder      { b.visibility = v; return b }
-func (b *moduleBuilder) SetModuleLookupKey(k string) *moduleBuilder { b.moduleLookupKey = k; return b }
+func (b *moduleBuilder) SetModule(m models.OrgModule) *moduleBuilder { b.module = m; return b }
+func (b *moduleBuilder) SetPrice(p models.Price) *moduleBuilder      { b.price = p; return b }
+func (b *moduleBuilder) SetStripePriceID(id string) *moduleBuilder   { b.stripePriceID = id; return b }
+func (b *moduleBuilder) SetStatus(s string) *moduleBuilder           { b.status = s; return b }
+func (b *moduleBuilder) SetVisibility(v string) *moduleBuilder       { b.visibility = v; return b }
+func (b *moduleBuilder) SetModuleLookupKey(k string) *moduleBuilder  { b.moduleLookupKey = k; return b }
+func (b *moduleBuilder) SetActive(a bool) *moduleBuilder             { b.active = a; return b }
 
 func TestStripePriceToOrgPrice(t *testing.T) {
 	p := &stripe.Price{
@@ -195,9 +192,8 @@ func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
 	}
 
 	cust := &entitlements.OrganizationCustomer{
-		Features:           []string{"f1"},
-		FeatureNames:       []string{"Feature1"},
-		PaymentMethodAdded: true,
+		Features:     []string{"f1"},
+		FeatureNames: []string{"Feature1"},
 	}
 
 	got := StripeSubscriptionToOrgSubscription(sub, cust)
@@ -206,7 +202,6 @@ func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
 		StripeSubscriptionID:     "sub_123",
 		StripeSubscriptionStatus: "active",
 		Active:                   true,
-		StripeCustomerID:         "cus_123",
 		ProductTier:              "Pro",
 		StripeProductTierID:      "prod_123",
 		ProductPrice:             models.Price{Amount: 20, Interval: "year", Currency: "usd"},
@@ -214,7 +209,6 @@ func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
 		DaysUntilDue:             int64ToStringPtr(7),
 		Features:                 []string{"f1"},
 		FeatureLookupKeys:        []string{"Feature1"},
-		PaymentMethodAdded:       stripe.Bool(true),
 	}
 
 	require.Equal(t, want, got)
@@ -319,9 +313,8 @@ func TestApplyStripeSubscription(t *testing.T) {
 	}
 
 	cust := &entitlements.OrganizationCustomer{
-		Features:           []string{"f1"},
-		FeatureNames:       []string{"Feature1"},
-		PaymentMethodAdded: true,
+		Features:     []string{"f1"},
+		FeatureNames: []string{"Feature1"},
 	}
 
 	b := &subscriptionBuilder{}
@@ -331,7 +324,7 @@ func TestApplyStripeSubscription(t *testing.T) {
 		stripeSubscriptionID:     "sub_123",
 		stripeSubscriptionStatus: "active",
 		active:                   true,
-		stripeCustomerID:         "cus_123",
+		stripeCustomerID:         "",
 		productTier:              "Pro",
 		stripeProductTierID:      "prod_123",
 		productPrice:             models.Price{Amount: 20, Interval: "year", Currency: "usd"},
@@ -339,7 +332,6 @@ func TestApplyStripeSubscription(t *testing.T) {
 		daysUntilDue:             "7",
 		features:                 []string{"f1"},
 		featureLookupKeys:        []string{"Feature1"},
-		paymentMethodAdded:       true,
 	}
 
 	require.Equal(t, b, got)
@@ -363,15 +355,16 @@ func TestApplyStripeSubscriptionItem(t *testing.T) {
 	}
 
 	b := &moduleBuilder{}
-	got := ApplyStripeSubscriptionItem(b, item)
+	got := ApplyStripeSubscriptionItem(context.Background(), b, item, nil, "active")
 
 	expected := &moduleBuilder{
-		module:          "mod1",
+		module:          models.OrgModule("mod1"),
 		price:           models.Price{Amount: 30, Interval: "month", Currency: "usd"},
 		stripePriceID:   "price_123",
 		status:          "active",
 		visibility:      "public",
 		moduleLookupKey: "lookup",
+		active:          false,
 	}
 
 	require.Equal(t, b, got)

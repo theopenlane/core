@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -87,7 +88,6 @@ func (o OrgMembership) Edges() []ent.Edge {
 // Annotations of the OrgMembership
 func (OrgMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entfga.MembershipChecks("organization"),
 		// Delete groups + program members when orgmembership is deleted
 		entx.CascadeThroughAnnotationField(
@@ -147,4 +147,10 @@ func (OrgMembership) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.OrgMembershipMutation](),
 		),
 	)
+}
+
+func (OrgMembership) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
 }

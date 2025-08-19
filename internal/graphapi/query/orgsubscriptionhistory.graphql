@@ -15,7 +15,6 @@ query GetAllOrgSubscriptionHistories {
         ownerID
         productTier
         ref
-        stripeCustomerID
         stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
@@ -42,7 +41,6 @@ query GetOrgSubscriptionHistories($where: OrgSubscriptionHistoryWhereInput) {
         ownerID
         productTier
         ref
-        stripeCustomerID
         stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus

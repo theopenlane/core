@@ -30,7 +30,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/permissioncache"
 )
 
 // HookOrganization runs on org mutations to set default values that are not provided
@@ -304,11 +303,6 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
-	orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
-	if err != nil {
-		return err
-	}
-
 	// create default entity types, if configured
 	if err := createEntityTypes(ctx, orgCreated.ID, m); err != nil {
 		return err
@@ -321,16 +315,14 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
-	modulesCreated, err := createDefaultOrgModulesProductsPrices(ctx, orgCreated, m, orgSubs, withTrial())
-	if err != nil {
-		return err
-	}
+	if m.EntConfig.Modules.Enabled {
+		orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
+		if err != nil {
+			return err
+		}
 
-	// create default feature tuples for base functionality when entitlements are enabled
-	if m.Client().EntitlementManager != nil {
-		if err := createFeatureTuples(ctx, m.Authz, orgCreated.ID, modulesCreated); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default feature tuples")
-
+		_, err = createDefaultOrgModulesProductsPrices(ctx, orgCreated, m, orgSubs, withTrial())
+		if err != nil {
 			return err
 		}
 	}
@@ -597,31 +589,6 @@ func updateDefaultOrgIfPersonal(ctx context.Context, userID, orgID string, clien
 	return nil
 }
 
-// createFeatureTuples writes default feature tuples to FGA and inserts them into
-// the feature cache if available.
-func createFeatureTuples(ctx context.Context, authz fgax.Client, orgID string, feats []string) error {
-	tuples := make([]fgax.TupleKey, 0, len(feats))
-	for _, f := range feats {
-		tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
-			SubjectID:   orgID,
-			SubjectType: generated.TypeOrganization,
-			ObjectID:    f,
-			ObjectType:  "feature",
-			Relation:    "enabled",
-		}))
-	}
-
-	if _, err := authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-		return err
-	}
-
-	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
-		return cache.SetFeatures(ctx, orgID, feats)
-	}
-
-	return nil
-}
-
 // orgModuleConfig controls which modules are selected when creating default module records - small functional options wrapper
 type orgModuleConfig struct {
 	personalOrg bool
@@ -688,7 +655,7 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 
 		// we set the price purely for reference; it will not be used for billing - we care mostly about the association of subscription to module
 		orgMod, err := m.Client().OrgModule.Create().
-			SetModule(moduleName).
+			SetModule(models.OrgModule(moduleName)).
 			SetSubscriptionID(orgSubs.ID).
 			SetOwnerID(orgCreated.ID).
 			SetActive(true).
