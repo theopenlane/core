@@ -6774,8 +6774,6 @@ type UpdateOrganizationInput struct {
 	AvatarRemoteURL                       *string
 	ClearAvatarUpdatedAt                  bool
 	AvatarUpdatedAt                       *time.Time
-	ClearStripeCustomerID                 bool
-	StripeCustomerID                      *string
 	ClearControlCreators                  bool
 	AddControlCreatorIDs                  []string
 	RemoveControlCreatorIDs               []string
@@ -6990,12 +6988,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AvatarUpdatedAt; v != nil {
 		m.SetAvatarUpdatedAt(*v)
-	}
-	if i.ClearStripeCustomerID {
-		m.ClearStripeCustomerID()
-	}
-	if v := i.StripeCustomerID; v != nil {
-		m.SetStripeCustomerID(*v)
 	}
 	if i.ClearControlCreators {
 		m.ClearControlCreators()

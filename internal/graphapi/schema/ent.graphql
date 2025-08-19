@@ -49570,11 +49570,6 @@ input UpdateOrganizationInput {
   """
   avatarUpdatedAt: Time
   clearAvatarUpdatedAt: Boolean
-  """
-  the stripe customer ID this organization is associated to
-  """
-  stripeCustomerID: String
-  clearStripeCustomerID: Boolean
   addControlCreatorIDs: [ID!]
   removeControlCreatorIDs: [ID!]
   clearControlCreators: Boolean

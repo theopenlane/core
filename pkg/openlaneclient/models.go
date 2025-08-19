@@ -29080,11 +29080,8 @@ type UpdateOrganizationInput struct {
 	AvatarRemoteURL      *string `json:"avatarRemoteURL,omitempty"`
 	ClearAvatarRemoteURL *bool   `json:"clearAvatarRemoteURL,omitempty"`
 	// The time the user's (local) avatar was last updated
-	AvatarUpdatedAt      *time.Time `json:"avatarUpdatedAt,omitempty"`
-	ClearAvatarUpdatedAt *bool      `json:"clearAvatarUpdatedAt,omitempty"`
-	// the stripe customer ID this organization is associated to
-	StripeCustomerID                      *string                         `json:"stripeCustomerID,omitempty"`
-	ClearStripeCustomerID                 *bool                           `json:"clearStripeCustomerID,omitempty"`
+	AvatarUpdatedAt                       *time.Time                      `json:"avatarUpdatedAt,omitempty"`
+	ClearAvatarUpdatedAt                  *bool                           `json:"clearAvatarUpdatedAt,omitempty"`
 	AddControlCreatorIDs                  []string                        `json:"addControlCreatorIDs,omitempty"`
 	RemoveControlCreatorIDs               []string                        `json:"removeControlCreatorIDs,omitempty"`
 	ClearControlCreators                  *bool                           `json:"clearControlCreators,omitempty"`

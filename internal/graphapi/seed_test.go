@@ -51,6 +51,7 @@ type testUserDetails struct {
 	UserCtx context.Context
 }
 
+// userBuilder creates a new test user and returns the details
 func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, features ...models.OrgModule) testUserDetails {
 	testUser := testUserDetails{}
 
@@ -66,9 +67,6 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, feat
 
 	// setup user context with the personal org
 	userCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
-
-	// ensure the personal org has modules enabled so org-owned interceptors don't block operations
-	// (&OrganizationBuilder{client: suite.client, Features: features}).enableModules(userCtx, t, testUser.PersonalOrgID)
 
 	// create a non-personal test organization
 	testOrg := (&OrganizationBuilder{client: suite.client, Features: features}).MustNew(userCtx, t)
