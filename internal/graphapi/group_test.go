@@ -28,7 +28,7 @@ func TestQueryGroup(t *testing.T) {
 		Visibility: &enums.VisibilityPrivate,
 	})
 	assert.NilError(t, err)
-	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
+	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
 
 	testCases := []struct {
 		name     string

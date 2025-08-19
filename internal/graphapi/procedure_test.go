@@ -21,7 +21,7 @@ import (
 func TestQueryProcedure(t *testing.T) {
 	// create an Procedure to be queried using testUser1
 	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
+	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
 
 	// add test cases for querying the procedure
 	testCases := []struct {
