@@ -19,6 +19,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -323,8 +324,18 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 		return nil
 	}
 
-	return transaction.FromContext(ctx).OrgSubscription.Update().
-		Where(orgsubscription.StripeCustomerID(paymentMethod.Customer.ID)).
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	org, err := transaction.FromContext(ctx).Organization.Query().
+		Where(organization.StripeCustomerID(paymentMethod.Customer.ID)).
+		Only(allowCtx)
+	if err != nil {
+		log.Error().Err(err).Msg("could not fetch organization by stripe customer id")
+		return err
+	}
+
+	return transaction.FromContext(ctx).OrganizationSetting.Update().
+		Where(organizationsetting.OrganizationID(org.ID)).
 		SetPaymentMethodAdded(true).
 		Exec(ctx)
 }
@@ -428,18 +439,6 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 		log.Debug().Str("subscription_id", orgSubscription.ID).Str("days_until_due", *stripeOrgSubscription.DaysUntilDue).Msg("days until due changed")
 	}
 
-	if stripeOrgSubscription.PaymentMethodAdded != nil && orgSubscription.PaymentMethodAdded != stripeOrgSubscription.PaymentMethodAdded {
-		mutation.SetPaymentMethodAdded(*stripeOrgSubscription.PaymentMethodAdded)
-
-		changed = true
-
-		if orgSubscription.PaymentMethodAdded != nil {
-			log.Debug().Str("subscription_id", orgSubscription.ID).Bool("payment_method_added", *orgSubscription.PaymentMethodAdded).Msg("payment method added changed")
-		} else {
-			log.Debug().Str("subscription_id", orgSubscription.ID).Msg("payment method added changed but was previously nil")
-		}
-	}
-
 	if orgSubscription.Active != stripeOrgSubscription.Active {
 		mutation.SetActive(stripeOrgSubscription.Active)
 
@@ -497,7 +496,6 @@ func (h *Handler) createOrUpdateOrgSubscriptionWithStripe(ctx context.Context, s
 			SetProductPrice(stripeSub.ProductPrice).
 			SetNillableTrialExpiresAt(stripeSub.TrialExpiresAt).
 			SetNillableDaysUntilDue(stripeSub.DaysUntilDue).
-			SetNillablePaymentMethodAdded(stripeSub.PaymentMethodAdded).
 			SetActive(stripeSub.Active).
 			Save(allowCtx)
 

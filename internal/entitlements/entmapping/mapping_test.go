@@ -7,7 +7,6 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
-
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
@@ -59,7 +58,6 @@ type subscriptionBuilder struct {
 	daysUntilDue             string
 	features                 []string
 	featureLookupKeys        []string
-	paymentMethodAdded       bool
 }
 
 func (b *subscriptionBuilder) SetStripeSubscriptionID(id string) *subscriptionBuilder {
@@ -98,10 +96,6 @@ func (b *subscriptionBuilder) SetDaysUntilDue(s string) *subscriptionBuilder {
 func (b *subscriptionBuilder) SetFeatures(f []string) *subscriptionBuilder { b.features = f; return b }
 func (b *subscriptionBuilder) SetFeatureLookupKeys(f []string) *subscriptionBuilder {
 	b.featureLookupKeys = f
-	return b
-}
-func (b *subscriptionBuilder) SetPaymentMethodAdded(bm bool) *subscriptionBuilder {
-	b.paymentMethodAdded = bm
 	return b
 }
 
@@ -198,9 +192,8 @@ func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
 	}
 
 	cust := &entitlements.OrganizationCustomer{
-		Features:           []string{"f1"},
-		FeatureNames:       []string{"Feature1"},
-		PaymentMethodAdded: true,
+		Features:     []string{"f1"},
+		FeatureNames: []string{"Feature1"},
 	}
 
 	got := StripeSubscriptionToOrgSubscription(sub, cust)
@@ -209,7 +202,6 @@ func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
 		StripeSubscriptionID:     "sub_123",
 		StripeSubscriptionStatus: "active",
 		Active:                   true,
-		StripeCustomerID:         "cus_123",
 		ProductTier:              "Pro",
 		StripeProductTierID:      "prod_123",
 		ProductPrice:             models.Price{Amount: 20, Interval: "year", Currency: "usd"},
@@ -217,7 +209,6 @@ func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
 		DaysUntilDue:             int64ToStringPtr(7),
 		Features:                 []string{"f1"},
 		FeatureLookupKeys:        []string{"Feature1"},
-		PaymentMethodAdded:       stripe.Bool(true),
 	}
 
 	require.Equal(t, want, got)
@@ -322,9 +313,8 @@ func TestApplyStripeSubscription(t *testing.T) {
 	}
 
 	cust := &entitlements.OrganizationCustomer{
-		Features:           []string{"f1"},
-		FeatureNames:       []string{"Feature1"},
-		PaymentMethodAdded: true,
+		Features:     []string{"f1"},
+		FeatureNames: []string{"Feature1"},
 	}
 
 	b := &subscriptionBuilder{}
@@ -342,7 +332,6 @@ func TestApplyStripeSubscription(t *testing.T) {
 		daysUntilDue:             "7",
 		features:                 []string{"f1"},
 		featureLookupKeys:        []string{"Feature1"},
-		paymentMethodAdded:       true,
 	}
 
 	require.Equal(t, b, got)

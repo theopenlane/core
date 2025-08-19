@@ -52,7 +52,7 @@ type Organization struct {
 	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicated_db,omitempty"`
-	// the customer ID this organization is associated to
+	// the stripe customer ID this organization is associated to
 	StripeCustomerID *string `json:"stripe_customer_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationQuery when eager-loading is set.

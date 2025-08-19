@@ -2817,10 +2817,8 @@ type ComplexityRoot struct {
 		ModuleBillingURLs        func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
-		PaymentMethodAdded       func(childComplexity int) int
 		ProductPrice             func(childComplexity int) int
 		ProductTier              func(childComplexity int) int
-		StripeCustomerID         func(childComplexity int) int
 		StripeProductTierID      func(childComplexity int) int
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
@@ -2854,11 +2852,9 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		Operation                func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
-		PaymentMethodAdded       func(childComplexity int) int
 		ProductPrice             func(childComplexity int) int
 		ProductTier              func(childComplexity int) int
 		Ref                      func(childComplexity int) int
-		StripeCustomerID         func(childComplexity int) int
 		StripeProductTierID      func(childComplexity int) int
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
@@ -3039,6 +3035,7 @@ type ComplexityRoot struct {
 		OidcDiscoveryEndpoint            func(childComplexity int) int
 		Organization                     func(childComplexity int) int
 		OrganizationID                   func(childComplexity int) int
+		PaymentMethodAdded               func(childComplexity int) int
 		Tags                             func(childComplexity int) int
 		TaxIdentifier                    func(childComplexity int) int
 		UpdatedAt                        func(childComplexity int) int
@@ -3091,6 +3088,7 @@ type ComplexityRoot struct {
 		OidcDiscoveryEndpoint            func(childComplexity int) int
 		Operation                        func(childComplexity int) int
 		OrganizationID                   func(childComplexity int) int
+		PaymentMethodAdded               func(childComplexity int) int
 		Ref                              func(childComplexity int) int
 		Tags                             func(childComplexity int) int
 		TaxIdentifier                    func(childComplexity int) int
@@ -19847,13 +19845,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrgSubscription.OwnerID(childComplexity), true
 
-	case "OrgSubscription.paymentMethodAdded":
-		if e.complexity.OrgSubscription.PaymentMethodAdded == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.PaymentMethodAdded(childComplexity), true
-
 	case "OrgSubscription.productPrice":
 		if e.complexity.OrgSubscription.ProductPrice == nil {
 			break
@@ -19867,13 +19858,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgSubscription.ProductTier(childComplexity), true
-
-	case "OrgSubscription.stripeCustomerID":
-		if e.complexity.OrgSubscription.StripeCustomerID == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.StripeCustomerID(childComplexity), true
 
 	case "OrgSubscription.stripeProductTierID":
 		if e.complexity.OrgSubscription.StripeProductTierID == nil {
@@ -20043,13 +20027,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrgSubscriptionHistory.OwnerID(childComplexity), true
 
-	case "OrgSubscriptionHistory.paymentMethodAdded":
-		if e.complexity.OrgSubscriptionHistory.PaymentMethodAdded == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.PaymentMethodAdded(childComplexity), true
-
 	case "OrgSubscriptionHistory.productPrice":
 		if e.complexity.OrgSubscriptionHistory.ProductPrice == nil {
 			break
@@ -20070,13 +20047,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgSubscriptionHistory.Ref(childComplexity), true
-
-	case "OrgSubscriptionHistory.stripeCustomerID":
-		if e.complexity.OrgSubscriptionHistory.StripeCustomerID == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.StripeCustomerID(childComplexity), true
 
 	case "OrgSubscriptionHistory.stripeProductTierID":
 		if e.complexity.OrgSubscriptionHistory.StripeProductTierID == nil {
@@ -21391,6 +21361,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSetting.OrganizationID(childComplexity), true
 
+	case "OrganizationSetting.paymentMethodAdded":
+		if e.complexity.OrganizationSetting.PaymentMethodAdded == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.PaymentMethodAdded(childComplexity), true
+
 	case "OrganizationSetting.tags":
 		if e.complexity.OrganizationSetting.Tags == nil {
 			break
@@ -21628,6 +21605,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingHistory.OrganizationID(childComplexity), true
+
+	case "OrganizationSettingHistory.paymentMethodAdded":
+		if e.complexity.OrganizationSettingHistory.PaymentMethodAdded == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.PaymentMethodAdded(childComplexity), true
 
 	case "OrganizationSettingHistory.ref":
 		if e.complexity.OrganizationSettingHistory.Ref == nil {
@@ -61907,10 +61891,6 @@ type OrgSubscription implements Node {
   """
   active: Boolean!
   """
-  the customer ID the subscription is associated to
-  """
-  stripeCustomerID: String
-  """
   the time the subscription is set to expire; only populated if subscription is cancelled
   """
   expiresAt: Time
@@ -61922,10 +61902,6 @@ type OrgSubscription implements Node {
   number of days until there is a due payment
   """
   daysUntilDue: String
-  """
-  whether or not a payment method has been added to the account
-  """
-  paymentMethodAdded: Boolean
   """
   the features associated with the subscription
   """
@@ -62039,10 +62015,6 @@ type OrgSubscriptionHistory implements Node {
   """
   active: Boolean!
   """
-  the customer ID the subscription is associated to
-  """
-  stripeCustomerID: String
-  """
   the time the subscription is set to expire; only populated if subscription is cancelled
   """
   expiresAt: Time
@@ -62054,10 +62026,6 @@ type OrgSubscriptionHistory implements Node {
   number of days until there is a due payment
   """
   daysUntilDue: String
-  """
-  whether or not a payment method has been added to the account
-  """
-  paymentMethodAdded: Boolean
   """
   the features associated with the subscription
   """
@@ -62347,24 +62315,6 @@ input OrgSubscriptionHistoryWhereInput {
   active: Boolean
   activeNEQ: Boolean
   """
-  stripe_customer_id field predicates
-  """
-  stripeCustomerID: String
-  stripeCustomerIDNEQ: String
-  stripeCustomerIDIn: [String!]
-  stripeCustomerIDNotIn: [String!]
-  stripeCustomerIDGT: String
-  stripeCustomerIDGTE: String
-  stripeCustomerIDLT: String
-  stripeCustomerIDLTE: String
-  stripeCustomerIDContains: String
-  stripeCustomerIDHasPrefix: String
-  stripeCustomerIDHasSuffix: String
-  stripeCustomerIDIsNil: Boolean
-  stripeCustomerIDNotNil: Boolean
-  stripeCustomerIDEqualFold: String
-  stripeCustomerIDContainsFold: String
-  """
   expires_at field predicates
   """
   expiresAt: Time
@@ -62408,13 +62358,6 @@ input OrgSubscriptionHistoryWhereInput {
   daysUntilDueNotNil: Boolean
   daysUntilDueEqualFold: String
   daysUntilDueContainsFold: String
-  """
-  payment_method_added field predicates
-  """
-  paymentMethodAdded: Boolean
-  paymentMethodAddedNEQ: Boolean
-  paymentMethodAddedIsNil: Boolean
-  paymentMethodAddedNotNil: Boolean
 }
 """
 Ordering options for OrgSubscription connections
@@ -62621,24 +62564,6 @@ input OrgSubscriptionWhereInput {
   active: Boolean
   activeNEQ: Boolean
   """
-  stripe_customer_id field predicates
-  """
-  stripeCustomerID: String
-  stripeCustomerIDNEQ: String
-  stripeCustomerIDIn: [String!]
-  stripeCustomerIDNotIn: [String!]
-  stripeCustomerIDGT: String
-  stripeCustomerIDGTE: String
-  stripeCustomerIDLT: String
-  stripeCustomerIDLTE: String
-  stripeCustomerIDContains: String
-  stripeCustomerIDHasPrefix: String
-  stripeCustomerIDHasSuffix: String
-  stripeCustomerIDIsNil: Boolean
-  stripeCustomerIDNotNil: Boolean
-  stripeCustomerIDEqualFold: String
-  stripeCustomerIDContainsFold: String
-  """
   expires_at field predicates
   """
   expiresAt: Time
@@ -62682,13 +62607,6 @@ input OrgSubscriptionWhereInput {
   daysUntilDueNotNil: Boolean
   daysUntilDueEqualFold: String
   daysUntilDueContainsFold: String
-  """
-  payment_method_added field predicates
-  """
-  paymentMethodAdded: Boolean
-  paymentMethodAddedNEQ: Boolean
-  paymentMethodAddedIsNil: Boolean
-  paymentMethodAddedNotNil: Boolean
   """
   owner edge predicates
   """
@@ -62743,7 +62661,7 @@ type Organization implements Node {
   """
   dedicatedDb: Boolean!
   """
-  the customer ID this organization is associated to
+  the stripe customer ID this organization is associated to
   """
   stripeCustomerID: String
   controlCreators(
@@ -64687,7 +64605,7 @@ type OrganizationHistory implements Node {
   """
   dedicatedDb: Boolean!
   """
-  the customer ID this organization is associated to
+  the stripe customer ID this organization is associated to
   """
   stripeCustomerID: String
 }
@@ -65066,6 +64984,10 @@ type OrganizationSetting implements Node {
   unique token used to receive compliance webhook events
   """
   complianceWebhookToken: String
+  """
+  whether or not a payment method has been added to the account
+  """
+  paymentMethodAdded: Boolean!
   organization: Organization
   files(
     """
@@ -65214,6 +65136,10 @@ type OrganizationSettingHistory implements Node {
   unique token used to receive compliance webhook events
   """
   complianceWebhookToken: String
+  """
+  whether or not a payment method has been added to the account
+  """
+  paymentMethodAdded: Boolean!
 }
 """
 A connection to a list of items.
@@ -85676,7 +85602,7 @@ input UpdateOrganizationInput {
   avatarUpdatedAt: Time
   clearAvatarUpdatedAt: Boolean
   """
-  the customer ID this organization is associated to
+  the stripe customer ID this organization is associated to
   """
   stripeCustomerID: String
   clearStripeCustomerID: Boolean

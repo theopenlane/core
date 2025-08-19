@@ -89,10 +89,6 @@ func (OrgSubscription) Fields() []ent.Field {
 			).
 			Nillable().
 			Optional(),
-		field.Bool("payment_method_added").
-			Comment("whether or not a payment method has been added to the account").
-			Nillable().
-			Optional(),
 		field.JSON("features", []string{}).
 			Comment("the features associated with the subscription").
 			Optional(),

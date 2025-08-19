@@ -257,26 +257,6 @@ func (_u *OrgSubscriptionHistoryUpdate) SetNillableActive(v *bool) *OrgSubscript
 	return _u
 }
 
-// SetStripeCustomerID sets the "stripe_customer_id" field.
-func (_u *OrgSubscriptionHistoryUpdate) SetStripeCustomerID(v string) *OrgSubscriptionHistoryUpdate {
-	_u.mutation.SetStripeCustomerID(v)
-	return _u
-}
-
-// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
-func (_u *OrgSubscriptionHistoryUpdate) SetNillableStripeCustomerID(v *string) *OrgSubscriptionHistoryUpdate {
-	if v != nil {
-		_u.SetStripeCustomerID(*v)
-	}
-	return _u
-}
-
-// ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
-func (_u *OrgSubscriptionHistoryUpdate) ClearStripeCustomerID() *OrgSubscriptionHistoryUpdate {
-	_u.mutation.ClearStripeCustomerID()
-	return _u
-}
-
 // SetExpiresAt sets the "expires_at" field.
 func (_u *OrgSubscriptionHistoryUpdate) SetExpiresAt(v time.Time) *OrgSubscriptionHistoryUpdate {
 	_u.mutation.SetExpiresAt(v)
@@ -334,26 +314,6 @@ func (_u *OrgSubscriptionHistoryUpdate) SetNillableDaysUntilDue(v *string) *OrgS
 // ClearDaysUntilDue clears the value of the "days_until_due" field.
 func (_u *OrgSubscriptionHistoryUpdate) ClearDaysUntilDue() *OrgSubscriptionHistoryUpdate {
 	_u.mutation.ClearDaysUntilDue()
-	return _u
-}
-
-// SetPaymentMethodAdded sets the "payment_method_added" field.
-func (_u *OrgSubscriptionHistoryUpdate) SetPaymentMethodAdded(v bool) *OrgSubscriptionHistoryUpdate {
-	_u.mutation.SetPaymentMethodAdded(v)
-	return _u
-}
-
-// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (_u *OrgSubscriptionHistoryUpdate) SetNillablePaymentMethodAdded(v *bool) *OrgSubscriptionHistoryUpdate {
-	if v != nil {
-		_u.SetPaymentMethodAdded(*v)
-	}
-	return _u
-}
-
-// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
-func (_u *OrgSubscriptionHistoryUpdate) ClearPaymentMethodAdded() *OrgSubscriptionHistoryUpdate {
-	_u.mutation.ClearPaymentMethodAdded()
 	return _u
 }
 
@@ -532,12 +492,6 @@ func (_u *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (_node int,
 	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := _u.mutation.StripeCustomerID(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldStripeCustomerID, field.TypeString, value)
-	}
-	if _u.mutation.StripeCustomerIDCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldStripeCustomerID, field.TypeString)
-	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldExpiresAt, field.TypeTime, value)
 	}
@@ -555,12 +509,6 @@ func (_u *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (_node int,
 	}
 	if _u.mutation.DaysUntilDueCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString)
-	}
-	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool, value)
-	}
-	if _u.mutation.PaymentMethodAddedCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Features(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)
@@ -832,26 +780,6 @@ func (_u *OrgSubscriptionHistoryUpdateOne) SetNillableActive(v *bool) *OrgSubscr
 	return _u
 }
 
-// SetStripeCustomerID sets the "stripe_customer_id" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetStripeCustomerID(v string) *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.SetStripeCustomerID(v)
-	return _u
-}
-
-// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetNillableStripeCustomerID(v *string) *OrgSubscriptionHistoryUpdateOne {
-	if v != nil {
-		_u.SetStripeCustomerID(*v)
-	}
-	return _u
-}
-
-// ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) ClearStripeCustomerID() *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.ClearStripeCustomerID()
-	return _u
-}
-
 // SetExpiresAt sets the "expires_at" field.
 func (_u *OrgSubscriptionHistoryUpdateOne) SetExpiresAt(v time.Time) *OrgSubscriptionHistoryUpdateOne {
 	_u.mutation.SetExpiresAt(v)
@@ -909,26 +837,6 @@ func (_u *OrgSubscriptionHistoryUpdateOne) SetNillableDaysUntilDue(v *string) *O
 // ClearDaysUntilDue clears the value of the "days_until_due" field.
 func (_u *OrgSubscriptionHistoryUpdateOne) ClearDaysUntilDue() *OrgSubscriptionHistoryUpdateOne {
 	_u.mutation.ClearDaysUntilDue()
-	return _u
-}
-
-// SetPaymentMethodAdded sets the "payment_method_added" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetPaymentMethodAdded(v bool) *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.SetPaymentMethodAdded(v)
-	return _u
-}
-
-// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetNillablePaymentMethodAdded(v *bool) *OrgSubscriptionHistoryUpdateOne {
-	if v != nil {
-		_u.SetPaymentMethodAdded(*v)
-	}
-	return _u
-}
-
-// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) ClearPaymentMethodAdded() *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.ClearPaymentMethodAdded()
 	return _u
 }
 
@@ -1137,12 +1045,6 @@ func (_u *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := _u.mutation.StripeCustomerID(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldStripeCustomerID, field.TypeString, value)
-	}
-	if _u.mutation.StripeCustomerIDCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldStripeCustomerID, field.TypeString)
-	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldExpiresAt, field.TypeTime, value)
 	}
@@ -1160,12 +1062,6 @@ func (_u *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if _u.mutation.DaysUntilDueCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString)
-	}
-	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool, value)
-	}
-	if _u.mutation.PaymentMethodAddedCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Features(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)

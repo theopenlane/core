@@ -188,9 +188,6 @@ func (c Control) Policy() ent.Policy {
 func (Control) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
-		models.CatalogPolicyManagementAddon,
-		models.CatalogRiskManagementAddon,
-		models.CatalogEntityManagementModule,
 	}
 }
 

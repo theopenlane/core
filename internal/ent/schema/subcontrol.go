@@ -162,8 +162,5 @@ func (s Subcontrol) Policy() ent.Policy {
 func (Subcontrol) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
-		models.CatalogPolicyManagementAddon,
-		models.CatalogRiskManagementAddon,
-		models.CatalogEntityManagementModule,
 	}
 }

@@ -57,7 +57,7 @@ type OrganizationHistory struct {
 	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicated_db,omitempty"`
-	// the customer ID this organization is associated to
+	// the stripe customer ID this organization is associated to
 	StripeCustomerID *string `json:"stripe_customer_id,omitempty"`
 	selectValues     sql.SelectValues
 }

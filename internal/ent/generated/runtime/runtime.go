@@ -4321,6 +4321,10 @@ func init() {
 	organizationsettingDescComplianceWebhookToken := organizationsettingFields[17].Descriptor()
 	// organizationsetting.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
 	organizationsetting.DefaultComplianceWebhookToken = organizationsettingDescComplianceWebhookToken.Default.(func() string)
+	// organizationsettingDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
+	organizationsettingDescPaymentMethodAdded := organizationsettingFields[18].Descriptor()
+	// organizationsetting.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
+	organizationsetting.DefaultPaymentMethodAdded = organizationsettingDescPaymentMethodAdded.Default.(bool)
 	// organizationsettingDescID is the schema descriptor for id field.
 	organizationsettingDescID := organizationsettingMixinFields3[0].Descriptor()
 	// organizationsetting.DefaultID holds the default value on creation for the id field.
@@ -4368,6 +4372,10 @@ func init() {
 	organizationsettinghistoryDescComplianceWebhookToken := organizationsettinghistoryFields[28].Descriptor()
 	// organizationsettinghistory.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
 	organizationsettinghistory.DefaultComplianceWebhookToken = organizationsettinghistoryDescComplianceWebhookToken.Default.(func() string)
+	// organizationsettinghistoryDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
+	organizationsettinghistoryDescPaymentMethodAdded := organizationsettinghistoryFields[29].Descriptor()
+	// organizationsettinghistory.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
+	organizationsettinghistory.DefaultPaymentMethodAdded = organizationsettinghistoryDescPaymentMethodAdded.Default.(bool)
 	// organizationsettinghistoryDescID is the schema descriptor for id field.
 	organizationsettinghistoryDescID := organizationsettinghistoryFields[9].Descriptor()
 	// organizationsettinghistory.DefaultID holds the default value on creation for the id field.

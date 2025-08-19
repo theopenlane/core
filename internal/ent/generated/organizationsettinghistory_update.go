@@ -468,6 +468,20 @@ func (_u *OrganizationSettingHistoryUpdate) ClearComplianceWebhookToken() *Organ
 	return _u
 }
 
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (_u *OrganizationSettingHistoryUpdate) SetPaymentMethodAdded(v bool) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetPaymentMethodAdded(v)
+	return _u
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillablePaymentMethodAdded(v *bool) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetPaymentMethodAdded(*v)
+	}
+	return _u
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (_u *OrganizationSettingHistoryUpdate) Mutation() *OrganizationSettingHistoryMutation {
 	return _u.mutation
@@ -703,6 +717,9 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.ComplianceWebhookTokenCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString)
+	}
+	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(organizationsettinghistory.FieldPaymentMethodAdded, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1162,6 +1179,20 @@ func (_u *OrganizationSettingHistoryUpdateOne) ClearComplianceWebhookToken() *Or
 	return _u
 }
 
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetPaymentMethodAdded(v bool) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetPaymentMethodAdded(v)
+	return _u
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillablePaymentMethodAdded(v *bool) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetPaymentMethodAdded(*v)
+	}
+	return _u
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (_u *OrganizationSettingHistoryUpdateOne) Mutation() *OrganizationSettingHistoryMutation {
 	return _u.mutation
@@ -1427,6 +1458,9 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.ComplianceWebhookTokenCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString)
+	}
+	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(organizationsettinghistory.FieldPaymentMethodAdded, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

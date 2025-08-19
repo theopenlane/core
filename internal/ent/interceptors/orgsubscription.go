@@ -72,27 +72,46 @@ func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, 
 		return nil
 	}
 
-	// if the subscription doesn't have a stripe ID or customer ID, skip
-	if orgSub.StripeSubscriptionID == "" || orgSub.StripeCustomerID == "" {
+	// if the subscription doesn't have a stripe ID
+	if orgSub.StripeSubscriptionID == "" {
 		return nil
 	}
 
+	client := generated.FromContext(ctx)
+	if client == nil {
+		zerolog.Ctx(ctx).Error().Msg("ent client not found in context")
+		return nil
+	}
+
+	org, err := client.Organization.Get(ctx, orgSub.OwnerID)
+	if err != nil {
+		zerolog.Ctx(ctx).Err(err).Str("owner_id", orgSub.OwnerID).Msg("failed to fetch organization")
+		return err
+	}
+
+	if org.StripeCustomerID == nil || *org.StripeCustomerID == "" {
+		zerolog.Ctx(ctx).Warn().Str("owner_id", orgSub.OwnerID).Msg("organization does not have a stripe customer ID")
+		return nil
+	}
+
+	customerID := *org.StripeCustomerID
+
 	// create a billing portal session
-	updateSubscription, err := q.EntitlementManager.CreateBillingPortalUpdateSession(ctx, orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
+	updateSubscription, err := q.EntitlementManager.CreateBillingPortalUpdateSession(ctx, orgSub.StripeSubscriptionID, customerID)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msg("failed to create update subscription billing portal session type")
 
 		return err
 	}
 
-	cancelSubscription, err := q.EntitlementManager.CancellationBillingPortalSession(ctx, orgSub.StripeSubscriptionID, orgSub.StripeCustomerID)
+	cancelSubscription, err := q.EntitlementManager.CancellationBillingPortalSession(ctx, orgSub.StripeSubscriptionID, customerID)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msg("failed to create cancel subscription billing portal session type")
 
 		return err
 	}
 
-	updatePaymentMethod, err := q.EntitlementManager.CreateBillingPortalPaymentMethods(ctx, orgSub.StripeCustomerID)
+	updatePaymentMethod, err := q.EntitlementManager.CreateBillingPortalPaymentMethods(ctx, customerID)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msg("failed to create update payment method billing portal session type")
 
@@ -111,7 +130,7 @@ func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, 
 			continue
 		}
 
-		sess, err := q.EntitlementManager.CreateBillingPortalAddModuleSession(ctx, orgSub.StripeSubscriptionID, orgSub.StripeCustomerID, priceID)
+		sess, err := q.EntitlementManager.CreateBillingPortalAddModuleSession(ctx, orgSub.StripeSubscriptionID, customerID, priceID)
 		if err != nil {
 			zerolog.Ctx(ctx).Warn().Err(err).Str("module", name).Msg("failed to create module billing portal session")
 			continue
@@ -120,7 +139,6 @@ func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, 
 		moduleURLs[name] = sess.ManageSubscription
 	}
 
-	// add the subscription URL to the result
 	orgSub.SubscriptionURL = updateSubscription.ManageSubscription
 	orgSub.Cancellation = cancelSubscription.Cancellation
 	orgSub.ManagePaymentMethods = updatePaymentMethod.PaymentMethods

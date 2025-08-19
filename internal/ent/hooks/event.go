@@ -621,8 +621,8 @@ func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID s
 	}
 
 	stripeCustomerID := ""
-	if len(org.Edges.OrgSubscriptions) > 0 {
-		stripeCustomerID = org.Edges.OrgSubscriptions[0].StripeCustomerID
+	if org.StripeCustomerID != nil {
+		stripeCustomerID = *org.StripeCustomerID
 	}
 
 	return &entitlements.OrganizationCustomer{

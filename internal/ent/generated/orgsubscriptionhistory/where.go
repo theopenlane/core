@@ -135,11 +135,6 @@ func Active(v bool) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldActive, v))
 }
 
-// StripeCustomerID applies equality check predicate on the "stripe_customer_id" field. It's identical to StripeCustomerIDEQ.
-func StripeCustomerID(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldStripeCustomerID, v))
-}
-
 // ExpiresAt applies equality check predicate on the "expires_at" field. It's identical to ExpiresAtEQ.
 func ExpiresAt(v time.Time) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldExpiresAt, v))
@@ -153,11 +148,6 @@ func TrialExpiresAt(v time.Time) predicate.OrgSubscriptionHistory {
 // DaysUntilDue applies equality check predicate on the "days_until_due" field. It's identical to DaysUntilDueEQ.
 func DaysUntilDue(v string) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldDaysUntilDue, v))
-}
-
-// PaymentMethodAdded applies equality check predicate on the "payment_method_added" field. It's identical to PaymentMethodAddedEQ.
-func PaymentMethodAdded(v bool) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldPaymentMethodAdded, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -1075,81 +1065,6 @@ func ActiveNEQ(v bool) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldNEQ(FieldActive, v))
 }
 
-// StripeCustomerIDEQ applies the EQ predicate on the "stripe_customer_id" field.
-func StripeCustomerIDEQ(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldStripeCustomerID, v))
-}
-
-// StripeCustomerIDNEQ applies the NEQ predicate on the "stripe_customer_id" field.
-func StripeCustomerIDNEQ(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldNEQ(FieldStripeCustomerID, v))
-}
-
-// StripeCustomerIDIn applies the In predicate on the "stripe_customer_id" field.
-func StripeCustomerIDIn(vs ...string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldIn(FieldStripeCustomerID, vs...))
-}
-
-// StripeCustomerIDNotIn applies the NotIn predicate on the "stripe_customer_id" field.
-func StripeCustomerIDNotIn(vs ...string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldNotIn(FieldStripeCustomerID, vs...))
-}
-
-// StripeCustomerIDGT applies the GT predicate on the "stripe_customer_id" field.
-func StripeCustomerIDGT(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldGT(FieldStripeCustomerID, v))
-}
-
-// StripeCustomerIDGTE applies the GTE predicate on the "stripe_customer_id" field.
-func StripeCustomerIDGTE(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldGTE(FieldStripeCustomerID, v))
-}
-
-// StripeCustomerIDLT applies the LT predicate on the "stripe_customer_id" field.
-func StripeCustomerIDLT(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldLT(FieldStripeCustomerID, v))
-}
-
-// StripeCustomerIDLTE applies the LTE predicate on the "stripe_customer_id" field.
-func StripeCustomerIDLTE(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldLTE(FieldStripeCustomerID, v))
-}
-
-// StripeCustomerIDContains applies the Contains predicate on the "stripe_customer_id" field.
-func StripeCustomerIDContains(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldContains(FieldStripeCustomerID, v))
-}
-
-// StripeCustomerIDHasPrefix applies the HasPrefix predicate on the "stripe_customer_id" field.
-func StripeCustomerIDHasPrefix(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldHasPrefix(FieldStripeCustomerID, v))
-}
-
-// StripeCustomerIDHasSuffix applies the HasSuffix predicate on the "stripe_customer_id" field.
-func StripeCustomerIDHasSuffix(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldHasSuffix(FieldStripeCustomerID, v))
-}
-
-// StripeCustomerIDIsNil applies the IsNil predicate on the "stripe_customer_id" field.
-func StripeCustomerIDIsNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldStripeCustomerID))
-}
-
-// StripeCustomerIDNotNil applies the NotNil predicate on the "stripe_customer_id" field.
-func StripeCustomerIDNotNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldStripeCustomerID))
-}
-
-// StripeCustomerIDEqualFold applies the EqualFold predicate on the "stripe_customer_id" field.
-func StripeCustomerIDEqualFold(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldEqualFold(FieldStripeCustomerID, v))
-}
-
-// StripeCustomerIDContainsFold applies the ContainsFold predicate on the "stripe_customer_id" field.
-func StripeCustomerIDContainsFold(v string) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldContainsFold(FieldStripeCustomerID, v))
-}
-
 // ExpiresAtEQ applies the EQ predicate on the "expires_at" field.
 func ExpiresAtEQ(v time.Time) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldExpiresAt, v))
@@ -1323,26 +1238,6 @@ func DaysUntilDueEqualFold(v string) predicate.OrgSubscriptionHistory {
 // DaysUntilDueContainsFold applies the ContainsFold predicate on the "days_until_due" field.
 func DaysUntilDueContainsFold(v string) predicate.OrgSubscriptionHistory {
 	return predicate.OrgSubscriptionHistory(sql.FieldContainsFold(FieldDaysUntilDue, v))
-}
-
-// PaymentMethodAddedEQ applies the EQ predicate on the "payment_method_added" field.
-func PaymentMethodAddedEQ(v bool) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldEQ(FieldPaymentMethodAdded, v))
-}
-
-// PaymentMethodAddedNEQ applies the NEQ predicate on the "payment_method_added" field.
-func PaymentMethodAddedNEQ(v bool) predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldNEQ(FieldPaymentMethodAdded, v))
-}
-
-// PaymentMethodAddedIsNil applies the IsNil predicate on the "payment_method_added" field.
-func PaymentMethodAddedIsNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldIsNull(FieldPaymentMethodAdded))
-}
-
-// PaymentMethodAddedNotNil applies the NotNil predicate on the "payment_method_added" field.
-func PaymentMethodAddedNotNil() predicate.OrgSubscriptionHistory {
-	return predicate.OrgSubscriptionHistory(sql.FieldNotNull(FieldPaymentMethodAdded))
 }
 
 // FeaturesIsNil applies the IsNil predicate on the "features" field.

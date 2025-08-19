@@ -77,7 +77,9 @@ type OrganizationSettingHistory struct {
 	IdentityProviderLoginEnforced bool `json:"identity_provider_login_enforced,omitempty"`
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken string `json:"compliance_webhook_token,omitempty"`
-	selectValues           sql.SelectValues
+	// whether or not a payment method has been added to the account
+	PaymentMethodAdded bool `json:"payment_method_added,omitempty"`
+	selectValues       sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -89,7 +91,7 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldIdentityProviderLoginEnforced:
+		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldIdentityProviderLoginEnforced, organizationsettinghistory.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
 		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldIdentityProvider, organizationsettinghistory.FieldIdentityProviderClientID, organizationsettinghistory.FieldIdentityProviderClientSecret, organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, organizationsettinghistory.FieldIdentityProviderEntityID, organizationsettinghistory.FieldOidcDiscoveryEndpoint, organizationsettinghistory.FieldComplianceWebhookToken:
 			values[i] = new(sql.NullString)
@@ -294,6 +296,12 @@ func (_m *OrganizationSettingHistory) assignValues(columns []string, values []an
 			} else if value.Valid {
 				_m.ComplianceWebhookToken = value.String
 			}
+		case organizationsettinghistory.FieldPaymentMethodAdded:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field payment_method_added", values[i])
+			} else if value.Valid {
+				_m.PaymentMethodAdded = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -417,6 +425,9 @@ func (_m *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("compliance_webhook_token=")
 	builder.WriteString(_m.ComplianceWebhookToken)
+	builder.WriteString(", ")
+	builder.WriteString("payment_method_added=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PaymentMethodAdded))
 	builder.WriteByte(')')
 	return builder.String()
 }

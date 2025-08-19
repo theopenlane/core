@@ -13,11 +13,9 @@ import (
 	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/permissioncache"
 )
@@ -38,8 +36,6 @@ func HasFeature(ctx context.Context, feature string) (bool, error) {
 
 // orgFeatures returns the enabled features for the authenticated organization
 func orgFeatures(ctx context.Context) ([]string, error) {
-	var client *generated.Client
-
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil || au.OrganizationID == "" {
 		return nil, nil
@@ -51,7 +47,6 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 		if err != nil {
 			log.Err(err).Msg("failed to get feature cache")
 		} else if len(moduleFeats) > 0 {
-			// convert models.OrgModule to string for compatibility
 			feats := make([]string, 0, len(moduleFeats))
 			for _, f := range moduleFeats {
 				feats = append(feats, f.String())
@@ -60,59 +55,30 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 		}
 	}
 
-	if c := generated.FromContext(ctx); c != nil {
-		client = c
-	} else if tx := transaction.FromContext(ctx); tx != nil {
-		client = tx.Client()
+	ac := utils.AuthzClientFromContext(ctx)
+	if ac == nil {
+		return nil, nil
 	}
 
-	var feats []string
-
-	// attempt to use the EntitlementManager
-	if client != nil && client.EntitlementManager != nil {
-		ac := utils.AuthzClientFromContext(ctx)
-		if ac != nil {
-			req := fgax.ListRequest{
-				SubjectID:   au.OrganizationID,
-				SubjectType: generated.TypeOrganization,
-				ObjectType:  "feature",
-				Relation:    "enabled",
-			}
-
-			resp, err := ac.ListObjectsRequest(ctx, req)
-			if err != nil {
-				return nil, err
-			}
-
-			feats = make([]string, 0, len(resp.Objects))
-			for _, obj := range resp.Objects {
-				ent, parseErr := fgax.ParseEntity(obj)
-				if parseErr != nil {
-					continue
-				}
-				feats = append(feats, ent.Identifier)
-			}
-		}
+	req := fgax.ListRequest{
+		SubjectID:   au.OrganizationID,
+		SubjectType: generated.TypeOrganization,
+		ObjectType:  "feature",
+		Relation:    "enabled",
 	}
 
-	// if EntitlementManager was not usable or features still empty,
-	// try to fallback to the OrgModule
-	if len(feats) == 0 && client != nil {
-		modules, err := client.OrgModule.Query().
-			Select(orgmodule.FieldModule).
-			Where(
-				orgmodule.OwnerID(au.OrganizationID),
-				orgmodule.Active(true),
-			).All(ctx)
+	resp, err := ac.ListObjectsRequest(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 
-		if err != nil {
-			return nil, err
+	feats := make([]string, 0, len(resp.Objects))
+	for _, obj := range resp.Objects {
+		ent, parseErr := fgax.ParseEntity(obj)
+		if parseErr != nil {
+			continue
 		}
-
-		feats = make([]string, 0, len(modules))
-		for _, m := range modules {
-			feats = append(feats, m.Module.String())
-		}
+		feats = append(feats, ent.Identifier)
 	}
 
 	// make sure to cache the result

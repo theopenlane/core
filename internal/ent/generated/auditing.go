@@ -2043,9 +2043,6 @@ func (_m *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change 
 	if !reflect.DeepEqual(_m.Active, new.Active) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldActive, _m.Active, new.Active))
 	}
-	if !reflect.DeepEqual(_m.StripeCustomerID, new.StripeCustomerID) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeCustomerID, _m.StripeCustomerID, new.StripeCustomerID))
-	}
 	if !reflect.DeepEqual(_m.ExpiresAt, new.ExpiresAt) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldExpiresAt, _m.ExpiresAt, new.ExpiresAt))
 	}
@@ -2054,9 +2051,6 @@ func (_m *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change 
 	}
 	if !reflect.DeepEqual(_m.DaysUntilDue, new.DaysUntilDue) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDaysUntilDue, _m.DaysUntilDue, new.DaysUntilDue))
-	}
-	if !reflect.DeepEqual(_m.PaymentMethodAdded, new.PaymentMethodAdded) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldPaymentMethodAdded, _m.PaymentMethodAdded, new.PaymentMethodAdded))
 	}
 	if !reflect.DeepEqual(_m.Features, new.Features) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatures, _m.Features, new.Features))
@@ -2243,6 +2237,9 @@ func (_m *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) [
 	}
 	if !reflect.DeepEqual(_m.ComplianceWebhookToken, new.ComplianceWebhookToken) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldComplianceWebhookToken, _m.ComplianceWebhookToken, new.ComplianceWebhookToken))
+	}
+	if !reflect.DeepEqual(_m.PaymentMethodAdded, new.PaymentMethodAdded) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldPaymentMethodAdded, _m.PaymentMethodAdded, new.PaymentMethodAdded))
 	}
 	return changes
 }

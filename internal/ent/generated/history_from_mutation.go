@@ -6401,10 +6401,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetActive(active)
 	}
 
-	if stripeCustomerID, exists := m.StripeCustomerID(); exists {
-		create = create.SetStripeCustomerID(stripeCustomerID)
-	}
-
 	if expiresAt, exists := m.ExpiresAt(); exists {
 		create = create.SetNillableExpiresAt(&expiresAt)
 	}
@@ -6415,10 +6411,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 	if daysUntilDue, exists := m.DaysUntilDue(); exists {
 		create = create.SetNillableDaysUntilDue(&daysUntilDue)
-	}
-
-	if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
-		create = create.SetNillablePaymentMethodAdded(&paymentMethodAdded)
 	}
 
 	if features, exists := m.Features(); exists {
@@ -6544,12 +6536,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetActive(orgsubscription.Active)
 		}
 
-		if stripeCustomerID, exists := m.StripeCustomerID(); exists {
-			create = create.SetStripeCustomerID(stripeCustomerID)
-		} else {
-			create = create.SetStripeCustomerID(orgsubscription.StripeCustomerID)
-		}
-
 		if expiresAt, exists := m.ExpiresAt(); exists {
 			create = create.SetNillableExpiresAt(&expiresAt)
 		} else {
@@ -6566,12 +6552,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetNillableDaysUntilDue(&daysUntilDue)
 		} else {
 			create = create.SetNillableDaysUntilDue(orgsubscription.DaysUntilDue)
-		}
-
-		if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
-			create = create.SetNillablePaymentMethodAdded(&paymentMethodAdded)
-		} else {
-			create = create.SetNillablePaymentMethodAdded(orgsubscription.PaymentMethodAdded)
 		}
 
 		if features, exists := m.Features(); exists {
@@ -6635,11 +6615,9 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetStripeProductTierID(orgsubscription.StripeProductTierID).
 			SetStripeSubscriptionStatus(orgsubscription.StripeSubscriptionStatus).
 			SetActive(orgsubscription.Active).
-			SetStripeCustomerID(orgsubscription.StripeCustomerID).
 			SetNillableExpiresAt(orgsubscription.ExpiresAt).
 			SetNillableTrialExpiresAt(orgsubscription.TrialExpiresAt).
 			SetNillableDaysUntilDue(orgsubscription.DaysUntilDue).
-			SetNillablePaymentMethodAdded(orgsubscription.PaymentMethodAdded).
 			SetFeatures(orgsubscription.Features).
 			SetFeatureLookupKeys(orgsubscription.FeatureLookupKeys).
 			Save(ctx)
@@ -7045,6 +7023,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetComplianceWebhookToken(complianceWebhookToken)
 	}
 
+	if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
+		create = create.SetPaymentMethodAdded(paymentMethodAdded)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -7226,6 +7208,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken)
 		}
 
+		if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
+			create = create.SetPaymentMethodAdded(paymentMethodAdded)
+		} else {
+			create = create.SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -7286,6 +7274,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetOidcDiscoveryEndpoint(organizationsetting.OidcDiscoveryEndpoint).
 			SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced).
 			SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
+			SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded).
 			Save(ctx)
 		if err != nil {
 			return err

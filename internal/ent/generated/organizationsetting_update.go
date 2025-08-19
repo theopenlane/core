@@ -470,6 +470,20 @@ func (_u *OrganizationSettingUpdate) ClearComplianceWebhookToken() *Organization
 	return _u
 }
 
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (_u *OrganizationSettingUpdate) SetPaymentMethodAdded(v bool) *OrganizationSettingUpdate {
+	_u.mutation.SetPaymentMethodAdded(v)
+	return _u
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (_u *OrganizationSettingUpdate) SetNillablePaymentMethodAdded(v *bool) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetPaymentMethodAdded(*v)
+	}
+	return _u
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (_u *OrganizationSettingUpdate) SetOrganization(v *Organization) *OrganizationSettingUpdate {
 	return _u.SetOrganizationID(v.ID)
@@ -763,6 +777,9 @@ func (_u *OrganizationSettingUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.ComplianceWebhookTokenCleared() {
 		_spec.ClearField(organizationsetting.FieldComplianceWebhookToken, field.TypeString)
+	}
+	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(organizationsetting.FieldPaymentMethodAdded, field.TypeBool, value)
 	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1301,6 +1318,20 @@ func (_u *OrganizationSettingUpdateOne) ClearComplianceWebhookToken() *Organizat
 	return _u
 }
 
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (_u *OrganizationSettingUpdateOne) SetPaymentMethodAdded(v bool) *OrganizationSettingUpdateOne {
+	_u.mutation.SetPaymentMethodAdded(v)
+	return _u
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (_u *OrganizationSettingUpdateOne) SetNillablePaymentMethodAdded(v *bool) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetPaymentMethodAdded(*v)
+	}
+	return _u
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (_u *OrganizationSettingUpdateOne) SetOrganization(v *Organization) *OrganizationSettingUpdateOne {
 	return _u.SetOrganizationID(v.ID)
@@ -1624,6 +1655,9 @@ func (_u *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	}
 	if _u.mutation.ComplianceWebhookTokenCleared() {
 		_spec.ClearField(organizationsetting.FieldComplianceWebhookToken, field.TypeString)
+	}
+	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(organizationsetting.FieldPaymentMethodAdded, field.TypeBool, value)
 	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{

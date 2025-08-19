@@ -25860,10 +25860,6 @@ type OrgSubscription implements Node {
   """
   active: Boolean!
   """
-  the customer ID the subscription is associated to
-  """
-  stripeCustomerID: String
-  """
   the time the subscription is set to expire; only populated if subscription is cancelled
   """
   expiresAt: Time
@@ -25875,10 +25871,6 @@ type OrgSubscription implements Node {
   number of days until there is a due payment
   """
   daysUntilDue: String
-  """
-  whether or not a payment method has been added to the account
-  """
-  paymentMethodAdded: Boolean
   """
   the features associated with the subscription
   """
@@ -25992,10 +25984,6 @@ type OrgSubscriptionHistory implements Node {
   """
   active: Boolean!
   """
-  the customer ID the subscription is associated to
-  """
-  stripeCustomerID: String
-  """
   the time the subscription is set to expire; only populated if subscription is cancelled
   """
   expiresAt: Time
@@ -26007,10 +25995,6 @@ type OrgSubscriptionHistory implements Node {
   number of days until there is a due payment
   """
   daysUntilDue: String
-  """
-  whether or not a payment method has been added to the account
-  """
-  paymentMethodAdded: Boolean
   """
   the features associated with the subscription
   """
@@ -26300,24 +26284,6 @@ input OrgSubscriptionHistoryWhereInput {
   active: Boolean
   activeNEQ: Boolean
   """
-  stripe_customer_id field predicates
-  """
-  stripeCustomerID: String
-  stripeCustomerIDNEQ: String
-  stripeCustomerIDIn: [String!]
-  stripeCustomerIDNotIn: [String!]
-  stripeCustomerIDGT: String
-  stripeCustomerIDGTE: String
-  stripeCustomerIDLT: String
-  stripeCustomerIDLTE: String
-  stripeCustomerIDContains: String
-  stripeCustomerIDHasPrefix: String
-  stripeCustomerIDHasSuffix: String
-  stripeCustomerIDIsNil: Boolean
-  stripeCustomerIDNotNil: Boolean
-  stripeCustomerIDEqualFold: String
-  stripeCustomerIDContainsFold: String
-  """
   expires_at field predicates
   """
   expiresAt: Time
@@ -26361,13 +26327,6 @@ input OrgSubscriptionHistoryWhereInput {
   daysUntilDueNotNil: Boolean
   daysUntilDueEqualFold: String
   daysUntilDueContainsFold: String
-  """
-  payment_method_added field predicates
-  """
-  paymentMethodAdded: Boolean
-  paymentMethodAddedNEQ: Boolean
-  paymentMethodAddedIsNil: Boolean
-  paymentMethodAddedNotNil: Boolean
 }
 """
 Ordering options for OrgSubscription connections
@@ -26574,24 +26533,6 @@ input OrgSubscriptionWhereInput {
   active: Boolean
   activeNEQ: Boolean
   """
-  stripe_customer_id field predicates
-  """
-  stripeCustomerID: String
-  stripeCustomerIDNEQ: String
-  stripeCustomerIDIn: [String!]
-  stripeCustomerIDNotIn: [String!]
-  stripeCustomerIDGT: String
-  stripeCustomerIDGTE: String
-  stripeCustomerIDLT: String
-  stripeCustomerIDLTE: String
-  stripeCustomerIDContains: String
-  stripeCustomerIDHasPrefix: String
-  stripeCustomerIDHasSuffix: String
-  stripeCustomerIDIsNil: Boolean
-  stripeCustomerIDNotNil: Boolean
-  stripeCustomerIDEqualFold: String
-  stripeCustomerIDContainsFold: String
-  """
   expires_at field predicates
   """
   expiresAt: Time
@@ -26635,13 +26576,6 @@ input OrgSubscriptionWhereInput {
   daysUntilDueNotNil: Boolean
   daysUntilDueEqualFold: String
   daysUntilDueContainsFold: String
-  """
-  payment_method_added field predicates
-  """
-  paymentMethodAdded: Boolean
-  paymentMethodAddedNEQ: Boolean
-  paymentMethodAddedIsNil: Boolean
-  paymentMethodAddedNotNil: Boolean
   """
   owner edge predicates
   """
@@ -26696,7 +26630,7 @@ type Organization implements Node {
   """
   dedicatedDb: Boolean!
   """
-  the customer ID this organization is associated to
+  the stripe customer ID this organization is associated to
   """
   stripeCustomerID: String
   controlCreators(
@@ -28640,7 +28574,7 @@ type OrganizationHistory implements Node {
   """
   dedicatedDb: Boolean!
   """
-  the customer ID this organization is associated to
+  the stripe customer ID this organization is associated to
   """
   stripeCustomerID: String
 }
@@ -29019,6 +28953,10 @@ type OrganizationSetting implements Node {
   unique token used to receive compliance webhook events
   """
   complianceWebhookToken: String
+  """
+  whether or not a payment method has been added to the account
+  """
+  paymentMethodAdded: Boolean!
   organization: Organization
   files(
     """
@@ -29167,6 +29105,10 @@ type OrganizationSettingHistory implements Node {
   unique token used to receive compliance webhook events
   """
   complianceWebhookToken: String
+  """
+  whether or not a payment method has been added to the account
+  """
+  paymentMethodAdded: Boolean!
 }
 """
 A connection to a list of items.
@@ -49629,7 +49571,7 @@ input UpdateOrganizationInput {
   avatarUpdatedAt: Time
   clearAvatarUpdatedAt: Boolean
   """
-  the customer ID this organization is associated to
+  the stripe customer ID this organization is associated to
   """
   stripeCustomerID: String
   clearStripeCustomerID: Boolean

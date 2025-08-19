@@ -68,6 +68,8 @@ const (
 	FieldIdentityProviderLoginEnforced = "identity_provider_login_enforced"
 	// FieldComplianceWebhookToken holds the string denoting the compliance_webhook_token field in the database.
 	FieldComplianceWebhookToken = "compliance_webhook_token"
+	// FieldPaymentMethodAdded holds the string denoting the payment_method_added field in the database.
+	FieldPaymentMethodAdded = "payment_method_added"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
@@ -116,6 +118,7 @@ var Columns = []string{
 	FieldOidcDiscoveryEndpoint,
 	FieldIdentityProviderLoginEnforced,
 	FieldComplianceWebhookToken,
+	FieldPaymentMethodAdded,
 }
 
 var (
@@ -165,6 +168,8 @@ var (
 	DefaultIdentityProviderLoginEnforced bool
 	// DefaultComplianceWebhookToken holds the default value on creation for the "compliance_webhook_token" field.
 	DefaultComplianceWebhookToken func() string
+	// DefaultPaymentMethodAdded holds the default value on creation for the "payment_method_added" field.
+	DefaultPaymentMethodAdded bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -304,6 +309,11 @@ func ByIdentityProviderLoginEnforced(opts ...sql.OrderTermOption) OrderOption {
 // ByComplianceWebhookToken orders the results by the compliance_webhook_token field.
 func ByComplianceWebhookToken(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldComplianceWebhookToken, opts...).ToFunc()
+}
+
+// ByPaymentMethodAdded orders the results by the payment_method_added field.
+func ByPaymentMethodAdded(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPaymentMethodAdded, opts...).ToFunc()
 }
 
 // ByOrganizationField orders the results by organization field.

@@ -120,7 +120,6 @@ func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription, cust *entitle
 		StripeSubscriptionID:     sub.ID,
 		StripeSubscriptionStatus: status,
 		Active:                   entitlements.IsSubscriptionActive(sub.Status),
-		StripeCustomerID:         sub.Customer.ID,
 		ProductTier:              productName,
 		StripeProductTierID:      productID,
 		ProductPrice:             price,
@@ -131,7 +130,6 @@ func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription, cust *entitle
 	if cust != nil {
 		orgSub.Features = cust.Features
 		orgSub.FeatureLookupKeys = cust.FeatureNames
-		orgSub.PaymentMethodAdded = &cust.PaymentMethodAdded
 	}
 
 	return orgSub
@@ -286,7 +284,6 @@ type OrgSubscriptionSetter[T any] interface {
 	SetDaysUntilDue(string) T
 	SetFeatures([]string) T
 	SetFeatureLookupKeys([]string) T
-	SetPaymentMethodAdded(bool) T
 }
 
 // ApplyStripeSubscription sets fields on the ent builder from the stripe.Subscription and customer info
@@ -335,7 +332,6 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 	if cust != nil {
 		b.SetFeatures(cust.Features)
 		b.SetFeatureLookupKeys(cust.FeatureNames)
-		b.SetPaymentMethodAdded(cust.PaymentMethodAdded)
 	}
 
 	return b

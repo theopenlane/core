@@ -46913,23 +46913,6 @@ type OrgSubscriptionWhereInput struct {
 	Active    *bool `json:"active,omitempty"`
 	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
 
-	// "stripe_customer_id" field predicates.
-	StripeCustomerID             *string  `json:"stripeCustomerID,omitempty"`
-	StripeCustomerIDNEQ          *string  `json:"stripeCustomerIDNEQ,omitempty"`
-	StripeCustomerIDIn           []string `json:"stripeCustomerIDIn,omitempty"`
-	StripeCustomerIDNotIn        []string `json:"stripeCustomerIDNotIn,omitempty"`
-	StripeCustomerIDGT           *string  `json:"stripeCustomerIDGT,omitempty"`
-	StripeCustomerIDGTE          *string  `json:"stripeCustomerIDGTE,omitempty"`
-	StripeCustomerIDLT           *string  `json:"stripeCustomerIDLT,omitempty"`
-	StripeCustomerIDLTE          *string  `json:"stripeCustomerIDLTE,omitempty"`
-	StripeCustomerIDContains     *string  `json:"stripeCustomerIDContains,omitempty"`
-	StripeCustomerIDHasPrefix    *string  `json:"stripeCustomerIDHasPrefix,omitempty"`
-	StripeCustomerIDHasSuffix    *string  `json:"stripeCustomerIDHasSuffix,omitempty"`
-	StripeCustomerIDIsNil        bool     `json:"stripeCustomerIDIsNil,omitempty"`
-	StripeCustomerIDNotNil       bool     `json:"stripeCustomerIDNotNil,omitempty"`
-	StripeCustomerIDEqualFold    *string  `json:"stripeCustomerIDEqualFold,omitempty"`
-	StripeCustomerIDContainsFold *string  `json:"stripeCustomerIDContainsFold,omitempty"`
-
 	// "expires_at" field predicates.
 	ExpiresAt       *time.Time  `json:"expiresAt,omitempty"`
 	ExpiresAtNEQ    *time.Time  `json:"expiresAtNEQ,omitempty"`
@@ -46970,12 +46953,6 @@ type OrgSubscriptionWhereInput struct {
 	DaysUntilDueNotNil       bool     `json:"daysUntilDueNotNil,omitempty"`
 	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
 	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
-
-	// "payment_method_added" field predicates.
-	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
-	PaymentMethodAddedNEQ    *bool `json:"paymentMethodAddedNEQ,omitempty"`
-	PaymentMethodAddedIsNil  bool  `json:"paymentMethodAddedIsNil,omitempty"`
-	PaymentMethodAddedNotNil bool  `json:"paymentMethodAddedNotNil,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -47468,51 +47445,6 @@ func (i *OrgSubscriptionWhereInput) P() (predicate.OrgSubscription, error) {
 	if i.ActiveNEQ != nil {
 		predicates = append(predicates, orgsubscription.ActiveNEQ(*i.ActiveNEQ))
 	}
-	if i.StripeCustomerID != nil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDEQ(*i.StripeCustomerID))
-	}
-	if i.StripeCustomerIDNEQ != nil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDNEQ(*i.StripeCustomerIDNEQ))
-	}
-	if len(i.StripeCustomerIDIn) > 0 {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDIn(i.StripeCustomerIDIn...))
-	}
-	if len(i.StripeCustomerIDNotIn) > 0 {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDNotIn(i.StripeCustomerIDNotIn...))
-	}
-	if i.StripeCustomerIDGT != nil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDGT(*i.StripeCustomerIDGT))
-	}
-	if i.StripeCustomerIDGTE != nil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDGTE(*i.StripeCustomerIDGTE))
-	}
-	if i.StripeCustomerIDLT != nil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDLT(*i.StripeCustomerIDLT))
-	}
-	if i.StripeCustomerIDLTE != nil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDLTE(*i.StripeCustomerIDLTE))
-	}
-	if i.StripeCustomerIDContains != nil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDContains(*i.StripeCustomerIDContains))
-	}
-	if i.StripeCustomerIDHasPrefix != nil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDHasPrefix(*i.StripeCustomerIDHasPrefix))
-	}
-	if i.StripeCustomerIDHasSuffix != nil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDHasSuffix(*i.StripeCustomerIDHasSuffix))
-	}
-	if i.StripeCustomerIDIsNil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDIsNil())
-	}
-	if i.StripeCustomerIDNotNil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDNotNil())
-	}
-	if i.StripeCustomerIDEqualFold != nil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDEqualFold(*i.StripeCustomerIDEqualFold))
-	}
-	if i.StripeCustomerIDContainsFold != nil {
-		predicates = append(predicates, orgsubscription.StripeCustomerIDContainsFold(*i.StripeCustomerIDContainsFold))
-	}
 	if i.ExpiresAt != nil {
 		predicates = append(predicates, orgsubscription.ExpiresAtEQ(*i.ExpiresAt))
 	}
@@ -47617,18 +47549,6 @@ func (i *OrgSubscriptionWhereInput) P() (predicate.OrgSubscription, error) {
 	}
 	if i.DaysUntilDueContainsFold != nil {
 		predicates = append(predicates, orgsubscription.DaysUntilDueContainsFold(*i.DaysUntilDueContainsFold))
-	}
-	if i.PaymentMethodAdded != nil {
-		predicates = append(predicates, orgsubscription.PaymentMethodAddedEQ(*i.PaymentMethodAdded))
-	}
-	if i.PaymentMethodAddedNEQ != nil {
-		predicates = append(predicates, orgsubscription.PaymentMethodAddedNEQ(*i.PaymentMethodAddedNEQ))
-	}
-	if i.PaymentMethodAddedIsNil {
-		predicates = append(predicates, orgsubscription.PaymentMethodAddedIsNil())
-	}
-	if i.PaymentMethodAddedNotNil {
-		predicates = append(predicates, orgsubscription.PaymentMethodAddedNotNil())
 	}
 
 	if i.HasOwner != nil {
@@ -47876,23 +47796,6 @@ type OrgSubscriptionHistoryWhereInput struct {
 	Active    *bool `json:"active,omitempty"`
 	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
 
-	// "stripe_customer_id" field predicates.
-	StripeCustomerID             *string  `json:"stripeCustomerID,omitempty"`
-	StripeCustomerIDNEQ          *string  `json:"stripeCustomerIDNEQ,omitempty"`
-	StripeCustomerIDIn           []string `json:"stripeCustomerIDIn,omitempty"`
-	StripeCustomerIDNotIn        []string `json:"stripeCustomerIDNotIn,omitempty"`
-	StripeCustomerIDGT           *string  `json:"stripeCustomerIDGT,omitempty"`
-	StripeCustomerIDGTE          *string  `json:"stripeCustomerIDGTE,omitempty"`
-	StripeCustomerIDLT           *string  `json:"stripeCustomerIDLT,omitempty"`
-	StripeCustomerIDLTE          *string  `json:"stripeCustomerIDLTE,omitempty"`
-	StripeCustomerIDContains     *string  `json:"stripeCustomerIDContains,omitempty"`
-	StripeCustomerIDHasPrefix    *string  `json:"stripeCustomerIDHasPrefix,omitempty"`
-	StripeCustomerIDHasSuffix    *string  `json:"stripeCustomerIDHasSuffix,omitempty"`
-	StripeCustomerIDIsNil        bool     `json:"stripeCustomerIDIsNil,omitempty"`
-	StripeCustomerIDNotNil       bool     `json:"stripeCustomerIDNotNil,omitempty"`
-	StripeCustomerIDEqualFold    *string  `json:"stripeCustomerIDEqualFold,omitempty"`
-	StripeCustomerIDContainsFold *string  `json:"stripeCustomerIDContainsFold,omitempty"`
-
 	// "expires_at" field predicates.
 	ExpiresAt       *time.Time  `json:"expiresAt,omitempty"`
 	ExpiresAtNEQ    *time.Time  `json:"expiresAtNEQ,omitempty"`
@@ -47933,12 +47836,6 @@ type OrgSubscriptionHistoryWhereInput struct {
 	DaysUntilDueNotNil       bool     `json:"daysUntilDueNotNil,omitempty"`
 	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
 	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
-
-	// "payment_method_added" field predicates.
-	PaymentMethodAdded       *bool `json:"paymentMethodAdded,omitempty"`
-	PaymentMethodAddedNEQ    *bool `json:"paymentMethodAddedNEQ,omitempty"`
-	PaymentMethodAddedIsNil  bool  `json:"paymentMethodAddedIsNil,omitempty"`
-	PaymentMethodAddedNotNil bool  `json:"paymentMethodAddedNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -48504,51 +48401,6 @@ func (i *OrgSubscriptionHistoryWhereInput) P() (predicate.OrgSubscriptionHistory
 	if i.ActiveNEQ != nil {
 		predicates = append(predicates, orgsubscriptionhistory.ActiveNEQ(*i.ActiveNEQ))
 	}
-	if i.StripeCustomerID != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDEQ(*i.StripeCustomerID))
-	}
-	if i.StripeCustomerIDNEQ != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDNEQ(*i.StripeCustomerIDNEQ))
-	}
-	if len(i.StripeCustomerIDIn) > 0 {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDIn(i.StripeCustomerIDIn...))
-	}
-	if len(i.StripeCustomerIDNotIn) > 0 {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDNotIn(i.StripeCustomerIDNotIn...))
-	}
-	if i.StripeCustomerIDGT != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDGT(*i.StripeCustomerIDGT))
-	}
-	if i.StripeCustomerIDGTE != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDGTE(*i.StripeCustomerIDGTE))
-	}
-	if i.StripeCustomerIDLT != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDLT(*i.StripeCustomerIDLT))
-	}
-	if i.StripeCustomerIDLTE != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDLTE(*i.StripeCustomerIDLTE))
-	}
-	if i.StripeCustomerIDContains != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDContains(*i.StripeCustomerIDContains))
-	}
-	if i.StripeCustomerIDHasPrefix != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDHasPrefix(*i.StripeCustomerIDHasPrefix))
-	}
-	if i.StripeCustomerIDHasSuffix != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDHasSuffix(*i.StripeCustomerIDHasSuffix))
-	}
-	if i.StripeCustomerIDIsNil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDIsNil())
-	}
-	if i.StripeCustomerIDNotNil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDNotNil())
-	}
-	if i.StripeCustomerIDEqualFold != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDEqualFold(*i.StripeCustomerIDEqualFold))
-	}
-	if i.StripeCustomerIDContainsFold != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeCustomerIDContainsFold(*i.StripeCustomerIDContainsFold))
-	}
 	if i.ExpiresAt != nil {
 		predicates = append(predicates, orgsubscriptionhistory.ExpiresAtEQ(*i.ExpiresAt))
 	}
@@ -48653,18 +48505,6 @@ func (i *OrgSubscriptionHistoryWhereInput) P() (predicate.OrgSubscriptionHistory
 	}
 	if i.DaysUntilDueContainsFold != nil {
 		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueContainsFold(*i.DaysUntilDueContainsFold))
-	}
-	if i.PaymentMethodAdded != nil {
-		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedEQ(*i.PaymentMethodAdded))
-	}
-	if i.PaymentMethodAddedNEQ != nil {
-		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedNEQ(*i.PaymentMethodAddedNEQ))
-	}
-	if i.PaymentMethodAddedIsNil {
-		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedIsNil())
-	}
-	if i.PaymentMethodAddedNotNil {
-		predicates = append(predicates, orgsubscriptionhistory.PaymentMethodAddedNotNil())
 	}
 
 	switch len(predicates) {

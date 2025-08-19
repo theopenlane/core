@@ -1952,11 +1952,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscription.FieldStripeProductTierID:      {Type: field.TypeString, Column: orgsubscription.FieldStripeProductTierID},
 			orgsubscription.FieldStripeSubscriptionStatus: {Type: field.TypeString, Column: orgsubscription.FieldStripeSubscriptionStatus},
 			orgsubscription.FieldActive:                   {Type: field.TypeBool, Column: orgsubscription.FieldActive},
-			orgsubscription.FieldStripeCustomerID:         {Type: field.TypeString, Column: orgsubscription.FieldStripeCustomerID},
 			orgsubscription.FieldExpiresAt:                {Type: field.TypeTime, Column: orgsubscription.FieldExpiresAt},
 			orgsubscription.FieldTrialExpiresAt:           {Type: field.TypeTime, Column: orgsubscription.FieldTrialExpiresAt},
 			orgsubscription.FieldDaysUntilDue:             {Type: field.TypeString, Column: orgsubscription.FieldDaysUntilDue},
-			orgsubscription.FieldPaymentMethodAdded:       {Type: field.TypeBool, Column: orgsubscription.FieldPaymentMethodAdded},
 			orgsubscription.FieldFeatures:                 {Type: field.TypeJSON, Column: orgsubscription.FieldFeatures},
 			orgsubscription.FieldFeatureLookupKeys:        {Type: field.TypeJSON, Column: orgsubscription.FieldFeatureLookupKeys},
 		},
@@ -1989,11 +1987,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscriptionhistory.FieldStripeProductTierID:      {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeProductTierID},
 			orgsubscriptionhistory.FieldStripeSubscriptionStatus: {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeSubscriptionStatus},
 			orgsubscriptionhistory.FieldActive:                   {Type: field.TypeBool, Column: orgsubscriptionhistory.FieldActive},
-			orgsubscriptionhistory.FieldStripeCustomerID:         {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeCustomerID},
 			orgsubscriptionhistory.FieldExpiresAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldExpiresAt},
 			orgsubscriptionhistory.FieldTrialExpiresAt:           {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldTrialExpiresAt},
 			orgsubscriptionhistory.FieldDaysUntilDue:             {Type: field.TypeString, Column: orgsubscriptionhistory.FieldDaysUntilDue},
-			orgsubscriptionhistory.FieldPaymentMethodAdded:       {Type: field.TypeBool, Column: orgsubscriptionhistory.FieldPaymentMethodAdded},
 			orgsubscriptionhistory.FieldFeatures:                 {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldFeatures},
 			orgsubscriptionhistory.FieldFeatureLookupKeys:        {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldFeatureLookupKeys},
 		},
@@ -2097,6 +2093,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldOidcDiscoveryEndpoint:            {Type: field.TypeString, Column: organizationsetting.FieldOidcDiscoveryEndpoint},
 			organizationsetting.FieldIdentityProviderLoginEnforced:    {Type: field.TypeBool, Column: organizationsetting.FieldIdentityProviderLoginEnforced},
 			organizationsetting.FieldComplianceWebhookToken:           {Type: field.TypeString, Column: organizationsetting.FieldComplianceWebhookToken},
+			organizationsetting.FieldPaymentMethodAdded:               {Type: field.TypeBool, Column: organizationsetting.FieldPaymentMethodAdded},
 		},
 	}
 	graph.Nodes[68] = &sqlgraph.Node{
@@ -2138,6 +2135,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldOidcDiscoveryEndpoint:            {Type: field.TypeString, Column: organizationsettinghistory.FieldOidcDiscoveryEndpoint},
 			organizationsettinghistory.FieldIdentityProviderLoginEnforced:    {Type: field.TypeBool, Column: organizationsettinghistory.FieldIdentityProviderLoginEnforced},
 			organizationsettinghistory.FieldComplianceWebhookToken:           {Type: field.TypeString, Column: organizationsettinghistory.FieldComplianceWebhookToken},
+			organizationsettinghistory.FieldPaymentMethodAdded:               {Type: field.TypeBool, Column: organizationsettinghistory.FieldPaymentMethodAdded},
 		},
 	}
 	graph.Nodes[69] = &sqlgraph.Node{
@@ -19522,11 +19520,6 @@ func (f *OrgSubscriptionFilter) WhereActive(p entql.BoolP) {
 	f.Where(p.Field(orgsubscription.FieldActive))
 }
 
-// WhereStripeCustomerID applies the entql string predicate on the stripe_customer_id field.
-func (f *OrgSubscriptionFilter) WhereStripeCustomerID(p entql.StringP) {
-	f.Where(p.Field(orgsubscription.FieldStripeCustomerID))
-}
-
 // WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
 func (f *OrgSubscriptionFilter) WhereExpiresAt(p entql.TimeP) {
 	f.Where(p.Field(orgsubscription.FieldExpiresAt))
@@ -19540,11 +19533,6 @@ func (f *OrgSubscriptionFilter) WhereTrialExpiresAt(p entql.TimeP) {
 // WhereDaysUntilDue applies the entql string predicate on the days_until_due field.
 func (f *OrgSubscriptionFilter) WhereDaysUntilDue(p entql.StringP) {
 	f.Where(p.Field(orgsubscription.FieldDaysUntilDue))
-}
-
-// WherePaymentMethodAdded applies the entql bool predicate on the payment_method_added field.
-func (f *OrgSubscriptionFilter) WherePaymentMethodAdded(p entql.BoolP) {
-	f.Where(p.Field(orgsubscription.FieldPaymentMethodAdded))
 }
 
 // WhereFeatures applies the entql json.RawMessage predicate on the features field.
@@ -19752,11 +19740,6 @@ func (f *OrgSubscriptionHistoryFilter) WhereActive(p entql.BoolP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldActive))
 }
 
-// WhereStripeCustomerID applies the entql string predicate on the stripe_customer_id field.
-func (f *OrgSubscriptionHistoryFilter) WhereStripeCustomerID(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldStripeCustomerID))
-}
-
 // WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
 func (f *OrgSubscriptionHistoryFilter) WhereExpiresAt(p entql.TimeP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldExpiresAt))
@@ -19770,11 +19753,6 @@ func (f *OrgSubscriptionHistoryFilter) WhereTrialExpiresAt(p entql.TimeP) {
 // WhereDaysUntilDue applies the entql string predicate on the days_until_due field.
 func (f *OrgSubscriptionHistoryFilter) WhereDaysUntilDue(p entql.StringP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldDaysUntilDue))
-}
-
-// WherePaymentMethodAdded applies the entql bool predicate on the payment_method_added field.
-func (f *OrgSubscriptionHistoryFilter) WherePaymentMethodAdded(p entql.BoolP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldPaymentMethodAdded))
 }
 
 // WhereFeatures applies the entql json.RawMessage predicate on the features field.
@@ -21155,6 +21133,11 @@ func (f *OrganizationSettingFilter) WhereComplianceWebhookToken(p entql.StringP)
 	f.Where(p.Field(organizationsetting.FieldComplianceWebhookToken))
 }
 
+// WherePaymentMethodAdded applies the entql bool predicate on the payment_method_added field.
+func (f *OrganizationSettingFilter) WherePaymentMethodAdded(p entql.BoolP) {
+	f.Where(p.Field(organizationsetting.FieldPaymentMethodAdded))
+}
+
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
 func (f *OrganizationSettingFilter) WhereHasOrganization() {
 	f.Where(entql.HasEdge("organization"))
@@ -21361,6 +21344,11 @@ func (f *OrganizationSettingHistoryFilter) WhereIdentityProviderLoginEnforced(p 
 // WhereComplianceWebhookToken applies the entql string predicate on the compliance_webhook_token field.
 func (f *OrganizationSettingHistoryFilter) WhereComplianceWebhookToken(p entql.StringP) {
 	f.Where(p.Field(organizationsettinghistory.FieldComplianceWebhookToken))
+}
+
+// WherePaymentMethodAdded applies the entql bool predicate on the payment_method_added field.
+func (f *OrganizationSettingHistoryFilter) WherePaymentMethodAdded(p entql.BoolP) {
+	f.Where(p.Field(organizationsettinghistory.FieldPaymentMethodAdded))
 }
 
 // addPredicate implements the predicateAdder interface.

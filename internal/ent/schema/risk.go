@@ -195,9 +195,7 @@ func (r Risk) Mixin() []ent.Mixin {
 func (Risk) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
-		models.CatalogPolicyManagementAddon,
 		models.CatalogRiskManagementAddon,
-		models.CatalogEntityManagementModule,
 	}
 }
 
