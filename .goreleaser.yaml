@@ -113,3 +113,14 @@ signs:
       - "--yes" # needed on cosign >= 2.0.0
     artifacts: archive
     output: true
+homebrew_casks:
+  - homepage: 'https://github.com/theopenlane/core'
+    description: 'openlane is the client CLI for interacting with the openlane server'
+    license: 'Apache-2.0'
+    commit_author:
+      name: theopenlane-bender
+      email: bender@theopenlane.io
+    repository:
+      owner: theopenlane
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
