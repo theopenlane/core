@@ -114,8 +114,7 @@ signs:
     artifacts: archive
     output: true
 homebrew_casks:
-  - name: openlane
-    homepage: 'https://github.com/theopenlane/core'
+  - homepage: 'https://github.com/theopenlane/core'
     description: 'openlane is the client CLI for interacting with the openlane server'
     license: 'Apache-2.0'
     commit_author:
@@ -125,5 +124,3 @@ homebrew_casks:
       owner: theopenlane
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    test: |
-      system "#{bin}/openlane --help"
