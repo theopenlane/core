@@ -4,7 +4,7 @@ services:
     # if you run without the taskfile and the env var set it will default to arm64-latest
     image: ghcr.io/theopenlane/riverboat:${RIVERBOAT_TAG:-arm64-latest}
     volumes:
-      - ./configs/riverboat/.config.dev.yaml:/config/.config.yaml
+      - ${PWD}/docker/configs/riverboat/.config.dev.yaml:/config/.config.yaml
     command:
       - serve
       - --debug

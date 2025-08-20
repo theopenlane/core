@@ -1,0 +1,26 @@
+FROM golang:1.24.6-alpine AS build
+
+
+RUN apk --no-cache add \
+    gcc musl-dev curl jq git npm github-cli bash
+
+WORKDIR /src
+
+COPY . .
+
+RUN CGO_ENABLED=1 go build -mod=readonly -o /bin/core
+
+FROM gcr.io/distroless/static:nonroot
+
+# `nonroot` coming from distroless
+USER 65532:65532
+
+# Copy the binary that was built
+COPY --from=build  /bin/core /bin/core
+
+# Copy default model into image
+COPY fga/model/model.fga fga/model/model.fga
+
+# Run the web service on container startup.
+ENTRYPOINT [ "/bin/core" ]
+CMD ["serve"]

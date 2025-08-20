@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	petname "github.com/dustinkirkland/golang-petname"
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/emailtemplates"
@@ -19,6 +19,7 @@ import (
 
 	"github.com/theopenlane/utils/gravatar"
 	"github.com/theopenlane/utils/passwd"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -249,8 +250,9 @@ func HookDeleteUser() ent.Hook {
 // personal orgs are assigned to all new users when registering
 func getPersonalOrgInput(user *generated.User) generated.CreateOrganizationInput {
 	// generate random name for personal orgs
-	name := caser.String(petname.Generate(2, " ")) //nolint:mnd
-	displayName := name
+	randomName := caser.String(gofakeit.PetName())
+	name := fmt.Sprintf("%s-%s", randomName, ulids.New().String())
+	displayName := randomName
 	personalOrg := true
 
 	return generated.CreateOrganizationInput{

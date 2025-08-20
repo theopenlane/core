@@ -8,10 +8,6 @@ import (
 	"github.com/tmc/langchaingo/llms"
 	"github.com/tmc/langchaingo/llms/anthropic"
 	"github.com/tmc/langchaingo/llms/cloudflare"
-	"github.com/tmc/langchaingo/llms/googleai"
-	"github.com/tmc/langchaingo/llms/huggingface"
-	"github.com/tmc/langchaingo/llms/mistral"
-	"github.com/tmc/langchaingo/llms/ollama"
 	"github.com/tmc/langchaingo/llms/openai"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
@@ -50,14 +46,6 @@ func getClient(cfg entconfig.Config) (llms.Model, error) {
 		return newAnthropicClient(cfg)
 	case entconfig.LLMProviderCloudflare:
 		return newCloudflareClient(cfg)
-	case entconfig.LLMProviderMistral:
-		return newMistralClient(cfg)
-	case entconfig.LLMProviderGemini:
-		return newGeminiClient(cfg)
-	case entconfig.LLMProviderHuggingface:
-		return newHuggingfaceClient(cfg)
-	case entconfig.LLMProviderOllama:
-		return newOllamaClient(cfg)
 	case entconfig.LLMProviderOpenai:
 		return newOpenAIClient(cfg)
 	default:
@@ -112,86 +100,6 @@ func newCloudflareClient(cfg entconfig.Config) (llms.Model, error) {
 	}
 
 	return cloudflare.New(opts...)
-}
-
-func newMistralClient(cfg entconfig.Config) (llms.Model, error) {
-	opts := []mistral.Option{}
-	mCfg := cfg.Summarizer.LLM.Mistral
-
-	if mCfg.APIKey != "" {
-		opts = append(opts, mistral.WithAPIKey(mCfg.APIKey))
-	}
-
-	if mCfg.Model != "" {
-		opts = append(opts, mistral.WithModel(mCfg.Model))
-	}
-
-	if mCfg.URL != "" {
-		opts = append(opts, mistral.WithEndpoint(mCfg.URL))
-	}
-
-	return mistral.New(opts...)
-}
-
-func newGeminiClient(cfg entconfig.Config) (llms.Model, error) {
-	opts := []googleai.Option{}
-	gCfg := cfg.Summarizer.LLM.Gemini
-
-	if gCfg.APIKey != "" {
-		opts = append(opts, googleai.WithAPIKey(gCfg.APIKey))
-	}
-
-	if gCfg.Model != "" {
-		opts = append(opts, googleai.WithDefaultModel(gCfg.Model))
-	}
-
-	if gCfg.MaxTokens != 0 {
-		opts = append(opts, googleai.WithDefaultMaxTokens(gCfg.MaxTokens))
-	}
-
-	if gCfg.CredentialsJSON != "" {
-		opts = append(opts, googleai.WithCredentialsJSON([]byte(gCfg.CredentialsJSON)))
-	}
-
-	if gCfg.CredentialsPath != "" {
-		opts = append(opts, googleai.WithCredentialsFile(gCfg.CredentialsPath))
-	}
-
-	return googleai.New(context.Background(), opts...)
-}
-
-func newHuggingfaceClient(cfg entconfig.Config) (llms.Model, error) {
-	opts := []huggingface.Option{}
-	hfCfg := cfg.Summarizer.LLM.HuggingFace
-
-	if hfCfg.APIKey != "" {
-		opts = append(opts, huggingface.WithToken(hfCfg.APIKey))
-	}
-
-	if hfCfg.Model != "" {
-		opts = append(opts, huggingface.WithModel(hfCfg.Model))
-	}
-
-	if hfCfg.URL != "" {
-		opts = append(opts, huggingface.WithURL(hfCfg.URL))
-	}
-
-	return huggingface.New(opts...)
-}
-
-func newOllamaClient(cfg entconfig.Config) (llms.Model, error) {
-	opts := []ollama.Option{}
-	oCfg := cfg.Summarizer.LLM.Ollama
-
-	if oCfg.Model != "" {
-		opts = append(opts, ollama.WithModel(oCfg.Model))
-	}
-
-	if oCfg.URL != "" {
-		opts = append(opts, ollama.WithServerURL(oCfg.URL))
-	}
-
-	return ollama.New(opts...)
 }
 
 func newOpenAIClient(cfg entconfig.Config) (llms.Model, error) {
