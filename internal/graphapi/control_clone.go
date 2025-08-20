@@ -290,7 +290,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			Where(
 				control.IDIn(existingControlIDs...)).
 			AddProgramIDs(*programID).
-			Exec(ctx); err != nil {
+			Exec(ctrlCtx); err != nil {
 
 			return nil, err
 		}
