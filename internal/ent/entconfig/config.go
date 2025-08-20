@@ -40,18 +40,6 @@ type SummarizerLLM struct {
 	// Anthropic contains configuration for Anthropic's API
 	Anthropic AnthropicConfig `json:"anthropic" koanf:"anthropic"`
 
-	// Mistral contains configuration for Mistral's API
-	Mistral MistralConfig `json:"mistral" koanf:"mistral"`
-
-	// Gemini contains configuration for Google's Gemini API
-	Gemini GeminiConfig `json:"gemini" koanf:"gemini"`
-
-	// HuggingFace contains configuration for HuggingFace's API
-	HuggingFace HuggingFaceConfig `json:"huggingFace" koanf:"huggingFace"`
-
-	// Ollama contains configuration for Ollama's API
-	Ollama OllamaConfig `json:"ollama" koanf:"ollama"`
-
 	// Cloudflare contains configuration for Cloudflare's API
 	Cloudflare CloudflareConfig `json:"cloudflare" koanf:"cloudflare"`
 
@@ -66,45 +54,6 @@ type GenericLLMConfig struct {
 
 	// APIKey contains the authentication key for the service
 	APIKey string `json:"apiKey" koanf:"apiKey" sensitive:"true"`
-}
-
-// GeminiConfig contains Google Gemini specific configuration
-type GeminiConfig struct {
-	GenericLLMConfig
-
-	// CredentialsPath is the path to Google Cloud credentials file
-	CredentialsPath string `json:"credentialsPath" koanf:"credentialsPath"`
-
-	// CredentialsJSON contains Google Cloud credentials as JSON string
-	CredentialsJSON string `json:"credentialsJSON" koanf:"credentialsJSON" sensitive:"true"`
-
-	// MaxTokens specifies the maximum tokens for response
-	MaxTokens int `json:"maxTokens" koanf:"maxTokens"`
-}
-
-// HuggingFaceConfig contains HuggingFace specific configuration
-type HuggingFaceConfig struct {
-	GenericLLMConfig
-
-	// URL specifies the API endpoint
-	URL string `json:"url" koanf:"url"`
-}
-
-// MistralConfig contains Mistral specific configuration
-type MistralConfig struct {
-	GenericLLMConfig
-
-	// URL specifies the API endpoint
-	URL string `json:"url" koanf:"url"`
-}
-
-// OllamaConfig contains Ollama specific configuration
-type OllamaConfig struct {
-	// Model specifies the model to use
-	Model string `json:"model" koanf:"model"`
-
-	// URL specifies the API endpoint
-	URL string `json:"url" koanf:"url"`
 }
 
 // AnthropicConfig contains Anthropic specific configuration
