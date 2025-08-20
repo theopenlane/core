@@ -453,9 +453,10 @@ tasks:
     run: once
     cmds:
       - echo Installing tools from tools.go
-      - go install gotest.tools/gotestsum@latest
-      - go install github.com/vektra/mockery/v3@latest
-      - go install github.com/oNaiPs/go-generate-fast@latest
+      - go get -tool gotest.tools/gotestsum@latest
+      - go get -tool github.com/vektra/mockery/v3@latest
+      - go get -tool github.com/invopop/jsonschema@latest
+      - go get -tool github.com/invopop/yaml@latest
 
   update-brew:
     desc: Update Homebrew and upgrade all packages

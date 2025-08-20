@@ -1,4 +1,4 @@
-//go:build ignore
+//go:build generate
 
 package main
 
@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/config"
 )
 
-// const values used for the schema generator
 // const values used for the schema generator
 const (
 	tagName            = "koanf"

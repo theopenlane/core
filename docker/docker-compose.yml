@@ -19,7 +19,7 @@ services:
     restart: unless-stopped
     environment:
       - CORE_REDIS_ADDRESS=redis:6379
-      - CORE_AUTHZ_HOST_URL=openfga:8080
+      - CORE_AUTHZ_HOSTURL=openfga:8080
     networks:
       - default
 
