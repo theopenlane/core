@@ -10,6 +10,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
@@ -2239,6 +2240,15 @@ func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cu
 func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) (*generated.ProgramConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	// apply default status filtering to exclude archived items unless explicitly requested
+	if where == nil {
+		where = &generated.ProgramWhereInput{}
+	}
+	if where.Status == nil && where.StatusNEQ == nil && where.StatusIn == nil && where.StatusNotIn == nil {
+		archivedStatus := enums.ProgramStatusArchived
+		where.StatusNEQ = &archivedStatus
+	}
 
 	if orderBy == nil {
 		orderBy = []*generated.ProgramOrder{

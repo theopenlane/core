@@ -322,7 +322,7 @@ const DefaultStatus enums.ProgramStatus = "NOT_STARTED"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.ProgramStatus) error {
 	switch s.String() {
-	case "NOT_STARTED", "IN_PROGRESS", "READY_FOR_AUDITOR", "COMPLETED", "ACTION_REQUIRED":
+	case "NOT_STARTED", "IN_PROGRESS", "ACTION_REQUIRED", "READY_FOR_AUDITOR", "COMPLETED", "ARCHIVED":
 		return nil
 	default:
 		return fmt.Errorf("program: invalid enum value for status field: %q", s)

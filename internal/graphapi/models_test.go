@@ -187,6 +187,7 @@ type ProgramBuilder struct {
 	// Add Permissions
 	EditorIDs       string
 	BlockedGroupIDs string
+	Status          enums.ProgramStatus
 }
 
 type ProgramMemberBuilder struct {
@@ -960,6 +961,10 @@ func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program
 
 	if p.BlockedGroupIDs != "" {
 		mutation.AddBlockedGroupIDs(p.BlockedGroupIDs)
+	}
+
+	if p.Status.String() != "" {
+		mutation.SetStatus(p.Status)
 	}
 
 	program, err := mutation.
