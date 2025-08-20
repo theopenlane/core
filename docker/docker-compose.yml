@@ -11,8 +11,9 @@ services:
       - --config=/config/.config.yaml
     volumes:
       - type: bind
-        source: ../config/.config.yaml
+        source: ${PWD}/config/.config.yaml
         target: /config/.config.yaml
+        read_only: true
     ports:
       - "17608:17608"
     restart: unless-stopped

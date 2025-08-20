@@ -1,2 +1,0 @@
-// Package certx is a package that provides functionality for certificate transparency log analysis. It leverages the certx utility to extract and analyze SSL/TLS certificates from various domains. The package is designed to work in conjunction with other subpackages within the sleuth package, such as dnsx, sub, ports, and spider, to provide a comprehensive analysis of domains and their associated certificates.
-package certx

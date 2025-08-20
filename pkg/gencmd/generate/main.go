@@ -1,3 +1,5 @@
+//go:build ignore
+
 package main
 
 import "github.com/theopenlane/core/pkg/gencmd/generate/cmd"
