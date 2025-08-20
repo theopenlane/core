@@ -28,7 +28,6 @@ tasks:
     dir: ..
     desc: brings up the compose environment for the core server
     cmds:
-      - GOOS=linux GOARCH=amd64 go build -mod=mod -o core
       - docker build -f docker/Dockerfile . -t core:dev
       - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-riverboat.yml -f ./docker/docker-compose-simple.yml up -d"
 
