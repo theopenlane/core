@@ -131,6 +131,7 @@ require (
 	github.com/containerd/platforms v0.2.1 // indirect
 	github.com/cpuguy83/dockercfg v0.3.2 // indirect
 	github.com/danieljoos/wincred v1.2.2 // indirect
+	github.com/dave/jennifer v1.7.1 // indirect
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/dnephin/pflag v1.0.7 // indirect
 	github.com/docker/docker v28.3.3+incompatible // indirect
@@ -378,6 +379,7 @@ require (
 )
 
 tool (
+	github.com/dave/jennifer
 	github.com/invopop/jsonschema
 	github.com/invopop/yaml
 	github.com/vektra/mockery/v3

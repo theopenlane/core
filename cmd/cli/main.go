@@ -1,3 +1,5 @@
+//go:build cli
+
 package main
 
 import (

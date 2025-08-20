@@ -220,8 +220,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateCustomDomain(tc.ctx, tc.request)
-					if tc.expectedErr != "" {
-			assert.ErrorContains(t, err, tc.expectedErr)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}
@@ -278,8 +278,8 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteCustomDomain(tc.ctx, tc.id)
-					if tc.expectedErr != "" {
-			assert.ErrorContains(t, err, tc.expectedErr)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}
@@ -470,8 +470,8 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateBulkCustomDomain(tc.ctx, tc.requests)
-					if tc.expectedErr != "" {
-			assert.ErrorContains(t, err, tc.expectedErr)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}
@@ -561,8 +561,8 @@ func TestGetAllCustomDomains(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllCustomDomains(tc.ctx)
 
-					if tc.expectedErr != "" {
-			assert.ErrorContains(t, err, tc.expectedErr)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 				return
 			}
 

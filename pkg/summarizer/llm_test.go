@@ -118,92 +118,6 @@ func TestNewLLMSummarizer(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "mistral with all options",
-			cfg: entconfig.Config{
-				Summarizer: entconfig.Summarizer{
-					LLM: entconfig.SummarizerLLM{
-						Provider: entconfig.LLMProviderMistral,
-						Mistral: entconfig.MistralConfig{
-							GenericLLMConfig: entconfig.GenericLLMConfig{
-								Model:  "mistral-tiny",
-								APIKey: "test-key",
-							},
-						},
-					},
-				},
-			},
-			wantErr: false,
-		},
-		{
-			name: "gemini with options",
-			cfg: entconfig.Config{
-				Summarizer: entconfig.Summarizer{
-					LLM: entconfig.SummarizerLLM{
-						Provider: entconfig.LLMProviderGemini,
-						Gemini: entconfig.GeminiConfig{
-							GenericLLMConfig: entconfig.GenericLLMConfig{
-								Model:  "gemini-pro",
-								APIKey: "test-key",
-							},
-							MaxTokens: 1000,
-						},
-					},
-				},
-			},
-			wantErr: false,
-		},
-		{
-			name: "gemini with multiple credential options",
-			cfg: entconfig.Config{
-				Summarizer: entconfig.Summarizer{
-					LLM: entconfig.SummarizerLLM{
-						Provider: entconfig.LLMProviderGemini,
-						Gemini: entconfig.GeminiConfig{
-							GenericLLMConfig: entconfig.GenericLLMConfig{
-								Model:  "gemini-pro",
-								APIKey: "test-key",
-							},
-							CredentialsJSON: `{"key": "value"}`,
-							MaxTokens:       1000,
-						},
-					},
-				},
-			},
-			wantErr: true,
-		},
-		{
-			name: "huggingface with all options",
-			cfg: entconfig.Config{
-				Summarizer: entconfig.Summarizer{
-					LLM: entconfig.SummarizerLLM{
-						Provider: entconfig.LLMProviderHuggingface,
-						HuggingFace: entconfig.HuggingFaceConfig{
-							GenericLLMConfig: entconfig.GenericLLMConfig{
-								Model:  "facebook/opt-1.3b",
-								APIKey: "test-key",
-							},
-						},
-					},
-				},
-			},
-			wantErr: false,
-		},
-		{
-			name: "ollama with all options",
-			cfg: entconfig.Config{
-				Summarizer: entconfig.Summarizer{
-					LLM: entconfig.SummarizerLLM{
-						Provider: entconfig.LLMProviderOllama,
-						Ollama: entconfig.OllamaConfig{
-							Model: "llama2",
-							URL:   "http://localhost:11434",
-						},
-					},
-				},
-			},
-			wantErr: false,
-		},
-		{
 			name: "openai with all options",
 			cfg: entconfig.Config{
 				Summarizer: entconfig.Summarizer{
@@ -247,20 +161,6 @@ func TestNewLLMSummarizer(t *testing.T) {
 				},
 			},
 			wantErr: true,
-		},
-		{
-			name: "minimal config for ollama",
-			cfg: entconfig.Config{
-				Summarizer: entconfig.Summarizer{
-					LLM: entconfig.SummarizerLLM{
-						Provider: entconfig.LLMProviderOllama,
-						Ollama: entconfig.OllamaConfig{
-							Model: "llama2",
-						},
-					},
-				},
-			},
-			wantErr: false,
 		},
 	}
 

@@ -336,18 +336,18 @@ tasks:
   go:build:ci:
     desc: Runs go build for the core server
     cmds:
-      - go build -mod=mod -a -o bin/core
+      - go build -mod=readonly -a -o bin/core
 
   go:build-cli:
     aliases: [buildcli]
     desc: Runs go build for the openlane cli
     cmds:
-      - go build -mod=mod -o openlane-cli ./cmd/cli
+      - go build -tags cli -mod=mod -o openlane-cli ./cmd/cli
 
   go:build-cli:ci:
     desc: Runs go build for the openlane cli in CI
     cmds:
-      - go build -mod=mod -a -o bin/openlane-cli ./cmd/cli
+      - go build -tags cli -mod=readonly -a -o bin/openlane-cli ./cmd/cli
 
   go:all:
     aliases: [go]
@@ -444,19 +444,8 @@ tasks:
     desc: installs all dependencies for the project
     aliases: [install]
     cmds:
-      - task: install:tools
       - task: brew-install
       - task: local-setup
-
-  install:tools:
-    desc: Installs tools from tools.go
-    run: once
-    cmds:
-      - echo Installing tools from tools.go
-      - go get -tool gotest.tools/gotestsum@latest
-      - go get -tool github.com/vektra/mockery/v3@latest
-      - go get -tool github.com/invopop/jsonschema@latest
-      - go get -tool github.com/invopop/yaml@latest
 
   update-brew:
     desc: Update Homebrew and upgrade all packages

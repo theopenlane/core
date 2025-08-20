@@ -17,7 +17,7 @@ tasks:
     desc: generates a new cli cmd
     interactive: true
     cmds:
-      - go run ../../pkg/gencmd/generate/main.go generate
+      - go run ../../pkg/gencmd/generate/main.go generate --tags cli
 
   generate:ro:
     desc: generates a new cli cmd with only the read cmds
