@@ -140,7 +140,7 @@ func TestQueryPrograms(t *testing.T) {
 		errorMsg        string
 	}{
 		{
-			name:            "happy path, org owner should see all programs (4) including archived",
+			name:            "happy path, org owner should see all programs",
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedResults: 3, // archived programs not listed by default

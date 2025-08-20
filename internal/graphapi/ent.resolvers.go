@@ -2241,7 +2241,7 @@ func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[strin
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
-	// apply default status filtering to exclude archived items unless explicitly requested
+	// apply default status filtering to exclude archived items unless they are explicitly requested
 	if where == nil {
 		where = &generated.ProgramWhereInput{}
 	}
