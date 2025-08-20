@@ -51,8 +51,6 @@ type subscriptionBuilder struct {
 	stripeSubscriptionStatus string
 	active                   bool
 	stripeCustomerID         string
-	productTier              string
-	stripeProductTierID      string
 	productPrice             models.Price
 	trialExpiresAt           time.Time
 	daysUntilDue             string
@@ -73,10 +71,7 @@ func (b *subscriptionBuilder) SetStripeCustomerID(id string) *subscriptionBuilde
 	b.stripeCustomerID = id
 	return b
 }
-func (b *subscriptionBuilder) SetStripeProductTierID(id string) *subscriptionBuilder {
-	b.stripeProductTierID = id
-	return b
-}
+
 func (b *subscriptionBuilder) SetProductPrice(p models.Price) *subscriptionBuilder {
 	b.productPrice = p
 	return b
@@ -198,8 +193,6 @@ func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
 		StripeSubscriptionID:     "sub_123",
 		StripeSubscriptionStatus: "active",
 		Active:                   true,
-		ProductTier:              "Pro",
-		StripeProductTierID:      "prod_123",
 		ProductPrice:             models.Price{Amount: 20, Interval: "year", Currency: "usd"},
 		TrialExpiresAt:           timePtr(time.Unix(1700000000, 0)),
 		DaysUntilDue:             int64ToStringPtr(7),
@@ -321,8 +314,6 @@ func TestApplyStripeSubscription(t *testing.T) {
 		stripeSubscriptionStatus: "active",
 		active:                   true,
 		stripeCustomerID:         "",
-		productTier:              "Pro",
-		stripeProductTierID:      "prod_123",
 		productPrice:             models.Price{Amount: 20, Interval: "year", Currency: "usd"},
 		trialExpiresAt:           time.Unix(1700000000, 0),
 		daysUntilDue:             "7",
