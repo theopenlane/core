@@ -33,12 +33,8 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldStripeSubscriptionID holds the string denoting the stripe_subscription_id field in the database.
 	FieldStripeSubscriptionID = "stripe_subscription_id"
-	// FieldProductTier holds the string denoting the product_tier field in the database.
-	FieldProductTier = "product_tier"
 	// FieldProductPrice holds the string denoting the product_price field in the database.
 	FieldProductPrice = "product_price"
-	// FieldStripeProductTierID holds the string denoting the stripe_product_tier_id field in the database.
-	FieldStripeProductTierID = "stripe_product_tier_id"
 	// FieldStripeSubscriptionStatus holds the string denoting the stripe_subscription_status field in the database.
 	FieldStripeSubscriptionStatus = "stripe_subscription_status"
 	// FieldActive holds the string denoting the active field in the database.
@@ -112,9 +108,7 @@ var Columns = []string{
 	FieldTags,
 	FieldOwnerID,
 	FieldStripeSubscriptionID,
-	FieldProductTier,
 	FieldProductPrice,
-	FieldStripeProductTierID,
 	FieldStripeSubscriptionStatus,
 	FieldActive,
 	FieldExpiresAt,
@@ -210,16 +204,6 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByStripeSubscriptionID orders the results by the stripe_subscription_id field.
 func ByStripeSubscriptionID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStripeSubscriptionID, opts...).ToFunc()
-}
-
-// ByProductTier orders the results by the product_tier field.
-func ByProductTier(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProductTier, opts...).ToFunc()
-}
-
-// ByStripeProductTierID orders the results by the stripe_product_tier_id field.
-func ByStripeProductTierID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStripeProductTierID, opts...).ToFunc()
 }
 
 // ByStripeSubscriptionStatus orders the results by the stripe_subscription_status field.

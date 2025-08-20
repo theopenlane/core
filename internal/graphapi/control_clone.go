@@ -113,15 +113,17 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 	orgID := ac.OrganizationID
 
-	// check if the organization has the required modules for Control entities before the parallel execution
-	// this prevents multiple queries to the database for each control
-	hasModules, _, err := rule.HasAllFeatures(ctx, schema.Control{}.Modules()...)
-	if err != nil {
-		return nil, err
-	}
+	if r.db.EntConfig != nil && r.db.EntConfig.Modules.Enabled {
+		// check if the organization has the required modules for Control entities before the parallel execution
+		// this prevents multiple queries to the database for each control
+		hasModules, _, err := rule.HasAllFeatures(ctx, schema.Control{}.Modules()...)
+		if err != nil {
+			return nil, err
+		}
 
-	if !hasModules {
-		return nil, generated.ErrPermissionDenied
+		if !hasModules {
+			return nil, generated.ErrPermissionDenied
+		}
 	}
 
 	// do this in a go-routine to allow multiple controls to be cloned in parallel, use pond for this

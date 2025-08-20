@@ -22,8 +22,6 @@ query GetAllOrgSubscriptions {
         ownerID
         paymentMethodAdded
         productPrice
-        productTier
-        stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
         tags
@@ -47,8 +45,6 @@ query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
     ownerID
     paymentMethodAdded
     productPrice
-    productTier
-    stripeProductTierID
     stripeSubscriptionID
     stripeSubscriptionStatus
     tags
@@ -80,8 +76,6 @@ query GetOrgSubscriptions($first: Int, $last: Int, $where: OrgSubscriptionWhereI
         ownerID
         paymentMethodAdded
         productPrice
-        productTier
-        stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
         tags

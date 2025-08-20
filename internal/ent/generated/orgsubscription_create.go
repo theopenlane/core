@@ -144,20 +144,6 @@ func (_c *OrgSubscriptionCreate) SetNillableStripeSubscriptionID(v *string) *Org
 	return _c
 }
 
-// SetProductTier sets the "product_tier" field.
-func (_c *OrgSubscriptionCreate) SetProductTier(v string) *OrgSubscriptionCreate {
-	_c.mutation.SetProductTier(v)
-	return _c
-}
-
-// SetNillableProductTier sets the "product_tier" field if the given value is not nil.
-func (_c *OrgSubscriptionCreate) SetNillableProductTier(v *string) *OrgSubscriptionCreate {
-	if v != nil {
-		_c.SetProductTier(*v)
-	}
-	return _c
-}
-
 // SetProductPrice sets the "product_price" field.
 func (_c *OrgSubscriptionCreate) SetProductPrice(v models.Price) *OrgSubscriptionCreate {
 	_c.mutation.SetProductPrice(v)
@@ -168,20 +154,6 @@ func (_c *OrgSubscriptionCreate) SetProductPrice(v models.Price) *OrgSubscriptio
 func (_c *OrgSubscriptionCreate) SetNillableProductPrice(v *models.Price) *OrgSubscriptionCreate {
 	if v != nil {
 		_c.SetProductPrice(*v)
-	}
-	return _c
-}
-
-// SetStripeProductTierID sets the "stripe_product_tier_id" field.
-func (_c *OrgSubscriptionCreate) SetStripeProductTierID(v string) *OrgSubscriptionCreate {
-	_c.mutation.SetStripeProductTierID(v)
-	return _c
-}
-
-// SetNillableStripeProductTierID sets the "stripe_product_tier_id" field if the given value is not nil.
-func (_c *OrgSubscriptionCreate) SetNillableStripeProductTierID(v *string) *OrgSubscriptionCreate {
-	if v != nil {
-		_c.SetStripeProductTierID(*v)
 	}
 	return _c
 }
@@ -494,17 +466,9 @@ func (_c *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Creat
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionID, field.TypeString, value)
 		_node.StripeSubscriptionID = value
 	}
-	if value, ok := _c.mutation.ProductTier(); ok {
-		_spec.SetField(orgsubscription.FieldProductTier, field.TypeString, value)
-		_node.ProductTier = value
-	}
 	if value, ok := _c.mutation.ProductPrice(); ok {
 		_spec.SetField(orgsubscription.FieldProductPrice, field.TypeJSON, value)
 		_node.ProductPrice = value
-	}
-	if value, ok := _c.mutation.StripeProductTierID(); ok {
-		_spec.SetField(orgsubscription.FieldStripeProductTierID, field.TypeString, value)
-		_node.StripeProductTierID = value
 	}
 	if value, ok := _c.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionStatus, field.TypeString, value)

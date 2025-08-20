@@ -89,17 +89,11 @@ func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription, cust *entitle
 		return nil
 	}
 
-	var productName, productID string
-
 	var price models.Price
 
 	if sub.Items != nil && len(sub.Items.Data) > 0 {
 		item := sub.Items.Data[0]
 		if item.Price != nil {
-			if item.Price.Product != nil {
-				productID = item.Price.Product.ID
-				productName = item.Price.Product.Name
-			}
 
 			interval := ""
 			if item.Price.Recurring != nil {
@@ -120,8 +114,6 @@ func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription, cust *entitle
 		StripeSubscriptionID:     sub.ID,
 		StripeSubscriptionStatus: status,
 		Active:                   entitlements.IsSubscriptionActive(sub.Status),
-		ProductTier:              productName,
-		StripeProductTierID:      productID,
 		ProductPrice:             price,
 		TrialExpiresAt:           timePtr(time.Unix(sub.TrialEnd, 0)),
 		DaysUntilDue:             int64ToStringPtr(sub.DaysUntilDue),
@@ -277,8 +269,6 @@ type OrgSubscriptionSetter[T any] interface {
 	SetStripeSubscriptionID(string) T
 	SetStripeSubscriptionStatus(string) T
 	SetActive(bool) T
-	SetProductTier(string) T
-	SetStripeProductTierID(string) T
 	SetProductPrice(models.Price) T
 	SetTrialExpiresAt(time.Time) T
 	SetDaysUntilDue(string) T
@@ -292,17 +282,11 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 		return b
 	}
 
-	var productName, productID string
-
 	var price models.Price
 
 	if sub.Items != nil && len(sub.Items.Data) > 0 {
 		item := sub.Items.Data[0]
 		if item.Price != nil {
-			if item.Price.Product != nil {
-				productID = item.Price.Product.ID
-				productName = item.Price.Product.Name
-			}
 
 			interval := ""
 			if item.Price.Recurring != nil {
@@ -323,8 +307,6 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 	b.SetStripeSubscriptionStatus(status)
 	b.SetActive(entitlements.IsSubscriptionActive(sub.Status))
 
-	b.SetProductTier(productName)
-	b.SetStripeProductTierID(productID)
 	b.SetProductPrice(price)
 	b.SetTrialExpiresAt(time.Unix(sub.TrialEnd, 0))
 	b.SetDaysUntilDue(fmt.Sprintf("%d", sub.DaysUntilDue))

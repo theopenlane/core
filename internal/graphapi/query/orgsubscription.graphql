@@ -14,8 +14,6 @@ query GetAllOrgSubscriptions {
         id
         ownerID
         productPrice
-        productTier
-        stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
         tags
@@ -38,9 +36,6 @@ query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
     id
     ownerID
     productPrice
-    productTier
-    stripeProductTierID
-    stripeSubscriptionID
     stripeSubscriptionStatus
     tags
     trialExpiresAt
@@ -63,9 +58,6 @@ query GetOrgSubscriptions($where: OrgSubscriptionWhereInput) {
         id
         ownerID
         productPrice
-        productTier
-        stripeProductTierID
-        stripeSubscriptionID
         stripeSubscriptionStatus
         tags
         trialExpiresAt

@@ -25840,17 +25840,9 @@ type OrgSubscription implements Node {
   """
   stripeSubscriptionID: String
   """
-  the common name of the product tier the subscription is associated with, e.g. starter tier
-  """
-  productTier: String
-  """
   the price of the product tier
   """
   productPrice: Price
-  """
-  the product id that represents the tier in stripe
-  """
-  stripeProductTierID: String
   """
   the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
   """
@@ -25964,17 +25956,9 @@ type OrgSubscriptionHistory implements Node {
   """
   stripeSubscriptionID: String
   """
-  the common name of the product tier the subscription is associated with, e.g. starter tier
-  """
-  productTier: String
-  """
   the price of the product tier
   """
   productPrice: Price
-  """
-  the product id that represents the tier in stripe
-  """
-  stripeProductTierID: String
   """
   the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
   """
@@ -26062,7 +26046,6 @@ enum OrgSubscriptionHistoryOrderField {
   history_time
   created_at
   updated_at
-  product_tier
   stripe_subscription_status
   active
   expires_at
@@ -26225,42 +26208,6 @@ input OrgSubscriptionHistoryWhereInput {
   stripeSubscriptionIDEqualFold: String
   stripeSubscriptionIDContainsFold: String
   """
-  product_tier field predicates
-  """
-  productTier: String
-  productTierNEQ: String
-  productTierIn: [String!]
-  productTierNotIn: [String!]
-  productTierGT: String
-  productTierGTE: String
-  productTierLT: String
-  productTierLTE: String
-  productTierContains: String
-  productTierHasPrefix: String
-  productTierHasSuffix: String
-  productTierIsNil: Boolean
-  productTierNotNil: Boolean
-  productTierEqualFold: String
-  productTierContainsFold: String
-  """
-  stripe_product_tier_id field predicates
-  """
-  stripeProductTierID: String
-  stripeProductTierIDNEQ: String
-  stripeProductTierIDIn: [String!]
-  stripeProductTierIDNotIn: [String!]
-  stripeProductTierIDGT: String
-  stripeProductTierIDGTE: String
-  stripeProductTierIDLT: String
-  stripeProductTierIDLTE: String
-  stripeProductTierIDContains: String
-  stripeProductTierIDHasPrefix: String
-  stripeProductTierIDHasSuffix: String
-  stripeProductTierIDIsNil: Boolean
-  stripeProductTierIDNotNil: Boolean
-  stripeProductTierIDEqualFold: String
-  stripeProductTierIDContainsFold: String
-  """
   stripe_subscription_status field predicates
   """
   stripeSubscriptionStatus: String
@@ -26347,7 +26294,6 @@ Properties by which OrgSubscription connections can be ordered.
 enum OrgSubscriptionOrderField {
   created_at
   updated_at
-  product_tier
   stripe_subscription_status
   active
   expires_at
@@ -26473,42 +26419,6 @@ input OrgSubscriptionWhereInput {
   stripeSubscriptionIDNotNil: Boolean
   stripeSubscriptionIDEqualFold: String
   stripeSubscriptionIDContainsFold: String
-  """
-  product_tier field predicates
-  """
-  productTier: String
-  productTierNEQ: String
-  productTierIn: [String!]
-  productTierNotIn: [String!]
-  productTierGT: String
-  productTierGTE: String
-  productTierLT: String
-  productTierLTE: String
-  productTierContains: String
-  productTierHasPrefix: String
-  productTierHasSuffix: String
-  productTierIsNil: Boolean
-  productTierNotNil: Boolean
-  productTierEqualFold: String
-  productTierContainsFold: String
-  """
-  stripe_product_tier_id field predicates
-  """
-  stripeProductTierID: String
-  stripeProductTierIDNEQ: String
-  stripeProductTierIDIn: [String!]
-  stripeProductTierIDNotIn: [String!]
-  stripeProductTierIDGT: String
-  stripeProductTierIDGTE: String
-  stripeProductTierIDLT: String
-  stripeProductTierIDLTE: String
-  stripeProductTierIDContains: String
-  stripeProductTierIDHasPrefix: String
-  stripeProductTierIDHasSuffix: String
-  stripeProductTierIDIsNil: Boolean
-  stripeProductTierIDNotNil: Boolean
-  stripeProductTierIDEqualFold: String
-  stripeProductTierIDContainsFold: String
   """
   stripe_subscription_status field predicates
   """

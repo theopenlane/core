@@ -73,10 +73,6 @@ func (b *subscriptionBuilder) SetStripeCustomerID(id string) *subscriptionBuilde
 	b.stripeCustomerID = id
 	return b
 }
-func (b *subscriptionBuilder) SetProductTier(tier string) *subscriptionBuilder {
-	b.productTier = tier
-	return b
-}
 func (b *subscriptionBuilder) SetStripeProductTierID(id string) *subscriptionBuilder {
 	b.stripeProductTierID = id
 	return b

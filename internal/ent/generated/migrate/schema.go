@@ -2955,9 +2955,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
-		{Name: "product_tier", Type: field.TypeString, Nullable: true},
 		{Name: "product_price", Type: field.TypeJSON, Nullable: true},
-		{Name: "stripe_product_tier_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
@@ -2975,7 +2973,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_subscriptions_organizations_org_subscriptions",
-				Columns:    []*schema.Column{OrgSubscriptionsColumns[19]},
+				Columns:    []*schema.Column{OrgSubscriptionsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2984,7 +2982,7 @@ var (
 			{
 				Name:    "orgsubscription_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrgSubscriptionsColumns[19]},
+				Columns: []*schema.Column{OrgSubscriptionsColumns[17]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3006,9 +3004,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
-		{Name: "product_tier", Type: field.TypeString, Nullable: true},
 		{Name: "product_price", Type: field.TypeJSON, Nullable: true},
-		{Name: "stripe_product_tier_id", Type: field.TypeString, Nullable: true},
 		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},

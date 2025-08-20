@@ -107,16 +107,6 @@ func StripeSubscriptionID(v string) predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldEQ(FieldStripeSubscriptionID, v))
 }
 
-// ProductTier applies equality check predicate on the "product_tier" field. It's identical to ProductTierEQ.
-func ProductTier(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldEQ(FieldProductTier, v))
-}
-
-// StripeProductTierID applies equality check predicate on the "stripe_product_tier_id" field. It's identical to StripeProductTierIDEQ.
-func StripeProductTierID(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldEQ(FieldStripeProductTierID, v))
-}
-
 // StripeSubscriptionStatus applies equality check predicate on the "stripe_subscription_status" field. It's identical to StripeSubscriptionStatusEQ.
 func StripeSubscriptionStatus(v string) predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldEQ(FieldStripeSubscriptionStatus, v))
@@ -677,81 +667,6 @@ func StripeSubscriptionIDContainsFold(v string) predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldContainsFold(FieldStripeSubscriptionID, v))
 }
 
-// ProductTierEQ applies the EQ predicate on the "product_tier" field.
-func ProductTierEQ(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldEQ(FieldProductTier, v))
-}
-
-// ProductTierNEQ applies the NEQ predicate on the "product_tier" field.
-func ProductTierNEQ(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldNEQ(FieldProductTier, v))
-}
-
-// ProductTierIn applies the In predicate on the "product_tier" field.
-func ProductTierIn(vs ...string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldIn(FieldProductTier, vs...))
-}
-
-// ProductTierNotIn applies the NotIn predicate on the "product_tier" field.
-func ProductTierNotIn(vs ...string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldNotIn(FieldProductTier, vs...))
-}
-
-// ProductTierGT applies the GT predicate on the "product_tier" field.
-func ProductTierGT(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldGT(FieldProductTier, v))
-}
-
-// ProductTierGTE applies the GTE predicate on the "product_tier" field.
-func ProductTierGTE(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldGTE(FieldProductTier, v))
-}
-
-// ProductTierLT applies the LT predicate on the "product_tier" field.
-func ProductTierLT(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldLT(FieldProductTier, v))
-}
-
-// ProductTierLTE applies the LTE predicate on the "product_tier" field.
-func ProductTierLTE(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldLTE(FieldProductTier, v))
-}
-
-// ProductTierContains applies the Contains predicate on the "product_tier" field.
-func ProductTierContains(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldContains(FieldProductTier, v))
-}
-
-// ProductTierHasPrefix applies the HasPrefix predicate on the "product_tier" field.
-func ProductTierHasPrefix(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldHasPrefix(FieldProductTier, v))
-}
-
-// ProductTierHasSuffix applies the HasSuffix predicate on the "product_tier" field.
-func ProductTierHasSuffix(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldHasSuffix(FieldProductTier, v))
-}
-
-// ProductTierIsNil applies the IsNil predicate on the "product_tier" field.
-func ProductTierIsNil() predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldIsNull(FieldProductTier))
-}
-
-// ProductTierNotNil applies the NotNil predicate on the "product_tier" field.
-func ProductTierNotNil() predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldNotNull(FieldProductTier))
-}
-
-// ProductTierEqualFold applies the EqualFold predicate on the "product_tier" field.
-func ProductTierEqualFold(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldEqualFold(FieldProductTier, v))
-}
-
-// ProductTierContainsFold applies the ContainsFold predicate on the "product_tier" field.
-func ProductTierContainsFold(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldContainsFold(FieldProductTier, v))
-}
-
 // ProductPriceIsNil applies the IsNil predicate on the "product_price" field.
 func ProductPriceIsNil() predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldIsNull(FieldProductPrice))
@@ -760,81 +675,6 @@ func ProductPriceIsNil() predicate.OrgSubscription {
 // ProductPriceNotNil applies the NotNil predicate on the "product_price" field.
 func ProductPriceNotNil() predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.FieldNotNull(FieldProductPrice))
-}
-
-// StripeProductTierIDEQ applies the EQ predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDEQ(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldEQ(FieldStripeProductTierID, v))
-}
-
-// StripeProductTierIDNEQ applies the NEQ predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDNEQ(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldNEQ(FieldStripeProductTierID, v))
-}
-
-// StripeProductTierIDIn applies the In predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDIn(vs ...string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldIn(FieldStripeProductTierID, vs...))
-}
-
-// StripeProductTierIDNotIn applies the NotIn predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDNotIn(vs ...string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldNotIn(FieldStripeProductTierID, vs...))
-}
-
-// StripeProductTierIDGT applies the GT predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDGT(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldGT(FieldStripeProductTierID, v))
-}
-
-// StripeProductTierIDGTE applies the GTE predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDGTE(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldGTE(FieldStripeProductTierID, v))
-}
-
-// StripeProductTierIDLT applies the LT predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDLT(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldLT(FieldStripeProductTierID, v))
-}
-
-// StripeProductTierIDLTE applies the LTE predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDLTE(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldLTE(FieldStripeProductTierID, v))
-}
-
-// StripeProductTierIDContains applies the Contains predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDContains(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldContains(FieldStripeProductTierID, v))
-}
-
-// StripeProductTierIDHasPrefix applies the HasPrefix predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDHasPrefix(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldHasPrefix(FieldStripeProductTierID, v))
-}
-
-// StripeProductTierIDHasSuffix applies the HasSuffix predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDHasSuffix(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldHasSuffix(FieldStripeProductTierID, v))
-}
-
-// StripeProductTierIDIsNil applies the IsNil predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDIsNil() predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldIsNull(FieldStripeProductTierID))
-}
-
-// StripeProductTierIDNotNil applies the NotNil predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDNotNil() predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldNotNull(FieldStripeProductTierID))
-}
-
-// StripeProductTierIDEqualFold applies the EqualFold predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDEqualFold(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldEqualFold(FieldStripeProductTierID, v))
-}
-
-// StripeProductTierIDContainsFold applies the ContainsFold predicate on the "stripe_product_tier_id" field.
-func StripeProductTierIDContainsFold(v string) predicate.OrgSubscription {
-	return predicate.OrgSubscription(sql.FieldContainsFold(FieldStripeProductTierID, v))
 }
 
 // StripeSubscriptionStatusEQ applies the EQ predicate on the "stripe_subscription_status" field.

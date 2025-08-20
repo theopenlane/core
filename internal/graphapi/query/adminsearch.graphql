@@ -561,9 +561,7 @@ query AdminSearch($query: String!) {
           tags
           ownerID
           stripeSubscriptionID
-          productTier
           productPrice
-          stripeProductTierID
           stripeSubscriptionStatus
           daysUntilDue
           features

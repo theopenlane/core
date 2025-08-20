@@ -44,12 +44,8 @@ type OrgSubscriptionHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the stripe subscription id
 	StripeSubscriptionID string `json:"stripe_subscription_id,omitempty"`
-	// the common name of the product tier the subscription is associated with, e.g. starter tier
-	ProductTier string `json:"product_tier,omitempty"`
 	// the price of the product tier
 	ProductPrice models.Price `json:"product_price,omitempty"`
-	// the product id that represents the tier in stripe
-	StripeProductTierID string `json:"stripe_product_tier_id,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
 	StripeSubscriptionStatus string `json:"stripe_subscription_status,omitempty"`
 	// indicates if the subscription is active
@@ -78,7 +74,7 @@ func (*OrgSubscriptionHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case orgsubscriptionhistory.FieldActive:
 			values[i] = new(sql.NullBool)
-		case orgsubscriptionhistory.FieldID, orgsubscriptionhistory.FieldRef, orgsubscriptionhistory.FieldCreatedBy, orgsubscriptionhistory.FieldUpdatedBy, orgsubscriptionhistory.FieldDeletedBy, orgsubscriptionhistory.FieldOwnerID, orgsubscriptionhistory.FieldStripeSubscriptionID, orgsubscriptionhistory.FieldProductTier, orgsubscriptionhistory.FieldStripeProductTierID, orgsubscriptionhistory.FieldStripeSubscriptionStatus, orgsubscriptionhistory.FieldDaysUntilDue:
+		case orgsubscriptionhistory.FieldID, orgsubscriptionhistory.FieldRef, orgsubscriptionhistory.FieldCreatedBy, orgsubscriptionhistory.FieldUpdatedBy, orgsubscriptionhistory.FieldDeletedBy, orgsubscriptionhistory.FieldOwnerID, orgsubscriptionhistory.FieldStripeSubscriptionID, orgsubscriptionhistory.FieldStripeSubscriptionStatus, orgsubscriptionhistory.FieldDaysUntilDue:
 			values[i] = new(sql.NullString)
 		case orgsubscriptionhistory.FieldHistoryTime, orgsubscriptionhistory.FieldCreatedAt, orgsubscriptionhistory.FieldUpdatedAt, orgsubscriptionhistory.FieldDeletedAt, orgsubscriptionhistory.FieldExpiresAt, orgsubscriptionhistory.FieldTrialExpiresAt:
 			values[i] = new(sql.NullTime)
@@ -177,12 +173,6 @@ func (_m *OrgSubscriptionHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				_m.StripeSubscriptionID = value.String
 			}
-		case orgsubscriptionhistory.FieldProductTier:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field product_tier", values[i])
-			} else if value.Valid {
-				_m.ProductTier = value.String
-			}
 		case orgsubscriptionhistory.FieldProductPrice:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field product_price", values[i])
@@ -190,12 +180,6 @@ func (_m *OrgSubscriptionHistory) assignValues(columns []string, values []any) e
 				if err := json.Unmarshal(*value, &_m.ProductPrice); err != nil {
 					return fmt.Errorf("unmarshal field product_price: %w", err)
 				}
-			}
-		case orgsubscriptionhistory.FieldStripeProductTierID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field stripe_product_tier_id", values[i])
-			} else if value.Valid {
-				_m.StripeProductTierID = value.String
 			}
 		case orgsubscriptionhistory.FieldStripeSubscriptionStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -318,14 +302,8 @@ func (_m *OrgSubscriptionHistory) String() string {
 	builder.WriteString("stripe_subscription_id=")
 	builder.WriteString(_m.StripeSubscriptionID)
 	builder.WriteString(", ")
-	builder.WriteString("product_tier=")
-	builder.WriteString(_m.ProductTier)
-	builder.WriteString(", ")
 	builder.WriteString("product_price=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProductPrice))
-	builder.WriteString(", ")
-	builder.WriteString("stripe_product_tier_id=")
-	builder.WriteString(_m.StripeProductTierID)
 	builder.WriteString(", ")
 	builder.WriteString("stripe_subscription_status=")
 	builder.WriteString(_m.StripeSubscriptionStatus)

@@ -385,14 +385,6 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 		log.Debug().Str("subscription_id", orgSubscription.ID).Strs("features", orgSubscription.Features).Msg("features changes")
 	}
 
-	if orgSubscription.ProductTier != stripeOrgSubscription.ProductTier {
-		mutation.SetProductTier(stripeOrgSubscription.ProductTier)
-
-		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("tier", orgSubscription.ProductTier).Msg("tier changed")
-	}
-
 	if orgSubscription.ProductPrice != stripeOrgSubscription.ProductPrice {
 		productPriceCopy := stripeOrgSubscription.ProductPrice
 
@@ -492,7 +484,6 @@ func (h *Handler) createOrUpdateOrgSubscriptionWithStripe(ctx context.Context, s
 		orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Create().
 			SetOwnerID(orgID).
 			SetStripeSubscriptionID(subscription.ID).
-			SetProductTier(stripeSub.ProductTier).
 			SetProductPrice(stripeSub.ProductPrice).
 			SetNillableTrialExpiresAt(stripeSub.TrialExpiresAt).
 			SetNillableDaysUntilDue(stripeSub.DaysUntilDue).

@@ -2028,14 +2028,8 @@ func (_m *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change 
 	if !reflect.DeepEqual(_m.StripeSubscriptionID, new.StripeSubscriptionID) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionID, _m.StripeSubscriptionID, new.StripeSubscriptionID))
 	}
-	if !reflect.DeepEqual(_m.ProductTier, new.ProductTier) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductTier, _m.ProductTier, new.ProductTier))
-	}
 	if !reflect.DeepEqual(_m.ProductPrice, new.ProductPrice) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductPrice, _m.ProductPrice, new.ProductPrice))
-	}
-	if !reflect.DeepEqual(_m.StripeProductTierID, new.StripeProductTierID) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeProductTierID, _m.StripeProductTierID, new.StripeProductTierID))
 	}
 	if !reflect.DeepEqual(_m.StripeSubscriptionStatus, new.StripeSubscriptionStatus) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionStatus, _m.StripeSubscriptionStatus, new.StripeSubscriptionStatus))

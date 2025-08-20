@@ -46858,40 +46858,6 @@ type OrgSubscriptionWhereInput struct {
 	StripeSubscriptionIDEqualFold    *string  `json:"stripeSubscriptionIDEqualFold,omitempty"`
 	StripeSubscriptionIDContainsFold *string  `json:"stripeSubscriptionIDContainsFold,omitempty"`
 
-	// "product_tier" field predicates.
-	ProductTier             *string  `json:"productTier,omitempty"`
-	ProductTierNEQ          *string  `json:"productTierNEQ,omitempty"`
-	ProductTierIn           []string `json:"productTierIn,omitempty"`
-	ProductTierNotIn        []string `json:"productTierNotIn,omitempty"`
-	ProductTierGT           *string  `json:"productTierGT,omitempty"`
-	ProductTierGTE          *string  `json:"productTierGTE,omitempty"`
-	ProductTierLT           *string  `json:"productTierLT,omitempty"`
-	ProductTierLTE          *string  `json:"productTierLTE,omitempty"`
-	ProductTierContains     *string  `json:"productTierContains,omitempty"`
-	ProductTierHasPrefix    *string  `json:"productTierHasPrefix,omitempty"`
-	ProductTierHasSuffix    *string  `json:"productTierHasSuffix,omitempty"`
-	ProductTierIsNil        bool     `json:"productTierIsNil,omitempty"`
-	ProductTierNotNil       bool     `json:"productTierNotNil,omitempty"`
-	ProductTierEqualFold    *string  `json:"productTierEqualFold,omitempty"`
-	ProductTierContainsFold *string  `json:"productTierContainsFold,omitempty"`
-
-	// "stripe_product_tier_id" field predicates.
-	StripeProductTierID             *string  `json:"stripeProductTierID,omitempty"`
-	StripeProductTierIDNEQ          *string  `json:"stripeProductTierIDNEQ,omitempty"`
-	StripeProductTierIDIn           []string `json:"stripeProductTierIDIn,omitempty"`
-	StripeProductTierIDNotIn        []string `json:"stripeProductTierIDNotIn,omitempty"`
-	StripeProductTierIDGT           *string  `json:"stripeProductTierIDGT,omitempty"`
-	StripeProductTierIDGTE          *string  `json:"stripeProductTierIDGTE,omitempty"`
-	StripeProductTierIDLT           *string  `json:"stripeProductTierIDLT,omitempty"`
-	StripeProductTierIDLTE          *string  `json:"stripeProductTierIDLTE,omitempty"`
-	StripeProductTierIDContains     *string  `json:"stripeProductTierIDContains,omitempty"`
-	StripeProductTierIDHasPrefix    *string  `json:"stripeProductTierIDHasPrefix,omitempty"`
-	StripeProductTierIDHasSuffix    *string  `json:"stripeProductTierIDHasSuffix,omitempty"`
-	StripeProductTierIDIsNil        bool     `json:"stripeProductTierIDIsNil,omitempty"`
-	StripeProductTierIDNotNil       bool     `json:"stripeProductTierIDNotNil,omitempty"`
-	StripeProductTierIDEqualFold    *string  `json:"stripeProductTierIDEqualFold,omitempty"`
-	StripeProductTierIDContainsFold *string  `json:"stripeProductTierIDContainsFold,omitempty"`
-
 	// "stripe_subscription_status" field predicates.
 	StripeSubscriptionStatus             *string  `json:"stripeSubscriptionStatus,omitempty"`
 	StripeSubscriptionStatusNEQ          *string  `json:"stripeSubscriptionStatusNEQ,omitempty"`
@@ -47304,96 +47270,6 @@ func (i *OrgSubscriptionWhereInput) P() (predicate.OrgSubscription, error) {
 	if i.StripeSubscriptionIDContainsFold != nil {
 		predicates = append(predicates, orgsubscription.StripeSubscriptionIDContainsFold(*i.StripeSubscriptionIDContainsFold))
 	}
-	if i.ProductTier != nil {
-		predicates = append(predicates, orgsubscription.ProductTierEQ(*i.ProductTier))
-	}
-	if i.ProductTierNEQ != nil {
-		predicates = append(predicates, orgsubscription.ProductTierNEQ(*i.ProductTierNEQ))
-	}
-	if len(i.ProductTierIn) > 0 {
-		predicates = append(predicates, orgsubscription.ProductTierIn(i.ProductTierIn...))
-	}
-	if len(i.ProductTierNotIn) > 0 {
-		predicates = append(predicates, orgsubscription.ProductTierNotIn(i.ProductTierNotIn...))
-	}
-	if i.ProductTierGT != nil {
-		predicates = append(predicates, orgsubscription.ProductTierGT(*i.ProductTierGT))
-	}
-	if i.ProductTierGTE != nil {
-		predicates = append(predicates, orgsubscription.ProductTierGTE(*i.ProductTierGTE))
-	}
-	if i.ProductTierLT != nil {
-		predicates = append(predicates, orgsubscription.ProductTierLT(*i.ProductTierLT))
-	}
-	if i.ProductTierLTE != nil {
-		predicates = append(predicates, orgsubscription.ProductTierLTE(*i.ProductTierLTE))
-	}
-	if i.ProductTierContains != nil {
-		predicates = append(predicates, orgsubscription.ProductTierContains(*i.ProductTierContains))
-	}
-	if i.ProductTierHasPrefix != nil {
-		predicates = append(predicates, orgsubscription.ProductTierHasPrefix(*i.ProductTierHasPrefix))
-	}
-	if i.ProductTierHasSuffix != nil {
-		predicates = append(predicates, orgsubscription.ProductTierHasSuffix(*i.ProductTierHasSuffix))
-	}
-	if i.ProductTierIsNil {
-		predicates = append(predicates, orgsubscription.ProductTierIsNil())
-	}
-	if i.ProductTierNotNil {
-		predicates = append(predicates, orgsubscription.ProductTierNotNil())
-	}
-	if i.ProductTierEqualFold != nil {
-		predicates = append(predicates, orgsubscription.ProductTierEqualFold(*i.ProductTierEqualFold))
-	}
-	if i.ProductTierContainsFold != nil {
-		predicates = append(predicates, orgsubscription.ProductTierContainsFold(*i.ProductTierContainsFold))
-	}
-	if i.StripeProductTierID != nil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDEQ(*i.StripeProductTierID))
-	}
-	if i.StripeProductTierIDNEQ != nil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDNEQ(*i.StripeProductTierIDNEQ))
-	}
-	if len(i.StripeProductTierIDIn) > 0 {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDIn(i.StripeProductTierIDIn...))
-	}
-	if len(i.StripeProductTierIDNotIn) > 0 {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDNotIn(i.StripeProductTierIDNotIn...))
-	}
-	if i.StripeProductTierIDGT != nil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDGT(*i.StripeProductTierIDGT))
-	}
-	if i.StripeProductTierIDGTE != nil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDGTE(*i.StripeProductTierIDGTE))
-	}
-	if i.StripeProductTierIDLT != nil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDLT(*i.StripeProductTierIDLT))
-	}
-	if i.StripeProductTierIDLTE != nil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDLTE(*i.StripeProductTierIDLTE))
-	}
-	if i.StripeProductTierIDContains != nil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDContains(*i.StripeProductTierIDContains))
-	}
-	if i.StripeProductTierIDHasPrefix != nil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDHasPrefix(*i.StripeProductTierIDHasPrefix))
-	}
-	if i.StripeProductTierIDHasSuffix != nil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDHasSuffix(*i.StripeProductTierIDHasSuffix))
-	}
-	if i.StripeProductTierIDIsNil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDIsNil())
-	}
-	if i.StripeProductTierIDNotNil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDNotNil())
-	}
-	if i.StripeProductTierIDEqualFold != nil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDEqualFold(*i.StripeProductTierIDEqualFold))
-	}
-	if i.StripeProductTierIDContainsFold != nil {
-		predicates = append(predicates, orgsubscription.StripeProductTierIDContainsFold(*i.StripeProductTierIDContainsFold))
-	}
 	if i.StripeSubscriptionStatus != nil {
 		predicates = append(predicates, orgsubscription.StripeSubscriptionStatusEQ(*i.StripeSubscriptionStatus))
 	}
@@ -47740,40 +47616,6 @@ type OrgSubscriptionHistoryWhereInput struct {
 	StripeSubscriptionIDNotNil       bool     `json:"stripeSubscriptionIDNotNil,omitempty"`
 	StripeSubscriptionIDEqualFold    *string  `json:"stripeSubscriptionIDEqualFold,omitempty"`
 	StripeSubscriptionIDContainsFold *string  `json:"stripeSubscriptionIDContainsFold,omitempty"`
-
-	// "product_tier" field predicates.
-	ProductTier             *string  `json:"productTier,omitempty"`
-	ProductTierNEQ          *string  `json:"productTierNEQ,omitempty"`
-	ProductTierIn           []string `json:"productTierIn,omitempty"`
-	ProductTierNotIn        []string `json:"productTierNotIn,omitempty"`
-	ProductTierGT           *string  `json:"productTierGT,omitempty"`
-	ProductTierGTE          *string  `json:"productTierGTE,omitempty"`
-	ProductTierLT           *string  `json:"productTierLT,omitempty"`
-	ProductTierLTE          *string  `json:"productTierLTE,omitempty"`
-	ProductTierContains     *string  `json:"productTierContains,omitempty"`
-	ProductTierHasPrefix    *string  `json:"productTierHasPrefix,omitempty"`
-	ProductTierHasSuffix    *string  `json:"productTierHasSuffix,omitempty"`
-	ProductTierIsNil        bool     `json:"productTierIsNil,omitempty"`
-	ProductTierNotNil       bool     `json:"productTierNotNil,omitempty"`
-	ProductTierEqualFold    *string  `json:"productTierEqualFold,omitempty"`
-	ProductTierContainsFold *string  `json:"productTierContainsFold,omitempty"`
-
-	// "stripe_product_tier_id" field predicates.
-	StripeProductTierID             *string  `json:"stripeProductTierID,omitempty"`
-	StripeProductTierIDNEQ          *string  `json:"stripeProductTierIDNEQ,omitempty"`
-	StripeProductTierIDIn           []string `json:"stripeProductTierIDIn,omitempty"`
-	StripeProductTierIDNotIn        []string `json:"stripeProductTierIDNotIn,omitempty"`
-	StripeProductTierIDGT           *string  `json:"stripeProductTierIDGT,omitempty"`
-	StripeProductTierIDGTE          *string  `json:"stripeProductTierIDGTE,omitempty"`
-	StripeProductTierIDLT           *string  `json:"stripeProductTierIDLT,omitempty"`
-	StripeProductTierIDLTE          *string  `json:"stripeProductTierIDLTE,omitempty"`
-	StripeProductTierIDContains     *string  `json:"stripeProductTierIDContains,omitempty"`
-	StripeProductTierIDHasPrefix    *string  `json:"stripeProductTierIDHasPrefix,omitempty"`
-	StripeProductTierIDHasSuffix    *string  `json:"stripeProductTierIDHasSuffix,omitempty"`
-	StripeProductTierIDIsNil        bool     `json:"stripeProductTierIDIsNil,omitempty"`
-	StripeProductTierIDNotNil       bool     `json:"stripeProductTierIDNotNil,omitempty"`
-	StripeProductTierIDEqualFold    *string  `json:"stripeProductTierIDEqualFold,omitempty"`
-	StripeProductTierIDContainsFold *string  `json:"stripeProductTierIDContainsFold,omitempty"`
 
 	// "stripe_subscription_status" field predicates.
 	StripeSubscriptionStatus             *string  `json:"stripeSubscriptionStatus,omitempty"`
@@ -48259,96 +48101,6 @@ func (i *OrgSubscriptionHistoryWhereInput) P() (predicate.OrgSubscriptionHistory
 	}
 	if i.StripeSubscriptionIDContainsFold != nil {
 		predicates = append(predicates, orgsubscriptionhistory.StripeSubscriptionIDContainsFold(*i.StripeSubscriptionIDContainsFold))
-	}
-	if i.ProductTier != nil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierEQ(*i.ProductTier))
-	}
-	if i.ProductTierNEQ != nil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierNEQ(*i.ProductTierNEQ))
-	}
-	if len(i.ProductTierIn) > 0 {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierIn(i.ProductTierIn...))
-	}
-	if len(i.ProductTierNotIn) > 0 {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierNotIn(i.ProductTierNotIn...))
-	}
-	if i.ProductTierGT != nil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierGT(*i.ProductTierGT))
-	}
-	if i.ProductTierGTE != nil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierGTE(*i.ProductTierGTE))
-	}
-	if i.ProductTierLT != nil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierLT(*i.ProductTierLT))
-	}
-	if i.ProductTierLTE != nil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierLTE(*i.ProductTierLTE))
-	}
-	if i.ProductTierContains != nil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierContains(*i.ProductTierContains))
-	}
-	if i.ProductTierHasPrefix != nil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierHasPrefix(*i.ProductTierHasPrefix))
-	}
-	if i.ProductTierHasSuffix != nil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierHasSuffix(*i.ProductTierHasSuffix))
-	}
-	if i.ProductTierIsNil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierIsNil())
-	}
-	if i.ProductTierNotNil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierNotNil())
-	}
-	if i.ProductTierEqualFold != nil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierEqualFold(*i.ProductTierEqualFold))
-	}
-	if i.ProductTierContainsFold != nil {
-		predicates = append(predicates, orgsubscriptionhistory.ProductTierContainsFold(*i.ProductTierContainsFold))
-	}
-	if i.StripeProductTierID != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDEQ(*i.StripeProductTierID))
-	}
-	if i.StripeProductTierIDNEQ != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDNEQ(*i.StripeProductTierIDNEQ))
-	}
-	if len(i.StripeProductTierIDIn) > 0 {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDIn(i.StripeProductTierIDIn...))
-	}
-	if len(i.StripeProductTierIDNotIn) > 0 {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDNotIn(i.StripeProductTierIDNotIn...))
-	}
-	if i.StripeProductTierIDGT != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDGT(*i.StripeProductTierIDGT))
-	}
-	if i.StripeProductTierIDGTE != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDGTE(*i.StripeProductTierIDGTE))
-	}
-	if i.StripeProductTierIDLT != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDLT(*i.StripeProductTierIDLT))
-	}
-	if i.StripeProductTierIDLTE != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDLTE(*i.StripeProductTierIDLTE))
-	}
-	if i.StripeProductTierIDContains != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDContains(*i.StripeProductTierIDContains))
-	}
-	if i.StripeProductTierIDHasPrefix != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDHasPrefix(*i.StripeProductTierIDHasPrefix))
-	}
-	if i.StripeProductTierIDHasSuffix != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDHasSuffix(*i.StripeProductTierIDHasSuffix))
-	}
-	if i.StripeProductTierIDIsNil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDIsNil())
-	}
-	if i.StripeProductTierIDNotNil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDNotNil())
-	}
-	if i.StripeProductTierIDEqualFold != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDEqualFold(*i.StripeProductTierIDEqualFold))
-	}
-	if i.StripeProductTierIDContainsFold != nil {
-		predicates = append(predicates, orgsubscriptionhistory.StripeProductTierIDContainsFold(*i.StripeProductTierIDContainsFold))
 	}
 	if i.StripeSubscriptionStatus != nil {
 		predicates = append(predicates, orgsubscriptionhistory.StripeSubscriptionStatusEQ(*i.StripeSubscriptionStatus))
