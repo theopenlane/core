@@ -1167,6 +1167,13 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 					},
 				},
 			}).
+			SetAssessmentMethods([]models.AssessmentMethod{
+				{
+					ID:     ulids.New().String(),
+					Type:   "test",
+					Method: gofakeit.HipsterSentence(5),
+				},
+			}).
 			SetMappedCategories([]string{"Governance", "Risk Management"}).
 			SetTags([]string{"tag1", "tag2"}).
 			SetSource(enums.ControlSourceUserDefined).
