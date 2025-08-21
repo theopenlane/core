@@ -2,7 +2,7 @@ services:
   riverboat:
     # the taskfile will set the tag based on the architecture, if you are running on x86_64 it will use the amd64-latest tag
     # if you run without the taskfile and the env var set it will default to arm64-latest
-    image: docker.io/library/riverboat:dev
+    image: ghcr.io/theopenlane/riverboat:${RIVERBOAT_TAG:-arm64-latest}
     volumes:
       - ${PWD}/docker/configs/riverboat/.config.yaml:/config/.config.yaml
     command:

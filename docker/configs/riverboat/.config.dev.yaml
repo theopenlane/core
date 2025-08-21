@@ -6,7 +6,7 @@ river:
       maxWorkers: 100
   workers:
     createCustomDomainWorker:
-      Config:
+      config:
         cloudflareApiKey: ""
         databaseHost: ""
         openlaneAPIHost: ""
@@ -18,7 +18,7 @@ river:
         enabled: false
         endpoint: query
     deleteCustomDomainWorker:
-      Config:
+      config:
         cloudflareApiKey: ""
         databaseHost: ""
         openlaneAPIHost: "http://host.docker.internal:17608"
@@ -42,7 +42,7 @@ river:
         openlaneAPIHost: "http://host.docker.internal:17608"
         openlaneAPIToken: "tolp__token"
     validateCustomDomainWorker:
-      Config:
+      config:
         cloudflareApiKey: ""
         databaseHost: ""
         openlaneAPIHost: "http://host.docker.internal:17608"
