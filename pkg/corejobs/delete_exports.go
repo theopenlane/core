@@ -16,6 +16,10 @@ type DeleteExportContentArgs struct {
 }
 
 type DeleteExportWorkerConfig struct {
+	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the delete export worker is enabled"`
+
+	Interval time.Duration `koanf:"interval" json:"interval" jsonschema:"required,default=10m description=the interval at which to run the delete export worker"`
+
 	OpenlaneAPIHost  string `koanf:"openlaneAPIHost" json:"openlaneAPIHost" jsonschema:"required description=the openlane api host"`
 	OpenlaneAPIToken string `koanf:"openlaneAPIToken" json:"openlaneAPIToken" jsonschema:"required description=the openlane api token"`
 

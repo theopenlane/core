@@ -36,7 +36,7 @@ func (CreateCustomDomainArgs) Kind() string { return "create_custom_domain" }
 type CreateCustomDomainWorker struct {
 	river.WorkerDefaults[CreateCustomDomainArgs]
 
-	Config CustomDomainConfig
+	Config CustomDomainConfig `koanf:"config" json:"config" jsonschema:"description=the configuration for custom domain creation"`
 
 	cfClient    intcloudflare.Client
 	olClient    olclient.OpenlaneClient

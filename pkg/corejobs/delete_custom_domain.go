@@ -32,7 +32,7 @@ func (DeleteCustomDomainArgs) Kind() string { return "delete_custom_domain" }
 type DeleteCustomDomainWorker struct {
 	river.WorkerDefaults[DeleteCustomDomainArgs]
 
-	Config CustomDomainConfig
+	Config CustomDomainConfig `koanf:"config" json:"config" jsonschema:"description=the configuration for custom domain deletion"`
 
 	cfClient intcloudflare.Client
 	olClient olclient.OpenlaneClient
