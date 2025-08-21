@@ -95,8 +95,8 @@ func TestQueryInternalPolicy(t *testing.T) {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetInternalPolicyByID(tc.ctx, tc.queryID)
 
-					if tc.errorMsg != "" {
-			assert.ErrorContains(t, err, tc.errorMsg)
+			if tc.errorMsg != "" {
+				assert.ErrorContains(t, err, tc.errorMsg)
 
 				if tc.updateBlockedGroup {
 					_, err := suite.client.api.UpdateInternalPolicy(testUser1.UserCtx, internalPolicy2.ID,
@@ -400,8 +400,8 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			}
 
 			resp, err := tc.client.CreateInternalPolicy(tc.ctx, tc.request)
-					if tc.expectedErr != "" {
-			assert.ErrorContains(t, err, tc.expectedErr)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}
@@ -642,8 +642,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateInternalPolicy(tc.ctx, tc.policyID, tc.request)
-					if tc.expectedErr != "" {
-			assert.ErrorContains(t, err, tc.expectedErr)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}
@@ -740,8 +740,8 @@ func TestMutationDeleteInternalPolicy(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteInternalPolicy(tc.ctx, tc.idToDelete)
-					if tc.expectedErr != "" {
-			assert.ErrorContains(t, err, tc.expectedErr)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}
@@ -858,8 +858,8 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateBulkInternalPolicy(tc.ctx, tc.ids, tc.input)
-					if tc.expectedErr != "" {
-			assert.ErrorContains(t, err, tc.expectedErr)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}

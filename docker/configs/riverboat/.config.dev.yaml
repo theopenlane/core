@@ -25,7 +25,9 @@ river:
         openlaneAPIToken: ""
     deleteExportContentWorker:
       config:
-        cutoffDuration: 30m
+        enabled: true
+        cutoffDuration: 1800000000000
+        interval: 600000000000
         openlaneAPIHost: "http://host.docker.internal:17608"
         openlaneAPIToken: ""
     emailWorker:
@@ -36,8 +38,9 @@ river:
         token: ""
     exportContentWorker:
       config:
+        enabled: true
         openlaneAPIHost: "http://host.docker.internal:17608"
-        openlaneAPIToken: "tolp_read_only_token"
+        openlaneAPIToken: "tolp__token"
     validateCustomDomainWorker:
       Config:
         cloudflareApiKey: ""

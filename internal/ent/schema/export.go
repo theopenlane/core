@@ -133,5 +133,6 @@ func (e Export) Policy() ent.Policy {
 func (Export) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookExport(),
+		hooks.HookUserCanViewTuple(),
 	}
 }
