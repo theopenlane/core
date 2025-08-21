@@ -331,7 +331,7 @@ tasks:
   go:build:
     desc: Runs go build for the core server
     cmds:
-      - "{{ .GOOS }} {{ .GOARCH }} go build -mod=mod -o core"
+      - "{{ .GOOS }} {{ .GOARCH }} go build -o core"
 
   go:build:ci:
     desc: Runs go build for the core server
@@ -342,7 +342,7 @@ tasks:
     aliases: [buildcli]
     desc: Runs go build for the openlane cli
     cmds:
-      - go build -tags cli -mod=mod -o openlane-cli ./cmd/cli
+      - go build -tags cli -o openlane-cli ./cmd/cli
 
   go:build-cli:ci:
     desc: Runs go build for the openlane cli in CI

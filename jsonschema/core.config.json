@@ -1202,6 +1202,12 @@
     },
     "river.QueueConfig": {
       "properties": {
+        "FetchCooldown": {
+          "type": "integer"
+        },
+        "FetchPollInterval": {
+          "type": "integer"
+        },
         "MaxWorkers": {
           "type": "integer"
         }

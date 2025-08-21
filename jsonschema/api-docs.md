@@ -902,6 +902,8 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**FetchCooldown**|`integer`|||
+|**FetchPollInterval**|`integer`|||
 |**MaxWorkers**|`integer`|||
 
 **Additional Properties:** not allowed  
