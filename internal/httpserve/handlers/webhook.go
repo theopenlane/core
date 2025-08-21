@@ -162,13 +162,6 @@ func unmarshalEventData[T interface{}](e *stripe.Event) (*T, error) {
 // HandleEvent unmarshals event data and triggers a corresponding function to be executed based on case match
 func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 	switch e.Type {
-	case stripe.EventTypeCustomerSubscriptionCreated:
-		subscription, err := unmarshalEventData[stripe.Subscription](e)
-		if err != nil {
-			return err
-		}
-
-		return h.handleSubscriptionCreated(c, subscription)
 	case stripe.EventTypeCustomerSubscriptionUpdated:
 		subscription, err := unmarshalEventData[stripe.Subscription](e)
 		if err != nil {
@@ -271,23 +264,6 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 	}
 
 	return h.invalidatePersonalAccessTokens(ctx, *ownerID)
-}
-
-// handleSubscriptionCreated handles subscription created events for new subscriptions
-func (h *Handler) handleSubscriptionCreated(ctx context.Context, s *stripe.Subscription) error {
-	if s.Customer == nil {
-		log.Error().Msg("subscription has no customer, cannot proceed")
-
-		return ErrSubscriberNotFound
-	}
-
-	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
-	if err != nil {
-		return err
-	}
-
-	_, err = h.createOrUpdateOrgSubscriptionWithStripe(ctx, s, customer)
-	return err
 }
 
 // handleSubscriptionUpdated handles subscription updated events
