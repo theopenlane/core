@@ -114,12 +114,12 @@ tasks:
         vars:
           EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
       - task: login:admin
+      - task: :fga:add:admin
       - task: createorg
         vars:
           ORG_NAME: admin-org
       - task: token:create
       - task: pat:create
-      - task: :fga:add:admin
 
   # === Login ===
   login:creds:
@@ -158,9 +158,14 @@ tasks:
 
   # === Token Management ===
   token:create:
+    desc: create api token for the user
+    cmds:
+      - go run main.go token create -n "generated-api-token"
+
+  pat:create:
     desc: create PAT for the user
     cmds:
-      - go run main.go pat create -n "generated-token" -o {{.ORG_ID}}
+      - go run main.go pat create -n "generated-personal-token" -o {{.ORG_ID}}
     vars:
       ORG_ID:
         sh: task org:get

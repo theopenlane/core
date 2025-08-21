@@ -1903,6 +1903,8 @@ func init() {
 	export.Hooks[4] = exportMixinHooks5[0]
 
 	export.Hooks[5] = exportHooks[0]
+
+	export.Hooks[6] = exportHooks[1]
 	exportMixinInters1 := exportMixin[1].Interceptors()
 	exportMixinInters2 := exportMixin[2].Interceptors()
 	exportMixinInters5 := exportMixin[5].Interceptors()

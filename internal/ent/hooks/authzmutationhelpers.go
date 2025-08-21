@@ -465,3 +465,45 @@ func getOrgMemberID(ctx context.Context, m utils.GenericMutation, userID string,
 
 	return orgMemberID, nil
 }
+
+// addUserRelation adds a relation to fga based on the authenticated user context, mutation
+// and relation type provided
+func addUserRelation(ctx context.Context, m generated.Mutation, relation string) error {
+	mut, _ := m.(utils.GenericMutation)
+
+	objID, exists := mut.ID()
+	if !exists {
+		return nil
+	}
+
+	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
+
+		return err
+	}
+
+	req := fgax.TupleRequest{
+		SubjectID:   ac.SubjectID,
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+		Relation:    relation,
+		ObjectID:    objID,
+		ObjectType:  GetObjectTypeFromEntMutation(m),
+	}
+
+	zerolog.Ctx(ctx).Debug().Interface("request", req).
+		Msg("creating can_view tuple for user")
+
+	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create can_view relationship tuple for user")
+
+		return ErrInternalServerError
+	}
+
+	return nil
+}
+
+// addUserCanViewRelation adds the can_view relation to fga based on the authenticated user context and mutation provided
+func addUserCanViewRelation(ctx context.Context, m generated.Mutation) error {
+	return addUserRelation(ctx, m, fgax.CanView)
+}

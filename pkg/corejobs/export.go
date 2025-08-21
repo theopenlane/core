@@ -211,7 +211,7 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 		Status: &enums.ExportStatusReady,
 	}
 
-	_, err = w.olClient.UpdateExport(ctx, job.Args.ExportID, updateInput, []*graphql.Upload{upload})
+	_, err = w.olClient.UpdateExport(ctx, job.Args.ExportID, updateInput, []*graphql.Upload{upload}, openlaneclient.WithImpersonationInterceptor(job.Args.UserID, job.Args.OrganizationID))
 	if err != nil {
 		log.Error().Err(err).Msg("failed to update export with file")
 		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed, err)
