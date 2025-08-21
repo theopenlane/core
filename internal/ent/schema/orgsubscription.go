@@ -44,17 +44,8 @@ func (OrgSubscription) Fields() []ent.Field {
 		field.String("stripe_subscription_id").
 			Comment("the stripe subscription id").
 			Optional(),
-		field.String("product_tier").
-			Comment("the common name of the product tier the subscription is associated with, e.g. starter tier").
-			Annotations(
-				entgql.OrderField("product_tier"),
-			).
-			Optional(),
 		field.JSON("product_price", models.Price{}).
 			Comment("the price of the product tier").
-			Optional(),
-		field.String("stripe_product_tier_id").
-			Comment("the product id that represents the tier in stripe").
 			Optional(),
 		field.String("stripe_subscription_status").
 			Comment("the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status").

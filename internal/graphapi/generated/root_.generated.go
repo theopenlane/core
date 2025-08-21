@@ -2818,8 +2818,6 @@ type ComplexityRoot struct {
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
 		ProductPrice             func(childComplexity int) int
-		ProductTier              func(childComplexity int) int
-		StripeProductTierID      func(childComplexity int) int
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
 		SubscriptionURL          func(childComplexity int) int
@@ -2853,9 +2851,7 @@ type ComplexityRoot struct {
 		Operation                func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
 		ProductPrice             func(childComplexity int) int
-		ProductTier              func(childComplexity int) int
 		Ref                      func(childComplexity int) int
-		StripeProductTierID      func(childComplexity int) int
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
 		Tags                     func(childComplexity int) int
@@ -19852,20 +19848,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrgSubscription.ProductPrice(childComplexity), true
 
-	case "OrgSubscription.productTier":
-		if e.complexity.OrgSubscription.ProductTier == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.ProductTier(childComplexity), true
-
-	case "OrgSubscription.stripeProductTierID":
-		if e.complexity.OrgSubscription.StripeProductTierID == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.StripeProductTierID(childComplexity), true
-
 	case "OrgSubscription.stripeSubscriptionID":
 		if e.complexity.OrgSubscription.StripeSubscriptionID == nil {
 			break
@@ -20034,26 +20016,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrgSubscriptionHistory.ProductPrice(childComplexity), true
 
-	case "OrgSubscriptionHistory.productTier":
-		if e.complexity.OrgSubscriptionHistory.ProductTier == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.ProductTier(childComplexity), true
-
 	case "OrgSubscriptionHistory.ref":
 		if e.complexity.OrgSubscriptionHistory.Ref == nil {
 			break
 		}
 
 		return e.complexity.OrgSubscriptionHistory.Ref(childComplexity), true
-
-	case "OrgSubscriptionHistory.stripeProductTierID":
-		if e.complexity.OrgSubscriptionHistory.StripeProductTierID == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.StripeProductTierID(childComplexity), true
 
 	case "OrgSubscriptionHistory.stripeSubscriptionID":
 		if e.complexity.OrgSubscriptionHistory.StripeSubscriptionID == nil {
@@ -61871,17 +61839,9 @@ type OrgSubscription implements Node {
   """
   stripeSubscriptionID: String
   """
-  the common name of the product tier the subscription is associated with, e.g. starter tier
-  """
-  productTier: String
-  """
   the price of the product tier
   """
   productPrice: Price
-  """
-  the product id that represents the tier in stripe
-  """
-  stripeProductTierID: String
   """
   the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
   """
@@ -61995,17 +61955,9 @@ type OrgSubscriptionHistory implements Node {
   """
   stripeSubscriptionID: String
   """
-  the common name of the product tier the subscription is associated with, e.g. starter tier
-  """
-  productTier: String
-  """
   the price of the product tier
   """
   productPrice: Price
-  """
-  the product id that represents the tier in stripe
-  """
-  stripeProductTierID: String
   """
   the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
   """
@@ -62093,7 +62045,6 @@ enum OrgSubscriptionHistoryOrderField {
   history_time
   created_at
   updated_at
-  product_tier
   stripe_subscription_status
   active
   expires_at
@@ -62256,42 +62207,6 @@ input OrgSubscriptionHistoryWhereInput {
   stripeSubscriptionIDEqualFold: String
   stripeSubscriptionIDContainsFold: String
   """
-  product_tier field predicates
-  """
-  productTier: String
-  productTierNEQ: String
-  productTierIn: [String!]
-  productTierNotIn: [String!]
-  productTierGT: String
-  productTierGTE: String
-  productTierLT: String
-  productTierLTE: String
-  productTierContains: String
-  productTierHasPrefix: String
-  productTierHasSuffix: String
-  productTierIsNil: Boolean
-  productTierNotNil: Boolean
-  productTierEqualFold: String
-  productTierContainsFold: String
-  """
-  stripe_product_tier_id field predicates
-  """
-  stripeProductTierID: String
-  stripeProductTierIDNEQ: String
-  stripeProductTierIDIn: [String!]
-  stripeProductTierIDNotIn: [String!]
-  stripeProductTierIDGT: String
-  stripeProductTierIDGTE: String
-  stripeProductTierIDLT: String
-  stripeProductTierIDLTE: String
-  stripeProductTierIDContains: String
-  stripeProductTierIDHasPrefix: String
-  stripeProductTierIDHasSuffix: String
-  stripeProductTierIDIsNil: Boolean
-  stripeProductTierIDNotNil: Boolean
-  stripeProductTierIDEqualFold: String
-  stripeProductTierIDContainsFold: String
-  """
   stripe_subscription_status field predicates
   """
   stripeSubscriptionStatus: String
@@ -62378,7 +62293,6 @@ Properties by which OrgSubscription connections can be ordered.
 enum OrgSubscriptionOrderField {
   created_at
   updated_at
-  product_tier
   stripe_subscription_status
   active
   expires_at
@@ -62504,42 +62418,6 @@ input OrgSubscriptionWhereInput {
   stripeSubscriptionIDNotNil: Boolean
   stripeSubscriptionIDEqualFold: String
   stripeSubscriptionIDContainsFold: String
-  """
-  product_tier field predicates
-  """
-  productTier: String
-  productTierNEQ: String
-  productTierIn: [String!]
-  productTierNotIn: [String!]
-  productTierGT: String
-  productTierGTE: String
-  productTierLT: String
-  productTierLTE: String
-  productTierContains: String
-  productTierHasPrefix: String
-  productTierHasSuffix: String
-  productTierIsNil: Boolean
-  productTierNotNil: Boolean
-  productTierEqualFold: String
-  productTierContainsFold: String
-  """
-  stripe_product_tier_id field predicates
-  """
-  stripeProductTierID: String
-  stripeProductTierIDNEQ: String
-  stripeProductTierIDIn: [String!]
-  stripeProductTierIDNotIn: [String!]
-  stripeProductTierIDGT: String
-  stripeProductTierIDGTE: String
-  stripeProductTierIDLT: String
-  stripeProductTierIDLTE: String
-  stripeProductTierIDContains: String
-  stripeProductTierIDHasPrefix: String
-  stripeProductTierIDHasSuffix: String
-  stripeProductTierIDIsNil: Boolean
-  stripeProductTierIDNotNil: Boolean
-  stripeProductTierIDEqualFold: String
-  stripeProductTierIDContainsFold: String
   """
   stripe_subscription_status field predicates
   """

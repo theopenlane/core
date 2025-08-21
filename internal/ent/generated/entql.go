@@ -1947,9 +1947,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscription.FieldTags:                     {Type: field.TypeJSON, Column: orgsubscription.FieldTags},
 			orgsubscription.FieldOwnerID:                  {Type: field.TypeString, Column: orgsubscription.FieldOwnerID},
 			orgsubscription.FieldStripeSubscriptionID:     {Type: field.TypeString, Column: orgsubscription.FieldStripeSubscriptionID},
-			orgsubscription.FieldProductTier:              {Type: field.TypeString, Column: orgsubscription.FieldProductTier},
 			orgsubscription.FieldProductPrice:             {Type: field.TypeJSON, Column: orgsubscription.FieldProductPrice},
-			orgsubscription.FieldStripeProductTierID:      {Type: field.TypeString, Column: orgsubscription.FieldStripeProductTierID},
 			orgsubscription.FieldStripeSubscriptionStatus: {Type: field.TypeString, Column: orgsubscription.FieldStripeSubscriptionStatus},
 			orgsubscription.FieldActive:                   {Type: field.TypeBool, Column: orgsubscription.FieldActive},
 			orgsubscription.FieldExpiresAt:                {Type: field.TypeTime, Column: orgsubscription.FieldExpiresAt},
@@ -1982,9 +1980,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscriptionhistory.FieldTags:                     {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldTags},
 			orgsubscriptionhistory.FieldOwnerID:                  {Type: field.TypeString, Column: orgsubscriptionhistory.FieldOwnerID},
 			orgsubscriptionhistory.FieldStripeSubscriptionID:     {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeSubscriptionID},
-			orgsubscriptionhistory.FieldProductTier:              {Type: field.TypeString, Column: orgsubscriptionhistory.FieldProductTier},
 			orgsubscriptionhistory.FieldProductPrice:             {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldProductPrice},
-			orgsubscriptionhistory.FieldStripeProductTierID:      {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeProductTierID},
 			orgsubscriptionhistory.FieldStripeSubscriptionStatus: {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeSubscriptionStatus},
 			orgsubscriptionhistory.FieldActive:                   {Type: field.TypeBool, Column: orgsubscriptionhistory.FieldActive},
 			orgsubscriptionhistory.FieldExpiresAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldExpiresAt},
@@ -19495,19 +19491,9 @@ func (f *OrgSubscriptionFilter) WhereStripeSubscriptionID(p entql.StringP) {
 	f.Where(p.Field(orgsubscription.FieldStripeSubscriptionID))
 }
 
-// WhereProductTier applies the entql string predicate on the product_tier field.
-func (f *OrgSubscriptionFilter) WhereProductTier(p entql.StringP) {
-	f.Where(p.Field(orgsubscription.FieldProductTier))
-}
-
 // WhereProductPrice applies the entql json.RawMessage predicate on the product_price field.
 func (f *OrgSubscriptionFilter) WhereProductPrice(p entql.BytesP) {
 	f.Where(p.Field(orgsubscription.FieldProductPrice))
-}
-
-// WhereStripeProductTierID applies the entql string predicate on the stripe_product_tier_id field.
-func (f *OrgSubscriptionFilter) WhereStripeProductTierID(p entql.StringP) {
-	f.Where(p.Field(orgsubscription.FieldStripeProductTierID))
 }
 
 // WhereStripeSubscriptionStatus applies the entql string predicate on the stripe_subscription_status field.
@@ -19715,19 +19701,9 @@ func (f *OrgSubscriptionHistoryFilter) WhereStripeSubscriptionID(p entql.StringP
 	f.Where(p.Field(orgsubscriptionhistory.FieldStripeSubscriptionID))
 }
 
-// WhereProductTier applies the entql string predicate on the product_tier field.
-func (f *OrgSubscriptionHistoryFilter) WhereProductTier(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldProductTier))
-}
-
 // WhereProductPrice applies the entql json.RawMessage predicate on the product_price field.
 func (f *OrgSubscriptionHistoryFilter) WhereProductPrice(p entql.BytesP) {
 	f.Where(p.Field(orgsubscriptionhistory.FieldProductPrice))
-}
-
-// WhereStripeProductTierID applies the entql string predicate on the stripe_product_tier_id field.
-func (f *OrgSubscriptionHistoryFilter) WhereStripeProductTierID(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldStripeProductTierID))
 }
 
 // WhereStripeSubscriptionStatus applies the entql string predicate on the stripe_subscription_status field.

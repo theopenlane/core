@@ -16428,12 +16428,8 @@ type OrgSubscription struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the stripe subscription id
 	StripeSubscriptionID *string `json:"stripeSubscriptionID,omitempty"`
-	// the common name of the product tier the subscription is associated with, e.g. starter tier
-	ProductTier *string `json:"productTier,omitempty"`
 	// the price of the product tier
 	ProductPrice *models.Price `json:"productPrice,omitempty"`
-	// the product id that represents the tier in stripe
-	StripeProductTierID *string `json:"stripeProductTierID,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
 	StripeSubscriptionStatus *string `json:"stripeSubscriptionStatus,omitempty"`
 	// indicates if the subscription is active
@@ -16491,12 +16487,8 @@ type OrgSubscriptionHistory struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the stripe subscription id
 	StripeSubscriptionID *string `json:"stripeSubscriptionID,omitempty"`
-	// the common name of the product tier the subscription is associated with, e.g. starter tier
-	ProductTier *string `json:"productTier,omitempty"`
 	// the price of the product tier
 	ProductPrice *models.Price `json:"productPrice,omitempty"`
-	// the product id that represents the tier in stripe
-	StripeProductTierID *string `json:"stripeProductTierID,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
 	StripeSubscriptionStatus *string `json:"stripeSubscriptionStatus,omitempty"`
 	// indicates if the subscription is active
@@ -16674,38 +16666,6 @@ type OrgSubscriptionHistoryWhereInput struct {
 	StripeSubscriptionIDNotNil       *bool    `json:"stripeSubscriptionIDNotNil,omitempty"`
 	StripeSubscriptionIDEqualFold    *string  `json:"stripeSubscriptionIDEqualFold,omitempty"`
 	StripeSubscriptionIDContainsFold *string  `json:"stripeSubscriptionIDContainsFold,omitempty"`
-	// product_tier field predicates
-	ProductTier             *string  `json:"productTier,omitempty"`
-	ProductTierNeq          *string  `json:"productTierNEQ,omitempty"`
-	ProductTierIn           []string `json:"productTierIn,omitempty"`
-	ProductTierNotIn        []string `json:"productTierNotIn,omitempty"`
-	ProductTierGt           *string  `json:"productTierGT,omitempty"`
-	ProductTierGte          *string  `json:"productTierGTE,omitempty"`
-	ProductTierLt           *string  `json:"productTierLT,omitempty"`
-	ProductTierLte          *string  `json:"productTierLTE,omitempty"`
-	ProductTierContains     *string  `json:"productTierContains,omitempty"`
-	ProductTierHasPrefix    *string  `json:"productTierHasPrefix,omitempty"`
-	ProductTierHasSuffix    *string  `json:"productTierHasSuffix,omitempty"`
-	ProductTierIsNil        *bool    `json:"productTierIsNil,omitempty"`
-	ProductTierNotNil       *bool    `json:"productTierNotNil,omitempty"`
-	ProductTierEqualFold    *string  `json:"productTierEqualFold,omitempty"`
-	ProductTierContainsFold *string  `json:"productTierContainsFold,omitempty"`
-	// stripe_product_tier_id field predicates
-	StripeProductTierID             *string  `json:"stripeProductTierID,omitempty"`
-	StripeProductTierIdneq          *string  `json:"stripeProductTierIDNEQ,omitempty"`
-	StripeProductTierIDIn           []string `json:"stripeProductTierIDIn,omitempty"`
-	StripeProductTierIDNotIn        []string `json:"stripeProductTierIDNotIn,omitempty"`
-	StripeProductTierIdgt           *string  `json:"stripeProductTierIDGT,omitempty"`
-	StripeProductTierIdgte          *string  `json:"stripeProductTierIDGTE,omitempty"`
-	StripeProductTierIdlt           *string  `json:"stripeProductTierIDLT,omitempty"`
-	StripeProductTierIdlte          *string  `json:"stripeProductTierIDLTE,omitempty"`
-	StripeProductTierIDContains     *string  `json:"stripeProductTierIDContains,omitempty"`
-	StripeProductTierIDHasPrefix    *string  `json:"stripeProductTierIDHasPrefix,omitempty"`
-	StripeProductTierIDHasSuffix    *string  `json:"stripeProductTierIDHasSuffix,omitempty"`
-	StripeProductTierIDIsNil        *bool    `json:"stripeProductTierIDIsNil,omitempty"`
-	StripeProductTierIDNotNil       *bool    `json:"stripeProductTierIDNotNil,omitempty"`
-	StripeProductTierIDEqualFold    *string  `json:"stripeProductTierIDEqualFold,omitempty"`
-	StripeProductTierIDContainsFold *string  `json:"stripeProductTierIDContainsFold,omitempty"`
 	// stripe_subscription_status field predicates
 	StripeSubscriptionStatus             *string  `json:"stripeSubscriptionStatus,omitempty"`
 	StripeSubscriptionStatusNeq          *string  `json:"stripeSubscriptionStatusNEQ,omitempty"`
@@ -16876,38 +16836,6 @@ type OrgSubscriptionWhereInput struct {
 	StripeSubscriptionIDNotNil       *bool    `json:"stripeSubscriptionIDNotNil,omitempty"`
 	StripeSubscriptionIDEqualFold    *string  `json:"stripeSubscriptionIDEqualFold,omitempty"`
 	StripeSubscriptionIDContainsFold *string  `json:"stripeSubscriptionIDContainsFold,omitempty"`
-	// product_tier field predicates
-	ProductTier             *string  `json:"productTier,omitempty"`
-	ProductTierNeq          *string  `json:"productTierNEQ,omitempty"`
-	ProductTierIn           []string `json:"productTierIn,omitempty"`
-	ProductTierNotIn        []string `json:"productTierNotIn,omitempty"`
-	ProductTierGt           *string  `json:"productTierGT,omitempty"`
-	ProductTierGte          *string  `json:"productTierGTE,omitempty"`
-	ProductTierLt           *string  `json:"productTierLT,omitempty"`
-	ProductTierLte          *string  `json:"productTierLTE,omitempty"`
-	ProductTierContains     *string  `json:"productTierContains,omitempty"`
-	ProductTierHasPrefix    *string  `json:"productTierHasPrefix,omitempty"`
-	ProductTierHasSuffix    *string  `json:"productTierHasSuffix,omitempty"`
-	ProductTierIsNil        *bool    `json:"productTierIsNil,omitempty"`
-	ProductTierNotNil       *bool    `json:"productTierNotNil,omitempty"`
-	ProductTierEqualFold    *string  `json:"productTierEqualFold,omitempty"`
-	ProductTierContainsFold *string  `json:"productTierContainsFold,omitempty"`
-	// stripe_product_tier_id field predicates
-	StripeProductTierID             *string  `json:"stripeProductTierID,omitempty"`
-	StripeProductTierIdneq          *string  `json:"stripeProductTierIDNEQ,omitempty"`
-	StripeProductTierIDIn           []string `json:"stripeProductTierIDIn,omitempty"`
-	StripeProductTierIDNotIn        []string `json:"stripeProductTierIDNotIn,omitempty"`
-	StripeProductTierIdgt           *string  `json:"stripeProductTierIDGT,omitempty"`
-	StripeProductTierIdgte          *string  `json:"stripeProductTierIDGTE,omitempty"`
-	StripeProductTierIdlt           *string  `json:"stripeProductTierIDLT,omitempty"`
-	StripeProductTierIdlte          *string  `json:"stripeProductTierIDLTE,omitempty"`
-	StripeProductTierIDContains     *string  `json:"stripeProductTierIDContains,omitempty"`
-	StripeProductTierIDHasPrefix    *string  `json:"stripeProductTierIDHasPrefix,omitempty"`
-	StripeProductTierIDHasSuffix    *string  `json:"stripeProductTierIDHasSuffix,omitempty"`
-	StripeProductTierIDIsNil        *bool    `json:"stripeProductTierIDIsNil,omitempty"`
-	StripeProductTierIDNotNil       *bool    `json:"stripeProductTierIDNotNil,omitempty"`
-	StripeProductTierIDEqualFold    *string  `json:"stripeProductTierIDEqualFold,omitempty"`
-	StripeProductTierIDContainsFold *string  `json:"stripeProductTierIDContainsFold,omitempty"`
 	// stripe_subscription_status field predicates
 	StripeSubscriptionStatus             *string  `json:"stripeSubscriptionStatus,omitempty"`
 	StripeSubscriptionStatusNeq          *string  `json:"stripeSubscriptionStatusNEQ,omitempty"`
@@ -35236,7 +35164,6 @@ const (
 	OrgSubscriptionHistoryOrderFieldHistoryTime              OrgSubscriptionHistoryOrderField = "history_time"
 	OrgSubscriptionHistoryOrderFieldCreatedAt                OrgSubscriptionHistoryOrderField = "created_at"
 	OrgSubscriptionHistoryOrderFieldUpdatedAt                OrgSubscriptionHistoryOrderField = "updated_at"
-	OrgSubscriptionHistoryOrderFieldProductTier              OrgSubscriptionHistoryOrderField = "product_tier"
 	OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus OrgSubscriptionHistoryOrderField = "stripe_subscription_status"
 	OrgSubscriptionHistoryOrderFieldActive                   OrgSubscriptionHistoryOrderField = "active"
 	OrgSubscriptionHistoryOrderFieldExpiresAt                OrgSubscriptionHistoryOrderField = "expires_at"
@@ -35248,7 +35175,6 @@ var AllOrgSubscriptionHistoryOrderField = []OrgSubscriptionHistoryOrderField{
 	OrgSubscriptionHistoryOrderFieldHistoryTime,
 	OrgSubscriptionHistoryOrderFieldCreatedAt,
 	OrgSubscriptionHistoryOrderFieldUpdatedAt,
-	OrgSubscriptionHistoryOrderFieldProductTier,
 	OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus,
 	OrgSubscriptionHistoryOrderFieldActive,
 	OrgSubscriptionHistoryOrderFieldExpiresAt,
@@ -35258,7 +35184,7 @@ var AllOrgSubscriptionHistoryOrderField = []OrgSubscriptionHistoryOrderField{
 
 func (e OrgSubscriptionHistoryOrderField) IsValid() bool {
 	switch e {
-	case OrgSubscriptionHistoryOrderFieldHistoryTime, OrgSubscriptionHistoryOrderFieldCreatedAt, OrgSubscriptionHistoryOrderFieldUpdatedAt, OrgSubscriptionHistoryOrderFieldProductTier, OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus, OrgSubscriptionHistoryOrderFieldActive, OrgSubscriptionHistoryOrderFieldExpiresAt, OrgSubscriptionHistoryOrderFieldTrialExpiresAt, OrgSubscriptionHistoryOrderFieldDaysUntilDue:
+	case OrgSubscriptionHistoryOrderFieldHistoryTime, OrgSubscriptionHistoryOrderFieldCreatedAt, OrgSubscriptionHistoryOrderFieldUpdatedAt, OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus, OrgSubscriptionHistoryOrderFieldActive, OrgSubscriptionHistoryOrderFieldExpiresAt, OrgSubscriptionHistoryOrderFieldTrialExpiresAt, OrgSubscriptionHistoryOrderFieldDaysUntilDue:
 		return true
 	}
 	return false
@@ -35305,7 +35231,6 @@ type OrgSubscriptionOrderField string
 const (
 	OrgSubscriptionOrderFieldCreatedAt                OrgSubscriptionOrderField = "created_at"
 	OrgSubscriptionOrderFieldUpdatedAt                OrgSubscriptionOrderField = "updated_at"
-	OrgSubscriptionOrderFieldProductTier              OrgSubscriptionOrderField = "product_tier"
 	OrgSubscriptionOrderFieldStripeSubscriptionStatus OrgSubscriptionOrderField = "stripe_subscription_status"
 	OrgSubscriptionOrderFieldActive                   OrgSubscriptionOrderField = "active"
 	OrgSubscriptionOrderFieldExpiresAt                OrgSubscriptionOrderField = "expires_at"
@@ -35316,7 +35241,6 @@ const (
 var AllOrgSubscriptionOrderField = []OrgSubscriptionOrderField{
 	OrgSubscriptionOrderFieldCreatedAt,
 	OrgSubscriptionOrderFieldUpdatedAt,
-	OrgSubscriptionOrderFieldProductTier,
 	OrgSubscriptionOrderFieldStripeSubscriptionStatus,
 	OrgSubscriptionOrderFieldActive,
 	OrgSubscriptionOrderFieldExpiresAt,
@@ -35326,7 +35250,7 @@ var AllOrgSubscriptionOrderField = []OrgSubscriptionOrderField{
 
 func (e OrgSubscriptionOrderField) IsValid() bool {
 	switch e {
-	case OrgSubscriptionOrderFieldCreatedAt, OrgSubscriptionOrderFieldUpdatedAt, OrgSubscriptionOrderFieldProductTier, OrgSubscriptionOrderFieldStripeSubscriptionStatus, OrgSubscriptionOrderFieldActive, OrgSubscriptionOrderFieldExpiresAt, OrgSubscriptionOrderFieldTrialExpiresAt, OrgSubscriptionOrderFieldDaysUntilDue:
+	case OrgSubscriptionOrderFieldCreatedAt, OrgSubscriptionOrderFieldUpdatedAt, OrgSubscriptionOrderFieldStripeSubscriptionStatus, OrgSubscriptionOrderFieldActive, OrgSubscriptionOrderFieldExpiresAt, OrgSubscriptionOrderFieldTrialExpiresAt, OrgSubscriptionOrderFieldDaysUntilDue:
 		return true
 	}
 	return false

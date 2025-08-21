@@ -163,26 +163,6 @@ func (_u *OrgSubscriptionHistoryUpdate) ClearStripeSubscriptionID() *OrgSubscrip
 	return _u
 }
 
-// SetProductTier sets the "product_tier" field.
-func (_u *OrgSubscriptionHistoryUpdate) SetProductTier(v string) *OrgSubscriptionHistoryUpdate {
-	_u.mutation.SetProductTier(v)
-	return _u
-}
-
-// SetNillableProductTier sets the "product_tier" field if the given value is not nil.
-func (_u *OrgSubscriptionHistoryUpdate) SetNillableProductTier(v *string) *OrgSubscriptionHistoryUpdate {
-	if v != nil {
-		_u.SetProductTier(*v)
-	}
-	return _u
-}
-
-// ClearProductTier clears the value of the "product_tier" field.
-func (_u *OrgSubscriptionHistoryUpdate) ClearProductTier() *OrgSubscriptionHistoryUpdate {
-	_u.mutation.ClearProductTier()
-	return _u
-}
-
 // SetProductPrice sets the "product_price" field.
 func (_u *OrgSubscriptionHistoryUpdate) SetProductPrice(v models.Price) *OrgSubscriptionHistoryUpdate {
 	_u.mutation.SetProductPrice(v)
@@ -200,26 +180,6 @@ func (_u *OrgSubscriptionHistoryUpdate) SetNillableProductPrice(v *models.Price)
 // ClearProductPrice clears the value of the "product_price" field.
 func (_u *OrgSubscriptionHistoryUpdate) ClearProductPrice() *OrgSubscriptionHistoryUpdate {
 	_u.mutation.ClearProductPrice()
-	return _u
-}
-
-// SetStripeProductTierID sets the "stripe_product_tier_id" field.
-func (_u *OrgSubscriptionHistoryUpdate) SetStripeProductTierID(v string) *OrgSubscriptionHistoryUpdate {
-	_u.mutation.SetStripeProductTierID(v)
-	return _u
-}
-
-// SetNillableStripeProductTierID sets the "stripe_product_tier_id" field if the given value is not nil.
-func (_u *OrgSubscriptionHistoryUpdate) SetNillableStripeProductTierID(v *string) *OrgSubscriptionHistoryUpdate {
-	if v != nil {
-		_u.SetStripeProductTierID(*v)
-	}
-	return _u
-}
-
-// ClearStripeProductTierID clears the value of the "stripe_product_tier_id" field.
-func (_u *OrgSubscriptionHistoryUpdate) ClearStripeProductTierID() *OrgSubscriptionHistoryUpdate {
-	_u.mutation.ClearStripeProductTierID()
 	return _u
 }
 
@@ -465,23 +425,11 @@ func (_u *OrgSubscriptionHistoryUpdate) sqlSave(ctx context.Context) (_node int,
 	if _u.mutation.StripeSubscriptionIDCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldStripeSubscriptionID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProductTier(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldProductTier, field.TypeString, value)
-	}
-	if _u.mutation.ProductTierCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldProductTier, field.TypeString)
-	}
 	if value, ok := _u.mutation.ProductPrice(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON, value)
 	}
 	if _u.mutation.ProductPriceCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.StripeProductTierID(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldStripeProductTierID, field.TypeString, value)
-	}
-	if _u.mutation.StripeProductTierIDCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldStripeProductTierID, field.TypeString)
 	}
 	if value, ok := _u.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeSubscriptionStatus, field.TypeString, value)
@@ -686,26 +634,6 @@ func (_u *OrgSubscriptionHistoryUpdateOne) ClearStripeSubscriptionID() *OrgSubsc
 	return _u
 }
 
-// SetProductTier sets the "product_tier" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetProductTier(v string) *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.SetProductTier(v)
-	return _u
-}
-
-// SetNillableProductTier sets the "product_tier" field if the given value is not nil.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetNillableProductTier(v *string) *OrgSubscriptionHistoryUpdateOne {
-	if v != nil {
-		_u.SetProductTier(*v)
-	}
-	return _u
-}
-
-// ClearProductTier clears the value of the "product_tier" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) ClearProductTier() *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.ClearProductTier()
-	return _u
-}
-
 // SetProductPrice sets the "product_price" field.
 func (_u *OrgSubscriptionHistoryUpdateOne) SetProductPrice(v models.Price) *OrgSubscriptionHistoryUpdateOne {
 	_u.mutation.SetProductPrice(v)
@@ -723,26 +651,6 @@ func (_u *OrgSubscriptionHistoryUpdateOne) SetNillableProductPrice(v *models.Pri
 // ClearProductPrice clears the value of the "product_price" field.
 func (_u *OrgSubscriptionHistoryUpdateOne) ClearProductPrice() *OrgSubscriptionHistoryUpdateOne {
 	_u.mutation.ClearProductPrice()
-	return _u
-}
-
-// SetStripeProductTierID sets the "stripe_product_tier_id" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetStripeProductTierID(v string) *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.SetStripeProductTierID(v)
-	return _u
-}
-
-// SetNillableStripeProductTierID sets the "stripe_product_tier_id" field if the given value is not nil.
-func (_u *OrgSubscriptionHistoryUpdateOne) SetNillableStripeProductTierID(v *string) *OrgSubscriptionHistoryUpdateOne {
-	if v != nil {
-		_u.SetStripeProductTierID(*v)
-	}
-	return _u
-}
-
-// ClearStripeProductTierID clears the value of the "stripe_product_tier_id" field.
-func (_u *OrgSubscriptionHistoryUpdateOne) ClearStripeProductTierID() *OrgSubscriptionHistoryUpdateOne {
-	_u.mutation.ClearStripeProductTierID()
 	return _u
 }
 
@@ -1018,23 +926,11 @@ func (_u *OrgSubscriptionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if _u.mutation.StripeSubscriptionIDCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldStripeSubscriptionID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProductTier(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldProductTier, field.TypeString, value)
-	}
-	if _u.mutation.ProductTierCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldProductTier, field.TypeString)
-	}
 	if value, ok := _u.mutation.ProductPrice(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON, value)
 	}
 	if _u.mutation.ProductPriceCleared() {
 		_spec.ClearField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.StripeProductTierID(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldStripeProductTierID, field.TypeString, value)
-	}
-	if _u.mutation.StripeProductTierIDCleared() {
-		_spec.ClearField(orgsubscriptionhistory.FieldStripeProductTierID, field.TypeString)
 	}
 	if value, ok := _u.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeSubscriptionStatus, field.TypeString, value)

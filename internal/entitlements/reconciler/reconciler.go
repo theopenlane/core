@@ -174,10 +174,8 @@ func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.Org
 		return ErrMultiplePrices
 	}
 
-	productName := ""
 	price := models.Price{}
 	if len(c.Prices) == 1 {
-		productName = c.Prices[0].ProductName
 		price = models.Price{
 			Amount:   c.Prices[0].Price,
 			Currency: c.Prices[0].Currency,
@@ -201,10 +199,8 @@ func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.Org
 		SetStripeSubscriptionID(c.StripeSubscriptionID).
 		SetStripeSubscriptionStatus(c.Subscription.Status).
 		SetActive(active).
-		SetProductTier(productName).
 		SetFeatures(c.FeatureNames).
 		SetFeatureLookupKeys(c.Features).
-		SetStripeProductTierID(c.Subscription.ProductID).
 		SetProductPrice(price)
 
 	if c.Status == string(stripe.SubscriptionStatusTrialing) {
