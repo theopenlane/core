@@ -88,6 +88,14 @@ See the [README](/config/README.md) in the `config` directory.
    task docker:all:up
    ```
 
+   Run fully in docker, with a published image:
+   ```bash
+   task docker:core:published
+   ```
+
+   :::note
+   This expects a config at `config/.config.docker.yaml`. This is to easily maintain a docker vs. local version where the urls to talk to services are different
+
 1. In a separate terminal, with the server running, you can create a verified
    test user by running:
 

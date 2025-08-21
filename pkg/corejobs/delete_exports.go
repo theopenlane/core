@@ -31,6 +31,11 @@ type DeleteExportWorkerConfig struct {
 // Kind satisfies the river.Job interface
 func (DeleteExportContentArgs) Kind() string { return "delete_export_content" }
 
+// InsertOpts provides the insertion options for the delete export content job
+func (DeleteExportContentArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{MaxAttempts: 3}
+}
+
 // DeleteExportContentWorker deletes exports that are older than the configured cutoff duration
 type DeleteExportContentWorker struct {
 	river.WorkerDefaults[DeleteExportContentArgs]
