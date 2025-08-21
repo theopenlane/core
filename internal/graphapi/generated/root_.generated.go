@@ -68688,9 +68688,10 @@ ProgramHistoryProgramStatus is enum for the field status
 enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramStatus") {
   NOT_STARTED
   IN_PROGRESS
+  ACTION_REQUIRED
   READY_FOR_AUDITOR
   COMPLETED
-  ACTION_REQUIRED
+  ARCHIVED
 }
 """
 ProgramHistoryProgramType is enum for the field program_type
@@ -69448,9 +69449,10 @@ ProgramProgramStatus is enum for the field status
 enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramStatus") {
   NOT_STARTED
   IN_PROGRESS
+  ACTION_REQUIRED
   READY_FOR_AUDITOR
   COMPLETED
-  ACTION_REQUIRED
+  ARCHIVED
 }
 """
 ProgramProgramType is enum for the field program_type
