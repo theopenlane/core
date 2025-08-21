@@ -21,7 +21,7 @@ load_template() {
             value="${arg#*=}"
             # Escape special characters in value and use printf for safe substitution
             escaped_value=$(printf '%s\n' "$value" | sed 's/[[\.*^$()+?{|]/\\&/g')
-            content=$(echo "$content" | sed "s/{{${key}}}/$escaped_value/g")
+            content=$(echo "$content" | sed "s|{{${key}}}|$escaped_value|g")
         fi
     done
 
