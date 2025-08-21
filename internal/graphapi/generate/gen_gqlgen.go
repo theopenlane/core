@@ -6,11 +6,11 @@ import (
 	"github.com/99designs/gqlgen/api"
 	"github.com/99designs/gqlgen/codegen/config"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/internal/ent/schema"
+	"github.com/theopenlane/core/internal/genhelpers"
 	"github.com/theopenlane/gqlgen-plugins/bulkgen"
 	"github.com/theopenlane/gqlgen-plugins/resolvergen"
 	"github.com/theopenlane/gqlgen-plugins/searchgen"
-
-	"github.com/theopenlane/core/internal/genhelpers"
 )
 
 const (
@@ -36,9 +36,10 @@ func main() {
 	rulePackage := "github.com/theopenlane/core/internal/ent/privacy/rule"
 
 	if err := api.Generate(cfg,
-		api.ReplacePlugin(resolvergen.NewWithOptions(resolvergen.WithEntGeneratedPackage(
-			entPackage,
-		))), // replace the resolvergen plugin
+		api.ReplacePlugin(resolvergen.NewWithOptions(
+			resolvergen.WithEntGeneratedPackage(entPackage),
+			resolvergen.WithArchivableSchemas([]string{schema.Program{}.Name()}),
+		)), // replace the resolvergen plugin
 		api.AddPlugin(bulkgen.NewWithOptions(
 			bulkgen.WithModelPackage(modelImport),
 			bulkgen.WithEntGeneratedPackage(entPackage),
