@@ -73,12 +73,6 @@ data:
   CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BETAHEADER: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.betaHeader }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_LEGACYTEXTCOMPLETION: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.legacyTextCompletion }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BASEURL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.baseURL }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_MISTRAL_URL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.mistral.url }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_CREDENTIALSPATH: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.gemini.credentialsPath }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_MAXTOKENS: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.gemini.maxTokens }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_HUGGINGFACE_URL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.huggingFace.url }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_OLLAMA_MODEL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.ollama.model }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_OLLAMA_URL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.ollama.url }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_ACCOUNTID: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.cloudflare.accountID }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_SERVERURL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.cloudflare.serverURL }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_URL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.openai.url }}
