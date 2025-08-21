@@ -102,23 +102,6 @@ entConfig:
                 apiKey: ""
                 model: ""
                 serverURL: ""
-            gemini:
-                apiKey: ""
-                credentialsJSON: ""
-                credentialsPath: ""
-                maxTokens: 0
-                model: ""
-            huggingFace:
-                apiKey: ""
-                model: ""
-                url: ""
-            mistral:
-                apiKey: ""
-                model: ""
-                url: ""
-            ollama:
-                model: ""
-                url: ""
             openai:
                 apiKey: ""
                 model: ""
