@@ -168,26 +168,6 @@ func (_u *OrgSubscriptionUpdate) ClearStripeSubscriptionID() *OrgSubscriptionUpd
 	return _u
 }
 
-// SetProductTier sets the "product_tier" field.
-func (_u *OrgSubscriptionUpdate) SetProductTier(v string) *OrgSubscriptionUpdate {
-	_u.mutation.SetProductTier(v)
-	return _u
-}
-
-// SetNillableProductTier sets the "product_tier" field if the given value is not nil.
-func (_u *OrgSubscriptionUpdate) SetNillableProductTier(v *string) *OrgSubscriptionUpdate {
-	if v != nil {
-		_u.SetProductTier(*v)
-	}
-	return _u
-}
-
-// ClearProductTier clears the value of the "product_tier" field.
-func (_u *OrgSubscriptionUpdate) ClearProductTier() *OrgSubscriptionUpdate {
-	_u.mutation.ClearProductTier()
-	return _u
-}
-
 // SetProductPrice sets the "product_price" field.
 func (_u *OrgSubscriptionUpdate) SetProductPrice(v models.Price) *OrgSubscriptionUpdate {
 	_u.mutation.SetProductPrice(v)
@@ -205,26 +185,6 @@ func (_u *OrgSubscriptionUpdate) SetNillableProductPrice(v *models.Price) *OrgSu
 // ClearProductPrice clears the value of the "product_price" field.
 func (_u *OrgSubscriptionUpdate) ClearProductPrice() *OrgSubscriptionUpdate {
 	_u.mutation.ClearProductPrice()
-	return _u
-}
-
-// SetStripeProductTierID sets the "stripe_product_tier_id" field.
-func (_u *OrgSubscriptionUpdate) SetStripeProductTierID(v string) *OrgSubscriptionUpdate {
-	_u.mutation.SetStripeProductTierID(v)
-	return _u
-}
-
-// SetNillableStripeProductTierID sets the "stripe_product_tier_id" field if the given value is not nil.
-func (_u *OrgSubscriptionUpdate) SetNillableStripeProductTierID(v *string) *OrgSubscriptionUpdate {
-	if v != nil {
-		_u.SetStripeProductTierID(*v)
-	}
-	return _u
-}
-
-// ClearStripeProductTierID clears the value of the "stripe_product_tier_id" field.
-func (_u *OrgSubscriptionUpdate) ClearStripeProductTierID() *OrgSubscriptionUpdate {
-	_u.mutation.ClearStripeProductTierID()
 	return _u
 }
 
@@ -259,26 +219,6 @@ func (_u *OrgSubscriptionUpdate) SetNillableActive(v *bool) *OrgSubscriptionUpda
 	if v != nil {
 		_u.SetActive(*v)
 	}
-	return _u
-}
-
-// SetStripeCustomerID sets the "stripe_customer_id" field.
-func (_u *OrgSubscriptionUpdate) SetStripeCustomerID(v string) *OrgSubscriptionUpdate {
-	_u.mutation.SetStripeCustomerID(v)
-	return _u
-}
-
-// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
-func (_u *OrgSubscriptionUpdate) SetNillableStripeCustomerID(v *string) *OrgSubscriptionUpdate {
-	if v != nil {
-		_u.SetStripeCustomerID(*v)
-	}
-	return _u
-}
-
-// ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
-func (_u *OrgSubscriptionUpdate) ClearStripeCustomerID() *OrgSubscriptionUpdate {
-	_u.mutation.ClearStripeCustomerID()
 	return _u
 }
 
@@ -339,26 +279,6 @@ func (_u *OrgSubscriptionUpdate) SetNillableDaysUntilDue(v *string) *OrgSubscrip
 // ClearDaysUntilDue clears the value of the "days_until_due" field.
 func (_u *OrgSubscriptionUpdate) ClearDaysUntilDue() *OrgSubscriptionUpdate {
 	_u.mutation.ClearDaysUntilDue()
-	return _u
-}
-
-// SetPaymentMethodAdded sets the "payment_method_added" field.
-func (_u *OrgSubscriptionUpdate) SetPaymentMethodAdded(v bool) *OrgSubscriptionUpdate {
-	_u.mutation.SetPaymentMethodAdded(v)
-	return _u
-}
-
-// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (_u *OrgSubscriptionUpdate) SetNillablePaymentMethodAdded(v *bool) *OrgSubscriptionUpdate {
-	if v != nil {
-		_u.SetPaymentMethodAdded(*v)
-	}
-	return _u
-}
-
-// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
-func (_u *OrgSubscriptionUpdate) ClearPaymentMethodAdded() *OrgSubscriptionUpdate {
-	_u.mutation.ClearPaymentMethodAdded()
 	return _u
 }
 
@@ -675,23 +595,11 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.StripeSubscriptionIDCleared() {
 		_spec.ClearField(orgsubscription.FieldStripeSubscriptionID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProductTier(); ok {
-		_spec.SetField(orgsubscription.FieldProductTier, field.TypeString, value)
-	}
-	if _u.mutation.ProductTierCleared() {
-		_spec.ClearField(orgsubscription.FieldProductTier, field.TypeString)
-	}
 	if value, ok := _u.mutation.ProductPrice(); ok {
 		_spec.SetField(orgsubscription.FieldProductPrice, field.TypeJSON, value)
 	}
 	if _u.mutation.ProductPriceCleared() {
 		_spec.ClearField(orgsubscription.FieldProductPrice, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.StripeProductTierID(); ok {
-		_spec.SetField(orgsubscription.FieldStripeProductTierID, field.TypeString, value)
-	}
-	if _u.mutation.StripeProductTierIDCleared() {
-		_spec.ClearField(orgsubscription.FieldStripeProductTierID, field.TypeString)
 	}
 	if value, ok := _u.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionStatus, field.TypeString, value)
@@ -701,12 +609,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(orgsubscription.FieldActive, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.StripeCustomerID(); ok {
-		_spec.SetField(orgsubscription.FieldStripeCustomerID, field.TypeString, value)
-	}
-	if _u.mutation.StripeCustomerIDCleared() {
-		_spec.ClearField(orgsubscription.FieldStripeCustomerID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscription.FieldExpiresAt, field.TypeTime, value)
@@ -725,12 +627,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.DaysUntilDueCleared() {
 		_spec.ClearField(orgsubscription.FieldDaysUntilDue, field.TypeString)
-	}
-	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
-		_spec.SetField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool, value)
-	}
-	if _u.mutation.PaymentMethodAddedCleared() {
-		_spec.ClearField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Features(); ok {
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)
@@ -1131,26 +1027,6 @@ func (_u *OrgSubscriptionUpdateOne) ClearStripeSubscriptionID() *OrgSubscription
 	return _u
 }
 
-// SetProductTier sets the "product_tier" field.
-func (_u *OrgSubscriptionUpdateOne) SetProductTier(v string) *OrgSubscriptionUpdateOne {
-	_u.mutation.SetProductTier(v)
-	return _u
-}
-
-// SetNillableProductTier sets the "product_tier" field if the given value is not nil.
-func (_u *OrgSubscriptionUpdateOne) SetNillableProductTier(v *string) *OrgSubscriptionUpdateOne {
-	if v != nil {
-		_u.SetProductTier(*v)
-	}
-	return _u
-}
-
-// ClearProductTier clears the value of the "product_tier" field.
-func (_u *OrgSubscriptionUpdateOne) ClearProductTier() *OrgSubscriptionUpdateOne {
-	_u.mutation.ClearProductTier()
-	return _u
-}
-
 // SetProductPrice sets the "product_price" field.
 func (_u *OrgSubscriptionUpdateOne) SetProductPrice(v models.Price) *OrgSubscriptionUpdateOne {
 	_u.mutation.SetProductPrice(v)
@@ -1168,26 +1044,6 @@ func (_u *OrgSubscriptionUpdateOne) SetNillableProductPrice(v *models.Price) *Or
 // ClearProductPrice clears the value of the "product_price" field.
 func (_u *OrgSubscriptionUpdateOne) ClearProductPrice() *OrgSubscriptionUpdateOne {
 	_u.mutation.ClearProductPrice()
-	return _u
-}
-
-// SetStripeProductTierID sets the "stripe_product_tier_id" field.
-func (_u *OrgSubscriptionUpdateOne) SetStripeProductTierID(v string) *OrgSubscriptionUpdateOne {
-	_u.mutation.SetStripeProductTierID(v)
-	return _u
-}
-
-// SetNillableStripeProductTierID sets the "stripe_product_tier_id" field if the given value is not nil.
-func (_u *OrgSubscriptionUpdateOne) SetNillableStripeProductTierID(v *string) *OrgSubscriptionUpdateOne {
-	if v != nil {
-		_u.SetStripeProductTierID(*v)
-	}
-	return _u
-}
-
-// ClearStripeProductTierID clears the value of the "stripe_product_tier_id" field.
-func (_u *OrgSubscriptionUpdateOne) ClearStripeProductTierID() *OrgSubscriptionUpdateOne {
-	_u.mutation.ClearStripeProductTierID()
 	return _u
 }
 
@@ -1222,26 +1078,6 @@ func (_u *OrgSubscriptionUpdateOne) SetNillableActive(v *bool) *OrgSubscriptionU
 	if v != nil {
 		_u.SetActive(*v)
 	}
-	return _u
-}
-
-// SetStripeCustomerID sets the "stripe_customer_id" field.
-func (_u *OrgSubscriptionUpdateOne) SetStripeCustomerID(v string) *OrgSubscriptionUpdateOne {
-	_u.mutation.SetStripeCustomerID(v)
-	return _u
-}
-
-// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
-func (_u *OrgSubscriptionUpdateOne) SetNillableStripeCustomerID(v *string) *OrgSubscriptionUpdateOne {
-	if v != nil {
-		_u.SetStripeCustomerID(*v)
-	}
-	return _u
-}
-
-// ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
-func (_u *OrgSubscriptionUpdateOne) ClearStripeCustomerID() *OrgSubscriptionUpdateOne {
-	_u.mutation.ClearStripeCustomerID()
 	return _u
 }
 
@@ -1302,26 +1138,6 @@ func (_u *OrgSubscriptionUpdateOne) SetNillableDaysUntilDue(v *string) *OrgSubsc
 // ClearDaysUntilDue clears the value of the "days_until_due" field.
 func (_u *OrgSubscriptionUpdateOne) ClearDaysUntilDue() *OrgSubscriptionUpdateOne {
 	_u.mutation.ClearDaysUntilDue()
-	return _u
-}
-
-// SetPaymentMethodAdded sets the "payment_method_added" field.
-func (_u *OrgSubscriptionUpdateOne) SetPaymentMethodAdded(v bool) *OrgSubscriptionUpdateOne {
-	_u.mutation.SetPaymentMethodAdded(v)
-	return _u
-}
-
-// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (_u *OrgSubscriptionUpdateOne) SetNillablePaymentMethodAdded(v *bool) *OrgSubscriptionUpdateOne {
-	if v != nil {
-		_u.SetPaymentMethodAdded(*v)
-	}
-	return _u
-}
-
-// ClearPaymentMethodAdded clears the value of the "payment_method_added" field.
-func (_u *OrgSubscriptionUpdateOne) ClearPaymentMethodAdded() *OrgSubscriptionUpdateOne {
-	_u.mutation.ClearPaymentMethodAdded()
 	return _u
 }
 
@@ -1668,23 +1484,11 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 	if _u.mutation.StripeSubscriptionIDCleared() {
 		_spec.ClearField(orgsubscription.FieldStripeSubscriptionID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProductTier(); ok {
-		_spec.SetField(orgsubscription.FieldProductTier, field.TypeString, value)
-	}
-	if _u.mutation.ProductTierCleared() {
-		_spec.ClearField(orgsubscription.FieldProductTier, field.TypeString)
-	}
 	if value, ok := _u.mutation.ProductPrice(); ok {
 		_spec.SetField(orgsubscription.FieldProductPrice, field.TypeJSON, value)
 	}
 	if _u.mutation.ProductPriceCleared() {
 		_spec.ClearField(orgsubscription.FieldProductPrice, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.StripeProductTierID(); ok {
-		_spec.SetField(orgsubscription.FieldStripeProductTierID, field.TypeString, value)
-	}
-	if _u.mutation.StripeProductTierIDCleared() {
-		_spec.ClearField(orgsubscription.FieldStripeProductTierID, field.TypeString)
 	}
 	if value, ok := _u.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscription.FieldStripeSubscriptionStatus, field.TypeString, value)
@@ -1694,12 +1498,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 	}
 	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(orgsubscription.FieldActive, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.StripeCustomerID(); ok {
-		_spec.SetField(orgsubscription.FieldStripeCustomerID, field.TypeString, value)
-	}
-	if _u.mutation.StripeCustomerIDCleared() {
-		_spec.ClearField(orgsubscription.FieldStripeCustomerID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscription.FieldExpiresAt, field.TypeTime, value)
@@ -1718,12 +1516,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 	}
 	if _u.mutation.DaysUntilDueCleared() {
 		_spec.ClearField(orgsubscription.FieldDaysUntilDue, field.TypeString)
-	}
-	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
-		_spec.SetField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool, value)
-	}
-	if _u.mutation.PaymentMethodAddedCleared() {
-		_spec.ClearField(orgsubscription.FieldPaymentMethodAdded, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Features(); ok {
 		_spec.SetField(orgsubscription.FieldFeatures, field.TypeJSON, value)

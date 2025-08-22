@@ -118,8 +118,13 @@ func (f *fakeClient) GetProduct(ctx context.Context, id string) (*stripe.Product
 
 func (f *fakeClient) FindPriceForProduct(ctx context.Context, productID string, currency string, unitAmount int64, interval, nickname, lookupKey, metadata string, meta map[string]string) (*stripe.Price, error) {
 	for _, p := range f.prices {
-		if p.Product != nil && p.Product.ID == productID && p.LookupKey == lookupKey {
-			return p, nil
+		if p.Product != nil && p.Product.ID == productID {
+			if p.LookupKey == metadata &&
+				p.UnitAmount == unitAmount &&
+				(p.Nickname == lookupKey || (lookupKey == "" && p.Nickname == "")) &&
+				(p.Recurring != nil && string(p.Recurring.Interval) == nickname) {
+				return p, nil
+			}
 		}
 	}
 
@@ -133,6 +138,19 @@ func (f *fakeClient) UpdatePriceMetadata(ctx context.Context, id string, md map[
 		p.Metadata = md
 	}
 	return p, nil
+}
+
+func (f *fakeClient) UpdateProductWithParams(ctx context.Context, productID string, params *stripe.ProductUpdateParams) (*stripe.Product, error) {
+	for _, p := range f.products {
+		if p.ID == productID {
+			return p, nil
+		}
+	}
+	return nil, nil
+}
+
+func (f *fakeClient) UpdateProductWithOptions(baseParams *stripe.ProductUpdateParams, opts ...entitlements.ProductUpdateOption) *stripe.ProductUpdateParams {
+	return baseParams
 }
 
 func TestPriceMatchesStripe(t *testing.T) {
@@ -334,8 +352,8 @@ addons: {}`
 
 	path := writeTempCatalogFile(t, catYAML)
 
-	prod := &stripe.Product{ID: "prod1", Name: "Prod1"}
-	price := &stripe.Price{ID: "price_1", UnitAmount: 100, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Product: prod, Metadata: map[string]string{catalog.ManagedByKey: catalog.ManagedByValue}}
+	prod := &stripe.Product{ID: "prod1", Name: "Prod1", Metadata: map[string]string{"module": "mod1"}}
+	price := &stripe.Price{ID: "price_1", UnitAmount: 100, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Nickname: "p1_month", Product: prod, Metadata: map[string]string{catalog.ManagedByKey: catalog.ManagedByValue}}
 
 	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_1": price}, features: map[string]*stripe.EntitlementsFeature{}}
 	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) { return client, nil }
@@ -375,8 +393,8 @@ addons: {}`
 
 	path := writeTempCatalogFile(t, catYAML)
 
-	prod := &stripe.Product{ID: "prod1", Name: "Prod1"}
-	price := &stripe.Price{ID: "price_1", UnitAmount: 100, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Product: prod, Metadata: map[string]string{}}
+	prod := &stripe.Product{ID: "prod1", Name: "Prod1", Metadata: map[string]string{"module": "mod1"}}
+	price := &stripe.Price{ID: "price_1", UnitAmount: 100, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Nickname: "p1_month", Product: prod, Metadata: map[string]string{}}
 
 	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_1": price}}
 	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) { return client, nil }
@@ -415,10 +433,10 @@ addons: {}`
 
 	path := writeTempCatalogFile(t, catYAML)
 
-	prod := &stripe.Product{ID: "prod1", Name: "Prod1"}
-	price := &stripe.Price{ID: "price_conflict", UnitAmount: 200, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Product: prod}
+	prod := &stripe.Product{ID: "prod1", Name: "Prod1", Metadata: map[string]string{"module": "mod1"}}
+	price := &stripe.Price{ID: "price_conflict", UnitAmount: 100, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Nickname: "p1_month", Product: prod, Metadata: map[string]string{}}
 
-	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_1": price}, features: map[string]*stripe.EntitlementsFeature{}}
+	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_conflict": price}, features: map[string]*stripe.EntitlementsFeature{}}
 	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) { return client, nil }
 	defer func() {
 		newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {

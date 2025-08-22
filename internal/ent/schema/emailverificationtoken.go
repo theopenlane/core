@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/entx/history"
@@ -90,6 +91,12 @@ func (e EmailVerificationToken) Mixin() []ent.Mixin {
 	}
 }
 
+func (EmailVerificationToken) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Indexes of the EmailVerificationToken
 func (EmailVerificationToken) Indexes() []ent.Index {
 	return []ent.Index{
@@ -100,9 +107,8 @@ func (EmailVerificationToken) Indexes() []ent.Index {
 }
 
 // Annotations of the EmailVerificationToken
-func (EmailVerificationToken) Annotations() []schema.Annotation {
+func (e EmailVerificationToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entgql.Skip(entgql.SkipAll),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
@@ -120,7 +126,7 @@ func (EmailVerificationToken) Hooks() []ent.Hook {
 }
 
 // Policy of the EmailVerificationToken
-func (EmailVerificationToken) Policy() ent.Policy {
+func (e EmailVerificationToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowAfterApplyingPrivacyTokenFilter[*token.VerifyToken](),

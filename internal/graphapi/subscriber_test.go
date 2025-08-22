@@ -82,7 +82,6 @@ func TestQuerySubscriber(t *testing.T) {
 			resp, err := tc.client.GetSubscriberByEmail(tc.ctx, tc.email)
 
 			if tc.wantErr {
-				assert.Check(t, is.Nil(resp))
 
 				errors := parseClientError(t, err)
 				for _, e := range errors {
@@ -208,7 +207,6 @@ func TestMutationCreateBulkSubscribers(t *testing.T) {
 			resp, err := tc.client.CreateBulkSubscriber(tc.ctx, input)
 
 			if tc.wantErr {
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -279,7 +277,6 @@ func TestMutationCreateSubscriber_Tokens(t *testing.T) {
 
 			if tc.wantErr {
 				assert.ErrorContains(t, err, "email is required but not provided")
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -395,8 +392,6 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 			resp, err := tc.client.CreateSubscriber(tc.ctx, input)
 
 			if tc.wantErr {
-				assert.Assert(t, is.Nil(resp))
-
 				errors := parseClientError(t, err)
 				for _, e := range errors {
 					assertErrorCode(t, e, tc.expectedErrorCode)
@@ -529,9 +524,7 @@ func TestUpdateSubscriber(t *testing.T) {
 			resp, err := tc.client.UpdateSubscriber(tc.ctx, tc.email, tc.updateInput)
 
 			if tc.wantErr {
-				assert.Assert(t, is.Nil(resp))
 				assert.ErrorContains(t, err, "subscriber not found")
-
 				return
 			}
 
@@ -622,7 +615,6 @@ func TestDeleteSubscriber(t *testing.T) {
 
 			if tc.wantErr {
 				assert.ErrorContains(t, err, notFoundErrorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

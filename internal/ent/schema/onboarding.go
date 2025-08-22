@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
@@ -16,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -69,6 +69,12 @@ func (Onboarding) Fields() []ent.Field {
 	}
 }
 
+func (Onboarding) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Mixin of the Onboarding
 func (Onboarding) Mixin() []ent.Mixin {
 	return []ent.Mixin{
@@ -93,9 +99,8 @@ func (o Onboarding) Edges() []ent.Edge {
 }
 
 // Annotations of the Onboarding
-func (Onboarding) Annotations() []schema.Annotation {
+func (o Onboarding) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entgql.Mutations(entgql.MutationCreate()),
 		// don't store the history of the onboarding
 		history.Annotations{
@@ -112,14 +117,9 @@ func (Onboarding) Hooks() []ent.Hook {
 }
 
 // Policy of the Onboarding
-func (Onboarding) Policy() ent.Policy {
-	// add the new policy here, the default post-policy is to deny all
-	// so you need to ensure there are rules in place to allow the actions you want
+func (o Onboarding) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			// this data should not be queried, so we deny all queries except
-			// those explicitly allowed from internal services
-			rule.AllowIfContextAllowRule(),
 			privacy.AlwaysDenyRule(), // deny all queries by default
 		),
 		policy.WithMutationRules(

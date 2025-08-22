@@ -61,7 +61,8 @@ Config contains the configuration for the core server
                 "openai": {}
             }
         },
-        "windmill": {}
+        "windmill": {},
+        "modules": {}
     },
     "auth": {
         "token": {
@@ -391,6 +392,7 @@ Config holds the configuration for the ent server
 |[**summarizer**](#entconfigsummarizer)|`object`|Summarizer holds configuration for the text summarization functionality<br/>||
 |[**windmill**](#entconfigwindmill)|`object`|Windmill holds configuration for the Windmill workflow automation platform<br/>||
 |**maxPoolSize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
+|[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -408,7 +410,8 @@ Config holds the configuration for the ent server
             "openai": {}
         }
     },
-    "windmill": {}
+    "windmill": {},
+    "modules": {}
 }
 ```
 
@@ -611,6 +614,19 @@ Windmill holds configuration for the Windmill workflow automation platform
 |**timezone**|`string`|Timezone for scheduled jobs<br/>||
 |**onFailureScript**|`string`|OnFailureScript script to run when a scheduled job fails<br/>||
 |**onSuccessScript**|`string`|OnSuccessScript script to run when a scheduled job succeeds<br/>||
+
+**Additional Properties:** not allowed  
+<a name="entconfigmodules"></a>
+### entConfig\.modules: object
+
+Modules settings for features access
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates whether to check and verify module access<br/>||
 
 **Additional Properties:** not allowed  
 <a name="auth"></a>

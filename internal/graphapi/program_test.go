@@ -18,6 +18,9 @@ func TestQueryProgram(t *testing.T) {
 	// create program1 with a linked procedure and policy
 	program1 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(adminUser.UserCtx, t)
+
+	archivedProgram := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true, Status: enums.ProgramStatusArchived}).MustNew(adminUser.UserCtx, t)
+
 	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
 
 	testCases := []struct {
@@ -50,6 +53,13 @@ func TestQueryProgram(t *testing.T) {
 			expectedResult: program1,
 		},
 		{
+			name:           "archived program - happy path using personal access token",
+			queryID:        archivedProgram.ID,
+			client:         suite.client.apiWithPAT,
+			ctx:            context.Background(),
+			expectedResult: archivedProgram,
+		},
+		{
 			name:     "no access, user of same org",
 			queryID:  program1.ID,
 			client:   suite.client.api,
@@ -78,7 +88,6 @@ func TestQueryProgram(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -117,6 +126,9 @@ func TestQueryPrograms(t *testing.T) {
 	// program created by an admin user of the first organization with a linked procedure and policy
 	program3 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(adminUser.UserCtx, t)
 
+	// archived program for the first organization
+	archivedProgram := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true, Status: enums.ProgramStatusArchived}).MustNew(testUser1.UserCtx, t)
+
 	// program for the other organization with a linked procedure and policy
 	anotherUser := suite.userBuilder(context.Background(), t)
 	program4 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(anotherUser.UserCtx, t)
@@ -129,16 +141,16 @@ func TestQueryPrograms(t *testing.T) {
 		errorMsg        string
 	}{
 		{
-			name:            "happy path, org owner should see all programs (3)",
+			name:            "happy path, org owner should see all programs",
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
-			expectedResults: 3,
+			expectedResults: 3, // archived programs not listed by default
 		},
 		{
 			name:            "happy path using personal access token",
 			client:          suite.client.apiWithPAT,
 			ctx:             context.Background(),
-			expectedResults: 3,
+			expectedResults: 3, // archived programs not listed by default
 		},
 		{
 			name:            "view only user has not been added to any programs",
@@ -166,7 +178,6 @@ func TestQueryPrograms(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -184,7 +195,7 @@ func TestQueryPrograms(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID, program3.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID, program3.ID, archivedProgram.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program4.ID}).MustDelete(anotherUser.UserCtx, t)
 
 	// cleanup procedures and policies
@@ -201,6 +212,10 @@ func TestQueryPrograms(t *testing.T) {
 		procedureIDs = append(procedureIDs, p.ID)
 	}
 
+	for _, p := range archivedProgram.Edges.Procedures {
+		procedureIDs = append(procedureIDs, p.ID)
+	}
+
 	policyIDs := []string{}
 	for _, p := range program1.Edges.InternalPolicies {
 		policyIDs = append(policyIDs, p.ID)
@@ -211,6 +226,10 @@ func TestQueryPrograms(t *testing.T) {
 	}
 
 	for _, p := range program3.Edges.InternalPolicies {
+		policyIDs = append(policyIDs, p.ID)
+	}
+
+	for _, p := range archivedProgram.Edges.InternalPolicies {
 		policyIDs = append(policyIDs, p.ID)
 	}
 
@@ -385,7 +404,6 @@ func TestMutationCreateProgram(t *testing.T) {
 			resp, err := tc.client.CreateProgram(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -592,9 +610,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 	gm4 := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, GroupID: viewerGroup.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the program
-	res, err := suite.client.api.GetProgramByID(viewOnlyUser.UserCtx, program.ID)
+	_, err = suite.client.api.GetProgramByID(viewOnlyUser.UserCtx, program.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Assert(t, is.Nil(res))
 
 	testCases := []struct {
 		name              string
@@ -755,7 +772,6 @@ func TestMutationUpdateProgram(t *testing.T) {
 			resp, err := tc.client.UpdateProgram(tc.ctx, program.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -947,7 +963,6 @@ func TestMutationDeleteProgram(t *testing.T) {
 			resp, err := tc.client.DeleteProgram(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

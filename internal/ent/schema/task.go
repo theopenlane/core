@@ -216,7 +216,6 @@ func (t Task) Edges() []ent.Edge {
 // Annotations of the Task
 func (Task) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}
@@ -239,4 +238,10 @@ func (Task) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.TaskMutation](),
 		),
 	)
+}
+
+func (Task) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
 }

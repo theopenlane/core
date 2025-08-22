@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -370,6 +371,12 @@ func (_q *WebauthnQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if webauthn.Policy == nil {
+		return errors.New("generated: uninitialized webauthn.Policy (forgotten import generated/runtime?)")
+	}
+	if err := webauthn.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

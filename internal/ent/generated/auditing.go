@@ -2028,23 +2028,14 @@ func (_m *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change 
 	if !reflect.DeepEqual(_m.StripeSubscriptionID, new.StripeSubscriptionID) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionID, _m.StripeSubscriptionID, new.StripeSubscriptionID))
 	}
-	if !reflect.DeepEqual(_m.ProductTier, new.ProductTier) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductTier, _m.ProductTier, new.ProductTier))
-	}
 	if !reflect.DeepEqual(_m.ProductPrice, new.ProductPrice) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductPrice, _m.ProductPrice, new.ProductPrice))
-	}
-	if !reflect.DeepEqual(_m.StripeProductTierID, new.StripeProductTierID) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeProductTierID, _m.StripeProductTierID, new.StripeProductTierID))
 	}
 	if !reflect.DeepEqual(_m.StripeSubscriptionStatus, new.StripeSubscriptionStatus) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionStatus, _m.StripeSubscriptionStatus, new.StripeSubscriptionStatus))
 	}
 	if !reflect.DeepEqual(_m.Active, new.Active) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldActive, _m.Active, new.Active))
-	}
-	if !reflect.DeepEqual(_m.StripeCustomerID, new.StripeCustomerID) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeCustomerID, _m.StripeCustomerID, new.StripeCustomerID))
 	}
 	if !reflect.DeepEqual(_m.ExpiresAt, new.ExpiresAt) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldExpiresAt, _m.ExpiresAt, new.ExpiresAt))
@@ -2054,9 +2045,6 @@ func (_m *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change 
 	}
 	if !reflect.DeepEqual(_m.DaysUntilDue, new.DaysUntilDue) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDaysUntilDue, _m.DaysUntilDue, new.DaysUntilDue))
-	}
-	if !reflect.DeepEqual(_m.PaymentMethodAdded, new.PaymentMethodAdded) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldPaymentMethodAdded, _m.PaymentMethodAdded, new.PaymentMethodAdded))
 	}
 	if !reflect.DeepEqual(_m.Features, new.Features) {
 		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatures, _m.Features, new.Features))
@@ -2138,6 +2126,9 @@ func (_m *OrganizationHistory) changes(new *OrganizationHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.DedicatedDb, new.DedicatedDb) {
 		changes = append(changes, NewChange(organizationhistory.FieldDedicatedDb, _m.DedicatedDb, new.DedicatedDb))
+	}
+	if !reflect.DeepEqual(_m.StripeCustomerID, new.StripeCustomerID) {
+		changes = append(changes, NewChange(organizationhistory.FieldStripeCustomerID, _m.StripeCustomerID, new.StripeCustomerID))
 	}
 	return changes
 }
@@ -2240,6 +2231,9 @@ func (_m *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) [
 	}
 	if !reflect.DeepEqual(_m.ComplianceWebhookToken, new.ComplianceWebhookToken) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldComplianceWebhookToken, _m.ComplianceWebhookToken, new.ComplianceWebhookToken))
+	}
+	if !reflect.DeepEqual(_m.PaymentMethodAdded, new.PaymentMethodAdded) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldPaymentMethodAdded, _m.PaymentMethodAdded, new.PaymentMethodAdded))
 	}
 	return changes
 }

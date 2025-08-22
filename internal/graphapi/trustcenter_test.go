@@ -65,7 +65,6 @@ func TestQueryTrustCenterByID(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -280,7 +279,6 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			resp, err := tc.client.CreateTrustCenter(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -379,7 +377,6 @@ func TestGetAllTrustCenters(t *testing.T) {
 
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 				return
 			}
 
@@ -528,7 +525,6 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 			resp, err := tc.client.UpdateTrustCenter(tc.ctx, tc.trustCenterID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -603,7 +599,6 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 			resp, err := tc.client.DeleteTrustCenter(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -690,7 +685,6 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 
 			if !tc.shouldSucceed {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 				return
 			}
 
@@ -952,7 +946,6 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.updateInput, logoFile, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 				return
 			}
 

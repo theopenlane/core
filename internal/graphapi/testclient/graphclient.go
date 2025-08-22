@@ -5330,9 +5330,6 @@ type AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node struct {
 	ID                       string        "json:\"id\" graphql:\"id\""
 	OwnerID                  *string       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ProductPrice             *models.Price "json:\"productPrice,omitempty\" graphql:\"productPrice\""
-	ProductTier              *string       "json:\"productTier,omitempty\" graphql:\"productTier\""
-	StripeCustomerID         *string       "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
-	StripeProductTierID      *string       "json:\"stripeProductTierID,omitempty\" graphql:\"stripeProductTierID\""
 	StripeSubscriptionID     *string       "json:\"stripeSubscriptionID,omitempty\" graphql:\"stripeSubscriptionID\""
 	StripeSubscriptionStatus *string       "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
@@ -5373,24 +5370,6 @@ func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetProductPrice() 
 		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.ProductPrice
-}
-func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetProductTier() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
-	}
-	return t.ProductTier
-}
-func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetStripeCustomerID() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
-	}
-	return t.StripeCustomerID
-}
-func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetStripeProductTierID() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
-	}
-	return t.StripeProductTierID
 }
 func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetStripeSubscriptionID() *string {
 	if t == nil {
@@ -48676,8 +48655,6 @@ type GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions struct {
 	Active                   bool     "json:\"active\" graphql:\"active\""
 	Features                 []string "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string   "json:\"id\" graphql:\"id\""
-	ProductTier              *string  "json:\"productTier,omitempty\" graphql:\"productTier\""
-	StripeCustomerID         *string  "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
 	StripeSubscriptionStatus *string  "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 }
 
@@ -48698,18 +48675,6 @@ func (t *GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetID() 
 		t = &GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
 	}
 	return t.ID
-}
-func (t *GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetProductTier() *string {
-	if t == nil {
-		t = &GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
-	}
-	return t.ProductTier
-}
-func (t *GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetStripeCustomerID() *string {
-	if t == nil {
-		t = &GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
-	}
-	return t.StripeCustomerID
 }
 func (t *GetAllOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetStripeSubscriptionStatus() *string {
 	if t == nil {
@@ -49092,8 +49057,6 @@ type GetOrganizationByID_Organization_OrgSubscriptions struct {
 	Active                   bool     "json:\"active\" graphql:\"active\""
 	Features                 []string "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string   "json:\"id\" graphql:\"id\""
-	ProductTier              *string  "json:\"productTier,omitempty\" graphql:\"productTier\""
-	StripeCustomerID         *string  "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
 	StripeSubscriptionStatus *string  "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 }
 
@@ -49114,18 +49077,6 @@ func (t *GetOrganizationByID_Organization_OrgSubscriptions) GetID() string {
 		t = &GetOrganizationByID_Organization_OrgSubscriptions{}
 	}
 	return t.ID
-}
-func (t *GetOrganizationByID_Organization_OrgSubscriptions) GetProductTier() *string {
-	if t == nil {
-		t = &GetOrganizationByID_Organization_OrgSubscriptions{}
-	}
-	return t.ProductTier
-}
-func (t *GetOrganizationByID_Organization_OrgSubscriptions) GetStripeCustomerID() *string {
-	if t == nil {
-		t = &GetOrganizationByID_Organization_OrgSubscriptions{}
-	}
-	return t.StripeCustomerID
 }
 func (t *GetOrganizationByID_Organization_OrgSubscriptions) GetStripeSubscriptionStatus() *string {
 	if t == nil {
@@ -49942,8 +49893,6 @@ type GetOrganizations_Organizations_Edges_Node_OrgSubscriptions struct {
 	Active                   bool     "json:\"active\" graphql:\"active\""
 	Features                 []string "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string   "json:\"id\" graphql:\"id\""
-	ProductTier              *string  "json:\"productTier,omitempty\" graphql:\"productTier\""
-	StripeCustomerID         *string  "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
 	StripeSubscriptionStatus *string  "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 }
 
@@ -49964,18 +49913,6 @@ func (t *GetOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetID() str
 		t = &GetOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
 	}
 	return t.ID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetProductTier() *string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
-	}
-	return t.ProductTier
-}
-func (t *GetOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetStripeCustomerID() *string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_OrgSubscriptions{}
-	}
-	return t.StripeCustomerID
 }
 func (t *GetOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetStripeSubscriptionStatus() *string {
 	if t == nil {
@@ -50272,8 +50209,6 @@ type UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions struct 
 	Active                   bool     "json:\"active\" graphql:\"active\""
 	Features                 []string "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string   "json:\"id\" graphql:\"id\""
-	ProductTier              *string  "json:\"productTier,omitempty\" graphql:\"productTier\""
-	StripeCustomerID         *string  "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
 	StripeSubscriptionStatus *string  "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 }
 
@@ -50294,18 +50229,6 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) Ge
 		t = &UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions{}
 	}
 	return t.ID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) GetProductTier() *string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions{}
-	}
-	return t.ProductTier
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) GetStripeCustomerID() *string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions{}
-	}
-	return t.StripeCustomerID
 }
 func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) GetStripeSubscriptionStatus() *string {
 	if t == nil {
@@ -52345,11 +52268,7 @@ type GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
 	OwnerID                  *string       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PaymentMethodAdded       *bool         "json:\"paymentMethodAdded,omitempty\" graphql:\"paymentMethodAdded\""
 	ProductPrice             *models.Price "json:\"productPrice,omitempty\" graphql:\"productPrice\""
-	ProductTier              *string       "json:\"productTier,omitempty\" graphql:\"productTier\""
-	StripeCustomerID         *string       "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
-	StripeProductTierID      *string       "json:\"stripeProductTierID,omitempty\" graphql:\"stripeProductTierID\""
 	StripeSubscriptionID     *string       "json:\"stripeSubscriptionID,omitempty\" graphql:\"stripeSubscriptionID\""
 	StripeSubscriptionStatus *string       "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
@@ -52412,35 +52331,11 @@ func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetOwnerID() *strin
 	}
 	return t.OwnerID
 }
-func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetPaymentMethodAdded() *bool {
-	if t == nil {
-		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
-	}
-	return t.PaymentMethodAdded
-}
 func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetProductPrice() *models.Price {
 	if t == nil {
 		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
 	}
 	return t.ProductPrice
-}
-func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetProductTier() *string {
-	if t == nil {
-		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
-	}
-	return t.ProductTier
-}
-func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetStripeCustomerID() *string {
-	if t == nil {
-		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
-	}
-	return t.StripeCustomerID
-}
-func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetStripeProductTierID() *string {
-	if t == nil {
-		t = &GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node{}
-	}
-	return t.StripeProductTierID
 }
 func (t *GetAllOrgSubscriptions_OrgSubscriptions_Edges_Node) GetStripeSubscriptionID() *string {
 	if t == nil {
@@ -52511,12 +52406,7 @@ type GetOrgSubscriptionByID_OrgSubscription struct {
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
 	OwnerID                  *string       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PaymentMethodAdded       *bool         "json:\"paymentMethodAdded,omitempty\" graphql:\"paymentMethodAdded\""
 	ProductPrice             *models.Price "json:\"productPrice,omitempty\" graphql:\"productPrice\""
-	ProductTier              *string       "json:\"productTier,omitempty\" graphql:\"productTier\""
-	StripeCustomerID         *string       "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
-	StripeProductTierID      *string       "json:\"stripeProductTierID,omitempty\" graphql:\"stripeProductTierID\""
-	StripeSubscriptionID     *string       "json:\"stripeSubscriptionID,omitempty\" graphql:\"stripeSubscriptionID\""
 	StripeSubscriptionStatus *string       "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
 	TrialExpiresAt           *time.Time    "json:\"trialExpiresAt,omitempty\" graphql:\"trialExpiresAt\""
@@ -52578,41 +52468,11 @@ func (t *GetOrgSubscriptionByID_OrgSubscription) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *GetOrgSubscriptionByID_OrgSubscription) GetPaymentMethodAdded() *bool {
-	if t == nil {
-		t = &GetOrgSubscriptionByID_OrgSubscription{}
-	}
-	return t.PaymentMethodAdded
-}
 func (t *GetOrgSubscriptionByID_OrgSubscription) GetProductPrice() *models.Price {
 	if t == nil {
 		t = &GetOrgSubscriptionByID_OrgSubscription{}
 	}
 	return t.ProductPrice
-}
-func (t *GetOrgSubscriptionByID_OrgSubscription) GetProductTier() *string {
-	if t == nil {
-		t = &GetOrgSubscriptionByID_OrgSubscription{}
-	}
-	return t.ProductTier
-}
-func (t *GetOrgSubscriptionByID_OrgSubscription) GetStripeCustomerID() *string {
-	if t == nil {
-		t = &GetOrgSubscriptionByID_OrgSubscription{}
-	}
-	return t.StripeCustomerID
-}
-func (t *GetOrgSubscriptionByID_OrgSubscription) GetStripeProductTierID() *string {
-	if t == nil {
-		t = &GetOrgSubscriptionByID_OrgSubscription{}
-	}
-	return t.StripeProductTierID
-}
-func (t *GetOrgSubscriptionByID_OrgSubscription) GetStripeSubscriptionID() *string {
-	if t == nil {
-		t = &GetOrgSubscriptionByID_OrgSubscription{}
-	}
-	return t.StripeSubscriptionID
 }
 func (t *GetOrgSubscriptionByID_OrgSubscription) GetStripeSubscriptionStatus() *string {
 	if t == nil {
@@ -52655,12 +52515,7 @@ type GetOrgSubscriptions_OrgSubscriptions_Edges_Node struct {
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
 	OwnerID                  *string       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PaymentMethodAdded       *bool         "json:\"paymentMethodAdded,omitempty\" graphql:\"paymentMethodAdded\""
 	ProductPrice             *models.Price "json:\"productPrice,omitempty\" graphql:\"productPrice\""
-	ProductTier              *string       "json:\"productTier,omitempty\" graphql:\"productTier\""
-	StripeCustomerID         *string       "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
-	StripeProductTierID      *string       "json:\"stripeProductTierID,omitempty\" graphql:\"stripeProductTierID\""
-	StripeSubscriptionID     *string       "json:\"stripeSubscriptionID,omitempty\" graphql:\"stripeSubscriptionID\""
 	StripeSubscriptionStatus *string       "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string      "json:\"tags,omitempty\" graphql:\"tags\""
 	TrialExpiresAt           *time.Time    "json:\"trialExpiresAt,omitempty\" graphql:\"trialExpiresAt\""
@@ -52722,41 +52577,11 @@ func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetPaymentMethodAdded() *bool {
-	if t == nil {
-		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
-	}
-	return t.PaymentMethodAdded
-}
 func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetProductPrice() *models.Price {
 	if t == nil {
 		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
 	}
 	return t.ProductPrice
-}
-func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetProductTier() *string {
-	if t == nil {
-		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
-	}
-	return t.ProductTier
-}
-func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetStripeCustomerID() *string {
-	if t == nil {
-		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
-	}
-	return t.StripeCustomerID
-}
-func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetStripeProductTierID() *string {
-	if t == nil {
-		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
-	}
-	return t.StripeProductTierID
-}
-func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetStripeSubscriptionID() *string {
-	if t == nil {
-		t = &GetOrgSubscriptions_OrgSubscriptions_Edges_Node{}
-	}
-	return t.StripeSubscriptionID
 }
 func (t *GetOrgSubscriptions_OrgSubscriptions_Edges_Node) GetStripeSubscriptionStatus() *string {
 	if t == nil {
@@ -52821,10 +52646,7 @@ type GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node struct {
 	ID                       string         "json:\"id\" graphql:\"id\""
 	Operation                history.OpType "json:\"operation\" graphql:\"operation\""
 	OwnerID                  *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ProductTier              *string        "json:\"productTier,omitempty\" graphql:\"productTier\""
 	Ref                      *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	StripeCustomerID         *string        "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
-	StripeProductTierID      *string        "json:\"stripeProductTierID,omitempty\" graphql:\"stripeProductTierID\""
 	StripeSubscriptionID     *string        "json:\"stripeSubscriptionID,omitempty\" graphql:\"stripeSubscriptionID\""
 	StripeSubscriptionStatus *string        "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string       "json:\"tags,omitempty\" graphql:\"tags\""
@@ -52886,29 +52708,11 @@ func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) Get
 	}
 	return t.OwnerID
 }
-func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetProductTier() *string {
-	if t == nil {
-		t = &GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
-	}
-	return t.ProductTier
-}
 func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetRef() *string {
 	if t == nil {
 		t = &GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
 	}
 	return t.Ref
-}
-func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetStripeCustomerID() *string {
-	if t == nil {
-		t = &GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
-	}
-	return t.StripeCustomerID
-}
-func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetStripeProductTierID() *string {
-	if t == nil {
-		t = &GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
-	}
-	return t.StripeProductTierID
 }
 func (t *GetAllOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetStripeSubscriptionID() *string {
 	if t == nil {
@@ -52973,10 +52777,7 @@ type GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node struct {
 	ID                       string         "json:\"id\" graphql:\"id\""
 	Operation                history.OpType "json:\"operation\" graphql:\"operation\""
 	OwnerID                  *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ProductTier              *string        "json:\"productTier,omitempty\" graphql:\"productTier\""
 	Ref                      *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	StripeCustomerID         *string        "json:\"stripeCustomerID,omitempty\" graphql:\"stripeCustomerID\""
-	StripeProductTierID      *string        "json:\"stripeProductTierID,omitempty\" graphql:\"stripeProductTierID\""
 	StripeSubscriptionID     *string        "json:\"stripeSubscriptionID,omitempty\" graphql:\"stripeSubscriptionID\""
 	StripeSubscriptionStatus *string        "json:\"stripeSubscriptionStatus,omitempty\" graphql:\"stripeSubscriptionStatus\""
 	Tags                     []string       "json:\"tags,omitempty\" graphql:\"tags\""
@@ -53038,29 +52839,11 @@ func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetOwn
 	}
 	return t.OwnerID
 }
-func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetProductTier() *string {
-	if t == nil {
-		t = &GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
-	}
-	return t.ProductTier
-}
 func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetRef() *string {
 	if t == nil {
 		t = &GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
 	}
 	return t.Ref
-}
-func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetStripeCustomerID() *string {
-	if t == nil {
-		t = &GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
-	}
-	return t.StripeCustomerID
-}
-func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetStripeProductTierID() *string {
-	if t == nil {
-		t = &GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node{}
-	}
-	return t.StripeProductTierID
 }
 func (t *GetOrgSubscriptionHistories_OrgSubscriptionHistories_Edges_Node) GetStripeSubscriptionID() *string {
 	if t == nil {
@@ -96875,11 +96658,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					tags
 					ownerID
 					stripeSubscriptionID
-					productTier
 					productPrice
-					stripeProductTierID
 					stripeSubscriptionStatus
-					stripeCustomerID
 					daysUntilDue
 					features
 					featureLookupKeys
@@ -109614,10 +109394,8 @@ const GetAllOrganizationsDocument = `query GetAllOrganizations {
 					tags
 				}
 				orgSubscriptions {
-					stripeCustomerID
 					stripeSubscriptionStatus
 					active
-					productTier
 					features
 					id
 				}
@@ -109699,10 +109477,8 @@ const GetOrganizationByIDDocument = `query GetOrganizationByID ($organizationId:
 			tags
 		}
 		orgSubscriptions {
-			stripeCustomerID
 			stripeSubscriptionStatus
 			active
-			productTier
 			features
 			id
 		}
@@ -109857,10 +109633,8 @@ const GetOrganizationsDocument = `query GetOrganizations ($where: OrganizationWh
 					tags
 				}
 				orgSubscriptions {
-					stripeCustomerID
 					stripeSubscriptionStatus
 					active
-					productTier
 					features
 					id
 				}
@@ -109930,10 +109704,8 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 				tags
 			}
 			orgSubscriptions {
-				stripeCustomerID
 				stripeSubscriptionStatus
 				active
-				productTier
 				features
 				id
 			}
@@ -110616,11 +110388,7 @@ const GetAllOrgSubscriptionsDocument = `query GetAllOrgSubscriptions {
 				features
 				id
 				ownerID
-				paymentMethodAdded
 				productPrice
-				productTier
-				stripeCustomerID
-				stripeProductTierID
 				stripeSubscriptionID
 				stripeSubscriptionStatus
 				tags
@@ -110659,12 +110427,7 @@ const GetOrgSubscriptionByIDDocument = `query GetOrgSubscriptionByID ($orgSubscr
 		features
 		id
 		ownerID
-		paymentMethodAdded
 		productPrice
-		productTier
-		stripeCustomerID
-		stripeProductTierID
-		stripeSubscriptionID
 		stripeSubscriptionStatus
 		tags
 		trialExpiresAt
@@ -110704,12 +110467,7 @@ const GetOrgSubscriptionsDocument = `query GetOrgSubscriptions ($where: OrgSubsc
 				features
 				id
 				ownerID
-				paymentMethodAdded
 				productPrice
-				productTier
-				stripeCustomerID
-				stripeProductTierID
-				stripeSubscriptionID
 				stripeSubscriptionStatus
 				tags
 				trialExpiresAt
@@ -110751,10 +110509,7 @@ const GetAllOrgSubscriptionHistoriesDocument = `query GetAllOrgSubscriptionHisto
 				id
 				operation
 				ownerID
-				productTier
 				ref
-				stripeCustomerID
-				stripeProductTierID
 				stripeSubscriptionID
 				stripeSubscriptionStatus
 				tags
@@ -110794,10 +110549,7 @@ const GetOrgSubscriptionHistoriesDocument = `query GetOrgSubscriptionHistories (
 				id
 				operation
 				ownerID
-				productTier
 				ref
-				stripeCustomerID
-				stripeProductTierID
 				stripeSubscriptionID
 				stripeSubscriptionStatus
 				tags

@@ -6,6 +6,7 @@ import (
 
 	"github.com/Yamashou/gqlgenc/clientv2"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/iam/auth"
 )
 
 // WithAuthorizationAndSession adds the authorization header and session to the client request
@@ -58,6 +59,20 @@ func WithLoggingInterceptor() clientv2.RequestInterceptor {
 // WithEmptyInterceptor adds an empty interceptor
 func WithEmptyInterceptor() clientv2.RequestInterceptor {
 	return func(ctx context.Context, req *http.Request, gqlInfo *clientv2.GQLRequestInfo, res interface{}, next clientv2.RequestInterceptorFunc) error {
+		return next(ctx, req, gqlInfo, res)
+	}
+}
+
+// WithImpersonationInterceptor adds impersonation headers to the request
+func WithImpersonationInterceptor(userID string, orgID string) clientv2.RequestInterceptor {
+	return func(ctx context.Context, req *http.Request, gqlInfo *clientv2.GQLRequestInfo, res interface{}, next clientv2.RequestInterceptorFunc) error {
+		if userID != "" {
+			req.Header.Set(auth.UserIDHeader, userID)
+		}
+		if orgID != "" {
+			req.Header.Set(auth.OrganizationIDHeader, orgID)
+		}
+
 		return next(ctx, req, gqlInfo, res)
 	}
 }

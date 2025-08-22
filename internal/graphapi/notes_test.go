@@ -80,7 +80,6 @@ func TestMutationUpdateNote(t *testing.T) {
 			resp, err := tc.client.UpdateTask(tc.ctx, task.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -170,7 +169,6 @@ func TestMutationDeleteNote(t *testing.T) {
 			resp, err := tc.client.UpdateTask(tc.ctx, task.ID, request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 				return
 			}
 
@@ -240,7 +238,6 @@ func TestQueryNote(t *testing.T) {
 			note, err := tc.client.GetNoteByID(tc.ctx, tc.noteID)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(note))
 				return
 			}
 

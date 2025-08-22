@@ -93,6 +93,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_avatarUpdatedAt(ctx, field)
 			case "dedicatedDb":
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
+			case "stripeCustomerID":
+				return ec.fieldContext_Organization_stripeCustomerID(ctx, field)
 			case "controlCreators":
 				return ec.fieldContext_Organization_controlCreators(ctx, field)
 			case "controlImplementationCreators":
@@ -295,6 +297,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_avatarUpdatedAt(ctx, field)
 			case "dedicatedDb":
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
+			case "stripeCustomerID":
+				return ec.fieldContext_Organization_stripeCustomerID(ctx, field)
 			case "controlCreators":
 				return ec.fieldContext_Organization_controlCreators(ctx, field)
 			case "controlImplementationCreators":
@@ -541,6 +545,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_avatarUpdatedAt(ctx, field)
 			case "dedicatedDb":
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
+			case "stripeCustomerID":
+				return ec.fieldContext_Organization_stripeCustomerID(ctx, field)
 			case "controlCreators":
 				return ec.fieldContext_Organization_controlCreators(ctx, field)
 			case "controlImplementationCreators":

@@ -286,6 +286,26 @@ func (_u *OrganizationUpdate) SetNillableDedicatedDb(v *bool) *OrganizationUpdat
 	return _u
 }
 
+// SetStripeCustomerID sets the "stripe_customer_id" field.
+func (_u *OrganizationUpdate) SetStripeCustomerID(v string) *OrganizationUpdate {
+	_u.mutation.SetStripeCustomerID(v)
+	return _u
+}
+
+// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
+func (_u *OrganizationUpdate) SetNillableStripeCustomerID(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetStripeCustomerID(*v)
+	}
+	return _u
+}
+
+// ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
+func (_u *OrganizationUpdate) ClearStripeCustomerID() *OrganizationUpdate {
+	_u.mutation.ClearStripeCustomerID()
+	return _u
+}
+
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
 func (_u *OrganizationUpdate) AddControlCreatorIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddControlCreatorIDs(ids...)
@@ -2802,6 +2822,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if value, ok := _u.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.StripeCustomerID(); ok {
+		_spec.SetField(organization.FieldStripeCustomerID, field.TypeString, value)
+	}
+	if _u.mutation.StripeCustomerIDCleared() {
+		_spec.ClearField(organization.FieldStripeCustomerID, field.TypeString)
 	}
 	if _u.mutation.ControlCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -6186,6 +6212,26 @@ func (_u *OrganizationUpdateOne) SetNillableDedicatedDb(v *bool) *OrganizationUp
 	return _u
 }
 
+// SetStripeCustomerID sets the "stripe_customer_id" field.
+func (_u *OrganizationUpdateOne) SetStripeCustomerID(v string) *OrganizationUpdateOne {
+	_u.mutation.SetStripeCustomerID(v)
+	return _u
+}
+
+// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
+func (_u *OrganizationUpdateOne) SetNillableStripeCustomerID(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetStripeCustomerID(*v)
+	}
+	return _u
+}
+
+// ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
+func (_u *OrganizationUpdateOne) ClearStripeCustomerID() *OrganizationUpdateOne {
+	_u.mutation.ClearStripeCustomerID()
+	return _u
+}
+
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
 func (_u *OrganizationUpdateOne) AddControlCreatorIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddControlCreatorIDs(ids...)
@@ -8732,6 +8778,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 	}
 	if value, ok := _u.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.StripeCustomerID(); ok {
+		_spec.SetField(organization.FieldStripeCustomerID, field.TypeString, value)
+	}
+	if _u.mutation.StripeCustomerIDCleared() {
+		_spec.ClearField(organization.FieldStripeCustomerID, field.TypeString)
 	}
 	if _u.mutation.ControlCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{

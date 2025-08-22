@@ -39,7 +39,7 @@ var defaultDevClientConfig = Config{
 	},
 	GraphQLPath:     "/query",
 	Interceptors:    []clientv2.RequestInterceptor{},
-	Clientv2Options: clientv2.Options{ParseDataAlongWithErrors: false},
+	Clientv2Options: clientv2.Options{ParseDataAlongWithErrors: true},
 }
 
 // NewDefaultConfig returns a new default configuration for the API client
@@ -53,5 +53,5 @@ var defaultProductionClientConfig = Config{
 		Host:   "api.theopenlane.io",
 	},
 	GraphQLPath:     "/query",
-	Clientv2Options: clientv2.Options{ParseDataAlongWithErrors: false},
+	Clientv2Options: clientv2.Options{ParseDataAlongWithErrors: true},
 }

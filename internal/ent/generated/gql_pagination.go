@@ -23324,20 +23324,6 @@ var (
 			}
 		},
 	}
-	// OrgSubscriptionOrderFieldProductTier orders OrgSubscription by product_tier.
-	OrgSubscriptionOrderFieldProductTier = &OrgSubscriptionOrderField{
-		Value: func(_m *OrgSubscription) (ent.Value, error) {
-			return _m.ProductTier, nil
-		},
-		column: orgsubscription.FieldProductTier,
-		toTerm: orgsubscription.ByProductTier,
-		toCursor: func(_m *OrgSubscription) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ProductTier,
-			}
-		},
-	}
 	// OrgSubscriptionOrderFieldStripeSubscriptionStatus orders OrgSubscription by stripe_subscription_status.
 	OrgSubscriptionOrderFieldStripeSubscriptionStatus = &OrgSubscriptionOrderField{
 		Value: func(_m *OrgSubscription) (ent.Value, error) {
@@ -23457,8 +23443,6 @@ func (f OrgSubscriptionOrderField) String() string {
 		str = "created_at"
 	case OrgSubscriptionOrderFieldUpdatedAt.column:
 		str = "updated_at"
-	case OrgSubscriptionOrderFieldProductTier.column:
-		str = "product_tier"
 	case OrgSubscriptionOrderFieldStripeSubscriptionStatus.column:
 		str = "stripe_subscription_status"
 	case OrgSubscriptionOrderFieldActive.column:
@@ -23489,8 +23473,6 @@ func (f *OrgSubscriptionOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *OrgSubscriptionOrderFieldCreatedAt
 	case "updated_at":
 		*f = *OrgSubscriptionOrderFieldUpdatedAt
-	case "product_tier":
-		*f = *OrgSubscriptionOrderFieldProductTier
 	case "stripe_subscription_status":
 		*f = *OrgSubscriptionOrderFieldStripeSubscriptionStatus
 	case "active":
@@ -23799,20 +23781,6 @@ var (
 			}
 		},
 	}
-	// OrgSubscriptionHistoryOrderFieldProductTier orders OrgSubscriptionHistory by product_tier.
-	OrgSubscriptionHistoryOrderFieldProductTier = &OrgSubscriptionHistoryOrderField{
-		Value: func(_m *OrgSubscriptionHistory) (ent.Value, error) {
-			return _m.ProductTier, nil
-		},
-		column: orgsubscriptionhistory.FieldProductTier,
-		toTerm: orgsubscriptionhistory.ByProductTier,
-		toCursor: func(_m *OrgSubscriptionHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ProductTier,
-			}
-		},
-	}
 	// OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus orders OrgSubscriptionHistory by stripe_subscription_status.
 	OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus = &OrgSubscriptionHistoryOrderField{
 		Value: func(_m *OrgSubscriptionHistory) (ent.Value, error) {
@@ -23934,8 +23902,6 @@ func (f OrgSubscriptionHistoryOrderField) String() string {
 		str = "created_at"
 	case OrgSubscriptionHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
-	case OrgSubscriptionHistoryOrderFieldProductTier.column:
-		str = "product_tier"
 	case OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus.column:
 		str = "stripe_subscription_status"
 	case OrgSubscriptionHistoryOrderFieldActive.column:
@@ -23968,8 +23934,6 @@ func (f *OrgSubscriptionHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *OrgSubscriptionHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *OrgSubscriptionHistoryOrderFieldUpdatedAt
-	case "product_tier":
-		*f = *OrgSubscriptionHistoryOrderFieldProductTier
 	case "stripe_subscription_status":
 		*f = *OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus
 	case "active":

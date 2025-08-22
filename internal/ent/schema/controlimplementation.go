@@ -7,13 +7,13 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ControlImplementation holds the schema definition for the ControlImplementation entity
@@ -107,16 +107,21 @@ func (ControlImplementation) Hooks() []ent.Hook {
 	}
 }
 
+func (ControlImplementation) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the ControlImplementation
-func (ControlImplementation) Annotations() []schema.Annotation {
+func (c ControlImplementation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }
 
 // Policy of the ControlImplementation
-func (ControlImplementation) Policy() ent.Policy {
+func (c ControlImplementation) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CanCreateObjectsUnderParents([]string{

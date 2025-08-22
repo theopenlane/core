@@ -79,14 +79,21 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 		return false, nil
 	}
 
-	_, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token)
+	_, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
 	assert.ErrorIs(t, err, ErrTokenSSORequired)
 
 	pat.SSOAuthorizations = models.SSOAuthorizationMap{org.ID: time.Now()}
 
-	au, id, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token)
+	au, id, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
 	assert.NoError(t, err)
 	assert.Equal(t, pat.ID, id)
 	assert.Equal(t, user.ID, au.SubjectID)
 	assert.Equal(t, []string{org.ID}, au.OrganizationIDs)
+	assert.Empty(t, au.OrganizationID)
+
+	userDefaulOrg := org.ID
+
+	au, id, err = isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, userDefaulOrg)
+	assert.NoError(t, err)
+	assert.Equal(t, org.ID, au.OrganizationID)
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 
 	em "github.com/theopenlane/core/internal/entitlements/entmapping"
@@ -19,7 +20,7 @@ import (
 
 // syncSubscriptionItemsWithStripe ensures OrgProduct, OrgPrice, and OrgModule
 // records exist and are updated based on the given Stripe subscription data.
-func syncSubscriptionItemsWithStripe(ctx context.Context, sub *stripe.Subscription) error {
+func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, sub *stripe.Subscription) error {
 	orgSub, err := getOrgSubscription(ctx, sub)
 	if err != nil {
 		return err
@@ -44,12 +45,12 @@ func syncSubscriptionItemsWithStripe(ctx context.Context, sub *stripe.Subscripti
 
 		zerolog.Ctx(ctx).Info().Str("price_subscription_ID", price.SubscriptionID).Msg("org price created for subscription")
 
-		mod, err := upsertOrgModule(ctx, orgSub, price, item)
+		mod, err := upsertOrgModule(ctx, orgSub, price, item, h.Entitlements, string(sub.Status))
 		if err != nil {
 			return err
 		}
 
-		zerolog.Ctx(ctx).Info().Str("module_name", mod.Module).Msg("org module created")
+		zerolog.Ctx(ctx).Info().Str("module_name", mod.Module.String()).Msg("org module created")
 	}
 
 	return nil
@@ -116,7 +117,8 @@ func upsertOrgPrice(ctx context.Context, orgSub *ent.OrgSubscription, prod *ent.
 }
 
 // upsertOrgModule creates or updates an OrgModule based on the Stripe subscription item data
-func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *ent.OrgPrice, item *stripe.SubscriptionItem) (*ent.OrgModule, error) {
+func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *ent.OrgPrice, item *stripe.SubscriptionItem,
+	client *entitlements.StripeClient, status string) (*ent.OrgModule, error) {
 	if item.Price == nil {
 		return nil, nil
 	}
@@ -135,14 +137,14 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 			SetSubscriptionID(orgSub.ID).
 			SetPriceID(price.ID)
 
-		em.ApplyStripeSubscriptionItem(builder, item)
+		em.ApplyStripeSubscriptionItem(ctx, builder, item, client, status)
 
 		return builder.Save(allowCtx)
 	}
 
 	builder := tx.OrgModule.UpdateOne(existing)
 
-	em.ApplyStripeSubscriptionItem(builder, item)
+	em.ApplyStripeSubscriptionItem(ctx, builder, item, client, status)
 
 	builder.SetPriceID(price.ID)
 

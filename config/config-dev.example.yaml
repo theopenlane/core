@@ -43,7 +43,7 @@ db:
   enableHistory: true
 
 jobQueue:
-    connectionURI: "postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable"
+  connectionURI: "postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable"
 
 # auth settings
 auth:
@@ -79,13 +79,13 @@ auth:
 
 # totp settings
 totp:
-    codeLength: 6
-    enabled: true
-    issuer: "theopenlane.io"
-    recoveryCodeCount: 16
-    recoveryCodeLength: 8
-    redis: true
-    secret: "4af7d1842cef4aa7b098cb68361002df"
+  codeLength: 6
+  enabled: true
+  issuer: "theopenlane.io"
+  recoveryCodeCount: 16
+  recoveryCodeLength: 8
+  redis: true
+  secret: "4af7d1842cef4aa7b098cb68361002df"
 
 # authz settings
 authz:
@@ -102,29 +102,31 @@ sessions:
   encryptionKey: encryptionsecret
   signingKey: my-signing-secret
   httpOnly: true
-  sameSite: 'Lax'
+  sameSite: "Lax"
   secure: false # set to true in production
 
 # email settings
 email:
-    companyAddress: 5150 Broadway St &middot; San Antonio, TX 78209
-    companyName: Openlane
-    corporation: theopenlane, Inc.
-    fromEmail: no-reply@mail.theopenlane.io
-    supportEmail: support@theopenlane.io
-    urls:
-      verifySubscriber: https://www.theopenlane.io/subscribe
-      verify: https://console.theopenlane.io/verify
-      reset: https://console.theopenlane.io/password-reset
-      invite: https://console.theopenlane.io/invite
-      root: https://www.theopenlane.io
-      docs: https://docs.theopenlane.io
-      product: https://console.theopenlane.io
+  companyAddress: 5150 Broadway St &middot; San Antonio, TX 78209
+  companyName: Openlane
+  corporation: theopenlane, Inc.
+  fromEmail: no-reply@mail.theopenlane.io
+  supportEmail: support@theopenlane.io
+  urls:
+    verifySubscriber: https://www.theopenlane.io/subscribe
+    verify: https://console.theopenlane.io/verify
+    reset: https://console.theopenlane.io/password-reset
+    invite: https://console.theopenlane.io/invite
+    root: https://www.theopenlane.io
+    docs: https://docs.theopenlane.io
+    product: https://console.theopenlane.io
 
 ratelimit:
   enabled: false
 
 entConfig:
+  modules:
+    enabled: false
   entityTypes:
     - vendor
     - account
@@ -141,7 +143,8 @@ entConfig:
 objectStorage:
   # when using local storage, we serve the files up on a static handler
   # if switching to s3, be sure to use the below defaultBucket instead
-  defaultBucket: "file_uploads"
+  defaultBucket:
+    "file_uploads"
     # uncomment and update to enable s3, otherwise it will default to local storage
     # accessKey: "REDACTED"
     # secretKey: "REDACTED"
@@ -150,4 +153,4 @@ objectStorage:
     # provider: "s3"
 
 subscription:
-    enabled: false
+  enabled: false

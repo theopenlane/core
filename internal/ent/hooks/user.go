@@ -147,19 +147,15 @@ func HookUser() ent.Hook {
 					return nil, err
 				}
 
-				// create a subscription for the personal org and add default modules
-				orgSubs, err := createOrgSubscription(ctx, org, m)
-				if err != nil {
-					return nil, err
-				}
+				if m.EntConfig.Modules.Enabled {
+					// create a subscription for the personal org and add default modules
+					orgSubs, err := createOrgSubscription(ctx, org, m)
+					if err != nil {
+						return nil, err
+					}
 
-				modulesCreated, err := createDefaultOrgModulesProductsPrices(ctx, org, m, orgSubs, withPersonalOrg())
-				if err != nil {
-					return nil, err
-				}
-
-				if m.Client().EntitlementManager != nil {
-					if err := createFeatureTuples(ctx, m.Authz, org.ID, modulesCreated); err != nil {
+					_, err = createDefaultOrgModulesProductsPrices(ctx, org, m, orgSubs, withPersonalOrg())
+					if err != nil {
 						return nil, err
 					}
 				}

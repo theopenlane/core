@@ -40,26 +40,18 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldStripeSubscriptionID holds the string denoting the stripe_subscription_id field in the database.
 	FieldStripeSubscriptionID = "stripe_subscription_id"
-	// FieldProductTier holds the string denoting the product_tier field in the database.
-	FieldProductTier = "product_tier"
 	// FieldProductPrice holds the string denoting the product_price field in the database.
 	FieldProductPrice = "product_price"
-	// FieldStripeProductTierID holds the string denoting the stripe_product_tier_id field in the database.
-	FieldStripeProductTierID = "stripe_product_tier_id"
 	// FieldStripeSubscriptionStatus holds the string denoting the stripe_subscription_status field in the database.
 	FieldStripeSubscriptionStatus = "stripe_subscription_status"
 	// FieldActive holds the string denoting the active field in the database.
 	FieldActive = "active"
-	// FieldStripeCustomerID holds the string denoting the stripe_customer_id field in the database.
-	FieldStripeCustomerID = "stripe_customer_id"
 	// FieldExpiresAt holds the string denoting the expires_at field in the database.
 	FieldExpiresAt = "expires_at"
 	// FieldTrialExpiresAt holds the string denoting the trial_expires_at field in the database.
 	FieldTrialExpiresAt = "trial_expires_at"
 	// FieldDaysUntilDue holds the string denoting the days_until_due field in the database.
 	FieldDaysUntilDue = "days_until_due"
-	// FieldPaymentMethodAdded holds the string denoting the payment_method_added field in the database.
-	FieldPaymentMethodAdded = "payment_method_added"
 	// FieldFeatures holds the string denoting the features field in the database.
 	FieldFeatures = "features"
 	// FieldFeatureLookupKeys holds the string denoting the feature_lookup_keys field in the database.
@@ -83,16 +75,12 @@ var Columns = []string{
 	FieldTags,
 	FieldOwnerID,
 	FieldStripeSubscriptionID,
-	FieldProductTier,
 	FieldProductPrice,
-	FieldStripeProductTierID,
 	FieldStripeSubscriptionStatus,
 	FieldActive,
-	FieldStripeCustomerID,
 	FieldExpiresAt,
 	FieldTrialExpiresAt,
 	FieldDaysUntilDue,
-	FieldPaymentMethodAdded,
 	FieldFeatures,
 	FieldFeatureLookupKeys,
 }
@@ -197,16 +185,6 @@ func ByStripeSubscriptionID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStripeSubscriptionID, opts...).ToFunc()
 }
 
-// ByProductTier orders the results by the product_tier field.
-func ByProductTier(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProductTier, opts...).ToFunc()
-}
-
-// ByStripeProductTierID orders the results by the stripe_product_tier_id field.
-func ByStripeProductTierID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStripeProductTierID, opts...).ToFunc()
-}
-
 // ByStripeSubscriptionStatus orders the results by the stripe_subscription_status field.
 func ByStripeSubscriptionStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStripeSubscriptionStatus, opts...).ToFunc()
@@ -215,11 +193,6 @@ func ByStripeSubscriptionStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByActive orders the results by the active field.
 func ByActive(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActive, opts...).ToFunc()
-}
-
-// ByStripeCustomerID orders the results by the stripe_customer_id field.
-func ByStripeCustomerID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStripeCustomerID, opts...).ToFunc()
 }
 
 // ByExpiresAt orders the results by the expires_at field.
@@ -235,11 +208,6 @@ func ByTrialExpiresAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDaysUntilDue orders the results by the days_until_due field.
 func ByDaysUntilDue(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDaysUntilDue, opts...).ToFunc()
-}
-
-// ByPaymentMethodAdded orders the results by the payment_method_added field.
-func ByPaymentMethodAdded(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPaymentMethodAdded, opts...).ToFunc()
 }
 
 var (

@@ -2817,11 +2817,7 @@ type ComplexityRoot struct {
 		ModuleBillingURLs        func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
-		PaymentMethodAdded       func(childComplexity int) int
 		ProductPrice             func(childComplexity int) int
-		ProductTier              func(childComplexity int) int
-		StripeCustomerID         func(childComplexity int) int
-		StripeProductTierID      func(childComplexity int) int
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
 		SubscriptionURL          func(childComplexity int) int
@@ -2854,12 +2850,8 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		Operation                func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
-		PaymentMethodAdded       func(childComplexity int) int
 		ProductPrice             func(childComplexity int) int
-		ProductTier              func(childComplexity int) int
 		Ref                      func(childComplexity int) int
-		StripeCustomerID         func(childComplexity int) int
-		StripeProductTierID      func(childComplexity int) int
 		StripeSubscriptionID     func(childComplexity int) int
 		StripeSubscriptionStatus func(childComplexity int) int
 		Tags                     func(childComplexity int) int
@@ -2947,6 +2939,7 @@ type ComplexityRoot struct {
 		Setting                       func(childComplexity int) int
 		StandardCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Standards                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		StripeCustomerID              func(childComplexity int) int
 		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Subprocessors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
 		Subscribers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
@@ -2998,6 +2991,7 @@ type ComplexityRoot struct {
 		Operation         func(childComplexity int) int
 		PersonalOrg       func(childComplexity int) int
 		Ref               func(childComplexity int) int
+		StripeCustomerID  func(childComplexity int) int
 		Tags              func(childComplexity int) int
 		UpdatedAt         func(childComplexity int) int
 		UpdatedBy         func(childComplexity int) int
@@ -3037,6 +3031,7 @@ type ComplexityRoot struct {
 		OidcDiscoveryEndpoint            func(childComplexity int) int
 		Organization                     func(childComplexity int) int
 		OrganizationID                   func(childComplexity int) int
+		PaymentMethodAdded               func(childComplexity int) int
 		Tags                             func(childComplexity int) int
 		TaxIdentifier                    func(childComplexity int) int
 		UpdatedAt                        func(childComplexity int) int
@@ -3089,6 +3084,7 @@ type ComplexityRoot struct {
 		OidcDiscoveryEndpoint            func(childComplexity int) int
 		Operation                        func(childComplexity int) int
 		OrganizationID                   func(childComplexity int) int
+		PaymentMethodAdded               func(childComplexity int) int
 		Ref                              func(childComplexity int) int
 		Tags                             func(childComplexity int) int
 		TaxIdentifier                    func(childComplexity int) int
@@ -19853,40 +19849,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrgSubscription.OwnerID(childComplexity), true
 
-	case "OrgSubscription.paymentMethodAdded":
-		if e.complexity.OrgSubscription.PaymentMethodAdded == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.PaymentMethodAdded(childComplexity), true
-
 	case "OrgSubscription.productPrice":
 		if e.complexity.OrgSubscription.ProductPrice == nil {
 			break
 		}
 
 		return e.complexity.OrgSubscription.ProductPrice(childComplexity), true
-
-	case "OrgSubscription.productTier":
-		if e.complexity.OrgSubscription.ProductTier == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.ProductTier(childComplexity), true
-
-	case "OrgSubscription.stripeCustomerID":
-		if e.complexity.OrgSubscription.StripeCustomerID == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.StripeCustomerID(childComplexity), true
-
-	case "OrgSubscription.stripeProductTierID":
-		if e.complexity.OrgSubscription.StripeProductTierID == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.StripeProductTierID(childComplexity), true
 
 	case "OrgSubscription.stripeSubscriptionID":
 		if e.complexity.OrgSubscription.StripeSubscriptionID == nil {
@@ -20049,13 +20017,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrgSubscriptionHistory.OwnerID(childComplexity), true
 
-	case "OrgSubscriptionHistory.paymentMethodAdded":
-		if e.complexity.OrgSubscriptionHistory.PaymentMethodAdded == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.PaymentMethodAdded(childComplexity), true
-
 	case "OrgSubscriptionHistory.productPrice":
 		if e.complexity.OrgSubscriptionHistory.ProductPrice == nil {
 			break
@@ -20063,33 +20024,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrgSubscriptionHistory.ProductPrice(childComplexity), true
 
-	case "OrgSubscriptionHistory.productTier":
-		if e.complexity.OrgSubscriptionHistory.ProductTier == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.ProductTier(childComplexity), true
-
 	case "OrgSubscriptionHistory.ref":
 		if e.complexity.OrgSubscriptionHistory.Ref == nil {
 			break
 		}
 
 		return e.complexity.OrgSubscriptionHistory.Ref(childComplexity), true
-
-	case "OrgSubscriptionHistory.stripeCustomerID":
-		if e.complexity.OrgSubscriptionHistory.StripeCustomerID == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.StripeCustomerID(childComplexity), true
-
-	case "OrgSubscriptionHistory.stripeProductTierID":
-		if e.complexity.OrgSubscriptionHistory.StripeProductTierID == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.StripeProductTierID(childComplexity), true
 
 	case "OrgSubscriptionHistory.stripeSubscriptionID":
 		if e.complexity.OrgSubscriptionHistory.StripeSubscriptionID == nil {
@@ -20897,6 +20837,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Standards(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.StandardOrder), args["where"].(*generated.StandardWhereInput)), true
 
+	case "Organization.stripeCustomerID":
+		if e.complexity.Organization.StripeCustomerID == nil {
+			break
+		}
+
+		return e.complexity.Organization.StripeCustomerID(childComplexity), true
+
 	case "Organization.subcontrols":
 		if e.complexity.Organization.Subcontrols == nil {
 			break
@@ -21168,6 +21115,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationHistory.Ref(childComplexity), true
 
+	case "OrganizationHistory.stripeCustomerID":
+		if e.complexity.OrganizationHistory.StripeCustomerID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationHistory.StripeCustomerID(childComplexity), true
+
 	case "OrganizationHistory.tags":
 		if e.complexity.OrganizationHistory.Tags == nil {
 			break
@@ -21382,6 +21336,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSetting.OrganizationID(childComplexity), true
+
+	case "OrganizationSetting.paymentMethodAdded":
+		if e.complexity.OrganizationSetting.PaymentMethodAdded == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.PaymentMethodAdded(childComplexity), true
 
 	case "OrganizationSetting.tags":
 		if e.complexity.OrganizationSetting.Tags == nil {
@@ -21620,6 +21581,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingHistory.OrganizationID(childComplexity), true
+
+	case "OrganizationSettingHistory.paymentMethodAdded":
+		if e.complexity.OrganizationSettingHistory.PaymentMethodAdded == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.PaymentMethodAdded(childComplexity), true
 
 	case "OrganizationSettingHistory.ref":
 		if e.complexity.OrganizationSettingHistory.Ref == nil {
@@ -61949,17 +61917,9 @@ type OrgSubscription implements Node {
   """
   stripeSubscriptionID: String
   """
-  the common name of the product tier the subscription is associated with, e.g. starter tier
-  """
-  productTier: String
-  """
   the price of the product tier
   """
   productPrice: Price
-  """
-  the product id that represents the tier in stripe
-  """
-  stripeProductTierID: String
   """
   the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
   """
@@ -61968,10 +61928,6 @@ type OrgSubscription implements Node {
   indicates if the subscription is active
   """
   active: Boolean!
-  """
-  the customer ID the subscription is associated to
-  """
-  stripeCustomerID: String
   """
   the time the subscription is set to expire; only populated if subscription is cancelled
   """
@@ -61984,10 +61940,6 @@ type OrgSubscription implements Node {
   number of days until there is a due payment
   """
   daysUntilDue: String
-  """
-  whether or not a payment method has been added to the account
-  """
-  paymentMethodAdded: Boolean
   """
   the features associated with the subscription
   """
@@ -62081,17 +62033,9 @@ type OrgSubscriptionHistory implements Node {
   """
   stripeSubscriptionID: String
   """
-  the common name of the product tier the subscription is associated with, e.g. starter tier
-  """
-  productTier: String
-  """
   the price of the product tier
   """
   productPrice: Price
-  """
-  the product id that represents the tier in stripe
-  """
-  stripeProductTierID: String
   """
   the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
   """
@@ -62100,10 +62044,6 @@ type OrgSubscriptionHistory implements Node {
   indicates if the subscription is active
   """
   active: Boolean!
-  """
-  the customer ID the subscription is associated to
-  """
-  stripeCustomerID: String
   """
   the time the subscription is set to expire; only populated if subscription is cancelled
   """
@@ -62116,10 +62056,6 @@ type OrgSubscriptionHistory implements Node {
   number of days until there is a due payment
   """
   daysUntilDue: String
-  """
-  whether or not a payment method has been added to the account
-  """
-  paymentMethodAdded: Boolean
   """
   the features associated with the subscription
   """
@@ -62187,7 +62123,6 @@ enum OrgSubscriptionHistoryOrderField {
   history_time
   created_at
   updated_at
-  product_tier
   stripe_subscription_status
   active
   expires_at
@@ -62350,42 +62285,6 @@ input OrgSubscriptionHistoryWhereInput {
   stripeSubscriptionIDEqualFold: String
   stripeSubscriptionIDContainsFold: String
   """
-  product_tier field predicates
-  """
-  productTier: String
-  productTierNEQ: String
-  productTierIn: [String!]
-  productTierNotIn: [String!]
-  productTierGT: String
-  productTierGTE: String
-  productTierLT: String
-  productTierLTE: String
-  productTierContains: String
-  productTierHasPrefix: String
-  productTierHasSuffix: String
-  productTierIsNil: Boolean
-  productTierNotNil: Boolean
-  productTierEqualFold: String
-  productTierContainsFold: String
-  """
-  stripe_product_tier_id field predicates
-  """
-  stripeProductTierID: String
-  stripeProductTierIDNEQ: String
-  stripeProductTierIDIn: [String!]
-  stripeProductTierIDNotIn: [String!]
-  stripeProductTierIDGT: String
-  stripeProductTierIDGTE: String
-  stripeProductTierIDLT: String
-  stripeProductTierIDLTE: String
-  stripeProductTierIDContains: String
-  stripeProductTierIDHasPrefix: String
-  stripeProductTierIDHasSuffix: String
-  stripeProductTierIDIsNil: Boolean
-  stripeProductTierIDNotNil: Boolean
-  stripeProductTierIDEqualFold: String
-  stripeProductTierIDContainsFold: String
-  """
   stripe_subscription_status field predicates
   """
   stripeSubscriptionStatus: String
@@ -62408,24 +62307,6 @@ input OrgSubscriptionHistoryWhereInput {
   """
   active: Boolean
   activeNEQ: Boolean
-  """
-  stripe_customer_id field predicates
-  """
-  stripeCustomerID: String
-  stripeCustomerIDNEQ: String
-  stripeCustomerIDIn: [String!]
-  stripeCustomerIDNotIn: [String!]
-  stripeCustomerIDGT: String
-  stripeCustomerIDGTE: String
-  stripeCustomerIDLT: String
-  stripeCustomerIDLTE: String
-  stripeCustomerIDContains: String
-  stripeCustomerIDHasPrefix: String
-  stripeCustomerIDHasSuffix: String
-  stripeCustomerIDIsNil: Boolean
-  stripeCustomerIDNotNil: Boolean
-  stripeCustomerIDEqualFold: String
-  stripeCustomerIDContainsFold: String
   """
   expires_at field predicates
   """
@@ -62470,13 +62351,6 @@ input OrgSubscriptionHistoryWhereInput {
   daysUntilDueNotNil: Boolean
   daysUntilDueEqualFold: String
   daysUntilDueContainsFold: String
-  """
-  payment_method_added field predicates
-  """
-  paymentMethodAdded: Boolean
-  paymentMethodAddedNEQ: Boolean
-  paymentMethodAddedIsNil: Boolean
-  paymentMethodAddedNotNil: Boolean
 }
 """
 Ordering options for OrgSubscription connections
@@ -62497,7 +62371,6 @@ Properties by which OrgSubscription connections can be ordered.
 enum OrgSubscriptionOrderField {
   created_at
   updated_at
-  product_tier
   stripe_subscription_status
   active
   expires_at
@@ -62624,42 +62497,6 @@ input OrgSubscriptionWhereInput {
   stripeSubscriptionIDEqualFold: String
   stripeSubscriptionIDContainsFold: String
   """
-  product_tier field predicates
-  """
-  productTier: String
-  productTierNEQ: String
-  productTierIn: [String!]
-  productTierNotIn: [String!]
-  productTierGT: String
-  productTierGTE: String
-  productTierLT: String
-  productTierLTE: String
-  productTierContains: String
-  productTierHasPrefix: String
-  productTierHasSuffix: String
-  productTierIsNil: Boolean
-  productTierNotNil: Boolean
-  productTierEqualFold: String
-  productTierContainsFold: String
-  """
-  stripe_product_tier_id field predicates
-  """
-  stripeProductTierID: String
-  stripeProductTierIDNEQ: String
-  stripeProductTierIDIn: [String!]
-  stripeProductTierIDNotIn: [String!]
-  stripeProductTierIDGT: String
-  stripeProductTierIDGTE: String
-  stripeProductTierIDLT: String
-  stripeProductTierIDLTE: String
-  stripeProductTierIDContains: String
-  stripeProductTierIDHasPrefix: String
-  stripeProductTierIDHasSuffix: String
-  stripeProductTierIDIsNil: Boolean
-  stripeProductTierIDNotNil: Boolean
-  stripeProductTierIDEqualFold: String
-  stripeProductTierIDContainsFold: String
-  """
   stripe_subscription_status field predicates
   """
   stripeSubscriptionStatus: String
@@ -62682,24 +62519,6 @@ input OrgSubscriptionWhereInput {
   """
   active: Boolean
   activeNEQ: Boolean
-  """
-  stripe_customer_id field predicates
-  """
-  stripeCustomerID: String
-  stripeCustomerIDNEQ: String
-  stripeCustomerIDIn: [String!]
-  stripeCustomerIDNotIn: [String!]
-  stripeCustomerIDGT: String
-  stripeCustomerIDGTE: String
-  stripeCustomerIDLT: String
-  stripeCustomerIDLTE: String
-  stripeCustomerIDContains: String
-  stripeCustomerIDHasPrefix: String
-  stripeCustomerIDHasSuffix: String
-  stripeCustomerIDIsNil: Boolean
-  stripeCustomerIDNotNil: Boolean
-  stripeCustomerIDEqualFold: String
-  stripeCustomerIDContainsFold: String
   """
   expires_at field predicates
   """
@@ -62744,13 +62563,6 @@ input OrgSubscriptionWhereInput {
   daysUntilDueNotNil: Boolean
   daysUntilDueEqualFold: String
   daysUntilDueContainsFold: String
-  """
-  payment_method_added field predicates
-  """
-  paymentMethodAdded: Boolean
-  paymentMethodAddedNEQ: Boolean
-  paymentMethodAddedIsNil: Boolean
-  paymentMethodAddedNotNil: Boolean
   """
   owner edge predicates
   """
@@ -62804,6 +62616,10 @@ type Organization implements Node {
   Whether the organization has a dedicated database
   """
   dedicatedDb: Boolean!
+  """
+  the stripe customer ID this organization is associated to
+  """
+  stripeCustomerID: String
   controlCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -64744,6 +64560,10 @@ type OrganizationHistory implements Node {
   Whether the organization has a dedicated database
   """
   dedicatedDb: Boolean!
+  """
+  the stripe customer ID this organization is associated to
+  """
+  stripeCustomerID: String
 }
 """
 A connection to a list of items.
@@ -65120,6 +64940,10 @@ type OrganizationSetting implements Node {
   unique token used to receive compliance webhook events
   """
   complianceWebhookToken: String
+  """
+  whether or not a payment method has been added to the account
+  """
+  paymentMethodAdded: Boolean!
   organization: Organization
   files(
     """
@@ -65268,6 +65092,10 @@ type OrganizationSettingHistory implements Node {
   unique token used to receive compliance webhook events
   """
   complianceWebhookToken: String
+  """
+  whether or not a payment method has been added to the account
+  """
+  paymentMethodAdded: Boolean!
 }
 """
 A connection to a list of items.
@@ -68938,9 +68766,10 @@ ProgramHistoryProgramStatus is enum for the field status
 enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramStatus") {
   NOT_STARTED
   IN_PROGRESS
+  ACTION_REQUIRED
   READY_FOR_AUDITOR
   COMPLETED
-  ACTION_REQUIRED
+  ARCHIVED
 }
 """
 ProgramHistoryProgramType is enum for the field program_type
@@ -69698,9 +69527,10 @@ ProgramProgramStatus is enum for the field status
 enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramStatus") {
   NOT_STARTED
   IN_PROGRESS
+  ACTION_REQUIRED
   READY_FOR_AUDITOR
   COMPLETED
-  ACTION_REQUIRED
+  ARCHIVED
 }
 """
 ProgramProgramType is enum for the field program_type
@@ -94939,7 +94769,8 @@ type TaskBulkUpdatePayload {
     IDs of the updated tasks
     """
     updatedIDs: [ID!]
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/template.graphql", Input: `extend type Query {
     """
     Look up template by ID

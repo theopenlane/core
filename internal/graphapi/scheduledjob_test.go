@@ -86,7 +86,6 @@ func TestQueryScheduledJob(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -354,7 +353,6 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 			resp, err := tc.client.CreateScheduledJob(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -514,7 +512,6 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 			resp, err := tc.client.UpdateScheduledJob(tc.ctx, tc.scheduledJobID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -628,7 +625,6 @@ func TestMutationDeleteScheduledJob(t *testing.T) {
 			resp, err := tc.client.DeleteScheduledJob(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

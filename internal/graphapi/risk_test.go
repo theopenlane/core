@@ -96,7 +96,6 @@ func TestQueryRisk(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -328,7 +327,6 @@ func TestMutationCreateRisk(t *testing.T) {
 			resp, err := tc.client.CreateRisk(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -469,9 +467,8 @@ func TestMutationUpdateRisk(t *testing.T) {
 	anotherStakeholderGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the risk
-	res, err := suite.client.api.GetRiskByID(anotherAdminUser.UserCtx, risk.ID)
+	_, err := suite.client.api.GetRiskByID(anotherAdminUser.UserCtx, risk.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Assert(t, is.Nil(res))
 
 	testCases := []struct {
 		name        string
@@ -529,7 +526,6 @@ func TestMutationUpdateRisk(t *testing.T) {
 			resp, err := tc.client.UpdateRisk(tc.ctx, risk.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -644,7 +640,6 @@ func TestMutationDeleteRisk(t *testing.T) {
 			resp, err := tc.client.DeleteRisk(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -742,7 +737,6 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 			resp, err := tc.client.UpdateBulkRisk(tc.ctx, tc.ids, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

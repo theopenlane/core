@@ -174,20 +174,6 @@ func (_c *OrgSubscriptionHistoryCreate) SetNillableStripeSubscriptionID(v *strin
 	return _c
 }
 
-// SetProductTier sets the "product_tier" field.
-func (_c *OrgSubscriptionHistoryCreate) SetProductTier(v string) *OrgSubscriptionHistoryCreate {
-	_c.mutation.SetProductTier(v)
-	return _c
-}
-
-// SetNillableProductTier sets the "product_tier" field if the given value is not nil.
-func (_c *OrgSubscriptionHistoryCreate) SetNillableProductTier(v *string) *OrgSubscriptionHistoryCreate {
-	if v != nil {
-		_c.SetProductTier(*v)
-	}
-	return _c
-}
-
 // SetProductPrice sets the "product_price" field.
 func (_c *OrgSubscriptionHistoryCreate) SetProductPrice(v models.Price) *OrgSubscriptionHistoryCreate {
 	_c.mutation.SetProductPrice(v)
@@ -198,20 +184,6 @@ func (_c *OrgSubscriptionHistoryCreate) SetProductPrice(v models.Price) *OrgSubs
 func (_c *OrgSubscriptionHistoryCreate) SetNillableProductPrice(v *models.Price) *OrgSubscriptionHistoryCreate {
 	if v != nil {
 		_c.SetProductPrice(*v)
-	}
-	return _c
-}
-
-// SetStripeProductTierID sets the "stripe_product_tier_id" field.
-func (_c *OrgSubscriptionHistoryCreate) SetStripeProductTierID(v string) *OrgSubscriptionHistoryCreate {
-	_c.mutation.SetStripeProductTierID(v)
-	return _c
-}
-
-// SetNillableStripeProductTierID sets the "stripe_product_tier_id" field if the given value is not nil.
-func (_c *OrgSubscriptionHistoryCreate) SetNillableStripeProductTierID(v *string) *OrgSubscriptionHistoryCreate {
-	if v != nil {
-		_c.SetStripeProductTierID(*v)
 	}
 	return _c
 }
@@ -240,20 +212,6 @@ func (_c *OrgSubscriptionHistoryCreate) SetActive(v bool) *OrgSubscriptionHistor
 func (_c *OrgSubscriptionHistoryCreate) SetNillableActive(v *bool) *OrgSubscriptionHistoryCreate {
 	if v != nil {
 		_c.SetActive(*v)
-	}
-	return _c
-}
-
-// SetStripeCustomerID sets the "stripe_customer_id" field.
-func (_c *OrgSubscriptionHistoryCreate) SetStripeCustomerID(v string) *OrgSubscriptionHistoryCreate {
-	_c.mutation.SetStripeCustomerID(v)
-	return _c
-}
-
-// SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
-func (_c *OrgSubscriptionHistoryCreate) SetNillableStripeCustomerID(v *string) *OrgSubscriptionHistoryCreate {
-	if v != nil {
-		_c.SetStripeCustomerID(*v)
 	}
 	return _c
 }
@@ -296,20 +254,6 @@ func (_c *OrgSubscriptionHistoryCreate) SetDaysUntilDue(v string) *OrgSubscripti
 func (_c *OrgSubscriptionHistoryCreate) SetNillableDaysUntilDue(v *string) *OrgSubscriptionHistoryCreate {
 	if v != nil {
 		_c.SetDaysUntilDue(*v)
-	}
-	return _c
-}
-
-// SetPaymentMethodAdded sets the "payment_method_added" field.
-func (_c *OrgSubscriptionHistoryCreate) SetPaymentMethodAdded(v bool) *OrgSubscriptionHistoryCreate {
-	_c.mutation.SetPaymentMethodAdded(v)
-	return _c
-}
-
-// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (_c *OrgSubscriptionHistoryCreate) SetNillablePaymentMethodAdded(v *bool) *OrgSubscriptionHistoryCreate {
-	if v != nil {
-		_c.SetPaymentMethodAdded(*v)
 	}
 	return _c
 }
@@ -501,17 +445,9 @@ func (_c *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory, *
 		_spec.SetField(orgsubscriptionhistory.FieldStripeSubscriptionID, field.TypeString, value)
 		_node.StripeSubscriptionID = value
 	}
-	if value, ok := _c.mutation.ProductTier(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldProductTier, field.TypeString, value)
-		_node.ProductTier = value
-	}
 	if value, ok := _c.mutation.ProductPrice(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON, value)
 		_node.ProductPrice = value
-	}
-	if value, ok := _c.mutation.StripeProductTierID(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldStripeProductTierID, field.TypeString, value)
-		_node.StripeProductTierID = value
 	}
 	if value, ok := _c.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeSubscriptionStatus, field.TypeString, value)
@@ -520,10 +456,6 @@ func (_c *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory, *
 	if value, ok := _c.mutation.Active(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldActive, field.TypeBool, value)
 		_node.Active = value
-	}
-	if value, ok := _c.mutation.StripeCustomerID(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldStripeCustomerID, field.TypeString, value)
-		_node.StripeCustomerID = value
 	}
 	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldExpiresAt, field.TypeTime, value)
@@ -536,10 +468,6 @@ func (_c *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory, *
 	if value, ok := _c.mutation.DaysUntilDue(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString, value)
 		_node.DaysUntilDue = &value
-	}
-	if value, ok := _c.mutation.PaymentMethodAdded(); ok {
-		_spec.SetField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool, value)
-		_node.PaymentMethodAdded = &value
 	}
 	if value, ok := _c.mutation.Features(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)

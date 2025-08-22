@@ -130,7 +130,7 @@ func (_c *OrgModuleCreate) SetNillableOwnerID(v *string) *OrgModuleCreate {
 }
 
 // SetModule sets the "module" field.
-func (_c *OrgModuleCreate) SetModule(v string) *OrgModuleCreate {
+func (_c *OrgModuleCreate) SetModule(v models.OrgModule) *OrgModuleCreate {
 	_c.mutation.SetModule(v)
 	return _c
 }
@@ -393,6 +393,11 @@ func (_c *OrgModuleCreate) check() error {
 	}
 	if _, ok := _c.mutation.Module(); !ok {
 		return &ValidationError{Name: "module", err: errors.New(`generated: missing required field "OrgModule.module"`)}
+	}
+	if v, ok := _c.mutation.Module(); ok {
+		if err := orgmodule.ModuleValidator(string(v)); err != nil {
+			return &ValidationError{Name: "module", err: fmt.Errorf(`generated: validator failed for field "OrgModule.module": %w`, err)}
+		}
 	}
 	if _, ok := _c.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "OrgModule.active"`)}

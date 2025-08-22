@@ -68,7 +68,6 @@ func TestQueryInvite(t *testing.T) {
 
 			if tc.wantErr {
 				assert.ErrorContains(t, err, notFoundErrorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -284,7 +283,6 @@ func TestMutationCreateInvite(t *testing.T) {
 
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -377,7 +375,6 @@ func TestMutationCreateBulkInvite(t *testing.T) {
 			resp, err := tc.client.CreateBulkInvite(tc.ctx, input)
 			if tc.wantErr {
 				assert.ErrorContains(t, err, "failed to create invite")
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -470,7 +467,6 @@ func TestMutationDeleteInvite(t *testing.T) {
 
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

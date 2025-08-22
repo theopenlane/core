@@ -5,7 +5,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Entity holds the schema definition for the Entity entity
@@ -137,17 +137,18 @@ func (Entity) Hooks() []ent.Hook {
 }
 
 // Policy of the Entity
-func (Entity) Policy() ent.Policy {
+func (e Entity) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),
 	)
 }
 
-// Annotations of the Entity
-func (Entity) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("entity-management"),
+func (Entity) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
 	}
 }

@@ -4,13 +4,14 @@ package entconfig
 type Config struct {
 	// EntityTypes is the list of entity types to create by default for the organization
 	EntityTypes []string `json:"entityTypes" koanf:"entityTypes" default:"" description:"entity types to create for the organization"`
-
 	// Summarizer contains configuration for text summarization
 	Summarizer Summarizer `json:"summarizer" koanf:"summarizer"`
 	// Windmill contains configuration for Windmill workflow automation
 	Windmill Windmill `json:"windmill" koanf:"windmill"`
 	// MaxPoolSize is the max pond pool workers that can be used by the ent client
 	MaxPoolSize int `json:"maxPoolSize" koanf:"maxPoolSize" default:"100"`
+	// Modules contains the configuration for the module system
+	Modules Modules `json:"modules" koanf:"modules"`
 }
 
 // Summarizer holds configuration for the text summarization functionality
@@ -167,4 +168,10 @@ type Windmill struct {
 
 	// OnSuccessScript script to run when a scheduled job succeeds
 	OnSuccessScript string `json:"onSuccessScript," koanf:"onSuccessScript"`
+}
+
+// Modules settings for features access
+type Modules struct {
+	// Enabled indicates whether to check and verify module access
+	Enabled bool `json:"enabled" koanf:"enabled" default:"true"`
 }

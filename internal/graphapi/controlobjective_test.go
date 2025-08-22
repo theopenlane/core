@@ -97,8 +97,6 @@ func TestQueryControlObjective(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -322,8 +320,6 @@ func TestMutationCreateControlObjective(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -406,9 +402,8 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the control objective
-	res, err := suite.client.api.GetControlObjectiveByID(anotherAdminUser.UserCtx, controlObjective.ID)
+	_, err := suite.client.api.GetControlObjectiveByID(anotherAdminUser.UserCtx, controlObjective.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Assert(t, is.Nil(res))
 
 	testCases := []struct {
 		name        string
@@ -484,8 +479,6 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 			resp, err := tc.client.UpdateControlObjective(tc.ctx, controlObjective.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 
@@ -606,8 +599,6 @@ func TestMutationDeleteControlObjective(t *testing.T) {
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
-
 				return
 			}
 

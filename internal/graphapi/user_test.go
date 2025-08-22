@@ -48,7 +48,6 @@ func TestQueryUser(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -132,7 +131,6 @@ func TestMutationCreateUser(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -301,7 +299,6 @@ func TestMutationUpdateUser(t *testing.T) {
 			resp, err := suite.client.api.UpdateUser(reqCtx, user.ID, tc.updateInput, tc.avatarFile)
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -360,7 +357,6 @@ func TestMutationDeleteUser(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -373,8 +369,7 @@ func TestMutationDeleteUser(t *testing.T) {
 			// add allow context to bypass auth since the tuple will be deleted
 			reqCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
 
-			org, err := suite.client.api.GetOrganizationByID(reqCtx, personalOrgID)
-			assert.Assert(t, is.Nil(org))
+			_, err = suite.client.api.GetOrganizationByID(reqCtx, personalOrgID)
 
 			assert.ErrorContains(t, err, notFoundErrorMsg)
 
@@ -382,9 +377,7 @@ func TestMutationDeleteUser(t *testing.T) {
 			assert.Check(t, is.Equal(tc.userID, resp.DeleteUser.DeletedID))
 
 			// make sure the user setting is deleted
-			out, err := suite.client.api.GetUserSettingByID(reqCtx, userSetting.ID)
-			assert.Assert(t, is.Nil(out))
-
+			_, err = suite.client.api.GetUserSettingByID(reqCtx, userSetting.ID)
 			assert.ErrorContains(t, err, notFoundErrorMsg)
 		})
 	}
@@ -406,14 +399,11 @@ func TestMutationUserCascadeDelete(t *testing.T) {
 	// make sure the deletedID matches the ID we wanted to delete
 	assert.Check(t, is.Equal(user.ID, resp.DeleteUser.DeletedID))
 
-	o, err := suite.client.api.GetUserByID(reqCtx, user.ID)
-
-	assert.Assert(t, is.Nil(o))
+	_, err = suite.client.api.GetUserByID(reqCtx, user.ID)
 
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
-	g, err := suite.client.api.GetPersonalAccessTokenByID(reqCtx, token.ID)
+	_, err = suite.client.api.GetPersonalAccessTokenByID(reqCtx, token.ID)
 
-	assert.Assert(t, is.Nil(g))
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 }

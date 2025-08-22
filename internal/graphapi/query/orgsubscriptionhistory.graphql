@@ -13,10 +13,7 @@ query GetAllOrgSubscriptionHistories {
         id
         operation
         ownerID
-        productTier
         ref
-        stripeCustomerID
-        stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
         tags
@@ -40,10 +37,7 @@ query GetOrgSubscriptionHistories($where: OrgSubscriptionHistoryWhereInput) {
         id
         operation
         ownerID
-        productTier
         ref
-        stripeCustomerID
-        stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
         tags

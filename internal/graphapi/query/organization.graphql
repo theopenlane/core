@@ -151,10 +151,8 @@ query GetAllOrganizations {
           tags
         }
         orgSubscriptions {
-          stripeCustomerID
           stripeSubscriptionStatus
           active
-          productTier
           features
           id
         }
@@ -220,10 +218,8 @@ query GetOrganizationByID($organizationId: ID!) {
       tags
     }
     orgSubscriptions {
-      stripeCustomerID
       stripeSubscriptionStatus
       active
-      productTier
       features
       id
     }
@@ -360,10 +356,8 @@ query GetOrganizations($where: OrganizationWhereInput) {
           tags
         }
         orgSubscriptions {
-          stripeCustomerID
           stripeSubscriptionStatus
           active
-          productTier
           features
           id
         }
@@ -419,10 +413,8 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
         tags
       }
       orgSubscriptions {
-        stripeCustomerID
         stripeSubscriptionStatus
         active
-        productTier
         features
         id
       }

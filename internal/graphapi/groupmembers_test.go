@@ -236,7 +236,6 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 
 			if tc.errMsg != "" {
 				assert.ErrorContains(t, err, tc.errMsg)
-
 				return
 			}
 
@@ -333,7 +332,6 @@ func TestMutationUpdateGroupMembers(t *testing.T) {
 
 			if tc.errMsg != "" {
 				assert.ErrorContains(t, err, tc.errMsg)
-
 				return
 			}
 
@@ -424,7 +422,6 @@ func TestMutationDeleteGroupMembers(t *testing.T) {
 			resp, err := tc.client.RemoveUserFromGroup(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

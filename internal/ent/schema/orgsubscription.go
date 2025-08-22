@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx"
 )
 
 // OrgSubscription holds the schema definition for the OrgSubscription entity
@@ -45,17 +44,8 @@ func (OrgSubscription) Fields() []ent.Field {
 		field.String("stripe_subscription_id").
 			Comment("the stripe subscription id").
 			Optional(),
-		field.String("product_tier").
-			Comment("the common name of the product tier the subscription is associated with, e.g. starter tier").
-			Annotations(
-				entgql.OrderField("product_tier"),
-			).
-			Optional(),
 		field.JSON("product_price", models.Price{}).
 			Comment("the price of the product tier").
-			Optional(),
-		field.String("stripe_product_tier_id").
-			Comment("the product id that represents the tier in stripe").
 			Optional(),
 		field.String("stripe_subscription_status").
 			Comment("the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status").
@@ -69,10 +59,6 @@ func (OrgSubscription) Fields() []ent.Field {
 				entgql.OrderField("active"),
 			).
 			Default(true),
-		field.String("stripe_customer_id").
-			Comment("the customer ID the subscription is associated to").
-			Unique().
-			Optional(),
 		field.Time("expires_at").
 			Comment("the time the subscription is set to expire; only populated if subscription is cancelled").
 			Annotations(
@@ -92,10 +78,6 @@ func (OrgSubscription) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("days_until_due"),
 			).
-			Nillable().
-			Optional(),
-		field.Bool("payment_method_added").
-			Comment("whether or not a payment method has been added to the account").
 			Nillable().
 			Optional(),
 		field.JSON("features", []string{}).
@@ -121,9 +103,8 @@ func (o OrgSubscription) Mixin() []ent.Mixin {
 }
 
 // Annotations of the OrgSubscription
-func (OrgSubscription) Annotations() []schema.Annotation {
+func (o OrgSubscription) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		// since we only have queries, we can just use the interceptors for queries and can skip the fga generated checks
@@ -131,7 +112,7 @@ func (OrgSubscription) Annotations() []schema.Annotation {
 }
 
 // Interceptors of the OrgSubscription
-func (OrgSubscription) Interceptors() []ent.Interceptor {
+func (o OrgSubscription) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorSubscriptionURL(),
 	}

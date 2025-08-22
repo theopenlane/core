@@ -38,26 +38,18 @@ type OrgSubscription struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the stripe subscription id
 	StripeSubscriptionID string `json:"stripe_subscription_id,omitempty"`
-	// the common name of the product tier the subscription is associated with, e.g. starter tier
-	ProductTier string `json:"product_tier,omitempty"`
 	// the price of the product tier
 	ProductPrice models.Price `json:"product_price,omitempty"`
-	// the product id that represents the tier in stripe
-	StripeProductTierID string `json:"stripe_product_tier_id,omitempty"`
 	// the status of the subscription in stripe -- see https://docs.stripe.com/api/subscriptions/object#subscription_object-status
 	StripeSubscriptionStatus string `json:"stripe_subscription_status,omitempty"`
 	// indicates if the subscription is active
 	Active bool `json:"active,omitempty"`
-	// the customer ID the subscription is associated to
-	StripeCustomerID string `json:"stripe_customer_id,omitempty"`
 	// the time the subscription is set to expire; only populated if subscription is cancelled
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// the time the trial is set to expire
 	TrialExpiresAt *time.Time `json:"trial_expires_at,omitempty"`
 	// number of days until there is a due payment
 	DaysUntilDue *string `json:"days_until_due,omitempty"`
-	// whether or not a payment method has been added to the account
-	PaymentMethodAdded *bool `json:"payment_method_added,omitempty"`
 	// the features associated with the subscription
 	Features []string `json:"features,omitempty"`
 	// the feature lookup keys associated with the subscription
@@ -152,9 +144,9 @@ func (*OrgSubscription) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case orgsubscription.FieldTags, orgsubscription.FieldProductPrice, orgsubscription.FieldFeatures, orgsubscription.FieldFeatureLookupKeys:
 			values[i] = new([]byte)
-		case orgsubscription.FieldActive, orgsubscription.FieldPaymentMethodAdded:
+		case orgsubscription.FieldActive:
 			values[i] = new(sql.NullBool)
-		case orgsubscription.FieldID, orgsubscription.FieldCreatedBy, orgsubscription.FieldUpdatedBy, orgsubscription.FieldDeletedBy, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldProductTier, orgsubscription.FieldStripeProductTierID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldStripeCustomerID, orgsubscription.FieldDaysUntilDue:
+		case orgsubscription.FieldID, orgsubscription.FieldCreatedBy, orgsubscription.FieldUpdatedBy, orgsubscription.FieldDeletedBy, orgsubscription.FieldOwnerID, orgsubscription.FieldStripeSubscriptionID, orgsubscription.FieldStripeSubscriptionStatus, orgsubscription.FieldDaysUntilDue:
 			values[i] = new(sql.NullString)
 		case orgsubscription.FieldCreatedAt, orgsubscription.FieldUpdatedAt, orgsubscription.FieldDeletedAt, orgsubscription.FieldExpiresAt, orgsubscription.FieldTrialExpiresAt:
 			values[i] = new(sql.NullTime)
@@ -235,12 +227,6 @@ func (_m *OrgSubscription) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.StripeSubscriptionID = value.String
 			}
-		case orgsubscription.FieldProductTier:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field product_tier", values[i])
-			} else if value.Valid {
-				_m.ProductTier = value.String
-			}
 		case orgsubscription.FieldProductPrice:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field product_price", values[i])
@@ -248,12 +234,6 @@ func (_m *OrgSubscription) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.ProductPrice); err != nil {
 					return fmt.Errorf("unmarshal field product_price: %w", err)
 				}
-			}
-		case orgsubscription.FieldStripeProductTierID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field stripe_product_tier_id", values[i])
-			} else if value.Valid {
-				_m.StripeProductTierID = value.String
 			}
 		case orgsubscription.FieldStripeSubscriptionStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -266,12 +246,6 @@ func (_m *OrgSubscription) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
 				_m.Active = value.Bool
-			}
-		case orgsubscription.FieldStripeCustomerID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field stripe_customer_id", values[i])
-			} else if value.Valid {
-				_m.StripeCustomerID = value.String
 			}
 		case orgsubscription.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -293,13 +267,6 @@ func (_m *OrgSubscription) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DaysUntilDue = new(string)
 				*_m.DaysUntilDue = value.String
-			}
-		case orgsubscription.FieldPaymentMethodAdded:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field payment_method_added", values[i])
-			} else if value.Valid {
-				_m.PaymentMethodAdded = new(bool)
-				*_m.PaymentMethodAdded = value.Bool
 			}
 		case orgsubscription.FieldFeatures:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -405,23 +372,14 @@ func (_m *OrgSubscription) String() string {
 	builder.WriteString("stripe_subscription_id=")
 	builder.WriteString(_m.StripeSubscriptionID)
 	builder.WriteString(", ")
-	builder.WriteString("product_tier=")
-	builder.WriteString(_m.ProductTier)
-	builder.WriteString(", ")
 	builder.WriteString("product_price=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProductPrice))
-	builder.WriteString(", ")
-	builder.WriteString("stripe_product_tier_id=")
-	builder.WriteString(_m.StripeProductTierID)
 	builder.WriteString(", ")
 	builder.WriteString("stripe_subscription_status=")
 	builder.WriteString(_m.StripeSubscriptionStatus)
 	builder.WriteString(", ")
 	builder.WriteString("active=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Active))
-	builder.WriteString(", ")
-	builder.WriteString("stripe_customer_id=")
-	builder.WriteString(_m.StripeCustomerID)
 	builder.WriteString(", ")
 	if v := _m.ExpiresAt; v != nil {
 		builder.WriteString("expires_at=")
@@ -436,11 +394,6 @@ func (_m *OrgSubscription) String() string {
 	if v := _m.DaysUntilDue; v != nil {
 		builder.WriteString("days_until_due=")
 		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.PaymentMethodAdded; v != nil {
-		builder.WriteString("payment_method_added=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("features=")

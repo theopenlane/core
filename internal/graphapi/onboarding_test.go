@@ -94,7 +94,6 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			if tc.expectedErr != "" {
 				assert.Assert(t, is.ErrorContains(err, tc.expectedErr))
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

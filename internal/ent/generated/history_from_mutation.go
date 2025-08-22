@@ -6381,16 +6381,8 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetStripeSubscriptionID(stripeSubscriptionID)
 	}
 
-	if productTier, exists := m.ProductTier(); exists {
-		create = create.SetProductTier(productTier)
-	}
-
 	if productPrice, exists := m.ProductPrice(); exists {
 		create = create.SetProductPrice(productPrice)
-	}
-
-	if stripeProductTierID, exists := m.StripeProductTierID(); exists {
-		create = create.SetStripeProductTierID(stripeProductTierID)
 	}
 
 	if stripeSubscriptionStatus, exists := m.StripeSubscriptionStatus(); exists {
@@ -6399,10 +6391,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 	if active, exists := m.Active(); exists {
 		create = create.SetActive(active)
-	}
-
-	if stripeCustomerID, exists := m.StripeCustomerID(); exists {
-		create = create.SetStripeCustomerID(stripeCustomerID)
 	}
 
 	if expiresAt, exists := m.ExpiresAt(); exists {
@@ -6415,10 +6403,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 	if daysUntilDue, exists := m.DaysUntilDue(); exists {
 		create = create.SetNillableDaysUntilDue(&daysUntilDue)
-	}
-
-	if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
-		create = create.SetNillablePaymentMethodAdded(&paymentMethodAdded)
 	}
 
 	if features, exists := m.Features(); exists {
@@ -6514,22 +6498,10 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetStripeSubscriptionID(orgsubscription.StripeSubscriptionID)
 		}
 
-		if productTier, exists := m.ProductTier(); exists {
-			create = create.SetProductTier(productTier)
-		} else {
-			create = create.SetProductTier(orgsubscription.ProductTier)
-		}
-
 		if productPrice, exists := m.ProductPrice(); exists {
 			create = create.SetProductPrice(productPrice)
 		} else {
 			create = create.SetProductPrice(orgsubscription.ProductPrice)
-		}
-
-		if stripeProductTierID, exists := m.StripeProductTierID(); exists {
-			create = create.SetStripeProductTierID(stripeProductTierID)
-		} else {
-			create = create.SetStripeProductTierID(orgsubscription.StripeProductTierID)
 		}
 
 		if stripeSubscriptionStatus, exists := m.StripeSubscriptionStatus(); exists {
@@ -6542,12 +6514,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetActive(active)
 		} else {
 			create = create.SetActive(orgsubscription.Active)
-		}
-
-		if stripeCustomerID, exists := m.StripeCustomerID(); exists {
-			create = create.SetStripeCustomerID(stripeCustomerID)
-		} else {
-			create = create.SetStripeCustomerID(orgsubscription.StripeCustomerID)
 		}
 
 		if expiresAt, exists := m.ExpiresAt(); exists {
@@ -6566,12 +6532,6 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetNillableDaysUntilDue(&daysUntilDue)
 		} else {
 			create = create.SetNillableDaysUntilDue(orgsubscription.DaysUntilDue)
-		}
-
-		if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
-			create = create.SetNillablePaymentMethodAdded(&paymentMethodAdded)
-		} else {
-			create = create.SetNillablePaymentMethodAdded(orgsubscription.PaymentMethodAdded)
 		}
 
 		if features, exists := m.Features(); exists {
@@ -6630,16 +6590,12 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetTags(orgsubscription.Tags).
 			SetOwnerID(orgsubscription.OwnerID).
 			SetStripeSubscriptionID(orgsubscription.StripeSubscriptionID).
-			SetProductTier(orgsubscription.ProductTier).
 			SetProductPrice(orgsubscription.ProductPrice).
-			SetStripeProductTierID(orgsubscription.StripeProductTierID).
 			SetStripeSubscriptionStatus(orgsubscription.StripeSubscriptionStatus).
 			SetActive(orgsubscription.Active).
-			SetStripeCustomerID(orgsubscription.StripeCustomerID).
 			SetNillableExpiresAt(orgsubscription.ExpiresAt).
 			SetNillableTrialExpiresAt(orgsubscription.TrialExpiresAt).
 			SetNillableDaysUntilDue(orgsubscription.DaysUntilDue).
-			SetNillablePaymentMethodAdded(orgsubscription.PaymentMethodAdded).
 			SetFeatures(orgsubscription.Features).
 			SetFeatureLookupKeys(orgsubscription.FeatureLookupKeys).
 			Save(ctx)
@@ -6729,6 +6685,10 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if dedicatedDb, exists := m.DedicatedDb(); exists {
 		create = create.SetDedicatedDb(dedicatedDb)
+	}
+
+	if stripeCustomerID, exists := m.StripeCustomerID(); exists {
+		create = create.SetNillableStripeCustomerID(&stripeCustomerID)
 	}
 
 	_, err := create.Save(ctx)
@@ -6858,6 +6818,12 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetDedicatedDb(organization.DedicatedDb)
 		}
 
+		if stripeCustomerID, exists := m.StripeCustomerID(); exists {
+			create = create.SetNillableStripeCustomerID(&stripeCustomerID)
+		} else {
+			create = create.SetNillableStripeCustomerID(organization.StripeCustomerID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -6909,6 +6875,7 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetNillableAvatarLocalFileID(organization.AvatarLocalFileID).
 			SetNillableAvatarUpdatedAt(organization.AvatarUpdatedAt).
 			SetDedicatedDb(organization.DedicatedDb).
+			SetNillableStripeCustomerID(organization.StripeCustomerID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -7032,6 +6999,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 
 	if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
 		create = create.SetComplianceWebhookToken(complianceWebhookToken)
+	}
+
+	if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
+		create = create.SetPaymentMethodAdded(paymentMethodAdded)
 	}
 
 	_, err := create.Save(ctx)
@@ -7215,6 +7186,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken)
 		}
 
+		if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
+			create = create.SetPaymentMethodAdded(paymentMethodAdded)
+		} else {
+			create = create.SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -7275,6 +7252,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetOidcDiscoveryEndpoint(organizationsetting.OidcDiscoveryEndpoint).
 			SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced).
 			SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
+			SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded).
 			Save(ctx)
 		if err != nil {
 			return err

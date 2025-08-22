@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 const (
@@ -134,10 +135,15 @@ func (i Invite) Edges() []ent.Edge {
 	}
 }
 
+func (Invite) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the Invite
-func (Invite) Annotations() []schema.Annotation {
+func (i Invite) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -154,7 +160,7 @@ func (Invite) Hooks() []ent.Hook {
 }
 
 // Policy of the Invite
-func (Invite) Policy() ent.Policy {
+func (i Invite) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),

@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
@@ -89,16 +90,22 @@ func (n Narrative) Mixin() []ent.Mixin {
 	}.getMixins(n)
 }
 
+func (Narrative) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+	}
+}
+
 // Annotations of the Narrative
-func (Narrative) Annotations() []schema.Annotation {
+func (n Narrative) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "policy-management"),
 		entfga.SelfAccessChecks(),
 	}
 }
 
 // Policy of the Narrative
-func (Narrative) Policy() ent.Policy {
+func (n Narrative) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CanCreateObjectsUnderParents([]string{

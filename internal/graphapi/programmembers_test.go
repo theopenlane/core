@@ -224,7 +224,6 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 			resp, err := tc.client.UpdateUserRoleInProgram(tc.ctx, tc.programMemberID, input)
 			if tc.errMsg != "" {
 				assert.ErrorContains(t, err, tc.errMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

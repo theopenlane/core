@@ -52,6 +52,8 @@ type Organization struct {
 	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicated_db,omitempty"`
+	// the stripe customer ID this organization is associated to
+	StripeCustomerID *string `json:"stripe_customer_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationQuery when eager-loading is set.
 	Edges        OrganizationEdges `json:"edges"`
@@ -884,7 +886,7 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organization.FieldPersonalOrg, organization.FieldDedicatedDb:
 			values[i] = new(sql.NullBool)
-		case organization.FieldID, organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldDeletedBy, organization.FieldName, organization.FieldDisplayName, organization.FieldDescription, organization.FieldParentOrganizationID, organization.FieldAvatarRemoteURL, organization.FieldAvatarLocalFileID:
+		case organization.FieldID, organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldDeletedBy, organization.FieldName, organization.FieldDisplayName, organization.FieldDescription, organization.FieldParentOrganizationID, organization.FieldAvatarRemoteURL, organization.FieldAvatarLocalFileID, organization.FieldStripeCustomerID:
 			values[i] = new(sql.NullString)
 		case organization.FieldCreatedAt, organization.FieldUpdatedAt, organization.FieldDeletedAt, organization.FieldAvatarUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -1009,6 +1011,13 @@ func (_m *Organization) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field dedicated_db", values[i])
 			} else if value.Valid {
 				_m.DedicatedDb = value.Bool
+			}
+		case organization.FieldStripeCustomerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stripe_customer_id", values[i])
+			} else if value.Valid {
+				_m.StripeCustomerID = new(string)
+				*_m.StripeCustomerID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -1434,6 +1443,11 @@ func (_m *Organization) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("dedicated_db=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DedicatedDb))
+	builder.WriteString(", ")
+	if v := _m.StripeCustomerID; v != nil {
+		builder.WriteString("stripe_customer_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

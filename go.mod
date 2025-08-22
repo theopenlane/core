@@ -20,7 +20,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.4
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.87.0
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
-	github.com/brianvoe/gofakeit/v7 v7.3.0
+	github.com/brianvoe/gofakeit/v7 v7.4.0
 	github.com/cloudflare/cloudflare-go/v4 v4.6.0
 	github.com/danielgtaylor/huma/v2 v2.34.1
 	github.com/dave/jennifer v1.7.1
@@ -81,7 +81,7 @@ require (
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.4
 	github.com/theopenlane/entx v0.12.1
-	github.com/theopenlane/gqlgen-plugins v0.7.0
+	github.com/theopenlane/gqlgen-plugins v0.7.1
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.15.4
 	github.com/theopenlane/newman v0.2.0

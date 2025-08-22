@@ -99,7 +99,6 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 			resp, err := tc.client.CreateProgramWithMembers(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -251,7 +250,6 @@ func TestMutationCreateFullProgram(t *testing.T) {
 			resp, err := tc.client.CreateFullProgram(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}

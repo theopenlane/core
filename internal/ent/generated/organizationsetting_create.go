@@ -350,6 +350,20 @@ func (_c *OrganizationSettingCreate) SetNillableComplianceWebhookToken(v *string
 	return _c
 }
 
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (_c *OrganizationSettingCreate) SetPaymentMethodAdded(v bool) *OrganizationSettingCreate {
+	_c.mutation.SetPaymentMethodAdded(v)
+	return _c
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillablePaymentMethodAdded(v *bool) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetPaymentMethodAdded(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *OrganizationSettingCreate) SetID(v string) *OrganizationSettingCreate {
 	_c.mutation.SetID(v)
@@ -462,6 +476,10 @@ func (_c *OrganizationSettingCreate) defaults() error {
 		v := organizationsetting.DefaultComplianceWebhookToken()
 		_c.mutation.SetComplianceWebhookToken(v)
 	}
+	if _, ok := _c.mutation.PaymentMethodAdded(); !ok {
+		v := organizationsetting.DefaultPaymentMethodAdded
+		_c.mutation.SetPaymentMethodAdded(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if organizationsetting.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized organizationsetting.DefaultID (forgotten import generated/runtime?)")
@@ -509,6 +527,9 @@ func (_c *OrganizationSettingCreate) check() error {
 	}
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_login_enforced"`)}
+	}
+	if _, ok := _c.mutation.PaymentMethodAdded(); !ok {
+		return &ValidationError{Name: "payment_method_added", err: errors.New(`generated: missing required field "OrganizationSetting.payment_method_added"`)}
 	}
 	return nil
 }
@@ -641,6 +662,10 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 	if value, ok := _c.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
 		_node.ComplianceWebhookToken = value
+	}
+	if value, ok := _c.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(organizationsetting.FieldPaymentMethodAdded, field.TypeBool, value)
+		_node.PaymentMethodAdded = value
 	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

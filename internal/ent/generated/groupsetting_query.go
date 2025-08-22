@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math"
 
@@ -371,12 +370,6 @@ func (_q *GroupSettingQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
-	}
-	if groupsetting.Policy == nil {
-		return errors.New("generated: uninitialized groupsetting.Policy (forgotten import generated/runtime?)")
-	}
-	if err := groupsetting.Policy.EvalQuery(ctx, _q); err != nil {
-		return err
 	}
 	return nil
 }

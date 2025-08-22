@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -113,13 +112,6 @@ func (u UserSetting) Edges() []ent.Edge {
 			},
 		}),
 		defaultEdgeToWithPagination(u, File{}),
-	}
-}
-
-// Annotations of the UserSetting
-func (UserSetting) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("base"),
 	}
 }
 

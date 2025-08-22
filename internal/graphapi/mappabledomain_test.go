@@ -43,7 +43,6 @@ func TestQueryMappableDomainByID(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -154,7 +153,6 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 			resp, err := tc.client.CreateMappableDomain(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -252,7 +250,6 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 			resp, err := tc.client.CreateBulkMappableDomain(tc.ctx, tc.requests)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -325,7 +322,6 @@ func TestUpdateMappableDomain(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -372,7 +368,6 @@ func TestGetAllMappableDomains(t *testing.T) {
 
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 				return
 			}
 

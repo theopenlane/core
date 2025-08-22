@@ -256,7 +256,8 @@ func TestExportContentWorker(t *testing.T) {
 						return input.Status != nil && *input.Status == enums.ExportStatusReady
 					}), mock.MatchedBy(func(files []*graphql.Upload) bool {
 						return len(files) == 1 && files[0].ContentType == "text/csv"
-					})).Return(&openlaneclient.UpdateExport{}, tc.updateExportError)
+					}), mock.Anything,
+					).Return(&openlaneclient.UpdateExport{}, tc.updateExportError)
 
 					if tc.expectUpdateExportSecond {
 						olMock.EXPECT().UpdateExport(mock.MatchedBy(func(ctx context.Context) bool {

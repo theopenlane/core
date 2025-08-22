@@ -177,7 +177,11 @@ func (suite *HandlerTestSuite) SetupTest() {
 		}),
 		ent.TokenManager(suite.sharedTokenManager),
 		ent.SessionConfig(&sessionConfig),
-		ent.EntConfig(&entconfig.Config{}),
+		ent.EntConfig(&entconfig.Config{
+			Modules: entconfig.Modules{
+				Enabled: true,
+			},
+		}),
 		ent.TOTP(suite.sharedOTPManager),
 		ent.PondPool(suite.sharedPondPool),
 	}

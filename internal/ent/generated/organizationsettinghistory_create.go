@@ -383,6 +383,20 @@ func (_c *OrganizationSettingHistoryCreate) SetNillableComplianceWebhookToken(v 
 	return _c
 }
 
+// SetPaymentMethodAdded sets the "payment_method_added" field.
+func (_c *OrganizationSettingHistoryCreate) SetPaymentMethodAdded(v bool) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetPaymentMethodAdded(v)
+	return _c
+}
+
+// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
+func (_c *OrganizationSettingHistoryCreate) SetNillablePaymentMethodAdded(v *bool) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetPaymentMethodAdded(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *OrganizationSettingHistoryCreate) SetID(v string) *OrganizationSettingHistoryCreate {
 	_c.mutation.SetID(v)
@@ -482,6 +496,10 @@ func (_c *OrganizationSettingHistoryCreate) defaults() error {
 		v := organizationsettinghistory.DefaultComplianceWebhookToken()
 		_c.mutation.SetComplianceWebhookToken(v)
 	}
+	if _, ok := _c.mutation.PaymentMethodAdded(); !ok {
+		v := organizationsettinghistory.DefaultPaymentMethodAdded
+		_c.mutation.SetPaymentMethodAdded(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if organizationsettinghistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultID (forgotten import generated/runtime?)")
@@ -520,6 +538,9 @@ func (_c *OrganizationSettingHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSettingHistory.identity_provider_login_enforced"`)}
+	}
+	if _, ok := _c.mutation.PaymentMethodAdded(); !ok {
+		return &ValidationError{Name: "payment_method_added", err: errors.New(`generated: missing required field "OrganizationSettingHistory.payment_method_added"`)}
 	}
 	return nil
 }
@@ -668,6 +689,10 @@ func (_c *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSettingHi
 	if value, ok := _c.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
 		_node.ComplianceWebhookToken = value
+	}
+	if value, ok := _c.mutation.PaymentMethodAdded(); ok {
+		_spec.SetField(organizationsettinghistory.FieldPaymentMethodAdded, field.TypeBool, value)
+		_node.PaymentMethodAdded = value
 	}
 	return _node, _spec
 }

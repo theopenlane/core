@@ -42,6 +42,8 @@ type stripeClient interface {
 	GetFeatureByLookupKey(ctx context.Context, lookupKey string) (*stripe.EntitlementsFeature, error)
 	GetProduct(ctx context.Context, id string) (*stripe.Product, error)
 	UpdatePriceMetadata(ctx context.Context, priceID string, metadata map[string]string) (*stripe.Price, error)
+	UpdateProductWithParams(ctx context.Context, productID string, params *stripe.ProductUpdateParams) (*stripe.Product, error)
+	UpdateProductWithOptions(baseParams *stripe.ProductUpdateParams, opts ...entitlements.ProductUpdateOption) *stripe.ProductUpdateParams
 }
 
 // newClient is a function that creates a new stripe client. It can be replaced in tests for mocking purposes
@@ -372,6 +374,7 @@ func processFeatureSet(ctx context.Context, sc stripeClient, prodMap map[string]
 
 		prodExists := prod != nil
 		missingPrices := 0
+		needsMetadataUpdate := false
 
 		if prodExists {
 			var t []takeoverInfo
@@ -380,11 +383,16 @@ func processFeatureSet(ctx context.Context, sc stripeClient, prodMap map[string]
 			feat.ProductID = prod.ID
 
 			takeovers = append(takeovers, t...)
+
+			// Check if product needs metadata update
+			if prod.Metadata == nil || prod.Metadata["module"] == "" {
+				needsMetadataUpdate = true
+			}
 		} else {
 			missingPrices = len(feat.Billing.Prices)
 		}
 
-		if !prodExists || missingPrices > 0 {
+		if !prodExists || missingPrices > 0 || needsMetadataUpdate {
 			missing = true
 		}
 

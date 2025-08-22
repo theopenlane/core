@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 )
@@ -51,7 +52,7 @@ type testUserDetails struct {
 }
 
 // userBuilder creates a new test user and returns the details
-func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T) testUserDetails {
+func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, features ...models.OrgModule) testUserDetails {
 	testUser := testUserDetails{}
 
 	// create a test user
@@ -68,7 +69,7 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T) test
 	userCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
 
 	// create a non-personal test organization
-	testOrg := (&OrganizationBuilder{client: suite.client}).MustNew(userCtx, t)
+	testOrg := (&OrganizationBuilder{client: suite.client, Features: features}).MustNew(userCtx, t)
 	testUser.OrganizationID = testOrg.ID
 
 	// setup user context with the org (and not the personal org)
