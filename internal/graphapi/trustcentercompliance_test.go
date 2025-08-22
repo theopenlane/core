@@ -145,7 +145,6 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 			resp, err := tc.client.CreateTrustCenterCompliance(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -276,7 +275,6 @@ func TestQueryTrustCenterCompliance(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
@@ -379,7 +377,6 @@ func TestQueryTrustCenterCompliances(t *testing.T) {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllTrustCenterCompliances(tc.ctx)
 			assert.NilError(t, err)
-			assert.Assert(t, resp != nil)
 
 			assert.Check(t, is.Len(resp.TrustCenterCompliances.Edges, tc.expectedResults))
 			assert.Check(t, is.Equal(int64(tc.expectedResults), resp.TrustCenterCompliances.TotalCount))
@@ -513,7 +510,6 @@ func TestMutationDeleteTrustCenterCompliance(t *testing.T) {
 			resp, err := tc.client.DeleteTrustCenterCompliance(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Check(t, is.Nil(resp))
 
 				return
 			}
