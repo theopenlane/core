@@ -27,7 +27,6 @@ type OrganizationSettingHistory struct {
 func (OrganizationSettingHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "organization_setting_history",
 		},

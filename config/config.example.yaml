@@ -62,9 +62,9 @@ db:
     maxIdleConnections: 0
     migrationProvider: atlas
     multiWrite: false
-    primaryDbSource: file:openlane.db
+    primaryDbSource: postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable
     runMigrations: true
-    secondaryDbSource: file:backup.db
+    secondaryDbSource: postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable
 domain: ""
 email:
     companyAddress: ""

@@ -27,7 +27,6 @@ type ProgramHistory struct {
 func (ProgramHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "program_history",
 		},

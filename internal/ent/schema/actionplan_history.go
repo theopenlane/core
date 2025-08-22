@@ -27,7 +27,6 @@ type ActionPlanHistory struct {
 func (ActionPlanHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "action_plan_history",
 		},

@@ -26,7 +26,6 @@ type TemplateHistory struct {
 func (TemplateHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "template_history",
 		},

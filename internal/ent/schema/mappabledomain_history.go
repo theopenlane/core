@@ -26,7 +26,6 @@ type MappableDomainHistory struct {
 func (MappableDomainHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "mappable_domain_history",
 		},

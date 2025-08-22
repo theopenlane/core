@@ -26,7 +26,6 @@ type ScanHistory struct {
 func (ScanHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "scan_history",
 		},

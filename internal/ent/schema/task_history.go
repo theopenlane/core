@@ -27,7 +27,6 @@ type TaskHistory struct {
 func (TaskHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "task_history",
 		},

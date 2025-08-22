@@ -36,14 +36,12 @@ db:
   debug: true
   driverName: pgx
   cacheTTL: 10s
-  primaryDbSource: "postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable"
   multiWrite: false
   migrationProvider: "goose"
   runMigrations: true
   enableHistory: true
 
 jobQueue:
-  connectionURI: "postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable"
 
 # auth settings
 auth:

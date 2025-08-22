@@ -27,7 +27,6 @@ type GroupHistory struct {
 func (GroupHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "group_history",
 		},

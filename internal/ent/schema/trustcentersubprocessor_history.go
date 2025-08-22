@@ -27,7 +27,6 @@ type TrustCenterSubprocessorHistory struct {
 func (TrustCenterSubprocessorHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "trust_center_subprocessor_history",
 		},

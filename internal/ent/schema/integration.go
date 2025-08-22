@@ -10,7 +10,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx"
 )
 
 // Integration maps configured integrations (github, slack, etc.) to organizations
@@ -100,7 +99,6 @@ func (Integration) Modules() []models.OrgModule {
 // Annotations of the Integration
 func (Integration) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entgql.Skip(
 			// integrations are created by an oauth flow, not by the user directly
 			entgql.SkipMutationCreateInput,

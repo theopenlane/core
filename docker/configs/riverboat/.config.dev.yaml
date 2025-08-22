@@ -25,7 +25,7 @@ river:
         openlaneAPIToken: ""
     deleteExportContentWorker:
       config:
-        enabled: true
+        enabled: false
         cutoffDuration: 1800000000000
         interval: 600000000000
         openlaneAPIHost: "http://host.docker.internal:17608"

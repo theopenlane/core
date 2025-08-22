@@ -26,7 +26,6 @@ type IntegrationHistory struct {
 func (IntegrationHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "integration_history",
 		},

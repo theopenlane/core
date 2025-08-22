@@ -27,7 +27,6 @@ type DocumentDataHistory struct {
 func (DocumentDataHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "document_data_history",
 		},

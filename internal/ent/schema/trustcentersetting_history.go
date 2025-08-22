@@ -27,7 +27,6 @@ type TrustCenterSettingHistory struct {
 func (TrustCenterSettingHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "trust_center_setting_history",
 		},
