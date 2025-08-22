@@ -26,7 +26,6 @@ type ContactHistory struct {
 func (ContactHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "contact_history",
 		},

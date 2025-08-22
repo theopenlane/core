@@ -26,7 +26,6 @@ type SubprocessorHistory struct {
 func (SubprocessorHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "subprocessor_history",
 		},

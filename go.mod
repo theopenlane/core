@@ -80,12 +80,12 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.4
-	github.com/theopenlane/entx v0.12.1
+	github.com/theopenlane/entx v0.13.2
 	github.com/theopenlane/gqlgen-plugins v0.7.1
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.15.4
 	github.com/theopenlane/newman v0.2.0
-	github.com/theopenlane/riverboat v0.2.1
+	github.com/theopenlane/riverboat v0.2.2
 	github.com/theopenlane/utils v0.4.8
 	github.com/tink-crypto/tink-go/v2 v2.4.0
 	github.com/tmc/langchaingo v0.1.13

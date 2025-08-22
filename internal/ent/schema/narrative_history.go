@@ -27,7 +27,6 @@ type NarrativeHistory struct {
 func (NarrativeHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "narrative_history",
 		},

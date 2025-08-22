@@ -26,7 +26,6 @@ type AssetHistory struct {
 func (AssetHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "asset_history",
 		},

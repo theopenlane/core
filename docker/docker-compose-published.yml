@@ -1,0 +1,24 @@
+services:
+  api:
+    image: ghcr.io/theopenlane/core:latest
+    pull_policy: always
+    command:
+      - serve
+      - --debug
+      - --pretty
+      - --config=/config/.config.yaml
+    volumes:
+      - type: bind
+        source: ${PWD}/config/.config.yaml
+        target: /config/.config.yaml
+        read_only: true
+    ports:
+      - "17608:17608"
+    environment:
+      - CORE_AUTHZ_HOSTURL=http://openfga:8080
+      - CORE_REDIS_ADDRESS=redis:6379
+      - CORE_DB_PRIMARYDBSOURCE=postgres://postgres:password@postgres:5432/core?sslmode=disable
+      - CORE_JOBQUEUE_CONNECTIONURI=postgres://postgres:password@postgres:5432/jobs?sslmode=disable
+    restart: unless-stopped
+    networks:
+      - default

@@ -27,7 +27,6 @@ type JobTemplateHistory struct {
 func (JobTemplateHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "job_template_history",
 		},

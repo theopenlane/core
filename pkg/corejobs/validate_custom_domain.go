@@ -32,7 +32,7 @@ func (ValidateCustomDomainArgs) Kind() string { return "validate_custom_domain" 
 type ValidateCustomDomainWorker struct {
 	river.WorkerDefaults[ValidateCustomDomainArgs]
 
-	Config CustomDomainConfig
+	Config CustomDomainConfig `koanf:"config" json:"config" jsonschema:"description=the configuration for custom domain validation"`
 
 	cfClient intcloudflare.Client
 	olClient olclient.OpenlaneClient

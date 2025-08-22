@@ -27,7 +27,6 @@ type ControlImplementationHistory struct {
 func (ControlImplementationHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
-		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "control_implementation_history",
 		},

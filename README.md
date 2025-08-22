@@ -88,6 +88,11 @@ See the [README](/config/README.md) in the `config` directory.
    task docker:all:up
    ```
 
+   Run fully in docker, with a published image:
+   ```bash
+   task docker:core:published
+   ```
+
 1. In a separate terminal, with the server running, you can create a verified
    test user by running:
 

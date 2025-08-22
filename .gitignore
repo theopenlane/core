@@ -68,6 +68,7 @@ results.txt
 *.env
 *.env-dev
 *.config.yaml
+*.config.docker.yaml
 .hermit
 
 junit.xml

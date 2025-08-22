@@ -186,8 +186,8 @@ data:
   CORE_DB_DATABASENAME: {{ .Values.openlane.coreConfiguration.db.databaseName | default "openlane" }}
   CORE_DB_DRIVERNAME: {{ .Values.openlane.coreConfiguration.db.driverName | default "pgx" }}
   CORE_DB_MULTIWRITE: {{ .Values.openlane.coreConfiguration.db.multiWrite | default "false" }}
-  CORE_DB_PRIMARYDBSOURCE: {{ .Values.openlane.coreConfiguration.db.primaryDbSource | default "file:openlane.db" }}
-  CORE_DB_SECONDARYDBSOURCE: {{ .Values.openlane.coreConfiguration.db.secondaryDbSource | default "file:backup.db" }}
+  CORE_DB_PRIMARYDBSOURCE: {{ .Values.openlane.coreConfiguration.db.primaryDbSource | default "postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable" }}
+  CORE_DB_SECONDARYDBSOURCE: {{ .Values.openlane.coreConfiguration.db.secondaryDbSource | default "postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable" }}
   CORE_DB_CACHETTL: {{ .Values.openlane.coreConfiguration.db.cacheTTL | default "1s" }}
   CORE_DB_RUNMIGRATIONS: {{ .Values.openlane.coreConfiguration.db.runMigrations | default "true" }}
   CORE_DB_MIGRATIONPROVIDER: {{ .Values.openlane.coreConfiguration.db.migrationProvider | default "atlas" }}

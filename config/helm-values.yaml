@@ -290,9 +290,9 @@ coreConfiguration:
     # -- enables writing to two databases simultaneously
     multiWrite: false  # @schema type:boolean; default:false
     # -- dsn of the primary database
-    primaryDbSource: "file:openlane.db"  # @schema type:string; default:file:openlane.db
+    primaryDbSource: "postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable"  # @schema type:string; default:postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable
     # -- dsn of the secondary database if multi-write is enabled
-    secondaryDbSource: "file:backup.db"  # @schema type:string; default:file:backup.db
+    secondaryDbSource: "postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable"  # @schema type:string; default:postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable
     # -- cache results for subsequent requests
     cacheTTL: 1s  # @schema type:integer; default:1s
     # -- run migrations on startup

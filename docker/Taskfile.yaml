@@ -30,6 +30,12 @@ tasks:
     cmds:
       - "docker compose down"
 
+  core:published:
+    dir: ..
+    desc: brings up the compose environment for the core server based on published image
+    cmds:
+      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-riverboat.yml -f ./docker/docker-compose-published.yml up -d"
+
   all:up:
     dir: ..
     desc: brings up the full docker compose development environment including core server, fga, and rover
