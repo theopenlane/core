@@ -1,5 +1,5 @@
 river:
-  databaseHost: postgres://postgres:password@host.docker.internal:5432/jobs?sslmode=disable
+  databaseHost: postgres://postgres:password@postgres:5432/jobs?sslmode=disable
   runMigrations: true
   queues:
     - name: email
