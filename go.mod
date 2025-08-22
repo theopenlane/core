@@ -4,7 +4,7 @@ go 1.24.6
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43
 
-replace google.golang.org/grpc => google.golang.org/grpc v1.73.0
+replace google.golang.org/grpc => google.golang.org/grpc v1.75.0
 
 require (
 	ariga.io/entcache v0.1.0
