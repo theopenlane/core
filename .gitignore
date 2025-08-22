@@ -14,6 +14,7 @@ bin/*
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+coverage/
 
 # Go workspace file
 go.work
@@ -72,3 +73,6 @@ results.txt
 .hermit
 
 junit.xml
+
+# build files
+dist/
