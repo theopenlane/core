@@ -122,6 +122,40 @@ func (_u *TrustCenterComplianceHistoryUpdate) ClearTags() *TrustCenterCompliance
 	return _u
 }
 
+// SetStandardID sets the "standard_id" field.
+func (_u *TrustCenterComplianceHistoryUpdate) SetStandardID(v string) *TrustCenterComplianceHistoryUpdate {
+	_u.mutation.SetStandardID(v)
+	return _u
+}
+
+// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
+func (_u *TrustCenterComplianceHistoryUpdate) SetNillableStandardID(v *string) *TrustCenterComplianceHistoryUpdate {
+	if v != nil {
+		_u.SetStandardID(*v)
+	}
+	return _u
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TrustCenterComplianceHistoryUpdate) SetTrustCenterID(v string) *TrustCenterComplianceHistoryUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TrustCenterComplianceHistoryUpdate) SetNillableTrustCenterID(v *string) *TrustCenterComplianceHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TrustCenterComplianceHistoryUpdate) ClearTrustCenterID() *TrustCenterComplianceHistoryUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // Mutation returns the TrustCenterComplianceHistoryMutation object of the builder.
 func (_u *TrustCenterComplianceHistoryUpdate) Mutation() *TrustCenterComplianceHistoryMutation {
 	return _u.mutation
@@ -227,6 +261,15 @@ func (_u *TrustCenterComplianceHistoryUpdate) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.StandardID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldStandardID, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterComplianceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -339,6 +382,40 @@ func (_u *TrustCenterComplianceHistoryUpdateOne) AppendTags(v []string) *TrustCe
 // ClearTags clears the value of the "tags" field.
 func (_u *TrustCenterComplianceHistoryUpdateOne) ClearTags() *TrustCenterComplianceHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetStandardID sets the "standard_id" field.
+func (_u *TrustCenterComplianceHistoryUpdateOne) SetStandardID(v string) *TrustCenterComplianceHistoryUpdateOne {
+	_u.mutation.SetStandardID(v)
+	return _u
+}
+
+// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
+func (_u *TrustCenterComplianceHistoryUpdateOne) SetNillableStandardID(v *string) *TrustCenterComplianceHistoryUpdateOne {
+	if v != nil {
+		_u.SetStandardID(*v)
+	}
+	return _u
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TrustCenterComplianceHistoryUpdateOne) SetTrustCenterID(v string) *TrustCenterComplianceHistoryUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TrustCenterComplianceHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterComplianceHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TrustCenterComplianceHistoryUpdateOne) ClearTrustCenterID() *TrustCenterComplianceHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -477,6 +554,15 @@ func (_u *TrustCenterComplianceHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.StandardID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldStandardID, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterComplianceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

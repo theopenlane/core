@@ -8562,6 +8562,7 @@ input CreateStandardInput {
   version: String
   ownerID: ID
   controlIDs: [ID!]
+  trustCenterComplianceIDs: [ID!]
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -8805,6 +8806,8 @@ input CreateTrustCenterComplianceInput {
   tags associated with the object
   """
   tags: [String!]
+  trustCenterID: ID
+  standardID: ID!
 }
 """
 CreateTrustCenterInput is used for create TrustCenter object.
@@ -8819,6 +8822,7 @@ input CreateTrustCenterInput {
   customDomainID: ID
   settingID: ID
   trustCenterSubprocessorIDs: [ID!]
+  trustCenterComplianceIDs: [ID!]
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -40194,6 +40198,37 @@ type Standard implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  trustCenterCompliances(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterCompliances returned from the connection.
+    """
+    orderBy: [TrustCenterComplianceOrder!]
+
+    """
+    Filtering options for TrustCenterCompliances returned from the connection.
+    """
+    where: TrustCenterComplianceWhereInput
+  ): TrustCenterComplianceConnection!
 }
 """
 A connection to a list of items.
@@ -41077,6 +41112,11 @@ input StandardWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  trust_center_compliances edge predicates
+  """
+  hasTrustCenterCompliances: Boolean
+  hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
 }
 type Subcontrol implements Node {
   id: ID!
@@ -45541,6 +45581,37 @@ type TrustCenter implements Node {
     """
     where: TrustCenterSubprocessorWhereInput
   ): TrustCenterSubprocessorConnection!
+  trustCenterCompliances(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterCompliances returned from the connection.
+    """
+    orderBy: [TrustCenterComplianceOrder!]
+
+    """
+    Filtering options for TrustCenterCompliances returned from the connection.
+    """
+    where: TrustCenterComplianceWhereInput
+  ): TrustCenterComplianceConnection!
 }
 type TrustCenterCompliance implements Node {
   id: ID!
@@ -45552,6 +45623,16 @@ type TrustCenterCompliance implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  ID of the standard
+  """
+  standardID: ID!
+  """
+  ID of the trust center
+  """
+  trustCenterID: ID
+  trustCenter: TrustCenter
+  standard: Standard!
 }
 """
 A connection to a list of items.
@@ -45596,6 +45677,14 @@ type TrustCenterComplianceHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  ID of the standard
+  """
+  standardID: String!
+  """
+  ID of the trust center
+  """
+  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -45775,6 +45864,40 @@ input TrustCenterComplianceHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  standard_id field predicates
+  """
+  standardID: String
+  standardIDNEQ: String
+  standardIDIn: [String!]
+  standardIDNotIn: [String!]
+  standardIDGT: String
+  standardIDGTE: String
+  standardIDLT: String
+  standardIDLTE: String
+  standardIDContains: String
+  standardIDHasPrefix: String
+  standardIDHasSuffix: String
+  standardIDEqualFold: String
+  standardIDContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 """
 Ordering options for TrustCenterCompliance connections
@@ -45879,6 +46002,50 @@ input TrustCenterComplianceWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  standard_id field predicates
+  """
+  standardID: ID
+  standardIDNEQ: ID
+  standardIDIn: [ID!]
+  standardIDNotIn: [ID!]
+  standardIDGT: ID
+  standardIDGTE: ID
+  standardIDLT: ID
+  standardIDLTE: ID
+  standardIDContains: ID
+  standardIDHasPrefix: ID
+  standardIDHasSuffix: ID
+  standardIDEqualFold: ID
+  standardIDContainsFold: ID
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  standard edge predicates
+  """
+  hasStandard: Boolean
+  hasStandardWith: [StandardWhereInput!]
 }
 """
 A connection to a list of items.
@@ -47772,6 +47939,11 @@ input TrustCenterWhereInput {
   """
   hasTrustCenterSubprocessors: Boolean
   hasTrustCenterSubprocessorsWith: [TrustCenterSubprocessorWhereInput!]
+  """
+  trust_center_compliances edge predicates
+  """
+  hasTrustCenterCompliances: Boolean
+  hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -50331,6 +50503,9 @@ input UpdateStandardInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addTrustCenterComplianceIDs: [ID!]
+  removeTrustCenterComplianceIDs: [ID!]
+  clearTrustCenterCompliances: Boolean
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -50681,6 +50856,9 @@ input UpdateTrustCenterComplianceInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
+  standardID: ID
 }
 """
 UpdateTrustCenterInput is used for update TrustCenter object.
@@ -50702,6 +50880,9 @@ input UpdateTrustCenterInput {
   addTrustCenterSubprocessorIDs: [ID!]
   removeTrustCenterSubprocessorIDs: [ID!]
   clearTrustCenterSubprocessors: Boolean
+  addTrustCenterComplianceIDs: [ID!]
+  removeTrustCenterComplianceIDs: [ID!]
+  clearTrustCenterCompliances: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

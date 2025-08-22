@@ -108,6 +108,12 @@ func (t TrustCenter) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			name:          "compliance",
+			edgeSchema:    TrustCenterCompliance{},
+			cascadeDelete: "TrustCenter",
+		}),
 	}
 }
 

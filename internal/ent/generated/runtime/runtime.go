@@ -5379,6 +5379,8 @@ func init() {
 	standard.Hooks[8] = standardHooks[1]
 
 	standard.Hooks[9] = standardHooks[2]
+
+	standard.Hooks[10] = standardHooks[3]
 	standardMixinInters1 := standardMixin[1].Interceptors()
 	standardMixinInters2 := standardMixin[2].Interceptors()
 	standardMixinInters7 := standardMixin[7].Interceptors()
@@ -6239,16 +6241,21 @@ func init() {
 	trustcentercomplianceMixinHooks0 := trustcentercomplianceMixin[0].Hooks()
 	trustcentercomplianceMixinHooks1 := trustcentercomplianceMixin[1].Hooks()
 	trustcentercomplianceMixinHooks2 := trustcentercomplianceMixin[2].Hooks()
+	trustcentercomplianceHooks := schema.TrustCenterCompliance{}.Hooks()
 
 	trustcentercompliance.Hooks[1] = trustcentercomplianceMixinHooks0[0]
 
 	trustcentercompliance.Hooks[2] = trustcentercomplianceMixinHooks1[0]
 
 	trustcentercompliance.Hooks[3] = trustcentercomplianceMixinHooks2[0]
+
+	trustcentercompliance.Hooks[4] = trustcentercomplianceHooks[0]
 	trustcentercomplianceMixinInters1 := trustcentercomplianceMixin[1].Interceptors()
 	trustcentercomplianceMixinInters2 := trustcentercomplianceMixin[2].Interceptors()
+	trustcentercomplianceInters := schema.TrustCenterCompliance{}.Interceptors()
 	trustcentercompliance.Interceptors[0] = trustcentercomplianceMixinInters1[0]
 	trustcentercompliance.Interceptors[1] = trustcentercomplianceMixinInters2[0]
+	trustcentercompliance.Interceptors[2] = trustcentercomplianceInters[0]
 	trustcentercomplianceMixinFields0 := trustcentercomplianceMixin[0].Fields()
 	_ = trustcentercomplianceMixinFields0
 	trustcentercomplianceMixinFields3 := trustcentercomplianceMixin[3].Fields()
@@ -6271,6 +6278,14 @@ func init() {
 	trustcentercomplianceDescTags := trustcentercomplianceMixinFields4[0].Descriptor()
 	// trustcentercompliance.DefaultTags holds the default value on creation for the tags field.
 	trustcentercompliance.DefaultTags = trustcentercomplianceDescTags.Default.([]string)
+	// trustcentercomplianceDescStandardID is the schema descriptor for standard_id field.
+	trustcentercomplianceDescStandardID := trustcentercomplianceFields[0].Descriptor()
+	// trustcentercompliance.StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.
+	trustcentercompliance.StandardIDValidator = trustcentercomplianceDescStandardID.Validators[0].(func(string) error)
+	// trustcentercomplianceDescTrustCenterID is the schema descriptor for trust_center_id field.
+	trustcentercomplianceDescTrustCenterID := trustcentercomplianceFields[1].Descriptor()
+	// trustcentercompliance.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	trustcentercompliance.TrustCenterIDValidator = trustcentercomplianceDescTrustCenterID.Validators[0].(func(string) error)
 	// trustcentercomplianceDescID is the schema descriptor for id field.
 	trustcentercomplianceDescID := trustcentercomplianceMixinFields3[0].Descriptor()
 	// trustcentercompliance.DefaultID holds the default value on creation for the id field.

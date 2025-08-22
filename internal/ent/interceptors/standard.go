@@ -11,12 +11,26 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // TraverseStandard only returns public standards and standards owned by the organization
 func TraverseStandard() ent.Interceptor {
 	return intercept.TraverseStandard(func(ctx context.Context, q *generated.StandardQuery) error {
+		anon, isAnon := auth.AnonymousTrustCenterUserFromContext(ctx)
+		if isAnon {
+			q.Where(
+				standard.HasTrustCenterCompliancesWith(
+					trustcentercompliance.HasTrustCenterWith(
+						trustcenter.OwnerID(anon.OrganizationID),
+					),
+				),
+			)
+			return nil
+		}
+
 		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
 		if err != nil {
 			return err

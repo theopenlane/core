@@ -904,6 +904,8 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
+          standardID
+          trustCenterID
         }
       }
     }

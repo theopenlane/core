@@ -7454,8 +7454,10 @@ func (t *AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo) GetStartCursor
 }
 
 type AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node struct {
-	ID   string   "json:\"id\" graphql:\"id\""
-	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID            string   "json:\"id\" graphql:\"id\""
+	StandardID    string   "json:\"standardID\" graphql:\"standardID\""
+	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
+	TrustCenterID *string  "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
 }
 
 func (t *AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node) GetID() string {
@@ -7464,11 +7466,23 @@ func (t *AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node) GetID() stri
 	}
 	return t.ID
 }
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node) GetStandardID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.StandardID
+}
 func (t *AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node) GetTags() []string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.TrustCenterID
 }
 
 type AdminSearch_AdminSearch_TrustCenterCompliances_Edges struct {
@@ -83063,13 +83077,81 @@ func (t *UpdateTrustCenter_UpdateTrustCenter) GetTrustCenter() *UpdateTrustCente
 	return &t.TrustCenter
 }
 
+type CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard struct {
+	Description          *string  "json:\"description,omitempty\" graphql:\"description\""
+	Domains              []string "json:\"domains,omitempty\" graphql:\"domains\""
+	GoverningBody        *string  "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	GoverningBodyLogoURL *string  "json:\"governingBodyLogoURL,omitempty\" graphql:\"governingBodyLogoURL\""
+	Link                 *string  "json:\"link,omitempty\" graphql:\"link\""
+	Name                 string   "json:\"name\" graphql:\"name\""
+	ShortName            *string  "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType         *string  "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Version              *string  "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard) GetDomains() []string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.Domains
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard) GetGoverningBody() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.GoverningBody
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard) GetGoverningBodyLogoURL() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.GoverningBodyLogoURL
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard) GetLink() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.Link
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard) GetShortName() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.ShortName
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard) GetStandardType() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.StandardType
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard) GetVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.Version
+}
+
 type CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string                                                                                                "json:\"id\" graphql:\"id\""
+	Standard  CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard "json:\"standard\" graphql:\"standard\""
+	Tags      []string                                                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time                                                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances) GetCreatedAt() *time.Time {
@@ -83089,6 +83171,12 @@ func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_T
 		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances{}
 	}
 	return t.ID
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances) GetStandard() *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances_Standard {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return &t.Standard
 }
 func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances) GetTags() []string {
 	if t == nil {
@@ -83120,13 +83208,81 @@ func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance) 
 	return t.TrustCenterCompliances
 }
 
+type CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard struct {
+	Description          *string  "json:\"description,omitempty\" graphql:\"description\""
+	Domains              []string "json:\"domains,omitempty\" graphql:\"domains\""
+	GoverningBody        *string  "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	GoverningBodyLogoURL *string  "json:\"governingBodyLogoURL,omitempty\" graphql:\"governingBodyLogoURL\""
+	Link                 *string  "json:\"link,omitempty\" graphql:\"link\""
+	Name                 string   "json:\"name\" graphql:\"name\""
+	ShortName            *string  "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType         *string  "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Version              *string  "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.Description
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard) GetDomains() []string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.Domains
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard) GetGoverningBody() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.GoverningBody
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard) GetGoverningBodyLogoURL() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.GoverningBodyLogoURL
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard) GetLink() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.Link
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard) GetName() string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.Name
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard) GetShortName() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.ShortName
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard) GetStandardType() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.StandardType
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard) GetVersion() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard{}
+	}
+	return t.Version
+}
+
 type CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                                                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                                                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string                                                                                          "json:\"id\" graphql:\"id\""
+	Standard  CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard "json:\"standard\" graphql:\"standard\""
+	Tags      []string                                                                                        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time                                                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                                                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances) GetCreatedAt() *time.Time {
@@ -83146,6 +83302,12 @@ func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCe
 		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances{}
 	}
 	return t.ID
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances) GetStandard() *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances_Standard {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return &t.Standard
 }
 func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances) GetTags() []string {
 	if t == nil {
@@ -83177,13 +83339,81 @@ func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance) GetTru
 	return t.TrustCenterCompliances
 }
 
+type CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard struct {
+	Description          *string  "json:\"description,omitempty\" graphql:\"description\""
+	Domains              []string "json:\"domains,omitempty\" graphql:\"domains\""
+	GoverningBody        *string  "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	GoverningBodyLogoURL *string  "json:\"governingBodyLogoURL,omitempty\" graphql:\"governingBodyLogoURL\""
+	Link                 *string  "json:\"link,omitempty\" graphql:\"link\""
+	Name                 string   "json:\"name\" graphql:\"name\""
+	ShortName            *string  "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType         *string  "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Version              *string  "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetDescription() *string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.Description
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetDomains() []string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.Domains
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetGoverningBody() *string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.GoverningBody
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetGoverningBodyLogoURL() *string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.GoverningBodyLogoURL
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetLink() *string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.Link
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetName() string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.Name
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetShortName() *string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.ShortName
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetStandardType() *string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.StandardType
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetVersion() *string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.Version
+}
+
 type CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string                                                                                 "json:\"id\" graphql:\"id\""
+	Standard  CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard "json:\"standard\" graphql:\"standard\""
+	Tags      []string                                                                               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time                                                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance) GetCreatedAt() *time.Time {
@@ -83203,6 +83433,12 @@ func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterComp
 		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance{}
 	}
 	return t.ID
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance) GetStandard() *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance_Standard {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return &t.Standard
 }
 func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance) GetTags() []string {
 	if t == nil {
@@ -83277,13 +83513,81 @@ func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo) GetStartC
 	return t.StartCursor
 }
 
+type GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard struct {
+	Description          *string  "json:\"description,omitempty\" graphql:\"description\""
+	Domains              []string "json:\"domains,omitempty\" graphql:\"domains\""
+	GoverningBody        *string  "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	GoverningBodyLogoURL *string  "json:\"governingBodyLogoURL,omitempty\" graphql:\"governingBodyLogoURL\""
+	Link                 *string  "json:\"link,omitempty\" graphql:\"link\""
+	Name                 string   "json:\"name\" graphql:\"name\""
+	ShortName            *string  "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType         *string  "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Version              *string  "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetDescription() *string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.Description
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetDomains() []string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.Domains
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetGoverningBody() *string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.GoverningBody
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetGoverningBodyLogoURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.GoverningBodyLogoURL
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetLink() *string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.Link
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetName() string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.Name
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetShortName() *string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.ShortName
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetStandardType() *string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.StandardType
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetVersion() *string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.Version
+}
+
 type GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string                                                                  "json:\"id\" graphql:\"id\""
+	Standard  GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard "json:\"standard\" graphql:\"standard\""
+	Tags      []string                                                                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time                                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetCreatedAt() *time.Time {
@@ -83303,6 +83607,12 @@ func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetID()
 		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetStandard() *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return &t.Standard
 }
 func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -83359,13 +83669,81 @@ func (t *GetAllTrustCenterCompliances_TrustCenterCompliances) GetTotalCount() in
 	return t.TotalCount
 }
 
+type GetTrustCenterComplianceByID_TrustCenterCompliance_Standard struct {
+	Description          *string  "json:\"description,omitempty\" graphql:\"description\""
+	Domains              []string "json:\"domains,omitempty\" graphql:\"domains\""
+	GoverningBody        *string  "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	GoverningBodyLogoURL *string  "json:\"governingBodyLogoURL,omitempty\" graphql:\"governingBodyLogoURL\""
+	Link                 *string  "json:\"link,omitempty\" graphql:\"link\""
+	Name                 string   "json:\"name\" graphql:\"name\""
+	ShortName            *string  "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType         *string  "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Version              *string  "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance_Standard) GetDescription() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance_Standard{}
+	}
+	return t.Description
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance_Standard) GetDomains() []string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance_Standard{}
+	}
+	return t.Domains
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance_Standard) GetGoverningBody() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance_Standard{}
+	}
+	return t.GoverningBody
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance_Standard) GetGoverningBodyLogoURL() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance_Standard{}
+	}
+	return t.GoverningBodyLogoURL
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance_Standard) GetLink() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance_Standard{}
+	}
+	return t.Link
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance_Standard) GetName() string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance_Standard{}
+	}
+	return t.Name
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance_Standard) GetShortName() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance_Standard{}
+	}
+	return t.ShortName
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance_Standard) GetStandardType() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance_Standard{}
+	}
+	return t.StandardType
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance_Standard) GetVersion() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance_Standard{}
+	}
+	return t.Version
+}
+
 type GetTrustCenterComplianceByID_TrustCenterCompliance struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string                                                      "json:\"id\" graphql:\"id\""
+	Standard  GetTrustCenterComplianceByID_TrustCenterCompliance_Standard "json:\"standard\" graphql:\"standard\""
+	Tags      []string                                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time                                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTrustCenterComplianceByID_TrustCenterCompliance) GetCreatedAt() *time.Time {
@@ -83385,6 +83763,12 @@ func (t *GetTrustCenterComplianceByID_TrustCenterCompliance) GetID() string {
 		t = &GetTrustCenterComplianceByID_TrustCenterCompliance{}
 	}
 	return t.ID
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance) GetStandard() *GetTrustCenterComplianceByID_TrustCenterCompliance_Standard {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance{}
+	}
+	return &t.Standard
 }
 func (t *GetTrustCenterComplianceByID_TrustCenterCompliance) GetTags() []string {
 	if t == nil {
@@ -83437,13 +83821,81 @@ func (t *GetTrustCenterCompliances_TrustCenterCompliances_PageInfo) GetStartCurs
 	return t.StartCursor
 }
 
+type GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard struct {
+	Description          *string  "json:\"description,omitempty\" graphql:\"description\""
+	Domains              []string "json:\"domains,omitempty\" graphql:\"domains\""
+	GoverningBody        *string  "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	GoverningBodyLogoURL *string  "json:\"governingBodyLogoURL,omitempty\" graphql:\"governingBodyLogoURL\""
+	Link                 *string  "json:\"link,omitempty\" graphql:\"link\""
+	Name                 string   "json:\"name\" graphql:\"name\""
+	ShortName            *string  "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType         *string  "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Version              *string  "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetDescription() *string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.Description
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetDomains() []string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.Domains
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetGoverningBody() *string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.GoverningBody
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetGoverningBodyLogoURL() *string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.GoverningBodyLogoURL
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetLink() *string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.Link
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetName() string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.Name
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetShortName() *string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.ShortName
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetStandardType() *string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.StandardType
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard) GetVersion() *string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard{}
+	}
+	return t.Version
+}
+
 type GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string                                                               "json:\"id\" graphql:\"id\""
+	Standard  GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard "json:\"standard\" graphql:\"standard\""
+	Tags      []string                                                             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time                                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetCreatedAt() *time.Time {
@@ -83463,6 +83915,12 @@ func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetID() st
 		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetStandard() *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node_Standard {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return &t.Standard
 }
 func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -83519,13 +83977,81 @@ func (t *GetTrustCenterCompliances_TrustCenterCompliances) GetTotalCount() int64
 	return t.TotalCount
 }
 
+type UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard struct {
+	Description          *string  "json:\"description,omitempty\" graphql:\"description\""
+	Domains              []string "json:\"domains,omitempty\" graphql:\"domains\""
+	GoverningBody        *string  "json:\"governingBody,omitempty\" graphql:\"governingBody\""
+	GoverningBodyLogoURL *string  "json:\"governingBodyLogoURL,omitempty\" graphql:\"governingBodyLogoURL\""
+	Link                 *string  "json:\"link,omitempty\" graphql:\"link\""
+	Name                 string   "json:\"name\" graphql:\"name\""
+	ShortName            *string  "json:\"shortName,omitempty\" graphql:\"shortName\""
+	StandardType         *string  "json:\"standardType,omitempty\" graphql:\"standardType\""
+	Version              *string  "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard) GetDescription() *string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.Description
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard) GetDomains() []string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.Domains
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard) GetGoverningBody() *string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.GoverningBody
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard) GetGoverningBodyLogoURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.GoverningBodyLogoURL
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard) GetLink() *string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.Link
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard) GetName() string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.Name
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard) GetShortName() *string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.ShortName
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard) GetStandardType() *string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.StandardType
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard) GetVersion() *string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.Version
+}
+
 type UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time                                                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string                                                                                 "json:\"id\" graphql:\"id\""
+	Standard  UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard "json:\"standard\" graphql:\"standard\""
+	Tags      []string                                                                               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time                                                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance) GetCreatedAt() *time.Time {
@@ -83545,6 +84071,12 @@ func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterComp
 		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance{}
 	}
 	return t.ID
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance) GetStandard() *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance_Standard {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return &t.Standard
 }
 func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance) GetTags() []string {
 	if t == nil {
@@ -96469,6 +97001,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				node {
 					id
 					tags
+					standardID
+					trustCenterID
 				}
 			}
 		}
@@ -118116,6 +118650,17 @@ const CreateBulkCSVTrustCenterComplianceDocument = `mutation CreateBulkCSVTrustC
 			tags
 			updatedAt
 			updatedBy
+			standard {
+				governingBody
+				governingBodyLogoURL
+				link
+				name
+				shortName
+				standardType
+				version
+				description
+				domains
+			}
 		}
 	}
 }
@@ -118147,6 +118692,17 @@ const CreateBulkTrustCenterComplianceDocument = `mutation CreateBulkTrustCenterC
 			tags
 			updatedAt
 			updatedBy
+			standard {
+				governingBody
+				governingBodyLogoURL
+				link
+				name
+				shortName
+				standardType
+				version
+				description
+				domains
+			}
 		}
 	}
 }
@@ -118178,6 +118734,17 @@ const CreateTrustCenterComplianceDocument = `mutation CreateTrustCenterComplianc
 			tags
 			updatedAt
 			updatedBy
+			standard {
+				governingBody
+				governingBodyLogoURL
+				link
+				name
+				shortName
+				standardType
+				version
+				description
+				domains
+			}
 		}
 	}
 }
@@ -118241,6 +118808,17 @@ const GetAllTrustCenterCompliancesDocument = `query GetAllTrustCenterCompliances
 				tags
 				updatedAt
 				updatedBy
+				standard {
+					governingBody
+					governingBodyLogoURL
+					link
+					name
+					shortName
+					standardType
+					version
+					description
+					domains
+				}
 			}
 		}
 	}
@@ -118270,6 +118848,17 @@ const GetTrustCenterComplianceByIDDocument = `query GetTrustCenterComplianceByID
 		tags
 		updatedAt
 		updatedBy
+		standard {
+			governingBody
+			governingBodyLogoURL
+			link
+			name
+			shortName
+			standardType
+			version
+			description
+			domains
+		}
 	}
 }
 `
@@ -118308,6 +118897,17 @@ const GetTrustCenterCompliancesDocument = `query GetTrustCenterCompliances ($fir
 				tags
 				updatedAt
 				updatedBy
+				standard {
+					governingBody
+					governingBodyLogoURL
+					link
+					name
+					shortName
+					standardType
+					version
+					description
+					domains
+				}
 			}
 		}
 	}
@@ -118342,6 +118942,17 @@ const UpdateTrustCenterComplianceDocument = `mutation UpdateTrustCenterComplianc
 			tags
 			updatedAt
 			updatedBy
+			standard {
+				governingBody
+				governingBodyLogoURL
+				link
+				name
+				shortName
+				standardType
+				version
+				description
+				domains
+			}
 		}
 	}
 }

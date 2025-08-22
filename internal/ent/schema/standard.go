@@ -7,6 +7,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -128,6 +129,10 @@ func (s Standard) Edges() []ent.Edge {
 			fromSchema: s,
 			edgeSchema: Control{},
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: TrustCenterCompliance{},
+		}),
 	}
 }
 
@@ -138,6 +143,7 @@ func (s Standard) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s,
 				withSkipForSystemAdmin(true), // allow empty owner_id for system admin
+				withAllowAnonymousTrustCenterAccess(true),
 			),
 			mixin.SystemOwnedMixin{},
 		},
@@ -150,6 +156,10 @@ func (Standard) Hooks() []ent.Hook {
 		hooks.HookStandardPublicAccessTuples(),
 		hooks.HookStandardCreate(),
 		hooks.HookStandardDelete(),
+		hook.On(
+			hooks.OrgOwnedTuplesHook(),
+			ent.OpCreate,
+		),
 	}
 }
 

@@ -78,13 +78,16 @@ type StandardEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// TrustCenterCompliances holds the value of the trust_center_compliances edge.
+	TrustCenterCompliances []*TrustCenterCompliance `json:"trust_center_compliances,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 
-	namedControls map[string][]*Control
+	namedControls               map[string][]*Control
+	namedTrustCenterCompliances map[string][]*TrustCenterCompliance
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -105,6 +108,15 @@ func (e StandardEdges) ControlsOrErr() ([]*Control, error) {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
+}
+
+// TrustCenterCompliancesOrErr returns the TrustCenterCompliances value or an error if the edge
+// was not loaded in eager-loading.
+func (e StandardEdges) TrustCenterCompliancesOrErr() ([]*TrustCenterCompliance, error) {
+	if e.loadedTypes[2] {
+		return e.TrustCenterCompliances, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_compliances"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -306,6 +318,11 @@ func (_m *Standard) QueryControls() *ControlQuery {
 	return NewStandardClient(_m.config).QueryControls(_m)
 }
 
+// QueryTrustCenterCompliances queries the "trust_center_compliances" edge of the Standard entity.
+func (_m *Standard) QueryTrustCenterCompliances() *TrustCenterComplianceQuery {
+	return NewStandardClient(_m.config).QueryTrustCenterCompliances(_m)
+}
+
 // Update returns a builder for updating this Standard.
 // Note that you need to call Standard.Unwrap() before calling this method if this Standard
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -422,6 +439,30 @@ func (_m *Standard) appendNamedControls(name string, edges ...*Control) {
 		_m.Edges.namedControls[name] = []*Control{}
 	} else {
 		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedTrustCenterCompliances returns the TrustCenterCompliances named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Standard) NamedTrustCenterCompliances(name string) ([]*TrustCenterCompliance, error) {
+	if _m.Edges.namedTrustCenterCompliances == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterCompliances[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Standard) appendNamedTrustCenterCompliances(name string, edges ...*TrustCenterCompliance) {
+	if _m.Edges.namedTrustCenterCompliances == nil {
+		_m.Edges.namedTrustCenterCompliances = make(map[string][]*TrustCenterCompliance)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterCompliances[name] = []*TrustCenterCompliance{}
+	} else {
+		_m.Edges.namedTrustCenterCompliances[name] = append(_m.Edges.namedTrustCenterCompliances[name], edges...)
 	}
 }
 

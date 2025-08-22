@@ -4073,30 +4073,31 @@ type ComplexityRoot struct {
 	}
 
 	Standard struct {
-		Controls             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		Description          func(childComplexity int) int
-		Domains              func(childComplexity int) int
-		Framework            func(childComplexity int) int
-		FreeToUse            func(childComplexity int) int
-		GoverningBody        func(childComplexity int) int
-		GoverningBodyLogoURL func(childComplexity int) int
-		ID                   func(childComplexity int) int
-		IsPublic             func(childComplexity int) int
-		Link                 func(childComplexity int) int
-		Name                 func(childComplexity int) int
-		Owner                func(childComplexity int) int
-		OwnerID              func(childComplexity int) int
-		Revision             func(childComplexity int) int
-		ShortName            func(childComplexity int) int
-		StandardType         func(childComplexity int) int
-		Status               func(childComplexity int) int
-		SystemOwned          func(childComplexity int) int
-		Tags                 func(childComplexity int) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
-		Version              func(childComplexity int) int
+		Controls               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Description            func(childComplexity int) int
+		Domains                func(childComplexity int) int
+		Framework              func(childComplexity int) int
+		FreeToUse              func(childComplexity int) int
+		GoverningBody          func(childComplexity int) int
+		GoverningBodyLogoURL   func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		IsPublic               func(childComplexity int) int
+		Link                   func(childComplexity int) int
+		Name                   func(childComplexity int) int
+		Owner                  func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Revision               func(childComplexity int) int
+		ShortName              func(childComplexity int) int
+		StandardType           func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		SystemOwned            func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		TrustCenterCompliances func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		Version                func(childComplexity int) int
 	}
 
 	StandardBulkCreatePayload struct {
@@ -4623,18 +4624,23 @@ type ComplexityRoot struct {
 		Setting                  func(childComplexity int) int
 		Slug                     func(childComplexity int) int
 		Tags                     func(childComplexity int) int
+		TrustCenterCompliances   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
 		TrustCenterSubprocessors func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
 	}
 
 	TrustCenterCompliance struct {
-		CreatedAt func(childComplexity int) int
-		CreatedBy func(childComplexity int) int
-		ID        func(childComplexity int) int
-		Tags      func(childComplexity int) int
-		UpdatedAt func(childComplexity int) int
-		UpdatedBy func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Standard      func(childComplexity int) int
+		StandardID    func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		TrustCenter   func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	TrustCenterComplianceBulkCreatePayload struct {
@@ -4661,15 +4667,17 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterComplianceHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		StandardID    func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	TrustCenterComplianceHistoryConnection struct {
@@ -28415,6 +28423,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Standard.Tags(childComplexity), true
 
+	case "Standard.trustCenterCompliances":
+		if e.complexity.Standard.TrustCenterCompliances == nil {
+			break
+		}
+
+		args, err := ec.field_Standard_trustCenterCompliances_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Standard.TrustCenterCompliances(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterComplianceOrder), args["where"].(*generated.TrustCenterComplianceWhereInput)), true
+
 	case "Standard.updatedAt":
 		if e.complexity.Standard.UpdatedAt == nil {
 			break
@@ -30925,6 +30945,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenter.Tags(childComplexity), true
 
+	case "TrustCenter.trustCenterCompliances":
+		if e.complexity.TrustCenter.TrustCenterCompliances == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenter_trustCenterCompliances_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenter.TrustCenterCompliances(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterComplianceOrder), args["where"].(*generated.TrustCenterComplianceWhereInput)), true
+
 	case "TrustCenter.trustCenterSubprocessors":
 		if e.complexity.TrustCenter.TrustCenterSubprocessors == nil {
 			break
@@ -30972,12 +31004,40 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterCompliance.ID(childComplexity), true
 
+	case "TrustCenterCompliance.standard":
+		if e.complexity.TrustCenterCompliance.Standard == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterCompliance.Standard(childComplexity), true
+
+	case "TrustCenterCompliance.standardID":
+		if e.complexity.TrustCenterCompliance.StandardID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterCompliance.StandardID(childComplexity), true
+
 	case "TrustCenterCompliance.tags":
 		if e.complexity.TrustCenterCompliance.Tags == nil {
 			break
 		}
 
 		return e.complexity.TrustCenterCompliance.Tags(childComplexity), true
+
+	case "TrustCenterCompliance.trustCenter":
+		if e.complexity.TrustCenterCompliance.TrustCenter == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterCompliance.TrustCenter(childComplexity), true
+
+	case "TrustCenterCompliance.trustCenterID":
+		if e.complexity.TrustCenterCompliance.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterCompliance.TrustCenterID(childComplexity), true
 
 	case "TrustCenterCompliance.updatedAt":
 		if e.complexity.TrustCenterCompliance.UpdatedAt == nil {
@@ -31091,12 +31151,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterComplianceHistory.Ref(childComplexity), true
 
+	case "TrustCenterComplianceHistory.standardID":
+		if e.complexity.TrustCenterComplianceHistory.StandardID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterComplianceHistory.StandardID(childComplexity), true
+
 	case "TrustCenterComplianceHistory.tags":
 		if e.complexity.TrustCenterComplianceHistory.Tags == nil {
 			break
 		}
 
 		return e.complexity.TrustCenterComplianceHistory.Tags(childComplexity), true
+
+	case "TrustCenterComplianceHistory.trustCenterID":
+		if e.complexity.TrustCenterComplianceHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterComplianceHistory.TrustCenterID(childComplexity), true
 
 	case "TrustCenterComplianceHistory.updatedAt":
 		if e.complexity.TrustCenterComplianceHistory.UpdatedAt == nil {
@@ -44561,6 +44635,7 @@ input CreateStandardInput {
   version: String
   ownerID: ID
   controlIDs: [ID!]
+  trustCenterComplianceIDs: [ID!]
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -44804,6 +44879,8 @@ input CreateTrustCenterComplianceInput {
   tags associated with the object
   """
   tags: [String!]
+  trustCenterID: ID
+  standardID: ID!
 }
 """
 CreateTrustCenterInput is used for create TrustCenter object.
@@ -44818,6 +44895,7 @@ input CreateTrustCenterInput {
   customDomainID: ID
   settingID: ID
   trustCenterSubprocessorIDs: [ID!]
+  trustCenterComplianceIDs: [ID!]
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -76193,6 +76271,37 @@ type Standard implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  trustCenterCompliances(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterCompliances returned from the connection.
+    """
+    orderBy: [TrustCenterComplianceOrder!]
+
+    """
+    Filtering options for TrustCenterCompliances returned from the connection.
+    """
+    where: TrustCenterComplianceWhereInput
+  ): TrustCenterComplianceConnection!
 }
 """
 A connection to a list of items.
@@ -77076,6 +77185,11 @@ input StandardWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  trust_center_compliances edge predicates
+  """
+  hasTrustCenterCompliances: Boolean
+  hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
 }
 type Subcontrol implements Node {
   id: ID!
@@ -81540,6 +81654,37 @@ type TrustCenter implements Node {
     """
     where: TrustCenterSubprocessorWhereInput
   ): TrustCenterSubprocessorConnection!
+  trustCenterCompliances(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterCompliances returned from the connection.
+    """
+    orderBy: [TrustCenterComplianceOrder!]
+
+    """
+    Filtering options for TrustCenterCompliances returned from the connection.
+    """
+    where: TrustCenterComplianceWhereInput
+  ): TrustCenterComplianceConnection!
 }
 type TrustCenterCompliance implements Node {
   id: ID!
@@ -81551,6 +81696,16 @@ type TrustCenterCompliance implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  ID of the standard
+  """
+  standardID: ID!
+  """
+  ID of the trust center
+  """
+  trustCenterID: ID
+  trustCenter: TrustCenter
+  standard: Standard!
 }
 """
 A connection to a list of items.
@@ -81595,6 +81750,14 @@ type TrustCenterComplianceHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  ID of the standard
+  """
+  standardID: String!
+  """
+  ID of the trust center
+  """
+  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -81774,6 +81937,40 @@ input TrustCenterComplianceHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  standard_id field predicates
+  """
+  standardID: String
+  standardIDNEQ: String
+  standardIDIn: [String!]
+  standardIDNotIn: [String!]
+  standardIDGT: String
+  standardIDGTE: String
+  standardIDLT: String
+  standardIDLTE: String
+  standardIDContains: String
+  standardIDHasPrefix: String
+  standardIDHasSuffix: String
+  standardIDEqualFold: String
+  standardIDContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 """
 Ordering options for TrustCenterCompliance connections
@@ -81878,6 +82075,50 @@ input TrustCenterComplianceWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  standard_id field predicates
+  """
+  standardID: ID
+  standardIDNEQ: ID
+  standardIDIn: [ID!]
+  standardIDNotIn: [ID!]
+  standardIDGT: ID
+  standardIDGTE: ID
+  standardIDLT: ID
+  standardIDLTE: ID
+  standardIDContains: ID
+  standardIDHasPrefix: ID
+  standardIDHasSuffix: ID
+  standardIDEqualFold: ID
+  standardIDContainsFold: ID
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  standard edge predicates
+  """
+  hasStandard: Boolean
+  hasStandardWith: [StandardWhereInput!]
 }
 """
 A connection to a list of items.
@@ -83771,6 +84012,11 @@ input TrustCenterWhereInput {
   """
   hasTrustCenterSubprocessors: Boolean
   hasTrustCenterSubprocessorsWith: [TrustCenterSubprocessorWhereInput!]
+  """
+  trust_center_compliances edge predicates
+  """
+  hasTrustCenterCompliances: Boolean
+  hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -86330,6 +86576,9 @@ input UpdateStandardInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addTrustCenterComplianceIDs: [ID!]
+  removeTrustCenterComplianceIDs: [ID!]
+  clearTrustCenterCompliances: Boolean
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -86680,6 +86929,9 @@ input UpdateTrustCenterComplianceInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
+  standardID: ID
 }
 """
 UpdateTrustCenterInput is used for update TrustCenter object.
@@ -86701,6 +86953,9 @@ input UpdateTrustCenterInput {
   addTrustCenterSubprocessorIDs: [ID!]
   removeTrustCenterSubprocessorIDs: [ID!]
   clearTrustCenterSubprocessors: Boolean
+  addTrustCenterComplianceIDs: [ID!]
+  removeTrustCenterComplianceIDs: [ID!]
+  clearTrustCenterCompliances: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

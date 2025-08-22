@@ -6,7 +6,10 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -92,6 +95,16 @@ func DeletedAt(v time.Time) predicate.TrustCenterCompliance {
 // DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
 func DeletedBy(v string) predicate.TrustCenterCompliance {
 	return predicate.TrustCenterCompliance(sql.FieldEQ(FieldDeletedBy, v))
+}
+
+// StandardID applies equality check predicate on the "standard_id" field. It's identical to StandardIDEQ.
+func StandardID(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldEQ(FieldStandardID, v))
+}
+
+// TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
+func TrustCenterID(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldEQ(FieldTrustCenterID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -477,6 +490,204 @@ func TagsIsNil() predicate.TrustCenterCompliance {
 // TagsNotNil applies the NotNil predicate on the "tags" field.
 func TagsNotNil() predicate.TrustCenterCompliance {
 	return predicate.TrustCenterCompliance(sql.FieldNotNull(FieldTags))
+}
+
+// StandardIDEQ applies the EQ predicate on the "standard_id" field.
+func StandardIDEQ(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldEQ(FieldStandardID, v))
+}
+
+// StandardIDNEQ applies the NEQ predicate on the "standard_id" field.
+func StandardIDNEQ(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldNEQ(FieldStandardID, v))
+}
+
+// StandardIDIn applies the In predicate on the "standard_id" field.
+func StandardIDIn(vs ...string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldIn(FieldStandardID, vs...))
+}
+
+// StandardIDNotIn applies the NotIn predicate on the "standard_id" field.
+func StandardIDNotIn(vs ...string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldNotIn(FieldStandardID, vs...))
+}
+
+// StandardIDGT applies the GT predicate on the "standard_id" field.
+func StandardIDGT(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldGT(FieldStandardID, v))
+}
+
+// StandardIDGTE applies the GTE predicate on the "standard_id" field.
+func StandardIDGTE(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldGTE(FieldStandardID, v))
+}
+
+// StandardIDLT applies the LT predicate on the "standard_id" field.
+func StandardIDLT(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldLT(FieldStandardID, v))
+}
+
+// StandardIDLTE applies the LTE predicate on the "standard_id" field.
+func StandardIDLTE(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldLTE(FieldStandardID, v))
+}
+
+// StandardIDContains applies the Contains predicate on the "standard_id" field.
+func StandardIDContains(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldContains(FieldStandardID, v))
+}
+
+// StandardIDHasPrefix applies the HasPrefix predicate on the "standard_id" field.
+func StandardIDHasPrefix(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldHasPrefix(FieldStandardID, v))
+}
+
+// StandardIDHasSuffix applies the HasSuffix predicate on the "standard_id" field.
+func StandardIDHasSuffix(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldHasSuffix(FieldStandardID, v))
+}
+
+// StandardIDEqualFold applies the EqualFold predicate on the "standard_id" field.
+func StandardIDEqualFold(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldEqualFold(FieldStandardID, v))
+}
+
+// StandardIDContainsFold applies the ContainsFold predicate on the "standard_id" field.
+func StandardIDContainsFold(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldContainsFold(FieldStandardID, v))
+}
+
+// TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
+func TrustCenterIDEQ(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
+func TrustCenterIDNEQ(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldNEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
+func TrustCenterIDIn(vs ...string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
+func TrustCenterIDNotIn(vs ...string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldNotIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
+func TrustCenterIDGT(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldGT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
+func TrustCenterIDGTE(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldGTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
+func TrustCenterIDLT(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldLT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
+func TrustCenterIDLTE(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldLTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
+func TrustCenterIDContains(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldContains(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
+func TrustCenterIDHasPrefix(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldHasPrefix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
+func TrustCenterIDHasSuffix(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldHasSuffix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
+func TrustCenterIDIsNil() predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldIsNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
+func TrustCenterIDNotNil() predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldNotNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
+func TrustCenterIDEqualFold(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldEqualFold(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
+func TrustCenterIDContainsFold(v string) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
+// HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.
+func HasTrustCenter() predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterWith applies the HasEdge predicate on the "trust_center" edge with a given conditions (other predicates).
+func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(func(s *sql.Selector) {
+		step := newTrustCenterStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasStandard applies the HasEdge predicate on the "standard" edge.
+func HasStandard() predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, StandardTable, StandardColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStandardWith applies the HasEdge predicate on the "standard" edge with a given conditions (other predicates).
+func HasStandardWith(preds ...predicate.Standard) predicate.TrustCenterCompliance {
+	return predicate.TrustCenterCompliance(func(s *sql.Selector) {
+		step := newStandardStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

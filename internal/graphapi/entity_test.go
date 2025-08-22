@@ -16,7 +16,7 @@ import (
 
 func TestQueryEntity(t *testing.T) {
 	entity := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
+	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
 
 	testCases := []struct {
 		name     string

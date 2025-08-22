@@ -3228,6 +3228,12 @@ func (_m *TrustCenterComplianceHistory) changes(new *TrustCenterComplianceHistor
 	if !reflect.DeepEqual(_m.Tags, new.Tags) {
 		changes = append(changes, NewChange(trustcentercompliancehistory.FieldTags, _m.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(_m.StandardID, new.StandardID) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldStandardID, _m.StandardID, new.StandardID))
+	}
+	if !reflect.DeepEqual(_m.TrustCenterID, new.TrustCenterID) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldTrustCenterID, _m.TrustCenterID, new.TrustCenterID))
+	}
 	return changes
 }
 

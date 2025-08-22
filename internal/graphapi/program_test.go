@@ -18,9 +18,10 @@ func TestQueryProgram(t *testing.T) {
 	// create program1 with a linked procedure and policy
 	program1 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(adminUser.UserCtx, t)
+
 	archivedProgram := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true, Status: enums.ProgramStatusArchived}).MustNew(adminUser.UserCtx, t)
 
-	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
+	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
 
 	testCases := []struct {
 		name           string

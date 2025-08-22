@@ -66116,6 +66116,10 @@ type StandardWhereInput struct {
 	// "controls" edge predicates.
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+
+	// "trust_center_compliances" edge predicates.
+	HasTrustCenterCompliances     *bool                              `json:"hasTrustCenterCompliances,omitempty"`
+	HasTrustCenterCompliancesWith []*TrustCenterComplianceWhereInput `json:"hasTrustCenterCompliancesWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -66948,6 +66952,24 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, standard.HasControlsWith(with...))
+	}
+	if i.HasTrustCenterCompliances != nil {
+		p := standard.HasTrustCenterCompliances()
+		if !*i.HasTrustCenterCompliances {
+			p = standard.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterCompliancesWith) > 0 {
+		with := make([]predicate.TrustCenterCompliance, 0, len(i.HasTrustCenterCompliancesWith))
+		for _, w := range i.HasTrustCenterCompliancesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterCompliancesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, standard.HasTrustCenterCompliancesWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -77074,6 +77096,10 @@ type TrustCenterWhereInput struct {
 	// "trust_center_subprocessors" edge predicates.
 	HasTrustCenterSubprocessors     *bool                                `json:"hasTrustCenterSubprocessors,omitempty"`
 	HasTrustCenterSubprocessorsWith []*TrustCenterSubprocessorWhereInput `json:"hasTrustCenterSubprocessorsWith,omitempty"`
+
+	// "trust_center_compliances" edge predicates.
+	HasTrustCenterCompliances     *bool                              `json:"hasTrustCenterCompliances,omitempty"`
+	HasTrustCenterCompliancesWith []*TrustCenterComplianceWhereInput `json:"hasTrustCenterCompliancesWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -77535,6 +77561,24 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 		}
 		predicates = append(predicates, trustcenter.HasTrustCenterSubprocessorsWith(with...))
 	}
+	if i.HasTrustCenterCompliances != nil {
+		p := trustcenter.HasTrustCenterCompliances()
+		if !*i.HasTrustCenterCompliances {
+			p = trustcenter.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterCompliancesWith) > 0 {
+		with := make([]predicate.TrustCenterCompliance, 0, len(i.HasTrustCenterCompliancesWith))
+		for _, w := range i.HasTrustCenterCompliancesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterCompliancesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenter.HasTrustCenterCompliancesWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTrustCenterWhereInput
@@ -77621,6 +77665,46 @@ type TrustCenterComplianceWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "standard_id" field predicates.
+	StandardID             *string  `json:"standardID,omitempty"`
+	StandardIDNEQ          *string  `json:"standardIDNEQ,omitempty"`
+	StandardIDIn           []string `json:"standardIDIn,omitempty"`
+	StandardIDNotIn        []string `json:"standardIDNotIn,omitempty"`
+	StandardIDGT           *string  `json:"standardIDGT,omitempty"`
+	StandardIDGTE          *string  `json:"standardIDGTE,omitempty"`
+	StandardIDLT           *string  `json:"standardIDLT,omitempty"`
+	StandardIDLTE          *string  `json:"standardIDLTE,omitempty"`
+	StandardIDContains     *string  `json:"standardIDContains,omitempty"`
+	StandardIDHasPrefix    *string  `json:"standardIDHasPrefix,omitempty"`
+	StandardIDHasSuffix    *string  `json:"standardIDHasSuffix,omitempty"`
+	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
+	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "trust_center" edge predicates.
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+
+	// "standard" edge predicates.
+	HasStandard     *bool                 `json:"hasStandard,omitempty"`
+	HasStandardWith []*StandardWhereInput `json:"hasStandardWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -77874,7 +77958,127 @@ func (i *TrustCenterComplianceWhereInput) P() (predicate.TrustCenterCompliance, 
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcentercompliance.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.StandardID != nil {
+		predicates = append(predicates, trustcentercompliance.StandardIDEQ(*i.StandardID))
+	}
+	if i.StandardIDNEQ != nil {
+		predicates = append(predicates, trustcentercompliance.StandardIDNEQ(*i.StandardIDNEQ))
+	}
+	if len(i.StandardIDIn) > 0 {
+		predicates = append(predicates, trustcentercompliance.StandardIDIn(i.StandardIDIn...))
+	}
+	if len(i.StandardIDNotIn) > 0 {
+		predicates = append(predicates, trustcentercompliance.StandardIDNotIn(i.StandardIDNotIn...))
+	}
+	if i.StandardIDGT != nil {
+		predicates = append(predicates, trustcentercompliance.StandardIDGT(*i.StandardIDGT))
+	}
+	if i.StandardIDGTE != nil {
+		predicates = append(predicates, trustcentercompliance.StandardIDGTE(*i.StandardIDGTE))
+	}
+	if i.StandardIDLT != nil {
+		predicates = append(predicates, trustcentercompliance.StandardIDLT(*i.StandardIDLT))
+	}
+	if i.StandardIDLTE != nil {
+		predicates = append(predicates, trustcentercompliance.StandardIDLTE(*i.StandardIDLTE))
+	}
+	if i.StandardIDContains != nil {
+		predicates = append(predicates, trustcentercompliance.StandardIDContains(*i.StandardIDContains))
+	}
+	if i.StandardIDHasPrefix != nil {
+		predicates = append(predicates, trustcentercompliance.StandardIDHasPrefix(*i.StandardIDHasPrefix))
+	}
+	if i.StandardIDHasSuffix != nil {
+		predicates = append(predicates, trustcentercompliance.StandardIDHasSuffix(*i.StandardIDHasSuffix))
+	}
+	if i.StandardIDEqualFold != nil {
+		predicates = append(predicates, trustcentercompliance.StandardIDEqualFold(*i.StandardIDEqualFold))
+	}
+	if i.StandardIDContainsFold != nil {
+		predicates = append(predicates, trustcentercompliance.StandardIDContainsFold(*i.StandardIDContainsFold))
+	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, trustcentercompliance.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
 
+	if i.HasTrustCenter != nil {
+		p := trustcentercompliance.HasTrustCenter()
+		if !*i.HasTrustCenter {
+			p = trustcentercompliance.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterWith) > 0 {
+		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		for _, w := range i.HasTrustCenterWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentercompliance.HasTrustCenterWith(with...))
+	}
+	if i.HasStandard != nil {
+		p := trustcentercompliance.HasStandard()
+		if !*i.HasStandard {
+			p = trustcentercompliance.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasStandardWith) > 0 {
+		with := make([]predicate.Standard, 0, len(i.HasStandardWith))
+		for _, w := range i.HasStandardWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasStandardWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentercompliance.HasStandardWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTrustCenterComplianceWhereInput
@@ -77994,6 +78198,38 @@ type TrustCenterComplianceHistoryWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "standard_id" field predicates.
+	StandardID             *string  `json:"standardID,omitempty"`
+	StandardIDNEQ          *string  `json:"standardIDNEQ,omitempty"`
+	StandardIDIn           []string `json:"standardIDIn,omitempty"`
+	StandardIDNotIn        []string `json:"standardIDNotIn,omitempty"`
+	StandardIDGT           *string  `json:"standardIDGT,omitempty"`
+	StandardIDGTE          *string  `json:"standardIDGTE,omitempty"`
+	StandardIDLT           *string  `json:"standardIDLT,omitempty"`
+	StandardIDLTE          *string  `json:"standardIDLTE,omitempty"`
+	StandardIDContains     *string  `json:"standardIDContains,omitempty"`
+	StandardIDHasPrefix    *string  `json:"standardIDHasPrefix,omitempty"`
+	StandardIDHasSuffix    *string  `json:"standardIDHasSuffix,omitempty"`
+	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
+	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -78327,6 +78563,90 @@ func (i *TrustCenterComplianceHistoryWhereInput) P() (predicate.TrustCenterCompl
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcentercompliancehistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.StandardID != nil {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDEQ(*i.StandardID))
+	}
+	if i.StandardIDNEQ != nil {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDNEQ(*i.StandardIDNEQ))
+	}
+	if len(i.StandardIDIn) > 0 {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDIn(i.StandardIDIn...))
+	}
+	if len(i.StandardIDNotIn) > 0 {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDNotIn(i.StandardIDNotIn...))
+	}
+	if i.StandardIDGT != nil {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDGT(*i.StandardIDGT))
+	}
+	if i.StandardIDGTE != nil {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDGTE(*i.StandardIDGTE))
+	}
+	if i.StandardIDLT != nil {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDLT(*i.StandardIDLT))
+	}
+	if i.StandardIDLTE != nil {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDLTE(*i.StandardIDLTE))
+	}
+	if i.StandardIDContains != nil {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDContains(*i.StandardIDContains))
+	}
+	if i.StandardIDHasPrefix != nil {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDHasPrefix(*i.StandardIDHasPrefix))
+	}
+	if i.StandardIDHasSuffix != nil {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDHasSuffix(*i.StandardIDHasSuffix))
+	}
+	if i.StandardIDEqualFold != nil {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDEqualFold(*i.StandardIDEqualFold))
+	}
+	if i.StandardIDContainsFold != nil {
+		predicates = append(predicates, trustcentercompliancehistory.StandardIDContainsFold(*i.StandardIDContainsFold))
+	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
 	}
 
 	switch len(predicates) {

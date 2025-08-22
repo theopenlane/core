@@ -29,7 +29,7 @@ func TestQueryEvidence(t *testing.T) {
 	control := (&ControlBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
 	evidenceControl := (&EvidenceBuilder{client: suite.client, ControlID: control.ID}).MustNew(testUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
+	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
 
 	// add test cases for querying the Evidence
 	testCases := []struct {

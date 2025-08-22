@@ -4,11 +4,14 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 )
 
@@ -109,6 +112,26 @@ func (_c *TrustCenterComplianceCreate) SetTags(v []string) *TrustCenterComplianc
 	return _c
 }
 
+// SetStandardID sets the "standard_id" field.
+func (_c *TrustCenterComplianceCreate) SetStandardID(v string) *TrustCenterComplianceCreate {
+	_c.mutation.SetStandardID(v)
+	return _c
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *TrustCenterComplianceCreate) SetTrustCenterID(v string) *TrustCenterComplianceCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *TrustCenterComplianceCreate) SetNillableTrustCenterID(v *string) *TrustCenterComplianceCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterComplianceCreate) SetID(v string) *TrustCenterComplianceCreate {
 	_c.mutation.SetID(v)
@@ -121,6 +144,16 @@ func (_c *TrustCenterComplianceCreate) SetNillableID(v *string) *TrustCenterComp
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_c *TrustCenterComplianceCreate) SetTrustCenter(v *TrustCenter) *TrustCenterComplianceCreate {
+	return _c.SetTrustCenterID(v.ID)
+}
+
+// SetStandard sets the "standard" edge to the Standard entity.
+func (_c *TrustCenterComplianceCreate) SetStandard(v *Standard) *TrustCenterComplianceCreate {
+	return _c.SetStandardID(v.ID)
 }
 
 // Mutation returns the TrustCenterComplianceMutation object of the builder.
@@ -190,6 +223,22 @@ func (_c *TrustCenterComplianceCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *TrustCenterComplianceCreate) check() error {
+	if _, ok := _c.mutation.StandardID(); !ok {
+		return &ValidationError{Name: "standard_id", err: errors.New(`generated: missing required field "TrustCenterCompliance.standard_id"`)}
+	}
+	if v, ok := _c.mutation.StandardID(); ok {
+		if err := trustcentercompliance.StandardIDValidator(v); err != nil {
+			return &ValidationError{Name: "standard_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterCompliance.standard_id": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.TrustCenterID(); ok {
+		if err := trustcentercompliance.TrustCenterIDValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterCompliance.trust_center_id": %w`, err)}
+		}
+	}
+	if len(_c.mutation.StandardIDs()) == 0 {
+		return &ValidationError{Name: "standard", err: errors.New(`generated: missing required edge "TrustCenterCompliance.standard"`)}
+	}
 	return nil
 }
 
@@ -253,6 +302,42 @@ func (_c *TrustCenterComplianceCreate) createSpec() (*TrustCenterCompliance, *sq
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(trustcentercompliance.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.TrustCenterTable,
+			Columns: []string{trustcentercompliance.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TrustCenterID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.StandardIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.StandardTable,
+			Columns: []string{trustcentercompliance.StandardColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.StandardID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

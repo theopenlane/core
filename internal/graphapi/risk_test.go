@@ -22,7 +22,7 @@ func TestQueryRisk(t *testing.T) {
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
 		MustNew(testUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
+	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
 
 	riskIDs := []string{}
 	// add test cases for querying the Risk

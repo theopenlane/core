@@ -38228,6 +38228,95 @@ func (_q *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			_q.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
+
+		case "trustCenterCompliances":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterComplianceClient{config: _q.config}).Query()
+			)
+			args := newTrustCenterCompliancePaginateArgs(fieldArgs(ctx, new(TrustCenterComplianceWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTrustCenterCompliancePager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Standard) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"standard_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(standard.TrustCenterCompliancesColumn), ids...))
+						})
+						if err := query.GroupBy(standard.TrustCenterCompliancesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Standard) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.TrustCenterCompliances)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, trustcentercomplianceImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(standard.TrustCenterCompliancesColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedTrustCenterCompliances(alias, func(wq *TrustCenterComplianceQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[standard.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, standard.FieldCreatedAt)
@@ -43016,6 +43105,95 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 			_q.WithNamedTrustCenterSubprocessors(alias, func(wq *TrustCenterSubprocessorQuery) {
 				*wq = *query
 			})
+
+		case "trustCenterCompliances":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterComplianceClient{config: _q.config}).Query()
+			)
+			args := newTrustCenterCompliancePaginateArgs(fieldArgs(ctx, new(TrustCenterComplianceWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTrustCenterCompliancePager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"trust_center_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(trustcenter.TrustCenterCompliancesColumn), ids...))
+						})
+						if err := query.GroupBy(trustcenter.TrustCenterCompliancesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.TrustCenterCompliances)
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, trustcentercomplianceImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(trustcenter.TrustCenterCompliancesColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedTrustCenterCompliances(alias, func(wq *TrustCenterComplianceQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[trustcenter.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcenter.FieldCreatedAt)
@@ -43146,6 +43324,36 @@ func (_q *TrustCenterComplianceQuery) collectField(ctx context.Context, oneNode 
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+
+		case "trustCenter":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcenterImplementors)...); err != nil {
+				return err
+			}
+			_q.withTrustCenter = query
+			if _, ok := fieldSeen[trustcentercompliance.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcentercompliance.FieldTrustCenterID)
+				fieldSeen[trustcentercompliance.FieldTrustCenterID] = struct{}{}
+			}
+
+		case "standard":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&StandardClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, standardImplementors)...); err != nil {
+				return err
+			}
+			_q.withStandard = query
+			if _, ok := fieldSeen[trustcentercompliance.FieldStandardID]; !ok {
+				selectedFields = append(selectedFields, trustcentercompliance.FieldStandardID)
+				fieldSeen[trustcentercompliance.FieldStandardID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcentercompliance.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcentercompliance.FieldCreatedAt)
@@ -43170,6 +43378,16 @@ func (_q *TrustCenterComplianceQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[trustcentercompliance.FieldTags]; !ok {
 				selectedFields = append(selectedFields, trustcentercompliance.FieldTags)
 				fieldSeen[trustcentercompliance.FieldTags] = struct{}{}
+			}
+		case "standardID":
+			if _, ok := fieldSeen[trustcentercompliance.FieldStandardID]; !ok {
+				selectedFields = append(selectedFields, trustcentercompliance.FieldStandardID)
+				fieldSeen[trustcentercompliance.FieldStandardID] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[trustcentercompliance.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcentercompliance.FieldTrustCenterID)
+				fieldSeen[trustcentercompliance.FieldTrustCenterID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -43300,6 +43518,16 @@ func (_q *TrustCenterComplianceHistoryQuery) collectField(ctx context.Context, o
 			if _, ok := fieldSeen[trustcentercompliancehistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, trustcentercompliancehistory.FieldTags)
 				fieldSeen[trustcentercompliancehistory.FieldTags] = struct{}{}
+			}
+		case "standardID":
+			if _, ok := fieldSeen[trustcentercompliancehistory.FieldStandardID]; !ok {
+				selectedFields = append(selectedFields, trustcentercompliancehistory.FieldStandardID)
+				fieldSeen[trustcentercompliancehistory.FieldStandardID] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[trustcentercompliancehistory.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcentercompliancehistory.FieldTrustCenterID)
+				fieldSeen[trustcentercompliancehistory.FieldTrustCenterID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
