@@ -117,12 +117,16 @@ func handleActivation(ctx context.Context, omm *generated.OrgModuleMutation, v g
 }
 
 func handleDeactivation(ctx context.Context, omm *generated.OrgModuleMutation, id string) (generated.Value, error) {
-	moduleToDeactivate, err := omm.Client().OrgModule.Get(ctx, id)
+	module, err := omm.Client().OrgModule.Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
 
-	return deleteModuleTuple(ctx, omm.Authz, moduleToDeactivate)
+	if err := deleteModuleTuple(ctx, omm.Authz, module); err != nil {
+		return nil, err
+	}
+
+	return module, nil
 }
 
 func handleOrgModuleDelete(ctx context.Context, omm *generated.OrgModuleMutation, next ent.Mutator) (generated.Value, error) {
@@ -141,11 +145,14 @@ func handleOrgModuleDelete(ctx context.Context, omm *generated.OrgModuleMutation
 		return nil, err
 	}
 
-	_, err = deleteModuleTuple(ctx, omm.Authz, moduleToDelete)
-	return v, err
+	if err := deleteModuleTuple(ctx, omm.Authz, moduleToDelete); err != nil {
+		return nil, err
+	}
+
+	return v, nil
 }
 
-func deleteModuleTuple(ctx context.Context, authz fgax.Client, module *generated.OrgModule) (generated.Value, error) {
+func deleteModuleTuple(ctx context.Context, authz fgax.Client, module *generated.OrgModule) error {
 	deleteTuple := fgax.GetTupleKey(fgax.TupleRequest{
 		SubjectID:   module.OwnerID,
 		SubjectType: generated.TypeOrganization,
@@ -155,7 +162,7 @@ func deleteModuleTuple(ctx context.Context, authz fgax.Client, module *generated
 	})
 
 	_, err := authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{deleteTuple})
-	return nil, err
+	return err
 }
 
 // createFeatureTuples writes default feature tuples to FGA and inserts them into

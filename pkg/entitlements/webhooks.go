@@ -14,7 +14,6 @@ var SupportedEventTypes = []stripe.EventType{
 	stripe.EventTypeCustomerSubscriptionPaused,
 	stripe.EventTypeCustomerSubscriptionTrialWillEnd,
 	stripe.EventTypePaymentMethodAttached,
-	stripe.EventTypeCustomerSubscriptionCreated,
 }
 
 // SupportedEventTypeStrings returns SupportedEventTypes as a slice of strings.
