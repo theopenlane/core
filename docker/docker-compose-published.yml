@@ -1,7 +1,7 @@
 services:
   api:
     image: ghcr.io/theopenlane/core:latest
-    always_pull: true
+    pull_policy: always
     command:
       - serve
       - --debug
