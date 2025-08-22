@@ -434,53 +434,6 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 	return &orgSubscription.OwnerID, nil
 }
 
-func (h *Handler) createOrUpdateOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
-
-	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
-
-	stripeSub := em.StripeSubscriptionToOrgSubscription(subscription, entitlements.MapStripeCustomer(customer))
-
-	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().
-		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).
-		Only(allowCtx)
-	if err != nil && !ent.IsNotFound(err) {
-		log.Error().Err(err).Msg("failed to query org subscription")
-		return nil, err
-	}
-
-	if ent.IsNotFound(err) {
-		log.Debug().Str("stripe_subscription_id", subscription.ID).Msg("creating new org subscription from stripe")
-
-		orgID := customer.Metadata["organization_id"]
-		if orgID == "" {
-			log.Error().Str("customer_id", customer.ID).Msg("organization_id not found in customer metadata")
-			return nil, ErrSubscriberNotFound
-		}
-
-		orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Create().
-			SetOwnerID(orgID).
-			SetStripeSubscriptionID(subscription.ID).
-			SetProductPrice(stripeSub.ProductPrice).
-			SetNillableTrialExpiresAt(stripeSub.TrialExpiresAt).
-			SetNillableDaysUntilDue(stripeSub.DaysUntilDue).
-			SetActive(stripeSub.Active).
-			Save(allowCtx)
-
-		if err != nil {
-			log.Error().Err(err).Msg("failed to create OrgSubscription")
-			return nil, err
-		}
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("stripe_subscription_id", subscription.ID).Msg("OrgSubscription created successfully")
-
-		if err := h.clearFeatureCache(ctx, orgSubscription.OwnerID); err != nil {
-			log.Error().Err(err).Msg("failed to ensure feature tuples")
-		}
-	}
-
-	return &orgSubscription.OwnerID, h.syncSubscriptionItemsWithStripe(ctx, subscription)
-}
-
 func (h *Handler) clearFeatureCache(ctx context.Context, orgID string) error {
 	if h.RedisClient != nil {
 		key := "features:" + orgID
