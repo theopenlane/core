@@ -75,7 +75,7 @@ require (
 	github.com/sebdah/goldie/v2 v2.7.1
 	github.com/spf13/cobra v1.9.1
 	github.com/stoewer/go-strcase v1.3.1
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	github.com/theopenlane/beacon v0.2.0
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
