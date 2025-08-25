@@ -15,6 +15,7 @@ builds:
       - CGO_ENABLED=0
     flags:
       - -trimpath
+      - -tags=cli
     ldflags:
       - "-s -w"
       - "-X main.Version={{ .Env.VERSION }}"
@@ -36,6 +37,7 @@ builds:
       - CGO_ENABLED=1
     flags:
       - -trimpath
+      - -tags=cli
     ldflags:
       - "-X main.Version={{ .Env.VERSION }}"
       - "-X main.Commit={{ .Env.COMMIT }}"
@@ -57,6 +59,7 @@ builds:
       - CGO_ENABLED=1
     flags:
       - -trimpath
+      - -tags=cli
     ldflags:
       - "-X main.Version={{ .Env.VERSION }}"
       - "-X main.Commit={{ .Env.COMMIT }}"
@@ -77,7 +80,7 @@ builds:
       - CGO_ENABLED=0
     flags:
       - -trimpath
-      - -tags=netgo
+      - -tags=netgo,cli
     ldflags:
       - "-s -w"
       - "-X main.Version={{ .Env.VERSION }}"
