@@ -1,7 +1,7 @@
 al.essio.dev/pkg/shellescape v1.5.1 h1:86HrALUujYS/h+GtqoB26SBEdkWfmMI6FubjXlsXyho=
 al.essio.dev/pkg/shellescape v1.5.1/go.mod h1:6sIqp7X2P6mThCQ7twERpZTuigpr6KbZWtls1U8I890=
-ariga.io/atlas v0.35.0 h1:tzco6CEZm1/jGD2ifHhKFlsQB7Bfsc/mty4zwm6Mlbc=
-ariga.io/atlas v0.35.0/go.mod h1:9ZAIr/V85596AVxmN8edyVHYKKpnNsDMdnHLsEliW7k=
+ariga.io/atlas v0.36.1 h1:w0BGAHPkzxpx0n9QWUVbtu7vUUihs7cDCTPsnnw9nck=
+ariga.io/atlas v0.36.1/go.mod h1:9ZAIr/V85596AVxmN8edyVHYKKpnNsDMdnHLsEliW7k=
 ariga.io/entcache v0.1.0 h1:nfJXzjB5CEvAK6SmjupHREMJrKLakeqU5tG3s4TO6JA=
 ariga.io/entcache v0.1.0/go.mod h1:3Z1Sql5bcqPA1YV/jvMlZyh9T+ntSFOclaASAm1TiKQ=
 cel.dev/expr v0.24.0 h1:56OvJKSH3hDGL0ml5uSxZmz3/3Pq4tJ+fb1unVLAFcY=
