@@ -1,3 +1,5 @@
+//go:build cli
+
 package cmd
 
 import "github.com/theopenlane/core/pkg/enums"
