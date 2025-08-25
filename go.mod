@@ -104,7 +104,7 @@ require (
 	github.com/tmc/langchaingo v0.1.13
 	github.com/urfave/cli/v3 v3.4.1
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/windmill-labs/windmill-go-client v1.530.0
+	github.com/windmill-labs/windmill-go-client v1.535.0
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.44.0
@@ -124,7 +124,7 @@ require (
 
 require (
 	al.essio.dev/pkg/shellescape v1.5.1 // indirect
-	ariga.io/atlas v0.35.0 // indirect
+	ariga.io/atlas v0.35.0
 	cel.dev/expr v0.24.0 // indirect
 	cloud.google.com/go v0.121.6 // indirect
 	cloud.google.com/go/auth v0.16.5 // indirect
