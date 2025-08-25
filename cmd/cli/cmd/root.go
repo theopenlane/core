@@ -1,3 +1,5 @@
+//go:build cli
+
 // Package cmd is the cobra cli implementation for the core server
 package cmd
 

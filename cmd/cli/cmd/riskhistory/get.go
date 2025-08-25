@@ -1,3 +1,5 @@
+//go:build cli
+
 package riskhistory
 
 import (

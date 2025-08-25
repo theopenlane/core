@@ -509,71 +509,6 @@
       "type": "object",
       "description": "Config holds the configuration for the ent server"
     },
-    "entconfig.GeminiConfig": {
-      "properties": {
-        "model": {
-          "type": "string",
-          "description": "Model specifies the model name to use"
-        },
-        "apiKey": {
-          "type": "string",
-          "description": "APIKey contains the authentication key for the service"
-        },
-        "credentialsPath": {
-          "type": "string",
-          "description": "CredentialsPath is the path to Google Cloud credentials file"
-        },
-        "credentialsJSON": {
-          "type": "string",
-          "description": "CredentialsJSON contains Google Cloud credentials as JSON string"
-        },
-        "maxTokens": {
-          "type": "integer",
-          "description": "MaxTokens specifies the maximum tokens for response"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "GeminiConfig contains Google Gemini specific configuration"
-    },
-    "entconfig.HuggingFaceConfig": {
-      "properties": {
-        "model": {
-          "type": "string",
-          "description": "Model specifies the model name to use"
-        },
-        "apiKey": {
-          "type": "string",
-          "description": "APIKey contains the authentication key for the service"
-        },
-        "url": {
-          "type": "string",
-          "description": "URL specifies the API endpoint"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "HuggingFaceConfig contains HuggingFace specific configuration"
-    },
-    "entconfig.MistralConfig": {
-      "properties": {
-        "model": {
-          "type": "string",
-          "description": "Model specifies the model name to use"
-        },
-        "apiKey": {
-          "type": "string",
-          "description": "APIKey contains the authentication key for the service"
-        },
-        "url": {
-          "type": "string",
-          "description": "URL specifies the API endpoint"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "MistralConfig contains Mistral specific configuration"
-    },
     "entconfig.Modules": {
       "properties": {
         "enabled": {
@@ -584,21 +519,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Modules settings for features access"
-    },
-    "entconfig.OllamaConfig": {
-      "properties": {
-        "model": {
-          "type": "string",
-          "description": "Model specifies the model to use"
-        },
-        "url": {
-          "type": "string",
-          "description": "URL specifies the API endpoint"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "OllamaConfig contains Ollama specific configuration"
     },
     "entconfig.OpenAIConfig": {
       "properties": {
@@ -651,22 +571,6 @@
         "anthropic": {
           "$ref": "#/$defs/entconfig.AnthropicConfig",
           "description": "Anthropic contains configuration for Anthropic's API"
-        },
-        "mistral": {
-          "$ref": "#/$defs/entconfig.MistralConfig",
-          "description": "Mistral contains configuration for Mistral's API"
-        },
-        "gemini": {
-          "$ref": "#/$defs/entconfig.GeminiConfig",
-          "description": "Gemini contains configuration for Google's Gemini API"
-        },
-        "huggingFace": {
-          "$ref": "#/$defs/entconfig.HuggingFaceConfig",
-          "description": "HuggingFace contains configuration for HuggingFace's API"
-        },
-        "ollama": {
-          "$ref": "#/$defs/entconfig.OllamaConfig",
-          "description": "Ollama contains configuration for Ollama's API"
         },
         "cloudflare": {
           "$ref": "#/$defs/entconfig.CloudflareConfig",
@@ -1298,6 +1202,12 @@
     },
     "river.QueueConfig": {
       "properties": {
+        "FetchCooldown": {
+          "type": "integer"
+        },
+        "FetchPollInterval": {
+          "type": "integer"
+        },
         "MaxWorkers": {
           "type": "integer"
         }

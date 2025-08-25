@@ -14,7 +14,7 @@ The [Taskfile](Taskfile.yaml) includes two commands:
 To use the cli directly instead of the `Taskfile`:
 
 ```
-go run cmd/cli/gencmd/generate/main.go generate --help
+go run pkg/gencmd/generate/main.g generate --help
 generate is the command to generate the stub files for a given cli cmd
 
 Usage:

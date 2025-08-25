@@ -1,4 +1,4 @@
-//go:build ignore
+//go:build db
 
 package main
 
@@ -47,7 +47,7 @@ func main() {
 	postgresOpts := append(baseOpts, schema.WithDialect(dialect.Postgres))
 
 	if len(os.Args) != 2 {
-		log.Fatal().Msg("migration name is required. Use: 'go run -mod=mod create_migrations.go <name>'")
+		log.Fatal().Msg("migration name is required. Use: 'go run create_migrations.go <name>'")
 	}
 
 	pgDBURI, ok := os.LookupEnv("ATLAS_POSTGRES_DB_URI")

@@ -17,7 +17,6 @@ bin/*
 coverage/
 
 # Go workspace file
-go.work
 go.work.sum
 
 # local dev created files

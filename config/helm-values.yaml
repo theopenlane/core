@@ -150,26 +150,6 @@ coreConfiguration:
           legacyTextCompletion: false  # @schema type:boolean
           # -- BaseURL specifies the API endpoint
           baseURL: ""  # @schema type:string
-        # -- Mistral contains configuration for Mistral's API
-        mistral:
-          # -- URL specifies the API endpoint
-          url: ""  # @schema type:string
-        # -- Gemini contains configuration for Google's Gemini API
-        gemini:
-          # -- CredentialsPath is the path to Google Cloud credentials file
-          credentialsPath: ""  # @schema type:string
-          # -- MaxTokens specifies the maximum tokens for response
-          maxTokens: 0  # @schema type:integer
-        # -- HuggingFace contains configuration for HuggingFace's API
-        huggingFace:
-          # -- URL specifies the API endpoint
-          url: ""  # @schema type:string
-        # -- Ollama contains configuration for Ollama's API
-        ollama:
-          # -- Model specifies the model to use
-          model: ""  # @schema type:string
-          # -- URL specifies the API endpoint
-          url: ""  # @schema type:string
         # -- Cloudflare contains configuration for Cloudflare's API
         cloudflare:
           # -- AccountID specifies the Cloudflare account ID
@@ -486,14 +466,6 @@ externalSecrets:
       secretKey: "CORE_SERVER_FIELDLEVELENCRYPTION_KEYSET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-server-fieldlevelencryption-keyset"  # @schema type:string
-    # -- core-entconfig-summarizer-llm-gemini-credentialsjson secret configuration
-    core-entconfig-summarizer-llm-gemini-credentialsjson:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for entConfig.summarizer.llm.gemini.credentialsJSON
-      secretKey: "CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_CREDENTIALSJSON"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-entconfig-summarizer-llm-gemini-credentialsjson"  # @schema type:string
     # -- core-entconfig-windmill-token secret configuration
     core-entconfig-windmill-token:
       # -- Enable this external secret
