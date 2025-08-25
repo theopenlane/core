@@ -24,13 +24,6 @@ tasks:
     cmds:
       - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-riverboat.yml -f ./docker/docker-compose.yml up -d"
 
-  core:linux:
-    dir: ..
-    desc: brings up the compose environment for the core server
-    cmds:
-      - docker build -f docker/Dockerfile . -t core:dev
-      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-riverboat.yml -f ./docker/docker-compose-simple.yml up -d"
-
   core:down:
     dir: ..
     desc: brings the core compose environment down
