@@ -69,6 +69,10 @@ func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, sub *stri
 // So this syncs it into the organization schema if needed
 func upsertOrgStripeCustomer(ctx context.Context, orgSub *ent.OrgSubscription, customerID string) error {
 
+	if customerID == "" {
+		return nil
+	}
+
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	tx := transaction.FromContext(ctx)
@@ -77,10 +81,6 @@ func upsertOrgStripeCustomer(ctx context.Context, orgSub *ent.OrgSubscription, c
 		Where(organization.ID(orgSub.OwnerID)).Only(ctx)
 	if err != nil {
 		return err
-	}
-
-	if customerID == "" {
-		return nil
 	}
 
 	if org.StripeCustomerID != nil && *org.StripeCustomerID != "" {
