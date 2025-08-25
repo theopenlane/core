@@ -361,17 +361,17 @@ tasks:
   hush:keyset:
     desc: Generates a new Tink keyset for field encryption
     cmds:
-      - go run ./internal/ent/hush/cmd/hush generate
+      - go run -tags generate ./internal/ent/hush/cmd/hush generate
 
   hush:quiet:
     desc: Generates a new Tink keyset (output only)
     cmds:
-      - go run ./internal/ent/hush/cmd/hush generate --quiet
+      - go run -tags generate ./internal/ent/hush/cmd/hush generate --quiet
 
   hush:export:
     desc: Generates a new Tink keyset in export format
     cmds:
-      - go run ./internal/ent/hush/cmd/hush generate --export
+      - go run -tags generate ./internal/ent/hush/cmd/hush generate --export
 
   # dev tasks
   run-dev:
