@@ -9,9 +9,11 @@ import (
 	"github.com/theopenlane/utils/contextx"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 
@@ -22,6 +24,11 @@ import (
 // records exist and are updated based on the given Stripe subscription data.
 func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, sub *stripe.Subscription) error {
 	orgSub, err := getOrgSubscription(ctx, sub)
+	if err != nil {
+		return err
+	}
+
+	err = upsertOrgStripeCustomer(ctx, orgSub, sub.Customer.ID)
 	if err != nil {
 		return err
 	}
@@ -54,6 +61,35 @@ func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, sub *stri
 	}
 
 	return nil
+}
+
+// upsertOrgStripeCustomer updates the org with the stripe customer id.
+// The subscription already has the owner_id but for older orgs, we may not
+// have the customer_id since we dropped them in the organization_subscription table
+// So this syncs it into the organization schema if needed
+func upsertOrgStripeCustomer(ctx context.Context, orgSub *ent.OrgSubscription, customerID string) error {
+
+	if customerID == "" {
+		return nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	tx := transaction.FromContext(ctx)
+
+	org, err := tx.Organization.Query().Select(organization.FieldStripeCustomerID).
+		Where(organization.ID(orgSub.OwnerID)).Only(ctx)
+	if err != nil {
+		return err
+	}
+
+	if org.StripeCustomerID != nil && *org.StripeCustomerID != "" {
+		return nil
+	}
+
+	return tx.Organization.Update().Where(organization.ID(orgSub.OwnerID)).
+		SetStripeCustomerID(customerID).
+		Exec(allowCtx)
 }
 
 // upsertOrgProduct creates or updates an OrgProduct based on the Stripe product data
