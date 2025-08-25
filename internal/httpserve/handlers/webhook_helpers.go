@@ -79,7 +79,11 @@ func upsertOrgStripeCustomer(ctx context.Context, orgSub *ent.OrgSubscription, c
 		return err
 	}
 
-	if (org.StripeCustomerID != nil && *org.StripeCustomerID != "") || customerID == "" {
+	if customerID == "" {
+		return nil
+	}
+
+	if org.StripeCustomerID != nil && *org.StripeCustomerID != "" {
 		return nil
 	}
 
