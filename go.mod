@@ -32,7 +32,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.87.1
 	github.com/brianvoe/gofakeit/v7 v7.4.0
 	github.com/cenkalti/backoff/v5 v5.0.3
-	github.com/cloudflare/cloudflare-go/v4 v4.6.0
+	github.com/cloudflare/cloudflare-go/v5 v5.1.0
 	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.18.0
 	github.com/fsnotify/fsnotify v1.9.0
@@ -73,7 +73,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 	github.com/pquerna/otp v1.5.0
-	github.com/pressly/goose/v3 v3.24.3
+	github.com/pressly/goose/v3 v3.25.0
 	github.com/prometheus/client_golang v1.23.0
 	github.com/ravilushqa/otelgqlgen v0.19.0
 	github.com/redis/go-redis/v9 v9.12.1
@@ -87,7 +87,7 @@ require (
 	github.com/spf13/cast v1.9.2
 	github.com/spf13/cobra v1.9.1
 	github.com/stoewer/go-strcase v1.3.1
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	github.com/stripe/stripe-go/v82 v82.4.1
 	github.com/theopenlane/beacon v0.2.0
 	github.com/theopenlane/echo-prometheus v0.1.0

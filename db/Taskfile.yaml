@@ -13,7 +13,7 @@ tasks:
       - |
         echo "If there is no schema to generate, this will not create a file (hint: name it your branch name if you're not sure) - enter the name of the migration:"
         read migration;
-        go run create_migrations.go ${migration};
+        go run -tags db create_migrations.go ${migration};
 
   lint:
     desc: lints the pushed migration files
@@ -37,4 +37,4 @@ tasks:
     desc: generate a new ent schema from template
     silent: true
     cmds:
-      - go run -mod=mod entgo.io/ent/cmd/ent new --template ../internal/ent/base/entinit.tmpl --target ../internal/ent/schema {{.CLI_ARGS}}
+      - go run -tags db -mod=readonly entgo.io/ent/cmd/ent new --template ../internal/ent/base/entinit.tmpl --target ../internal/ent/schema {{.CLI_ARGS}}
