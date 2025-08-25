@@ -5,6 +5,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -69,10 +70,35 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 		)
 	}
 
-	if err := m.Client().Group.CreateBulk(builders...).Exec(ctx); err != nil {
+	groups, err := m.Client().Group.CreateBulk(builders...).Save(ctx)
+	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating system managed groups")
 
 		return err
+	}
+
+	// add group member to managed groups
+	for _, g := range groups {
+		if g.Name == ViewersGroup {
+			continue
+		}
+
+		userID, err := auth.GetSubjectIDFromContext(ctx)
+		if err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("error getting user ID from context")
+			return err
+		}
+
+		input := generated.CreateGroupMembershipInput{
+			Role:    &enums.RoleMember,
+			UserID:  userID,
+			GroupID: g.ID,
+		}
+
+		if err := m.Client().GroupMembership.Create().SetInput(input).Exec(ctx); err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("error adding user to managed group")
+			return err
+		}
 	}
 
 	zerolog.Ctx(ctx).Debug().Str("organization", orgID).Msg("created system managed groups")
