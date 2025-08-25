@@ -36,7 +36,7 @@ require (
 	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.18.0
 	github.com/fsnotify/fsnotify v1.9.0
-	github.com/gabriel-vasile/mimetype v1.4.9
+	github.com/gabriel-vasile/mimetype v1.4.10
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.133.0
 	github.com/go-jose/go-jose/v4 v4.1.2
