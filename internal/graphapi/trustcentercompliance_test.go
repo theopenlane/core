@@ -31,10 +31,9 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name: "happy path, minimal input with standard and trust center",
+			name: "happy path, minimal input with standard and trust center determined by org",
 			request: testclient.CreateTrustCenterComplianceInput{
-				StandardID:    standard1.ID,
-				TrustCenterID: &trustCenter1.ID,
+				StandardID: standard1.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -112,11 +111,12 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 		{
 			name: "missing required field",
 			request: testclient.CreateTrustCenterComplianceInput{
-				Tags: []string{"missing", "standard"},
+				Tags:          []string{"missing", "standard"},
+				TrustCenterID: &trustCenter1.ID,
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "internal system error",
+			expectedErr: "value is less than the required length",
 		},
 		{
 			name: "invalid standard id",
