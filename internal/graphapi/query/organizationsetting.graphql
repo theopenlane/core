@@ -23,6 +23,7 @@ query GetAllOrganizationSettings {
         identityProviderClientSecret
         identityProviderMetadataEndpoint
         complianceWebhookToken
+        paymentMethodAdded
         organization {
           id
           displayName
@@ -55,6 +56,7 @@ query GetOrganizationSettingByID($organizationSettingId: ID!) {
     identityProviderClientSecret
     identityProviderMetadataEndpoint
     complianceWebhookToken
+    paymentMethodAdded
     organization {
       id
       displayName
@@ -86,6 +88,7 @@ query GetOrganizationSettings($where: OrganizationSettingWhereInput!) {
         oidcDiscoveryEndpoint
         identityProviderClientSecret
         identityProviderMetadataEndpoint
+        paymentMethodAdded
         complianceWebhookToken
         organization {
           id
@@ -120,6 +123,7 @@ mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: Up
       identityProviderClientSecret
       identityProviderMetadataEndpoint
       complianceWebhookToken
+      paymentMethodAdded
       organization {
         id
         displayName

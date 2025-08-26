@@ -50757,6 +50757,7 @@ type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	IdentityProviderMetadataEndpoint *string                                                                  "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
 	OidcDiscoveryEndpoint            *string                                                                  "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
 	Organization                     *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	PaymentMethodAdded               bool                                                                     "json:\"paymentMethodAdded\" graphql:\"paymentMethodAdded\""
 	Tags                             []string                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier                    *string                                                                  "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt                        *time.Time                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -50871,6 +50872,12 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetOrganiza
 	}
 	return t.Organization
 }
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetPaymentMethodAdded() bool {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.PaymentMethodAdded
+}
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetTags() []string {
 	if t == nil {
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -50955,6 +50962,7 @@ type GetOrganizationSettingByID_OrganizationSetting struct {
 	IdentityProviderMetadataEndpoint *string                                                      "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
 	OidcDiscoveryEndpoint            *string                                                      "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
 	Organization                     *GetOrganizationSettingByID_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	PaymentMethodAdded               bool                                                         "json:\"paymentMethodAdded\" graphql:\"paymentMethodAdded\""
 	Tags                             []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier                    *string                                                      "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt                        *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -51069,6 +51077,12 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetOrganization() *GetO
 	}
 	return t.Organization
 }
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetPaymentMethodAdded() bool {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.PaymentMethodAdded
+}
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetTags() []string {
 	if t == nil {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
@@ -51131,6 +51145,7 @@ type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	IdentityProviderMetadataEndpoint *string                                                               "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
 	OidcDiscoveryEndpoint            *string                                                               "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
 	Organization                     *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	PaymentMethodAdded               bool                                                                  "json:\"paymentMethodAdded\" graphql:\"paymentMethodAdded\""
 	Tags                             []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier                    *string                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt                        *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -51245,6 +51260,12 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetOrganizatio
 	}
 	return t.Organization
 }
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetPaymentMethodAdded() bool {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.PaymentMethodAdded
+}
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetTags() []string {
 	if t == nil {
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -51329,6 +51350,7 @@ type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting str
 	IdentityProviderMetadataEndpoint *string                                                                               "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
 	OidcDiscoveryEndpoint            *string                                                                               "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
 	Organization                     *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	PaymentMethodAdded               bool                                                                                  "json:\"paymentMethodAdded\" graphql:\"paymentMethodAdded\""
 	Tags                             []string                                                                              "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier                    *string                                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 	UpdatedAt                        *time.Time                                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -51442,6 +51464,12 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
 	}
 	return t.Organization
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetPaymentMethodAdded() bool {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.PaymentMethodAdded
 }
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetTags() []string {
 	if t == nil {
@@ -109860,6 +109888,7 @@ const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 				identityProviderClientSecret
 				identityProviderMetadataEndpoint
 				complianceWebhookToken
+				paymentMethodAdded
 				organization {
 					id
 					displayName
@@ -109908,6 +109937,7 @@ const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($o
 		identityProviderClientSecret
 		identityProviderMetadataEndpoint
 		complianceWebhookToken
+		paymentMethodAdded
 		organization {
 			id
 			displayName
@@ -109957,6 +109987,7 @@ const GetOrganizationSettingsDocument = `query GetOrganizationSettings ($where: 
 				oidcDiscoveryEndpoint
 				identityProviderClientSecret
 				identityProviderMetadataEndpoint
+				paymentMethodAdded
 				complianceWebhookToken
 				organization {
 					id
@@ -110009,6 +110040,7 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 			identityProviderClientSecret
 			identityProviderMetadataEndpoint
 			complianceWebhookToken
+			paymentMethodAdded
 			organization {
 				id
 				displayName
