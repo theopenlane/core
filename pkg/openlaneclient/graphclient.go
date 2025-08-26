@@ -72,8 +72,8 @@ type OpenlaneGraphClient interface {
 	UpdateControlImplementation(ctx context.Context, updateControlImplementationID string, input UpdateControlImplementationInput, interceptors ...clientv2.RequestInterceptor) (*UpdateControlImplementation, error)
 	GetAllControlImplementationHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlImplementationHistories, error)
 	GetControlImplementationHistories(ctx context.Context, first *int64, last *int64, where *ControlImplementationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlImplementationHistories, error)
-	CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControlObjective, error)
 	CreateBulkControlObjective(ctx context.Context, input []*CreateControlObjectiveInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkControlObjective, error)
+	CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControlObjective, error)
 	CreateControlObjective(ctx context.Context, input CreateControlObjectiveInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlObjective, error)
 	DeleteControlObjective(ctx context.Context, deleteControlObjectiveID string, interceptors ...clientv2.RequestInterceptor) (*DeleteControlObjective, error)
 	GetAllControlObjectives(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlObjectives, error)
@@ -10171,213 +10171,6 @@ func (t *GetControlImplementationHistories_ControlImplementationHistories) GetTo
 	return t.TotalCount
 }
 
-type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges_Node struct {
-	RefCode string "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges struct {
-	Node *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges) GetNode() *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls struct {
-	Edges []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls) GetEdges() []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges_Node struct {
-	RefCode string "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges struct {
-	Node *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges) GetNode() *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols struct {
-	Edges []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols) GetEdges() []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives struct {
-	Category             *string                                                                                   "json:\"category,omitempty\" graphql:\"category\""
-	ControlObjectiveType *string                                                                                   "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
-	Controls             CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls    "json:\"controls\" graphql:\"controls\""
-	CreatedAt            *time.Time                                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DesiredOutcome       *string                                                                                   "json:\"desiredOutcome,omitempty\" graphql:\"desiredOutcome\""
-	DisplayID            string                                                                                    "json:\"displayID\" graphql:\"displayID\""
-	ID                   string                                                                                    "json:\"id\" graphql:\"id\""
-	Name                 string                                                                                    "json:\"name\" graphql:\"name\""
-	OwnerID              *string                                                                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Revision             *string                                                                                   "json:\"revision,omitempty\" graphql:\"revision\""
-	Source               *enums.ControlSource                                                                      "json:\"source,omitempty\" graphql:\"source\""
-	Status               *enums.ObjectiveStatus                                                                    "json:\"status,omitempty\" graphql:\"status\""
-	Subcategory          *string                                                                                   "json:\"subcategory,omitempty\" graphql:\"subcategory\""
-	Subcontrols          CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
-	Tags                 []string                                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt            *time.Time                                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetCategory() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.Category
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetControlObjectiveType() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.ControlObjectiveType
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetControls() *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return &t.Controls
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetDesiredOutcome() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.DesiredOutcome
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetDisplayID() string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.DisplayID
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetName() string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.Name
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetRevision() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.Revision
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetSource() *enums.ControlSource {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.Source
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetStatus() *enums.ObjectiveStatus {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.Status
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetSubcategory() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.Subcategory
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetSubcontrols() *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return &t.Subcontrols
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.UpdatedBy
-}
-
-type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective struct {
-	ControlObjectives []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
-}
-
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective) GetControlObjectives() []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective{}
-	}
-	return t.ControlObjectives
-}
-
 type CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives_Controls_Edges_Node struct {
 	RefCode string "json:\"refCode\" graphql:\"refCode\""
 }
@@ -10581,6 +10374,213 @@ type CreateBulkControlObjective_CreateBulkControlObjective struct {
 func (t *CreateBulkControlObjective_CreateBulkControlObjective) GetControlObjectives() []*CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives {
 	if t == nil {
 		t = &CreateBulkControlObjective_CreateBulkControlObjective{}
+	}
+	return t.ControlObjectives
+}
+
+type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges_Node struct {
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges struct {
+	Node *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges) GetNode() *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges_Node {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls struct {
+	Edges []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls) GetEdges() []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls_Edges {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls{}
+	}
+	return t.Edges
+}
+
+type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges_Node struct {
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges struct {
+	Node *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges) GetNode() *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols struct {
+	Edges []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols) GetEdges() []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols_Edges {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols{}
+	}
+	return t.Edges
+}
+
+type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives struct {
+	Category             *string                                                                                   "json:\"category,omitempty\" graphql:\"category\""
+	ControlObjectiveType *string                                                                                   "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
+	Controls             CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls    "json:\"controls\" graphql:\"controls\""
+	CreatedAt            *time.Time                                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string                                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DesiredOutcome       *string                                                                                   "json:\"desiredOutcome,omitempty\" graphql:\"desiredOutcome\""
+	DisplayID            string                                                                                    "json:\"displayID\" graphql:\"displayID\""
+	ID                   string                                                                                    "json:\"id\" graphql:\"id\""
+	Name                 string                                                                                    "json:\"name\" graphql:\"name\""
+	OwnerID              *string                                                                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision             *string                                                                                   "json:\"revision,omitempty\" graphql:\"revision\""
+	Source               *enums.ControlSource                                                                      "json:\"source,omitempty\" graphql:\"source\""
+	Status               *enums.ObjectiveStatus                                                                    "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory          *string                                                                                   "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Subcontrols          CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
+	Tags                 []string                                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time                                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string                                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetCategory() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.Category
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetControlObjectiveType() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.ControlObjectiveType
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetControls() *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Controls {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return &t.Controls
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetDesiredOutcome() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.DesiredOutcome
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.DisplayID
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetRevision() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.Revision
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetSource() *enums.ControlSource {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.Source
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetStatus() *enums.ObjectiveStatus {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.Status
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetSubcategory() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.Subcategory
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetSubcontrols() *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives_Subcontrols {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return &t.Subcontrols
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective struct {
+	ControlObjectives []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+}
+
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective) GetControlObjectives() []*CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective{}
 	}
 	return t.ControlObjectives
 }
@@ -74583,17 +74583,6 @@ func (t *GetControlImplementationHistories) GetControlImplementationHistories() 
 	return &t.ControlImplementationHistories
 }
 
-type CreateBulkCSVControlObjective struct {
-	CreateBulkCSVControlObjective CreateBulkCSVControlObjective_CreateBulkCSVControlObjective "json:\"createBulkCSVControlObjective\" graphql:\"createBulkCSVControlObjective\""
-}
-
-func (t *CreateBulkCSVControlObjective) GetCreateBulkCSVControlObjective() *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective{}
-	}
-	return &t.CreateBulkCSVControlObjective
-}
-
 type CreateBulkControlObjective struct {
 	CreateBulkControlObjective CreateBulkControlObjective_CreateBulkControlObjective "json:\"createBulkControlObjective\" graphql:\"createBulkControlObjective\""
 }
@@ -74603,6 +74592,17 @@ func (t *CreateBulkControlObjective) GetCreateBulkControlObjective() *CreateBulk
 		t = &CreateBulkControlObjective{}
 	}
 	return &t.CreateBulkControlObjective
+}
+
+type CreateBulkCSVControlObjective struct {
+	CreateBulkCSVControlObjective CreateBulkCSVControlObjective_CreateBulkCSVControlObjective "json:\"createBulkCSVControlObjective\" graphql:\"createBulkCSVControlObjective\""
+}
+
+func (t *CreateBulkCSVControlObjective) GetCreateBulkCSVControlObjective() *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective{}
+	}
+	return &t.CreateBulkCSVControlObjective
 }
 
 type CreateControlObjective struct {
@@ -82108,61 +82108,6 @@ func (c *Client) GetControlImplementationHistories(ctx context.Context, first *i
 	return &res, nil
 }
 
-const CreateBulkCSVControlObjectiveDocument = `mutation CreateBulkCSVControlObjective ($input: Upload!) {
-	createBulkCSVControlObjective(input: $input) {
-		controlObjectives {
-			category
-			controlObjectiveType
-			createdAt
-			createdBy
-			desiredOutcome
-			displayID
-			id
-			name
-			ownerID
-			revision
-			source
-			status
-			subcategory
-			tags
-			updatedAt
-			updatedBy
-			controls {
-				edges {
-					node {
-						refCode
-					}
-				}
-			}
-			subcontrols {
-				edges {
-					node {
-						refCode
-					}
-				}
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControlObjective, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVControlObjective
-	if err := c.Client.Post(ctx, "CreateBulkCSVControlObjective", CreateBulkCSVControlObjectiveDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateBulkControlObjectiveDocument = `mutation CreateBulkControlObjective ($input: [CreateControlObjectiveInput!]) {
 	createBulkControlObjective(input: $input) {
 		controlObjectives {
@@ -82208,6 +82153,61 @@ func (c *Client) CreateBulkControlObjective(ctx context.Context, input []*Create
 
 	var res CreateBulkControlObjective
 	if err := c.Client.Post(ctx, "CreateBulkControlObjective", CreateBulkControlObjectiveDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVControlObjectiveDocument = `mutation CreateBulkCSVControlObjective ($input: Upload!) {
+	createBulkCSVControlObjective(input: $input) {
+		controlObjectives {
+			category
+			controlObjectiveType
+			createdAt
+			createdBy
+			desiredOutcome
+			displayID
+			id
+			name
+			ownerID
+			revision
+			source
+			status
+			subcategory
+			tags
+			updatedAt
+			updatedBy
+			controls {
+				edges {
+					node {
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				edges {
+					node {
+						refCode
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControlObjective, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVControlObjective
+	if err := c.Client.Post(ctx, "CreateBulkCSVControlObjective", CreateBulkCSVControlObjectiveDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -101568,8 +101568,8 @@ var DocumentOperationNames = map[string]string{
 	UpdateControlImplementationDocument:            "UpdateControlImplementation",
 	GetAllControlImplementationHistoriesDocument:   "GetAllControlImplementationHistories",
 	GetControlImplementationHistoriesDocument:      "GetControlImplementationHistories",
-	CreateBulkCSVControlObjectiveDocument:          "CreateBulkCSVControlObjective",
 	CreateBulkControlObjectiveDocument:             "CreateBulkControlObjective",
+	CreateBulkCSVControlObjectiveDocument:          "CreateBulkCSVControlObjective",
 	CreateControlObjectiveDocument:                 "CreateControlObjective",
 	DeleteControlObjectiveDocument:                 "DeleteControlObjective",
 	GetAllControlObjectivesDocument:                "GetAllControlObjectives",
