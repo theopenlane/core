@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 
 	"github.com/rs/zerolog"
@@ -114,7 +115,7 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPICo
 
 // FinishWebauthnRegistration is the request to finish a webauthn registration - this is where we get the credential created by the user back
 func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIContext) error {
-	_, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnRegistrationFinishRequest, models.ExampleWebauthnRegistrationResponse, openapi.Registry)
+	requestData, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnRegistrationFinishRequest, models.ExampleWebauthnRegistrationResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -151,8 +152,12 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 		return h.InternalServerError(ctx, err, openapi)
 	}
 
-	// follows https://www.w3.org/TR/webauthn/#sctn-registering-a-new-credential
-	response, err := protocol.ParseCredentialCreationResponseBody(ctx.Request().Body)
+	data, err := json.Marshal(requestData)
+	if err != nil {
+		return h.BadRequest(ctx, err, openapi)
+	}
+
+	response, err := protocol.ParseCredentialCreationResponseBytes(data)
 	if err != nil {
 		return h.BadRequest(ctx, err, openapi)
 	}
@@ -261,7 +266,7 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) 
 
 // FinishWebauthnLogin is the request to finish a webauthn login
 func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) error {
-	_, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnLoginFinishRequest, models.ExampleWebauthnLoginResponse, openapi.Registry)
+	requestData, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnLoginFinishRequest, models.ExampleWebauthnLoginResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -283,7 +288,12 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 		return h.BadRequest(ctx, ErrNoAuthUser, openapi)
 	}
 
-	response, err := protocol.ParseCredentialRequestResponseBody(ctx.Request().Body)
+	data, err := json.Marshal(requestData)
+	if err != nil {
+		return h.BadRequest(ctx, err, openapi)
+	}
+
+	response, err := protocol.ParseCredentialRequestResponseBytes(data)
 	if err != nil {
 		zerolog.Ctx(reqCtx).Error().Err(err).Msg("unable to parse credential request response body")
 
