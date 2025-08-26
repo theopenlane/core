@@ -270,8 +270,13 @@ func generateConfigMapEntry(field envparse.VarInfo, defaultVal string) string {
 	// Standard non-domain field processing
 	// Prefix with openlane.coreConfiguration for Helm chart compatibility
 	helmPath := fmt.Sprintf("openlane.coreConfiguration.%s", strings.TrimPrefix(field.FullPath, "core."))
+	if defaultVal == "" {
+		return fmt.Sprintf("  %s: {{ .Values.%s }}\n", field.Key, helmPath)
+	}
 
-	return wrapInIf(helmPath, field.Key, field.Type.Kind())
+	// Format default value based on type
+	formattedDefault := formatDefaultValue(defaultVal, field.Type.Kind())
+	return fmt.Sprintf("  %s: {{ .Values.%s | default %s }}\n", field.Key, helmPath, formattedDefault)
 }
 
 // formatDefaultValue formats a default value based on its type
@@ -332,7 +337,7 @@ func namePkg(r reflect.Type) string {
 	return r.String()
 }
 
-// generateHelmValues creates a Helm-compatible values-ref.yaml from the config structure
+// generateHelmValues creates a Helm-compatible values.yaml from the config structure
 func generateHelmValues(structure interface{}) (string, error) {
 	// Create a reflector to extract comments and schema information
 	r := new(jsonschema.Reflector)
@@ -356,7 +361,7 @@ func generateHelmValues(structure interface{}) (string, error) {
 	var regularResult strings.Builder
 
 	// Add helm values header comment for regular values
-	regularResult.WriteString(`# Helm values-ref.yaml for Openlane
+	regularResult.WriteString(`# Helm values.yaml for Openlane
 # This file is auto-generated from the core config structure
 # Manual changes may be overwritten when regenerated
 #
@@ -808,122 +813,76 @@ func isExternalSensitiveField(path string) bool {
 	return ok
 }
 
-func wrapInIf(fieldPath, envKey string, kind reflect.Kind) string {
-	parts := strings.Split(fieldPath, ".")
-	if len(parts) < 3 || parts[0] != "openlane" || parts[1] != "coreConfiguration" {
-		// Expecting paths rooted at openlane.coreConfiguration
-		// Fall back to old behavior or return empty; here we just return empty.
-		return ""
-	}
-
-	var b strings.Builder
-
-	// Root is always present
-	b.WriteString("{{- with .Values.openlane.coreConfiguration }}\n")
-
-	// Open nested `with` blocks down to the parent of the leaf
-	for i := 2; i < len(parts)-1; i++ {
-		b.WriteString("{{- with .")
-		b.WriteString(parts[i])
-		b.WriteString(" }}\n")
-	}
-
-	leaf := parts[len(parts)-1]
-
-	if kind == reflect.Bool {
-		// Render if the key exists (even if it's false)
-		b.WriteString("{{- if hasKey . \"")
-		b.WriteString(leaf)
-		b.WriteString("\" }}\n")
-		b.WriteString(envKey)
-		b.WriteString(": \"{{ index . \"")
-		b.WriteString(leaf)
-		b.WriteString("\" }}\"\n")
-		b.WriteString("{{- end }}\n")
-	} else {
-		// Only render if non-empty
-		b.WriteString("{{- with .")
-		b.WriteString(leaf)
-		b.WriteString(" }}\n")
-		b.WriteString(envKey)
-		b.WriteString(": \"{{ . }}\"\n")
-		b.WriteString("{{- end }}\n")
-	}
-
-	// Close all parent `with` blocks
-	for i := 2; i < len(parts)-1; i++ {
-		b.WriteString("{{- end }}\n")
-	}
-	// Close the coreConfiguration with
-	b.WriteString("{{- end }}\n\n")
-
-	return b.String()
-}
-
-// generateDomainHelmTemplate creates Helm template logic for domain inheritance fields.
-// Priority:
-// 1) If .Values.openlane.coreConfiguration.<fieldPath> is set (all parents non-nil) -> use it
-// 2) else if .Values.domain -> synthesize with prefix/suffix
-// 3) else -> defaultVal (or "")
+// generateDomainHelmTemplate creates Helm template logic for domain inheritance fields
 func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, defaultVal string) string {
-	parts := strings.Split(fieldPath, ".")
-	if len(parts) < 3 || parts[0] != "openlane" || parts[1] != "coreConfiguration" {
-		return ""
-	}
+	var template strings.Builder
 
-	// Build chained path for rendering the value
-	valuePath := ".Values." + fieldPath
+	// Generate block-level conditional template for proper Helm formatting
+	template.WriteString("{{- if .Values.")
+	template.WriteString(fieldPath)
+	template.WriteString(" }}\n")
+	template.WriteString("  ")
+	template.WriteString(envKey)
+	template.WriteString(": {{ .Values.")
+	template.WriteString(fieldPath)
+	template.WriteString(" }}\n")
+	template.WriteString("{{- else if .Values.domain }}\n")
+	template.WriteString("  ")
+	template.WriteString(envKey)
+	template.WriteString(": ")
 
-	// Build safe guard with `and(...)`
-	// Example: (and (.Values.openlane.coreConfiguration.auth) (.Values.openlane.coreConfiguration.auth.token) (.Values.openlane.coreConfiguration.auth.token.audience))
-	var guard strings.Builder
-	guard.WriteString("(and")
-	for i := 2; i < len(parts); i++ {
-		guard.WriteString(" (")
-		guard.WriteString(".Values.openlane.coreConfiguration")
-		for j := 2; j <= i; j++ {
-			guard.WriteString("." + parts[j])
-		}
-		guard.WriteString(")")
-	}
-	guard.WriteString(")")
-
-	var b strings.Builder
-
-	// if guard
-	b.WriteString("{{- if " + guard.String() + " }}\n")
-	b.WriteString(envKey + ": {{ " + valuePath + " | toJson | quote }}\n")
-
-	// else if .Values.domain
-	b.WriteString("{{- else if .Values.domain }}\n")
-	b.WriteString(envKey + ": ")
+	// Handle domain transformation logic
 	switch {
 	case domainPrefix != "" && domainSuffix != "":
-		b.WriteString("\"" + domainPrefix + ".{{ .Values.domain }}" + domainSuffix + "\"")
+		template.WriteString("\"")
+		template.WriteString(domainPrefix)
+		template.WriteString(".{{ .Values.domain }}")
+		template.WriteString(domainSuffix)
+		template.WriteString("\"")
 	case domainPrefix != "":
+		// Handle multiple prefixes for slice fields
 		if strings.Contains(domainPrefix, ",") {
 			prefixes := strings.Split(domainPrefix, ",")
-			b.WriteString("\"")
-			for i, pre := range prefixes {
+			template.WriteString("\"")
+			for i, prefix := range prefixes {
 				if i > 0 {
-					b.WriteString(",")
+					template.WriteString(",")
 				}
-				b.WriteString(strings.TrimSpace(pre) + ".{{ .Values.domain }}")
+				template.WriteString(strings.TrimSpace(prefix))
+				template.WriteString(".{{ .Values.domain }}")
 			}
-			b.WriteString("\"")
+			template.WriteString("\"")
 		} else {
-			b.WriteString("\"" + domainPrefix + ".{{ .Values.domain }}\"")
+			template.WriteString("\"")
+			template.WriteString(domainPrefix)
+			template.WriteString(".{{ .Values.domain }}")
+			template.WriteString("\"")
 		}
 	case domainSuffix != "":
-		b.WriteString("\"{{ .Values.domain }}" + domainSuffix + "\"")
+		template.WriteString("\"{{ .Values.domain }}")
+		template.WriteString(domainSuffix)
+		template.WriteString("\"")
 	default:
-		b.WriteString("\"{{ .Values.domain }}\"")
+		template.WriteString("\"{{ .Values.domain }}\"")
 	}
-	b.WriteString("\n")
 
-	b.WriteString("{{- end }}\n\n")
+	template.WriteString("\n{{- else }}\n")
+	template.WriteString("  ")
+	template.WriteString(envKey)
+	template.WriteString(": ")
 
-	return b.String()
+	// Fallback to default value
+	if defaultVal != "" {
+		template.WriteString("\"")
+		template.WriteString(defaultVal)
+		template.WriteString("\"")
+	} else {
+		template.WriteString("\"\"")
+	}
+
+	template.WriteString("\n{{- end }}\n")
+
+	return template.String()
 }
 
 // findSensitiveFields recursively finds all sensitive fields in a struct

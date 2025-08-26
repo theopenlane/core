@@ -50,9 +50,9 @@ SCRIPT
 }
 
 @test "format_summary replaces literal \\n with real newlines" {
-  input="\\n- Updated values-ref.yaml\\n- Fixed config\\n- Added feature"
+  input="\\n- Updated values.yaml\\n- Fixed config\\n- Added feature"
   expected=$'
-- Updated values-ref.yaml
+- Updated values.yaml
 - Fixed config
 - Added feature'
 
