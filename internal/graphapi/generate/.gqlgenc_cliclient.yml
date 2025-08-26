@@ -51,7 +51,7 @@ models:
   AuditLogOrderField:
     model: github.com/theopenlane/core/pkg/models.AuditLogOrderField
 schema: ["internal/graphapi/clientschema/schema.graphql"]
-query: ["internal/graphapi/query/*.graphql"]
+query: ["internal/graphapi/query/simple/*.graphql"]
 generate:
   clientV2: true
   clientInterfaceName: "OpenlaneGraphClient"

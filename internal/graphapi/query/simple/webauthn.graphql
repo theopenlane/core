@@ -1,4 +1,8 @@
-
+mutation DeleteWebauthn($deleteWebauthnId: ID!) {
+  deleteWebauthn(id: $deleteWebauthnId) {
+    deletedID
+  }
+}
 
 query GetAllWebauthns {
   webauthns {
@@ -11,45 +15,6 @@ query GetAllWebauthns {
     }
     edges {
       node {
-        aaguid
-        backupEligible
-        backupState
-        createdAt
-        createdBy
-        id
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
-}
-query GetWebauthnByID($webauthnId: ID!) {
-  webauthn(id: $webauthnId) {
-    aaguid
-    backupEligible
-    backupState
-    createdAt
-    createdBy
-    id
-    tags
-    updatedAt
-    updatedBy
-  }
-}
-
-query GetWebauthns($first: Int, $last: Int, $where: WebauthnWhereInput) {
-  webauthns(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        aaguid
         backupEligible
         backupState
         createdAt

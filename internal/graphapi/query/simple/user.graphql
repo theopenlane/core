@@ -1,56 +1,3 @@
-
-mutation CreateBulkCSVUser($input: Upload!) {
-  createBulkCSVUser(input: $input) {
-    users {
-      authProvider
-      avatarLocalFileID
-      avatarRemoteURL
-      avatarUpdatedAt
-      createdAt
-      createdBy
-      displayID
-      displayName
-      email
-      firstName
-      id
-      lastLoginProvider
-      lastName
-      lastSeen
-      role
-      sub
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkUser($input: [CreateUserInput!]) {
-  createBulkUser(input: $input) {
-    users {
-      authProvider
-      avatarLocalFileID
-      avatarRemoteURL
-      avatarUpdatedAt
-      createdAt
-      createdBy
-      displayID
-      displayName
-      email
-      firstName
-      id
-      lastLoginProvider
-      lastName
-      lastSeen
-      role
-      sub
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
 mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {
     user {
@@ -117,6 +64,7 @@ query GetAllUsers {
     }
   }
 }
+
 query GetUserByID($userId: ID!) {
   user(id: $userId) {
     authProvider
@@ -175,6 +123,7 @@ query GetUsers($first: Int, $last: Int, $where: UserWhereInput) {
     }
   }
 }
+
 mutation UpdateUser($updateUserId: ID!, $input: UpdateUserInput!) {
   updateUser(id: $updateUserId, input: $input) {
     user {

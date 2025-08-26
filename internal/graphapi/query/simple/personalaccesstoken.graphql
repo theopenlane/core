@@ -13,7 +13,7 @@ mutation CreateBulkCSVPersonalAccessToken($input: Upload!) {
       revokedAt
       revokedBy
       revokedReason
-      sSOAuthorizations
+      ssoAuthorizations
       scopes
       tags
       token
@@ -37,7 +37,7 @@ mutation CreateBulkPersonalAccessToken($input: [CreatePersonalAccessTokenInput!]
       revokedAt
       revokedBy
       revokedReason
-      sSOAuthorizations
+      ssoAuthorizations
       scopes
       tags
       token
@@ -61,7 +61,7 @@ mutation CreatePersonalAccessToken($input: CreatePersonalAccessTokenInput!) {
       revokedAt
       revokedBy
       revokedReason
-      sSOAuthorizations
+      ssoAuthorizations
       scopes
       tags
       token
@@ -99,7 +99,7 @@ query GetAllPersonalAccessTokens {
         revokedAt
         revokedBy
         revokedReason
-        sSOAuthorizations
+        ssoAuthorizations
         scopes
         tags
         token
@@ -122,7 +122,7 @@ query GetPersonalAccessTokenByID($personalAccessTokenId: ID!) {
     revokedAt
     revokedBy
     revokedReason
-    sSOAuthorizations
+    ssoAuthorizations
     scopes
     tags
     token
@@ -153,7 +153,7 @@ query GetPersonalAccessTokens($first: Int, $last: Int, $where: PersonalAccessTok
         revokedAt
         revokedBy
         revokedReason
-        sSOAuthorizations
+        ssoAuthorizations
         scopes
         tags
         token
@@ -177,7 +177,7 @@ mutation UpdatePersonalAccessToken($updatePersonalAccessTokenId: ID!, $input: Up
       revokedAt
       revokedBy
       revokedReason
-      sSOAuthorizations
+      ssoAuthorizations
       scopes
       tags
       token

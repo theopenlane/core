@@ -53,30 +53,6 @@ mutation DeleteDocumentData($deleteDocumentDataId: ID!) {
   }
 }
 
-query GetAllDocumentData {
-  documentData {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        data
-        id
-        ownerID
-        tags
-        templateID
-        updatedAt
-        updatedBy
-      }
-    }
-  }
-}
 query GetDocumentDataByID($documentDataId: ID!) {
   documentData(id: $documentDataId) {
     createdAt
@@ -91,30 +67,6 @@ query GetDocumentDataByID($documentDataId: ID!) {
   }
 }
 
-query GetDocumentData($first: Int, $last: Int, $where: DocumentDataWhereInput) {
-  documentData(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        data
-        id
-        ownerID
-        tags
-        templateID
-        updatedAt
-        updatedBy
-      }
-    }
-  }
-}
 mutation UpdateDocumentData($updateDocumentDataId: ID!, $input: UpdateDocumentDataInput!) {
   updateDocumentData(id: $updateDocumentDataId, input: $input) {
     documentData {
