@@ -79,6 +79,8 @@ type Config struct {
 	Slack Slack `json:"slack" koanf:"slack"`
 	// IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
 	IntegrationOauthProvider handlers.IntegrationOauthProviderConfig `json:"integrationOauthProvider" koanf:"integrationOauthProvider"`
+	// TrustCenterCnameTarget
+	// TrustCenterCnameTarget string `json:"trustCenterCnameTarget" koanf:"trustCenterCnameTarget" default:""`
 }
 
 // Server settings for the echo server
@@ -130,7 +132,8 @@ type Server struct {
 	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
 	DefaultTrustCenterDomain string `json:"defaultTrustCenterDomain" koanf:"defaultTrustCenterDomain" default:""`
 	// FieldLevelEncryption contains the configuration for field level encryption
-	FieldLevelEncryption crypto.Config `json:"fieldLevelEncryption" koanf:"fieldLevelEncryption"`
+	FieldLevelEncryption   crypto.Config `json:"fieldLevelEncryption" koanf:"fieldLevelEncryption"`
+	TrustCenterCnameTarget string        `json:"trustCenterCnameTarget" koanf:"trustCenterCnameTarget" default:""`
 }
 
 // KeyWatcher contains settings for the key watcher that manages JWT signing keys

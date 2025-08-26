@@ -10,6 +10,33 @@ mutation CreateTrustCenter($input: CreateTrustCenterInput!) {
       tags
       updatedAt
       updatedBy
+      customDomain {
+        cnameRecord
+        dnsVerification {
+          dnsTxtRecord
+          dnsTxtValue
+          dnsVerificationStatus
+          dnsVerificationStatusReason
+          acmeChallengeStatus
+          acmeChallengeStatusReason
+        }
+      }
+      setting {
+        id
+        overview
+        title
+        primaryColor
+        logoRemoteURL
+        logoLocalFileID
+        logoFile {
+          presignedURL
+        }
+        themeMode
+        font
+        foregroundColor
+        backgroundColor
+        accentColor
+      }
     }
   }
 }
@@ -33,6 +60,17 @@ query GetAllTrustCenters {
       node {
         createdAt
         createdBy
+        customDomain {
+          cnameRecord
+          dnsVerification {
+            dnsTxtRecord
+            dnsTxtValue
+            dnsVerificationStatus
+            dnsVerificationStatusReason
+            acmeChallengeStatus
+            acmeChallengeStatusReason
+          }
+        }
         customDomainID
         id
         ownerID
@@ -40,6 +78,22 @@ query GetAllTrustCenters {
         tags
         updatedAt
         updatedBy
+        setting {
+          id
+          overview
+          title
+          primaryColor
+          logoRemoteURL
+          logoLocalFileID
+          logoFile {
+            presignedURL
+          }
+          themeMode
+          font
+          foregroundColor
+          backgroundColor
+          accentColor
+        }
       }
     }
   }
@@ -56,6 +110,17 @@ query GetTrustCenterByID($trustCenterId: ID!) {
     tags
     updatedAt
     updatedBy
+    customDomain {
+      cnameRecord
+      dnsVerification {
+        dnsTxtRecord
+        dnsTxtValue
+        dnsVerificationStatus
+        dnsVerificationStatusReason
+        acmeChallengeStatus
+        acmeChallengeStatusReason
+      }
+    }
     setting {
       id
       overview
@@ -95,6 +160,33 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
         tags
         updatedAt
         updatedBy
+        customDomain {
+          cnameRecord
+          dnsVerification {
+            dnsTxtRecord
+            dnsTxtValue
+            dnsVerificationStatus
+            dnsVerificationStatusReason
+            acmeChallengeStatus
+            acmeChallengeStatusReason
+          }
+        }
+        setting {
+          id
+          overview
+          title
+          primaryColor
+          logoRemoteURL
+          logoLocalFileID
+          logoFile {
+            presignedURL
+          }
+          themeMode
+          font
+          foregroundColor
+          backgroundColor
+          accentColor
+        }
       }
     }
   }
@@ -112,6 +204,33 @@ mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterI
       tags
       updatedAt
       updatedBy
+      customDomain {
+        cnameRecord
+        dnsVerification {
+          dnsTxtRecord
+          dnsTxtValue
+          dnsVerificationStatus
+          dnsVerificationStatusReason
+          acmeChallengeStatus
+          acmeChallengeStatusReason
+        }
+      }
+      setting {
+        id
+        overview
+        title
+        primaryColor
+        logoRemoteURL
+        logoLocalFileID
+        logoFile {
+          presignedURL
+        }
+        themeMode
+        font
+        foregroundColor
+        backgroundColor
+        accentColor
+      }
     }
   }
 }

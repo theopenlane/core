@@ -6,37 +6,64 @@ package graphapi
 
 import (
 	"context"
-	"time"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterDomain is the resolver for the createTrustCenterDomain field.
 func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input model.CreateTrustCenterDomainInput) (*model.TrustCenterDomainCreatePayload, error) {
-	// res, err := withTransactionalMutation(ctx).TrustCenterDomain.Create().SetInput(input).Save(ctx)
-	// if err != nil {
-	// 	return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterdomain"})
-	// }
+	cnameTarget := r.trustCenterCnameTarget
+	if cnameTarget == "" {
+		return nil, parseRequestError(ErrMissingTrustCenterCnameTarget, action{action: ActionCreate, object: "trustcenterdomain"})
+	}
+	transactionCtx := withTransactionalMutation(ctx)
+
+	mappableDomainID, err := transactionCtx.MappableDomain.Query().Where(mappabledomain.Name(cnameTarget)).FirstID(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterdomain"})
+	}
+
+	trustCenter, err := transactionCtx.TrustCenter.Get(ctx, input.TrustCenterID)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterdomain"})
+	}
+
+	if trustCenter.CustomDomainID != "" {
+		return nil, parseRequestError(ErrTrustCenterDomainAlreadyExists, action{action: ActionCreate, object: "trustcenterdomain"})
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &trustCenter.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	customDomain, err := transactionCtx.CustomDomain.Create().
+		SetInput(generated.CreateCustomDomainInput{
+			CnameRecord:      input.CnameRecord,
+			OwnerID:          &trustCenter.OwnerID,
+			MappableDomainID: mappableDomainID,
+		}).
+		Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "customdomain"})
+	}
+
+	updateReq := trustCenter.Update().SetInput(generated.UpdateTrustCenterInput{
+		CustomDomainID: &customDomain.ID,
+	})
+
+	_, err = updateReq.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "customdomain"})
+	}
 
 	return &model.TrustCenterDomainCreatePayload{
-		// TrustCenterDomain: res,
-		CustomDomain: &generated.CustomDomain{
-			ID:                "abc123",
-			CreatedAt:         time.Now(),
-			UpdatedAt:         time.Now(),
-			OwnerID:           "abc123",
-			CnameRecord:       input.CnameRecord,
-			MappableDomainID:  "abc123",
-			DNSVerificationID: "abc123",
-			Edges: generated.CustomDomainEdges{
-				DNSVerification: &generated.DNSVerification{
-					ID:           "abc123",
-					OwnerID:      "abc123",
-					DNSTxtRecord: "_cf_txt.domain.com",
-					DNSTxtValue:  "asdfkdjsafds",
-				},
-			},
-		},
+		CustomDomain: customDomain,
 	}, nil
 }

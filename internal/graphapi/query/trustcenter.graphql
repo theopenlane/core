@@ -10,6 +10,17 @@ mutation CreateTrustCenter($input: CreateTrustCenterInput!) {
       tags
       updatedAt
       updatedBy
+      customDomain {
+        cnameRecord
+        dnsVerification {
+          dnsTxtRecord
+          dnsTxtValue
+          dnsVerificationStatus
+          dnsVerificationStatusReason
+          acmeChallengeStatus
+          acmeChallengeStatusReason
+        }
+      }
       setting {
         id
         overview
@@ -49,6 +60,17 @@ query GetAllTrustCenters {
       node {
         createdAt
         createdBy
+        customDomain {
+          cnameRecord
+          dnsVerification {
+            dnsTxtRecord
+            dnsTxtValue
+            dnsVerificationStatus
+            dnsVerificationStatusReason
+            acmeChallengeStatus
+            acmeChallengeStatusReason
+          }
+        }
         customDomainID
         id
         ownerID
@@ -87,6 +109,17 @@ query GetTrustCenterByID($trustCenterId: ID!) {
     tags
     updatedAt
     updatedBy
+    customDomain {
+      cnameRecord
+      dnsVerification {
+        dnsTxtRecord
+        dnsTxtValue
+        dnsVerificationStatus
+        dnsVerificationStatusReason
+        acmeChallengeStatus
+        acmeChallengeStatusReason
+      }
+    }
     setting {
       id
       overview
@@ -126,6 +159,17 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
         tags
         updatedAt
         updatedBy
+        customDomain {
+          cnameRecord
+          dnsVerification {
+            dnsTxtRecord
+            dnsTxtValue
+            dnsVerificationStatus
+            dnsVerificationStatusReason
+            acmeChallengeStatus
+            acmeChallengeStatusReason
+          }
+        }
         setting {
           id
           overview
@@ -158,6 +202,17 @@ mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterI
       tags
       updatedAt
       updatedBy
+      customDomain {
+        cnameRecord
+        dnsVerification {
+          dnsTxtRecord
+          dnsTxtValue
+          dnsVerificationStatus
+          dnsVerificationStatusReason
+          acmeChallengeStatus
+          acmeChallengeStatusReason
+        }
+      }
       setting {
         id
         overview
