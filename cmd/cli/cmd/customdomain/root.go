@@ -68,6 +68,9 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
+	case *openlaneclient.DeleteCustomDomain:
+		deletedTableOutput(v)
+		return nil
 	}
 
 	s, err := json.Marshal(e)
@@ -109,6 +112,15 @@ func tableOutput(out []openlaneclient.CustomDomain) {
 
 		writer.AddRow(i.ID, i.CnameRecord, verificationID, i.CreatedAt)
 	}
+
+	writer.Render()
+}
+
+// deletedTableOutput prints the deleted id in a table format
+func deletedTableOutput(e *openlaneclient.DeleteCustomDomain) {
+	writer := tables.NewTableWriter(command.OutOrStdout(), "DeletedID")
+
+	writer.AddRow(e.DeleteCustomDomain.DeletedID)
 
 	writer.Render()
 }

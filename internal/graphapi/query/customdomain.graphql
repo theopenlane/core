@@ -40,6 +40,12 @@ mutation CreateCustomDomain($input: CreateCustomDomainInput!) {
       createdAt
       createdBy
       dnsVerificationID
+      dnsVerification {
+        id
+        dnsTxtRecord
+        dnsTxtValue
+        dnsVerificationStatus
+      }
       id
       mappableDomainID
       ownerID
@@ -71,6 +77,12 @@ query GetAllCustomDomains {
         createdAt
         createdBy
         dnsVerificationID
+        dnsVerification {
+          id
+          dnsTxtRecord
+          dnsTxtValue
+          dnsVerificationStatus
+        }
         id
         mappableDomainID
         ownerID
@@ -87,6 +99,12 @@ query GetCustomDomainByID($customDomainId: ID!) {
     createdAt
     createdBy
     dnsVerificationID
+    dnsVerification {
+      id
+      dnsTxtRecord
+      dnsTxtValue
+      dnsVerificationStatus
+    }
     id
     mappableDomainID
     ownerID
@@ -111,6 +129,12 @@ query GetCustomDomains($first: Int, $last: Int, $where: CustomDomainWhereInput) 
         createdAt
         createdBy
         dnsVerificationID
+        dnsVerification {
+          id
+          dnsTxtRecord
+          dnsTxtValue
+          dnsVerificationStatus
+        }
         id
         mappableDomainID
         ownerID
@@ -128,6 +152,12 @@ mutation UpdateCustomDomain($updateCustomDomainId: ID!, $input: UpdateCustomDoma
       createdAt
       createdBy
       dnsVerificationID
+      dnsVerification {
+        id
+        dnsTxtRecord
+        dnsTxtValue
+        dnsVerificationStatus
+      }
       id
       mappableDomainID
       ownerID
