@@ -37,8 +37,8 @@ mutation CreateBulkJobResult($input: [CreateJobResultInput!]) {
   }
 }
 
-mutation CreateJobResult($input: CreateJobResultInput!) {
-  createJobResult(input: $input) {
+mutation CreateJobResult($input: CreateJobResultInput!, $jobResultFiles: [Upload!]) {
+  createJobResult(input: $input, jobResultFiles: $jobResultFiles) {
     jobResult {
       createdAt
       createdBy

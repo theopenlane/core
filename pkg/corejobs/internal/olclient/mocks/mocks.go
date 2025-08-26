@@ -8478,12 +8478,12 @@ func (_c *MockOpenlaneGraphClient_CreateInvite_Call) RunAndReturn(run func(ctx c
 }
 
 // CreateJobResult provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) CreateJobResult(ctx context.Context, input openlaneclient.CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobResult, error) {
+func (_mock *MockOpenlaneGraphClient) CreateJobResult(ctx context.Context, input openlaneclient.CreateJobResultInput, jobResultFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobResult, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, input, interceptors)
+		tmpRet = _mock.Called(ctx, input, jobResultFiles, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, input)
+		tmpRet = _mock.Called(ctx, input, jobResultFiles)
 	}
 	ret := tmpRet
 
@@ -8493,18 +8493,18 @@ func (_mock *MockOpenlaneGraphClient) CreateJobResult(ctx context.Context, input
 
 	var r0 *openlaneclient.CreateJobResult
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateJobResultInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobResult, error)); ok {
-		return returnFunc(ctx, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateJobResultInput, []*graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobResult, error)); ok {
+		return returnFunc(ctx, input, jobResultFiles, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateJobResultInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateJobResult); ok {
-		r0 = returnFunc(ctx, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateJobResultInput, []*graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.CreateJobResult); ok {
+		r0 = returnFunc(ctx, input, jobResultFiles, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.CreateJobResult)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateJobResultInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, input, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateJobResultInput, []*graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, jobResultFiles, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -8519,13 +8519,14 @@ type MockOpenlaneGraphClient_CreateJobResult_Call struct {
 // CreateJobResult is a helper method to define mock.On call
 //   - ctx context.Context
 //   - input openlaneclient.CreateJobResultInput
+//   - jobResultFiles []*graphql.Upload
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) CreateJobResult(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateJobResult_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) CreateJobResult(ctx interface{}, input interface{}, jobResultFiles interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateJobResult_Call {
 	return &MockOpenlaneGraphClient_CreateJobResult_Call{Call: _e.mock.On("CreateJobResult",
-		append([]interface{}{ctx, input}, interceptors...)...)}
+		append([]interface{}{ctx, input, jobResultFiles}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_CreateJobResult_Call) Run(run func(ctx context.Context, input openlaneclient.CreateJobResultInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateJobResult_Call {
+func (_c *MockOpenlaneGraphClient_CreateJobResult_Call) Run(run func(ctx context.Context, input openlaneclient.CreateJobResultInput, jobResultFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateJobResult_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -8535,16 +8536,21 @@ func (_c *MockOpenlaneGraphClient_CreateJobResult_Call) Run(run func(ctx context
 		if args[1] != nil {
 			arg1 = args[1].(openlaneclient.CreateJobResultInput)
 		}
-		var arg2 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 2 {
-			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		var arg2 []*graphql.Upload
+		if args[2] != nil {
+			arg2 = args[2].([]*graphql.Upload)
 		}
-		arg2 = variadicArgs
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
 		run(
 			arg0,
 			arg1,
-			arg2...,
+			arg2,
+			arg3...,
 		)
 	})
 	return _c
@@ -8555,7 +8561,7 @@ func (_c *MockOpenlaneGraphClient_CreateJobResult_Call) Return(createJobResult *
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_CreateJobResult_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobResult, error)) *MockOpenlaneGraphClient_CreateJobResult_Call {
+func (_c *MockOpenlaneGraphClient_CreateJobResult_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateJobResultInput, jobResultFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobResult, error)) *MockOpenlaneGraphClient_CreateJobResult_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -39648,12 +39654,12 @@ func (_c *MockOpenlaneGraphClient_UpdateInternalPolicy_Call) RunAndReturn(run fu
 }
 
 // UpdateJobResult provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) UpdateJobResult(ctx context.Context, updateJobResultID string, input openlaneclient.UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateJobResult, error) {
+func (_mock *MockOpenlaneGraphClient) UpdateJobResult(ctx context.Context, updateJobResultID string, input openlaneclient.UpdateJobResultInput, jobResultFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateJobResult, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, updateJobResultID, input, interceptors)
+		tmpRet = _mock.Called(ctx, updateJobResultID, input, jobResultFiles, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, updateJobResultID, input)
+		tmpRet = _mock.Called(ctx, updateJobResultID, input, jobResultFiles)
 	}
 	ret := tmpRet
 
@@ -39663,18 +39669,18 @@ func (_mock *MockOpenlaneGraphClient) UpdateJobResult(ctx context.Context, updat
 
 	var r0 *openlaneclient.UpdateJobResult
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateJobResultInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateJobResult, error)); ok {
-		return returnFunc(ctx, updateJobResultID, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateJobResultInput, []*graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateJobResult, error)); ok {
+		return returnFunc(ctx, updateJobResultID, input, jobResultFiles, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateJobResultInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateJobResult); ok {
-		r0 = returnFunc(ctx, updateJobResultID, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateJobResultInput, []*graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.UpdateJobResult); ok {
+		r0 = returnFunc(ctx, updateJobResultID, input, jobResultFiles, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.UpdateJobResult)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateJobResultInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, updateJobResultID, input, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateJobResultInput, []*graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateJobResultID, input, jobResultFiles, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -39690,13 +39696,14 @@ type MockOpenlaneGraphClient_UpdateJobResult_Call struct {
 //   - ctx context.Context
 //   - updateJobResultID string
 //   - input openlaneclient.UpdateJobResultInput
+//   - jobResultFiles []*graphql.Upload
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) UpdateJobResult(ctx interface{}, updateJobResultID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateJobResult_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateJobResult(ctx interface{}, updateJobResultID interface{}, input interface{}, jobResultFiles interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateJobResult_Call {
 	return &MockOpenlaneGraphClient_UpdateJobResult_Call{Call: _e.mock.On("UpdateJobResult",
-		append([]interface{}{ctx, updateJobResultID, input}, interceptors...)...)}
+		append([]interface{}{ctx, updateJobResultID, input, jobResultFiles}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_UpdateJobResult_Call) Run(run func(ctx context.Context, updateJobResultID string, input openlaneclient.UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateJobResult_Call {
+func (_c *MockOpenlaneGraphClient_UpdateJobResult_Call) Run(run func(ctx context.Context, updateJobResultID string, input openlaneclient.UpdateJobResultInput, jobResultFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateJobResult_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -39710,17 +39717,22 @@ func (_c *MockOpenlaneGraphClient_UpdateJobResult_Call) Run(run func(ctx context
 		if args[2] != nil {
 			arg2 = args[2].(openlaneclient.UpdateJobResultInput)
 		}
-		var arg3 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 3 {
-			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		var arg3 []*graphql.Upload
+		if args[3] != nil {
+			arg3 = args[3].([]*graphql.Upload)
 		}
-		arg3 = variadicArgs
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
 		run(
 			arg0,
 			arg1,
 			arg2,
-			arg3...,
+			arg3,
+			arg4...,
 		)
 	})
 	return _c
@@ -39731,7 +39743,7 @@ func (_c *MockOpenlaneGraphClient_UpdateJobResult_Call) Return(updateJobResult *
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_UpdateJobResult_Call) RunAndReturn(run func(ctx context.Context, updateJobResultID string, input openlaneclient.UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateJobResult, error)) *MockOpenlaneGraphClient_UpdateJobResult_Call {
+func (_c *MockOpenlaneGraphClient_UpdateJobResult_Call) RunAndReturn(run func(ctx context.Context, updateJobResultID string, input openlaneclient.UpdateJobResultInput, jobResultFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateJobResult, error)) *MockOpenlaneGraphClient_UpdateJobResult_Call {
 	_c.Call.Return(run)
 	return _c
 }
