@@ -19,7 +19,7 @@ type CustomDomainConfig struct {
 	OpenlaneAPIToken string `koanf:"openlaneAPIToken" json:"openlaneAPIToken" jsonschema:"required description=the openlane api token"`
 
 	DatabaseHost     string        `koanf:"databaseHost" json:"databaseHost" jsonschema:"required description=the database host"`
-	ValidateInterval time.Duration `koanf:"validateInterval" json:"validateInterval" jsonschema:"required description=the interval to validate custom domains"`
+	ValidateInterval time.Duration `koanf:"validateInterval" json:"validateInterval" jsonschema:"required,default=5m description=the interval to validate custom domains"`
 }
 
 // getOpenlaneClient creates and returns a new Openlane client using the provided configuration.
