@@ -1,3 +1,5 @@
+//go:build cli
+
 package reconcile
 
 // Config defines configuration for the reconcile job

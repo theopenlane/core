@@ -1,7 +1,4 @@
-//go:build benchmark
-// +build benchmark
-
-package bench
+package bench_test
 
 import (
 	"context"

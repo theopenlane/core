@@ -657,11 +657,46 @@ var ExampleWebauthnBeginRegistrationResponse = WebauthnBeginRegistrationResponse
 }
 
 // WebauthnRegistrationFinishRequest is the request to finish webauthn registration
-// This endpoint processes raw WebAuthn credential creation response data
-type WebauthnRegistrationFinishRequest struct{}
+// This represents the credential creation response from the browser's WebAuthn API
+type WebauthnRegistrationFinishRequest struct {
+	ID                      string                 `json:"id" description:"The credential ID"`
+	RawID                   string                 `json:"rawId" description:"The raw credential ID"`
+	Type                    string                 `json:"type" description:"The credential type, should be 'public-key'"`
+	AuthenticatorAttachment string                 `json:"authenticatorAttachment,omitempty" description:"How the authenticator is attached"`
+	ClientExtensionResults  map[string]interface{} `json:"clientExtensionResults,omitempty" description:"Extension results"`
+	Response                struct {
+		AttestationObject  string   `json:"attestationObject" description:"The attestation object"`
+		ClientDataJSON     string   `json:"clientDataJSON" description:"The client data JSON"`
+		PublicKey          string   `json:"publicKey,omitempty" description:"The public key"`
+		PublicKeyAlgorithm int      `json:"publicKeyAlgorithm,omitempty" description:"The public key algorithm"`
+		Transports         []string `json:"transports,omitempty" description:"Available transports"`
+		AuthenticatorData  string   `json:"authenticatorData,omitempty" description:"The authenticator data"`
+	} `json:"response" description:"The authenticator response"`
+}
 
 // ExampleWebauthnRegistrationFinishRequest is an example WebAuthn registration finish request for OpenAPI documentation
-var ExampleWebauthnRegistrationFinishRequest = WebauthnRegistrationFinishRequest{}
+var ExampleWebauthnRegistrationFinishRequest = WebauthnRegistrationFinishRequest{
+	ID:                      "JBqvfKoo_U-McTi9NxkpDTncmL2Lg6fczz6PD7WesCHQPg",
+	RawID:                   "JBqvfKoo_U-McTi9NxkpDTncmL2Lg6fczz6PD7WesCHQPg",
+	Type:                    "public-key",
+	AuthenticatorAttachment: "platform",
+	ClientExtensionResults:  map[string]interface{}{},
+	Response: struct {
+		AttestationObject  string   `json:"attestationObject" description:"The attestation object"`
+		ClientDataJSON     string   `json:"clientDataJSON" description:"The client data JSON"`
+		PublicKey          string   `json:"publicKey,omitempty" description:"The public key"`
+		PublicKeyAlgorithm int      `json:"publicKeyAlgorithm,omitempty" description:"The public key algorithm"`
+		Transports         []string `json:"transports,omitempty" description:"Available transports"`
+		AuthenticatorData  string   `json:"authenticatorData,omitempty" description:"The authenticator data"`
+	}{
+		AttestationObject:  "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVimSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NdAAAAALraVWanqkAfvZZFYZpVEg0AIiQar3yqKP1PjHE4vTcZKQ053Ji9i4On3M8-jw-1nrAh0D6lAQIDJiABIVggldWfMY_HYjHCZuSgBcDj-Zqcnipy1SJVNlhvmZBxvpciWCDh1UJNz9Uyr6jqeQhApJ3krQCvDNoeXaH0ffa9KapYdw",
+		ClientDataJSON:     "eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiTWZlN1l6aS0zUU9rMDM4VHh3dVVvaTBaaURIZEdaOGlGNVhXc09UTTVnbyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMSIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+		PublicKey:          "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEldWfMY_HYjHCZuSgBcDj-Zqcnipy1SJVNlhvmZBxvpfh1UJNz9Uyr6jqeQhApJ3krQCvDNoeXaH0ffa9KapYdw",
+		PublicKeyAlgorithm: -7,
+		Transports:         []string{"internal", "hybrid"},
+		AuthenticatorData:  "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NdAAAAALraVWanqkAfvZZFYZpVEg0AIiQar3yqKP1PjHE4vTcZKQ053Ji9i4On3M8-jw-1nrAh0D6lAQIDJiABIVggldWfMY_HYjHCZuSgBcDj-Zqcnipy1SJVNlhvmZBxvpciWCDh1UJNz9Uyr6jqeQhApJ3krQCvDNoeXaH0ffa9KapYdw",
+	},
+}
 
 // WebauthnRegistrationResponse is the response after a successful webauthn registration
 type WebauthnRegistrationResponse struct {
@@ -709,8 +744,20 @@ type WebauthnBeginLoginResponse struct {
 }
 
 // WebauthnLoginFinishRequest is the request to finish webauthn login
-// This endpoint processes raw WebAuthn credential assertion response data
-type WebauthnLoginFinishRequest struct{}
+// This represents the credential assertion response from the browser's WebAuthn API
+type WebauthnLoginFinishRequest struct {
+	ID                      string                 `json:"id" description:"The credential ID"`
+	RawID                   string                 `json:"rawId" description:"The raw credential ID"`
+	Type                    string                 `json:"type" description:"The credential type, should be 'public-key'"`
+	AuthenticatorAttachment string                 `json:"authenticatorAttachment,omitempty" description:"How the authenticator is attached"`
+	ClientExtensionResults  map[string]interface{} `json:"clientExtensionResults,omitempty" description:"Extension results"`
+	Response                struct {
+		AuthenticatorData string `json:"authenticatorData" description:"The authenticator data"`
+		ClientDataJSON    string `json:"clientDataJSON" description:"The client data JSON"`
+		Signature         string `json:"signature" description:"The assertion signature"`
+		UserHandle        string `json:"userHandle,omitempty" description:"The user handle"`
+	} `json:"response" description:"The authenticator response"`
+}
 
 // WebauthnLoginResponse is the response after a successful webauthn login
 type WebauthnLoginResponse struct {
@@ -746,7 +793,24 @@ func (r *WebauthnLoginResponse) ExampleResponse() any {
 }
 
 // ExampleWebauthnLoginFinishRequest is an example WebAuthn login finish request for OpenAPI documentation
-var ExampleWebauthnLoginFinishRequest = WebauthnLoginFinishRequest{}
+var ExampleWebauthnLoginFinishRequest = WebauthnLoginFinishRequest{
+	ID:                      "JBqvfKoo_U-McTi9NxkpDTncmL2Lg6fczz6PD7WesCHQPg",
+	RawID:                   "JBqvfKoo_U-McTi9NxkpDTncmL2Lg6fczz6PD7WesCHQPg",
+	Type:                    "public-key",
+	AuthenticatorAttachment: "platform",
+	ClientExtensionResults:  map[string]interface{}{},
+	Response: struct {
+		AuthenticatorData string `json:"authenticatorData" description:"The authenticator data"`
+		ClientDataJSON    string `json:"clientDataJSON" description:"The client data JSON"`
+		Signature         string `json:"signature" description:"The assertion signature"`
+		UserHandle        string `json:"userHandle,omitempty" description:"The user handle"`
+	}{
+		AuthenticatorData: "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NdAAAAALraVWanqkAfvZZFYZpVEg0AIiQar3yqKP1PjHE4vTcZKQ053Ji9i4On3M8-jw-1nrAh0D6lAQIDJiABIVggldWfMY_HYjHCZuSgBcDj-Zqcnipy1SJVNlhvmZBxvpciWCDh1UJNz9Uyr6jqeQhApJ3krQCvDNoeXaH0ffa9KapYdw",
+		ClientDataJSON:    "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiTWZlN1l6aS0zUU9rMDM4VHh3dVVvaTBaaURIZEdaOGlGNVhXc09UTTVnbyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMSIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+		Signature:         "MEUCIQDKIueQAhZmGtPTmzp7QQRjZU_XLUqHdGj3QKRMOxRNbwIgF1hkJJ5y7cA3RGZe9x4n9vXq_L9x8eR1r9cE4w1uJ_A",
+		UserHandle:        "dXNlci1pZC0xMjM0NQ",
+	},
+}
 
 // ExampleWebauthnLoginResponse is an example WebAuthn login response for OpenAPI documentation
 var ExampleWebauthnLoginResponse = WebauthnLoginResponse{

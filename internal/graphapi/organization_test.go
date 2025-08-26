@@ -508,6 +508,15 @@ func TestMutationCreateOrganization(t *testing.T) {
 
 			assert.ErrorContains(t, err, interceptors.ErrFeatureNotEnabled.Error())
 
+			// ensure owner is in the managed group
+			for _, g := range managedGroups.Groups.Edges {
+				if g.Node.Name == "Viewers" {
+					assert.Check(t, is.Len(g.Node.Members.Edges, 0))
+				} else {
+					assert.Check(t, is.Len(g.Node.Members.Edges, 1))
+				}
+			}
+
 			// while group is in the base module, this query includes programs and others
 			// which are in other modules
 			assert.Check(t, is.Len(managedGroups.Groups.Edges, 3))

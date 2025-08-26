@@ -311,12 +311,12 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 func getWindmillLanguage(language enums.JobPlatformType) api.SchemasRawScriptLanguage {
 	switch language {
 	case enums.JobPlatformTypeGo:
-		return api.SchemasRawScriptLanguageGo
+		return api.Go
 	case enums.JobPlatformTypeTs:
-		return api.SchemasRawScriptLanguageBun
+		return api.Bun
 	default:
 		// fall back to bash for any other language
-		return api.SchemasRawScriptLanguageBash
+		return api.Bash
 	}
 }
 

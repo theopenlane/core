@@ -53,10 +53,6 @@ Config contains the configuration for the core server
         "summarizer": {
             "llm": {
                 "anthropic": {},
-                "mistral": {},
-                "gemini": {},
-                "huggingFace": {},
-                "ollama": {},
                 "cloudflare": {},
                 "openai": {}
             }
@@ -402,10 +398,6 @@ Config holds the configuration for the ent server
     "summarizer": {
         "llm": {
             "anthropic": {},
-            "mistral": {},
-            "gemini": {},
-            "huggingFace": {},
-            "ollama": {},
             "cloudflare": {},
             "openai": {}
         }
@@ -442,10 +434,6 @@ Summarizer holds configuration for the text summarization functionality
 {
     "llm": {
         "anthropic": {},
-        "mistral": {},
-        "gemini": {},
-        "huggingFace": {},
-        "ollama": {},
         "cloudflare": {},
         "openai": {}
     }
@@ -464,10 +452,6 @@ SummarizerLLM contains configuration for multiple LLM providers
 |----|----|-----------|--------|
 |**provider**|`string`|Provider specifies which LLM service to use<br/>||
 |[**anthropic**](#entconfigsummarizerllmanthropic)|`object`|AnthropicConfig contains Anthropic specific configuration<br/>||
-|[**mistral**](#entconfigsummarizerllmmistral)|`object`|MistralConfig contains Mistral specific configuration<br/>||
-|[**gemini**](#entconfigsummarizerllmgemini)|`object`|GeminiConfig contains Google Gemini specific configuration<br/>||
-|[**huggingFace**](#entconfigsummarizerllmhuggingface)|`object`|HuggingFaceConfig contains HuggingFace specific configuration<br/>||
-|[**ollama**](#entconfigsummarizerllmollama)|`object`|OllamaConfig contains Ollama specific configuration<br/>||
 |[**cloudflare**](#entconfigsummarizerllmcloudflare)|`object`|CloudflareConfig contains Cloudflare specific configuration<br/>||
 |[**openai**](#entconfigsummarizerllmopenai)|`object`|OpenAIConfig contains OpenAI specific configuration<br/>||
 
@@ -477,10 +461,6 @@ SummarizerLLM contains configuration for multiple LLM providers
 ```json
 {
     "anthropic": {},
-    "mistral": {},
-    "gemini": {},
-    "huggingFace": {},
-    "ollama": {},
     "cloudflare": {},
     "openai": {}
 }
@@ -501,67 +481,6 @@ AnthropicConfig contains Anthropic specific configuration
 |**baseURL**|`string`|BaseURL specifies the API endpoint<br/>||
 |**model**|`string`|Model specifies the model name to use<br/>||
 |**apiKey**|`string`|APIKey contains the authentication key for the service<br/>||
-
-**Additional Properties:** not allowed  
-<a name="entconfigsummarizerllmmistral"></a>
-##### entConfig\.summarizer\.llm\.mistral: object
-
-MistralConfig contains Mistral specific configuration
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**model**|`string`|Model specifies the model name to use<br/>||
-|**apiKey**|`string`|APIKey contains the authentication key for the service<br/>||
-|**url**|`string`|URL specifies the API endpoint<br/>||
-
-**Additional Properties:** not allowed  
-<a name="entconfigsummarizerllmgemini"></a>
-##### entConfig\.summarizer\.llm\.gemini: object
-
-GeminiConfig contains Google Gemini specific configuration
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**model**|`string`|Model specifies the model name to use<br/>||
-|**apiKey**|`string`|APIKey contains the authentication key for the service<br/>||
-|**credentialsPath**|`string`|CredentialsPath is the path to Google Cloud credentials file<br/>||
-|**credentialsJSON**|`string`|CredentialsJSON contains Google Cloud credentials as JSON string<br/>||
-|**maxTokens**|`integer`|MaxTokens specifies the maximum tokens for response<br/>||
-
-**Additional Properties:** not allowed  
-<a name="entconfigsummarizerllmhuggingface"></a>
-##### entConfig\.summarizer\.llm\.huggingFace: object
-
-HuggingFaceConfig contains HuggingFace specific configuration
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**model**|`string`|Model specifies the model name to use<br/>||
-|**apiKey**|`string`|APIKey contains the authentication key for the service<br/>||
-|**url**|`string`|URL specifies the API endpoint<br/>||
-
-**Additional Properties:** not allowed  
-<a name="entconfigsummarizerllmollama"></a>
-##### entConfig\.summarizer\.llm\.ollama: object
-
-OllamaConfig contains Ollama specific configuration
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**model**|`string`|Model specifies the model to use<br/>||
-|**url**|`string`|URL specifies the API endpoint<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfigsummarizerllmcloudflare"></a>
@@ -983,6 +902,8 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**FetchCooldown**|`integer`|||
+|**FetchPollInterval**|`integer`|||
 |**MaxWorkers**|`integer`|||
 
 **Additional Properties:** not allowed  

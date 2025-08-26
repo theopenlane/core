@@ -1,3 +1,5 @@
+//go:build cli
+
 package trustcenter
 
 import (
@@ -24,6 +26,7 @@ func init() {
 	// command line flags for the create command
 	createCmd.Flags().StringP("custom-domain-id", "d", "", "custom domain id for the trustcenter")
 	createCmd.Flags().StringSliceP("tags", "t", []string{}, "tags associated with the trustcenter")
+	createCmd.Flags().StringP("org-id", "o", "", "Org ID to associate the custom domain with")
 }
 
 // createValidation validates the required fields for the command
@@ -34,6 +37,11 @@ func createValidation() (input openlaneclient.CreateTrustCenterInput, err error)
 	customDomainID := cmd.Config.String("custom-domain-id")
 	if customDomainID != "" {
 		input.CustomDomainID = &customDomainID
+	}
+
+	orgID := cmd.Config.String("org-id")
+	if orgID != "" {
+		input.OwnerID = &orgID
 	}
 
 	tags := cmd.Config.Strings("tags")

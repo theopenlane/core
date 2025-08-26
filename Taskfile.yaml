@@ -245,13 +245,13 @@ tasks:
     env:
       TEST_DB_URL: "docker://postgres:17-alpine"
     cmds:
-      - go test -v ./...
+      - go test -v ./... -tags test
 
   go:test:cover:
     desc: runs and outputs results of created go tests with coverage
     aliases: [cover]
     cmds:
-      - go test -v ./... -coverprofile=coverage.out -timeout 20m
+      - go test -v ./... -coverprofile=coverage.out -timeout 20m -tags test
 
   go:test:coverout:
     desc: runs and outputs results of created go tests with coverage
@@ -265,14 +265,14 @@ tasks:
     desc: runs tests using gotestsum
     aliases: [testsum]
     cmds:
-      - gotestsum --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20
+      - gotestsum --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20 -tags test
 
   go:testsum:verbose:
     silent: true
     desc: runs tests using gotestsum
     aliases: [testsum]
     cmds:
-      - gotestsum --format standard-verbose --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20
+      - gotestsum --format standard-verbose --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20 -tags test
 
   go:testsum:slow:
     silent: true
@@ -286,7 +286,7 @@ tasks:
     silent: true
     aliases: ['testsum:ci']
     cmds:
-      - go run gotest.tools/gotestsum@latest --junitfile junit.xml --junitfile-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage.out
+      - go run gotest.tools/gotestsum@latest --junitfile junit.xml --junitfile-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage.out -tags test
 
   go:testsum:ci:cover:
     desc: pushes test results to buildkite using gotestsum
@@ -315,7 +315,7 @@ tasks:
     silent: true
     aliases: ['testsum:graph']
     cmds:
-      - gotestsum --packages "github.com/theopenlane/core/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20
+      - gotestsum --packages "github.com/theopenlane/core/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
 
   go:fmt:
     desc: format all go code
@@ -331,23 +331,23 @@ tasks:
   go:build:
     desc: Runs go build for the core server
     cmds:
-      - "{{ .GOOS }} {{ .GOARCH }} go build -mod=mod -o core"
+      - "{{ .GOOS }} {{ .GOARCH }} go build -o core"
 
   go:build:ci:
     desc: Runs go build for the core server
     cmds:
-      - go build -mod=mod -a -o bin/core
+      - go build -mod=readonly -a -o bin/core
 
   go:build-cli:
     aliases: [buildcli]
     desc: Runs go build for the openlane cli
     cmds:
-      - go build -mod=mod -o openlane-cli ./cmd/cli
+      - go build -tags cli -o openlane-cli ./cmd/cli
 
   go:build-cli:ci:
     desc: Runs go build for the openlane cli in CI
     cmds:
-      - go build -mod=mod -a -o bin/openlane-cli ./cmd/cli
+      - go build -tags cli -mod=readonly -a -o bin/openlane-cli ./cmd/cli
 
   go:all:
     aliases: [go]
@@ -361,22 +361,23 @@ tasks:
   hush:keyset:
     desc: Generates a new Tink keyset for field encryption
     cmds:
-      - go run ./internal/ent/hush/cmd/hush generate
+      - go run -tags generate ./internal/ent/hush/cmd/hush generate
 
   hush:quiet:
     desc: Generates a new Tink keyset (output only)
     cmds:
-      - go run ./internal/ent/hush/cmd/hush generate --quiet
+      - go run -tags generate ./internal/ent/hush/cmd/hush generate --quiet
 
   hush:export:
     desc: Generates a new Tink keyset in export format
     cmds:
-      - go run ./internal/ent/hush/cmd/hush generate --export
+      - go run -tags generate ./internal/ent/hush/cmd/hush generate --export
 
   # dev tasks
   run-dev:
     dotenv: ["{{.ENV}}/.env-dev"]
     desc: runs the core server in dev mode
+    deps: ['go:build-cli']
     cmds:
       - task: compose:redis
       - task: compose:fga
@@ -446,20 +447,8 @@ tasks:
     desc: installs all dependencies for the project
     aliases: [install]
     cmds:
-      - task: install:tools
       - task: brew-install
       - task: local-setup
-
-  install:tools:
-    desc: Installs tools from tools.go
-    run: once
-    cmds:
-      - echo Installing tools from tools.go
-      - cat tools.go | grep _ | awk -F'/' '{print $NF}' | awk -F'"' '{print "which "$1}' | sh $1 | xargs rm -f
-      - cat tools.go | grep _ | awk -F'"' '{print $2}' | xargs -tI % go install %
-    sources:
-      - tools.go
-      - go.mod
 
   update-brew:
     desc: Update Homebrew and upgrade all packages
