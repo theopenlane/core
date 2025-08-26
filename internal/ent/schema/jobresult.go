@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -146,7 +147,9 @@ func (j JobResult) Annotations() []schema.Annotation {
 
 // Hooks of the JobResult
 func (JobResult) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookJobResultFiles(),
+	}
 }
 
 // Interceptors of the JobResult

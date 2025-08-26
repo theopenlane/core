@@ -130,8 +130,8 @@ type MutationResolver interface {
 	CreateBulkCSVInvite(ctx context.Context, input graphql.Upload) (*model.InviteBulkCreatePayload, error)
 	UpdateInvite(ctx context.Context, id string, input generated.UpdateInviteInput) (*model.InviteUpdatePayload, error)
 	DeleteInvite(ctx context.Context, id string) (*model.InviteDeletePayload, error)
-	CreateJobResult(ctx context.Context, input generated.CreateJobResultInput) (*model.JobResultCreatePayload, error)
-	UpdateJobResult(ctx context.Context, id string, input generated.UpdateJobResultInput) (*model.JobResultUpdatePayload, error)
+	CreateJobResult(ctx context.Context, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultCreatePayload, error)
+	UpdateJobResult(ctx context.Context, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultUpdatePayload, error)
 	DeleteJobResult(ctx context.Context, id string) (*model.JobResultDeletePayload, error)
 	CreateJobRunner(ctx context.Context, input generated.CreateJobRunnerInput) (*model.JobRunnerCreatePayload, error)
 	UpdateJobRunner(ctx context.Context, id string, input generated.UpdateJobRunnerInput) (*model.JobRunnerUpdatePayload, error)
@@ -1456,6 +1456,11 @@ func (ec *executionContext) field_Mutation_createJobResult_args(ctx context.Cont
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "jobResultFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["jobResultFiles"] = arg1
 	return args, nil
 }
 
@@ -2981,6 +2986,11 @@ func (ec *executionContext) field_Mutation_updateJobResult_args(ctx context.Cont
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "jobResultFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["jobResultFiles"] = arg2
 	return args, nil
 }
 
@@ -10656,7 +10666,7 @@ func (ec *executionContext) _Mutation_createJobResult(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateJobResult(rctx, fc.Args["input"].(generated.CreateJobResultInput))
+		return ec.resolvers.Mutation().CreateJobResult(rctx, fc.Args["input"].(generated.CreateJobResultInput), fc.Args["jobResultFiles"].([]*graphql.Upload))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10715,7 +10725,7 @@ func (ec *executionContext) _Mutation_updateJobResult(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateJobResult(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateJobResultInput))
+		return ec.resolvers.Mutation().UpdateJobResult(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateJobResultInput), fc.Args["jobResultFiles"].([]*graphql.Upload))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

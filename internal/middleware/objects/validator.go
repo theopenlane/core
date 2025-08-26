@@ -40,5 +40,6 @@ var MimeTypeValidator objects.ValidationFunc = func(f objects.File) error {
 		return objects.MimeTypeValidator(mimes...)(f)
 	}
 
-	return nil
+	// Default to sharedMimeTypes if the type isn't in the map
+	return objects.MimeTypeValidator(sharedMimeTypes...)(f)
 }
