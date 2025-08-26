@@ -11,360 +11,1893 @@ metadata:
     # This checksum will trigger deployment restarts when the ConfigMap changes
     checksum/config: {{ .Values | toYaml | sha256sum }}
 data:
-  CORE_DOMAIN: {{ .Values.openlane.coreConfiguration.domain }}
-  CORE_REFRESHINTERVAL: {{ .Values.openlane.coreConfiguration.refreshInterval | default "10m" }}
-  CORE_SERVER_DEV: {{ .Values.openlane.coreConfiguration.server.dev | default "false" }}
-  CORE_SERVER_LISTEN: {{ .Values.openlane.coreConfiguration.server.listen | default ":17608" }}
-  CORE_SERVER_METRICSPORT: {{ .Values.openlane.coreConfiguration.server.metricsPort | default ":17609" }}
-  CORE_SERVER_SHUTDOWNGRACEPERIOD: {{ .Values.openlane.coreConfiguration.server.shutdownGracePeriod | default "10s" }}
-  CORE_SERVER_READTIMEOUT: {{ .Values.openlane.coreConfiguration.server.readTimeout | default "15s" }}
-  CORE_SERVER_WRITETIMEOUT: {{ .Values.openlane.coreConfiguration.server.writeTimeout | default "15s" }}
-  CORE_SERVER_IDLETIMEOUT: {{ .Values.openlane.coreConfiguration.server.idleTimeout | default "30s" }}
-  CORE_SERVER_READHEADERTIMEOUT: {{ .Values.openlane.coreConfiguration.server.readHeaderTimeout | default "2s" }}
-  CORE_SERVER_TLS_ENABLED: {{ .Values.openlane.coreConfiguration.server.tls.enabled | default "false" }}
-  CORE_SERVER_TLS_CERTFILE: {{ .Values.openlane.coreConfiguration.server.tls.certFile | default "server.crt" }}
-  CORE_SERVER_TLS_CERTKEY: {{ .Values.openlane.coreConfiguration.server.tls.certKey | default "server.key" }}
-  CORE_SERVER_TLS_AUTOCERT: {{ .Values.openlane.coreConfiguration.server.tls.autoCert | default "false" }}
-  CORE_SERVER_CORS_ENABLED: {{ .Values.openlane.coreConfiguration.server.cors.enabled | default "true" }}
-  CORE_SERVER_CORS_PREFIXES: {{ .Values.openlane.coreConfiguration.server.cors.prefixes }}
-{{- if .Values.openlane.coreConfiguration.server.cors.allowOrigins }}
-  CORE_SERVER_CORS_ALLOWORIGINS: {{ .Values.openlane.coreConfiguration.server.cors.allowOrigins }}
-{{- else if .Values.domain }}
-  CORE_SERVER_CORS_ALLOWORIGINS: "https://console.{{ .Values.domain }},https://docs.{{ .Values.domain }},https://www.{{ .Values.domain }}"
-{{- else }}
-  CORE_SERVER_CORS_ALLOWORIGINS: ""
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .domain }}
+CORE_DOMAIN: "{{ . }}"
 {{- end }}
-  CORE_SERVER_CORS_COOKIEINSECURE: {{ .Values.openlane.coreConfiguration.server.cors.cookieInsecure }}
-  CORE_SERVER_SECURE_ENABLED: {{ .Values.openlane.coreConfiguration.server.secure.enabled | default "true" }}
-  CORE_SERVER_SECURE_XSSPROTECTION: {{ .Values.openlane.coreConfiguration.server.secure.xssprotection | default "1; mode=block" }}
-  CORE_SERVER_SECURE_CONTENTTYPENOSNIFF: {{ .Values.openlane.coreConfiguration.server.secure.contenttypenosniff | default "nosniff" }}
-  CORE_SERVER_SECURE_XFRAMEOPTIONS: {{ .Values.openlane.coreConfiguration.server.secure.xframeoptions | default "SAMEORIGIN" }}
-  CORE_SERVER_SECURE_HSTSPRELOADENABLED: {{ .Values.openlane.coreConfiguration.server.secure.hstspreloadenabled | default "false" }}
-  CORE_SERVER_SECURE_HSTSMAXAGE: {{ .Values.openlane.coreConfiguration.server.secure.hstsmaxage | default "31536000" }}
-  CORE_SERVER_SECURE_CONTENTSECURITYPOLICY: {{ .Values.openlane.coreConfiguration.server.secure.contentsecuritypolicy | default "default-src 'self'" }}
-  CORE_SERVER_SECURE_REFERRERPOLICY: {{ .Values.openlane.coreConfiguration.server.secure.referrerpolicy | default "same-origin" }}
-  CORE_SERVER_SECURE_CSPREPORTONLY: {{ .Values.openlane.coreConfiguration.server.secure.cspreportonly | default "false" }}
-  CORE_SERVER_REDIRECTS_ENABLED: {{ .Values.openlane.coreConfiguration.server.redirects.enabled | default "true" }}
-  CORE_SERVER_REDIRECTS_REDIRECTS: {{ .Values.openlane.coreConfiguration.server.redirects.redirects }}
-  CORE_SERVER_REDIRECTS_CODE: {{ .Values.openlane.coreConfiguration.server.redirects.code }}
-  CORE_SERVER_CACHECONTROL_ENABLED: {{ .Values.openlane.coreConfiguration.server.cacheControl.enabled | default "true" }}
-  CORE_SERVER_CACHECONTROL_NOCACHEHEADERS: {{ .Values.openlane.coreConfiguration.server.cacheControl.noCacheHeaders }}
-  CORE_SERVER_CACHECONTROL_ETAGHEADERS: {{ .Values.openlane.coreConfiguration.server.cacheControl.etagHeaders }}
-  CORE_SERVER_MIME_ENABLED: {{ .Values.openlane.coreConfiguration.server.mime.enabled | default "true" }}
-  CORE_SERVER_MIME_MIMETYPESFILE: {{ .Values.openlane.coreConfiguration.server.mime.mimeTypesFile }}
-  CORE_SERVER_MIME_DEFAULTCONTENTTYPE: {{ .Values.openlane.coreConfiguration.server.mime.defaultContentType | default "application/data" }}
-  CORE_SERVER_GRAPHPOOL_MAXWORKERS: {{ .Values.openlane.coreConfiguration.server.graphPool.maxWorkers | default "100" }}
-  CORE_SERVER_ENABLEGRAPHEXTENSIONS: {{ .Values.openlane.coreConfiguration.server.enableGraphExtensions | default "true" }}
-  CORE_SERVER_COMPLEXITYLIMIT: {{ .Values.openlane.coreConfiguration.server.complexityLimit | default "100" }}
-  CORE_SERVER_MAXRESULTLIMIT: {{ .Values.openlane.coreConfiguration.server.maxResultLimit | default "100" }}
-  CORE_SERVER_CSRFPROTECTION_ENABLED: {{ .Values.openlane.coreConfiguration.server.csrfProtection.enabled | default "false" }}
-  CORE_SERVER_CSRFPROTECTION_HEADER: {{ .Values.openlane.coreConfiguration.server.csrfProtection.header | default "X-CSRF-Token" }}
-  CORE_SERVER_CSRFPROTECTION_COOKIE: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookie | default "ol.csrf-token" }}
-  CORE_SERVER_CSRFPROTECTION_SECURE: {{ .Values.openlane.coreConfiguration.server.csrfProtection.secure | default "true" }}
-  CORE_SERVER_CSRFPROTECTION_SAMESITE: {{ .Values.openlane.coreConfiguration.server.csrfProtection.sameSite | default "Lax" }}
-  CORE_SERVER_CSRFPROTECTION_COOKIEHTTPONLY: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookieHttpOnly | default "false" }}
-  CORE_SERVER_CSRFPROTECTION_COOKIEDOMAIN: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookieDomain }}
-  CORE_SERVER_CSRFPROTECTION_COOKIEPATH: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookiePath | default "/" }}
-  CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: {{ .Values.openlane.coreConfiguration.server.defaultTrustCenterDomain }}
-  CORE_SERVER_FIELDLEVELENCRYPTION_ENABLED: {{ .Values.openlane.coreConfiguration.server.fieldLevelEncryption.enabled | default "false" }}
-  CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.openlane.coreConfiguration.entConfig.entityTypes }}
-  CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.type | default "lexrank" }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.provider }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BETAHEADER: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.betaHeader }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_LEGACYTEXTCOMPLETION: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.legacyTextCompletion }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BASEURL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.baseURL }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_ACCOUNTID: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.cloudflare.accountID }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_SERVERURL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.cloudflare.serverURL }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_URL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.openai.url }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_ORGANIZATIONID: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.openai.organizationID }}
-  CORE_ENTCONFIG_SUMMARIZER_MAXIMUMSENTENCES: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.maximumSentences | default "60" }}
-  CORE_ENTCONFIG_WINDMILL_ENABLED: {{ .Values.openlane.coreConfiguration.entConfig.windmill.enabled | default "false" }}
-  CORE_ENTCONFIG_WINDMILL_BASEURL: {{ .Values.openlane.coreConfiguration.entConfig.windmill.baseURL | default "https://app.windmill.dev" }}
-  CORE_ENTCONFIG_WINDMILL_WORKSPACE: {{ .Values.openlane.coreConfiguration.entConfig.windmill.workspace }}
-  CORE_ENTCONFIG_WINDMILL_DEFAULTTIMEOUT: {{ .Values.openlane.coreConfiguration.entConfig.windmill.defaultTimeout | default "30s" }}
-  CORE_ENTCONFIG_WINDMILL_TIMEZONE: {{ .Values.openlane.coreConfiguration.entConfig.windmill.timezone | default "UTC" }}
-  CORE_ENTCONFIG_WINDMILL_ONFAILURESCRIPT: {{ .Values.openlane.coreConfiguration.entConfig.windmill.onFailureScript }}
-  CORE_ENTCONFIG_WINDMILL_ONSUCCESSSCRIPT: {{ .Values.openlane.coreConfiguration.entConfig.windmill.onSuccessScript }}
-  CORE_ENTCONFIG_MAXPOOLSIZE: {{ .Values.openlane.coreConfiguration.entConfig.maxPoolSize | default "100" }}
-  CORE_ENTCONFIG_MODULES_ENABLED: {{ .Values.openlane.coreConfiguration.entConfig.modules.enabled | default "true" }}
-  CORE_AUTH_ENABLED: {{ .Values.openlane.coreConfiguration.auth.enabled | default "true" }}
-  CORE_AUTH_TOKEN_KID: {{ .Values.openlane.coreConfiguration.auth.token.kid }}
-{{- if .Values.openlane.coreConfiguration.auth.token.audience }}
-  CORE_AUTH_TOKEN_AUDIENCE: {{ .Values.openlane.coreConfiguration.auth.token.audience }}
-{{- else if .Values.domain }}
-  CORE_AUTH_TOKEN_AUDIENCE: "https://api.{{ .Values.domain }}"
-{{- else }}
-  CORE_AUTH_TOKEN_AUDIENCE: "https://theopenlane.io"
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.auth.token.refreshAudience }}
-  CORE_AUTH_TOKEN_REFRESHAUDIENCE: {{ .Values.openlane.coreConfiguration.auth.token.refreshAudience }}
-{{- else if .Values.domain }}
-  CORE_AUTH_TOKEN_REFRESHAUDIENCE: "https://api.{{ .Values.domain }}"
-{{- else }}
-  CORE_AUTH_TOKEN_REFRESHAUDIENCE: ""
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .refreshInterval }}
+CORE_REFRESHINTERVAL: "{{ . }}"
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.auth.token.issuer }}
-  CORE_AUTH_TOKEN_ISSUER: {{ .Values.openlane.coreConfiguration.auth.token.issuer }}
-{{- else if .Values.domain }}
-  CORE_AUTH_TOKEN_ISSUER: "https://api.{{ .Values.domain }}"
-{{- else }}
-  CORE_AUTH_TOKEN_ISSUER: "https://auth.theopenlane.io"
 {{- end }}
-  CORE_AUTH_TOKEN_ACCESSDURATION: {{ .Values.openlane.coreConfiguration.auth.token.accessDuration | default "1h" }}
-  CORE_AUTH_TOKEN_REFRESHDURATION: {{ .Values.openlane.coreConfiguration.auth.token.refreshDuration | default "2h" }}
-  CORE_AUTH_TOKEN_REFRESHOVERLAP: {{ .Values.openlane.coreConfiguration.auth.token.refreshOverlap | default "-15m" }}
-{{- if .Values.openlane.coreConfiguration.auth.token.jwksEndpoint }}
-  CORE_AUTH_TOKEN_JWKSENDPOINT: {{ .Values.openlane.coreConfiguration.auth.token.jwksEndpoint }}
-{{- else if .Values.domain }}
-  CORE_AUTH_TOKEN_JWKSENDPOINT: "https://api.{{ .Values.domain }}/.well-known/jwks.json"
-{{- else }}
-  CORE_AUTH_TOKEN_JWKSENDPOINT: "https://api.theopenlane.io/.well-known/jwks.json"
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- if hasKey . "dev" }}
+CORE_SERVER_DEV: "{{ index . "dev" }}"
 {{- end }}
-  CORE_AUTH_TOKEN_KEYS: {{ .Values.openlane.coreConfiguration.auth.token.keys }}
-  CORE_AUTH_TOKEN_GENERATEKEYS: {{ .Values.openlane.coreConfiguration.auth.token.generateKeys | default "true" }}
-  CORE_AUTH_SUPPORTEDPROVIDERS: {{ .Values.openlane.coreConfiguration.auth.supportedProviders }}
-  CORE_AUTH_PROVIDERS_REDIRECTURL: {{ .Values.openlane.coreConfiguration.auth.providers.redirectUrl | default "http://localhost:3001/api/auth/callback/theopenlane" }}
-  CORE_AUTH_PROVIDERS_GITHUB_CLIENTID: {{ .Values.openlane.coreConfiguration.auth.providers.github.clientId }}
-{{- if .Values.openlane.coreConfiguration.auth.providers.github.clientEndpoint }}
-  CORE_AUTH_PROVIDERS_GITHUB_CLIENTENDPOINT: {{ .Values.openlane.coreConfiguration.auth.providers.github.clientEndpoint }}
-{{- else if .Values.domain }}
-  CORE_AUTH_PROVIDERS_GITHUB_CLIENTENDPOINT: "https://api.{{ .Values.domain }}"
-{{- else }}
-  CORE_AUTH_PROVIDERS_GITHUB_CLIENTENDPOINT: "http://localhost:17608"
 {{- end }}
-  CORE_AUTH_PROVIDERS_GITHUB_SCOPES: {{ .Values.openlane.coreConfiguration.auth.providers.github.scopes }}
-  CORE_AUTH_PROVIDERS_GITHUB_REDIRECTURL: {{ .Values.openlane.coreConfiguration.auth.providers.github.redirectUrl | default "/v1/github/callback" }}
-  CORE_AUTH_PROVIDERS_GOOGLE_CLIENTID: {{ .Values.openlane.coreConfiguration.auth.providers.google.clientId }}
-{{- if .Values.openlane.coreConfiguration.auth.providers.google.clientEndpoint }}
-  CORE_AUTH_PROVIDERS_GOOGLE_CLIENTENDPOINT: {{ .Values.openlane.coreConfiguration.auth.providers.google.clientEndpoint }}
-{{- else if .Values.domain }}
-  CORE_AUTH_PROVIDERS_GOOGLE_CLIENTENDPOINT: "https://api.{{ .Values.domain }}"
-{{- else }}
-  CORE_AUTH_PROVIDERS_GOOGLE_CLIENTENDPOINT: "http://localhost:17608"
 {{- end }}
-  CORE_AUTH_PROVIDERS_GOOGLE_SCOPES: {{ .Values.openlane.coreConfiguration.auth.providers.google.scopes }}
-  CORE_AUTH_PROVIDERS_GOOGLE_REDIRECTURL: {{ .Values.openlane.coreConfiguration.auth.providers.google.redirectUrl | default "/v1/google/callback" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_ENABLED: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.enabled | default "true" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_DISPLAYNAME: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.displayName }}
-{{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.relyingPartyId }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_RELYINGPARTYID: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.relyingPartyId }}
-{{- else if .Values.domain }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_RELYINGPARTYID: "{{ .Values.domain }}"
-{{- else }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_RELYINGPARTYID: "localhost"
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .listen }}
+CORE_SERVER_LISTEN: "{{ . }}"
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins }}
-{{- else if .Values.domain }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: "https://console.{{ .Values.domain }}"
-{{- else }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: "[http://localhost:3001]"
 {{- end }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_MAXDEVICES: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.maxDevices | default "10" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_ENFORCETIMEOUT: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.enforceTimeout | default "true" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_TIMEOUT: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.timeout | default "60s" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_DEBUG: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.debug | default "false" }}
-  CORE_AUTHZ_ENABLED: {{ .Values.openlane.coreConfiguration.authz.enabled | default "true" }}
-  CORE_AUTHZ_STORENAME: {{ .Values.openlane.coreConfiguration.authz.storeName | default "openlane" }}
-  CORE_AUTHZ_HOSTURL: {{ .Values.openlane.coreConfiguration.authz.hostUrl | default "https://authz.theopenlane.io" }}
-  CORE_AUTHZ_STOREID: {{ .Values.openlane.coreConfiguration.authz.storeId }}
-  CORE_AUTHZ_MODELID: {{ .Values.openlane.coreConfiguration.authz.modelId }}
-  CORE_AUTHZ_CREATENEWMODEL: {{ .Values.openlane.coreConfiguration.authz.createNewModel | default "false" }}
-  CORE_AUTHZ_MODELFILE: {{ .Values.openlane.coreConfiguration.authz.modelFile | default "fga/model/model.fga" }}
-  CORE_AUTHZ_CREDENTIALS_CLIENTID: {{ .Values.openlane.coreConfiguration.authz.credentials.clientId }}
-  CORE_AUTHZ_CREDENTIALS_AUDIENCE: {{ .Values.openlane.coreConfiguration.authz.credentials.audience }}
-  CORE_AUTHZ_CREDENTIALS_ISSUER: {{ .Values.openlane.coreConfiguration.authz.credentials.issuer }}
-  CORE_AUTHZ_CREDENTIALS_SCOPES: {{ .Values.openlane.coreConfiguration.authz.credentials.scopes }}
-  CORE_AUTHZ_IGNOREDUPLICATEKEYERROR: {{ .Values.openlane.coreConfiguration.authz.ignoreDuplicateKeyError | default "true" }}
-  CORE_DB_DEBUG: {{ .Values.openlane.coreConfiguration.db.debug | default "false" }}
-  CORE_DB_DATABASENAME: {{ .Values.openlane.coreConfiguration.db.databaseName | default "openlane" }}
-  CORE_DB_DRIVERNAME: {{ .Values.openlane.coreConfiguration.db.driverName | default "pgx" }}
-  CORE_DB_MULTIWRITE: {{ .Values.openlane.coreConfiguration.db.multiWrite | default "false" }}
-  CORE_DB_PRIMARYDBSOURCE: {{ .Values.openlane.coreConfiguration.db.primaryDbSource | default "postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable" }}
-  CORE_DB_SECONDARYDBSOURCE: {{ .Values.openlane.coreConfiguration.db.secondaryDbSource | default "postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable" }}
-  CORE_DB_CACHETTL: {{ .Values.openlane.coreConfiguration.db.cacheTTL | default "1s" }}
-  CORE_DB_RUNMIGRATIONS: {{ .Values.openlane.coreConfiguration.db.runMigrations | default "true" }}
-  CORE_DB_MIGRATIONPROVIDER: {{ .Values.openlane.coreConfiguration.db.migrationProvider | default "atlas" }}
-  CORE_DB_ENABLEHISTORY: {{ .Values.openlane.coreConfiguration.db.enableHistory | default "false" }}
-  CORE_DB_MAXCONNECTIONS: {{ .Values.openlane.coreConfiguration.db.maxConnections | default "0" }}
-  CORE_DB_MAXIDLECONNECTIONS: {{ .Values.openlane.coreConfiguration.db.maxIdleConnections | default "0" }}
-  CORE_JOBQUEUE_CONNECTIONURI: {{ .Values.openlane.coreConfiguration.jobQueue.connectionURI | default "postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable" }}
-  CORE_JOBQUEUE_RUNMIGRATIONS: {{ .Values.openlane.coreConfiguration.jobQueue.runMigrations | default "false" }}
-  CORE_REDIS_ENABLED: {{ .Values.openlane.coreConfiguration.redis.enabled | default "true" }}
-  CORE_REDIS_ADDRESS: {{ .Values.openlane.coreConfiguration.redis.address | default "localhost:6379" }}
-  CORE_REDIS_NAME: {{ .Values.openlane.coreConfiguration.redis.name }}
-  CORE_REDIS_USERNAME: {{ .Values.openlane.coreConfiguration.redis.username }}
-  CORE_REDIS_PASSWORD: {{ .Values.openlane.coreConfiguration.redis.password }}
-  CORE_REDIS_DB: {{ .Values.openlane.coreConfiguration.redis.db | default "0" }}
-  CORE_REDIS_DIALTIMEOUT: {{ .Values.openlane.coreConfiguration.redis.dialTimeout | default "5s" }}
-  CORE_REDIS_READTIMEOUT: {{ .Values.openlane.coreConfiguration.redis.readTimeout | default "0" }}
-  CORE_REDIS_WRITETIMEOUT: {{ .Values.openlane.coreConfiguration.redis.writeTimeout | default "0" }}
-  CORE_REDIS_MAXRETRIES: {{ .Values.openlane.coreConfiguration.redis.maxRetries | default "3" }}
-  CORE_REDIS_MINIDLECONNS: {{ .Values.openlane.coreConfiguration.redis.minIdleConns | default "0" }}
-  CORE_REDIS_MAXIDLECONNS: {{ .Values.openlane.coreConfiguration.redis.maxIdleConns | default "0" }}
-  CORE_REDIS_MAXACTIVECONNS: {{ .Values.openlane.coreConfiguration.redis.maxActiveConns | default "0" }}
-  CORE_TRACER_ENABLED: {{ .Values.openlane.coreConfiguration.tracer.enabled | default "false" }}
-  CORE_TRACER_PROVIDER: {{ .Values.openlane.coreConfiguration.tracer.provider | default "stdout" }}
-  CORE_TRACER_ENVIRONMENT: {{ .Values.openlane.coreConfiguration.tracer.environment | default "development" }}
-  CORE_TRACER_STDOUT_PRETTY: {{ .Values.openlane.coreConfiguration.tracer.stdout.pretty | default "true" }}
-  CORE_TRACER_STDOUT_DISABLETIMESTAMP: {{ .Values.openlane.coreConfiguration.tracer.stdout.disableTimestamp | default "false" }}
-  CORE_TRACER_OTLP_ENDPOINT: {{ .Values.openlane.coreConfiguration.tracer.otlp.endpoint | default "localhost:4317" }}
-  CORE_TRACER_OTLP_INSECURE: {{ .Values.openlane.coreConfiguration.tracer.otlp.insecure | default "true" }}
-  CORE_TRACER_OTLP_CERTIFICATE: {{ .Values.openlane.coreConfiguration.tracer.otlp.certificate }}
-  CORE_TRACER_OTLP_HEADERS: {{ .Values.openlane.coreConfiguration.tracer.otlp.headers }}
-  CORE_TRACER_OTLP_COMPRESSION: {{ .Values.openlane.coreConfiguration.tracer.otlp.compression }}
-  CORE_TRACER_OTLP_TIMEOUT: {{ .Values.openlane.coreConfiguration.tracer.otlp.timeout | default "10s" }}
-  CORE_EMAIL_COMPANYNAME: {{ .Values.openlane.coreConfiguration.email.companyName }}
-  CORE_EMAIL_COMPANYADDRESS: {{ .Values.openlane.coreConfiguration.email.companyAddress }}
-  CORE_EMAIL_CORPORATION: {{ .Values.openlane.coreConfiguration.email.corporation }}
-  CORE_EMAIL_YEAR: {{ .Values.openlane.coreConfiguration.email.year }}
-{{- if .Values.openlane.coreConfiguration.email.fromEmail }}
-  CORE_EMAIL_FROMEMAIL: {{ .Values.openlane.coreConfiguration.email.fromEmail }}
-{{- else if .Values.domain }}
-  CORE_EMAIL_FROMEMAIL: "no-reply@mail.{{ .Values.domain }}"
-{{- else }}
-  CORE_EMAIL_FROMEMAIL: ""
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.email.supportEmail }}
-  CORE_EMAIL_SUPPORTEMAIL: {{ .Values.openlane.coreConfiguration.email.supportEmail }}
-{{- else if .Values.domain }}
-  CORE_EMAIL_SUPPORTEMAIL: "support@.{{ .Values.domain }}"
-{{- else }}
-  CORE_EMAIL_SUPPORTEMAIL: ""
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .metricsPort }}
+CORE_SERVER_METRICSPORT: "{{ . }}"
 {{- end }}
-  CORE_EMAIL_LOGOURL: {{ .Values.openlane.coreConfiguration.email.logoURL }}
-{{- if .Values.openlane.coreConfiguration.email.urls.root }}
-  CORE_EMAIL_URLS_ROOT: {{ .Values.openlane.coreConfiguration.email.urls.root }}
-{{- else if .Values.domain }}
-  CORE_EMAIL_URLS_ROOT: "https://www.{{ .Values.domain }}"
-{{- else }}
-  CORE_EMAIL_URLS_ROOT: ""
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.email.urls.product }}
-  CORE_EMAIL_URLS_PRODUCT: {{ .Values.openlane.coreConfiguration.email.urls.product }}
-{{- else if .Values.domain }}
-  CORE_EMAIL_URLS_PRODUCT: "https://console.{{ .Values.domain }}"
-{{- else }}
-  CORE_EMAIL_URLS_PRODUCT: ""
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.email.urls.docs }}
-  CORE_EMAIL_URLS_DOCS: {{ .Values.openlane.coreConfiguration.email.urls.docs }}
-{{- else if .Values.domain }}
-  CORE_EMAIL_URLS_DOCS: "https://docs.{{ .Values.domain }}"
-{{- else }}
-  CORE_EMAIL_URLS_DOCS: ""
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .shutdownGracePeriod }}
+CORE_SERVER_SHUTDOWNGRACEPERIOD: "{{ . }}"
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.email.urls.verify }}
-  CORE_EMAIL_URLS_VERIFY: {{ .Values.openlane.coreConfiguration.email.urls.verify }}
-{{- else if .Values.domain }}
-  CORE_EMAIL_URLS_VERIFY: "https://console.{{ .Values.domain }}/verify"
-{{- else }}
-  CORE_EMAIL_URLS_VERIFY: ""
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.email.urls.invite }}
-  CORE_EMAIL_URLS_INVITE: {{ .Values.openlane.coreConfiguration.email.urls.invite }}
-{{- else if .Values.domain }}
-  CORE_EMAIL_URLS_INVITE: "https://console.{{ .Values.domain }}/invite"
-{{- else }}
-  CORE_EMAIL_URLS_INVITE: ""
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.email.urls.reset }}
-  CORE_EMAIL_URLS_RESET: {{ .Values.openlane.coreConfiguration.email.urls.reset }}
-{{- else if .Values.domain }}
-  CORE_EMAIL_URLS_RESET: "https://console.{{ .Values.domain }}/password-reset"
-{{- else }}
-  CORE_EMAIL_URLS_RESET: ""
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .readTimeout }}
+CORE_SERVER_READTIMEOUT: "{{ . }}"
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.email.urls.verifySubscriber }}
-  CORE_EMAIL_URLS_VERIFYSUBSCRIBER: {{ .Values.openlane.coreConfiguration.email.urls.verifySubscriber }}
-{{- else if .Values.domain }}
-  CORE_EMAIL_URLS_VERIFYSUBSCRIBER: "https://console.{{ .Values.domain }}/subscriber-verify"
-{{- else }}
-  CORE_EMAIL_URLS_VERIFYSUBSCRIBER: ""
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.email.urls.verifyBilling }}
-  CORE_EMAIL_URLS_VERIFYBILLING: {{ .Values.openlane.coreConfiguration.email.urls.verifyBilling }}
-{{- else if .Values.domain }}
-  CORE_EMAIL_URLS_VERIFYBILLING: "https://console.{{ .Values.domain }}/verify-billing"
-{{- else }}
-  CORE_EMAIL_URLS_VERIFYBILLING: ""
 {{- end }}
-  CORE_EMAIL_TEMPLATESPATH: {{ .Values.openlane.coreConfiguration.email.templatesPath }}
-  CORE_SESSIONS_SIGNINGKEY: {{ .Values.openlane.coreConfiguration.sessions.signingKey | default "my-signing-secret" }}
-  CORE_SESSIONS_ENCRYPTIONKEY: {{ .Values.openlane.coreConfiguration.sessions.encryptionKey | default "encryptionsecret" }}
-{{- if .Values.openlane.coreConfiguration.sessions.domain }}
-  CORE_SESSIONS_DOMAIN: {{ .Values.openlane.coreConfiguration.sessions.domain }}
-{{- else if .Values.domain }}
-  CORE_SESSIONS_DOMAIN: "{{ .Values.domain }}"
-{{- else }}
-  CORE_SESSIONS_DOMAIN: ""
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .writeTimeout }}
+CORE_SERVER_WRITETIMEOUT: "{{ . }}"
 {{- end }}
-  CORE_SESSIONS_MAXAGE: {{ .Values.openlane.coreConfiguration.sessions.maxAge | default "3600" }}
-  CORE_SESSIONS_SECURE: {{ .Values.openlane.coreConfiguration.sessions.secure | default "true" }}
-  CORE_SESSIONS_HTTPONLY: {{ .Values.openlane.coreConfiguration.sessions.httpOnly | default "true" }}
-  CORE_SESSIONS_SAMESITE: {{ .Values.openlane.coreConfiguration.sessions.sameSite | default "Strict" }}
-  CORE_TOTP_ENABLED: {{ .Values.openlane.coreConfiguration.totp.enabled | default "true" }}
-  CORE_TOTP_CODELENGTH: {{ .Values.openlane.coreConfiguration.totp.codeLength | default "6" }}
-{{- if .Values.openlane.coreConfiguration.totp.issuer }}
-  CORE_TOTP_ISSUER: {{ .Values.openlane.coreConfiguration.totp.issuer }}
-{{- else if .Values.domain }}
-  CORE_TOTP_ISSUER: "{{ .Values.domain }}"
-{{- else }}
-  CORE_TOTP_ISSUER: ""
 {{- end }}
-  CORE_TOTP_REDIS: {{ .Values.openlane.coreConfiguration.totp.redis | default "true" }}
-  CORE_TOTP_RECOVERYCODECOUNT: {{ .Values.openlane.coreConfiguration.totp.recoveryCodeCount | default "16" }}
-  CORE_TOTP_RECOVERYCODELENGTH: {{ .Values.openlane.coreConfiguration.totp.recoveryCodeLength | default "8" }}
-  CORE_RATELIMIT_ENABLED: {{ .Values.openlane.coreConfiguration.ratelimit.enabled | default "false" }}
-  CORE_RATELIMIT_LIMIT: {{ .Values.openlane.coreConfiguration.ratelimit.limit | default "10" }}
-  CORE_RATELIMIT_BURST: {{ .Values.openlane.coreConfiguration.ratelimit.burst | default "30" }}
-  CORE_RATELIMIT_EXPIRES: {{ .Values.openlane.coreConfiguration.ratelimit.expires | default "10m" }}
-  CORE_OBJECTSTORAGE_ENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.enabled | default "true" }}
-  CORE_OBJECTSTORAGE_PROVIDER: {{ .Values.openlane.coreConfiguration.objectStorage.provider }}
-  CORE_OBJECTSTORAGE_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.region }}
-  CORE_OBJECTSTORAGE_DEFAULTBUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.defaultBucket | default "file_uploads" }}
-  CORE_OBJECTSTORAGE_LOCALURL: {{ .Values.openlane.coreConfiguration.objectStorage.localURL | default "http://localhost:17608/files/" }}
-  CORE_OBJECTSTORAGE_KEYS: {{ .Values.openlane.coreConfiguration.objectStorage.keys | default "uploadFile" }}
-  CORE_OBJECTSTORAGE_MAXSIZEMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxSizeMB }}
-  CORE_OBJECTSTORAGE_MAXMEMORYMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxMemoryMB }}
-  CORE_SUBSCRIPTION_ENABLED: {{ .Values.openlane.coreConfiguration.subscription.enabled | default "false" }}
-  CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: {{ .Values.openlane.coreConfiguration.subscription.publicStripeKey }}
-  CORE_SUBSCRIPTION_TRIALSUBSCRIPTIONPRICEID: {{ .Values.openlane.coreConfiguration.subscription.trialSubscriptionPriceID | default "price_1QKLyeBvxky1R7SvaZYGWyQb" }}
-  CORE_SUBSCRIPTION_PERSONALORGSUBSCRIPTIONPRICEID: {{ .Values.openlane.coreConfiguration.subscription.personalOrgSubscriptionPriceID | default "price_1QycPyBvxky1R7Svz0gOWnNh" }}
-{{- if .Values.openlane.coreConfiguration.subscription.stripeWebhookURL }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookURL }}
-{{- else if .Values.domain }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.{{ .Values.domain }}/v1/stripe/webhook"
-{{- else }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.openlane.com/v1/stripe/webhook"
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.subscription.stripeBillingPortalSuccessURL }}
-  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: {{ .Values.openlane.coreConfiguration.subscription.stripeBillingPortalSuccessURL }}
-{{- else if .Values.domain }}
-  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.{{ .Values.domain }}/billing"
-{{- else }}
-  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.openlane.com/billing"
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .idleTimeout }}
+CORE_SERVER_IDLETIMEOUT: "{{ . }}"
 {{- end }}
-{{- if .Values.openlane.coreConfiguration.subscription.stripeCancellationReturnURL }}
-  CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: {{ .Values.openlane.coreConfiguration.subscription.stripeCancellationReturnURL }}
-{{- else if .Values.domain }}
-  CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: "https://console.{{ .Values.domain }}/organization-settings/billing/subscription_canceled"
-{{- else }}
-  CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: "https://console.theopenlane.io/organization-settings/billing/subscription_canceled"
 {{- end }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKEVENTS: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookEvents }}
-  CORE_KEYWATCHER_ENABLED: {{ .Values.openlane.coreConfiguration.keywatcher.enabled | default "false" }}
-  CORE_KEYWATCHER_KEYDIR: {{ .Values.openlane.coreConfiguration.keywatcher.keyDir | default "./keys" }}
-  CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: {{ .Values.openlane.coreConfiguration.keywatcher.externalSecretsIntegration | default "false" }}
-  CORE_SLACK_NEWSUBSCRIBERMESSAGEFILE: {{ .Values.openlane.coreConfiguration.slack.newSubscriberMessageFile }}
-  CORE_SLACK_NEWUSERMESSAGEFILE: {{ .Values.openlane.coreConfiguration.slack.newUserMessageFile }}
-  CORE_INTEGRATIONOAUTHPROVIDER_REDIRECTURL: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.redirectUrl | default "http://localhost:17608" }}
-  CORE_INTEGRATIONOAUTHPROVIDER_SUCCESSREDIRECTURL: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.successRedirectUrl | default "/integrations/success" }}
-  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTID: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientId }}
-  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTSECRET: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientSecret }}
-  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTENDPOINT: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientEndpoint | default "http://localhost:17608" }}
-  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_SCOPES: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.scopes }}
-  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTID: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientId }}
-  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTSECRET: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientSecret }}
-  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTENDPOINT: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientEndpoint | default "http://localhost:17608" }}
-  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_SCOPES: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.scopes }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .readHeaderTimeout }}
+CORE_SERVER_READHEADERTIMEOUT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .tls }}
+{{- if hasKey . "enabled" }}
+CORE_SERVER_TLS_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .tls }}
+{{- with .certFile }}
+CORE_SERVER_TLS_CERTFILE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .tls }}
+{{- with .certKey }}
+CORE_SERVER_TLS_CERTKEY: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .tls }}
+{{- if hasKey . "autoCert" }}
+CORE_SERVER_TLS_AUTOCERT: "{{ index . "autoCert" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .cors }}
+{{- if hasKey . "enabled" }}
+CORE_SERVER_CORS_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .cors }}
+{{- with .prefixes }}
+CORE_SERVER_CORS_PREFIXES: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.server) (.Values.openlane.coreConfiguration.server.cors) (.Values.openlane.coreConfiguration.server.cors.allowOrigins)) }}
+CORE_SERVER_CORS_ALLOWORIGINS: {{ .Values.openlane.coreConfiguration.server.cors.allowOrigins | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_SERVER_CORS_ALLOWORIGINS: "https://console.{{ .Values.domain }},https://docs.{{ .Values.domain }},https://www.{{ .Values.domain }}"
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .cors }}
+{{- if hasKey . "cookieInsecure" }}
+CORE_SERVER_CORS_COOKIEINSECURE: "{{ index . "cookieInsecure" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .secure }}
+{{- if hasKey . "enabled" }}
+CORE_SERVER_SECURE_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .secure }}
+{{- with .xssprotection }}
+CORE_SERVER_SECURE_XSSPROTECTION: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .secure }}
+{{- with .contenttypenosniff }}
+CORE_SERVER_SECURE_CONTENTTYPENOSNIFF: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .secure }}
+{{- with .xframeoptions }}
+CORE_SERVER_SECURE_XFRAMEOPTIONS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .secure }}
+{{- if hasKey . "hstspreloadenabled" }}
+CORE_SERVER_SECURE_HSTSPRELOADENABLED: "{{ index . "hstspreloadenabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .secure }}
+{{- with .hstsmaxage }}
+CORE_SERVER_SECURE_HSTSMAXAGE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .secure }}
+{{- with .contentsecuritypolicy }}
+CORE_SERVER_SECURE_CONTENTSECURITYPOLICY: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .secure }}
+{{- with .referrerpolicy }}
+CORE_SERVER_SECURE_REFERRERPOLICY: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .secure }}
+{{- if hasKey . "cspreportonly" }}
+CORE_SERVER_SECURE_CSPREPORTONLY: "{{ index . "cspreportonly" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .redirects }}
+{{- if hasKey . "enabled" }}
+CORE_SERVER_REDIRECTS_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .redirects }}
+{{- with .redirects }}
+CORE_SERVER_REDIRECTS_REDIRECTS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .redirects }}
+{{- with .code }}
+CORE_SERVER_REDIRECTS_CODE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .cacheControl }}
+{{- if hasKey . "enabled" }}
+CORE_SERVER_CACHECONTROL_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .cacheControl }}
+{{- with .noCacheHeaders }}
+CORE_SERVER_CACHECONTROL_NOCACHEHEADERS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .cacheControl }}
+{{- with .etagHeaders }}
+CORE_SERVER_CACHECONTROL_ETAGHEADERS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .mime }}
+{{- if hasKey . "enabled" }}
+CORE_SERVER_MIME_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .mime }}
+{{- with .mimeTypesFile }}
+CORE_SERVER_MIME_MIMETYPESFILE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .mime }}
+{{- with .defaultContentType }}
+CORE_SERVER_MIME_DEFAULTCONTENTTYPE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .graphPool }}
+{{- with .maxWorkers }}
+CORE_SERVER_GRAPHPOOL_MAXWORKERS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- if hasKey . "enableGraphExtensions" }}
+CORE_SERVER_ENABLEGRAPHEXTENSIONS: "{{ index . "enableGraphExtensions" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .complexityLimit }}
+CORE_SERVER_COMPLEXITYLIMIT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .maxResultLimit }}
+CORE_SERVER_MAXRESULTLIMIT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .csrfProtection }}
+{{- if hasKey . "enabled" }}
+CORE_SERVER_CSRFPROTECTION_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .csrfProtection }}
+{{- with .header }}
+CORE_SERVER_CSRFPROTECTION_HEADER: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .csrfProtection }}
+{{- with .cookie }}
+CORE_SERVER_CSRFPROTECTION_COOKIE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .csrfProtection }}
+{{- if hasKey . "secure" }}
+CORE_SERVER_CSRFPROTECTION_SECURE: "{{ index . "secure" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .csrfProtection }}
+{{- with .sameSite }}
+CORE_SERVER_CSRFPROTECTION_SAMESITE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .csrfProtection }}
+{{- if hasKey . "cookieHttpOnly" }}
+CORE_SERVER_CSRFPROTECTION_COOKIEHTTPONLY: "{{ index . "cookieHttpOnly" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .csrfProtection }}
+{{- with .cookieDomain }}
+CORE_SERVER_CSRFPROTECTION_COOKIEDOMAIN: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .csrfProtection }}
+{{- with .cookiePath }}
+CORE_SERVER_CSRFPROTECTION_COOKIEPATH: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .defaultTrustCenterDomain }}
+CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .server }}
+{{- with .fieldLevelEncryption }}
+{{- if hasKey . "enabled" }}
+CORE_SERVER_FIELDLEVELENCRYPTION_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .entityTypes }}
+CORE_ENTCONFIG_ENTITYTYPES: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .summarizer }}
+{{- with .type }}
+CORE_ENTCONFIG_SUMMARIZER_TYPE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .summarizer }}
+{{- with .llm }}
+{{- with .provider }}
+CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .summarizer }}
+{{- with .llm }}
+{{- with .anthropic }}
+{{- with .betaHeader }}
+CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BETAHEADER: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .summarizer }}
+{{- with .llm }}
+{{- with .anthropic }}
+{{- if hasKey . "legacyTextCompletion" }}
+CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_LEGACYTEXTCOMPLETION: "{{ index . "legacyTextCompletion" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .summarizer }}
+{{- with .llm }}
+{{- with .anthropic }}
+{{- with .baseURL }}
+CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BASEURL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .summarizer }}
+{{- with .llm }}
+{{- with .cloudflare }}
+{{- with .accountID }}
+CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_ACCOUNTID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .summarizer }}
+{{- with .llm }}
+{{- with .cloudflare }}
+{{- with .serverURL }}
+CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_SERVERURL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .summarizer }}
+{{- with .llm }}
+{{- with .openai }}
+{{- with .url }}
+CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_URL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .summarizer }}
+{{- with .llm }}
+{{- with .openai }}
+{{- with .organizationID }}
+CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_ORGANIZATIONID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .summarizer }}
+{{- with .maximumSentences }}
+CORE_ENTCONFIG_SUMMARIZER_MAXIMUMSENTENCES: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .windmill }}
+{{- if hasKey . "enabled" }}
+CORE_ENTCONFIG_WINDMILL_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .windmill }}
+{{- with .baseURL }}
+CORE_ENTCONFIG_WINDMILL_BASEURL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .windmill }}
+{{- with .workspace }}
+CORE_ENTCONFIG_WINDMILL_WORKSPACE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .windmill }}
+{{- with .defaultTimeout }}
+CORE_ENTCONFIG_WINDMILL_DEFAULTTIMEOUT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .windmill }}
+{{- with .timezone }}
+CORE_ENTCONFIG_WINDMILL_TIMEZONE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .windmill }}
+{{- with .onFailureScript }}
+CORE_ENTCONFIG_WINDMILL_ONFAILURESCRIPT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .windmill }}
+{{- with .onSuccessScript }}
+CORE_ENTCONFIG_WINDMILL_ONSUCCESSSCRIPT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .maxPoolSize }}
+CORE_ENTCONFIG_MAXPOOLSIZE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .entConfig }}
+{{- with .modules }}
+{{- if hasKey . "enabled" }}
+CORE_ENTCONFIG_MODULES_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- if hasKey . "enabled" }}
+CORE_AUTH_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .token }}
+{{- with .kid }}
+CORE_AUTH_TOKEN_KID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.auth) (.Values.openlane.coreConfiguration.auth.token) (.Values.openlane.coreConfiguration.auth.token.audience)) }}
+CORE_AUTH_TOKEN_AUDIENCE: {{ .Values.openlane.coreConfiguration.auth.token.audience | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_AUTH_TOKEN_AUDIENCE: "https://api.{{ .Values.domain }}"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.auth) (.Values.openlane.coreConfiguration.auth.token) (.Values.openlane.coreConfiguration.auth.token.refreshAudience)) }}
+CORE_AUTH_TOKEN_REFRESHAUDIENCE: {{ .Values.openlane.coreConfiguration.auth.token.refreshAudience | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_AUTH_TOKEN_REFRESHAUDIENCE: "https://api.{{ .Values.domain }}"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.auth) (.Values.openlane.coreConfiguration.auth.token) (.Values.openlane.coreConfiguration.auth.token.issuer)) }}
+CORE_AUTH_TOKEN_ISSUER: {{ .Values.openlane.coreConfiguration.auth.token.issuer | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_AUTH_TOKEN_ISSUER: "https://api.{{ .Values.domain }}"
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .token }}
+{{- with .accessDuration }}
+CORE_AUTH_TOKEN_ACCESSDURATION: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .token }}
+{{- with .refreshDuration }}
+CORE_AUTH_TOKEN_REFRESHDURATION: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .token }}
+{{- with .refreshOverlap }}
+CORE_AUTH_TOKEN_REFRESHOVERLAP: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.auth) (.Values.openlane.coreConfiguration.auth.token) (.Values.openlane.coreConfiguration.auth.token.jwksEndpoint)) }}
+CORE_AUTH_TOKEN_JWKSENDPOINT: {{ .Values.openlane.coreConfiguration.auth.token.jwksEndpoint | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_AUTH_TOKEN_JWKSENDPOINT: "https://api.{{ .Values.domain }}/.well-known/jwks.json"
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .token }}
+{{- with .keys }}
+CORE_AUTH_TOKEN_KEYS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .token }}
+{{- if hasKey . "generateKeys" }}
+CORE_AUTH_TOKEN_GENERATEKEYS: "{{ index . "generateKeys" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .supportedProviders }}
+CORE_AUTH_SUPPORTEDPROVIDERS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .redirectUrl }}
+CORE_AUTH_PROVIDERS_REDIRECTURL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .github }}
+{{- with .clientId }}
+CORE_AUTH_PROVIDERS_GITHUB_CLIENTID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.auth) (.Values.openlane.coreConfiguration.auth.providers) (.Values.openlane.coreConfiguration.auth.providers.github) (.Values.openlane.coreConfiguration.auth.providers.github.clientEndpoint)) }}
+CORE_AUTH_PROVIDERS_GITHUB_CLIENTENDPOINT: {{ .Values.openlane.coreConfiguration.auth.providers.github.clientEndpoint | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_AUTH_PROVIDERS_GITHUB_CLIENTENDPOINT: "https://api.{{ .Values.domain }}"
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .github }}
+{{- with .scopes }}
+CORE_AUTH_PROVIDERS_GITHUB_SCOPES: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .github }}
+{{- with .redirectUrl }}
+CORE_AUTH_PROVIDERS_GITHUB_REDIRECTURL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .google }}
+{{- with .clientId }}
+CORE_AUTH_PROVIDERS_GOOGLE_CLIENTID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.auth) (.Values.openlane.coreConfiguration.auth.providers) (.Values.openlane.coreConfiguration.auth.providers.google) (.Values.openlane.coreConfiguration.auth.providers.google.clientEndpoint)) }}
+CORE_AUTH_PROVIDERS_GOOGLE_CLIENTENDPOINT: {{ .Values.openlane.coreConfiguration.auth.providers.google.clientEndpoint | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_AUTH_PROVIDERS_GOOGLE_CLIENTENDPOINT: "https://api.{{ .Values.domain }}"
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .google }}
+{{- with .scopes }}
+CORE_AUTH_PROVIDERS_GOOGLE_SCOPES: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .google }}
+{{- with .redirectUrl }}
+CORE_AUTH_PROVIDERS_GOOGLE_REDIRECTURL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .webauthn }}
+{{- if hasKey . "enabled" }}
+CORE_AUTH_PROVIDERS_WEBAUTHN_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .webauthn }}
+{{- with .displayName }}
+CORE_AUTH_PROVIDERS_WEBAUTHN_DISPLAYNAME: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.auth) (.Values.openlane.coreConfiguration.auth.providers) (.Values.openlane.coreConfiguration.auth.providers.webauthn) (.Values.openlane.coreConfiguration.auth.providers.webauthn.relyingPartyId)) }}
+CORE_AUTH_PROVIDERS_WEBAUTHN_RELYINGPARTYID: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.relyingPartyId | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_AUTH_PROVIDERS_WEBAUTHN_RELYINGPARTYID: "{{ .Values.domain }}"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.auth) (.Values.openlane.coreConfiguration.auth.providers) (.Values.openlane.coreConfiguration.auth.providers.webauthn) (.Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins)) }}
+CORE_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: "https://console.{{ .Values.domain }}"
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .webauthn }}
+{{- with .maxDevices }}
+CORE_AUTH_PROVIDERS_WEBAUTHN_MAXDEVICES: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .webauthn }}
+{{- if hasKey . "enforceTimeout" }}
+CORE_AUTH_PROVIDERS_WEBAUTHN_ENFORCETIMEOUT: "{{ index . "enforceTimeout" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .webauthn }}
+{{- with .timeout }}
+CORE_AUTH_PROVIDERS_WEBAUTHN_TIMEOUT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .auth }}
+{{- with .providers }}
+{{- with .webauthn }}
+{{- if hasKey . "debug" }}
+CORE_AUTH_PROVIDERS_WEBAUTHN_DEBUG: "{{ index . "debug" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- if hasKey . "enabled" }}
+CORE_AUTHZ_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- with .storeName }}
+CORE_AUTHZ_STORENAME: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- with .hostUrl }}
+CORE_AUTHZ_HOSTURL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- with .storeId }}
+CORE_AUTHZ_STOREID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- with .modelId }}
+CORE_AUTHZ_MODELID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- if hasKey . "createNewModel" }}
+CORE_AUTHZ_CREATENEWMODEL: "{{ index . "createNewModel" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- with .modelFile }}
+CORE_AUTHZ_MODELFILE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- with .credentials }}
+{{- with .clientId }}
+CORE_AUTHZ_CREDENTIALS_CLIENTID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- with .credentials }}
+{{- with .audience }}
+CORE_AUTHZ_CREDENTIALS_AUDIENCE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- with .credentials }}
+{{- with .issuer }}
+CORE_AUTHZ_CREDENTIALS_ISSUER: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- with .credentials }}
+{{- with .scopes }}
+CORE_AUTHZ_CREDENTIALS_SCOPES: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .authz }}
+{{- if hasKey . "ignoreDuplicateKeyError" }}
+CORE_AUTHZ_IGNOREDUPLICATEKEYERROR: "{{ index . "ignoreDuplicateKeyError" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- if hasKey . "debug" }}
+CORE_DB_DEBUG: "{{ index . "debug" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- with .databaseName }}
+CORE_DB_DATABASENAME: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- with .driverName }}
+CORE_DB_DRIVERNAME: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- if hasKey . "multiWrite" }}
+CORE_DB_MULTIWRITE: "{{ index . "multiWrite" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- with .primaryDbSource }}
+CORE_DB_PRIMARYDBSOURCE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- with .secondaryDbSource }}
+CORE_DB_SECONDARYDBSOURCE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- with .cacheTTL }}
+CORE_DB_CACHETTL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- if hasKey . "runMigrations" }}
+CORE_DB_RUNMIGRATIONS: "{{ index . "runMigrations" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- with .migrationProvider }}
+CORE_DB_MIGRATIONPROVIDER: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- if hasKey . "enableHistory" }}
+CORE_DB_ENABLEHISTORY: "{{ index . "enableHistory" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- with .maxConnections }}
+CORE_DB_MAXCONNECTIONS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .db }}
+{{- with .maxIdleConnections }}
+CORE_DB_MAXIDLECONNECTIONS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .jobQueue }}
+{{- with .connectionURI }}
+CORE_JOBQUEUE_CONNECTIONURI: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .jobQueue }}
+{{- if hasKey . "runMigrations" }}
+CORE_JOBQUEUE_RUNMIGRATIONS: "{{ index . "runMigrations" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- if hasKey . "enabled" }}
+CORE_REDIS_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .address }}
+CORE_REDIS_ADDRESS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .name }}
+CORE_REDIS_NAME: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .username }}
+CORE_REDIS_USERNAME: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .password }}
+CORE_REDIS_PASSWORD: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .db }}
+CORE_REDIS_DB: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .dialTimeout }}
+CORE_REDIS_DIALTIMEOUT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .readTimeout }}
+CORE_REDIS_READTIMEOUT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .writeTimeout }}
+CORE_REDIS_WRITETIMEOUT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .maxRetries }}
+CORE_REDIS_MAXRETRIES: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .minIdleConns }}
+CORE_REDIS_MINIDLECONNS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .maxIdleConns }}
+CORE_REDIS_MAXIDLECONNS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .redis }}
+{{- with .maxActiveConns }}
+CORE_REDIS_MAXACTIVECONNS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .tracer }}
+{{- if hasKey . "enabled" }}
+CORE_TRACER_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .tracer }}
+{{- with .provider }}
+CORE_TRACER_PROVIDER: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .tracer }}
+{{- with .environment }}
+CORE_TRACER_ENVIRONMENT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .tracer }}
+{{- with .stdout }}
+{{- if hasKey . "pretty" }}
+CORE_TRACER_STDOUT_PRETTY: "{{ index . "pretty" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .tracer }}
+{{- with .stdout }}
+{{- if hasKey . "disableTimestamp" }}
+CORE_TRACER_STDOUT_DISABLETIMESTAMP: "{{ index . "disableTimestamp" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .tracer }}
+{{- with .otlp }}
+{{- with .endpoint }}
+CORE_TRACER_OTLP_ENDPOINT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .tracer }}
+{{- with .otlp }}
+{{- if hasKey . "insecure" }}
+CORE_TRACER_OTLP_INSECURE: "{{ index . "insecure" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .tracer }}
+{{- with .otlp }}
+{{- with .certificate }}
+CORE_TRACER_OTLP_CERTIFICATE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .tracer }}
+{{- with .otlp }}
+{{- with .headers }}
+CORE_TRACER_OTLP_HEADERS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .tracer }}
+{{- with .otlp }}
+{{- with .compression }}
+CORE_TRACER_OTLP_COMPRESSION: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .tracer }}
+{{- with .otlp }}
+{{- with .timeout }}
+CORE_TRACER_OTLP_TIMEOUT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .email }}
+{{- with .companyName }}
+CORE_EMAIL_COMPANYNAME: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .email }}
+{{- with .companyAddress }}
+CORE_EMAIL_COMPANYADDRESS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .email }}
+{{- with .corporation }}
+CORE_EMAIL_CORPORATION: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .email }}
+{{- with .year }}
+CORE_EMAIL_YEAR: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.email) (.Values.openlane.coreConfiguration.email.fromEmail)) }}
+CORE_EMAIL_FROMEMAIL: {{ .Values.openlane.coreConfiguration.email.fromEmail | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_EMAIL_FROMEMAIL: "no-reply@mail.{{ .Values.domain }}"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.email) (.Values.openlane.coreConfiguration.email.supportEmail)) }}
+CORE_EMAIL_SUPPORTEMAIL: {{ .Values.openlane.coreConfiguration.email.supportEmail | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_EMAIL_SUPPORTEMAIL: "support@.{{ .Values.domain }}"
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .email }}
+{{- with .logoURL }}
+CORE_EMAIL_LOGOURL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.email) (.Values.openlane.coreConfiguration.email.urls) (.Values.openlane.coreConfiguration.email.urls.root)) }}
+CORE_EMAIL_URLS_ROOT: {{ .Values.openlane.coreConfiguration.email.urls.root | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_EMAIL_URLS_ROOT: "https://www.{{ .Values.domain }}"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.email) (.Values.openlane.coreConfiguration.email.urls) (.Values.openlane.coreConfiguration.email.urls.product)) }}
+CORE_EMAIL_URLS_PRODUCT: {{ .Values.openlane.coreConfiguration.email.urls.product | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_EMAIL_URLS_PRODUCT: "https://console.{{ .Values.domain }}"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.email) (.Values.openlane.coreConfiguration.email.urls) (.Values.openlane.coreConfiguration.email.urls.docs)) }}
+CORE_EMAIL_URLS_DOCS: {{ .Values.openlane.coreConfiguration.email.urls.docs | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_EMAIL_URLS_DOCS: "https://docs.{{ .Values.domain }}"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.email) (.Values.openlane.coreConfiguration.email.urls) (.Values.openlane.coreConfiguration.email.urls.verify)) }}
+CORE_EMAIL_URLS_VERIFY: {{ .Values.openlane.coreConfiguration.email.urls.verify | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_EMAIL_URLS_VERIFY: "https://console.{{ .Values.domain }}/verify"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.email) (.Values.openlane.coreConfiguration.email.urls) (.Values.openlane.coreConfiguration.email.urls.invite)) }}
+CORE_EMAIL_URLS_INVITE: {{ .Values.openlane.coreConfiguration.email.urls.invite | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_EMAIL_URLS_INVITE: "https://console.{{ .Values.domain }}/invite"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.email) (.Values.openlane.coreConfiguration.email.urls) (.Values.openlane.coreConfiguration.email.urls.reset)) }}
+CORE_EMAIL_URLS_RESET: {{ .Values.openlane.coreConfiguration.email.urls.reset | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_EMAIL_URLS_RESET: "https://console.{{ .Values.domain }}/password-reset"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.email) (.Values.openlane.coreConfiguration.email.urls) (.Values.openlane.coreConfiguration.email.urls.verifySubscriber)) }}
+CORE_EMAIL_URLS_VERIFYSUBSCRIBER: {{ .Values.openlane.coreConfiguration.email.urls.verifySubscriber | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_EMAIL_URLS_VERIFYSUBSCRIBER: "https://console.{{ .Values.domain }}/subscriber-verify"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.email) (.Values.openlane.coreConfiguration.email.urls) (.Values.openlane.coreConfiguration.email.urls.verifyBilling)) }}
+CORE_EMAIL_URLS_VERIFYBILLING: {{ .Values.openlane.coreConfiguration.email.urls.verifyBilling | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_EMAIL_URLS_VERIFYBILLING: "https://console.{{ .Values.domain }}/verify-billing"
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .email }}
+{{- with .templatesPath }}
+CORE_EMAIL_TEMPLATESPATH: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .sessions }}
+{{- with .signingKey }}
+CORE_SESSIONS_SIGNINGKEY: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .sessions }}
+{{- with .encryptionKey }}
+CORE_SESSIONS_ENCRYPTIONKEY: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.sessions) (.Values.openlane.coreConfiguration.sessions.domain)) }}
+CORE_SESSIONS_DOMAIN: {{ .Values.openlane.coreConfiguration.sessions.domain | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_SESSIONS_DOMAIN: "{{ .Values.domain }}"
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .sessions }}
+{{- with .maxAge }}
+CORE_SESSIONS_MAXAGE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .sessions }}
+{{- if hasKey . "secure" }}
+CORE_SESSIONS_SECURE: "{{ index . "secure" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .sessions }}
+{{- if hasKey . "httpOnly" }}
+CORE_SESSIONS_HTTPONLY: "{{ index . "httpOnly" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .sessions }}
+{{- with .sameSite }}
+CORE_SESSIONS_SAMESITE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .totp }}
+{{- if hasKey . "enabled" }}
+CORE_TOTP_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .totp }}
+{{- with .codeLength }}
+CORE_TOTP_CODELENGTH: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.totp) (.Values.openlane.coreConfiguration.totp.issuer)) }}
+CORE_TOTP_ISSUER: {{ .Values.openlane.coreConfiguration.totp.issuer | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_TOTP_ISSUER: "{{ .Values.domain }}"
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .totp }}
+{{- if hasKey . "redis" }}
+CORE_TOTP_REDIS: "{{ index . "redis" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .totp }}
+{{- with .recoveryCodeCount }}
+CORE_TOTP_RECOVERYCODECOUNT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .totp }}
+{{- with .recoveryCodeLength }}
+CORE_TOTP_RECOVERYCODELENGTH: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .ratelimit }}
+{{- if hasKey . "enabled" }}
+CORE_RATELIMIT_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .ratelimit }}
+{{- with .limit }}
+CORE_RATELIMIT_LIMIT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .ratelimit }}
+{{- with .burst }}
+CORE_RATELIMIT_BURST: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .ratelimit }}
+{{- with .expires }}
+CORE_RATELIMIT_EXPIRES: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .objectStorage }}
+{{- if hasKey . "enabled" }}
+CORE_OBJECTSTORAGE_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .objectStorage }}
+{{- with .provider }}
+CORE_OBJECTSTORAGE_PROVIDER: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .objectStorage }}
+{{- with .region }}
+CORE_OBJECTSTORAGE_REGION: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .objectStorage }}
+{{- with .defaultBucket }}
+CORE_OBJECTSTORAGE_DEFAULTBUCKET: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .objectStorage }}
+{{- with .localURL }}
+CORE_OBJECTSTORAGE_LOCALURL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .objectStorage }}
+{{- with .keys }}
+CORE_OBJECTSTORAGE_KEYS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .objectStorage }}
+{{- with .maxSizeMB }}
+CORE_OBJECTSTORAGE_MAXSIZEMB: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .objectStorage }}
+{{- with .maxMemoryMB }}
+CORE_OBJECTSTORAGE_MAXMEMORYMB: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .subscription }}
+{{- if hasKey . "enabled" }}
+CORE_SUBSCRIPTION_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .subscription }}
+{{- with .publicStripeKey }}
+CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .subscription }}
+{{- with .trialSubscriptionPriceID }}
+CORE_SUBSCRIPTION_TRIALSUBSCRIPTIONPRICEID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .subscription }}
+{{- with .personalOrgSubscriptionPriceID }}
+CORE_SUBSCRIPTION_PERSONALORGSUBSCRIPTIONPRICEID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.subscription) (.Values.openlane.coreConfiguration.subscription.stripeWebhookURL)) }}
+CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookURL | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.{{ .Values.domain }}/v1/stripe/webhook"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.subscription) (.Values.openlane.coreConfiguration.subscription.stripeBillingPortalSuccessURL)) }}
+CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: {{ .Values.openlane.coreConfiguration.subscription.stripeBillingPortalSuccessURL | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.{{ .Values.domain }}/billing"
+{{- end }}
+
+{{- if (and (.Values.openlane.coreConfiguration.subscription) (.Values.openlane.coreConfiguration.subscription.stripeCancellationReturnURL)) }}
+CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: {{ .Values.openlane.coreConfiguration.subscription.stripeCancellationReturnURL | toJson | quote }}
+{{- else if .Values.domain }}
+CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: "https://console.{{ .Values.domain }}/organization-settings/billing/subscription_canceled"
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .subscription }}
+{{- with .stripeWebhookEvents }}
+CORE_SUBSCRIPTION_STRIPEWEBHOOKEVENTS: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .keywatcher }}
+{{- if hasKey . "enabled" }}
+CORE_KEYWATCHER_ENABLED: "{{ index . "enabled" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .keywatcher }}
+{{- with .keyDir }}
+CORE_KEYWATCHER_KEYDIR: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .keywatcher }}
+{{- if hasKey . "externalSecretsIntegration" }}
+CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: "{{ index . "externalSecretsIntegration" }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .slack }}
+{{- with .newSubscriberMessageFile }}
+CORE_SLACK_NEWSUBSCRIBERMESSAGEFILE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .slack }}
+{{- with .newUserMessageFile }}
+CORE_SLACK_NEWUSERMESSAGEFILE: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .integrationOauthProvider }}
+{{- with .redirectUrl }}
+CORE_INTEGRATIONOAUTHPROVIDER_REDIRECTURL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .integrationOauthProvider }}
+{{- with .successRedirectUrl }}
+CORE_INTEGRATIONOAUTHPROVIDER_SUCCESSREDIRECTURL: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .integrationOauthProvider }}
+{{- with .github }}
+{{- with .clientId }}
+CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .integrationOauthProvider }}
+{{- with .github }}
+{{- with .clientSecret }}
+CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTSECRET: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .integrationOauthProvider }}
+{{- with .github }}
+{{- with .clientEndpoint }}
+CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTENDPOINT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .integrationOauthProvider }}
+{{- with .github }}
+{{- with .scopes }}
+CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_SCOPES: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .integrationOauthProvider }}
+{{- with .slack }}
+{{- with .clientId }}
+CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTID: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .integrationOauthProvider }}
+{{- with .slack }}
+{{- with .clientSecret }}
+CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTSECRET: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .integrationOauthProvider }}
+{{- with .slack }}
+{{- with .clientEndpoint }}
+CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTENDPOINT: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- with .Values.openlane.coreConfiguration }}
+{{- with .integrationOauthProvider }}
+{{- with .slack }}
+{{- with .scopes }}
+CORE_INTEGRATIONOAUTHPROVIDER_SLACK_SCOPES: "{{ . }}"
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
