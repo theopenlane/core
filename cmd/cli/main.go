@@ -16,7 +16,6 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/dnsverification"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entity"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entitytype"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/events"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/evidence"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/file"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/group"

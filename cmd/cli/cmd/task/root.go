@@ -99,9 +99,14 @@ func tableOutput(out []openlaneclient.Task) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Title", "Details", "Category", "Assignee", "Assigner", "Status", "Due")
 
 	for _, i := range out {
-		assignee := ""
+		assignee := *i.AssigneeID
 		if i.Assignee != nil {
-			assignee = i.Assignee.ID
+			assignee = i.Assignee.DisplayName
+		}
+
+		assigner := *i.AssignerID
+		if i.Assigner != nil {
+			assigner = i.Assigner.DisplayName
 		}
 
 		var dueDate string
@@ -109,7 +114,7 @@ func tableOutput(out []openlaneclient.Task) {
 			dueDate = i.Due.String()
 		}
 
-		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Details, *i.Category, assignee, i.Assigner.ID, i.Status, dueDate)
+		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Details, *i.Category, assignee, assigner, i.Status, dueDate)
 
 		if i.Comments != nil {
 			writer.AddRow("----------------------------------------")

@@ -12,6 +12,17 @@ tasks:
     cmds:
       - task --list
 
+  # === Test Commands ===
+  test:get:
+    silent: true
+    desc: runs get for all the cli commands, use this if you think you might have broken something. It assumes you already have a user registered and the server running
+    dir: ../..
+    deps:
+      - :go:build-cli
+      - login
+    cmds:
+      - bash cmd/cli/test/testget.sh
+
   # === Generate Tasks ===
   generate:
     desc: generates a new cli cmd

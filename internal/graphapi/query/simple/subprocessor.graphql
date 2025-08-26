@@ -1,43 +1,5 @@
-mutation CreateBulkCSVSubprocessor($input: Upload!) {
-  createBulkCSVSubprocessor(input: $input) {
-    subprocessors {
-      createdAt
-      createdBy
-      description
-      id
-      logoLocalFileID
-      logoRemoteURL
-      name
-      ownerID
-      systemOwned
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkSubprocessor($input: [CreateSubprocessorInput!]) {
-  createBulkSubprocessor(input: $input) {
-    subprocessors {
-      createdAt
-      createdBy
-      description
-      id
-      logoLocalFileID
-      logoRemoteURL
-      name
-      ownerID
-      systemOwned
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateSubprocessor($input: CreateSubprocessorInput!) {
-  createSubprocessor(input: $input) {
+mutation CreateSubprocessor($input: CreateSubprocessorInput!, $logoFile: Upload) {
+  createSubprocessor(input: $input, logoFile: $logoFile) {
     subprocessor {
       createdAt
       createdBy
@@ -134,8 +96,8 @@ query GetSubprocessors($first: Int, $last: Int, $where: SubprocessorWhereInput) 
   }
 }
 
-mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!) {
-  updateSubprocessor(id: $updateSubprocessorId, input: $input) {
+mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload) {
+  updateSubprocessor(id: $updateSubprocessorId, input: $input, logoFile: $logoFile) {
     subprocessor {
       createdAt
       createdBy

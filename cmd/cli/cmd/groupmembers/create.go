@@ -66,7 +66,7 @@ func create(ctx context.Context) error {
 	input, err := createValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.AddUserToGroupWithRole(ctx, input)
+	o, err := client.CreateGroupMembership(ctx, input)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

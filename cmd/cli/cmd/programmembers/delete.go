@@ -59,14 +59,14 @@ func delete(ctx context.Context) error {
 	where, err := deleteValidation()
 	cobra.CheckErr(err)
 
-	programMembers, err := client.GetProgramMembersByProgramID(ctx, &where)
+	programMembers, err := client.GetProgramMemberships(ctx, cmd.First, cmd.Last, &where)
 	cobra.CheckErr(err)
 
 	if len(programMembers.ProgramMemberships.Edges) != 1 {
 		return errors.New("error getting existing relation") //nolint:err113
 	}
 
-	o, err := client.RemoveUserFromProgram(ctx, programMembers.ProgramMemberships.Edges[0].Node.ID)
+	o, err := client.DeleteProgramMembership(ctx, programMembers.ProgramMemberships.Edges[0].Node.ID)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

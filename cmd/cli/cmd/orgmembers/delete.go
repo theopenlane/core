@@ -52,7 +52,7 @@ func delete(ctx context.Context) error {
 	where, err := deleteValidation()
 	cobra.CheckErr(err)
 
-	orgMembers, err := client.GetOrgMembersByOrgID(ctx, &where)
+	orgMembers, err := client.GetOrgMemberships(ctx, cmd.First, cmd.Last, &where)
 	cobra.CheckErr(err)
 
 	if len(orgMembers.OrgMemberships.Edges) != 1 {
@@ -61,7 +61,7 @@ func delete(ctx context.Context) error {
 
 	id := orgMembers.OrgMemberships.Edges[0].Node.ID
 
-	o, err := client.RemoveUserFromOrg(ctx, id)
+	o, err := client.DeleteOrgMembership(ctx, id)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

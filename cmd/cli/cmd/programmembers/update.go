@@ -75,14 +75,14 @@ func update(ctx context.Context) error {
 	where, input, err := updateValidation()
 	cobra.CheckErr(err)
 
-	programMembers, err := client.GetProgramMembersByProgramID(ctx, &where)
+	programMembers, err := client.GetProgramMemberships(ctx, cmd.First, cmd.Last, &where)
 	cobra.CheckErr(err)
 
 	if len(programMembers.ProgramMemberships.Edges) != 1 {
 		return errors.New("error getting existing relation") //nolint:err113
 	}
 
-	o, err := client.UpdateUserRoleInProgram(ctx, programMembers.ProgramMemberships.Edges[0].Node.ID, input)
+	o, err := client.UpdateProgramMembership(ctx, programMembers.ProgramMemberships.Edges[0].Node.ID, input)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

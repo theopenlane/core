@@ -122,7 +122,7 @@ func getEntityTypeID(ctx context.Context, name string) (string, error) {
 		Name: &name,
 	}
 
-	o, err := client.GetEntityTypes(ctx, where)
+	o, err := client.GetEntityTypes(ctx, cmd.First, cmd.Last, where)
 	cobra.CheckErr(err)
 
 	if len(o.EntityTypes.Edges) == 0 || len(o.EntityTypes.Edges) > 1 {

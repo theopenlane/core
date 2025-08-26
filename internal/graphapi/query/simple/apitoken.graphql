@@ -1,7 +1,6 @@
-
-mutation CreateBulkCSVAPIToken($input: Upload!) {
-  createBulkCSVAPIToken(input: $input) {
-    apiTokens {
+mutation CreateAPIToken($input: CreateAPITokenInput!) {
+  createAPIToken(input: $input) {
+    apiToken {
       createdAt
       createdBy
       description
@@ -14,7 +13,7 @@ mutation CreateBulkCSVAPIToken($input: Upload!) {
       revokedAt
       revokedBy
       revokedReason
-      sSOAuthorizations
+      ssoAuthorizations
       scopes
       tags
       token
@@ -39,7 +38,7 @@ mutation CreateBulkAPIToken($input: [CreateAPITokenInput!]) {
       revokedAt
       revokedBy
       revokedReason
-      sSOAuthorizations
+      ssoAuthorizations
       scopes
       tags
       token
@@ -49,9 +48,9 @@ mutation CreateBulkAPIToken($input: [CreateAPITokenInput!]) {
   }
 }
 
-mutation CreateAPIToken($input: CreateAPITokenInput!) {
-  createAPIToken(input: $input) {
-    apiToken {
+mutation CreateBulkCSVAPIToken($input: Upload!) {
+  createBulkCSVAPIToken(input: $input) {
+    apiTokens {
       createdAt
       createdBy
       description
@@ -64,7 +63,7 @@ mutation CreateAPIToken($input: CreateAPITokenInput!) {
       revokedAt
       revokedBy
       revokedReason
-      sSOAuthorizations
+      ssoAuthorizations
       scopes
       tags
       token
@@ -103,7 +102,7 @@ query GetAllAPITokens {
         revokedAt
         revokedBy
         revokedReason
-        sSOAuthorizations
+        ssoAuthorizations
         scopes
         tags
         token
@@ -113,6 +112,7 @@ query GetAllAPITokens {
     }
   }
 }
+
 query GetAPITokenByID($apiTokenId: ID!) {
   apiToken(id: $apiTokenId) {
     createdAt
@@ -127,7 +127,7 @@ query GetAPITokenByID($apiTokenId: ID!) {
     revokedAt
     revokedBy
     revokedReason
-    sSOAuthorizations
+    ssoAuthorizations
     scopes
     tags
     token
@@ -159,7 +159,7 @@ query GetAPITokens($first: Int, $last: Int, $where: APITokenWhereInput) {
         revokedAt
         revokedBy
         revokedReason
-        sSOAuthorizations
+        ssoAuthorizations
         scopes
         tags
         token
@@ -169,6 +169,7 @@ query GetAPITokens($first: Int, $last: Int, $where: APITokenWhereInput) {
     }
   }
 }
+
 mutation UpdateAPIToken($updateAPITokenId: ID!, $input: UpdateAPITokenInput!) {
   updateAPIToken(id: $updateAPITokenId, input: $input) {
     apiToken {
@@ -184,7 +185,7 @@ mutation UpdateAPIToken($updateAPITokenId: ID!, $input: UpdateAPITokenInput!) {
       revokedAt
       revokedBy
       revokedReason
-      sSOAuthorizations
+      ssoAuthorizations
       scopes
       tags
       token

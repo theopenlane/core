@@ -33,19 +33,27 @@ func consoleOutput(e any) error {
 
 	// check the type of the output and print them in a table format
 	switch v := e.(type) {
-	case *openlaneclient.GetGroupMembersByGroupID:
-		var nodes []*openlaneclient.GetGroupMembersByGroupID_GroupMemberships_Edges_Node
+	case *openlaneclient.GetAllGroupMemberships:
+		var nodes []*openlaneclient.GetAllGroupMemberships_GroupMemberships_Edges_Node
 
 		for _, i := range v.GroupMemberships.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *openlaneclient.AddUserToGroupWithRole:
+	case *openlaneclient.GetGroupMemberships:
+		var nodes []*openlaneclient.GetGroupMemberships_GroupMemberships_Edges_Node
+
+		for _, i := range v.GroupMemberships.Edges {
+			nodes = append(nodes, i.Node)
+		}
+
+		e = nodes
+	case *openlaneclient.CreateGroupMembership:
 		e = v.CreateGroupMembership.GroupMembership
-	case *openlaneclient.UpdateUserRoleInGroup:
+	case *openlaneclient.UpdateGroupMembership:
 		e = v.UpdateGroupMembership.GroupMembership
-	case *openlaneclient.RemoveUserFromGroup:
+	case *openlaneclient.DeleteGroupMembership:
 		deletedTableOutput(v)
 		return nil
 	}
@@ -79,16 +87,16 @@ func jsonOutput(out any) error {
 
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.GroupMembership) {
-	writer := tables.NewTableWriter(command.OutOrStdout(), "UserID", "DisplayName", "FirstName", "LastName", "Email", "Role")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "GroupID", "UserID", "DisplayName", "FirstName", "LastName", "Email", "Role")
 	for _, i := range out {
-		writer.AddRow(i.UserID, i.User.DisplayName, *i.User.FirstName, *i.User.LastName, i.User.Email, i.Role)
+		writer.AddRow(i.GroupID, i.User.ID, i.User.DisplayName, *i.User.FirstName, *i.User.LastName, i.User.Email, i.Role)
 	}
 
 	writer.Render()
 }
 
 // deleteTableOutput prints the deleted id in a table format
-func deletedTableOutput(e *openlaneclient.RemoveUserFromGroup) {
+func deletedTableOutput(e *openlaneclient.DeleteGroupMembership) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "DeletedID")
 
 	writer.AddRow(e.DeleteGroupMembership.DeletedID)

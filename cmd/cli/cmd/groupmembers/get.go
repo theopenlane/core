@@ -40,14 +40,16 @@ func get(ctx context.Context) error {
 	// filter options
 	id := cmd.Config.String("group-id")
 	if id == "" {
-		return cmd.NewRequiredFieldMissingError("group id")
+		o, err := client.GetAllGroupMemberships(ctx)
+		cobra.CheckErr(err)
+		return consoleOutput(o)
 	}
 
 	where := openlaneclient.GroupMembershipWhereInput{
 		GroupID: &id,
 	}
 
-	o, err := client.GetGroupMembersByGroupID(ctx, &where)
+	o, err := client.GetGroupMemberships(ctx, cmd.First, cmd.Last, &where)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

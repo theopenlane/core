@@ -75,14 +75,14 @@ func update(ctx context.Context) error {
 	where, input, err := updateValidation()
 	cobra.CheckErr(err)
 
-	groupMembers, err := client.GetGroupMembersByGroupID(ctx, &where)
+	groupMembers, err := client.GetGroupMemberships(ctx, cmd.First, cmd.Last, &where)
 	cobra.CheckErr(err)
 
 	if len(groupMembers.GroupMemberships.Edges) != 1 {
 		return errors.New("error getting existing relation") //nolint:err113
 	}
 
-	o, err := client.UpdateUserRoleInGroup(ctx, groupMembers.GroupMemberships.Edges[0].Node.ID, input)
+	o, err := client.UpdateGroupMembership(ctx, groupMembers.GroupMemberships.Edges[0].Node.ID, input)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

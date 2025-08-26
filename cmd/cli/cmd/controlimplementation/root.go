@@ -93,13 +93,17 @@ func tableOutput(out []openlaneclient.ControlImplementation) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Details", "Status", "ImplementationDate", "Verified", "VerificationDate", "Controls", "Subcontrols")
 	for _, i := range out {
 		controlRefCodes := []string{}
-		for _, control := range i.Controls.Edges {
-			controlRefCodes = append(controlRefCodes, control.Node.RefCode)
+		if i.Controls != nil {
+			for _, control := range i.Controls.Edges {
+				controlRefCodes = append(controlRefCodes, control.Node.RefCode)
+			}
 		}
 
 		subcontrolRefCodes := []string{}
-		for _, subcontrol := range i.Subcontrols.Edges {
-			subcontrolRefCodes = append(subcontrolRefCodes, subcontrol.Node.RefCode)
+		if i.Subcontrols != nil {
+			for _, subcontrol := range i.Subcontrols.Edges {
+				subcontrolRefCodes = append(subcontrolRefCodes, subcontrol.Node.RefCode)
+			}
 		}
 
 		writer.AddRow(i.ID, *i.Details, i.Status, i.ImplementationDate, *i.Verified, i.VerificationDate, strings.Join(controlRefCodes, ","), strings.Join(subcontrolRefCodes, ","))
