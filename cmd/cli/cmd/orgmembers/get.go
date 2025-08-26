@@ -45,7 +45,7 @@ func get(ctx context.Context) error {
 		where.OrganizationID = &id
 	}
 
-	o, err := client.GetOrgMembersByOrgID(ctx, &where)
+	o, err := client.GetOrgMemberships(ctx, cmd.First, cmd.Last, &where)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

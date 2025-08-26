@@ -33,19 +33,27 @@ func consoleOutput(e any) error {
 
 	// check the type of the output and print them in a table format
 	switch v := e.(type) {
-	case *openlaneclient.GetProgramMembersByProgramID:
-		var nodes []*openlaneclient.GetProgramMembersByProgramID_ProgramMemberships_Edges_Node
+	case *openlaneclient.GetProgramMemberships:
+		var nodes []*openlaneclient.GetProgramMemberships_ProgramMemberships_Edges_Node
 
 		for _, i := range v.ProgramMemberships.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *openlaneclient.AddUserToProgramWithRole:
+	case *openlaneclient.GetAllProgramMemberships:
+		var nodes []*openlaneclient.GetAllProgramMemberships_ProgramMemberships_Edges_Node
+
+		for _, i := range v.ProgramMemberships.Edges {
+			nodes = append(nodes, i.Node)
+		}
+
+		e = nodes
+	case *openlaneclient.CreateProgramMembership:
 		e = v.CreateProgramMembership.ProgramMembership
-	case *openlaneclient.UpdateUserRoleInProgram:
+	case *openlaneclient.UpdateProgramMembership:
 		e = v.UpdateProgramMembership.ProgramMembership
-	case *openlaneclient.RemoveUserFromProgram:
+	case *openlaneclient.DeleteProgramMembership:
 		deletedTableOutput(v)
 		return nil
 	}
@@ -79,16 +87,37 @@ func jsonOutput(out any) error {
 
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.ProgramMembership) {
-	writer := tables.NewTableWriter(command.OutOrStdout(), "UserID", "DisplayName", "FirstName", "LastName", "Email", "Role")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ProgramID", "UserID", "DisplayName", "FirstName", "LastName", "Email", "Role")
 	for _, i := range out {
-		writer.AddRow(i.UserID, i.User.DisplayName, *i.User.FirstName, *i.User.LastName, i.User.Email, i.Role)
+		firstName := ""
+
+		if i.User == nil {
+			continue
+		}
+
+		if i.User.FirstName != nil {
+			firstName = *i.User.FirstName
+		}
+		lastName := ""
+		if i.User.LastName != nil {
+			lastName = *i.User.LastName
+		}
+
+		writer.AddRow(
+			i.ProgramID,
+			i.User.ID,
+			i.User.DisplayName,
+			firstName,
+			lastName,
+			i.User.Email,
+			i.Role)
 	}
 
 	writer.Render()
 }
 
 // deleteTableOutput prints the deleted id in a table format
-func deletedTableOutput(e *openlaneclient.RemoveUserFromProgram) {
+func deletedTableOutput(e *openlaneclient.DeleteProgramMembership) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "DeletedID")
 
 	writer.AddRow(e.DeleteProgramMembership.DeletedID)

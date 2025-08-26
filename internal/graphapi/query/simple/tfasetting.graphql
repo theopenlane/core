@@ -1,11 +1,16 @@
-mutation DeleteTFASetting($deleteTFASettingId: ID!) {
-  deleteTFASetting(id: $deleteTFASettingId) {
-    deletedID
+mutation CreateTFASetting($input: CreateTFASettingInput!) {
+  createTFASetting(input: $input) {
+    tfaSetting {
+      totpAllowed
+      verified
+    }
+    qrCode
+    tfaSecret
   }
 }
 
 query GetAllTFASettings {
-  tFASettings {
+  tfaSettings {
     totalCount
     pageInfo {
       startCursor
@@ -28,7 +33,7 @@ query GetAllTFASettings {
 }
 
 query GetTFASettingByID($tFASettingId: ID!) {
-  tFASetting(id: $tFASettingId) {
+  tfaSetting(id: $tFASettingId) {
     createdAt
     createdBy
     id
@@ -40,7 +45,7 @@ query GetTFASettingByID($tFASettingId: ID!) {
 }
 
 query GetTFASettings($first: Int, $last: Int, $where: TFASettingWhereInput) {
-  tFASettings(first: $first, last: $last, where: $where) {
+  tfaSettings(first: $first, last: $last, where: $where) {
     totalCount
     pageInfo {
       startCursor
@@ -61,16 +66,15 @@ query GetTFASettings($first: Int, $last: Int, $where: TFASettingWhereInput) {
     }
   }
 }
-mutation UpdateTFASetting($updateTFASettingId: ID!, $input: UpdateTFASettingInput!) {
-  updateTFASetting(id: $updateTFASettingId, input: $input) {
-    tFASetting {
-      createdAt
-      createdBy
-      id
+
+mutation UpdateTFASetting($input: UpdateTFASettingInput!) {
+  updateTFASetting(input: $input) {
+    tfaSetting {
       totpAllowed
-      updatedAt
-      updatedBy
       verified
     }
+    qrCode
+    tfaSecret
+    recoveryCodes
   }
 }

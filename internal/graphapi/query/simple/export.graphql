@@ -18,12 +18,6 @@ mutation CreateExport($input: CreateExportInput!) {
   }
 }
 
-mutation DeleteExport($deleteExportId: ID!) {
-  deleteExport(id: $deleteExportId) {
-    deletedID
-  }
-}
-
 query GetAllExports {
   exports {
     totalCount
@@ -100,8 +94,8 @@ query GetExports($first: Int, $last: Int, $where: ExportWhereInput) {
   }
 }
 
-mutation UpdateExport($updateExportId: ID!, $input: UpdateExportInput!) {
-  updateExport(id: $updateExportId, input: $input) {
+mutation UpdateExport($id: ID!, $input: UpdateExportInput!, $exportFiles: [Upload!]) {
+  updateExport(id: $id, input: $input, exportFiles: $exportFiles) {
     export {
       createdAt
       createdBy
@@ -117,5 +111,17 @@ mutation UpdateExport($updateExportId: ID!, $input: UpdateExportInput!) {
       updatedAt
       updatedBy
     }
+  }
+}
+
+mutation DeleteExport($deleteExportId: ID!) {
+  deleteExport(id: $deleteExportId) {
+    deletedID
+  }
+}
+
+mutation DeleteBulkExport($ids: [ID!]!) {
+  deleteBulkExport(ids: $ids) {
+    deletedIDs
   }
 }

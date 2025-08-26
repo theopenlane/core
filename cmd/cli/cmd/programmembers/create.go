@@ -66,7 +66,7 @@ func create(ctx context.Context) error {
 	input, err := createValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.AddUserToProgramWithRole(ctx, input)
+	o, err := client.CreateProgramMembership(ctx, input)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

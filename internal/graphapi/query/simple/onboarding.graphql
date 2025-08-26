@@ -11,15 +11,3 @@ mutation CreateOnboarding($input: CreateOnboardingInput!) {
     }
   }
 }
-
-query GetOnboardingByID($onboardingId: ID!) {
-  onboarding(id: $onboardingId) {
-    companyDetails
-    companyName
-    compliance
-    domains
-    id
-    organizationID
-    userDetails
-  }
-}

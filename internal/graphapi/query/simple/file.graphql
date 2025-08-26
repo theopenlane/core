@@ -1,3 +1,9 @@
+mutation DeleteFile($deleteFileId: ID!) {
+  deleteFile(id: $deleteFileId) {
+    deletedID
+  }
+}
+
 query GetAllFiles {
   files {
     totalCount

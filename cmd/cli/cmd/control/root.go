@@ -89,25 +89,30 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.Control) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "Source", "Category", "CategoryID", "Subcategory", "Status", "ControlType", "MappedCategories", "Standard", "Programs")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "Source", "Category", "CategoryID", "Subcategory", "Status", "ControlType", "MappedCategories", "Standard")
 
 	for _, i := range out {
-		programs := []string{}
-
-		for _, p := range i.Programs.Edges {
-			programs = append(programs, p.Node.Name)
+		refFramework := "-"
+		if i.ReferenceFramework != nil {
+			refFramework = *i.ReferenceFramework
 		}
 
-		stdName := ""
-		if i.Standard != nil {
-			if i.Standard.ShortName != nil {
-				stdName = *i.Standard.ShortName
-			} else {
-				stdName = i.Standard.Name
-			}
+		cat := "-"
+		if i.Category != nil {
+			cat = *i.Category
 		}
 
-		writer.AddRow(i.ID, i.RefCode, *i.Description, i.Source, *i.Category, *i.CategoryID, *i.Subcategory, i.Status.String(), i.ControlType, strings.Join(i.MappedCategories, ", "), stdName, strings.Join(programs, ", "))
+		catID := "-"
+		if i.CategoryID != nil {
+			catID = *i.CategoryID
+		}
+
+		subcat := "-"
+		if i.Subcategory != nil {
+			subcat = *i.Subcategory
+		}
+
+		writer.AddRow(i.ID, i.RefCode, *i.Description, i.Source, cat, catID, subcat, i.Status.String(), i.ControlType, strings.Join(i.MappedCategories, ", "), refFramework)
 	}
 
 	writer.Render()

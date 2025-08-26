@@ -1,7 +1,7 @@
 
 
-query GetAllOrgSubscriptionHistories {
-  orgSubscriptionHistories {
+query GetAllOrgSubscriptions {
+  orgSubscriptions {
     totalCount
     pageInfo {
       startCursor
@@ -18,12 +18,9 @@ query GetAllOrgSubscriptionHistories {
         expiresAt
         featureLookupKeys
         features
-        historyTime
         id
-        operation
         ownerID
         productPrice
-        ref
         stripeSubscriptionID
         stripeSubscriptionStatus
         tags
@@ -34,9 +31,29 @@ query GetAllOrgSubscriptionHistories {
     }
   }
 }
+query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
+  orgSubscription(id: $orgSubscriptionId) {
+    active
+    createdAt
+    createdBy
+    daysUntilDue
+    expiresAt
+    featureLookupKeys
+    features
+    id
+    ownerID
+    productPrice
+    stripeSubscriptionID
+    stripeSubscriptionStatus
+    tags
+    trialExpiresAt
+    updatedAt
+    updatedBy
+  }
+}
 
-query GetOrgSubscriptionHistories($first: Int, $last: Int, $where: OrgSubscriptionHistoryWhereInput) {
-  orgSubscriptionHistories(first: $first, last: $last, where: $where) {
+query GetOrgSubscriptions($first: Int, $last: Int, $where: OrgSubscriptionWhereInput) {
+  orgSubscriptions(first: $first, last: $last, where: $where) {
     totalCount
     pageInfo {
       startCursor
@@ -53,12 +70,9 @@ query GetOrgSubscriptionHistories($first: Int, $last: Int, $where: OrgSubscripti
         expiresAt
         featureLookupKeys
         features
-        historyTime
         id
-        operation
         ownerID
         productPrice
-        ref
         stripeSubscriptionID
         stripeSubscriptionStatus
         tags

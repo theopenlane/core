@@ -92,7 +92,12 @@ func tableOutput(out []openlaneclient.Standard) {
 	// TODO: add additional columns to the table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Version", "Category", "GoverningBody", "Domain Count", "Control Count")
 	for _, i := range out {
-		writer.AddRow(i.ID, *i.ShortName, *i.Version, *i.StandardType, *i.GoverningBody, len(i.Domains), i.Controls.TotalCount)
+		writer.AddRow(i.ID, *i.ShortName,
+			*i.Version,
+			*i.StandardType,
+			*i.GoverningBody,
+			len(i.Domains),
+			i.Controls.TotalCount)
 	}
 
 	writer.Render()

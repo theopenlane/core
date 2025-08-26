@@ -71,19 +71,3 @@ query GetIntegrations($first: Int, $last: Int, $where: IntegrationWhereInput) {
   }
 }
 
-mutation UpdateIntegration($updateIntegrationId: ID!, $input: UpdateIntegrationInput!) {
-  updateIntegration(id: $updateIntegrationId, input: $input) {
-    integration {
-      createdAt
-      createdBy
-      description
-      id
-      kind
-      name
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}

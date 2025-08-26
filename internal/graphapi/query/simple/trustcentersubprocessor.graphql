@@ -69,10 +69,17 @@ query GetAllTrustCenterSubprocessors {
         createdAt
         createdBy
         id
-        subprocessorID
         trustCenterID
         updatedAt
         updatedBy
+        subprocessor {
+          name
+          description
+          logoFile {
+            presignedURL
+          }
+          logoRemoteURL
+        }
       }
     }
   }
@@ -84,10 +91,17 @@ query GetTrustCenterSubprocessorByID($trustCenterSubprocessorId: ID!) {
     createdAt
     createdBy
     id
-    subprocessorID
     trustCenterID
     updatedAt
     updatedBy
+    subprocessor {
+      name
+      description
+      logoFile {
+        presignedURL
+      }
+      logoRemoteURL
+    }
   }
 }
 
@@ -107,10 +121,17 @@ query GetTrustCenterSubprocessors($first: Int, $last: Int, $where: TrustCenterSu
         createdAt
         createdBy
         id
-        subprocessorID
         trustCenterID
         updatedAt
         updatedBy
+        subprocessor {
+          name
+          description
+          logoFile {
+            presignedURL
+          }
+          logoRemoteURL
+        }
       }
     }
   }
@@ -123,10 +144,17 @@ mutation UpdateTrustCenterSubprocessor($updateTrustCenterSubprocessorId: ID!, $i
       createdAt
       createdBy
       id
-      subprocessorID
       trustCenterID
       updatedAt
       updatedBy
+      subprocessor {
+        name
+        description
+        logoFile {
+          presignedURL
+        }
+        logoRemoteURL
+      }
     }
   }
 }

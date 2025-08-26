@@ -54,7 +54,7 @@ func get(ctx context.Context) error {
 	includeCompleted := cmd.Config.Bool("include-completed")
 	if includeCompleted {
 		// get all will be filtered for the authorized organization(s)
-		o, err := client.GetAllTasks(ctx, nil, nil, nil, nil, nil)
+		o, err := client.GetAllTasks(ctx)
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)

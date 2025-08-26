@@ -58,6 +58,16 @@ mutation CreateGroup($input: CreateGroupInput!) {
       tags
       updatedAt
       updatedBy
+      setting {
+        id
+        joinPolicy
+        syncToGithub
+        syncToSlack
+        visibility
+      }
+      members {
+        totalCount
+      }
     }
   }
 }
@@ -93,6 +103,16 @@ query GetAllGroups {
         tags
         updatedAt
         updatedBy
+        setting {
+          id
+          joinPolicy
+          syncToGithub
+          syncToSlack
+          visibility
+        }
+        members {
+          totalCount
+        }
       }
     }
   }
@@ -113,6 +133,16 @@ query GetGroupByID($groupId: ID!) {
     tags
     updatedAt
     updatedBy
+    setting {
+      id
+      joinPolicy
+      syncToGithub
+      syncToSlack
+      visibility
+    }
+    members {
+      totalCount
+    }
   }
 }
 
@@ -141,6 +171,16 @@ query GetGroups($first: Int, $last: Int, $where: GroupWhereInput) {
         tags
         updatedAt
         updatedBy
+        setting {
+          id
+          joinPolicy
+          syncToGithub
+          syncToSlack
+          visibility
+        }
+        members {
+          totalCount
+        }
       }
     }
   }
@@ -162,6 +202,16 @@ mutation UpdateGroup($updateGroupId: ID!, $input: UpdateGroupInput!) {
       tags
       updatedAt
       updatedBy
+      setting {
+        id
+        joinPolicy
+        syncToGithub
+        syncToSlack
+        visibility
+      }
+      members {
+        totalCount
+      }
     }
   }
 }

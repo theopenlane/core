@@ -64,7 +64,7 @@ func create(ctx context.Context) error {
 	input, err := createValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.AddUserToOrgWithRole(ctx, input)
+	o, err := client.CreateOrgMembership(ctx, input)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

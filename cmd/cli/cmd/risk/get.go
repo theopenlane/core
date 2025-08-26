@@ -47,7 +47,7 @@ func get(ctx context.Context) error {
 	}
 
 	// get all will be filtered for the authorized organization(s)
-	o, err := client.GetAllRisks(ctx, nil, nil, nil, nil, nil)
+	o, err := client.GetAllRisks(ctx)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

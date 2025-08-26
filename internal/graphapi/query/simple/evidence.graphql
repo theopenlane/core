@@ -1,5 +1,5 @@
-mutation CreateEvidence($input: CreateEvidenceInput!) {
-  createEvidence(input: $input) {
+mutation CreateEvidence($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]) {
+  createEvidence(input: $input, evidenceFiles: $evidenceFiles) {
     evidence {
       collectionProcedure
       createdAt
@@ -114,8 +114,12 @@ query GetEvidences($first: Int, $last: Int, $where: EvidenceWhereInput) {
     }
   }
 }
-mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!) {
-  updateEvidence(id: $updateEvidenceId, input: $input) {
+mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $evidenceFiles: [Upload!]) {
+  updateEvidence(
+    id: $updateEvidenceId
+    input: $input
+    evidenceFiles: $evidenceFiles
+  ) {
     evidence {
       collectionProcedure
       createdAt

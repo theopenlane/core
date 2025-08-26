@@ -39,7 +39,7 @@ func get(ctx context.Context) error {
 	// filter options
 	id := cmd.Config.String("id")
 	if id != "" {
-		o, err := client.GetSubcontrolHistories(ctx, &openlaneclient.SubcontrolHistoryWhereInput{
+		o, err := client.GetSubcontrolHistories(ctx, cmd.First, cmd.Last, &openlaneclient.SubcontrolHistoryWhereInput{
 			Ref: &id,
 		})
 		cobra.CheckErr(err)
