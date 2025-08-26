@@ -492,10 +492,10 @@ type OpenlaneGraphClient interface {
 	CreateUser(ctx context.Context, input CreateUserInput, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error)
 	DeleteUser(ctx context.Context, deleteUserID string, interceptors ...clientv2.RequestInterceptor) (*DeleteUser, error)
 	GetAllUsers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsers, error)
+	GetSelf(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetSelf, error)
 	GetUserByID(ctx context.Context, userID string, interceptors ...clientv2.RequestInterceptor) (*GetUserByID, error)
 	GetUsers(ctx context.Context, first *int64, last *int64, where *UserWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetUsers, error)
 	UpdateUser(ctx context.Context, updateUserID string, input UpdateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateUser, error)
-	GetSelf(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetSelf, error)
 	GetAllUserHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUserHistories, error)
 	GetUserHistories(ctx context.Context, first *int64, last *int64, where *UserHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetUserHistories, error)
 	CreateUserSetting(ctx context.Context, input CreateUserSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateUserSetting, error)
@@ -68634,6 +68634,212 @@ func (t *GetAllUsers_Users) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GetSelf_Self_Setting_DefaultOrg struct {
+	ID          string "json:\"id\" graphql:\"id\""
+	Name        string "json:\"name\" graphql:\"name\""
+	PersonalOrg *bool  "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
+}
+
+func (t *GetSelf_Self_Setting_DefaultOrg) GetID() string {
+	if t == nil {
+		t = &GetSelf_Self_Setting_DefaultOrg{}
+	}
+	return t.ID
+}
+func (t *GetSelf_Self_Setting_DefaultOrg) GetName() string {
+	if t == nil {
+		t = &GetSelf_Self_Setting_DefaultOrg{}
+	}
+	return t.Name
+}
+func (t *GetSelf_Self_Setting_DefaultOrg) GetPersonalOrg() *bool {
+	if t == nil {
+		t = &GetSelf_Self_Setting_DefaultOrg{}
+	}
+	return t.PersonalOrg
+}
+
+type GetSelf_Self_Setting struct {
+	DefaultOrg     *GetSelf_Self_Setting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
+	EmailConfirmed bool                             "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
+	Locked         bool                             "json:\"locked\" graphql:\"locked\""
+	SilencedAt     *time.Time                       "json:\"silencedAt,omitempty\" graphql:\"silencedAt\""
+	Status         enums.UserStatus                 "json:\"status\" graphql:\"status\""
+	SuspendedAt    *time.Time                       "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
+	Tags           []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GetSelf_Self_Setting) GetDefaultOrg() *GetSelf_Self_Setting_DefaultOrg {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.DefaultOrg
+}
+func (t *GetSelf_Self_Setting) GetEmailConfirmed() bool {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.EmailConfirmed
+}
+func (t *GetSelf_Self_Setting) GetLocked() bool {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.Locked
+}
+func (t *GetSelf_Self_Setting) GetSilencedAt() *time.Time {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.SilencedAt
+}
+func (t *GetSelf_Self_Setting) GetStatus() *enums.UserStatus {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return &t.Status
+}
+func (t *GetSelf_Self_Setting) GetSuspendedAt() *time.Time {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.SuspendedAt
+}
+func (t *GetSelf_Self_Setting) GetTags() []string {
+	if t == nil {
+		t = &GetSelf_Self_Setting{}
+	}
+	return t.Tags
+}
+
+type GetSelf_Self_TfaSettings_Edges_Node struct {
+	TotpAllowed *bool "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
+	Verified    bool  "json:\"verified\" graphql:\"verified\""
+}
+
+func (t *GetSelf_Self_TfaSettings_Edges_Node) GetTotpAllowed() *bool {
+	if t == nil {
+		t = &GetSelf_Self_TfaSettings_Edges_Node{}
+	}
+	return t.TotpAllowed
+}
+func (t *GetSelf_Self_TfaSettings_Edges_Node) GetVerified() bool {
+	if t == nil {
+		t = &GetSelf_Self_TfaSettings_Edges_Node{}
+	}
+	return t.Verified
+}
+
+type GetSelf_Self_TfaSettings_Edges struct {
+	Node *GetSelf_Self_TfaSettings_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetSelf_Self_TfaSettings_Edges) GetNode() *GetSelf_Self_TfaSettings_Edges_Node {
+	if t == nil {
+		t = &GetSelf_Self_TfaSettings_Edges{}
+	}
+	return t.Node
+}
+
+type GetSelf_Self_TfaSettings struct {
+	Edges []*GetSelf_Self_TfaSettings_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetSelf_Self_TfaSettings) GetEdges() []*GetSelf_Self_TfaSettings_Edges {
+	if t == nil {
+		t = &GetSelf_Self_TfaSettings{}
+	}
+	return t.Edges
+}
+
+type GetSelf_Self struct {
+	AuthProvider enums.AuthProvider       "json:\"authProvider\" graphql:\"authProvider\""
+	DisplayID    string                   "json:\"displayID\" graphql:\"displayID\""
+	DisplayName  string                   "json:\"displayName\" graphql:\"displayName\""
+	Email        string                   "json:\"email\" graphql:\"email\""
+	FirstName    *string                  "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID           string                   "json:\"id\" graphql:\"id\""
+	LastName     *string                  "json:\"lastName,omitempty\" graphql:\"lastName\""
+	LastSeen     *time.Time               "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
+	Setting      GetSelf_Self_Setting     "json:\"setting\" graphql:\"setting\""
+	Sub          *string                  "json:\"sub,omitempty\" graphql:\"sub\""
+	Tags         []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TfaSettings  GetSelf_Self_TfaSettings "json:\"tfaSettings\" graphql:\"tfaSettings\""
+}
+
+func (t *GetSelf_Self) GetAuthProvider() *enums.AuthProvider {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return &t.AuthProvider
+}
+func (t *GetSelf_Self) GetDisplayID() string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.DisplayID
+}
+func (t *GetSelf_Self) GetDisplayName() string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.DisplayName
+}
+func (t *GetSelf_Self) GetEmail() string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.Email
+}
+func (t *GetSelf_Self) GetFirstName() *string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.FirstName
+}
+func (t *GetSelf_Self) GetID() string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.ID
+}
+func (t *GetSelf_Self) GetLastName() *string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.LastName
+}
+func (t *GetSelf_Self) GetLastSeen() *time.Time {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.LastSeen
+}
+func (t *GetSelf_Self) GetSetting() *GetSelf_Self_Setting {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return &t.Setting
+}
+func (t *GetSelf_Self) GetSub() *string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.Sub
+}
+func (t *GetSelf_Self) GetTags() []string {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return t.Tags
+}
+func (t *GetSelf_Self) GetTfaSettings() *GetSelf_Self_TfaSettings {
+	if t == nil {
+		t = &GetSelf_Self{}
+	}
+	return &t.TfaSettings
+}
+
 type GetUserByID_User struct {
 	AuthProvider      enums.AuthProvider  "json:\"authProvider\" graphql:\"authProvider\""
 	AvatarLocalFileID *string             "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
@@ -69122,212 +69328,6 @@ func (t *UpdateUser_UpdateUser) GetUser() *UpdateUser_UpdateUser_User {
 		t = &UpdateUser_UpdateUser{}
 	}
 	return &t.User
-}
-
-type GetSelf_Self_Setting_DefaultOrg struct {
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-	PersonalOrg *bool  "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
-}
-
-func (t *GetSelf_Self_Setting_DefaultOrg) GetID() string {
-	if t == nil {
-		t = &GetSelf_Self_Setting_DefaultOrg{}
-	}
-	return t.ID
-}
-func (t *GetSelf_Self_Setting_DefaultOrg) GetName() string {
-	if t == nil {
-		t = &GetSelf_Self_Setting_DefaultOrg{}
-	}
-	return t.Name
-}
-func (t *GetSelf_Self_Setting_DefaultOrg) GetPersonalOrg() *bool {
-	if t == nil {
-		t = &GetSelf_Self_Setting_DefaultOrg{}
-	}
-	return t.PersonalOrg
-}
-
-type GetSelf_Self_Setting struct {
-	DefaultOrg     *GetSelf_Self_Setting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
-	EmailConfirmed bool                             "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
-	Locked         bool                             "json:\"locked\" graphql:\"locked\""
-	SilencedAt     *time.Time                       "json:\"silencedAt,omitempty\" graphql:\"silencedAt\""
-	Status         enums.UserStatus                 "json:\"status\" graphql:\"status\""
-	SuspendedAt    *time.Time                       "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
-	Tags           []string                         "json:\"tags,omitempty\" graphql:\"tags\""
-}
-
-func (t *GetSelf_Self_Setting) GetDefaultOrg() *GetSelf_Self_Setting_DefaultOrg {
-	if t == nil {
-		t = &GetSelf_Self_Setting{}
-	}
-	return t.DefaultOrg
-}
-func (t *GetSelf_Self_Setting) GetEmailConfirmed() bool {
-	if t == nil {
-		t = &GetSelf_Self_Setting{}
-	}
-	return t.EmailConfirmed
-}
-func (t *GetSelf_Self_Setting) GetLocked() bool {
-	if t == nil {
-		t = &GetSelf_Self_Setting{}
-	}
-	return t.Locked
-}
-func (t *GetSelf_Self_Setting) GetSilencedAt() *time.Time {
-	if t == nil {
-		t = &GetSelf_Self_Setting{}
-	}
-	return t.SilencedAt
-}
-func (t *GetSelf_Self_Setting) GetStatus() *enums.UserStatus {
-	if t == nil {
-		t = &GetSelf_Self_Setting{}
-	}
-	return &t.Status
-}
-func (t *GetSelf_Self_Setting) GetSuspendedAt() *time.Time {
-	if t == nil {
-		t = &GetSelf_Self_Setting{}
-	}
-	return t.SuspendedAt
-}
-func (t *GetSelf_Self_Setting) GetTags() []string {
-	if t == nil {
-		t = &GetSelf_Self_Setting{}
-	}
-	return t.Tags
-}
-
-type GetSelf_Self_TfaSettings_Edges_Node struct {
-	TotpAllowed *bool "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
-	Verified    bool  "json:\"verified\" graphql:\"verified\""
-}
-
-func (t *GetSelf_Self_TfaSettings_Edges_Node) GetTotpAllowed() *bool {
-	if t == nil {
-		t = &GetSelf_Self_TfaSettings_Edges_Node{}
-	}
-	return t.TotpAllowed
-}
-func (t *GetSelf_Self_TfaSettings_Edges_Node) GetVerified() bool {
-	if t == nil {
-		t = &GetSelf_Self_TfaSettings_Edges_Node{}
-	}
-	return t.Verified
-}
-
-type GetSelf_Self_TfaSettings_Edges struct {
-	Node *GetSelf_Self_TfaSettings_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetSelf_Self_TfaSettings_Edges) GetNode() *GetSelf_Self_TfaSettings_Edges_Node {
-	if t == nil {
-		t = &GetSelf_Self_TfaSettings_Edges{}
-	}
-	return t.Node
-}
-
-type GetSelf_Self_TfaSettings struct {
-	Edges []*GetSelf_Self_TfaSettings_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetSelf_Self_TfaSettings) GetEdges() []*GetSelf_Self_TfaSettings_Edges {
-	if t == nil {
-		t = &GetSelf_Self_TfaSettings{}
-	}
-	return t.Edges
-}
-
-type GetSelf_Self struct {
-	AuthProvider enums.AuthProvider       "json:\"authProvider\" graphql:\"authProvider\""
-	DisplayID    string                   "json:\"displayID\" graphql:\"displayID\""
-	DisplayName  string                   "json:\"displayName\" graphql:\"displayName\""
-	Email        string                   "json:\"email\" graphql:\"email\""
-	FirstName    *string                  "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID           string                   "json:\"id\" graphql:\"id\""
-	LastName     *string                  "json:\"lastName,omitempty\" graphql:\"lastName\""
-	LastSeen     *time.Time               "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
-	Setting      GetSelf_Self_Setting     "json:\"setting\" graphql:\"setting\""
-	Sub          *string                  "json:\"sub,omitempty\" graphql:\"sub\""
-	Tags         []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TfaSettings  GetSelf_Self_TfaSettings "json:\"tfaSettings\" graphql:\"tfaSettings\""
-}
-
-func (t *GetSelf_Self) GetAuthProvider() *enums.AuthProvider {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return &t.AuthProvider
-}
-func (t *GetSelf_Self) GetDisplayID() string {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return t.DisplayID
-}
-func (t *GetSelf_Self) GetDisplayName() string {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return t.DisplayName
-}
-func (t *GetSelf_Self) GetEmail() string {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return t.Email
-}
-func (t *GetSelf_Self) GetFirstName() *string {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return t.FirstName
-}
-func (t *GetSelf_Self) GetID() string {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return t.ID
-}
-func (t *GetSelf_Self) GetLastName() *string {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return t.LastName
-}
-func (t *GetSelf_Self) GetLastSeen() *time.Time {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return t.LastSeen
-}
-func (t *GetSelf_Self) GetSetting() *GetSelf_Self_Setting {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return &t.Setting
-}
-func (t *GetSelf_Self) GetSub() *string {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return t.Sub
-}
-func (t *GetSelf_Self) GetTags() []string {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return t.Tags
-}
-func (t *GetSelf_Self) GetTfaSettings() *GetSelf_Self_TfaSettings {
-	if t == nil {
-		t = &GetSelf_Self{}
-	}
-	return &t.TfaSettings
 }
 
 type GetAllUserHistories_UserHistories_PageInfo struct {
@@ -76229,6 +76229,17 @@ func (t *GetAllUsers) GetUsers() *GetAllUsers_Users {
 	return &t.Users
 }
 
+type GetSelf struct {
+	Self GetSelf_Self "json:\"self\" graphql:\"self\""
+}
+
+func (t *GetSelf) GetSelf() *GetSelf_Self {
+	if t == nil {
+		t = &GetSelf{}
+	}
+	return &t.Self
+}
+
 type GetUserByID struct {
 	User GetUserByID_User "json:\"user\" graphql:\"user\""
 }
@@ -76260,17 +76271,6 @@ func (t *UpdateUser) GetUpdateUser() *UpdateUser_UpdateUser {
 		t = &UpdateUser{}
 	}
 	return &t.UpdateUser
-}
-
-type GetSelf struct {
-	Self GetSelf_Self "json:\"self\" graphql:\"self\""
-}
-
-func (t *GetSelf) GetSelf() *GetSelf_Self {
-	if t == nil {
-		t = &GetSelf{}
-	}
-	return &t.Self
 }
 
 type GetAllUserHistories struct {
@@ -97342,6 +97342,58 @@ func (c *Client) GetAllUsers(ctx context.Context, interceptors ...clientv2.Reque
 	return &res, nil
 }
 
+const GetSelfDocument = `query GetSelf {
+	self {
+		authProvider
+		displayID
+		displayName
+		email
+		firstName
+		id
+		lastName
+		lastSeen
+		sub
+		tags
+		setting {
+			defaultOrg {
+				id
+				name
+				personalOrg
+			}
+			emailConfirmed
+			locked
+			silencedAt
+			status
+			suspendedAt
+			tags
+		}
+		tfaSettings {
+			edges {
+				node {
+					totpAllowed
+					verified
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetSelf(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetSelf, error) {
+	vars := map[string]any{}
+
+	var res GetSelf
+	if err := c.Client.Post(ctx, "GetSelf", GetSelfDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetUserByIDDocument = `query GetUserByID ($userId: ID!) {
 	user(id: $userId) {
 		authProvider
@@ -97475,58 +97527,6 @@ func (c *Client) UpdateUser(ctx context.Context, updateUserID string, input Upda
 
 	var res UpdateUser
 	if err := c.Client.Post(ctx, "UpdateUser", UpdateUserDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetSelfDocument = `query GetSelf {
-	self {
-		authProvider
-		displayID
-		displayName
-		email
-		firstName
-		id
-		lastName
-		lastSeen
-		sub
-		tags
-		setting {
-			defaultOrg {
-				id
-				name
-				personalOrg
-			}
-			emailConfirmed
-			locked
-			silencedAt
-			status
-			suspendedAt
-			tags
-		}
-		tfaSettings {
-			edges {
-				node {
-					totpAllowed
-					verified
-				}
-			}
-		}
-	}
-}
-`
-
-func (c *Client) GetSelf(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetSelf, error) {
-	vars := map[string]any{}
-
-	var res GetSelf
-	if err := c.Client.Post(ctx, "GetSelf", GetSelfDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -98506,10 +98506,10 @@ var DocumentOperationNames = map[string]string{
 	CreateUserDocument:                             "CreateUser",
 	DeleteUserDocument:                             "DeleteUser",
 	GetAllUsersDocument:                            "GetAllUsers",
+	GetSelfDocument:                                "GetSelf",
 	GetUserByIDDocument:                            "GetUserByID",
 	GetUsersDocument:                               "GetUsers",
 	UpdateUserDocument:                             "UpdateUser",
-	GetSelfDocument:                                "GetSelf",
 	GetAllUserHistoriesDocument:                    "GetAllUserHistories",
 	GetUserHistoriesDocument:                       "GetUserHistories",
 	CreateUserSettingDocument:                      "CreateUserSetting",
