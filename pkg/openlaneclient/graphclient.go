@@ -469,6 +469,7 @@ type OpenlaneGraphClient interface {
 	UpdateTrustCenterCompliance(ctx context.Context, updateTrustCenterComplianceID string, input UpdateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterCompliance, error)
 	GetAllTrustCenterComplianceHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterComplianceHistories, error)
 	GetTrustCenterComplianceHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterComplianceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterComplianceHistories, error)
+	CreateTrustCenterDomain(ctx context.Context, input CreateTrustCenterDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDomain, error)
 	GetAllTrustCenterHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterHistories, error)
 	GetTrustCenterHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterHistories, error)
 	CreateTrustCenterSetting(ctx context.Context, input CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSetting, error)
@@ -68531,6 +68532,130 @@ func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories) GetTo
 	return t.TotalCount
 }
 
+type CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification struct {
+	DNSTxtRecord          string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue           string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	ID                    string                      "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification) GetDNSTxtValue() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification{}
+	}
+	return t.DNSTxtValue
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification{}
+	}
+	return &t.DNSVerificationStatus
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification{}
+	}
+	return t.ID
+}
+
+type CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain struct {
+	CnameRecord       string                                                                        "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt         *time.Time                                                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                                                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSVerification   *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification "json:\"dnsVerification,omitempty\" graphql:\"dnsVerification\""
+	DNSVerificationID *string                                                                       "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	ID                string                                                                        "json:\"id\" graphql:\"id\""
+	MappableDomainID  string                                                                        "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID           *string                                                                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string                                                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time                                                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                                                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetCnameRecord() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.CnameRecord
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetDNSVerification() *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.DNSVerification
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.DNSVerificationID
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetMappableDomainID() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.MappableDomainID
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.OwnerID
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetTags() []string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.Tags
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTrustCenterDomain_CreateTrustCenterDomain struct {
+	CustomDomain CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain "json:\"customDomain\" graphql:\"customDomain\""
+}
+
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain) GetCustomDomain() *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain{}
+	}
+	return &t.CustomDomain
+}
+
 type GetAllTrustCenterHistories_TrustCenterHistories_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -78948,6 +79073,17 @@ func (t *GetTrustCenterComplianceHistories) GetTrustCenterComplianceHistories() 
 		t = &GetTrustCenterComplianceHistories{}
 	}
 	return &t.TrustCenterComplianceHistories
+}
+
+type CreateTrustCenterDomain struct {
+	CreateTrustCenterDomain CreateTrustCenterDomain_CreateTrustCenterDomain "json:\"createTrustCenterDomain\" graphql:\"createTrustCenterDomain\""
+}
+
+func (t *CreateTrustCenterDomain) GetCreateTrustCenterDomain() *CreateTrustCenterDomain_CreateTrustCenterDomain {
+	if t == nil {
+		t = &CreateTrustCenterDomain{}
+	}
+	return &t.CreateTrustCenterDomain
 }
 
 type GetAllTrustCenterHistories struct {
@@ -99848,6 +99984,47 @@ func (c *Client) GetTrustCenterComplianceHistories(ctx context.Context, first *i
 	return &res, nil
 }
 
+const CreateTrustCenterDomainDocument = `mutation CreateTrustCenterDomain ($input: CreateTrustCenterDomainInput!) {
+	createTrustCenterDomain(input: $input) {
+		customDomain {
+			cnameRecord
+			createdAt
+			createdBy
+			dnsVerificationID
+			dnsVerification {
+				id
+				dnsTxtRecord
+				dnsTxtValue
+				dnsVerificationStatus
+			}
+			id
+			mappableDomainID
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterDomain(ctx context.Context, input CreateTrustCenterDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDomain, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTrustCenterDomain
+	if err := c.Client.Post(ctx, "CreateTrustCenterDomain", CreateTrustCenterDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetAllTrustCenterHistoriesDocument = `query GetAllTrustCenterHistories {
 	trustCenterHistories {
 		totalCount
@@ -101967,6 +102144,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateTrustCenterComplianceDocument:            "UpdateTrustCenterCompliance",
 	GetAllTrustCenterComplianceHistoriesDocument:   "GetAllTrustCenterComplianceHistories",
 	GetTrustCenterComplianceHistoriesDocument:      "GetTrustCenterComplianceHistories",
+	CreateTrustCenterDomainDocument:                "CreateTrustCenterDomain",
 	GetAllTrustCenterHistoriesDocument:             "GetAllTrustCenterHistories",
 	GetTrustCenterHistoriesDocument:                "GetTrustCenterHistories",
 	CreateTrustCenterSettingDocument:               "CreateTrustCenterSetting",

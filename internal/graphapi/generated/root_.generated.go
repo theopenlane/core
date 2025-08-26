@@ -2472,6 +2472,7 @@ type ComplexityRoot struct {
 		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput) int
 		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
+		CreateTrustCenterDomain              func(childComplexity int, input model.CreateTrustCenterDomainInput) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
 		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
@@ -4707,6 +4708,10 @@ type ComplexityRoot struct {
 
 	TrustCenterDeletePayload struct {
 		DeletedID func(childComplexity int) int
+	}
+
+	TrustCenterDomainCreatePayload struct {
+		CustomDomain func(childComplexity int) int
 	}
 
 	TrustCenterEdge struct {
@@ -17392,6 +17397,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateTrustCenterCompliance(childComplexity, args["input"].(generated.CreateTrustCenterComplianceInput)), true
+
+	case "Mutation.createTrustCenterDomain":
+		if e.complexity.Mutation.CreateTrustCenterDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTrustCenterDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTrustCenterDomain(childComplexity, args["input"].(model.CreateTrustCenterDomainInput)), true
 
 	case "Mutation.createTrustCenterSetting":
 		if e.complexity.Mutation.CreateTrustCenterSetting == nil {
@@ -31263,6 +31280,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDeletePayload.DeletedID(childComplexity), true
 
+	case "TrustCenterDomainCreatePayload.customDomain":
+		if e.complexity.TrustCenterDomainCreatePayload.CustomDomain == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDomainCreatePayload.CustomDomain(childComplexity), true
+
 	case "TrustCenterEdge.cursor":
 		if e.complexity.TrustCenterEdge.Cursor == nil {
 			break
@@ -33185,6 +33209,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateTaskInput,
 		ec.unmarshalInputCreateTemplateInput,
 		ec.unmarshalInputCreateTrustCenterComplianceInput,
+		ec.unmarshalInputCreateTrustCenterDomainInput,
 		ec.unmarshalInputCreateTrustCenterInput,
 		ec.unmarshalInputCreateTrustCenterSettingInput,
 		ec.unmarshalInputCreateTrustCenterSubprocessorInput,
@@ -95130,6 +95155,38 @@ type TrustCenterComplianceBulkCreatePayload {
     Created trustCenterCompliances
     """
     trustCenterCompliances: [TrustCenterCompliance!]
+}`, BuiltIn: false},
+	{Name: "../schema/trustcenterdomain.graphql", Input: `extend type Mutation{
+    """
+    Create a new trustCenterSetting
+    """
+    createTrustCenterDomain(
+        """
+        values of the trustCenterDomain
+        """
+        input: CreateTrustCenterDomainInput!
+    ): TrustCenterDomainCreatePayload!
+}
+
+"""
+Return response for createTrustCenterDomain mutation
+"""
+type TrustCenterDomainCreatePayload {
+    customDomain: CustomDomain!
+}
+
+"""
+Input for createTrustCenterDomain mutation
+"""
+input CreateTrustCenterDomainInput {
+	"""
+	the name of the custom domain
+	"""
+	cnameRecord: String!
+    """
+    trust center ID
+    """
+    trustCenterID: ID!
 }`, BuiltIn: false},
 	{Name: "../schema/trustcenterextended.graphql", Input: `extend input UpdateTrustCenterInput {
   updateTrustCenterSetting: UpdateTrustCenterSettingInput

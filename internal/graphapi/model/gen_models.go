@@ -293,6 +293,14 @@ type CreateProgramWithMembersInput struct {
 	StandardID *string                         `json:"standardID,omitempty"`
 }
 
+// Input for createTrustCenterDomain mutation
+type CreateTrustCenterDomainInput struct {
+	// the name of the custom domain
+	CnameRecord string `json:"cnameRecord"`
+	// trust center ID
+	TrustCenterID string `json:"trustCenterID"`
+}
+
 // Return response for createBulkCustomDomain mutation
 type CustomDomainBulkCreatePayload struct {
 	// Created customDomains
@@ -1490,6 +1498,11 @@ type TrustCenterCreatePayload struct {
 type TrustCenterDeletePayload struct {
 	// Deleted trustCenter ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createTrustCenterDomain mutation
+type TrustCenterDomainCreatePayload struct {
+	CustomDomain *generated.CustomDomain `json:"customDomain"`
 }
 
 // Return response for createBulkTrustCenterSetting mutation
