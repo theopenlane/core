@@ -85,7 +85,7 @@ func get(ctx context.Context) error {
 		PersonalOrg: &includePersonalOrgs,
 	}
 
-	o, err := client.GetOrganizations(ctx, where)
+	o, err := client.GetOrganizations(ctx, cmd.First, cmd.Last, where)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

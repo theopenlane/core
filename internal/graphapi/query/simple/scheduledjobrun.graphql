@@ -1,40 +1,3 @@
-
-mutation CreateBulkCSVScheduledJobRun($input: Upload!) {
-  createBulkCSVScheduledJobRun(input: $input) {
-    scheduledJobRuns {
-      createdAt
-      createdBy
-      expectedExecutionTime
-      id
-      jobRunnerID
-      ownerID
-      scheduledJobID
-      script
-      status
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkScheduledJobRun($input: [CreateScheduledJobRunInput!]) {
-  createBulkScheduledJobRun(input: $input) {
-    scheduledJobRuns {
-      createdAt
-      createdBy
-      expectedExecutionTime
-      id
-      jobRunnerID
-      ownerID
-      scheduledJobID
-      script
-      status
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
 mutation CreateScheduledJobRun($input: CreateScheduledJobRunInput!) {
   createScheduledJobRun(input: $input) {
     scheduledJobRun {
@@ -85,6 +48,7 @@ query GetAllScheduledJobRuns {
     }
   }
 }
+
 query GetScheduledJobRunByID($scheduledJobRunId: ID!) {
   scheduledJobRun(id: $scheduledJobRunId) {
     createdAt
@@ -127,6 +91,7 @@ query GetScheduledJobRuns($first: Int, $last: Int, $where: ScheduledJobRunWhereI
     }
   }
 }
+
 mutation UpdateScheduledJobRun($updateScheduledJobRunId: ID!, $input: UpdateScheduledJobRunInput!) {
   updateScheduledJobRun(id: $updateScheduledJobRunId, input: $input) {
     scheduledJobRun {

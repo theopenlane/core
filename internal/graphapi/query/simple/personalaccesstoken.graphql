@@ -1,52 +1,3 @@
-
-mutation CreateBulkCSVPersonalAccessToken($input: Upload!) {
-  createBulkCSVPersonalAccessToken(input: $input) {
-    personalAccessTokens {
-      createdAt
-      createdBy
-      description
-      expiresAt
-      id
-      isActive
-      lastUsedAt
-      name
-      revokedAt
-      revokedBy
-      revokedReason
-      sSOAuthorizations
-      scopes
-      tags
-      token
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkPersonalAccessToken($input: [CreatePersonalAccessTokenInput!]) {
-  createBulkPersonalAccessToken(input: $input) {
-    personalAccessTokens {
-      createdAt
-      createdBy
-      description
-      expiresAt
-      id
-      isActive
-      lastUsedAt
-      name
-      revokedAt
-      revokedBy
-      revokedReason
-      sSOAuthorizations
-      scopes
-      tags
-      token
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
 mutation CreatePersonalAccessToken($input: CreatePersonalAccessTokenInput!) {
   createPersonalAccessToken(input: $input) {
     personalAccessToken {
@@ -61,12 +12,21 @@ mutation CreatePersonalAccessToken($input: CreatePersonalAccessTokenInput!) {
       revokedAt
       revokedBy
       revokedReason
-      sSOAuthorizations
+      ssoAuthorizations
       scopes
       tags
       token
       updatedAt
       updatedBy
+      organizations {
+        edges {
+          node {
+            id
+            name
+            displayName
+          }
+        }
+      }
     }
   }
 }
@@ -99,12 +59,21 @@ query GetAllPersonalAccessTokens {
         revokedAt
         revokedBy
         revokedReason
-        sSOAuthorizations
+        ssoAuthorizations
         scopes
         tags
         token
         updatedAt
         updatedBy
+        organizations {
+          edges {
+            node {
+              id
+              name
+              displayName
+            }
+          }
+        }
       }
     }
   }
@@ -122,12 +91,21 @@ query GetPersonalAccessTokenByID($personalAccessTokenId: ID!) {
     revokedAt
     revokedBy
     revokedReason
-    sSOAuthorizations
+    ssoAuthorizations
     scopes
     tags
     token
     updatedAt
     updatedBy
+    organizations {
+      edges {
+        node {
+          id
+          name
+          displayName
+        }
+      }
+    }
   }
 }
 
@@ -153,12 +131,21 @@ query GetPersonalAccessTokens($first: Int, $last: Int, $where: PersonalAccessTok
         revokedAt
         revokedBy
         revokedReason
-        sSOAuthorizations
+        ssoAuthorizations
         scopes
         tags
         token
         updatedAt
         updatedBy
+        organizations {
+          edges {
+            node {
+              id
+              name
+              displayName
+            }
+          }
+        }
       }
     }
   }
@@ -177,12 +164,21 @@ mutation UpdatePersonalAccessToken($updatePersonalAccessTokenId: ID!, $input: Up
       revokedAt
       revokedBy
       revokedReason
-      sSOAuthorizations
+      ssoAuthorizations
       scopes
       tags
       token
       updatedAt
       updatedBy
+      organizations {
+        edges {
+          node {
+            id
+            name
+            displayName
+          }
+        }
+      }
     }
   }
 }

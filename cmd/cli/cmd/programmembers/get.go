@@ -40,14 +40,16 @@ func get(ctx context.Context) error {
 	// filter options
 	id := cmd.Config.String("program-id")
 	if id == "" {
-		return cmd.NewRequiredFieldMissingError("program id")
+		o, err := client.GetAllProgramMemberships(ctx)
+		cobra.CheckErr(err)
+		return consoleOutput(o)
 	}
 
 	where := openlaneclient.ProgramMembershipWhereInput{
 		ProgramID: &id,
 	}
 
-	o, err := client.GetProgramMembersByProgramID(ctx, &where)
+	o, err := client.GetProgramMemberships(ctx, cmd.First, cmd.Last, &where)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

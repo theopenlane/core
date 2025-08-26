@@ -54,7 +54,7 @@ func get(ctx context.Context) error {
 
 	// if a ref code is provided, filter on that control
 	if refCode != "" {
-		o, err := client.GetSubcontrols(ctx, &openlaneclient.SubcontrolWhereInput{
+		o, err := client.GetSubcontrols(ctx, cmd.First, cmd.Last, &openlaneclient.SubcontrolWhereInput{
 			RefCode: &refCode,
 		})
 		cobra.CheckErr(err)
@@ -64,7 +64,7 @@ func get(ctx context.Context) error {
 
 	// if a control ID is provided, filter on that control
 	if controlID != "" {
-		o, err := client.GetSubcontrols(ctx, &openlaneclient.SubcontrolWhereInput{
+		o, err := client.GetSubcontrols(ctx, cmd.First, cmd.Last, &openlaneclient.SubcontrolWhereInput{
 			ControlID: &controlID,
 		})
 		cobra.CheckErr(err)
@@ -78,7 +78,7 @@ func get(ctx context.Context) error {
 			RefCode: &controlRefCode,
 		}
 
-		o, err := client.GetSubcontrols(ctx, &openlaneclient.SubcontrolWhereInput{
+		o, err := client.GetSubcontrols(ctx, cmd.First, cmd.Last, &openlaneclient.SubcontrolWhereInput{
 			HasControlWith: []*openlaneclient.ControlWhereInput{where},
 		})
 		cobra.CheckErr(err)

@@ -5,7 +5,6 @@ package evidence
 import (
 	"encoding/json"
 	"strings"
-	"time"
 
 	"github.com/spf13/cobra"
 
@@ -90,22 +89,20 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.Evidence) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Name", "Description", "CollectionProcedure", "Source", "IsAutomated", "URL", "NumOfFiles", "Programs", "CreatedAt", "UpdatedAt")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Name", "Description", "CollectionProcedure", "Source", "IsAutomated", "URL", "NumOfFiles", "Controls", "CreatedAt", "UpdatedAt")
 	for _, i := range out {
-		prgs := i.Programs.Edges
-
-		progNames := make([]string, 0, len(prgs))
-
-		// add programs with either no end date or end date before the current date
-		for _, p := range prgs {
-			if p.Node.EndDate == nil {
-				progNames = append(progNames, p.Node.Name)
-			} else if p.Node.EndDate.Before(time.Now()) {
-				progNames = append(progNames, p.Node.Name)
-			}
+		files := 0
+		if i.Files != nil {
+			files = len(i.Files.Edges)
 		}
 
-		writer.AddRow(i.ID, i.DisplayID, i.Name, *i.Description, *i.CollectionProcedure, *i.Source, *i.IsAutomated, *i.URL, len(i.Files.Edges), strings.Join(progNames, ","), i.CreatedAt, i.UpdatedAt)
+		controls := []string{}
+		if i.Controls != nil {
+			for _, c := range i.Controls.Edges {
+				controls = append(controls, c.Node.RefCode)
+			}
+		}
+		writer.AddRow(i.ID, i.DisplayID, i.Name, *i.Description, *i.CollectionProcedure, *i.Source, *i.IsAutomated, *i.URL, files, strings.Join(controls, ", "), i.CreatedAt, i.UpdatedAt)
 	}
 
 	writer.Render()

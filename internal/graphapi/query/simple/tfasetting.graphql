@@ -1,54 +1,16 @@
-
-mutation CreateBulkCSVTFASetting($input: Upload!) {
-  createBulkCSVTFASetting(input: $input) {
-    tFASettings {
-      createdAt
-      createdBy
-      id
-      totpAllowed
-      updatedAt
-      updatedBy
-      verified
-    }
-  }
-}
-
-mutation CreateBulkTFASetting($input: [CreateTFASettingInput!]) {
-  createBulkTFASetting(input: $input) {
-    tFASettings {
-      createdAt
-      createdBy
-      id
-      totpAllowed
-      updatedAt
-      updatedBy
-      verified
-    }
-  }
-}
-
 mutation CreateTFASetting($input: CreateTFASettingInput!) {
   createTFASetting(input: $input) {
-    tFASetting {
-      createdAt
-      createdBy
-      id
+    tfaSetting {
       totpAllowed
-      updatedAt
-      updatedBy
       verified
     }
-  }
-}
-
-mutation DeleteTFASetting($deleteTFASettingId: ID!) {
-  deleteTFASetting(id: $deleteTFASettingId) {
-    deletedID
+    qrCode
+    tfaSecret
   }
 }
 
 query GetAllTFASettings {
-  tFASettings {
+  tfaSettings {
     totalCount
     pageInfo {
       startCursor
@@ -69,8 +31,9 @@ query GetAllTFASettings {
     }
   }
 }
+
 query GetTFASettingByID($tFASettingId: ID!) {
-  tFASetting(id: $tFASettingId) {
+  tfaSetting(id: $tFASettingId) {
     createdAt
     createdBy
     id
@@ -82,7 +45,7 @@ query GetTFASettingByID($tFASettingId: ID!) {
 }
 
 query GetTFASettings($first: Int, $last: Int, $where: TFASettingWhereInput) {
-  tFASettings(first: $first, last: $last, where: $where) {
+  tfaSettings(first: $first, last: $last, where: $where) {
     totalCount
     pageInfo {
       startCursor
@@ -103,16 +66,15 @@ query GetTFASettings($first: Int, $last: Int, $where: TFASettingWhereInput) {
     }
   }
 }
-mutation UpdateTFASetting($updateTFASettingId: ID!, $input: UpdateTFASettingInput!) {
-  updateTFASetting(id: $updateTFASettingId, input: $input) {
-    tFASetting {
-      createdAt
-      createdBy
-      id
+
+mutation UpdateTFASetting($input: UpdateTFASettingInput!) {
+  updateTFASetting(input: $input) {
+    tfaSetting {
       totpAllowed
-      updatedAt
-      updatedBy
       verified
     }
+    qrCode
+    tfaSecret
+    recoveryCodes
   }
 }

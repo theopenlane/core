@@ -33,19 +33,19 @@ func consoleOutput(e any) error {
 
 	// check the type of the output and print them in a table format
 	switch v := e.(type) {
-	case *openlaneclient.GetOrgMembersByOrgID:
-		var nodes []*openlaneclient.GetOrgMembersByOrgID_OrgMemberships_Edges_Node
+	case *openlaneclient.GetOrgMemberships:
+		var nodes []*openlaneclient.GetOrgMemberships_OrgMemberships_Edges_Node
 
 		for _, i := range v.OrgMemberships.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *openlaneclient.AddUserToOrgWithRole:
+	case *openlaneclient.CreateOrgMembership:
 		e = v.CreateOrgMembership.OrgMembership
-	case *openlaneclient.UpdateUserRoleInOrg:
+	case *openlaneclient.UpdateOrgMembership:
 		e = v.UpdateOrgMembership.OrgMembership
-	case *openlaneclient.RemoveUserFromOrg:
+	case *openlaneclient.DeleteOrgMembership:
 		deletedTableOutput(v)
 		return nil
 	}
@@ -108,7 +108,7 @@ func tableOutput(out []openlaneclient.OrgMembership) {
 }
 
 // deleteTableOutput prints the deleted id in a table format
-func deletedTableOutput(e *openlaneclient.RemoveUserFromOrg) {
+func deletedTableOutput(e *openlaneclient.DeleteOrgMembership) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "DeletedID")
 
 	writer.AddRow(e.DeleteOrgMembership.DeletedID)

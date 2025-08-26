@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVTask($input: Upload!) {
   createBulkCSVTask(input: $input) {
     tasks {
@@ -18,6 +17,14 @@ mutation CreateBulkCSVTask($input: Upload!) {
       title
       updatedAt
       updatedBy
+      assignee {
+        id
+        displayName
+      }
+      assigner {
+        id
+        displayName
+      }
     }
   }
 }
@@ -41,6 +48,14 @@ mutation CreateBulkTask($input: [CreateTaskInput!]) {
       title
       updatedAt
       updatedBy
+      assignee {
+        id
+        displayName
+      }
+      assigner {
+        id
+        displayName
+      }
     }
   }
 }
@@ -64,6 +79,14 @@ mutation CreateTask($input: CreateTaskInput!) {
       title
       updatedAt
       updatedBy
+      assignee {
+        id
+        displayName
+      }
+      assigner {
+        id
+        displayName
+      }
     }
   }
 }
@@ -101,10 +124,19 @@ query GetAllTasks {
         title
         updatedAt
         updatedBy
+        assignee {
+          id
+          displayName
+        }
+        assigner {
+          id
+          displayName
+        }
       }
     }
   }
 }
+
 query GetTaskByID($taskId: ID!) {
   task(id: $taskId) {
     assigneeID
@@ -123,11 +155,26 @@ query GetTaskByID($taskId: ID!) {
     title
     updatedAt
     updatedBy
+    assignee {
+      id
+      displayName
+    }
+    assigner {
+      id
+      displayName
+    }
   }
 }
 
-query GetTasks($first: Int, $last: Int, $where: TaskWhereInput) {
-  tasks(first: $first, last: $last, where: $where) {
+query GetTasks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: TaskWhereInput, $orderBy: [TaskOrder!]) {
+  tasks(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+    orderBy: $orderBy
+  ) {
     totalCount
     pageInfo {
       startCursor
@@ -153,10 +200,19 @@ query GetTasks($first: Int, $last: Int, $where: TaskWhereInput) {
         title
         updatedAt
         updatedBy
+        assignee {
+          id
+          displayName
+        }
+        assigner {
+          id
+          displayName
+        }
       }
     }
   }
 }
+
 mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
   updateTask(id: $updateTaskId, input: $input) {
     task {
@@ -176,6 +232,14 @@ mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
       title
       updatedAt
       updatedBy
+      assignee {
+        id
+        displayName
+      }
+      assigner {
+        id
+        displayName
+      }
     }
   }
 }

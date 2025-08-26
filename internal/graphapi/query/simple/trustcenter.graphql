@@ -1,36 +1,3 @@
-
-mutation CreateBulkCSVTrustCenter($input: Upload!) {
-  createBulkCSVTrustCenter(input: $input) {
-    trustCenters {
-      createdAt
-      createdBy
-      customDomainID
-      id
-      ownerID
-      slug
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkTrustCenter($input: [CreateTrustCenterInput!]) {
-  createBulkTrustCenter(input: $input) {
-    trustCenters {
-      createdAt
-      createdBy
-      customDomainID
-      id
-      ownerID
-      slug
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
 mutation CreateTrustCenter($input: CreateTrustCenterInput!) {
   createTrustCenter(input: $input) {
     trustCenter {
@@ -77,6 +44,7 @@ query GetAllTrustCenters {
     }
   }
 }
+
 query GetTrustCenterByID($trustCenterId: ID!) {
   trustCenter(id: $trustCenterId) {
     createdAt
@@ -88,6 +56,22 @@ query GetTrustCenterByID($trustCenterId: ID!) {
     tags
     updatedAt
     updatedBy
+    setting {
+      id
+      overview
+      title
+      primaryColor
+      logoRemoteURL
+      logoLocalFileID
+      logoFile {
+        presignedURL
+      }
+      themeMode
+      font
+      foregroundColor
+      backgroundColor
+      accentColor
+    }
   }
 }
 
@@ -115,6 +99,7 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
     }
   }
 }
+
 mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterInput!) {
   updateTrustCenter(id: $updateTrustCenterId, input: $input) {
     trustCenter {

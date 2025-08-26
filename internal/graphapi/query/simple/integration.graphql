@@ -1,55 +1,3 @@
-
-mutation CreateBulkCSVIntegration($input: Upload!) {
-  createBulkCSVIntegration(input: $input) {
-    integrations {
-      createdAt
-      createdBy
-      description
-      id
-      kind
-      name
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkIntegration($input: [CreateIntegrationInput!]) {
-  createBulkIntegration(input: $input) {
-    integrations {
-      createdAt
-      createdBy
-      description
-      id
-      kind
-      name
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateIntegration($input: CreateIntegrationInput!) {
-  createIntegration(input: $input) {
-    integration {
-      createdAt
-      createdBy
-      description
-      id
-      kind
-      name
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
 mutation DeleteIntegration($deleteIntegrationId: ID!) {
   deleteIntegration(id: $deleteIntegrationId) {
     deletedID
@@ -81,6 +29,7 @@ query GetAllIntegrations {
     }
   }
 }
+
 query GetIntegrationByID($integrationId: ID!) {
   integration(id: $integrationId) {
     createdAt
@@ -121,19 +70,4 @@ query GetIntegrations($first: Int, $last: Int, $where: IntegrationWhereInput) {
     }
   }
 }
-mutation UpdateIntegration($updateIntegrationId: ID!, $input: UpdateIntegrationInput!) {
-  updateIntegration(id: $updateIntegrationId, input: $input) {
-    integration {
-      createdAt
-      createdBy
-      description
-      id
-      kind
-      name
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
+

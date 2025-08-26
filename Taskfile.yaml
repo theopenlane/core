@@ -65,7 +65,6 @@ tasks:
       - go-generate-fast ./...
       - task: tidy
 
-
   regenerate:
     desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
     env:
@@ -106,8 +105,11 @@ tasks:
       - internal/graphapi/generated/**/*.go
       - internal/graphapi/model/gen_models.go
       - internal/graphapi/*.resolvers.go
+      - internal/graphapi/testclient/graphqlclient.go
+      - internal/graphapi/testclient/models.go
       - pkg/openlaneclient/models.go
       - pkg/openlaneclient/graphqlclient.go
+      - pkg/openlaneclient/models.go
       - internal/httpserve/handlers/csv/sample_*.csv
     method: checksum
     cmds:

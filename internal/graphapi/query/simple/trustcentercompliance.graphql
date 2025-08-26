@@ -8,6 +8,17 @@ mutation CreateBulkCSVTrustCenterCompliance($input: Upload!) {
       tags
       updatedAt
       updatedBy
+      standard {
+        governingBody
+        governingBodyLogoURL
+        link
+        name
+        shortName
+        standardType
+        version
+        description
+        domains
+      }
     }
   }
 }
@@ -21,6 +32,17 @@ mutation CreateBulkTrustCenterCompliance($input: [CreateTrustCenterComplianceInp
       tags
       updatedAt
       updatedBy
+      standard {
+        governingBody
+        governingBodyLogoURL
+        link
+        name
+        shortName
+        standardType
+        version
+        description
+        domains
+      }
     }
   }
 }
@@ -34,6 +56,17 @@ mutation CreateTrustCenterCompliance($input: CreateTrustCenterComplianceInput!) 
       tags
       updatedAt
       updatedBy
+      standard {
+        governingBody
+        governingBodyLogoURL
+        link
+        name
+        shortName
+        standardType
+        version
+        description
+        domains
+      }
     }
   }
 }
@@ -61,6 +94,17 @@ query GetAllTrustCenterCompliances {
         tags
         updatedAt
         updatedBy
+         standard {
+          governingBody
+          governingBodyLogoURL
+          link
+          name
+          shortName
+          standardType
+          version
+          description
+          domains
+        }
       }
     }
   }
@@ -73,6 +117,17 @@ query GetTrustCenterComplianceByID($trustCenterComplianceId: ID!) {
     tags
     updatedAt
     updatedBy
+    standard {
+      governingBody
+      governingBodyLogoURL
+      link
+      name
+      shortName
+      standardType
+      version
+      description
+      domains
+    }
   }
 }
 
@@ -93,6 +148,17 @@ query GetTrustCenterCompliances($first: Int, $last: Int, $where: TrustCenterComp
         tags
         updatedAt
         updatedBy
+        standard {
+          governingBody
+          governingBodyLogoURL
+          link
+          name
+          shortName
+          standardType
+          version
+          description
+          domains
+        }
       }
     }
   }
@@ -106,6 +172,17 @@ mutation UpdateTrustCenterCompliance($updateTrustCenterComplianceId: ID!, $input
       tags
       updatedAt
       updatedBy
+      standard {
+        governingBody
+        governingBodyLogoURL
+        link
+        name
+        shortName
+        standardType
+        version
+        description
+        domains
+      }
     }
   }
 }

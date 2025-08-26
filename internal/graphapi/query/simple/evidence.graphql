@@ -1,54 +1,5 @@
-
-mutation CreateBulkCSVEvidence($input: Upload!) {
-  createBulkCSVEvidence(input: $input) {
-    evidences {
-      collectionProcedure
-      createdAt
-      createdBy
-      creationDate
-      description
-      displayID
-      id
-      isAutomated
-      name
-      ownerID
-      renewalDate
-      source
-      status
-      tags
-      updatedAt
-      updatedBy
-      url
-    }
-  }
-}
-
-mutation CreateBulkEvidence($input: [CreateEvidenceInput!]) {
-  createBulkEvidence(input: $input) {
-    evidences {
-      collectionProcedure
-      createdAt
-      createdBy
-      creationDate
-      description
-      displayID
-      id
-      isAutomated
-      name
-      ownerID
-      renewalDate
-      source
-      status
-      tags
-      updatedAt
-      updatedBy
-      url
-    }
-  }
-}
-
-mutation CreateEvidence($input: CreateEvidenceInput!) {
-  createEvidence(input: $input) {
+mutation CreateEvidence($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]) {
+  createEvidence(input: $input, evidenceFiles: $evidenceFiles) {
     evidence {
       collectionProcedure
       createdAt
@@ -67,6 +18,23 @@ mutation CreateEvidence($input: CreateEvidenceInput!) {
       updatedAt
       updatedBy
       url
+      files {
+        totalCount
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
+      controls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }
@@ -105,6 +73,23 @@ query GetAllEvidences {
         updatedAt
         updatedBy
         url
+        files {
+          totalCount
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
+        controls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
       }
     }
   }
@@ -128,6 +113,23 @@ query GetEvidenceByID($evidenceId: ID!) {
     updatedAt
     updatedBy
     url
+    files {
+      totalCount
+      edges {
+        node {
+          id
+          presignedURL
+        }
+      }
+    }
+    controls {
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
   }
 }
 
@@ -159,12 +161,33 @@ query GetEvidences($first: Int, $last: Int, $where: EvidenceWhereInput) {
         updatedAt
         updatedBy
         url
+        files {
+          totalCount
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
+        controls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
       }
     }
   }
 }
-mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!) {
-  updateEvidence(id: $updateEvidenceId, input: $input) {
+mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $evidenceFiles: [Upload!]) {
+  updateEvidence(
+    id: $updateEvidenceId
+    input: $input
+    evidenceFiles: $evidenceFiles
+  ) {
     evidence {
       collectionProcedure
       createdAt
@@ -183,6 +206,23 @@ mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!) {
       updatedAt
       updatedBy
       url
+      files {
+        totalCount
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
+      controls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }

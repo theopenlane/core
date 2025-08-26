@@ -22,11 +22,8 @@ query GetAllOrgSubscriptionHistories {
         id
         operation
         ownerID
-        paymentMethodAdded
         productPrice
-        productTier
         ref
-        stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
         tags
@@ -60,11 +57,8 @@ query GetOrgSubscriptionHistories($first: Int, $last: Int, $where: OrgSubscripti
         id
         operation
         ownerID
-        paymentMethodAdded
         productPrice
-        productTier
         ref
-        stripeProductTierID
         stripeSubscriptionID
         stripeSubscriptionStatus
         tags

@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVGroupMembership($input: Upload!) {
   createBulkCSVGroupMembership(input: $input) {
     groupMemberships {
@@ -39,7 +38,13 @@ mutation CreateGroupMembership($input: CreateGroupMembershipInput!) {
       role
       updatedAt
       updatedBy
-      userID
+      user {
+        displayName
+        email
+        firstName
+        id
+        lastName
+      }
     }
   }
 }
@@ -68,11 +73,18 @@ query GetAllGroupMemberships {
         role
         updatedAt
         updatedBy
-        userID
+        user {
+          displayName
+          email
+          firstName
+          id
+          lastName
+        }
       }
     }
   }
 }
+
 query GetGroupMembershipByID($groupMembershipId: ID!) {
   groupMembership(id: $groupMembershipId) {
     createdAt
@@ -82,7 +94,13 @@ query GetGroupMembershipByID($groupMembershipId: ID!) {
     role
     updatedAt
     updatedBy
-    userID
+    user {
+      displayName
+      email
+      firstName
+      id
+      lastName
+    }
   }
 }
 
@@ -104,11 +122,18 @@ query GetGroupMemberships($first: Int, $last: Int, $where: GroupMembershipWhereI
         role
         updatedAt
         updatedBy
-        userID
+        user {
+          displayName
+          email
+          firstName
+          id
+          lastName
+        }
       }
     }
   }
 }
+
 mutation UpdateGroupMembership($updateGroupMembershipId: ID!, $input: UpdateGroupMembershipInput!) {
   updateGroupMembership(id: $updateGroupMembershipId, input: $input) {
     groupMembership {
@@ -119,7 +144,13 @@ mutation UpdateGroupMembership($updateGroupMembershipId: ID!, $input: UpdateGrou
       role
       updatedAt
       updatedBy
-      userID
+      user {
+        displayName
+        email
+        firstName
+        id
+        lastName
+      }
     }
   }
 }

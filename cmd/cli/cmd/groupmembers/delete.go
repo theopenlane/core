@@ -60,14 +60,14 @@ func delete(ctx context.Context) error {
 	where, err := deleteValidation()
 	cobra.CheckErr(err)
 
-	groupMembers, err := client.GetGroupMembersByGroupID(ctx, &where)
+	groupMembers, err := client.GetGroupMemberships(ctx, cmd.First, cmd.Last, &where)
 	cobra.CheckErr(err)
 
 	if len(groupMembers.GroupMemberships.Edges) != 1 {
 		return errors.New("error getting existing relation") //nolint:err113
 	}
 
-	o, err := client.RemoveUserFromGroup(ctx, groupMembers.GroupMemberships.Edges[0].Node.ID)
+	o, err := client.DeleteGroupMembership(ctx, groupMembers.GroupMemberships.Edges[0].Node.ID)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

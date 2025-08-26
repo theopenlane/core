@@ -1,21 +1,11 @@
-
 mutation CreateBulkCSVSubscriber($input: Upload!) {
   createBulkCSVSubscriber(input: $input) {
     subscribers {
       active
-      createdAt
-      createdBy
       email
       id
-      ownerID
-      phoneNumber
-      sendAttempts
-      tags
-      unsubscribed
-      updatedAt
-      updatedBy
       verifiedEmail
-      verifiedPhone
+      unsubscribed
     }
   }
 }
@@ -24,19 +14,10 @@ mutation CreateBulkSubscriber($input: [CreateSubscriberInput!]) {
   createBulkSubscriber(input: $input) {
     subscribers {
       active
-      createdAt
-      createdBy
       email
       id
-      ownerID
-      phoneNumber
-      sendAttempts
-      tags
-      unsubscribed
-      updatedAt
-      updatedBy
       verifiedEmail
-      verifiedPhone
+      unsubscribed
     }
   }
 }
@@ -49,27 +30,25 @@ mutation CreateSubscriber($input: CreateSubscriberInput!) {
       createdBy
       email
       id
-      ownerID
-      phoneNumber
-      sendAttempts
-      tags
-      unsubscribed
       updatedAt
       updatedBy
       verifiedEmail
-      verifiedPhone
+      unsubscribed
     }
   }
 }
 
-mutation DeleteSubscriber($deleteSubscriberId: ID!) {
-  deleteSubscriber(id: $deleteSubscriberId) {
-    deletedID
+mutation DeleteSubscriber($deleteSubscriberEmail: String!, $subscriberOrganization: ID) {
+  deleteSubscriber(
+    email: $deleteSubscriberEmail
+    ownerID: $subscriberOrganization
+  ) {
+    email
   }
 }
 
-query GetAllSubscribers {
-  subscribers {
+query GetAllSubscribers($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SubscriberOrder!]) {
+  subscribers(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
     totalCount
     pageInfo {
       startCursor
@@ -80,44 +59,31 @@ query GetAllSubscribers {
     edges {
       node {
         active
-        createdAt
-        createdBy
         email
         id
         ownerID
-        phoneNumber
-        sendAttempts
-        tags
-        unsubscribed
-        updatedAt
-        updatedBy
         verifiedEmail
-        verifiedPhone
+        unsubscribed
+        sendAttempts
       }
     }
   }
 }
-query GetSubscriberByID($subscriberId: ID!) {
-  subscriber(id: $subscriberId) {
+
+query GetSubscriberByEmail($email: String!) {
+  subscriber(email: $email) {
     active
-    createdAt
-    createdBy
     email
     id
     ownerID
-    phoneNumber
-    sendAttempts
-    tags
-    unsubscribed
-    updatedAt
-    updatedBy
     verifiedEmail
-    verifiedPhone
+    unsubscribed
+    sendAttempts
   }
 }
 
-query GetSubscribers($first: Int, $last: Int, $where: SubscriberWhereInput) {
-  subscribers(first: $first, last: $last, where: $where) {
+query GetSubscribers($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: SubscriberWhereInput, $orderBy: [SubscriberOrder!]) {
+  subscribers(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
     totalCount
     pageInfo {
       startCursor
@@ -128,40 +94,31 @@ query GetSubscribers($first: Int, $last: Int, $where: SubscriberWhereInput) {
     edges {
       node {
         active
-        createdAt
-        createdBy
         email
         id
         ownerID
-        phoneNumber
-        sendAttempts
-        tags
-        unsubscribed
-        updatedAt
-        updatedBy
         verifiedEmail
-        verifiedPhone
+        unsubscribed
+        sendAttempts
       }
     }
   }
 }
-mutation UpdateSubscriber($updateSubscriberId: ID!, $input: UpdateSubscriberInput!) {
-  updateSubscriber(id: $updateSubscriberId, input: $input) {
+
+mutation UpdateSubscriber($email: String!, $input: UpdateSubscriberInput!) {
+  updateSubscriber(email: $email, input: $input) {
     subscriber {
       active
       createdAt
       createdBy
       email
       id
-      ownerID
       phoneNumber
-      sendAttempts
-      tags
-      unsubscribed
       updatedAt
       updatedBy
       verifiedEmail
       verifiedPhone
+      unsubscribed
     }
   }
 }

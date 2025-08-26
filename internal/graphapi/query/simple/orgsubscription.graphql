@@ -20,7 +20,6 @@ query GetAllOrgSubscriptions {
         features
         id
         ownerID
-        paymentMethodAdded
         productPrice
         stripeSubscriptionID
         stripeSubscriptionStatus
@@ -43,7 +42,6 @@ query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
     features
     id
     ownerID
-    paymentMethodAdded
     productPrice
     stripeSubscriptionID
     stripeSubscriptionStatus
@@ -74,7 +72,6 @@ query GetOrgSubscriptions($first: Int, $last: Int, $where: OrgSubscriptionWhereI
         features
         id
         ownerID
-        paymentMethodAdded
         productPrice
         stripeSubscriptionID
         stripeSubscriptionStatus

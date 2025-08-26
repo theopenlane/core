@@ -1,48 +1,5 @@
-
-mutation CreateBulkCSVOrganization($input: Upload!) {
-  createBulkCSVOrganization(input: $input) {
-    organizations {
-      avatarLocalFileID
-      avatarRemoteURL
-      avatarUpdatedAt
-      createdAt
-      createdBy
-      dedicatedDb
-      description
-      displayName
-      id
-      name
-      personalOrg
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkOrganization($input: [CreateOrganizationInput!]) {
-  createBulkOrganization(input: $input) {
-    organizations {
-      avatarLocalFileID
-      avatarRemoteURL
-      avatarUpdatedAt
-      createdAt
-      createdBy
-      dedicatedDb
-      description
-      displayName
-      id
-      name
-      personalOrg
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateOrganization($input: CreateOrganizationInput!) {
-  createOrganization(input: $input) {
+mutation CreateOrganization($input: CreateOrganizationInput!, $avatarFile: Upload) {
+  createOrganization(input: $input, avatarFile: $avatarFile) {
     organization {
       avatarLocalFileID
       avatarRemoteURL
@@ -145,8 +102,12 @@ query GetOrganizations($first: Int, $last: Int, $where: OrganizationWhereInput) 
     }
   }
 }
-mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizationInput!) {
-  updateOrganization(id: $updateOrganizationId, input: $input) {
+mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizationInput!, $avatarFile: Upload) {
+  updateOrganization(
+    id: $updateOrganizationId
+    input: $input
+    avatarFile: $avatarFile
+  ) {
     organization {
       avatarLocalFileID
       avatarRemoteURL
