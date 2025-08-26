@@ -2,6 +2,7 @@ package corejobs
 
 import (
 	"net/url"
+	"time"
 
 	"github.com/theopenlane/core/pkg/openlaneclient"
 
@@ -17,7 +18,8 @@ type CustomDomainConfig struct {
 	OpenlaneAPIHost  string `koanf:"openlaneAPIHost" json:"openlaneAPIHost" jsonschema:"required description=the openlane api host"`
 	OpenlaneAPIToken string `koanf:"openlaneAPIToken" json:"openlaneAPIToken" jsonschema:"required description=the openlane api token"`
 
-	DatabaseHost string `koanf:"databaseHost" json:"databaseHost" jsonschema:"required description=the database host"`
+	DatabaseHost     string        `koanf:"databaseHost" json:"databaseHost" jsonschema:"required description=the database host"`
+	ValidateInterval time.Duration `koanf:"validateInterval" json:"validateInterval" jsonschema:"required description=the interval to validate custom domains"`
 }
 
 // getOpenlaneClient creates and returns a new Openlane client using the provided configuration.
