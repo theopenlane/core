@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVMappedControl($input: Upload!) {
   createBulkCSVMappedControl(input: $input) {
     mappedControls {
@@ -7,7 +6,6 @@ mutation CreateBulkCSVMappedControl($input: Upload!) {
       createdBy
       id
       mappingType
-      ownerID
       relation
       source
       tags
@@ -25,12 +23,43 @@ mutation CreateBulkMappedControl($input: [CreateMappedControlInput!]) {
       createdBy
       id
       mappingType
-      ownerID
       relation
       source
       tags
       updatedAt
       updatedBy
+      fromControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      fromSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }
@@ -43,12 +72,43 @@ mutation CreateMappedControl($input: CreateMappedControlInput!) {
       createdBy
       id
       mappingType
-      ownerID
       relation
       source
       tags
       updatedAt
       updatedBy
+      fromControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      fromSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }
@@ -75,16 +135,48 @@ query GetAllMappedControls {
         createdBy
         id
         mappingType
-        ownerID
         relation
         source
         tags
         updatedAt
         updatedBy
+        fromControls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        toControls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        fromSubcontrols {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        toSubcontrols {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
       }
     }
   }
 }
+
 query GetMappedControlByID($mappedControlId: ID!) {
   mappedControl(id: $mappedControlId) {
     confidence
@@ -92,12 +184,43 @@ query GetMappedControlByID($mappedControlId: ID!) {
     createdBy
     id
     mappingType
-    ownerID
     relation
     source
     tags
     updatedAt
     updatedBy
+    fromControls {
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
+    toControls {
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
+    fromSubcontrols {
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
+    toSubcontrols {
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
   }
 }
 
@@ -117,16 +240,48 @@ query GetMappedControls($first: Int, $last: Int, $where: MappedControlWhereInput
         createdBy
         id
         mappingType
-        ownerID
         relation
         source
         tags
         updatedAt
         updatedBy
+        fromControls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        toControls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        fromSubcontrols {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        toSubcontrols {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
       }
     }
   }
 }
+
 mutation UpdateMappedControl($updateMappedControlId: ID!, $input: UpdateMappedControlInput!) {
   updateMappedControl(id: $updateMappedControlId, input: $input) {
     mappedControl {
@@ -135,12 +290,43 @@ mutation UpdateMappedControl($updateMappedControlId: ID!, $input: UpdateMappedCo
       createdBy
       id
       mappingType
-      ownerID
       relation
       source
       tags
       updatedAt
       updatedBy
+      fromControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      fromSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }

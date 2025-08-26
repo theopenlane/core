@@ -1,3 +1,39 @@
+mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
+  createBulkControlObjective(input: $input) {
+    controlObjectives {
+      category
+      controlObjectiveType
+      createdAt
+      createdBy
+      desiredOutcome
+      displayID
+      id
+      name
+      ownerID
+      revision
+      source
+      status
+      subcategory
+      tags
+      updatedAt
+      updatedBy
+      controls {
+        edges {
+          node {
+            refCode
+          }
+        }
+      }
+      subcontrols {
+        edges {
+          node {
+            refCode
+          }
+        }
+      }
+    }
+  }
+}
 
 mutation CreateBulkCSVControlObjective($input: Upload!) {
   createBulkCSVControlObjective(input: $input) {
@@ -18,29 +54,20 @@ mutation CreateBulkCSVControlObjective($input: Upload!) {
       tags
       updatedAt
       updatedBy
-    }
-  }
-}
-
-mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
-  createBulkControlObjective(input: $input) {
-    controlObjectives {
-      category
-      controlObjectiveType
-      createdAt
-      createdBy
-      desiredOutcome
-      displayID
-      id
-      name
-      ownerID
-      revision
-      source
-      status
-      subcategory
-      tags
-      updatedAt
-      updatedBy
+      controls {
+        edges {
+          node {
+            refCode
+          }
+        }
+      }
+      subcontrols {
+        edges {
+          node {
+            refCode
+          }
+        }
+      }
     }
   }
 }
@@ -64,6 +91,20 @@ mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
       tags
       updatedAt
       updatedBy
+      controls {
+        edges {
+          node {
+            refCode
+          }
+        }
+      }
+      subcontrols {
+        edges {
+          node {
+            refCode
+          }
+        }
+      }
     }
   }
 }
@@ -101,10 +142,25 @@ query GetAllControlObjectives {
         tags
         updatedAt
         updatedBy
+        controls {
+          edges {
+            node {
+              refCode
+            }
+          }
+        }
+        subcontrols {
+          edges {
+            node {
+              refCode
+            }
+          }
+        }
       }
     }
   }
 }
+
 query GetControlObjectiveByID($controlObjectiveId: ID!) {
   controlObjective(id: $controlObjectiveId) {
     category
@@ -123,6 +179,20 @@ query GetControlObjectiveByID($controlObjectiveId: ID!) {
     tags
     updatedAt
     updatedBy
+    controls {
+      edges {
+        node {
+          refCode
+        }
+      }
+    }
+    subcontrols {
+      edges {
+        node {
+          refCode
+        }
+      }
+    }
   }
 }
 
@@ -153,10 +223,25 @@ query GetControlObjectives($first: Int, $last: Int, $where: ControlObjectiveWher
         tags
         updatedAt
         updatedBy
+        controls {
+          edges {
+            node {
+              refCode
+            }
+          }
+        }
+        subcontrols {
+          edges {
+            node {
+              refCode
+            }
+          }
+        }
       }
     }
   }
 }
+
 mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateControlObjectiveInput!) {
   updateControlObjective(id: $updateControlObjectiveId, input: $input) {
     controlObjective {
@@ -176,6 +261,20 @@ mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateCo
       tags
       updatedAt
       updatedBy
+      controls {
+        edges {
+          node {
+            refCode
+          }
+        }
+      }
+      subcontrols {
+        edges {
+          node {
+            refCode
+          }
+        }
+      }
     }
   }
 }

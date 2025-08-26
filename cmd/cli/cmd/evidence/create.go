@@ -4,6 +4,7 @@ package evidence
 
 import (
 	"context"
+	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
@@ -31,6 +32,8 @@ func init() {
 	createCmd.Flags().StringArrayP("programs", "p", []string{}, "program of the evidence")
 	createCmd.Flags().StringArray("controls", []string{}, "ids of controls to link to the evidence")
 	createCmd.Flags().StringArray("subcontrols", []string{}, "ids of subcontrols to link to the evidence")
+	createCmd.Flags().StringArray("controlRefs", []string{}, "standard short name and ref code, e.g. (SOC2:CC1.1) of controls to link to the evidence")
+	createCmd.Flags().StringArray("subcontrolRefs", []string{}, "standard short name and ref code, e.g. (SOC2:CC1.POF1) of subcontrols to link to the evidence")
 	createCmd.Flags().StringArray("control-objectives", []string{}, "ids of control objectives to link to the evidence")
 	createCmd.Flags().StringP("collection-procedure", "c", "", "steps taken to collect the evidence")
 	createCmd.Flags().StringP("source", "s", "", "system source of the evidence")
@@ -40,7 +43,7 @@ func init() {
 }
 
 // createValidation validates the required fields for the command
-func createValidation() (input openlaneclient.CreateEvidenceInput, uploads []*graphql.Upload, err error) {
+func createValidation(ctx context.Context, client *openlaneclient.OpenlaneClient) (input openlaneclient.CreateEvidenceInput, uploads []*graphql.Upload, err error) {
 	// validation of required fields for the create command
 	// output the input struct with the required fields and optional fields based on the command line flags
 	input.Name = cmd.Config.String("name")
@@ -48,6 +51,8 @@ func createValidation() (input openlaneclient.CreateEvidenceInput, uploads []*gr
 	programs := cmd.Config.Strings("programs")
 	controls := cmd.Config.Strings("controls")
 	subcontrols := cmd.Config.Strings("subcontrols")
+	controlRefs := cmd.Config.Strings("controlRefs")
+	subcontrolRefs := cmd.Config.Strings("subcontrolRefs")
 	controlObjectives := cmd.Config.Strings("control-objectives")
 	collectionProcedure := cmd.Config.String("collection-procedure")
 	source := cmd.Config.String("source")
@@ -69,10 +74,48 @@ func createValidation() (input openlaneclient.CreateEvidenceInput, uploads []*gr
 
 	if len(controls) > 0 {
 		input.ControlIDs = controls
+	} else if len(controlRefs) > 0 {
+		for _, ref := range controlRefs {
+			parts := strings.Split(ref, ":")
+			if len(parts) != 2 {
+				cmd.NewInvalidFieldError("control ref", ref)
+			}
+
+			control, err := client.GetControls(ctx, nil, nil, &openlaneclient.ControlWhereInput{
+				ReferenceFramework: &parts[0],
+				RefCode:            &parts[1],
+			})
+			cobra.CheckErr(err)
+
+			if len(control.Controls.Edges) == 0 {
+				return input, nil, cmd.NewInvalidFieldError("control ref", ref)
+			}
+
+			input.ControlIDs = append(input.ControlIDs, control.Controls.Edges[0].Node.ID)
+		}
 	}
 
 	if len(subcontrols) > 0 {
 		input.SubcontrolIDs = subcontrols
+	} else if len(subcontrolRefs) > 0 {
+		for _, ref := range subcontrolRefs {
+			parts := strings.Split(ref, ":")
+			if len(parts) != 2 {
+				cmd.NewInvalidFieldError("subcontrol ref", ref)
+			}
+
+			control, err := client.GetSubcontrols(ctx, nil, nil, &openlaneclient.SubcontrolWhereInput{
+				ReferenceFramework: &parts[0],
+				RefCode:            &parts[1],
+			})
+			cobra.CheckErr(err)
+
+			if len(control.Subcontrols.Edges) == 0 {
+				return input, nil, cmd.NewInvalidFieldError("control ref", ref)
+			}
+
+			input.SubcontrolIDs = append(input.SubcontrolIDs, control.Subcontrols.Edges[0].Node.ID)
+		}
 	}
 
 	if len(controlObjectives) > 0 {
@@ -122,7 +165,7 @@ func create(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	input, uploads, err := createValidation()
+	input, uploads, err := createValidation(ctx, client)
 	cobra.CheckErr(err)
 
 	o, err := client.CreateEvidence(ctx, input, uploads)

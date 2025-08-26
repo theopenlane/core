@@ -18,6 +18,23 @@ mutation CreateEvidence($input: CreateEvidenceInput!, $evidenceFiles: [Upload!])
       updatedAt
       updatedBy
       url
+      files {
+        totalCount
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
+      controls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }
@@ -56,6 +73,23 @@ query GetAllEvidences {
         updatedAt
         updatedBy
         url
+        files {
+          totalCount
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
+        controls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
       }
     }
   }
@@ -79,6 +113,23 @@ query GetEvidenceByID($evidenceId: ID!) {
     updatedAt
     updatedBy
     url
+    files {
+      totalCount
+      edges {
+        node {
+          id
+          presignedURL
+        }
+      }
+    }
+    controls {
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
   }
 }
 
@@ -110,6 +161,23 @@ query GetEvidences($first: Int, $last: Int, $where: EvidenceWhereInput) {
         updatedAt
         updatedBy
         url
+        files {
+          totalCount
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
+        controls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
       }
     }
   }
@@ -138,6 +206,23 @@ mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $e
       updatedAt
       updatedBy
       url
+      files {
+        totalCount
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
+      controls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }

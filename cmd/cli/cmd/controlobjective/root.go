@@ -90,21 +90,24 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.ControlObjective) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "DesiredOutcome", "Source", "Revision", "Status", "ControlObjectiveType", "Controls", "Programs")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "DesiredOutcome", "Source", "Revision", "Status", "ControlObjectiveType", "Controls", "Subcontrols")
 
 	for _, i := range out {
-		programs := []string{}
-
-		for _, p := range i.Programs.Edges {
-			programs = append(programs, p.Node.Name)
-		}
-
 		controls := []string{}
-		for _, c := range i.Controls.Edges {
-			controls = append(controls, c.Node.RefCode)
+		if i.Controls != nil {
+			for _, c := range i.Controls.Edges {
+				controls = append(controls, c.Node.RefCode)
+			}
 		}
 
-		writer.AddRow(i.ID, i.Name, *i.DesiredOutcome, *i.Source, *i.Revision, *i.Status, *i.ControlObjectiveType, strings.Join(controls, ", "), strings.Join(programs, ", "))
+		subcontrols := []string{}
+		if i.Subcontrols != nil {
+			for _, c := range i.Subcontrols.Edges {
+				subcontrols = append(subcontrols, c.Node.RefCode)
+			}
+		}
+
+		writer.AddRow(i.ID, i.Name, *i.DesiredOutcome, *i.Source, *i.Revision, *i.Status, *i.ControlObjectiveType, strings.Join(controls, ", "), strings.Join(subcontrols, ", "))
 	}
 
 	writer.Render()
