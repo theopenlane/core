@@ -11,12 +11,6 @@ func (sc *StripeClient) CreateBillingPortalUpdateSession(ctx context.Context, su
 	params := &stripe.BillingPortalSessionCreateParams{
 		Customer:  &custID,
 		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
-		FlowData: &stripe.BillingPortalSessionCreateFlowDataParams{
-			Type: stripe.String("subscription_update"),
-			SubscriptionUpdate: &stripe.BillingPortalSessionCreateFlowDataSubscriptionUpdateParams{
-				Subscription: &subsID,
-			},
-		},
 	}
 
 	billingPortalSession, err := sc.Client.V1BillingPortalSessions.Create(ctx, params)
