@@ -1,4 +1,4 @@
-# Helm values.yaml for Openlane
+# Helm values-ref.yaml for Openlane
 # This file is auto-generated from the core config structure
 # Manual changes may be overwritten when regenerated
 #
