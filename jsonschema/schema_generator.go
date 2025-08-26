@@ -332,7 +332,7 @@ func namePkg(r reflect.Type) string {
 	return r.String()
 }
 
-// generateHelmValues creates a Helm-compatible values.yaml from the config structure
+// generateHelmValues creates a Helm-compatible values-ref.yaml from the config structure
 func generateHelmValues(structure interface{}) (string, error) {
 	// Create a reflector to extract comments and schema information
 	r := new(jsonschema.Reflector)
@@ -356,7 +356,7 @@ func generateHelmValues(structure interface{}) (string, error) {
 	var regularResult strings.Builder
 
 	// Add helm values header comment for regular values
-	regularResult.WriteString(`# Helm values.yaml for Openlane
+	regularResult.WriteString(`# Helm values-ref.yaml for Openlane
 # This file is auto-generated from the core config structure
 # Manual changes may be overwritten when regenerated
 #

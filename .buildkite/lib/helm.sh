@@ -271,14 +271,14 @@ apply_helm_config_changes() {
     local changes_made=false
     local change_summary=""
 
-    # Update Helm values.yaml (intelligent merging approach)
+    # Update Helm values-ref.yaml (intelligent merging approach)
     local values_changes=""
     if values_changes=$(merge_helm_values \
         "$source_dir/helm-values.yaml" \
-        "$chart_dir/values.yaml" \
-        "Helm values.yaml" 2>&1); then
+        "$chart_dir/values-ref.yaml" \
+        "Helm values-ref.yaml" 2>&1); then
         changes_made=true
-        change_summary+="\n- 🔄 Merged Helm values.yaml$values_changes"
+        change_summary+="\n- 🔄 Merged Helm values-ref.yaml$values_changes"
     fi
 
     # Update external secrets directory

@@ -49,8 +49,8 @@ git checkout -b "$release_branch"
 changes_made=false
 change_summary=""
 
-# Update the image tag in values.yaml
-values_file="$chart_dir/values.yaml"
+# Update the image tag in values-prod.yaml
+values_file="$chart_dir/values-prod.yaml"
 if [[ -f "$values_file" ]]; then
   current_tag=$(yq e '.openlane.image.tag' "$values_file")
   new_tag="${BUILDKITE_TAG}"
