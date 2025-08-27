@@ -130,6 +130,7 @@ coreConfiguration:
     fieldLevelEncryption:
       # -- Enabled indicates whether Tink encryption is enabled
       enabled: false  # @schema type:boolean; default:false
+    trustCenterCnameTarget: ""  # @schema type:string
   # -- EntConfig contains the ent configuration used by the ent middleware
   entConfig:
     # -- EntityTypes is the list of entity types to create by default for the organization

@@ -264,6 +264,7 @@ server:
         certKey: server.key
         config: null
         enabled: false
+    trustCenterCnameTarget: ""
     writeTimeout: 15000000000
 sessions:
     domain: ""

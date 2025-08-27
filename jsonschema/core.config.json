@@ -242,6 +242,9 @@
         "fieldLevelEncryption": {
           "$ref": "#/$defs/crypto.Config",
           "description": "FieldLevelEncryption contains the configuration for field level encryption"
+        },
+        "trustCenterCnameTarget": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
