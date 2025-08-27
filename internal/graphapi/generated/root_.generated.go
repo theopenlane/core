@@ -2441,7 +2441,7 @@ type ComplexityRoot struct {
 		CreateHush                           func(childComplexity int, input generated.CreateHushInput) int
 		CreateInternalPolicy                 func(childComplexity int, input generated.CreateInternalPolicyInput) int
 		CreateInvite                         func(childComplexity int, input generated.CreateInviteInput) int
-		CreateJobResult                      func(childComplexity int, input generated.CreateJobResultInput) int
+		CreateJobResult                      func(childComplexity int, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload) int
 		CreateJobRunner                      func(childComplexity int, input generated.CreateJobRunnerInput) int
 		CreateJobRunnerRegistrationToken     func(childComplexity int, input generated.CreateJobRunnerRegistrationTokenInput) int
 		CreateJobRunnerToken                 func(childComplexity int, input generated.CreateJobRunnerTokenInput) int
@@ -2561,7 +2561,7 @@ type ComplexityRoot struct {
 		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
 		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
-		UpdateJobResult                      func(childComplexity int, id string, input generated.UpdateJobResultInput) int
+		UpdateJobResult                      func(childComplexity int, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) int
 		UpdateJobRunner                      func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
 		UpdateJobTemplate                    func(childComplexity int, id string, input generated.UpdateJobTemplateInput) int
 		UpdateMappableDomain                 func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
@@ -17031,7 +17031,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateJobResult(childComplexity, args["input"].(generated.CreateJobResultInput)), true
+		return e.complexity.Mutation.CreateJobResult(childComplexity, args["input"].(generated.CreateJobResultInput), args["jobResultFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.createJobRunner":
 		if e.complexity.Mutation.CreateJobRunner == nil {
@@ -18471,7 +18471,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateJobResult(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobResultInput)), true
+		return e.complexity.Mutation.UpdateJobResult(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobResultInput), args["jobResultFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateJobRunner":
 		if e.complexity.Mutation.UpdateJobRunner == nil {
@@ -90881,6 +90881,10 @@ extend type Mutation{
         values of the jobResult
         """
         input: CreateJobResultInput!
+        """
+        files to upload as jobResult attachments
+        """
+        jobResultFiles: [Upload!]
     ): JobResultCreatePayload!
     """
     Update an existing jobResult
@@ -90894,6 +90898,10 @@ extend type Mutation{
         New values for the jobResult
         """
         input: UpdateJobResultInput!
+        """
+        files to upload as jobResult attachments
+        """
+        jobResultFiles: [Upload!]
     ): JobResultUpdatePayload!
     """
     Delete an existing jobResult

@@ -223,12 +223,12 @@ type OpenlaneGraphClient interface {
 	GetInviteByID(ctx context.Context, inviteID string, interceptors ...clientv2.RequestInterceptor) (*GetInviteByID, error)
 	GetInvites(ctx context.Context, first *int64, last *int64, where *InviteWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetInvites, error)
 	UpdateInvite(ctx context.Context, updateInviteID string, input UpdateInviteInput, interceptors ...clientv2.RequestInterceptor) (*UpdateInvite, error)
-	CreateJobResult(ctx context.Context, input CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobResult, error)
+	CreateJobResult(ctx context.Context, input CreateJobResultInput, jobResultFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateJobResult, error)
 	DeleteJobResult(ctx context.Context, deleteJobResultID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobResult, error)
 	GetAllJobResults(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobResults, error)
 	GetJobResultByID(ctx context.Context, jobResultID string, interceptors ...clientv2.RequestInterceptor) (*GetJobResultByID, error)
 	GetJobResults(ctx context.Context, first *int64, last *int64, where *JobResultWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobResults, error)
-	UpdateJobResult(ctx context.Context, updateJobResultID string, input UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobResult, error)
+	UpdateJobResult(ctx context.Context, updateJobResultID string, input UpdateJobResultInput, jobResultFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateJobResult, error)
 	CreateJobRunner(ctx context.Context, input CreateJobRunnerInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobRunner, error)
 	DeleteJobRunner(ctx context.Context, deleteJobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunner, error)
 	GetAllJobRunners(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunners, error)
@@ -88482,8 +88482,8 @@ func (c *Client) UpdateInvite(ctx context.Context, updateInviteID string, input 
 	return &res, nil
 }
 
-const CreateJobResultDocument = `mutation CreateJobResult ($input: CreateJobResultInput!) {
-	createJobResult(input: $input) {
+const CreateJobResultDocument = `mutation CreateJobResult ($input: CreateJobResultInput!, $jobResultFiles: [Upload!]) {
+	createJobResult(input: $input, jobResultFiles: $jobResultFiles) {
 		jobResult {
 			createdAt
 			createdBy
@@ -88502,9 +88502,10 @@ const CreateJobResultDocument = `mutation CreateJobResult ($input: CreateJobResu
 }
 `
 
-func (c *Client) CreateJobResult(ctx context.Context, input CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobResult, error) {
+func (c *Client) CreateJobResult(ctx context.Context, input CreateJobResultInput, jobResultFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateJobResult, error) {
 	vars := map[string]any{
-		"input": input,
+		"input":          input,
+		"jobResultFiles": jobResultFiles,
 	}
 
 	var res CreateJobResult
@@ -88670,8 +88671,8 @@ func (c *Client) GetJobResults(ctx context.Context, first *int64, last *int64, w
 	return &res, nil
 }
 
-const UpdateJobResultDocument = `mutation UpdateJobResult ($updateJobResultId: ID!, $input: UpdateJobResultInput!) {
-	updateJobResult(id: $updateJobResultId, input: $input) {
+const UpdateJobResultDocument = `mutation UpdateJobResult ($updateJobResultId: ID!, $input: UpdateJobResultInput!, $jobResultFiles: [Upload!]) {
+	updateJobResult(id: $updateJobResultId, input: $input, jobResultFiles: $jobResultFiles) {
 		jobResult {
 			createdAt
 			createdBy
@@ -88690,10 +88691,11 @@ const UpdateJobResultDocument = `mutation UpdateJobResult ($updateJobResultId: I
 }
 `
 
-func (c *Client) UpdateJobResult(ctx context.Context, updateJobResultID string, input UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobResult, error) {
+func (c *Client) UpdateJobResult(ctx context.Context, updateJobResultID string, input UpdateJobResultInput, jobResultFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateJobResult, error) {
 	vars := map[string]any{
 		"updateJobResultId": updateJobResultID,
 		"input":             input,
+		"jobResultFiles":    jobResultFiles,
 	}
 
 	var res UpdateJobResult

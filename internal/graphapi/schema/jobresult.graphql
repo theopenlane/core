@@ -19,6 +19,10 @@ extend type Mutation{
         values of the jobResult
         """
         input: CreateJobResultInput!
+        """
+        files to upload as jobResult attachments
+        """
+        jobResultFiles: [Upload!]
     ): JobResultCreatePayload!
     """
     Update an existing jobResult
@@ -32,6 +36,10 @@ extend type Mutation{
         New values for the jobResult
         """
         input: UpdateJobResultInput!
+        """
+        files to upload as jobResult attachments
+        """
+        jobResultFiles: [Upload!]
     ): JobResultUpdatePayload!
     """
     Delete an existing jobResult

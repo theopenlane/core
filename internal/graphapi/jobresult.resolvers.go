@@ -7,6 +7,7 @@ package graphapi
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
@@ -15,7 +16,7 @@ import (
 )
 
 // CreateJobResult is the resolver for the createJobResult field.
-func (r *mutationResolver) CreateJobResult(ctx context.Context, input generated.CreateJobResultInput) (*model.JobResultCreatePayload, error) {
+func (r *mutationResolver) CreateJobResult(ctx context.Context, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -34,7 +35,7 @@ func (r *mutationResolver) CreateJobResult(ctx context.Context, input generated.
 }
 
 // UpdateJobResult is the resolver for the updateJobResult field.
-func (r *mutationResolver) UpdateJobResult(ctx context.Context, id string, input generated.UpdateJobResultInput) (*model.JobResultUpdatePayload, error) {
+func (r *mutationResolver) UpdateJobResult(ctx context.Context, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).JobResult.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "jobresult"})

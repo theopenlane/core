@@ -1,5 +1,5 @@
-mutation CreateJobResult($input: CreateJobResultInput!) {
-  createJobResult(input: $input) {
+mutation CreateJobResult($input: CreateJobResultInput!, $jobResultFiles: [Upload!]) {
+  createJobResult(input: $input, jobResultFiles: $jobResultFiles) {
     jobResult {
       createdAt
       createdBy
@@ -50,6 +50,7 @@ query GetAllJobResults {
     }
   }
 }
+
 query GetJobResultByID($jobResultId: ID!) {
   jobResult(id: $jobResultId) {
     createdAt
@@ -94,8 +95,13 @@ query GetJobResults($first: Int, $last: Int, $where: JobResultWhereInput) {
     }
   }
 }
-mutation UpdateJobResult($updateJobResultId: ID!, $input: UpdateJobResultInput!) {
-  updateJobResult(id: $updateJobResultId, input: $input) {
+
+mutation UpdateJobResult($updateJobResultId: ID!, $input: UpdateJobResultInput!, $jobResultFiles: [Upload!]) {
+  updateJobResult(
+    id: $updateJobResultId
+    input: $input
+    jobResultFiles: $jobResultFiles
+  ) {
     jobResult {
       createdAt
       createdBy
