@@ -21,7 +21,7 @@ import (
 func HookProgramAuthz() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return hook.ProgramFunc(func(ctx context.Context, m *generated.ProgramMutation) (ent.Value, error) {
-			if m.Op().Is(ent.OpUpdate | ent.OpUpdateOne) {
+			if m.Op().Is(ent.OpUpdate|ent.OpUpdateOne) && !isDeleteOp(ctx, m) {
 				if err := checkArchivedProgram(ctx, m); err != nil {
 					return nil, err
 				}
@@ -152,7 +152,7 @@ func checkArchivedProgram(ctx context.Context, m *generated.ProgramMutation) err
 	status, exists := m.Status()
 	// if status is not getting updated and the current status is archived
 	// prevent all updates
-	if (!exists && program.Status == enums.ProgramStatusArchived) || status == enums.ProgramStatusArchived {
+	if !exists && program.Status == enums.ProgramStatusArchived || status == enums.ProgramStatusArchived {
 		return ErrArchivedProgramUpdateNotAllowed
 	}
 
