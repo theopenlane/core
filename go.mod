@@ -87,16 +87,16 @@ require (
 	github.com/spf13/cast v1.9.2
 	github.com/spf13/cobra v1.9.1
 	github.com/stoewer/go-strcase v1.3.1
-	github.com/stretchr/testify v1.11.0
+	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v82 v82.4.1
 	github.com/theopenlane/beacon v0.2.0
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.4
-	github.com/theopenlane/entx v0.13.2
+	github.com/theopenlane/entx v0.14.0
 	github.com/theopenlane/gqlgen-plugins v0.7.1
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.15.4
+	github.com/theopenlane/iam v0.16.1
 	github.com/theopenlane/newman v0.2.0
 	github.com/theopenlane/riverboat v0.2.2
 	github.com/theopenlane/utils v0.4.8
@@ -366,5 +366,5 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20250818200422-3122310a409c // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250818200422-3122310a409c // indirect
 	google.golang.org/grpc v1.75.0 // indirect
-	google.golang.org/protobuf v1.36.7 // indirect
+	google.golang.org/protobuf v1.36.8 // indirect
 )
