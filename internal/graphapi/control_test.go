@@ -1797,6 +1797,9 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 	// create one with with duplicate category
 	control7 := (&ControlBuilder{client: suite.client, Category: category, StandardID: standard.ID}).MustNew(user1.UserCtx, t)
 
+	// create another without a category to test multiple controls in "No Category"
+	control8 := (&ControlBuilder{client: suite.client}).MustNew(user1.UserCtx, t)
+
 	cursor := ""
 	testCases := []struct {
 		name               string
@@ -1818,6 +1821,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 				control2.Category: {},
 				control5.Category: {},
 				control6.Category: {},
+				"No Category":     {},
 			},
 		},
 		{
@@ -1877,6 +1881,15 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 			},
 		},
 		{
+			name:     "happy path, get controls in No Category",
+			client:   suite.client.api,
+			ctx:      user1.UserCtx,
+			category: lo.ToPtr("No Category"),
+			expectedCategories: map[string]struct{}{
+				"No Category": {},
+			},
+		},
+		{
 			name:   "no controls, no results",
 			client: suite.client.api,
 			ctx:    testUser2.UserCtx,
@@ -1907,6 +1920,10 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 					for _, edge := range resp.ControlsGroupByCategory.Edges {
 						if edge.Node.Category == cat {
 							foundCat = true
+
+							if cat == "No Category" && tc.category != nil && *tc.category == "No Category" {
+								assert.Check(t, edge.Node.Controls.TotalCount == 2, "No Category group should contain exactly 2 controls (control3 and control8)")
+							}
 							break
 						}
 					}
@@ -1918,7 +1935,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 
 	// cleanup created controls
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(user1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID, control6.ID, control7.ID}}).MustDelete(user1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID, control6.ID, control7.ID, control8.ID}}).MustDelete(user1.UserCtx, t)
 }
 
 func TestMutationUpdateBulkControl(t *testing.T) {
