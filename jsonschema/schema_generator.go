@@ -230,14 +230,14 @@ func processEnvironmentVariables() (*EnvironmentFields, []SensitiveField, error)
 		defaultVal := field.Tags.Get(defaultTag)
 		isSecret := field.Tags.Get(sensitiveTag) == "true" || isExternalSensitiveField(field.FullPath)
 
-		// Add to environment variables
+		// Always add to environment variables
 		envVars += fmt.Sprintf("%s=\"%s\"\n", field.Key, defaultVal)
 
-		// Add to ConfigMap
-		configMapEntry := generateConfigMapEntry(field, defaultVal)
-		configMapData += configMapEntry
-
-		if isSecret {
+		if !isSecret {
+			// Add to ConfigMap
+			configMapEntry := generateConfigMapEntry(field, defaultVal)
+			configMapData += configMapEntry
+		} else {
 			// Track sensitive fields for secret generation
 			secretName := generateSecretName(field.FullPath)
 			sensitiveFields = append(sensitiveFields, SensitiveField{
