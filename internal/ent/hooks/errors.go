@@ -73,6 +73,9 @@ var (
 	ErrFieldRequired = errors.New("field is required but not provided")
 	// ErrOwnerIDNotExists is returned when an owner_id cannot be found
 	ErrOwnerIDNotExists = errors.New("owner_id is required")
+	// ErrArchivedProgramUpdateNotAllowed is returned when an archived program is updated. It only
+	// allows updates if the status is changed
+	ErrArchivedProgramUpdateNotAllowed = errors.New("you cannot update an archived program")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

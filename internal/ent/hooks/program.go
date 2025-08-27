@@ -17,9 +17,16 @@ import (
 )
 
 // HookProgramAuthz runs on program mutations to setup or remove relationship tuples
+// and prevents updates to archived programs - except if the update contains status changes too
 func HookProgramAuthz() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return hook.ProgramFunc(func(ctx context.Context, m *generated.ProgramMutation) (ent.Value, error) {
+			if m.Op().Is(ent.OpUpdate | ent.OpUpdateOne) {
+				if err := checkArchivedProgram(ctx, m); err != nil {
+					return nil, err
+				}
+			}
+
 			// do the mutation, and then create/delete the relationship
 			retValue, err := next.Mutate(ctx, m)
 			if err != nil {
@@ -129,6 +136,25 @@ func programDeleteHook(ctx context.Context, m *generated.ProgramMutation) error 
 	}
 
 	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleted relationship tuples")
+
+	return nil
+}
+
+// checkArchivedProgram prevents updates to archived programs if need be
+func checkArchivedProgram(ctx context.Context, m *generated.ProgramMutation) error {
+	id, _ := m.ID()
+
+	program, err := m.Client().Program.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	status, exists := m.Status()
+	// if status is not getting updated and the current status is archived
+	// prevent all updates
+	if (!exists && program.Status == enums.ProgramStatusArchived) || status == enums.ProgramStatusArchived {
+		return ErrArchivedProgramUpdateNotAllowed
+	}
 
 	return nil
 }
