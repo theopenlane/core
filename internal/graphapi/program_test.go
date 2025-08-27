@@ -7,6 +7,7 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/utils/ulids"
@@ -555,6 +556,8 @@ func TestMutationCreateProgram(t *testing.T) {
 func TestMutationUpdateProgram(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	archivedProgram := (&ProgramBuilder{client: suite.client, Status: enums.ProgramStatusArchived}).MustNew(testUser1.UserCtx, t)
+
 	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &testclient.ProgramMembershipWhereInput{})
 	assert.NilError(t, err)
 
@@ -615,6 +618,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 
 	testCases := []struct {
 		name              string
+		programID         string
 		request           testclient.UpdateProgramInput
 		client            *testclient.TestClient
 		ctx               context.Context
@@ -622,7 +626,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 		expectedEdgeCount int
 	}{
 		{
-			name: "happy path, update field",
+			name:      "happy path, update field",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				Description:  lo.ToPtr("new description"),
 				ProgramType:  &enums.ProgramTypeRiskAssessment,
@@ -633,7 +638,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "happy path, update multiple fields using pat",
+			name:      "happy path, update multiple fields using pat",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				Status:               &enums.ProgramStatusReadyForAuditor,
 				ProgramType:          &enums.ProgramTypeFramework,
@@ -650,7 +656,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "remove program member, can remove self if org owner",
+			name:      "remove program member, can remove self if org owner",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				RemoveProgramMembers: []string{testUserProgramMemberID},
 			},
@@ -658,7 +665,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "add program member, cannot add self",
+			name:      "add program member, cannot add self",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				AddProgramMembers: []*testclient.AddProgramMembershipInput{
 					{
@@ -671,7 +679,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "add program member, can add another user",
+			name:      "add program member, can add another user",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				AddProgramMembers: []*testclient.AddProgramMembershipInput{
 					{
@@ -683,7 +692,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "happy path, remove program member",
+			name:      "happy path, remove program member",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				RemoveProgramMembers: []string{pm.ID},
 			},
@@ -691,7 +701,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "happy path, re-add program member as editor",
+			name:      "happy path, re-add program member as editor",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				AddProgramMembers: []*testclient.AddProgramMembershipInput{
 					{
@@ -704,7 +715,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "happy path, update edge - procedure",
+			name:      "happy path, update edge - procedure",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				AddProcedureIDs: []string{procedure1.ID},
 			},
@@ -713,7 +725,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			expectedEdgeCount: 1,
 		},
 		{
-			name: "happy path, update edge - policy",
+			name:      "happy path, update edge - policy",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				AddInternalPolicyIDs: []string{policy1.ID},
 			},
@@ -722,7 +735,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			expectedEdgeCount: 1,
 		},
 		{
-			name: "update edge - procedure - not allowed to access procedure",
+			name:      "update edge - procedure - not allowed to access procedure",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				AddProcedureIDs: []string{procedure2.ID},
 			},
@@ -731,7 +745,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "update edge - policy - not allowed to access procedure",
+			name:      "update edge - policy - not allowed to access procedure",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				AddInternalPolicyIDs: []string{policy2.ID},
 			},
@@ -740,7 +755,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "update not allowed, not enough permissions",
+			name:      "update not allowed, not enough permissions",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				Description: lo.ToPtr("newer description"),
 			},
@@ -749,7 +765,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg, // user in in viewer group, but has no edit access
 		},
 		{
-			name: "update not allowed, no permissions",
+			name:      "update not allowed, no permissions",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				Description: lo.ToPtr("newer description"),
 			},
@@ -758,18 +775,49 @@ func TestMutationUpdateProgram(t *testing.T) {
 			expectedErr: notFoundErrorMsg,
 		},
 		{
-			name: "update allowed, user in editor group",
+			name:      "update allowed, user in editor group",
+			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				Description: lo.ToPtr("soc2 2024"),
 			},
 			client: suite.client.api,
 			ctx:    anotherAdminUser.UserCtx, // user assigned to the group which has editor permissions
 		},
+		{
+			name:      "update not allowed, program is archived and status update is archived",
+			programID: archivedProgram.ID,
+			request: testclient.UpdateProgramInput{
+				Description: lo.ToPtr("newer description"),
+				Status:      lo.ToPtr(enums.ProgramStatusArchived),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: hooks.ErrArchivedProgramUpdateNotAllowed.Error(),
+		},
+		{
+			name:      "update not allowed, program is archived",
+			programID: archivedProgram.ID,
+			request: testclient.UpdateProgramInput{
+				Description: lo.ToPtr("newer description"),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: hooks.ErrArchivedProgramUpdateNotAllowed.Error(),
+		},
+		{
+			name:      "update allowed, program is archived but status is updated",
+			programID: archivedProgram.ID,
+			request: testclient.UpdateProgramInput{
+				Status: lo.ToPtr(enums.ProgramStatusInProgress),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateProgram(tc.ctx, program.ID, tc.request)
+			resp, err := tc.client.UpdateProgram(tc.ctx, tc.programID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
