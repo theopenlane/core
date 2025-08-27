@@ -2,13 +2,13 @@ auth:
     enabled: true
     providers:
         github:
-            clientEndpoint: http://localhost:17608
+            clientEndpoint: ""
             clientId: ""
             clientSecret: ""
             redirectUrl: /v1/github/callback
             scopes: null
         google:
-            clientEndpoint: http://localhost:17608
+            clientEndpoint: ""
             clientId: ""
             clientSecret: ""
             redirectUrl: /v1/google/callback
@@ -20,17 +20,16 @@ auth:
             enabled: true
             enforceTimeout: true
             maxDevices: 10
-            relyingPartyId: localhost
-            requestOrigins:
-                - http://localhost:3001
+            relyingPartyId: ""
+            requestOrigins: null
             timeout: 60000000000
     supportedProviders: null
     token:
         accessDuration: 3600000000000
-        audience: https://theopenlane.io
+        audience: ""
         generateKeys: true
-        issuer: https://auth.theopenlane.io
-        jwksEndpoint: https://api.theopenlane.io/.well-known/jwks.json
+        issuer: ""
+        jwksEndpoint: ""
         keys: null
         kid: ""
         refreshAudience: ""
@@ -121,17 +120,17 @@ entConfig:
         workspace: ""
 integrationOauthProvider:
     github:
-        clientEndpoint: http://localhost:17608
+        clientEndpoint: ""
         clientId: ""
         clientSecret: ""
         scopes: null
-    redirectUrl: http://localhost:17608
+    redirectUrl: ""
     slack:
-        clientEndpoint: http://localhost:17608
+        clientEndpoint: ""
         clientId: ""
         clientSecret: ""
         scopes: null
-    successRedirectUrl: /integrations/success
+    successRedirectUrl: ""
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     riverConf:

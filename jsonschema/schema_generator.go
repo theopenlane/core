@@ -271,18 +271,18 @@ func generateConfigMapEntry(field envparse.VarInfo, defaultVal string) string {
 	// Prefix with openlane.coreConfiguration for Helm chart compatibility
 	helmPath := fmt.Sprintf("openlane.coreConfiguration.%s", strings.TrimPrefix(field.FullPath, "core."))
 	if defaultVal == "" {
-		return fmt.Sprintf("  %s: {{ .Values.%s }}\n", field.Key, helmPath)
+		return fmt.Sprintf("  %s: {{ .Values.%s | quote }}\n", field.Key, helmPath)
 	}
 
 	// Format default value based on type
 	formattedDefault := formatDefaultValue(defaultVal, field.Type.Kind())
-	return fmt.Sprintf("  %s: {{ .Values.%s | default %s }}\n", field.Key, helmPath, formattedDefault)
+	return fmt.Sprintf("  %s: {{ .Values.%s | quote | default %s }}\n", field.Key, helmPath, formattedDefault)
 }
 
 // formatDefaultValue formats a default value based on its type
 func formatDefaultValue(defaultVal string, kind reflect.Kind) string {
 	switch kind {
-	case reflect.String, reflect.Int64:
+	case reflect.String, reflect.Int64, reflect.Int, reflect.Int32:
 		return "\"" + defaultVal + "\""
 	case reflect.Slice:
 		// Remove brackets and add quotes
@@ -600,8 +600,6 @@ func formatValue(v any) string {
 }
 
 // hasSecretChildren checks if a struct has any sensitive child fields
-//
-//nolint:unused // actually used but linter doesn't see it
 func hasSecretChildren(v reflect.Value, prefix string) bool {
 	if !v.IsValid() || v.Kind() != reflect.Struct {
 		return false
@@ -855,7 +853,11 @@ func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, d
 		} else {
 			template.WriteString("\"")
 			template.WriteString(domainPrefix)
-			template.WriteString(".{{ .Values.domain }}")
+			if strings.HasSuffix(domainPrefix, "@") {
+				template.WriteString("{{ .Values.domain }}")
+			} else {
+				template.WriteString(".{{ .Values.domain }}")
+			}
 			template.WriteString("\"")
 		}
 	case domainSuffix != "":
