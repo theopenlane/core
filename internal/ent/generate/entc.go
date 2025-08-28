@@ -81,10 +81,6 @@ func main() {
 		accessmap.WithSchemaPath(schemaPath),
 	)
 
-	exportEnumsExt := exportenums.New(
-		exportenums.WithSchemaPath(schemaPath),
-	)
-
 	log.Info().Msg("running ent codegen with extensions")
 
 	if err := entc.Generate(schemaPath, &gen.Config{
@@ -95,7 +91,7 @@ func main() {
 			genhooks.GenQuery(graphSimpleQueryDir),
 			genhooks.GenSearchSchema(graphSchemaDir, graphQueryDir),
 			accessMapExt.Hook(),
-			exportEnumsExt.Hook(),
+			exportenums.New().Hook(),
 		},
 		Package: "github.com/theopenlane/core/internal/ent/generated",
 		Features: []gen.Feature{

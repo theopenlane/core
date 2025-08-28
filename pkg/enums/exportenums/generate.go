@@ -19,7 +19,6 @@ type ExtensionOption = func(*Extension)
 
 // Config is the configuration for the export enums extension.
 type Config struct {
-	SchemaPath  string
 	OutputDir   string
 	PackageName string
 }
@@ -29,7 +28,6 @@ func New(opts ...ExtensionOption) *Extension {
 	extension := &Extension{
 		// Set configuration defaults that can get overridden with ExtensionOption
 		config: &Config{
-			SchemaPath:  "./schema",
 			OutputDir:   "./pkg/enums",
 			PackageName: "enums",
 		},
@@ -46,14 +44,6 @@ func New(opts ...ExtensionOption) *Extension {
 type Extension struct {
 	entc.DefaultExtension
 	config *Config
-}
-
-// WithSchemaPath allows you to set an alternative schemaPath
-// Defaults to "./schema"
-func WithSchemaPath(schemaPath string) ExtensionOption {
-	return func(h *Extension) {
-		h.config.SchemaPath = schemaPath
-	}
 }
 
 // WithGeneratedDir allows you to set an alternative output directory
