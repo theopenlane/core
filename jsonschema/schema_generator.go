@@ -309,6 +309,9 @@ func generateConfigMap(configMapPath, configMapData string) error {
 		return fmt.Errorf("failed to read ConfigMap template: %w", err)
 	}
 
+	// append the {{- end }} for the if wrapper
+	configMapData = configMapData + "{{- end }}\n"
+
 	header = append(header, []byte(configMapData)...)
 	configMapContent := header
 
