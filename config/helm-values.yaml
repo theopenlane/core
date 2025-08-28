@@ -141,7 +141,7 @@ coreConfiguration:
       # -- LLM contains configuration for large language model based summarization
       llm:
         # -- Provider specifies which LLM service to use
-        provider:   # @schema type:string
+        provider: none  # @schema type:string; default:none
         # -- Anthropic contains configuration for Anthropic's API
         anthropic:
           # -- BetaHeader specifies the beta API features to enable

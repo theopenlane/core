@@ -106,7 +106,7 @@ entConfig:
                 model: ""
                 organizationID: ""
                 url: ""
-            provider: ""
+            provider: none
         maximumSentences: 60
         type: lexrank
     windmill:

@@ -227,6 +227,11 @@ func processEnvironmentVariables() (*EnvironmentFields, []SensitiveField, error)
 	var sensitiveFields []SensitiveField
 
 	for _, field := range out {
+		if strings.EqualFold(field.FieldName, "domain") {
+			// skip the domain field, this is used for inheritance, not alone
+			continue
+		}
+
 		defaultVal := field.Tags.Get(defaultTag)
 		isSecret := field.Tags.Get(sensitiveTag) == "true" || isExternalSensitiveField(field.FullPath)
 
@@ -261,22 +266,34 @@ func generateConfigMapEntry(field envparse.VarInfo, defaultVal string) string {
 	domainPrefix := field.Tags.Get("domainPrefix")
 	domainSuffix := field.Tags.Get("domainSuffix")
 
+	kind := field.Type.Kind()
+
+	joinStr := ""
+	switch kind {
+	case reflect.Slice, reflect.Array:
+		joinStr = " join \",\""
+	case reflect.Map, reflect.Struct:
+		// maps cannot be set as environment variables
+		return ""
+	}
+
 	if domainTag == "inherit" {
 		// Generate Helm template logic for domain inheritance
 		helmPath := fmt.Sprintf("openlane.coreConfiguration.%s", strings.TrimPrefix(field.FullPath, "core."))
-		return generateDomainHelmTemplate(field.Key, helmPath, domainPrefix, domainSuffix, defaultVal)
+		return generateDomainHelmTemplate(field.Key, helmPath, domainPrefix, domainSuffix, defaultVal, joinStr)
 	}
 
 	// Standard non-domain field processing
 	// Prefix with openlane.coreConfiguration for Helm chart compatibility
 	helmPath := fmt.Sprintf("openlane.coreConfiguration.%s", strings.TrimPrefix(field.FullPath, "core."))
+
 	if defaultVal == "" {
-		return fmt.Sprintf("  %s: {{ .Values.%s | quote }}\n", field.Key, helmPath)
+		return fmt.Sprintf("  %s: {{%s .Values.%s | quote }}\n", field.Key, joinStr, helmPath)
 	}
 
 	// Format default value based on type
-	formattedDefault := formatDefaultValue(defaultVal, field.Type.Kind())
-	return fmt.Sprintf("  %s: {{ .Values.%s | quote | default %s }}\n", field.Key, helmPath, formattedDefault)
+	formattedDefault := formatDefaultValue(defaultVal, kind)
+	return fmt.Sprintf("  %s: {{%s .Values.%s | quote | default %s }}\n", field.Key, joinStr, helmPath, formattedDefault)
 }
 
 // formatDefaultValue formats a default value based on its type
@@ -815,7 +832,7 @@ func isExternalSensitiveField(path string) bool {
 }
 
 // generateDomainHelmTemplate creates Helm template logic for domain inheritance fields
-func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, defaultVal string) string {
+func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, defaultVal, joinStr string) string {
 	var template strings.Builder
 
 	// Generate block-level conditional template for proper Helm formatting
@@ -824,7 +841,7 @@ func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, d
 	template.WriteString(" }}\n")
 	template.WriteString("  ")
 	template.WriteString(envKey)
-	template.WriteString(": {{ .Values.")
+	template.WriteString(fmt.Sprintf(": {{%s .Values.", joinStr))
 	template.WriteString(fieldPath)
 	template.WriteString(" }}\n")
 	template.WriteString("{{- else if .Values.domain }}\n")

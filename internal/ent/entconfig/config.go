@@ -35,7 +35,7 @@ type LLMProvider string
 // SummarizerLLM contains configuration for multiple LLM providers
 type SummarizerLLM struct {
 	// Provider specifies which LLM service to use
-	Provider LLMProvider `json:"provider" koanf:"provider"`
+	Provider LLMProvider `json:"provider" koanf:"provider" default:"none"`
 
 	// Anthropic contains configuration for Anthropic's API
 	Anthropic AnthropicConfig `json:"anthropic" koanf:"anthropic"`
