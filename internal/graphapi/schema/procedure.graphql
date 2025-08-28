@@ -23,6 +23,19 @@ extend type Mutation{
         input: CreateProcedureInput!
     ): ProcedureCreatePayload!
     """
+    Create a new procedure via file upload
+    """
+    createUploadProcedure(
+        """
+        file containing values of the procedure
+        """
+        input: Upload!
+        """
+        ID of the owner organization
+        """
+        ownerID: ID!
+    ): ProcedureCreatePayload!
+    """
     Create multiple new procedures
     """
     createBulkProcedure(

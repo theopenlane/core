@@ -2474,6 +2474,8 @@ type ComplexityRoot struct {
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
+		CreateUploadInternalPolicy           func(childComplexity int, input graphql.Upload, ownerID string) int
+		CreateUploadProcedure                func(childComplexity int, input graphql.Upload, ownerID string) int
 		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
 		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
 		DeleteAPIToken                       func(childComplexity int, id string) int
@@ -17416,6 +17418,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateTrustCenterSubprocessor(childComplexity, args["input"].(generated.CreateTrustCenterSubprocessorInput)), true
+
+	case "Mutation.createUploadInternalPolicy":
+		if e.complexity.Mutation.CreateUploadInternalPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createUploadInternalPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateUploadInternalPolicy(childComplexity, args["input"].(graphql.Upload), args["ownerID"].(string)), true
+
+	case "Mutation.createUploadProcedure":
+		if e.complexity.Mutation.CreateUploadProcedure == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createUploadProcedure_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateUploadProcedure(childComplexity, args["input"].(graphql.Upload), args["ownerID"].(string)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -90650,6 +90676,19 @@ extend type Mutation{
         input: CreateInternalPolicyInput!
     ): InternalPolicyCreatePayload!
     """
+    Create a new internalPolicy via file upload
+    """
+    createUploadInternalPolicy(
+        """
+        file containing values of the internalPolicy
+        """
+        input: Upload!
+        """
+        ID of the owner organization
+        """
+        ownerID: ID!
+    ): InternalPolicyCreatePayload!
+    """
     Create multiple new internalPolicys
     """
     createBulkInternalPolicy(
@@ -92091,6 +92130,19 @@ extend type Mutation{
         values of the procedure
         """
         input: CreateProcedureInput!
+    ): ProcedureCreatePayload!
+    """
+    Create a new procedure via file upload
+    """
+    createUploadProcedure(
+        """
+        file containing values of the procedure
+        """
+        input: Upload!
+        """
+        ID of the owner organization
+        """
+        ownerID: ID!
     ): ProcedureCreatePayload!
     """
     Create multiple new procedures

@@ -10522,6 +10522,95 @@ func (_c *MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call) RunAndRetu
 	return _c
 }
 
+// CreateUploadProcedure provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateUploadProcedure(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadProcedure, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, ownerID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input, ownerID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateUploadProcedure")
+	}
+
+	var r0 *openlaneclient.CreateUploadProcedure
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, string, ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadProcedure, error)); ok {
+		return returnFunc(ctx, input, ownerID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, string, ...clientv2.RequestInterceptor) *openlaneclient.CreateUploadProcedure); ok {
+		r0 = returnFunc(ctx, input, ownerID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateUploadProcedure)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, graphql.Upload, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, ownerID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateUploadProcedure_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateUploadProcedure'
+type MockOpenlaneGraphClient_CreateUploadProcedure_Call struct {
+	*mock.Call
+}
+
+// CreateUploadProcedure is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - ownerID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateUploadProcedure(ctx interface{}, input interface{}, ownerID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateUploadProcedure_Call {
+	return &MockOpenlaneGraphClient_CreateUploadProcedure_Call{Call: _e.mock.On("CreateUploadProcedure",
+		append([]interface{}{ctx, input, ownerID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateUploadProcedure_Call) Run(run func(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateUploadProcedure_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateUploadProcedure_Call) Return(createUploadProcedure *openlaneclient.CreateUploadProcedure, err error) *MockOpenlaneGraphClient_CreateUploadProcedure_Call {
+	_c.Call.Return(createUploadProcedure, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateUploadProcedure_Call) RunAndReturn(run func(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadProcedure, error)) *MockOpenlaneGraphClient_CreateUploadProcedure_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateUser provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) CreateUser(ctx context.Context, input openlaneclient.CreateUserInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUser, error) {
 	var tmpRet mock.Arguments

@@ -34,6 +34,28 @@ func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.
 	}, nil
 }
 
+// CreateUploadProcedure is the resolver for the createUploadProcedure field.
+func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, input graphql.Upload, ownerID string) (*model.ProcedureCreatePayload, error) {
+	var procedureInput generated.CreateProcedureInput
+
+	procedureInput.OwnerID = &ownerID
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &ownerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	res, err := withTransactionalMutation(ctx).Procedure.Create().SetInput(procedureInput).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "procedure"})
+	}
+
+	return &model.ProcedureCreatePayload{
+		Procedure: res,
+	}, nil
+}
+
 // CreateBulkProcedure is the resolver for the createBulkProcedure field.
 func (r *mutationResolver) CreateBulkProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error) {
 	if len(input) == 0 {

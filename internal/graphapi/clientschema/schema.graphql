@@ -26512,6 +26512,20 @@ type Mutation {
 		input: CreateInternalPolicyInput!
 	): InternalPolicyCreatePayload!
 	"""
+	Create a new internalPolicy via file upload
+	"""
+	createUploadInternalPolicy(
+		"""
+		file containing values of the internalPolicy
+		"""
+		input: Upload!
+
+		"""
+		ID of the owner organization
+		"""
+		ownerID: ID!
+	): InternalPolicyCreatePayload!
+	"""
 	Create multiple new internalPolicys
 	"""
 	createBulkInternalPolicy(
@@ -27145,6 +27159,20 @@ type Mutation {
 		values of the procedure
 		"""
 		input: CreateProcedureInput!
+	): ProcedureCreatePayload!
+	"""
+	Create a new procedure via file upload
+	"""
+	createUploadProcedure(
+		"""
+		file containing values of the procedure
+		"""
+		input: Upload!
+
+		"""
+		ID of the owner organization
+		"""
+		ownerID: ID!
 	): ProcedureCreatePayload!
 	"""
 	Create multiple new procedures
