@@ -77,7 +77,7 @@ func (CustomDomain) Fields() []ent.Field {
 func (e CustomDomain) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(e, withSkipForSystemAdmin(true)),
+			newOrgOwnedMixin(e, withSkipForSystemAdmin(true), withAllowAnonymousTrustCenterAccess(true)),
 		},
 	}.getMixins(e)
 }
@@ -123,11 +123,7 @@ func (e CustomDomain) Policy() ent.Policy {
 			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithOnMutationRules(
-			ent.OpUpdateOne|ent.OpUpdate,
-			rule.AllowMutationIfSystemAdmin(),
-		),
-		policy.WithOnMutationRules(
-			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete,
+			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete|ent.OpUpdateOne|ent.OpUpdate,
 			policy.CheckOrgWriteAccess(),
 		),
 	)

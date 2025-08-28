@@ -244,7 +244,8 @@
           "description": "FieldLevelEncryption contains the configuration for field level encryption"
         },
         "trustCenterCnameTarget": {
-          "type": "string"
+          "type": "string",
+          "description": "TrustCenterCnameTarget is the cname target for the trust center\nUsed for mapping the vanity domains to the trust centers"
         }
       },
       "additionalProperties": false,

@@ -130,6 +130,8 @@ coreConfiguration:
     fieldLevelEncryption:
       # -- Enabled indicates whether Tink encryption is enabled
       enabled: false  # @schema type:boolean; default:false
+    # -- TrustCenterCnameTarget is the cname target for the trust center
+    # Used for mapping the vanity domains to the trust centers
     trustCenterCnameTarget: ""  # @schema type:string
   # -- EntConfig contains the ent configuration used by the ent middleware
   entConfig:
