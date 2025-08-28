@@ -57,12 +57,14 @@ auth:
     - github
   providers:
     google:
+      clientEndpoint: "http://localhost:17608"
       clientId: "client_id_here.apps.googleusercontent.com"
       clientSecret: "client_secret_here"
       scopes:
         - email
         - profile
     github:
+      clientEndpoint: "http://localhost:17608"
       clientId: "client_id_here"
       clientSecret: "client_secret_here"
       scopes:
@@ -152,3 +154,16 @@ objectStorage:
 
 subscription:
   enabled: false
+
+integrationOauthProvider:
+  successRedirectUrl: "http://localhost:3001/organization-settings/integrations"
+  github:
+    clientEndpoint: http://localhost:17608
+    clientId: ""
+    clientSecret: ""
+    scopes: ["read:user", "user:email", "repo"]
+  slack:
+    clientEndpoint: http://localhost:17608
+    clientId: ""
+    clientSecret: ""
+    scopes: ["channels:read", "chat:write", "users:read"]
