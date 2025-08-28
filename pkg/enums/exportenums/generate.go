@@ -17,14 +17,14 @@ import (
 // ExtensionOption is a function that modifies the Extension configuration.
 type ExtensionOption = func(*Extension)
 
-// Config is the configuration for the accessmap extension.
+// Config is the configuration for the export enums extension.
 type Config struct {
 	SchemaPath  string
 	OutputDir   string
 	PackageName string
 }
 
-// New creates a new accessmap extension
+// New creates a new export enums extension
 func New(opts ...ExtensionOption) *Extension {
 	extension := &Extension{
 		// Set configuration defaults that can get overridden with ExtensionOption
@@ -57,7 +57,7 @@ func WithSchemaPath(schemaPath string) ExtensionOption {
 }
 
 // WithGeneratedDir allows you to set an alternative output directory
-// Defaults to "./internal/ent/generated"
+// Defaults to "./pkg/enums"
 func WithGeneratedDir(outputDir string) ExtensionOption {
 	return func(h *Extension) {
 		h.config.OutputDir = outputDir
@@ -65,7 +65,7 @@ func WithGeneratedDir(outputDir string) ExtensionOption {
 }
 
 // WithPackageName allows you to set an alternative package name for the generated file
-// Defaults to "generated"
+// Defaults to "enums"
 func WithPackageName(packageName string) ExtensionOption {
 	return func(h *Extension) {
 		h.config.PackageName = packageName
@@ -131,7 +131,7 @@ func (e Extension) Hook() gen.Hook {
 				return fmt.Errorf("parsing template: %w", err)
 			}
 
-			outputDir := "pkg/enums"
+			outputDir := e.config.OutputDir
 			if err := os.MkdirAll(outputDir, 0755); err != nil {
 				return fmt.Errorf("creating output directory: %w", err)
 			}
