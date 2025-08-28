@@ -4,29 +4,27 @@ package hooks
 
 import (
 	"fmt"
-	"strings"
 )
 
 // ExportableSchemas contains all schemas that have Exportable annotation
 var ExportableSchemas = map[string]bool{
-	"control":        true,
-	"evidence":       true,
-	"internalpolicy": true,
-	"procedure":      true,
-	"risk":           true,
-	"subscriber":     true,
-	"task":           true,
+	"CONTROL":         true,
+	"EVIDENCE":        true,
+	"INTERNAL_POLICY": true,
+	"PROCEDURE":       true,
+	"RISK":            true,
+	"SUBSCRIBER":      true,
+	"TASK":            true,
 }
 
 // IsSchemaExportable checks if a schema name is exportable
 func IsSchemaExportable(schemaName string) bool {
-	return ExportableSchemas[strings.ToLower(schemaName)]
+	return ExportableSchemas[schemaName]
 }
 
 // ValidateExportType validates that an export type corresponds to an exportable schema
 func ValidateExportType(exportType string) error {
-	schemaName := strings.ToLower(exportType)
-	if !IsSchemaExportable(schemaName) {
+	if !IsSchemaExportable(exportType) {
 		return fmt.Errorf("schema %s is not exportable (missing Exportable annotation)", exportType)
 	}
 	return nil

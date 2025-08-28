@@ -22,9 +22,9 @@ func TestMutationCreateExport(t *testing.T) {
 		{
 			name: "happy path, create export with regular user",
 			request: testclient.CreateExportInput{
-				ExportType: enums.ExportTypeInternalpolicy,
-				OwnerID:    &testUser1.OrganizationID,
+				ExportType: enums.ExportTypeInternalPolicy,
 				Format:     enums.ExportFormatCsv,
+				Fields:     []string{"name", "details"},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
