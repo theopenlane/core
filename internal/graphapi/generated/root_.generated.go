@@ -50174,7 +50174,7 @@ ExportExportType is enum for the field export_type
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
   CONTROL
   EVIDENCE
-  INTERNALPOLICY
+  INTERNAL_POLICY
   PROCEDURE
   RISK
   SUBSCRIBER
