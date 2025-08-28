@@ -103,6 +103,7 @@ func (e Extension) Hook() gen.Hook {
 			}
 
 			funcMap := template.FuncMap{
+				"ToUpper":         strings.ToUpper,
 				"ToCamel":         strcase.UpperCamelCase,
 				"ToSnake":         strcase.UpperSnakeCase,
 				"lowerToSentence": lowerToSentence,
@@ -173,7 +174,7 @@ var (
 	{{ $.Name }}{{ . | ToCamel }} {{ $.Name }} = "{{ . | ToSnake }}"
 {{- end }}
 	// {{ $.Name }}Invalid is used when an unknown or unsupported value is provided.
-	{{ $.Name }}Invalid {{ $.Name }} = "{{ .Name }}_INVALID"
+	{{ $.Name }}Invalid {{ $.Name }} = "{{ .Name | ToUpper }}_INVALID"
 )
 
 // Values returns a slice of strings representing all valid {{ .Name }} values.

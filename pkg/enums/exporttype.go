@@ -25,7 +25,7 @@ var (
 	// ExportTypeTask indicates the task.
 	ExportTypeTask ExportType = "TASK"
 	// ExportTypeInvalid is used when an unknown or unsupported value is provided.
-	ExportTypeInvalid ExportType = "ExportType_INVALID"
+	ExportTypeInvalid ExportType = "EXPORTTYPE_INVALID"
 )
 
 // Values returns a slice of strings representing all valid ExportType values.
