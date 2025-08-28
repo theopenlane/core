@@ -102,7 +102,7 @@ require (
 	github.com/tmc/langchaingo v0.1.13
 	github.com/urfave/cli/v3 v3.4.1
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/windmill-labs/windmill-go-client v1.530.0
+	github.com/windmill-labs/windmill-go-client v1.536.0
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.44.0
