@@ -12,7 +12,6 @@ metadata:
     # This checksum will trigger deployment restarts when the ConfigMap changes
     checksum/config: {{ .Values | toYaml | sha256sum }}
 data:
-  CORE_DOMAIN: {{ .Values.openlane.coreConfiguration.domain | quote }}
   CORE_REFRESHINTERVAL: {{ .Values.openlane.coreConfiguration.refreshInterval | quote | default "10m" }}
   CORE_SERVER_DEV: {{ .Values.openlane.coreConfiguration.server.dev | quote | default "false" }}
   CORE_SERVER_LISTEN: {{ .Values.openlane.coreConfiguration.server.listen | quote | default ":17608" }}
@@ -27,9 +26,8 @@ data:
   CORE_SERVER_TLS_CERTKEY: {{ .Values.openlane.coreConfiguration.server.tls.certKey | quote | default "server.key" }}
   CORE_SERVER_TLS_AUTOCERT: {{ .Values.openlane.coreConfiguration.server.tls.autoCert | quote | default "false" }}
   CORE_SERVER_CORS_ENABLED: {{ .Values.openlane.coreConfiguration.server.cors.enabled | quote | default "true" }}
-  CORE_SERVER_CORS_PREFIXES: {{ .Values.openlane.coreConfiguration.server.cors.prefixes | quote }}
 {{- if .Values.openlane.coreConfiguration.server.cors.allowOrigins }}
-  CORE_SERVER_CORS_ALLOWORIGINS: {{ .Values.openlane.coreConfiguration.server.cors.allowOrigins }}
+  CORE_SERVER_CORS_ALLOWORIGINS: {{ join "," .Values.openlane.coreConfiguration.server.cors.allowOrigins }}
 {{- else if .Values.domain }}
   CORE_SERVER_CORS_ALLOWORIGINS: "https://console.{{ .Values.domain }},https://docs.{{ .Values.domain }},https://www.{{ .Values.domain }}"
 {{- else }}
@@ -46,11 +44,9 @@ data:
   CORE_SERVER_SECURE_REFERRERPOLICY: {{ .Values.openlane.coreConfiguration.server.secure.referrerpolicy | quote | default "same-origin" }}
   CORE_SERVER_SECURE_CSPREPORTONLY: {{ .Values.openlane.coreConfiguration.server.secure.cspreportonly | quote | default "false" }}
   CORE_SERVER_REDIRECTS_ENABLED: {{ .Values.openlane.coreConfiguration.server.redirects.enabled | quote | default "true" }}
-  CORE_SERVER_REDIRECTS_REDIRECTS: {{ .Values.openlane.coreConfiguration.server.redirects.redirects | quote }}
   CORE_SERVER_REDIRECTS_CODE: {{ .Values.openlane.coreConfiguration.server.redirects.code | quote }}
   CORE_SERVER_CACHECONTROL_ENABLED: {{ .Values.openlane.coreConfiguration.server.cacheControl.enabled | quote | default "true" }}
-  CORE_SERVER_CACHECONTROL_NOCACHEHEADERS: {{ .Values.openlane.coreConfiguration.server.cacheControl.noCacheHeaders | quote }}
-  CORE_SERVER_CACHECONTROL_ETAGHEADERS: {{ .Values.openlane.coreConfiguration.server.cacheControl.etagHeaders | quote }}
+  CORE_SERVER_CACHECONTROL_ETAGHEADERS: {{ join "," .Values.openlane.coreConfiguration.server.cacheControl.etagHeaders | quote }}
   CORE_SERVER_MIME_ENABLED: {{ .Values.openlane.coreConfiguration.server.mime.enabled | quote | default "true" }}
   CORE_SERVER_MIME_MIMETYPESFILE: {{ .Values.openlane.coreConfiguration.server.mime.mimeTypesFile | quote }}
   CORE_SERVER_MIME_DEFAULTCONTENTTYPE: {{ .Values.openlane.coreConfiguration.server.mime.defaultContentType | quote | default "application/data" }}
@@ -68,9 +64,9 @@ data:
   CORE_SERVER_CSRFPROTECTION_COOKIEPATH: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookiePath | quote | default "/" }}
   CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: {{ .Values.openlane.coreConfiguration.server.defaultTrustCenterDomain | quote }}
   CORE_SERVER_FIELDLEVELENCRYPTION_ENABLED: {{ .Values.openlane.coreConfiguration.server.fieldLevelEncryption.enabled | quote | default "false" }}
-  CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.openlane.coreConfiguration.entConfig.entityTypes | quote }}
+  CORE_ENTCONFIG_ENTITYTYPES: {{ join "," .Values.openlane.coreConfiguration.entConfig.entityTypes | quote }}
   CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.type | quote | default "lexrank" }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.provider | quote }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.provider | quote | default "none" }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BETAHEADER: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.betaHeader | quote }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_LEGACYTEXTCOMPLETION: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.legacyTextCompletion | quote }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BASEURL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.baseURL | quote }}
@@ -121,9 +117,8 @@ data:
 {{- else }}
   CORE_AUTH_TOKEN_JWKSENDPOINT: ""
 {{- end }}
-  CORE_AUTH_TOKEN_KEYS: {{ .Values.openlane.coreConfiguration.auth.token.keys | quote }}
   CORE_AUTH_TOKEN_GENERATEKEYS: {{ .Values.openlane.coreConfiguration.auth.token.generateKeys | quote | default "true" }}
-  CORE_AUTH_SUPPORTEDPROVIDERS: {{ .Values.openlane.coreConfiguration.auth.supportedProviders | quote }}
+  CORE_AUTH_SUPPORTEDPROVIDERS: {{ join "," .Values.openlane.coreConfiguration.auth.supportedProviders | quote }}
   CORE_AUTH_PROVIDERS_REDIRECTURL: {{ .Values.openlane.coreConfiguration.auth.providers.redirectUrl | quote | default "http://localhost:3001/api/auth/callback/theopenlane" }}
   CORE_AUTH_PROVIDERS_GITHUB_CLIENTID: {{ .Values.openlane.coreConfiguration.auth.providers.github.clientId | quote }}
 {{- if .Values.openlane.coreConfiguration.auth.providers.github.clientEndpoint }}
@@ -133,7 +128,7 @@ data:
 {{- else }}
   CORE_AUTH_PROVIDERS_GITHUB_CLIENTENDPOINT: ""
 {{- end }}
-  CORE_AUTH_PROVIDERS_GITHUB_SCOPES: {{ .Values.openlane.coreConfiguration.auth.providers.github.scopes | quote }}
+  CORE_AUTH_PROVIDERS_GITHUB_SCOPES: {{ join "," .Values.openlane.coreConfiguration.auth.providers.github.scopes | quote }}
   CORE_AUTH_PROVIDERS_GITHUB_REDIRECTURL: {{ .Values.openlane.coreConfiguration.auth.providers.github.redirectUrl | quote | default "/v1/github/callback" }}
   CORE_AUTH_PROVIDERS_GOOGLE_CLIENTID: {{ .Values.openlane.coreConfiguration.auth.providers.google.clientId | quote }}
 {{- if .Values.openlane.coreConfiguration.auth.providers.google.clientEndpoint }}
@@ -143,7 +138,7 @@ data:
 {{- else }}
   CORE_AUTH_PROVIDERS_GOOGLE_CLIENTENDPOINT: ""
 {{- end }}
-  CORE_AUTH_PROVIDERS_GOOGLE_SCOPES: {{ .Values.openlane.coreConfiguration.auth.providers.google.scopes | quote }}
+  CORE_AUTH_PROVIDERS_GOOGLE_SCOPES: {{ join "," .Values.openlane.coreConfiguration.auth.providers.google.scopes | quote }}
   CORE_AUTH_PROVIDERS_GOOGLE_REDIRECTURL: {{ .Values.openlane.coreConfiguration.auth.providers.google.redirectUrl | quote | default "/v1/google/callback" }}
   CORE_AUTH_PROVIDERS_WEBAUTHN_ENABLED: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.enabled | quote | default "true" }}
   CORE_AUTH_PROVIDERS_WEBAUTHN_DISPLAYNAME: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.displayName | quote }}
@@ -155,7 +150,7 @@ data:
   CORE_AUTH_PROVIDERS_WEBAUTHN_RELYINGPARTYID: ""
 {{- end }}
 {{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: {{ join "," .Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins }}
 {{- else if .Values.domain }}
   CORE_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: "https://console.{{ .Values.domain }}"
 {{- else }}
@@ -209,7 +204,7 @@ data:
   CORE_TRACER_OTLP_ENDPOINT: {{ .Values.openlane.coreConfiguration.tracer.otlp.endpoint | quote | default "localhost:4317" }}
   CORE_TRACER_OTLP_INSECURE: {{ .Values.openlane.coreConfiguration.tracer.otlp.insecure | quote | default "true" }}
   CORE_TRACER_OTLP_CERTIFICATE: {{ .Values.openlane.coreConfiguration.tracer.otlp.certificate | quote }}
-  CORE_TRACER_OTLP_HEADERS: {{ .Values.openlane.coreConfiguration.tracer.otlp.headers | quote }}
+  CORE_TRACER_OTLP_HEADERS: {{ join "," .Values.openlane.coreConfiguration.tracer.otlp.headers | quote }}
   CORE_TRACER_OTLP_COMPRESSION: {{ .Values.openlane.coreConfiguration.tracer.otlp.compression | quote }}
   CORE_TRACER_OTLP_TIMEOUT: {{ .Values.openlane.coreConfiguration.tracer.otlp.timeout | quote | default "10s" }}
   CORE_EMAIL_COMPANYNAME: {{ .Values.openlane.coreConfiguration.email.companyName | quote }}
@@ -288,13 +283,6 @@ data:
   CORE_EMAIL_URLS_VERIFYBILLING: ""
 {{- end }}
   CORE_EMAIL_TEMPLATESPATH: {{ .Values.openlane.coreConfiguration.email.templatesPath | quote }}
-{{- if .Values.openlane.coreConfiguration.sessions.domain }}
-  CORE_SESSIONS_DOMAIN: {{ .Values.openlane.coreConfiguration.sessions.domain }}
-{{- else if .Values.domain }}
-  CORE_SESSIONS_DOMAIN: "{{ .Values.domain }}"
-{{- else }}
-  CORE_SESSIONS_DOMAIN: ""
-{{- end }}
   CORE_SESSIONS_MAXAGE: {{ .Values.openlane.coreConfiguration.sessions.maxAge | quote | default "3600" }}
   CORE_SESSIONS_SECURE: {{ .Values.openlane.coreConfiguration.sessions.secure | quote | default "true" }}
   CORE_SESSIONS_HTTPONLY: {{ .Values.openlane.coreConfiguration.sessions.httpOnly | quote | default "true" }}
@@ -320,7 +308,7 @@ data:
   CORE_OBJECTSTORAGE_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.region | quote }}
   CORE_OBJECTSTORAGE_DEFAULTBUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.defaultBucket | quote | default "file_uploads" }}
   CORE_OBJECTSTORAGE_LOCALURL: {{ .Values.openlane.coreConfiguration.objectStorage.localURL | quote | default "http://localhost:17608/files/" }}
-  CORE_OBJECTSTORAGE_KEYS: {{ .Values.openlane.coreConfiguration.objectStorage.keys | quote | default "uploadFile" }}
+  CORE_OBJECTSTORAGE_KEYS: {{ join "," .Values.openlane.coreConfiguration.objectStorage.keys | quote | default "uploadFile" }}
   CORE_OBJECTSTORAGE_MAXSIZEMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxSizeMB | quote }}
   CORE_OBJECTSTORAGE_MAXMEMORYMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxMemoryMB | quote }}
   CORE_SUBSCRIPTION_ENABLED: {{ .Values.openlane.coreConfiguration.subscription.enabled | quote | default "false" }}
@@ -348,7 +336,7 @@ data:
 {{- else }}
   CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: "https://console.theopenlane.io/organization-settings/billing/subscription_canceled"
 {{- end }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKEVENTS: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookEvents | quote }}
+  CORE_SUBSCRIPTION_STRIPEWEBHOOKEVENTS: {{ join "," .Values.openlane.coreConfiguration.subscription.stripeWebhookEvents | quote }}
   CORE_KEYWATCHER_ENABLED: {{ .Values.openlane.coreConfiguration.keywatcher.enabled | quote | default "false" }}
   CORE_KEYWATCHER_KEYDIR: {{ .Values.openlane.coreConfiguration.keywatcher.keyDir | quote | default "./keys" }}
   CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: {{ .Values.openlane.coreConfiguration.keywatcher.externalSecretsIntegration | quote | default "false" }}
@@ -370,7 +358,7 @@ data:
 {{- else }}
   CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTENDPOINT: ""
 {{- end }}
-  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_SCOPES: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.scopes | quote }}
+  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_SCOPES: {{ join "," .Values.openlane.coreConfiguration.integrationOauthProvider.github.scopes | quote }}
   CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTID: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientId | quote }}
 {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientEndpoint }}
   CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTENDPOINT: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientEndpoint }}
@@ -379,5 +367,5 @@ data:
 {{- else }}
   CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTENDPOINT: ""
 {{- end }}
-  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_SCOPES: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.scopes | quote }}
+  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_SCOPES: {{ join "," .Values.openlane.coreConfiguration.integrationOauthProvider.slack.scopes | quote }}
 {{- end }}
