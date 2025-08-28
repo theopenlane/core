@@ -108,7 +108,7 @@ func (e Extension) Hook() gen.Hook {
 				"lowerToSentence": lowerToSentence,
 			}
 
-			// loop through all nodes and generate schema if not specified to be skipped
+			// loop through all nodes and generate a list of schemas with the Export annotation
 			schemas := []string{}
 			for _, node := range g.Nodes {
 				if checkHasExportAnnotation(node) {
