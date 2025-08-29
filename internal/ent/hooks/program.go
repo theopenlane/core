@@ -149,12 +149,17 @@ func checkArchivedProgram(ctx context.Context, m *generated.ProgramMutation) err
 		return err
 	}
 
+	if program.Status != enums.ProgramStatusArchived {
+		return nil
+	}
+
 	status, exists := m.Status()
-	// if status is not getting updated and the current status is archived
-	// prevent all updates
-	if (!exists && program.Status == enums.ProgramStatusArchived) || status == enums.ProgramStatusArchived {
+	if !exists {
 		return ErrArchivedProgramUpdateNotAllowed
 	}
 
+	if status == enums.ProgramStatusArchived {
+		return ErrArchivedProgramUpdateNotAllowed
+	}
 	return nil
 }
