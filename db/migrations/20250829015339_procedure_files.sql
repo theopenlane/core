@@ -1,2 +1,0 @@
--- Create "procedure_files" table
-CREATE TABLE "procedure_files" ("procedure_id" character varying NOT NULL, "file_id" character varying NOT NULL, PRIMARY KEY ("procedure_id", "file_id"), CONSTRAINT "procedure_files_file_id" FOREIGN KEY ("file_id") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "procedure_files_procedure_id" FOREIGN KEY ("procedure_id") REFERENCES "procedures" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
