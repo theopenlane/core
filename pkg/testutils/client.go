@@ -26,7 +26,8 @@ import (
 )
 
 var (
-	MaxResultLimit = 10
+	MaxResultLimit         = 10
+	TrustCenterCnameTarget = "cname.test.net"
 )
 
 // localRoundTripper is an http.RoundTripper that executes HTTP transactions
@@ -131,7 +132,8 @@ func createAuthConfig(c *ent.Client) *auth.Options {
 // testGraphServer creates a new graphql server for testing the graph api
 func testGraphServer(c *ent.Client, u *objects.Objects) *handler.Server {
 	r := graphapi.NewResolver(c, u).
-		WithMaxResultLimit(MaxResultLimit)
+		WithMaxResultLimit(MaxResultLimit).
+		WithTrustCenterCnameTarget(TrustCenterCnameTarget)
 
 	// add the pool to the resolver without a metrics collector
 	r.WithPool(100, false) //nolint:mnd

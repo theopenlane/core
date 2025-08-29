@@ -345,7 +345,7 @@ func TestUpdateCustomDomain(t *testing.T) {
 			updateInput: testclient.UpdateCustomDomainInput{
 				Tags: []string{"hello"},
 			},
-			errorMsg: notFoundErrorMsg,
+			errorMsg: notAuthorizedErrorMsg,
 		},
 	}
 

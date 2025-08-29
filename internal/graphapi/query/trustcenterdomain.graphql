@@ -1,0 +1,22 @@
+mutation CreateTrustCenterDomain($input: CreateTrustCenterDomainInput!) {
+  createTrustCenterDomain(input: $input) {
+    customDomain {
+      cnameRecord
+      createdAt
+      createdBy
+      dnsVerificationID
+      dnsVerification {
+        id
+        dnsTxtRecord
+        dnsTxtValue
+        dnsVerificationStatus
+      }
+      id
+      mappableDomainID
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

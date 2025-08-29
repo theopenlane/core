@@ -139,6 +139,7 @@ Server settings for the echo server
 |**secretManager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 |**defaultTrustCenterDomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
 |[**fieldLevelEncryption**](#serverfieldlevelencryption)|`object`||no|
+|**trustCenterCnameTarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
 
 **Additional Properties:** not allowed  
 **Example**

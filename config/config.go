@@ -131,6 +131,9 @@ type Server struct {
 	DefaultTrustCenterDomain string `json:"defaultTrustCenterDomain" koanf:"defaultTrustCenterDomain" default:""`
 	// FieldLevelEncryption contains the configuration for field level encryption
 	FieldLevelEncryption crypto.Config `json:"fieldLevelEncryption" koanf:"fieldLevelEncryption"`
+	// TrustCenterCnameTarget is the cname target for the trust center
+	// Used for mapping the vanity domains to the trust centers
+	TrustCenterCnameTarget string `json:"trustCenterCnameTarget" koanf:"trustCenterCnameTarget" default:""`
 }
 
 // KeyWatcher contains settings for the key watcher that manages JWT signing keys
