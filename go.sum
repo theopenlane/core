@@ -152,8 +152,8 @@ github.com/chzyer/readline v1.5.1/go.mod h1:Eh+b79XXUwfKfcPLepksvw2tcLE/Ct21YObk
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
 github.com/chzyer/test v1.0.0 h1:p3BQDXSxOhOG0P9z6/hGnII4LGiEPOYBhs8asl/fC04=
 github.com/chzyer/test v1.0.0/go.mod h1:2JlltgoNkt4TW/z9V/IzDdFaMTM2JPIi26O1pF38GC8=
-github.com/cloudflare/cloudflare-go/v5 v5.1.0 h1:vvWUtrt5ZPEBFidL2ik64QipXLZmhMBgtRTw4bYvPwE=
-github.com/cloudflare/cloudflare-go/v5 v5.1.0/go.mod h1:C6OjOlDHOk/g7lXehothXJRFZrSIJMLzOZB2SXQhcjk=
+github.com/cloudflare/cloudflare-go/v6 v6.0.0 h1:dJ6o3NUWeJnRQ6jlLi+y/ZE7vvAWTEm5hBWPlaiUxCM=
+github.com/cloudflare/cloudflare-go/v6 v6.0.0/go.mod h1:bNIqRTGO0VC9lqJYanVbO+UDJPqo+zoG3Gs9ioL9PIA=
 github.com/containerd/continuity v0.4.5 h1:ZRoN1sXq9u7V6QoHMcVWGhOwDFqZ4B9i5H6un1Wh0x4=
 github.com/containerd/continuity v0.4.5/go.mod h1:/lNJvtJKUQStBzpVQ1+rasXO1LAWtUQssk28EZvJ3nE=
 github.com/containerd/errdefs v1.0.0 h1:tg5yIfIlQIrxYtu9ajqY42W3lpS19XqdxRQeEwYG8PI=

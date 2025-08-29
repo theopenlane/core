@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/custom_hostnames"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/custom_hostnames"
 	"github.com/riverqueue/river"
 	"github.com/riverqueue/river/rivertype"
 	"github.com/samber/lo"
