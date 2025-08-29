@@ -32,6 +32,9 @@ public_key.pem
 emails/*
 fixtures/emails/*
 
+# bats tests
+tmp/test.md
+
 # object files
 file_uploads/*
 

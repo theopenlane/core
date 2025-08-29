@@ -61,7 +61,7 @@ if [[ -f "$values_file" ]]; then
   yq e -i ".openlane.image.tag = \"$new_tag\"" "$values_file"
   git add "$values_file"
   changes_made=true
-  change_summary+="\\n- 📦 Updated image tag from $current_tag to $new_tag"
+  change_summary+="\n- 📦 Updated image tag from $current_tag to $new_tag"
 
   echo "✅ Image tag updated successfully"
 else
@@ -92,7 +92,7 @@ if [[ -f "$chart_file" ]]; then
   sed -i -E "s/^version:.*/version: $new_chart_version/" "$chart_file"
   git add "$chart_file"
   changes_made=true
-  change_summary+="\\n- 📈 Updated chart version to $new_chart_version"
+  change_summary+="\n- 📈 Updated chart version to $new_chart_version"
 fi
 
 # Update app version to match the release tag
@@ -111,7 +111,7 @@ if [[ -f "$chart_file" ]]; then
     fi
 
     git add "$chart_file"
-    change_summary+="\\n- 🔄 Updated app version to $new_app_version"
+    change_summary+="\n- 🔄 Updated app version to $new_app_version"
   fi
 fi
 

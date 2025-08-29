@@ -12,9 +12,13 @@ tasks:
 
   test:
     desc: Install dependencies
+    silent: true
     cmds:
-      - pwd
+      - echo "Running bats tests"
       - for: {var: BATSTESTS, as: BATS}
         cmd: bats {{.BATS}}
+      - echo "running test for load_template"
+      - bash .buildkite/tests/load_template_test.sh
+
     preconditions:
       - which bats
