@@ -12,14 +12,7 @@ mutation CreateTrustCenter($input: CreateTrustCenterInput!) {
       updatedBy
       customDomain {
         cnameRecord
-        dnsVerification {
-          dnsTxtRecord
-          dnsTxtValue
-          dnsVerificationStatus
-          dnsVerificationStatusReason
-          acmeChallengeStatus
-          acmeChallengeStatusReason
-        }
+        dnsVerificationID
       }
       setting {
         id
@@ -62,14 +55,7 @@ query GetAllTrustCenters {
         createdBy
         customDomain {
           cnameRecord
-          dnsVerification {
-            dnsTxtRecord
-            dnsTxtValue
-            dnsVerificationStatus
-            dnsVerificationStatusReason
-            acmeChallengeStatus
-            acmeChallengeStatusReason
-          }
+          dnsVerificationID
         }
         customDomainID
         id
@@ -111,14 +97,7 @@ query GetTrustCenterByID($trustCenterId: ID!) {
     updatedBy
     customDomain {
       cnameRecord
-      dnsVerification {
-        dnsTxtRecord
-        dnsTxtValue
-        dnsVerificationStatus
-        dnsVerificationStatusReason
-        acmeChallengeStatus
-        acmeChallengeStatusReason
-      }
+      dnsVerificationID
     }
     setting {
       id
@@ -161,14 +140,7 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
         updatedBy
         customDomain {
           cnameRecord
-          dnsVerification {
-            dnsTxtRecord
-            dnsTxtValue
-            dnsVerificationStatus
-            dnsVerificationStatusReason
-            acmeChallengeStatus
-            acmeChallengeStatusReason
-          }
+          dnsVerificationID
         }
         setting {
           id
@@ -204,14 +176,7 @@ mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterI
       updatedBy
       customDomain {
         cnameRecord
-        dnsVerification {
-          dnsTxtRecord
-          dnsTxtValue
-          dnsVerificationStatus
-          dnsVerificationStatusReason
-          acmeChallengeStatus
-          acmeChallengeStatusReason
-        }
+        dnsVerificationID
       }
       setting {
         id

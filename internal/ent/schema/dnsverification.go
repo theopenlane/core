@@ -94,7 +94,7 @@ func (DNSVerification) Fields() []ent.Field {
 func (e DNSVerification) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(e, withSkipForSystemAdmin(true), withAllowAnonymousTrustCenterAccess(true)),
+			newOrgOwnedMixin(e, withSkipForSystemAdmin(true)),
 		},
 	}.getMixins(e)
 }
