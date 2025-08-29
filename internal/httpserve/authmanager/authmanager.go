@@ -139,8 +139,8 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 
 // checkActiveSubscription checks if the organization has an active subscription
 func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) {
-	// if the entitlement manager is disabled, we can skip the check
-	if a.db.EntitlementManager == nil {
+	// if the entitlement manager is disabled or modules not enabled, we can skip the check
+	if !a.GetDBClient().EntConfig.Modules.Enabled || a.db.EntitlementManager == nil {
 		return true, nil
 	}
 
