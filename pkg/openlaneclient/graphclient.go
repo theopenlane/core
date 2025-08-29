@@ -470,6 +470,7 @@ type OpenlaneGraphClient interface {
 	UpdateTrustCenterCompliance(ctx context.Context, updateTrustCenterComplianceID string, input UpdateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterCompliance, error)
 	GetAllTrustCenterComplianceHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterComplianceHistories, error)
 	GetTrustCenterComplianceHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterComplianceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterComplianceHistories, error)
+	CreateTrustCenterDomain(ctx context.Context, input CreateTrustCenterDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDomain, error)
 	GetAllTrustCenterHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterHistories, error)
 	GetTrustCenterHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterHistories, error)
 	CreateTrustCenterSetting(ctx context.Context, input CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSetting, error)
@@ -66811,16 +66812,135 @@ func (t *UpdateTFASetting_UpdateTFASetting) GetTfaSetting() *UpdateTFASetting_Up
 	return &t.TfaSetting
 }
 
+type CreateTrustCenter_CreateTrustCenter_TrustCenter_CustomDomain struct {
+	CnameRecord       string  "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	DNSVerificationID *string "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+}
+
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_CustomDomain) GetCnameRecord() string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_CustomDomain{}
+	}
+	return t.CnameRecord
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_CustomDomain) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_CustomDomain{}
+	}
+	return t.DNSVerificationID
+}
+
+type CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting struct {
+	AccentColor     *string                                                           "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor *string                                                           "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	Font            *string                                                           "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor *string                                                           "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID              string                                                            "json:\"id\" graphql:\"id\""
+	LogoFile        *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                           "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                           "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                           "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                           "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode       *enums.TrustCenterThemeMode                                       "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title           *string                                                           "json:\"title,omitempty\" graphql:\"title\""
+}
+
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetAccentColor() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.AccentColor
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.BackgroundColor
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetFont() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.Font
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetForegroundColor() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.ForegroundColor
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetLogoFile() *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetOverview() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.Overview
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetPrimaryColor() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.PrimaryColor
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.ThemeMode
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetTitle() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.Title
+}
+
 type CreateTrustCenter_CreateTrustCenter_TrustCenter struct {
-	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CustomDomainID *string    "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
-	ID             string     "json:\"id\" graphql:\"id\""
-	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Slug           *string    "json:\"slug,omitempty\" graphql:\"slug\""
-	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt      *time.Time                                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomain   *CreateTrustCenter_CreateTrustCenter_TrustCenter_CustomDomain "json:\"customDomain,omitempty\" graphql:\"customDomain\""
+	CustomDomainID *string                                                       "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string                                                        "json:\"id\" graphql:\"id\""
+	OwnerID        *string                                                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Setting        *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting      "json:\"setting,omitempty\" graphql:\"setting\""
+	Slug           *string                                                       "json:\"slug,omitempty\" graphql:\"slug\""
+	Tags           []string                                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time                                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetCreatedAt() *time.Time {
@@ -66834,6 +66954,12 @@ func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetCreatedBy() *string
 		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
 	}
 	return t.CreatedBy
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetCustomDomain() *CreateTrustCenter_CreateTrustCenter_TrustCenter_CustomDomain {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
+	}
+	return t.CustomDomain
 }
 func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetCustomDomainID() *string {
 	if t == nil {
@@ -66852,6 +66978,12 @@ func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetOwnerID() *string {
 		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
 	}
 	return t.OwnerID
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetSetting() *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
+	}
+	return t.Setting
 }
 func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetSlug() *string {
 	if t == nil {
@@ -66932,16 +67064,135 @@ func (t *GetAllTrustCenters_TrustCenters_PageInfo) GetStartCursor() *string {
 	return t.StartCursor
 }
 
+type GetAllTrustCenters_TrustCenters_Edges_Node_CustomDomain struct {
+	CnameRecord       string  "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	DNSVerificationID *string "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+}
+
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_CustomDomain) GetCnameRecord() string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_CustomDomain{}
+	}
+	return t.CnameRecord
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_CustomDomain) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_CustomDomain{}
+	}
+	return t.DNSVerificationID
+}
+
+type GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetAllTrustCenters_TrustCenters_Edges_Node_Setting struct {
+	AccentColor     *string                                                      "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor *string                                                      "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	Font            *string                                                      "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor *string                                                      "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID              string                                                       "json:\"id\" graphql:\"id\""
+	LogoFile        *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                      "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                      "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                      "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                      "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode       *enums.TrustCenterThemeMode                                  "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title           *string                                                      "json:\"title,omitempty\" graphql:\"title\""
+}
+
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetAccentColor() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.AccentColor
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.BackgroundColor
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetFont() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.Font
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetForegroundColor() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.ForegroundColor
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoFile() *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetOverview() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.Overview
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetPrimaryColor() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.PrimaryColor
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.ThemeMode
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetTitle() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.Title
+}
+
 type GetAllTrustCenters_TrustCenters_Edges_Node struct {
-	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CustomDomainID *string    "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
-	ID             string     "json:\"id\" graphql:\"id\""
-	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Slug           *string    "json:\"slug,omitempty\" graphql:\"slug\""
-	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt      *time.Time                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomain   *GetAllTrustCenters_TrustCenters_Edges_Node_CustomDomain "json:\"customDomain,omitempty\" graphql:\"customDomain\""
+	CustomDomainID *string                                                  "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string                                                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                                                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Setting        *GetAllTrustCenters_TrustCenters_Edges_Node_Setting      "json:\"setting,omitempty\" graphql:\"setting\""
+	Slug           *string                                                  "json:\"slug,omitempty\" graphql:\"slug\""
+	Tags           []string                                                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetCreatedAt() *time.Time {
@@ -66955,6 +67206,12 @@ func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetCreatedBy() *string {
 		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
 	}
 	return t.CreatedBy
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetCustomDomain() *GetAllTrustCenters_TrustCenters_Edges_Node_CustomDomain {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.CustomDomain
 }
 func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetCustomDomainID() *string {
 	if t == nil {
@@ -66973,6 +67230,12 @@ func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetOwnerID() *string {
 		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
 	}
 	return t.OwnerID
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetSetting() *GetAllTrustCenters_TrustCenters_Edges_Node_Setting {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.Setting
 }
 func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetSlug() *string {
 	if t == nil {
@@ -67033,6 +67296,24 @@ func (t *GetAllTrustCenters_TrustCenters) GetTotalCount() int64 {
 		t = &GetAllTrustCenters_TrustCenters{}
 	}
 	return t.TotalCount
+}
+
+type GetTrustCenterByID_TrustCenter_CustomDomain struct {
+	CnameRecord       string  "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	DNSVerificationID *string "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+}
+
+func (t *GetTrustCenterByID_TrustCenter_CustomDomain) GetCnameRecord() string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_CustomDomain{}
+	}
+	return t.CnameRecord
+}
+func (t *GetTrustCenterByID_TrustCenter_CustomDomain) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_CustomDomain{}
+	}
+	return t.DNSVerificationID
 }
 
 type GetTrustCenterByID_TrustCenter_Setting_LogoFile struct {
@@ -67135,16 +67416,17 @@ func (t *GetTrustCenterByID_TrustCenter_Setting) GetTitle() *string {
 }
 
 type GetTrustCenterByID_TrustCenter struct {
-	CreatedAt      *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CustomDomainID *string                                 "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
-	ID             string                                  "json:\"id\" graphql:\"id\""
-	OwnerID        *string                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Setting        *GetTrustCenterByID_TrustCenter_Setting "json:\"setting,omitempty\" graphql:\"setting\""
-	Slug           *string                                 "json:\"slug,omitempty\" graphql:\"slug\""
-	Tags           []string                                "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt      *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt      *time.Time                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomain   *GetTrustCenterByID_TrustCenter_CustomDomain "json:\"customDomain,omitempty\" graphql:\"customDomain\""
+	CustomDomainID *string                                      "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string                                       "json:\"id\" graphql:\"id\""
+	OwnerID        *string                                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Setting        *GetTrustCenterByID_TrustCenter_Setting      "json:\"setting,omitempty\" graphql:\"setting\""
+	Slug           *string                                      "json:\"slug,omitempty\" graphql:\"slug\""
+	Tags           []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTrustCenterByID_TrustCenter) GetCreatedAt() *time.Time {
@@ -67158,6 +67440,12 @@ func (t *GetTrustCenterByID_TrustCenter) GetCreatedBy() *string {
 		t = &GetTrustCenterByID_TrustCenter{}
 	}
 	return t.CreatedBy
+}
+func (t *GetTrustCenterByID_TrustCenter) GetCustomDomain() *GetTrustCenterByID_TrustCenter_CustomDomain {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter{}
+	}
+	return t.CustomDomain
 }
 func (t *GetTrustCenterByID_TrustCenter) GetCustomDomainID() *string {
 	if t == nil {
@@ -67240,16 +67528,135 @@ func (t *GetTrustCenters_TrustCenters_PageInfo) GetStartCursor() *string {
 	return t.StartCursor
 }
 
+type GetTrustCenters_TrustCenters_Edges_Node_CustomDomain struct {
+	CnameRecord       string  "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	DNSVerificationID *string "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+}
+
+func (t *GetTrustCenters_TrustCenters_Edges_Node_CustomDomain) GetCnameRecord() string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_CustomDomain{}
+	}
+	return t.CnameRecord
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_CustomDomain) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_CustomDomain{}
+	}
+	return t.DNSVerificationID
+}
+
+type GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenters_TrustCenters_Edges_Node_Setting struct {
+	AccentColor     *string                                                   "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor *string                                                   "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	Font            *string                                                   "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor *string                                                   "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID              string                                                    "json:\"id\" graphql:\"id\""
+	LogoFile        *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                   "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                   "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                   "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                   "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode       *enums.TrustCenterThemeMode                               "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title           *string                                                   "json:\"title,omitempty\" graphql:\"title\""
+}
+
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetAccentColor() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.AccentColor
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.BackgroundColor
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetFont() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.Font
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetForegroundColor() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.ForegroundColor
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetID() string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoFile() *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetOverview() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.Overview
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetPrimaryColor() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.PrimaryColor
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.ThemeMode
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetTitle() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.Title
+}
+
 type GetTrustCenters_TrustCenters_Edges_Node struct {
-	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CustomDomainID *string    "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
-	ID             string     "json:\"id\" graphql:\"id\""
-	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Slug           *string    "json:\"slug,omitempty\" graphql:\"slug\""
-	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt      *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomain   *GetTrustCenters_TrustCenters_Edges_Node_CustomDomain "json:\"customDomain,omitempty\" graphql:\"customDomain\""
+	CustomDomainID *string                                               "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string                                                "json:\"id\" graphql:\"id\""
+	OwnerID        *string                                               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Setting        *GetTrustCenters_TrustCenters_Edges_Node_Setting      "json:\"setting,omitempty\" graphql:\"setting\""
+	Slug           *string                                               "json:\"slug,omitempty\" graphql:\"slug\""
+	Tags           []string                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTrustCenters_TrustCenters_Edges_Node) GetCreatedAt() *time.Time {
@@ -67263,6 +67670,12 @@ func (t *GetTrustCenters_TrustCenters_Edges_Node) GetCreatedBy() *string {
 		t = &GetTrustCenters_TrustCenters_Edges_Node{}
 	}
 	return t.CreatedBy
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node) GetCustomDomain() *GetTrustCenters_TrustCenters_Edges_Node_CustomDomain {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.CustomDomain
 }
 func (t *GetTrustCenters_TrustCenters_Edges_Node) GetCustomDomainID() *string {
 	if t == nil {
@@ -67281,6 +67694,12 @@ func (t *GetTrustCenters_TrustCenters_Edges_Node) GetOwnerID() *string {
 		t = &GetTrustCenters_TrustCenters_Edges_Node{}
 	}
 	return t.OwnerID
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node) GetSetting() *GetTrustCenters_TrustCenters_Edges_Node_Setting {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.Setting
 }
 func (t *GetTrustCenters_TrustCenters_Edges_Node) GetSlug() *string {
 	if t == nil {
@@ -67343,16 +67762,135 @@ func (t *GetTrustCenters_TrustCenters) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type UpdateTrustCenter_UpdateTrustCenter_TrustCenter_CustomDomain struct {
+	CnameRecord       string  "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	DNSVerificationID *string "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+}
+
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_CustomDomain) GetCnameRecord() string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_CustomDomain{}
+	}
+	return t.CnameRecord
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_CustomDomain) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_CustomDomain{}
+	}
+	return t.DNSVerificationID
+}
+
+type UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting struct {
+	AccentColor     *string                                                           "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor *string                                                           "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	Font            *string                                                           "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor *string                                                           "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID              string                                                            "json:\"id\" graphql:\"id\""
+	LogoFile        *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                           "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                           "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                           "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                           "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode       *enums.TrustCenterThemeMode                                       "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title           *string                                                           "json:\"title,omitempty\" graphql:\"title\""
+}
+
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetAccentColor() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.AccentColor
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.BackgroundColor
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetFont() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.Font
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetForegroundColor() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.ForegroundColor
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetLogoFile() *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetOverview() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.Overview
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetPrimaryColor() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.PrimaryColor
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.ThemeMode
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetTitle() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.Title
+}
+
 type UpdateTrustCenter_UpdateTrustCenter_TrustCenter struct {
-	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CustomDomainID *string    "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
-	ID             string     "json:\"id\" graphql:\"id\""
-	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Slug           *string    "json:\"slug,omitempty\" graphql:\"slug\""
-	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt      *time.Time                                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomain   *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_CustomDomain "json:\"customDomain,omitempty\" graphql:\"customDomain\""
+	CustomDomainID *string                                                       "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string                                                        "json:\"id\" graphql:\"id\""
+	OwnerID        *string                                                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Setting        *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting      "json:\"setting,omitempty\" graphql:\"setting\""
+	Slug           *string                                                       "json:\"slug,omitempty\" graphql:\"slug\""
+	Tags           []string                                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time                                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetCreatedAt() *time.Time {
@@ -67366,6 +67904,12 @@ func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetCreatedBy() *string
 		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
 	}
 	return t.CreatedBy
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetCustomDomain() *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_CustomDomain {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
+	}
+	return t.CustomDomain
 }
 func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetCustomDomainID() *string {
 	if t == nil {
@@ -67384,6 +67928,12 @@ func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetOwnerID() *string {
 		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
 	}
 	return t.OwnerID
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetSetting() *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
+	}
+	return t.Setting
 }
 func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetSlug() *string {
 	if t == nil {
@@ -68720,6 +69270,130 @@ func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories) GetTo
 		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories{}
 	}
 	return t.TotalCount
+}
+
+type CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification struct {
+	DNSTxtRecord          string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue           string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	ID                    string                      "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification) GetDNSTxtValue() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification{}
+	}
+	return t.DNSTxtValue
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification{}
+	}
+	return &t.DNSVerificationStatus
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification{}
+	}
+	return t.ID
+}
+
+type CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain struct {
+	CnameRecord       string                                                                        "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt         *time.Time                                                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                                                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSVerification   *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification "json:\"dnsVerification,omitempty\" graphql:\"dnsVerification\""
+	DNSVerificationID *string                                                                       "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	ID                string                                                                        "json:\"id\" graphql:\"id\""
+	MappableDomainID  string                                                                        "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID           *string                                                                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string                                                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time                                                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                                                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetCnameRecord() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.CnameRecord
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetDNSVerification() *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.DNSVerification
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.DNSVerificationID
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetMappableDomainID() string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.MappableDomainID
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.OwnerID
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetTags() []string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.Tags
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTrustCenterDomain_CreateTrustCenterDomain struct {
+	CustomDomain CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain "json:\"customDomain\" graphql:\"customDomain\""
+}
+
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain) GetCustomDomain() *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain{}
+	}
+	return &t.CustomDomain
 }
 
 type GetAllTrustCenterHistories_TrustCenterHistories_PageInfo struct {
@@ -79150,6 +79824,17 @@ func (t *GetTrustCenterComplianceHistories) GetTrustCenterComplianceHistories() 
 		t = &GetTrustCenterComplianceHistories{}
 	}
 	return &t.TrustCenterComplianceHistories
+}
+
+type CreateTrustCenterDomain struct {
+	CreateTrustCenterDomain CreateTrustCenterDomain_CreateTrustCenterDomain "json:\"createTrustCenterDomain\" graphql:\"createTrustCenterDomain\""
+}
+
+func (t *CreateTrustCenterDomain) GetCreateTrustCenterDomain() *CreateTrustCenterDomain_CreateTrustCenterDomain {
+	if t == nil {
+		t = &CreateTrustCenterDomain{}
+	}
+	return &t.CreateTrustCenterDomain
 }
 
 type GetAllTrustCenterHistories struct {
@@ -99465,6 +100150,26 @@ const CreateTrustCenterDocument = `mutation CreateTrustCenter ($input: CreateTru
 			tags
 			updatedAt
 			updatedBy
+			customDomain {
+				cnameRecord
+				dnsVerificationID
+			}
+			setting {
+				id
+				overview
+				title
+				primaryColor
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
+				themeMode
+				font
+				foregroundColor
+				backgroundColor
+				accentColor
+			}
 		}
 	}
 }
@@ -99524,6 +100229,10 @@ const GetAllTrustCentersDocument = `query GetAllTrustCenters {
 			node {
 				createdAt
 				createdBy
+				customDomain {
+					cnameRecord
+					dnsVerificationID
+				}
 				customDomainID
 				id
 				ownerID
@@ -99531,6 +100240,22 @@ const GetAllTrustCentersDocument = `query GetAllTrustCenters {
 				tags
 				updatedAt
 				updatedBy
+				setting {
+					id
+					overview
+					title
+					primaryColor
+					logoRemoteURL
+					logoLocalFileID
+					logoFile {
+						presignedURL
+					}
+					themeMode
+					font
+					foregroundColor
+					backgroundColor
+					accentColor
+				}
 			}
 		}
 	}
@@ -99563,6 +100288,10 @@ const GetTrustCenterByIDDocument = `query GetTrustCenterByID ($trustCenterId: ID
 		tags
 		updatedAt
 		updatedBy
+		customDomain {
+			cnameRecord
+			dnsVerificationID
+		}
 		setting {
 			id
 			overview
@@ -99620,6 +100349,26 @@ const GetTrustCentersDocument = `query GetTrustCenters ($first: Int, $last: Int,
 				tags
 				updatedAt
 				updatedBy
+				customDomain {
+					cnameRecord
+					dnsVerificationID
+				}
+				setting {
+					id
+					overview
+					title
+					primaryColor
+					logoRemoteURL
+					logoLocalFileID
+					logoFile {
+						presignedURL
+					}
+					themeMode
+					font
+					foregroundColor
+					backgroundColor
+					accentColor
+				}
 			}
 		}
 	}
@@ -99657,6 +100406,26 @@ const UpdateTrustCenterDocument = `mutation UpdateTrustCenter ($updateTrustCente
 			tags
 			updatedAt
 			updatedBy
+			customDomain {
+				cnameRecord
+				dnsVerificationID
+			}
+			setting {
+				id
+				overview
+				title
+				primaryColor
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
+				themeMode
+				font
+				foregroundColor
+				backgroundColor
+				accentColor
+			}
 		}
 	}
 }
@@ -100091,6 +100860,47 @@ func (c *Client) GetTrustCenterComplianceHistories(ctx context.Context, first *i
 
 	var res GetTrustCenterComplianceHistories
 	if err := c.Client.Post(ctx, "GetTrustCenterComplianceHistories", GetTrustCenterComplianceHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateTrustCenterDomainDocument = `mutation CreateTrustCenterDomain ($input: CreateTrustCenterDomainInput!) {
+	createTrustCenterDomain(input: $input) {
+		customDomain {
+			cnameRecord
+			createdAt
+			createdBy
+			dnsVerificationID
+			dnsVerification {
+				id
+				dnsTxtRecord
+				dnsTxtValue
+				dnsVerificationStatus
+			}
+			id
+			mappableDomainID
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterDomain(ctx context.Context, input CreateTrustCenterDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDomain, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTrustCenterDomain
+	if err := c.Client.Post(ctx, "CreateTrustCenterDomain", CreateTrustCenterDomainDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -102221,6 +103031,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateTrustCenterComplianceDocument:            "UpdateTrustCenterCompliance",
 	GetAllTrustCenterComplianceHistoriesDocument:   "GetAllTrustCenterComplianceHistories",
 	GetTrustCenterComplianceHistoriesDocument:      "GetTrustCenterComplianceHistories",
+	CreateTrustCenterDomainDocument:                "CreateTrustCenterDomain",
 	GetAllTrustCenterHistoriesDocument:             "GetAllTrustCenterHistories",
 	GetTrustCenterHistoriesDocument:                "GetTrustCenterHistories",
 	CreateTrustCenterSettingDocument:               "CreateTrustCenterSetting",

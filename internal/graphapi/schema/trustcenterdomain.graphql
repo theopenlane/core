@@ -1,0 +1,32 @@
+extend type Mutation{
+    """
+    Create a new trustCenterSetting
+    """
+    createTrustCenterDomain(
+        """
+        values of the trustCenterDomain
+        """
+        input: CreateTrustCenterDomainInput!
+    ): TrustCenterDomainCreatePayload!
+}
+
+"""
+Return response for createTrustCenterDomain mutation
+"""
+type TrustCenterDomainCreatePayload {
+    customDomain: CustomDomain!
+}
+
+"""
+Input for createTrustCenterDomain mutation
+"""
+input CreateTrustCenterDomainInput {
+	"""
+	the name of the custom domain
+	"""
+	cnameRecord: String!
+    """
+    trust center ID
+    """
+    trustCenterID: ID!
+}

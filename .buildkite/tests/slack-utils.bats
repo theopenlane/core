@@ -49,8 +49,8 @@ SCRIPT
     grep -q 'hello World' "$TEST_TEMP_DIR/payload"
 }
 
-@test "format_summary replaces literal \\n with real newlines" {
-  input="\\n- Updated values.yaml\\n- Fixed config\\n- Added feature"
+@test "format_summary replaces literal \n with real newlines" {
+  input="\n- Updated values.yaml\n- Fixed config\n- Added feature"
   expected=$'
 - Updated values.yaml
 - Fixed config

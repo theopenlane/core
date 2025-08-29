@@ -6,12 +6,15 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/pkg/corejobs"
+	"github.com/theopenlane/iam/auth"
 )
 
 // HookCustomDomain runs on create mutations
@@ -45,7 +48,12 @@ func HookDeleteCustomDomain() ent.Hook {
 	return hook.If(
 		func(next ent.Mutator) ent.Mutator {
 			return hook.CustomDomainFunc(func(ctx context.Context, m *generated.CustomDomainMutation) (generated.Value, error) {
+				zerolog.Ctx(ctx).Debug().Msg("custom domain delete hook")
 				if !isDeleteOp(ctx, m) {
+					// only allow system admin to update
+					if !auth.IsSystemAdminFromContext(ctx) {
+						return nil, generated.ErrPermissionDenied
+					}
 					return next.Mutate(ctx, m)
 				}
 
@@ -57,7 +65,25 @@ func HookDeleteCustomDomain() ent.Hook {
 				cd, err := m.Client().CustomDomain.Query().Where(customdomain.ID(id)).
 					Select(customdomain.FieldDNSVerificationID, customdomain.FieldMappableDomainID, customdomain.FieldDNSVerificationID).
 					Only(ctx)
-				if err != nil || cd.DNSVerificationID == "" {
+				if err != nil {
+					return nil, err
+				}
+
+				trustCenters, err := m.Client().TrustCenter.Query().
+					Where(trustcenter.HasCustomDomainWith(customdomain.ID(id))).
+					All(ctx)
+				if err != nil {
+					return nil, err
+				}
+				for _, tc := range trustCenters {
+					if err = m.Client().TrustCenter.UpdateOneID(tc.ID).
+						ClearCustomDomain().
+						Exec(ctx); err != nil {
+						return nil, err
+					}
+				}
+
+				if cd.DNSVerificationID == "" {
 					return next.Mutate(ctx, m)
 				}
 

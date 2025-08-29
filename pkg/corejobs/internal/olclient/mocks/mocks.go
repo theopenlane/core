@@ -10356,6 +10356,89 @@ func (_c *MockOpenlaneGraphClient_CreateTrustCenterCompliance_Call) RunAndReturn
 	return _c
 }
 
+// CreateTrustCenterDomain provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateTrustCenterDomain(ctx context.Context, input openlaneclient.CreateTrustCenterDomainInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterDomain, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateTrustCenterDomain")
+	}
+
+	var r0 *openlaneclient.CreateTrustCenterDomain
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterDomainInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterDomain, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterDomainInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateTrustCenterDomain); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateTrustCenterDomain)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateTrustCenterDomainInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateTrustCenterDomain_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateTrustCenterDomain'
+type MockOpenlaneGraphClient_CreateTrustCenterDomain_Call struct {
+	*mock.Call
+}
+
+// CreateTrustCenterDomain is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateTrustCenterDomainInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateTrustCenterDomain(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTrustCenterDomain_Call {
+	return &MockOpenlaneGraphClient_CreateTrustCenterDomain_Call{Call: _e.mock.On("CreateTrustCenterDomain",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterDomain_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTrustCenterDomainInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTrustCenterDomain_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateTrustCenterDomainInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateTrustCenterDomainInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterDomain_Call) Return(createTrustCenterDomain *openlaneclient.CreateTrustCenterDomain, err error) *MockOpenlaneGraphClient_CreateTrustCenterDomain_Call {
+	_c.Call.Return(createTrustCenterDomain, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterDomain_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTrustCenterDomainInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterDomain, error)) *MockOpenlaneGraphClient_CreateTrustCenterDomain_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateTrustCenterSetting provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) CreateTrustCenterSetting(ctx context.Context, input openlaneclient.CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterSetting, error) {
 	var tmpRet mock.Arguments

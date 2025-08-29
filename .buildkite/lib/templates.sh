@@ -19,9 +19,7 @@ load_template() {
         if [[ "$arg" == *"="* ]]; then
             key="${arg%%=*}"
             value="${arg#*=}"
-            # Escape special characters in value and use printf for safe substitution
-            escaped_value=$(printf '%s\n' "$value" | sed 's/[[\.*^$()+?{|]/\\&/g')
-            content=$(echo "$content" | sed "s|{{${key}}}|$escaped_value|g")
+            content="${content//\{\{${key}\}\}/$value}"
         fi
     done
 

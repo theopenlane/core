@@ -10,6 +10,10 @@ mutation CreateTrustCenter($input: CreateTrustCenterInput!) {
       tags
       updatedAt
       updatedBy
+      customDomain {
+        cnameRecord
+        dnsVerificationID
+      }
       setting {
         id
         overview
@@ -49,6 +53,10 @@ query GetAllTrustCenters {
       node {
         createdAt
         createdBy
+        customDomain {
+          cnameRecord
+          dnsVerificationID
+        }
         customDomainID
         id
         ownerID
@@ -87,6 +95,10 @@ query GetTrustCenterByID($trustCenterId: ID!) {
     tags
     updatedAt
     updatedBy
+    customDomain {
+      cnameRecord
+      dnsVerificationID
+    }
     setting {
       id
       overview
@@ -126,6 +138,10 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
         tags
         updatedAt
         updatedBy
+        customDomain {
+          cnameRecord
+          dnsVerificationID
+        }
         setting {
           id
           overview
@@ -158,6 +174,10 @@ mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterI
       tags
       updatedAt
       updatedBy
+      customDomain {
+        cnameRecord
+        dnsVerificationID
+      }
       setting {
         id
         overview

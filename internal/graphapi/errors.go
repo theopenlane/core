@@ -36,6 +36,10 @@ var (
 
 	// ErrResourceNotAccessibleWithToken is returned when a resource is not accessible with a personal access token or api token
 	ErrResourceNotAccessibleWithToken = errors.New("resource is not accessible with token authentication")
+
+	ErrMissingTrustCenterCnameTarget = errors.New("missing trust center cname target")
+
+	ErrTrustCenterDomainAlreadyExists = errors.New("domain already exists for this trust center")
 )
 
 var _ gqlerrors.CustomErrorType = (*NotFoundError)(nil)

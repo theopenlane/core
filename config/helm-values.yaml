@@ -130,6 +130,9 @@ coreConfiguration:
     fieldLevelEncryption:
       # -- Enabled indicates whether Tink encryption is enabled
       enabled: false  # @schema type:boolean; default:false
+    # -- TrustCenterCnameTarget is the cname target for the trust center
+    # Used for mapping the vanity domains to the trust centers
+    trustCenterCnameTarget: ""  # @schema type:string
   # -- EntConfig contains the ent configuration used by the ent middleware
   entConfig:
     # -- EntityTypes is the list of entity types to create by default for the organization
@@ -141,7 +144,7 @@ coreConfiguration:
       # -- LLM contains configuration for large language model based summarization
       llm:
         # -- Provider specifies which LLM service to use
-        provider:   # @schema type:string
+        provider: none  # @schema type:string; default:none
         # -- Anthropic contains configuration for Anthropic's API
         anthropic:
           # -- BetaHeader specifies the beta API features to enable
@@ -193,13 +196,13 @@ coreConfiguration:
     # -- Token contains the token config settings for the issued tokens
     token:
       kid: ""  # @schema type:string
-      audience: "https://theopenlane.io"  # @schema type:string; default:https://theopenlane.io
+      audience: ""  # @schema type:string
       refreshAudience: ""  # @schema type:string
-      issuer: "https://auth.theopenlane.io"  # @schema type:string; default:https://auth.theopenlane.io
+      issuer: ""  # @schema type:string
       accessDuration: 1h0m0s  # @schema type:integer; default:1h
       refreshDuration: 2h0m0s  # @schema type:integer; default:2h
       refreshOverlap: -15m0s  # @schema type:integer; default:-15m
-      jwksEndpoint: "https://api.theopenlane.io/.well-known/jwks.json"  # @schema type:string; default:https://api.theopenlane.io/.well-known/jwks.json
+      jwksEndpoint: ""  # @schema type:string
       keys: {}
       generateKeys: true  # @schema type:boolean; default:true
     # -- SupportedProviders are the supported oauth providers that have been configured
@@ -211,22 +214,21 @@ coreConfiguration:
       # -- Github contains the configuration settings for the Github Oauth Provider
       github:
         clientId: ""  # @schema type:string
-        clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
+        clientEndpoint: ""  # @schema type:string
         scopes: []
         redirectUrl: "/v1/github/callback"  # @schema type:string; default:/v1/github/callback
       # -- Google contains the configuration settings for the Google Oauth Provider
       google:
         clientId: ""  # @schema type:string
-        clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
+        clientEndpoint: ""  # @schema type:string
         scopes: []
         redirectUrl: "/v1/google/callback"  # @schema type:string; default:/v1/google/callback
       # -- Webauthn contains the configuration settings for the Webauthn Oauth Provider
       webauthn:
         enabled: true  # @schema type:boolean; default:true
         displayName: ""  # @schema type:string
-        relyingPartyId: "localhost"  # @schema type:string; default:localhost
-        requestOrigins:
-            - http://localhost:3001
+        relyingPartyId: ""  # @schema type:string
+        requestOrigins: []
         maxDevices: 10  # @schema type:integer; default:10
         enforceTimeout: true  # @schema type:boolean; default:true
         timeout: 1m0s  # @schema type:integer; default:60s
@@ -269,10 +271,6 @@ coreConfiguration:
     driverName: "pgx"  # @schema type:string; default:pgx
     # -- enables writing to two databases simultaneously
     multiWrite: false  # @schema type:boolean; default:false
-    # -- dsn of the primary database
-    primaryDbSource: "postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable"  # @schema type:string; default:postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable
-    # -- dsn of the secondary database if multi-write is enabled
-    secondaryDbSource: "postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable"  # @schema type:string; default:postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable
     # -- cache results for subsequent requests
     cacheTTL: 1s  # @schema type:integer; default:1s
     # -- run migrations on startup
@@ -287,7 +285,6 @@ coreConfiguration:
     maxIdleConnections: 0  # @schema type:integer; default:0
   # -- JobQueue contains the configuration for the job queue (river) client
   jobQueue:
-    connectionURI: "postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable"  # @schema type:string; default:postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     runMigrations: false  # @schema type:boolean; default:false
     riverConf:
   # -- Redis contains the redis configuration for the key-value store
@@ -341,8 +338,6 @@ coreConfiguration:
     templatesPath: ""  # @schema type:string
   # -- Sessions config for user sessions and cookies
   sessions:
-    signingKey: "my-signing-secret"  # @schema type:string; default:my-signing-secret
-    encryptionKey: "encryptionsecret"  # @schema type:string; default:encryptionsecret
     domain: ""  # @schema type:string
     maxAge: 3600  # @schema type:integer; default:3600
     secure: true  # @schema type:boolean; default:true
@@ -420,27 +415,23 @@ coreConfiguration:
   # -- IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
   integrationOauthProvider:
     # -- RedirectURL is the base URL for integration OAuth callbacks
-    redirectUrl: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
+    redirectUrl: ""  # @schema type:string
     # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration
-    successRedirectUrl: "/integrations/success"  # @schema type:string; default:/integrations/success
+    successRedirectUrl: ""  # @schema type:string
     # -- Github contains the configuration settings for GitHub integrations
     github:
       # -- ClientID is the OAuth2 client ID
       clientId: ""  # @schema type:string
-      # -- ClientSecret is the OAuth2 client secret
-      clientSecret: ""  # @schema type:string
       # -- ClientEndpoint is the base URL for the OAuth endpoints
-      clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
+      clientEndpoint: ""  # @schema type:string
       # -- Scopes are the OAuth2 scopes to request
       scopes: []
     # -- Slack contains the configuration settings for Slack integrations
     slack:
       # -- ClientID is the OAuth2 client ID
       clientId: ""  # @schema type:string
-      # -- ClientSecret is the OAuth2 client secret
-      clientSecret: ""  # @schema type:string
       # -- ClientEndpoint is the base URL for the OAuth endpoints
-      clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
+      clientEndpoint: ""  # @schema type:string
       # -- Scopes are the OAuth2 scopes to request
       scopes: []
 
@@ -506,6 +497,46 @@ externalSecrets:
       secretKey: "CORE_AUTHZ_CREDENTIALS_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-authz-credentials-clientsecret"  # @schema type:string
+    # -- core-db-primarydbsource secret configuration
+    core-db-primarydbsource:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for db.primaryDbSource
+      secretKey: "CORE_DB_PRIMARYDBSOURCE"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-db-primarydbsource"  # @schema type:string
+    # -- core-db-secondarydbsource secret configuration
+    core-db-secondarydbsource:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for db.secondaryDbSource
+      secretKey: "CORE_DB_SECONDARYDBSOURCE"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-db-secondarydbsource"  # @schema type:string
+    # -- core-jobqueue-connectionuri secret configuration
+    core-jobqueue-connectionuri:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for jobQueue.connectionURI
+      secretKey: "CORE_JOBQUEUE_CONNECTIONURI"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-jobqueue-connectionuri"  # @schema type:string
+    # -- core-sessions-signingkey secret configuration
+    core-sessions-signingkey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for sessions.signingKey
+      secretKey: "CORE_SESSIONS_SIGNINGKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-sessions-signingkey"  # @schema type:string
+    # -- core-sessions-encryptionkey secret configuration
+    core-sessions-encryptionkey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for sessions.encryptionKey
+      secretKey: "CORE_SESSIONS_ENCRYPTIONKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-sessions-encryptionkey"  # @schema type:string
     # -- core-totp-secret secret configuration
     core-totp-secret:
       # -- Enable this external secret
@@ -570,3 +601,19 @@ externalSecrets:
       secretKey: "CORE_SLACK_WEBHOOKURL"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-slack-webhookurl"  # @schema type:string
+    # -- core-integrationoauthprovider-github-clientsecret secret configuration
+    core-integrationoauthprovider-github-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrationOauthProvider.github.clientSecret
+      secretKey: "CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrationoauthprovider-github-clientsecret"  # @schema type:string
+    # -- core-integrationoauthprovider-slack-clientsecret secret configuration
+    core-integrationoauthprovider-slack-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrationOauthProvider.slack.clientSecret
+      secretKey: "CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrationoauthprovider-slack-clientsecret"  # @schema type:string

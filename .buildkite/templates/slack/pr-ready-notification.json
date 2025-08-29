@@ -20,11 +20,11 @@
       "fields": [
         {
           "type": "mrkdwn",
-          "text": "*Core PR:*\\n<{{CORE_PR_URL}}|#{{CORE_PR_NUMBER}}> (Merged)"
+          "text": "*Core PR:*\n<{{CORE_PR_URL}}|#{{CORE_PR_NUMBER}}> (Merged)"
         },
         {
           "type": "mrkdwn",
-          "text": "*Infrastructure PR:*\\n<{{INFRA_PR_URL}}|Ready for Review>"
+          "text": "*Infrastructure PR:*\n<{{INFRA_PR_URL}}|Ready for Review>"
         }
       ]
     },
@@ -39,7 +39,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*Next Steps:*\\n• Review the infrastructure PR\\n• Approve and merge to deploy changes\\n• Monitor deployment for any issues"
+        "text": "*Next Steps:*\n• Review the infrastructure PR\n• Approve and merge to deploy changes\n• Monitor deployment for any issues"
       }
     },
     {

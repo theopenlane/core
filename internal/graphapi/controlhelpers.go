@@ -11,6 +11,10 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
+const (
+	noCategoryLabel = "No Category"
+)
+
 // getAllCategories retrieves all control categories based on the provided field name and where filter
 // It returns a slice of ControlCategoryEdge containing the categories and their reference frameworks.
 // If the field name is not provided, it defaults to control.FieldCategory.

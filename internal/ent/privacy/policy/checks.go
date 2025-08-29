@@ -109,6 +109,7 @@ func CheckOrgEditAccess() privacy.QueryRule {
 // CheckOrgWriteAccess checks if the requestor has access to edit the organization
 func CheckOrgWriteAccess() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
+		zerolog.Ctx(ctx).Debug().Msg("checking org write access")
 		return rule.CheckCurrentOrgAccess(ctx, m, fgax.CanEdit)
 	})
 }
@@ -171,7 +172,7 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 
 	for _, edge := range edges {
 		relationCheck := fgax.CanEdit
-		edgeMap := mapEdgeToObjectType(m.Type(), edge)
+		edgeMap := mapEdgeToObjectType(ctx, m.Type(), edge)
 		if edgeMap.SkipEditCheck {
 			if edgeMap.CheckViewAccess {
 				relationCheck = fgax.CanView
@@ -245,7 +246,8 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 
 // mapEdgeToObjectType maps the edge to the object type and returns the EdgeAccess
 // based on the generated access map
-func mapEdgeToObjectType(schema, edge string) generated.EdgeAccess {
+func mapEdgeToObjectType(ctx context.Context, schema string, edge string) generated.EdgeAccess {
+	zerolog.Ctx(ctx).Debug().Str("schema", schema).Str("edge", edge).Msg("mapping edge to object type")
 	schemaType := strcase.SnakeCase(schema)
 
 	schemaMap, ok := generated.EdgeAccessMap[schemaType]

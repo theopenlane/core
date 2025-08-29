@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -12,6 +13,7 @@ import (
 // AllowMutationIfSystemAdmin determines whether a mutation operation should be allowed based on whether the user is a system admin
 func AllowMutationIfSystemAdmin() privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
+		zerolog.Ctx(ctx).Debug().Msg("checking if user is system admin")
 		return systemAdminCheck(ctx)
 	})
 }

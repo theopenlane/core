@@ -183,25 +183,25 @@ func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entg
 
 	categories := []string{}
 	if category == nil {
-		whereFilter := control.CategoryNEQ("")
-
-		if whereP != nil {
-			whereFilter = control.And(
-				append([]predicate.Control{control.CategoryNEQ("")}, whereP)...,
-			)
-
-		}
-		// get all distinct categories from controls
+		// get all distinct non-empty categories from controls
 		var err error
 		categories, err = withTransactionalMutation(ctx).Control.Query().
 			Select(control.FieldCategory).
-			Where(whereFilter).
+			Where(func() predicate.Control {
+				if whereP != nil {
+					return control.And(control.CategoryNEQ(""), whereP)
+				}
+				return control.CategoryNEQ("")
+			}()).
 			Unique(true).
 			GroupBy(control.FieldCategory).
 			Strings(ctx)
 		if err != nil {
 			return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
 		}
+
+		// always add "No Category" for controls with empty/null categories
+		categories = append(categories, noCategoryLabel)
 	} else {
 		categories = []string{*category}
 	}
@@ -212,8 +212,25 @@ func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entg
 	}
 
 	for _, category := range categories {
+		var categoryFilter predicate.Control
+
+		// handle the special "No Category" case
+		if category == noCategoryLabel {
+			categoryFilter = control.Or(control.CategoryEQ(""), control.CategoryIsNil())
+		} else {
+			categoryFilter = control.Category(category)
+		}
+
+		// combine category filters
+		var combinedFilter predicate.Control
+		if whereP != nil {
+			combinedFilter = control.And(categoryFilter, whereP)
+		} else {
+			combinedFilter = categoryFilter
+		}
+
 		query, err := withTransactionalMutation(ctx).Control.Query().Where(
-			control.Category(category),
+			combinedFilter,
 		).CollectFields(ctx)
 		if err != nil {
 			return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
@@ -225,8 +242,7 @@ func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entg
 			first,
 			before,
 			last,
-			generated.WithControlOrder(orderBy),
-			generated.WithControlFilter(where.Filter))
+			generated.WithControlOrder(orderBy))
 		if err != nil {
 			return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
 		}

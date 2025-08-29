@@ -227,13 +227,18 @@ func processEnvironmentVariables() (*EnvironmentFields, []SensitiveField, error)
 	var sensitiveFields []SensitiveField
 
 	for _, field := range out {
+		if strings.EqualFold(field.FieldName, "domain") {
+			// skip the domain field, this is used for inheritance, not alone
+			continue
+		}
+
 		defaultVal := field.Tags.Get(defaultTag)
 		isSecret := field.Tags.Get(sensitiveTag) == "true" || isExternalSensitiveField(field.FullPath)
 
-		if !isSecret {
-			// Add to environment variables
-			envVars += fmt.Sprintf("%s=\"%s\"\n", field.Key, defaultVal)
+		// Always add to environment variables
+		envVars += fmt.Sprintf("%s=\"%s\"\n", field.Key, defaultVal)
 
+		if !isSecret {
 			// Add to ConfigMap
 			configMapEntry := generateConfigMapEntry(field, defaultVal)
 			configMapData += configMapEntry
@@ -261,28 +266,40 @@ func generateConfigMapEntry(field envparse.VarInfo, defaultVal string) string {
 	domainPrefix := field.Tags.Get("domainPrefix")
 	domainSuffix := field.Tags.Get("domainSuffix")
 
+	kind := field.Type.Kind()
+
+	joinStr := ""
+	switch kind {
+	case reflect.Slice, reflect.Array:
+		joinStr = " join \",\""
+	case reflect.Map, reflect.Struct:
+		// maps cannot be set as environment variables
+		return ""
+	}
+
 	if domainTag == "inherit" {
 		// Generate Helm template logic for domain inheritance
 		helmPath := fmt.Sprintf("openlane.coreConfiguration.%s", strings.TrimPrefix(field.FullPath, "core."))
-		return generateDomainHelmTemplate(field.Key, helmPath, domainPrefix, domainSuffix, defaultVal)
+		return generateDomainHelmTemplate(field.Key, helmPath, domainPrefix, domainSuffix, defaultVal, joinStr)
 	}
 
 	// Standard non-domain field processing
 	// Prefix with openlane.coreConfiguration for Helm chart compatibility
 	helmPath := fmt.Sprintf("openlane.coreConfiguration.%s", strings.TrimPrefix(field.FullPath, "core."))
+
 	if defaultVal == "" {
-		return fmt.Sprintf("  %s: {{ .Values.%s }}\n", field.Key, helmPath)
+		return fmt.Sprintf("  %s: {{%s .Values.%s | quote }}\n", field.Key, joinStr, helmPath)
 	}
 
 	// Format default value based on type
-	formattedDefault := formatDefaultValue(defaultVal, field.Type.Kind())
-	return fmt.Sprintf("  %s: {{ .Values.%s | default %s }}\n", field.Key, helmPath, formattedDefault)
+	formattedDefault := formatDefaultValue(defaultVal, kind)
+	return fmt.Sprintf("  %s: {{%s .Values.%s | quote | default %s }}\n", field.Key, joinStr, helmPath, formattedDefault)
 }
 
 // formatDefaultValue formats a default value based on its type
 func formatDefaultValue(defaultVal string, kind reflect.Kind) string {
 	switch kind {
-	case reflect.String, reflect.Int64:
+	case reflect.String, reflect.Int64, reflect.Int, reflect.Int32:
 		return "\"" + defaultVal + "\""
 	case reflect.Slice:
 		// Remove brackets and add quotes
@@ -308,6 +325,9 @@ func generateConfigMap(configMapPath, configMapData string) error {
 	if err != nil {
 		return fmt.Errorf("failed to read ConfigMap template: %w", err)
 	}
+
+	// append the {{- end }} for the if wrapper
+	configMapData = configMapData + "{{- end }}\n"
 
 	header = append(header, []byte(configMapData)...)
 	configMapContent := header
@@ -600,8 +620,6 @@ func formatValue(v any) string {
 }
 
 // hasSecretChildren checks if a struct has any sensitive child fields
-//
-//nolint:unused // actually used but linter doesn't see it
 func hasSecretChildren(v reflect.Value, prefix string) bool {
 	if !v.IsValid() || v.Kind() != reflect.Struct {
 		return false
@@ -814,7 +832,7 @@ func isExternalSensitiveField(path string) bool {
 }
 
 // generateDomainHelmTemplate creates Helm template logic for domain inheritance fields
-func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, defaultVal string) string {
+func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, defaultVal, joinStr string) string {
 	var template strings.Builder
 
 	// Generate block-level conditional template for proper Helm formatting
@@ -823,7 +841,7 @@ func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, d
 	template.WriteString(" }}\n")
 	template.WriteString("  ")
 	template.WriteString(envKey)
-	template.WriteString(": {{ .Values.")
+	template.WriteString(fmt.Sprintf(": {{%s .Values.", joinStr))
 	template.WriteString(fieldPath)
 	template.WriteString(" }}\n")
 	template.WriteString("{{- else if .Values.domain }}\n")
@@ -855,7 +873,11 @@ func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, d
 		} else {
 			template.WriteString("\"")
 			template.WriteString(domainPrefix)
-			template.WriteString(".{{ .Values.domain }}")
+			if strings.HasSuffix(domainPrefix, "@") {
+				template.WriteString("{{ .Values.domain }}")
+			} else {
+				template.WriteString(".{{ .Values.domain }}")
+			}
 			template.WriteString("\"")
 		}
 	case domainSuffix != "":
