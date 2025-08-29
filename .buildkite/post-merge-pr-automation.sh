@@ -109,7 +109,7 @@ while IFS=':' read -r pr_number branch_name title; do
       sed -i -E "s/^version:.*/version: $new_version/" "$chart_file"
       git add "$chart_file"
       changes_made=true
-      change_summary+="\\n- 📈 Bumped chart version to $new_version"
+      change_summary+="\n- 📈 Bumped chart version to $new_version"
     fi
 
     # Source helm documentation utilities from core repo
