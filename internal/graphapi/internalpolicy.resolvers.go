@@ -35,15 +35,17 @@ func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input gener
 }
 
 // CreateUploadInternalPolicy is the resolver for the createUploadInternalPolicy field.
-func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, input graphql.Upload, ownerID string) (*model.InternalPolicyCreatePayload, error) {
+func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, input graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error) {
 	var internalPolicyInput generated.CreateInternalPolicyInput
 
-	internalPolicyInput.OwnerID = &ownerID
+	internalPolicyInput.OwnerID = ownerID
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &ownerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	if ownerID != nil {
+		if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {
+			log.Error().Err(err).Msg("failed to set organization in auth context")
+			return nil, rout.NewMissingRequiredFieldError("owner_id")
+		}
 	}
 
 	res, err := withTransactionalMutation(ctx).InternalPolicy.Create().SetInput(internalPolicyInput).Save(ctx)
@@ -121,7 +123,7 @@ func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, 
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendTagSuggestions(input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.AppendDismissedImprovementSuggestions)
 
 	res, err = req.Save(ctx)
 	if err != nil {

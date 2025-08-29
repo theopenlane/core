@@ -32,6 +32,7 @@ var validMimeTypes = map[string][]string{
 	"evidenceFiles": sharedMimeTypes,
 	"noteFiles":     sharedMimeTypes,
 	"exportFiles":   {"text/csv", "text/plain; charset=utf-8", "text/plain", "application/json", "application/json; charset=utf-8"},
+	"procedureFile": {"text/plain; charset=utf-8"},
 }
 
 // MimeTypeValidator returns a validation function for the given key

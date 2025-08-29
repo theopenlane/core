@@ -35,13 +35,13 @@ func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.
 }
 
 // CreateUploadProcedure is the resolver for the createUploadProcedure field.
-func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, input graphql.Upload, ownerID string) (*model.ProcedureCreatePayload, error) {
+func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string) (*model.ProcedureCreatePayload, error) {
 	var procedureInput generated.CreateProcedureInput
 
-	procedureInput.OwnerID = &ownerID
+	procedureInput.OwnerID = ownerID
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &ownerID); err != nil {
+	if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -121,7 +121,7 @@ func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendTagSuggestions(input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.AppendDismissedImprovementSuggestions)
 
 	res, err = req.Save(ctx)
 	if err != nil {

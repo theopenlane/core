@@ -1316,6 +1316,7 @@ type ComplexityRoot struct {
 		OrganizationSetting   func(childComplexity int) int
 		PersistedFileSize     func(childComplexity int) int
 		PresignedURL          func(childComplexity int) int
+		Procedure             func(childComplexity int) int
 		Program               func(childComplexity int) int
 		ProvidedFileExtension func(childComplexity int) int
 		ProvidedFileName      func(childComplexity int) int
@@ -2474,8 +2475,8 @@ type ComplexityRoot struct {
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
-		CreateUploadInternalPolicy           func(childComplexity int, input graphql.Upload, ownerID string) int
-		CreateUploadProcedure                func(childComplexity int, input graphql.Upload, ownerID string) int
+		CreateUploadInternalPolicy           func(childComplexity int, input graphql.Upload, ownerID *string) int
+		CreateUploadProcedure                func(childComplexity int, procedureFile graphql.Upload, ownerID *string) int
 		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
 		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
 		DeleteAPIToken                       func(childComplexity int, id string) int
@@ -3187,6 +3188,7 @@ type ComplexityRoot struct {
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Files                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -11059,6 +11061,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.PresignedURL(childComplexity), true
 
+	case "File.procedure":
+		if e.complexity.File.Procedure == nil {
+			break
+		}
+
+		return e.complexity.File.Procedure(childComplexity), true
+
 	case "File.program":
 		if e.complexity.File.Program == nil {
 			break
@@ -17429,7 +17438,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateUploadInternalPolicy(childComplexity, args["input"].(graphql.Upload), args["ownerID"].(string)), true
+		return e.complexity.Mutation.CreateUploadInternalPolicy(childComplexity, args["input"].(graphql.Upload), args["ownerID"].(*string)), true
 
 	case "Mutation.createUploadProcedure":
 		if e.complexity.Mutation.CreateUploadProcedure == nil {
@@ -17441,7 +17450,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateUploadProcedure(childComplexity, args["input"].(graphql.Upload), args["ownerID"].(string)), true
+		return e.complexity.Mutation.CreateUploadProcedure(childComplexity, args["procedureFile"].(graphql.Upload), args["ownerID"].(*string)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -22066,6 +22075,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Procedure.files":
+		if e.complexity.Procedure.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Procedure_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
 	case "Procedure.id":
 		if e.complexity.Procedure.ID == nil {
@@ -43564,6 +43585,7 @@ input CreateFileInput {
   eventIDs: [ID!]
   trustCenterSettingIDs: [ID!]
   subprocessorIDs: [ID!]
+  procedureIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -44362,6 +44384,7 @@ input CreateProcedureInput {
   narrativeIDs: [ID!]
   riskIDs: [ID!]
   taskIDs: [ID!]
+  fileIDs: [ID!]
 }
 """
 CreateProgramInput is used for create Program object.
@@ -50554,6 +50577,7 @@ type File implements Node {
   ): EventConnection!
   trustCenterSetting: [TrustCenterSetting!]
   subprocessor: [Subprocessor!]
+  procedure: [Procedure!]
 }
 """
 A connection to a list of items.
@@ -51436,6 +51460,11 @@ input FileWhereInput {
   """
   hasSubprocessor: Boolean
   hasSubprocessorWith: [SubprocessorWhereInput!]
+  """
+  procedure edge predicates
+  """
+  hasProcedure: Boolean
+  hasProcedureWith: [ProcedureWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -67153,6 +67182,37 @@ type Procedure implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -68017,6 +68077,11 @@ input ProcedureWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
 }
 type Program implements Node {
   id: ID!
@@ -85071,6 +85136,9 @@ input UpdateFileInput {
   addSubprocessorIDs: [ID!]
   removeSubprocessorIDs: [ID!]
   clearSubprocessor: Boolean
+  addProcedureIDs: [ID!]
+  removeProcedureIDs: [ID!]
+  clearProcedure: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -86195,6 +86263,9 @@ input UpdateProcedureInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
 }
 """
 UpdateProgramInput is used for update Program object.
@@ -90686,7 +90757,7 @@ extend type Mutation{
         """
         ID of the owner organization
         """
-        ownerID: ID!
+        ownerID: ID
     ): InternalPolicyCreatePayload!
     """
     Create multiple new internalPolicys
@@ -92138,11 +92209,11 @@ extend type Mutation{
         """
         file containing values of the procedure
         """
-        input: Upload!
+        procedureFile: Upload!
         """
         ID of the owner organization
         """
-        ownerID: ID!
+        ownerID: ID
     ): ProcedureCreatePayload!
     """
     Create multiple new procedures

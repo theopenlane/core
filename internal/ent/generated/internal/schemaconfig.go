@@ -153,6 +153,7 @@ type SchemaConfig struct {
 	ProcedureNarratives                string // Procedure-narratives->Narrative table.
 	ProcedureRisks                     string // Procedure-risks->Risk table.
 	ProcedureTasks                     string // Procedure-tasks->Task table.
+	ProcedureFiles                     string // Procedure-files->File table.
 	ProcedureHistory                   string // ProcedureHistory table.
 	Program                            string // Program table.
 	ProgramBlockedGroups               string // Program-blocked_groups->Group table.

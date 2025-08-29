@@ -106,11 +106,13 @@ type ProcedureEdges struct {
 	Risks []*Risk `json:"risks,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [13]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -121,6 +123,7 @@ type ProcedureEdges struct {
 	namedNarratives       map[string][]*Narrative
 	namedRisks            map[string][]*Risk
 	namedTasks            map[string][]*Task
+	namedFiles            map[string][]*File
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -235,6 +238,15 @@ func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
+}
+
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProcedureEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[12] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -521,6 +533,11 @@ func (_m *Procedure) QueryRisks() *RiskQuery {
 // QueryTasks queries the "tasks" edge of the Procedure entity.
 func (_m *Procedure) QueryTasks() *TaskQuery {
 	return NewProcedureClient(_m.config).QueryTasks(_m)
+}
+
+// QueryFiles queries the "files" edge of the Procedure entity.
+func (_m *Procedure) QueryFiles() *FileQuery {
+	return NewProcedureClient(_m.config).QueryFiles(_m)
 }
 
 // Update returns a builder for updating this Procedure.
@@ -840,6 +857,30 @@ func (_m *Procedure) appendNamedTasks(name string, edges ...*Task) {
 		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
 		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Procedure) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Procedure) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFiles[name] = []*File{}
+	} else {
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

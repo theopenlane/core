@@ -33,7 +33,7 @@ extend type Mutation{
         """
         ID of the owner organization
         """
-        ownerID: ID!
+        ownerID: ID
     ): InternalPolicyCreatePayload!
     """
     Create multiple new internalPolicys

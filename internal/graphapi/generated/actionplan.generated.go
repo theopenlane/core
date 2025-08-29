@@ -120,7 +120,7 @@ type MutationResolver interface {
 	DeleteHush(ctx context.Context, id string) (*model.HushDeletePayload, error)
 	DeleteIntegration(ctx context.Context, id string) (*model.IntegrationDeletePayload, error)
 	CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error)
-	CreateUploadInternalPolicy(ctx context.Context, input graphql.Upload, ownerID string) (*model.InternalPolicyCreatePayload, error)
+	CreateUploadInternalPolicy(ctx context.Context, input graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error)
 	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error)
@@ -181,7 +181,7 @@ type MutationResolver interface {
 	UpdatePersonalAccessToken(ctx context.Context, id string, input generated.UpdatePersonalAccessTokenInput) (*model.PersonalAccessTokenUpdatePayload, error)
 	DeletePersonalAccessToken(ctx context.Context, id string) (*model.PersonalAccessTokenDeletePayload, error)
 	CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error)
-	CreateUploadProcedure(ctx context.Context, input graphql.Upload, ownerID string) (*model.ProcedureCreatePayload, error)
+	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string) (*model.ProcedureCreatePayload, error)
 	CreateBulkProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error)
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkCreatePayload, error)
 	UpdateBulkProcedure(ctx context.Context, ids []string, input generated.UpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error)
@@ -1856,7 +1856,7 @@ func (ec *executionContext) field_Mutation_createUploadInternalPolicy_args(ctx c
 		return nil, err
 	}
 	args["input"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalNID2string)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalOID2ᚖstring)
 	if err != nil {
 		return nil, err
 	}
@@ -1867,12 +1867,12 @@ func (ec *executionContext) field_Mutation_createUploadInternalPolicy_args(ctx c
 func (ec *executionContext) field_Mutation_createUploadProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "procedureFile", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
-	args["input"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalNID2string)
+	args["procedureFile"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalOID2ᚖstring)
 	if err != nil {
 		return nil, err
 	}
@@ -10108,7 +10108,7 @@ func (ec *executionContext) _Mutation_createUploadInternalPolicy(ctx context.Con
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateUploadInternalPolicy(rctx, fc.Args["input"].(graphql.Upload), fc.Args["ownerID"].(string))
+		return ec.resolvers.Mutation().CreateUploadInternalPolicy(rctx, fc.Args["input"].(graphql.Upload), fc.Args["ownerID"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -13709,7 +13709,7 @@ func (ec *executionContext) _Mutation_createUploadProcedure(ctx context.Context,
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateUploadProcedure(rctx, fc.Args["input"].(graphql.Upload), fc.Args["ownerID"].(string))
+		return ec.resolvers.Mutation().CreateUploadProcedure(rctx, fc.Args["procedureFile"].(graphql.Upload), fc.Args["ownerID"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

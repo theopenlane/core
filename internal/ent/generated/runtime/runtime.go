@@ -4573,6 +4573,8 @@ func init() {
 	procedure.Hooks[11] = procedureMixinHooks9[2]
 
 	procedure.Hooks[12] = procedureHooks[0]
+
+	procedure.Hooks[13] = procedureHooks[1]
 	procedureMixinInters1 := procedureMixin[1].Interceptors()
 	procedureMixinInters2 := procedureMixin[2].Interceptors()
 	procedureMixinInters7 := procedureMixin[7].Interceptors()

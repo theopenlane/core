@@ -10523,12 +10523,12 @@ func (_c *MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call) RunAndRetu
 }
 
 // CreateUploadProcedure provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) CreateUploadProcedure(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadProcedure, error) {
+func (_mock *MockOpenlaneGraphClient) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadProcedure, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, input, ownerID, interceptors)
+		tmpRet = _mock.Called(ctx, procedureFile, ownerID, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, input, ownerID)
+		tmpRet = _mock.Called(ctx, procedureFile, ownerID)
 	}
 	ret := tmpRet
 
@@ -10538,18 +10538,18 @@ func (_mock *MockOpenlaneGraphClient) CreateUploadProcedure(ctx context.Context,
 
 	var r0 *openlaneclient.CreateUploadProcedure
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, string, ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadProcedure, error)); ok {
-		return returnFunc(ctx, input, ownerID, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, *string, ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadProcedure, error)); ok {
+		return returnFunc(ctx, procedureFile, ownerID, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, string, ...clientv2.RequestInterceptor) *openlaneclient.CreateUploadProcedure); ok {
-		r0 = returnFunc(ctx, input, ownerID, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, *string, ...clientv2.RequestInterceptor) *openlaneclient.CreateUploadProcedure); ok {
+		r0 = returnFunc(ctx, procedureFile, ownerID, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.CreateUploadProcedure)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, graphql.Upload, string, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, input, ownerID, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, graphql.Upload, *string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, procedureFile, ownerID, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -10563,15 +10563,15 @@ type MockOpenlaneGraphClient_CreateUploadProcedure_Call struct {
 
 // CreateUploadProcedure is a helper method to define mock.On call
 //   - ctx context.Context
-//   - input graphql.Upload
-//   - ownerID string
+//   - procedureFile graphql.Upload
+//   - ownerID *string
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) CreateUploadProcedure(ctx interface{}, input interface{}, ownerID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateUploadProcedure_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) CreateUploadProcedure(ctx interface{}, procedureFile interface{}, ownerID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateUploadProcedure_Call {
 	return &MockOpenlaneGraphClient_CreateUploadProcedure_Call{Call: _e.mock.On("CreateUploadProcedure",
-		append([]interface{}{ctx, input, ownerID}, interceptors...)...)}
+		append([]interface{}{ctx, procedureFile, ownerID}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_CreateUploadProcedure_Call) Run(run func(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateUploadProcedure_Call {
+func (_c *MockOpenlaneGraphClient_CreateUploadProcedure_Call) Run(run func(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateUploadProcedure_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -10581,9 +10581,9 @@ func (_c *MockOpenlaneGraphClient_CreateUploadProcedure_Call) Run(run func(ctx c
 		if args[1] != nil {
 			arg1 = args[1].(graphql.Upload)
 		}
-		var arg2 string
+		var arg2 *string
 		if args[2] != nil {
-			arg2 = args[2].(string)
+			arg2 = args[2].(*string)
 		}
 		var arg3 []clientv2.RequestInterceptor
 		var variadicArgs []clientv2.RequestInterceptor
@@ -10606,7 +10606,7 @@ func (_c *MockOpenlaneGraphClient_CreateUploadProcedure_Call) Return(createUploa
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_CreateUploadProcedure_Call) RunAndReturn(run func(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadProcedure, error)) *MockOpenlaneGraphClient_CreateUploadProcedure_Call {
+func (_c *MockOpenlaneGraphClient_CreateUploadProcedure_Call) RunAndReturn(run func(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateUploadProcedure, error)) *MockOpenlaneGraphClient_CreateUploadProcedure_Call {
 	_c.Call.Return(run)
 	return _c
 }

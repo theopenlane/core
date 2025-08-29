@@ -2037,6 +2037,18 @@ func (_m *File) Subprocessor(ctx context.Context) (result []*Subprocessor, err e
 	return result, err
 }
 
+func (_m *File) Procedure(ctx context.Context) (result []*Procedure, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = _m.NamedProcedure(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = _m.Edges.ProcedureOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = _m.QueryProcedure().All(ctx)
+	}
+	return result, err
+}
+
 func (_m *Group) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -5372,6 +5384,27 @@ func (_m *Procedure) Tasks(
 		return conn, nil
 	}
 	return _m.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Procedure) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[12][alias]
+	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *Program) Owner(ctx context.Context) (*Organization, error) {

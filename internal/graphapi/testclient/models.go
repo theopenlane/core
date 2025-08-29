@@ -4672,6 +4672,7 @@ type CreateFileInput struct {
 	EventIDs               []string `json:"eventIDs,omitempty"`
 	TrustCenterSettingIDs  []string `json:"trustCenterSettingIDs,omitempty"`
 	SubprocessorIDs        []string `json:"subprocessorIDs,omitempty"`
+	ProcedureIDs           []string `json:"procedureIDs,omitempty"`
 }
 
 type CreateFullProgramInput struct {
@@ -5218,6 +5219,7 @@ type CreateProcedureInput struct {
 	NarrativeIDs                    []string `json:"narrativeIDs,omitempty"`
 	RiskIDs                         []string `json:"riskIDs,omitempty"`
 	TaskIDs                         []string `json:"taskIDs,omitempty"`
+	FileIDs                         []string `json:"fileIDs,omitempty"`
 }
 
 // CreateProgramInput is used for create Program object.
@@ -9102,6 +9104,7 @@ type File struct {
 	Events              *EventConnection       `json:"events"`
 	TrustCenterSetting  []*TrustCenterSetting  `json:"trustCenterSetting,omitempty"`
 	Subprocessor        []*Subprocessor        `json:"subprocessor,omitempty"`
+	Procedure           []*Procedure           `json:"procedure,omitempty"`
 	PresignedURL        *string                `json:"presignedURL,omitempty"`
 }
 
@@ -9805,6 +9808,9 @@ type FileWhereInput struct {
 	// subprocessor edge predicates
 	HasSubprocessor     *bool                     `json:"hasSubprocessor,omitempty"`
 	HasSubprocessorWith []*SubprocessorWhereInput `json:"hasSubprocessorWith,omitempty"`
+	// procedure edge predicates
+	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
+	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
 }
 
 type Group struct {
@@ -18709,6 +18715,7 @@ type Procedure struct {
 	Narratives       *NarrativeConnection      `json:"narratives"`
 	Risks            *RiskConnection           `json:"risks"`
 	Tasks            *TaskConnection           `json:"tasks"`
+	Files            *FileConnection           `json:"files"`
 }
 
 func (Procedure) IsNode() {}
@@ -19367,6 +19374,9 @@ type ProcedureWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 }
 
 type Program struct {
@@ -28560,6 +28570,9 @@ type UpdateFileInput struct {
 	AddSubprocessorIDs           []string `json:"addSubprocessorIDs,omitempty"`
 	RemoveSubprocessorIDs        []string `json:"removeSubprocessorIDs,omitempty"`
 	ClearSubprocessor            *bool    `json:"clearSubprocessor,omitempty"`
+	AddProcedureIDs              []string `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs           []string `json:"removeProcedureIDs,omitempty"`
+	ClearProcedure               *bool    `json:"clearProcedure,omitempty"`
 }
 
 // UpdateGroupInput is used for update Group object.
@@ -29464,6 +29477,9 @@ type UpdateProcedureInput struct {
 	AddTaskIDs                            []string            `json:"addTaskIDs,omitempty"`
 	RemoveTaskIDs                         []string            `json:"removeTaskIDs,omitempty"`
 	ClearTasks                            *bool               `json:"clearTasks,omitempty"`
+	AddFileIDs                            []string            `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                         []string            `json:"removeFileIDs,omitempty"`
+	ClearFiles                            *bool               `json:"clearFiles,omitempty"`
 	RevisionBump                          *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 

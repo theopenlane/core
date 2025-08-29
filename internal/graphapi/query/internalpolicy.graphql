@@ -148,7 +148,7 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
   }
 }
 
-mutation CreateUploadInternalPolicy($input: Upload!, $ownerID: ID!) {
+mutation CreateUploadInternalPolicy($input: Upload!, $ownerID: ID) {
   createUploadInternalPolicy(input: $input, ownerID: $ownerID) {
     internalPolicy {
       approvalRequired

@@ -95,8 +95,8 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
   }
 }
 
-mutation CreateUploadProcedure($input: Upload!, $ownerID: ID!) {
-  createUploadProcedure(input: $input, ownerID: $ownerID) {
+mutation CreateUploadProcedure($procedureFile: Upload!, $ownerID: ID) {
+  createUploadProcedure(procedureFile: $procedureFile, ownerID: $ownerID) {
     procedure {
       approvalRequired
       approverID

@@ -214,7 +214,7 @@ type TestGraphClient interface {
 	CreateBulkInternalPolicy(ctx context.Context, input []*CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInternalPolicy, error)
 	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkInternalPolicy, error)
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
-	CreateUploadInternalPolicy(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error)
+	CreateUploadInternalPolicy(ctx context.Context, input graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error)
 	DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInternalPolicy, error)
 	GetAllInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
 	GetInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, where *InternalPolicyWhereInput, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error)
@@ -333,7 +333,7 @@ type TestGraphClient interface {
 	CreateBulkProcedure(ctx context.Context, input []*CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProcedure, error)
 	UpdateBulkProcedure(ctx context.Context, ids []string, input UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProcedure, error)
 	CreateProcedure(ctx context.Context, input CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateProcedure, error)
-	CreateUploadProcedure(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error)
+	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error)
 	DeleteProcedure(ctx context.Context, deleteProcedureID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProcedure, error)
 	GetAllProcedures(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProcedures, error)
 	GetProcedureByID(ctx context.Context, procedureID string, interceptors ...clientv2.RequestInterceptor) (*GetProcedureByID, error)
@@ -106567,7 +106567,7 @@ func (c *Client) CreateInternalPolicy(ctx context.Context, input CreateInternalP
 	return &res, nil
 }
 
-const CreateUploadInternalPolicyDocument = `mutation CreateUploadInternalPolicy ($input: Upload!, $ownerID: ID!) {
+const CreateUploadInternalPolicyDocument = `mutation CreateUploadInternalPolicy ($input: Upload!, $ownerID: ID) {
 	createUploadInternalPolicy(input: $input, ownerID: $ownerID) {
 		internalPolicy {
 			approvalRequired
@@ -106624,7 +106624,7 @@ const CreateUploadInternalPolicyDocument = `mutation CreateUploadInternalPolicy 
 }
 `
 
-func (c *Client) CreateUploadInternalPolicy(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error) {
+func (c *Client) CreateUploadInternalPolicy(ctx context.Context, input graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error) {
 	vars := map[string]any{
 		"input":   input,
 		"ownerID": ownerID,
@@ -111998,8 +111998,8 @@ func (c *Client) CreateProcedure(ctx context.Context, input CreateProcedureInput
 	return &res, nil
 }
 
-const CreateUploadProcedureDocument = `mutation CreateUploadProcedure ($input: Upload!, $ownerID: ID!) {
-	createUploadProcedure(input: $input, ownerID: $ownerID) {
+const CreateUploadProcedureDocument = `mutation CreateUploadProcedure ($procedureFile: Upload!, $ownerID: ID) {
+	createUploadProcedure(procedureFile: $procedureFile, ownerID: $ownerID) {
 		procedure {
 			approvalRequired
 			createdAt
@@ -112047,10 +112047,10 @@ const CreateUploadProcedureDocument = `mutation CreateUploadProcedure ($input: U
 }
 `
 
-func (c *Client) CreateUploadProcedure(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error) {
+func (c *Client) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error) {
 	vars := map[string]any{
-		"input":   input,
-		"ownerID": ownerID,
+		"procedureFile": procedureFile,
+		"ownerID":       ownerID,
 	}
 
 	var res CreateUploadProcedure

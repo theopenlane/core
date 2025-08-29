@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -614,6 +615,21 @@ func (_u *FileUpdate) AddSubprocessor(v ...*Subprocessor) *FileUpdate {
 	return _u.AddSubprocessorIDs(ids...)
 }
 
+// AddProcedureIDs adds the "procedure" edge to the Procedure entity by IDs.
+func (_u *FileUpdate) AddProcedureIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
+}
+
+// AddProcedure adds the "procedure" edges to the Procedure entity.
+func (_u *FileUpdate) AddProcedure(v ...*Procedure) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddProcedureIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (_u *FileUpdate) Mutation() *FileMutation {
 	return _u.mutation
@@ -911,6 +927,27 @@ func (_u *FileUpdate) RemoveSubprocessor(v ...*Subprocessor) *FileUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubprocessorIDs(ids...)
+}
+
+// ClearProcedure clears all "procedure" edges to the Procedure entity.
+func (_u *FileUpdate) ClearProcedure() *FileUpdate {
+	_u.mutation.ClearProcedure()
+	return _u
+}
+
+// RemoveProcedureIDs removes the "procedure" edge to Procedure entities by IDs.
+func (_u *FileUpdate) RemoveProcedureIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
+}
+
+// RemoveProcedure removes "procedure" edges to Procedure entities.
+func (_u *FileUpdate) RemoveProcedure(v ...*Procedure) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1782,6 +1819,54 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ProcedureCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProcedureTable,
+			Columns: file.ProcedurePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedProcedureIDs(); len(nodes) > 0 && !_u.mutation.ProcedureCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProcedureTable,
+			Columns: file.ProcedurePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProcedureIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProcedureTable,
+			Columns: file.ProcedurePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.File
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2374,6 +2459,21 @@ func (_u *FileUpdateOne) AddSubprocessor(v ...*Subprocessor) *FileUpdateOne {
 	return _u.AddSubprocessorIDs(ids...)
 }
 
+// AddProcedureIDs adds the "procedure" edge to the Procedure entity by IDs.
+func (_u *FileUpdateOne) AddProcedureIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
+}
+
+// AddProcedure adds the "procedure" edges to the Procedure entity.
+func (_u *FileUpdateOne) AddProcedure(v ...*Procedure) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddProcedureIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (_u *FileUpdateOne) Mutation() *FileMutation {
 	return _u.mutation
@@ -2671,6 +2771,27 @@ func (_u *FileUpdateOne) RemoveSubprocessor(v ...*Subprocessor) *FileUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubprocessorIDs(ids...)
+}
+
+// ClearProcedure clears all "procedure" edges to the Procedure entity.
+func (_u *FileUpdateOne) ClearProcedure() *FileUpdateOne {
+	_u.mutation.ClearProcedure()
+	return _u
+}
+
+// RemoveProcedureIDs removes the "procedure" edge to Procedure entities by IDs.
+func (_u *FileUpdateOne) RemoveProcedureIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
+}
+
+// RemoveProcedure removes "procedure" edges to Procedure entities.
+func (_u *FileUpdateOne) RemoveProcedure(v ...*Procedure) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // Where appends a list predicates to the FileUpdate builder.
@@ -3567,6 +3688,54 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProcedureCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProcedureTable,
+			Columns: file.ProcedurePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedProcedureIDs(); len(nodes) > 0 && !_u.mutation.ProcedureCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProcedureTable,
+			Columns: file.ProcedurePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProcedureIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProcedureTable,
+			Columns: file.ProcedurePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

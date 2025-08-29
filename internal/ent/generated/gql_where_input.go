@@ -23918,6 +23918,10 @@ type FileWhereInput struct {
 	// "subprocessor" edge predicates.
 	HasSubprocessor     *bool                     `json:"hasSubprocessor,omitempty"`
 	HasSubprocessorWith []*SubprocessorWhereInput `json:"hasSubprocessorWith,omitempty"`
+
+	// "procedure" edge predicates.
+	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
+	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -24960,6 +24964,24 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, file.HasSubprocessorWith(with...))
+	}
+	if i.HasProcedure != nil {
+		p := file.HasProcedure()
+		if !*i.HasProcedure {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProcedureWith) > 0 {
+		with := make([]predicate.Procedure, 0, len(i.HasProcedureWith))
+		for _, w := range i.HasProcedureWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProcedureWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasProcedureWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -54435,6 +54457,10 @@ type ProcedureWhereInput struct {
 	// "tasks" edge predicates.
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -55330,6 +55356,24 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, procedure.HasTasksWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := procedure.HasFiles()
+		if !*i.HasFiles {
+			p = procedure.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, procedure.HasFilesWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

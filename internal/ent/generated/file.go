@@ -101,11 +101,13 @@ type FileEdges struct {
 	TrustCenterSetting []*TrustCenterSetting `json:"trust_center_setting,omitempty"`
 	// Subprocessor holds the value of the subprocessor edge.
 	Subprocessor []*Subprocessor `json:"subprocessor,omitempty"`
+	// Procedure holds the value of the procedure edge.
+	Procedure []*Procedure `json:"procedure,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [15]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [15]map[string]int
 
 	namedUser                map[string][]*User
 	namedOrganization        map[string][]*Organization
@@ -121,6 +123,7 @@ type FileEdges struct {
 	namedEvents              map[string][]*Event
 	namedTrustCenterSetting  map[string][]*TrustCenterSetting
 	namedSubprocessor        map[string][]*Subprocessor
+	namedProcedure           map[string][]*Procedure
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -247,6 +250,15 @@ func (e FileEdges) SubprocessorOrErr() ([]*Subprocessor, error) {
 		return e.Subprocessor, nil
 	}
 	return nil, &NotLoadedError{edge: "subprocessor"}
+}
+
+// ProcedureOrErr returns the Procedure value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) ProcedureOrErr() ([]*Procedure, error) {
+	if e.loadedTypes[14] {
+		return e.Procedure, nil
+	}
+	return nil, &NotLoadedError{edge: "procedure"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -510,6 +522,11 @@ func (_m *File) QueryTrustCenterSetting() *TrustCenterSettingQuery {
 // QuerySubprocessor queries the "subprocessor" edge of the File entity.
 func (_m *File) QuerySubprocessor() *SubprocessorQuery {
 	return NewFileClient(_m.config).QuerySubprocessor(_m)
+}
+
+// QueryProcedure queries the "procedure" edge of the File entity.
+func (_m *File) QueryProcedure() *ProcedureQuery {
+	return NewFileClient(_m.config).QueryProcedure(_m)
 }
 
 // Update returns a builder for updating this File.
@@ -934,6 +951,30 @@ func (_m *File) appendNamedSubprocessor(name string, edges ...*Subprocessor) {
 		_m.Edges.namedSubprocessor[name] = []*Subprocessor{}
 	} else {
 		_m.Edges.namedSubprocessor[name] = append(_m.Edges.namedSubprocessor[name], edges...)
+	}
+}
+
+// NamedProcedure returns the Procedure named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedProcedure(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedure == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedProcedure[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedProcedure(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedure == nil {
+		_m.Edges.namedProcedure = make(map[string][]*Procedure)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedProcedure[name] = []*Procedure{}
+	} else {
+		_m.Edges.namedProcedure[name] = append(_m.Edges.namedProcedure[name], edges...)
 	}
 }
 

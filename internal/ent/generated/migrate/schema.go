@@ -6926,6 +6926,31 @@ var (
 			},
 		},
 	}
+	// ProcedureFilesColumns holds the columns for the "procedure_files" table.
+	ProcedureFilesColumns = []*schema.Column{
+		{Name: "procedure_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// ProcedureFilesTable holds the schema information for the "procedure_files" table.
+	ProcedureFilesTable = &schema.Table{
+		Name:       "procedure_files",
+		Columns:    ProcedureFilesColumns,
+		PrimaryKey: []*schema.Column{ProcedureFilesColumns[0], ProcedureFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "procedure_files_procedure_id",
+				Columns:    []*schema.Column{ProcedureFilesColumns[0]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "procedure_files_file_id",
+				Columns:    []*schema.Column{ProcedureFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ProgramBlockedGroupsColumns holds the columns for the "program_blocked_groups" table.
 	ProgramBlockedGroupsColumns = []*schema.Column{
 		{Name: "program_id", Type: field.TypeString},
@@ -8036,6 +8061,7 @@ var (
 		ProcedureNarrativesTable,
 		ProcedureRisksTable,
 		ProcedureTasksTable,
+		ProcedureFilesTable,
 		ProgramBlockedGroupsTable,
 		ProgramEditorsTable,
 		ProgramViewersTable,
@@ -8509,6 +8535,8 @@ func init() {
 	ProcedureRisksTable.ForeignKeys[1].RefTable = RisksTable
 	ProcedureTasksTable.ForeignKeys[0].RefTable = ProceduresTable
 	ProcedureTasksTable.ForeignKeys[1].RefTable = TasksTable
+	ProcedureFilesTable.ForeignKeys[0].RefTable = ProceduresTable
+	ProcedureFilesTable.ForeignKeys[1].RefTable = FilesTable
 	ProgramBlockedGroupsTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	ProgramEditorsTable.ForeignKeys[0].RefTable = ProgramsTable

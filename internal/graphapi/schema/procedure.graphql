@@ -29,11 +29,11 @@ extend type Mutation{
         """
         file containing values of the procedure
         """
-        input: Upload!
+        procedureFile: Upload!
         """
         ID of the owner organization
         """
-        ownerID: ID!
+        ownerID: ID
     ): ProcedureCreatePayload!
     """
     Create multiple new procedures

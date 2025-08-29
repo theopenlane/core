@@ -330,7 +330,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProcedure, error)
 	CreateBulkProcedure(ctx context.Context, input []*CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProcedure, error)
 	CreateProcedure(ctx context.Context, input CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateProcedure, error)
-	CreateUploadProcedure(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error)
+	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error)
 	DeleteProcedure(ctx context.Context, deleteProcedureID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProcedure, error)
 	GetAllProcedures(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProcedures, error)
 	GetProcedureByID(ctx context.Context, procedureID string, interceptors ...clientv2.RequestInterceptor) (*GetProcedureByID, error)
@@ -93289,8 +93289,8 @@ func (c *Client) CreateProcedure(ctx context.Context, input CreateProcedureInput
 	return &res, nil
 }
 
-const CreateUploadProcedureDocument = `mutation CreateUploadProcedure ($input: Upload!, $ownerID: ID!) {
-	createUploadProcedure(input: $input, ownerID: $ownerID) {
+const CreateUploadProcedureDocument = `mutation CreateUploadProcedure ($procedureFile: Upload!, $ownerID: ID) {
+	createUploadProcedure(procedureFile: $procedureFile, ownerID: $ownerID) {
 		procedure {
 			approvalRequired
 			approverID
@@ -93322,10 +93322,10 @@ const CreateUploadProcedureDocument = `mutation CreateUploadProcedure ($input: U
 }
 `
 
-func (c *Client) CreateUploadProcedure(ctx context.Context, input graphql.Upload, ownerID string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error) {
+func (c *Client) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error) {
 	vars := map[string]any{
-		"input":   input,
-		"ownerID": ownerID,
+		"procedureFile": procedureFile,
+		"ownerID":       ownerID,
 	}
 
 	var res CreateUploadProcedure
