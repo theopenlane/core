@@ -87,6 +87,8 @@ const (
 	EdgeSubprocessor = "subprocessor"
 	// EdgeProcedure holds the string denoting the procedure edge name in mutations.
 	EdgeProcedure = "procedure"
+	// EdgeInternalPolicy holds the string denoting the internal_policy edge name in mutations.
+	EdgeInternalPolicy = "internal_policy"
 	// Table holds the table name of the file in the database.
 	Table = "files"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.
@@ -164,6 +166,11 @@ const (
 	// ProcedureInverseTable is the table name for the Procedure entity.
 	// It exists in this package in order to avoid circular dependency with the "procedure" package.
 	ProcedureInverseTable = "procedures"
+	// InternalPolicyTable is the table that holds the internal_policy relation/edge. The primary key declared below.
+	InternalPolicyTable = "internal_policy_files"
+	// InternalPolicyInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPolicyInverseTable = "internal_policies"
 )
 
 // Columns holds all SQL columns for file fields.
@@ -245,6 +252,9 @@ var (
 	// ProcedurePrimaryKey and ProcedureColumn2 are the table columns denoting the
 	// primary key for the procedure relation (M2M).
 	ProcedurePrimaryKey = []string{"procedure_id", "file_id"}
+	// InternalPolicyPrimaryKey and InternalPolicyColumn2 are the table columns denoting the
+	// primary key for the internal_policy relation (M2M).
+	InternalPolicyPrimaryKey = []string{"internal_policy_id", "file_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -599,6 +609,20 @@ func ByProcedure(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProcedureStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByInternalPolicyCount orders the results by internal_policy count.
+func ByInternalPolicyCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalPolicyStep(), opts...)
+	}
+}
+
+// ByInternalPolicy orders the results by internal_policy terms.
+func ByInternalPolicy(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -702,5 +726,12 @@ func newProcedureStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProcedureInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProcedureTable, ProcedurePrimaryKey...),
+	)
+}
+func newInternalPolicyStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPolicyInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyTable, InternalPolicyPrimaryKey...),
 	)
 }

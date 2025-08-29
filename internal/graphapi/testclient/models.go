@@ -4673,6 +4673,7 @@ type CreateFileInput struct {
 	TrustCenterSettingIDs  []string `json:"trustCenterSettingIDs,omitempty"`
 	SubprocessorIDs        []string `json:"subprocessorIDs,omitempty"`
 	ProcedureIDs           []string `json:"procedureIDs,omitempty"`
+	InternalPolicyIDs      []string `json:"internalPolicyIDs,omitempty"`
 }
 
 type CreateFullProgramInput struct {
@@ -4823,6 +4824,7 @@ type CreateInternalPolicyInput struct {
 	NarrativeIDs                    []string `json:"narrativeIDs,omitempty"`
 	TaskIDs                         []string `json:"taskIDs,omitempty"`
 	RiskIDs                         []string `json:"riskIDs,omitempty"`
+	FileIDs                         []string `json:"fileIDs,omitempty"`
 	ProgramIDs                      []string `json:"programIDs,omitempty"`
 }
 
@@ -9105,6 +9107,7 @@ type File struct {
 	TrustCenterSetting  []*TrustCenterSetting  `json:"trustCenterSetting,omitempty"`
 	Subprocessor        []*Subprocessor        `json:"subprocessor,omitempty"`
 	Procedure           []*Procedure           `json:"procedure,omitempty"`
+	InternalPolicy      []*InternalPolicy      `json:"internalPolicy,omitempty"`
 	PresignedURL        *string                `json:"presignedURL,omitempty"`
 }
 
@@ -9811,6 +9814,9 @@ type FileWhereInput struct {
 	// procedure edge predicates
 	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
 	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
+	// internal_policy edge predicates
+	HasInternalPolicy     *bool                       `json:"hasInternalPolicy,omitempty"`
+	HasInternalPolicyWith []*InternalPolicyWhereInput `json:"hasInternalPolicyWith,omitempty"`
 }
 
 type Group struct {
@@ -12077,6 +12083,7 @@ type InternalPolicy struct {
 	Narratives             *NarrativeConnection             `json:"narratives"`
 	Tasks                  *TaskConnection                  `json:"tasks"`
 	Risks                  *RiskConnection                  `json:"risks"`
+	Files                  *FileConnection                  `json:"files"`
 	Programs               *ProgramConnection               `json:"programs"`
 }
 
@@ -12739,6 +12746,9 @@ type InternalPolicyWhereInput struct {
 	// risks edge predicates
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
@@ -28573,6 +28583,9 @@ type UpdateFileInput struct {
 	AddProcedureIDs              []string `json:"addProcedureIDs,omitempty"`
 	RemoveProcedureIDs           []string `json:"removeProcedureIDs,omitempty"`
 	ClearProcedure               *bool    `json:"clearProcedure,omitempty"`
+	AddInternalPolicyIDs         []string `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs      []string `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicy          *bool    `json:"clearInternalPolicy,omitempty"`
 }
 
 // UpdateGroupInput is used for update Group object.
@@ -28840,6 +28853,9 @@ type UpdateInternalPolicyInput struct {
 	AddRiskIDs                            []string            `json:"addRiskIDs,omitempty"`
 	RemoveRiskIDs                         []string            `json:"removeRiskIDs,omitempty"`
 	ClearRisks                            *bool               `json:"clearRisks,omitempty"`
+	AddFileIDs                            []string            `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                         []string            `json:"removeFileIDs,omitempty"`
+	ClearFiles                            *bool               `json:"clearFiles,omitempty"`
 	AddProgramIDs                         []string            `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs                      []string            `json:"removeProgramIDs,omitempty"`
 	ClearPrograms                         *bool               `json:"clearPrograms,omitempty"`

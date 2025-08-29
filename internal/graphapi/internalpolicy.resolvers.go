@@ -35,17 +35,17 @@ func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input gener
 }
 
 // CreateUploadInternalPolicy is the resolver for the createUploadInternalPolicy field.
-func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, input graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error) {
+func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error) {
 	var internalPolicyInput generated.CreateInternalPolicyInput
 
-	internalPolicyInput.OwnerID = ownerID
+	if ownerID != nil && *ownerID != "" {
+		internalPolicyInput.OwnerID = ownerID
+	}
 
 	// set the organization in the auth context if its not done for us
-	if ownerID != nil {
-		if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {
-			log.Error().Err(err).Msg("failed to set organization in auth context")
-			return nil, rout.NewMissingRequiredFieldError("owner_id")
-		}
+	if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).InternalPolicy.Create().SetInput(internalPolicyInput).Save(ctx)

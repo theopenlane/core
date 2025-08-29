@@ -1932,6 +1932,35 @@ func HasProcedureWith(preds ...predicate.Procedure) predicate.File {
 	})
 }
 
+// HasInternalPolicy applies the HasEdge predicate on the "internal_policy" edge.
+func HasInternalPolicy() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, InternalPolicyTable, InternalPolicyPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyFiles
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalPolicyWith applies the HasEdge predicate on the "internal_policy" edge with a given conditions (other predicates).
+func HasInternalPolicyWith(preds ...predicate.InternalPolicy) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newInternalPolicyStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.File) predicate.File {
 	return predicate.File(sql.AndPredicates(predicates...))

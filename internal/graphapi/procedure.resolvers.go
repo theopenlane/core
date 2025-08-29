@@ -38,7 +38,9 @@ func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.
 func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string) (*model.ProcedureCreatePayload, error) {
 	var procedureInput generated.CreateProcedureInput
 
-	procedureInput.OwnerID = ownerID
+	if ownerID != nil && *ownerID != "" {
+		procedureInput.OwnerID = ownerID
+	}
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {

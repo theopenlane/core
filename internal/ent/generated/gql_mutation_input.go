@@ -3408,6 +3408,7 @@ type CreateFileInput struct {
 	TrustCenterSettingIDs  []string
 	SubprocessorIDs        []string
 	ProcedureIDs           []string
+	InternalPolicyIDs      []string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -3493,6 +3494,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
 	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateFileInput on the FileCreate builder.
@@ -3574,6 +3578,9 @@ type UpdateFileInput struct {
 	ClearProcedure               bool
 	AddProcedureIDs              []string
 	RemoveProcedureIDs           []string
+	ClearInternalPolicy          bool
+	AddInternalPolicyIDs         []string
+	RemoveInternalPolicyIDs      []string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -3790,6 +3797,15 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveProcedureIDs; len(v) > 0 {
 		m.RemoveProcedureIDs(v...)
+	}
+	if i.ClearInternalPolicy {
+		m.ClearInternalPolicy()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 }
 
@@ -4739,6 +4755,7 @@ type CreateInternalPolicyInput struct {
 	NarrativeIDs                    []string
 	TaskIDs                         []string
 	RiskIDs                         []string
+	FileIDs                         []string
 	ProgramIDs                      []string
 }
 
@@ -4826,6 +4843,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
 	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
@@ -4911,6 +4931,9 @@ type UpdateInternalPolicyInput struct {
 	ClearRisks                            bool
 	AddRiskIDs                            []string
 	RemoveRiskIDs                         []string
+	ClearFiles                            bool
+	AddFileIDs                            []string
+	RemoveFileIDs                         []string
 	ClearPrograms                         bool
 	AddProgramIDs                         []string
 	RemoveProgramIDs                      []string
@@ -5133,6 +5156,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()

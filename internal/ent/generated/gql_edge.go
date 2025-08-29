@@ -2049,6 +2049,18 @@ func (_m *File) Procedure(ctx context.Context) (result []*Procedure, err error) 
 	return result, err
 }
 
+func (_m *File) InternalPolicy(ctx context.Context) (result []*InternalPolicy, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = _m.NamedInternalPolicy(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = _m.Edges.InternalPolicyOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = _m.QueryInternalPolicy().All(ctx)
+	}
+	return result, err
+}
+
 func (_m *Group) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -3179,6 +3191,27 @@ func (_m *InternalPolicy) Risks(
 	return _m.QueryRisks().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *InternalPolicy) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[13][alias]
+	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *InternalPolicy) Programs(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ProgramOrder, where *ProgramWhereInput,
 ) (*ProgramConnection, error) {
@@ -3187,7 +3220,7 @@ func (_m *InternalPolicy) Programs(
 		WithProgramFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[13][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[14][alias]
 	if nodes, err := _m.NamedPrograms(alias); err == nil || hasTotalCount {
 		pager, err := newProgramPager(opts, last != nil)
 		if err != nil {

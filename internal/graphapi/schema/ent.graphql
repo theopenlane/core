@@ -7466,6 +7466,7 @@ input CreateFileInput {
   trustCenterSettingIDs: [ID!]
   subprocessorIDs: [ID!]
   procedureIDs: [ID!]
+  internalPolicyIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -7668,6 +7669,7 @@ input CreateInternalPolicyInput {
   narrativeIDs: [ID!]
   taskIDs: [ID!]
   riskIDs: [ID!]
+  fileIDs: [ID!]
   programIDs: [ID!]
 }
 """
@@ -14458,6 +14460,7 @@ type File implements Node {
   trustCenterSetting: [TrustCenterSetting!]
   subprocessor: [Subprocessor!]
   procedure: [Procedure!]
+  internalPolicy: [InternalPolicy!]
 }
 """
 A connection to a list of items.
@@ -15345,6 +15348,11 @@ input FileWhereInput {
   """
   hasProcedure: Boolean
   hasProcedureWith: [ProcedureWhereInput!]
+  """
+  internal_policy edge predicates
+  """
+  hasInternalPolicy: Boolean
+  hasInternalPolicyWith: [InternalPolicyWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -19645,6 +19653,37 @@ type InternalPolicy implements Node {
     """
     where: RiskWhereInput
   ): RiskConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   programs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -20545,6 +20584,11 @@ input InternalPolicyWhereInput {
   """
   hasRisks: Boolean
   hasRisksWith: [RiskWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
   """
   programs edge predicates
   """
@@ -49019,6 +49063,9 @@ input UpdateFileInput {
   addProcedureIDs: [ID!]
   removeProcedureIDs: [ID!]
   clearProcedure: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicy: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -49339,6 +49386,9 @@ input UpdateInternalPolicyInput {
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean

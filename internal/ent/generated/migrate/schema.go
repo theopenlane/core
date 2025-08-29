@@ -6276,6 +6276,31 @@ var (
 			},
 		},
 	}
+	// InternalPolicyFilesColumns holds the columns for the "internal_policy_files" table.
+	InternalPolicyFilesColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// InternalPolicyFilesTable holds the schema information for the "internal_policy_files" table.
+	InternalPolicyFilesTable = &schema.Table{
+		Name:       "internal_policy_files",
+		Columns:    InternalPolicyFilesColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyFilesColumns[0], InternalPolicyFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_files_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyFilesColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_files_file_id",
+				Columns:    []*schema.Column{InternalPolicyFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// InviteEventsColumns holds the columns for the "invite_events" table.
 	InviteEventsColumns = []*schema.Column{
 		{Name: "invite_id", Type: field.TypeString},
@@ -8035,6 +8060,7 @@ var (
 		InternalPolicyNarrativesTable,
 		InternalPolicyTasksTable,
 		InternalPolicyRisksTable,
+		InternalPolicyFilesTable,
 		InviteEventsTable,
 		InviteGroupsTable,
 		JobRunnerJobRunnerTokensTable,
@@ -8483,6 +8509,8 @@ func init() {
 	InternalPolicyTasksTable.ForeignKeys[1].RefTable = TasksTable
 	InternalPolicyRisksTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyRisksTable.ForeignKeys[1].RefTable = RisksTable
+	InternalPolicyFilesTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyFilesTable.ForeignKeys[1].RefTable = FilesTable
 	InviteEventsTable.ForeignKeys[0].RefTable = InvitesTable
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
 	InviteGroupsTable.ForeignKeys[0].RefTable = InvitesTable

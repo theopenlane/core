@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -528,6 +529,21 @@ func (_c *FileCreate) AddProcedure(v ...*Procedure) *FileCreate {
 	return _c.AddProcedureIDs(ids...)
 }
 
+// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+func (_c *FileCreate) AddInternalPolicyIDs(ids ...string) *FileCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
+}
+
+// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
+func (_c *FileCreate) AddInternalPolicy(v ...*InternalPolicy) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddInternalPolicyIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (_c *FileCreate) Mutation() *FileMutation {
 	return _c.mutation
@@ -984,6 +1000,23 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ProcedureFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalPolicyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.InternalPolicyTable,
+			Columns: file.InternalPolicyPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.InternalPolicyFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

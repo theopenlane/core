@@ -214,7 +214,7 @@ type TestGraphClient interface {
 	CreateBulkInternalPolicy(ctx context.Context, input []*CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInternalPolicy, error)
 	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkInternalPolicy, error)
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
-	CreateUploadInternalPolicy(ctx context.Context, input graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error)
+	CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error)
 	DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInternalPolicy, error)
 	GetAllInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
 	GetInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, where *InternalPolicyWhereInput, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error)
@@ -106567,8 +106567,8 @@ func (c *Client) CreateInternalPolicy(ctx context.Context, input CreateInternalP
 	return &res, nil
 }
 
-const CreateUploadInternalPolicyDocument = `mutation CreateUploadInternalPolicy ($input: Upload!, $ownerID: ID) {
-	createUploadInternalPolicy(input: $input, ownerID: $ownerID) {
+const CreateUploadInternalPolicyDocument = `mutation CreateUploadInternalPolicy ($policyFile: Upload!, $ownerID: ID) {
+	createUploadInternalPolicy(policyFile: $policyFile, ownerID: $ownerID) {
 		internalPolicy {
 			approvalRequired
 			createdAt
@@ -106624,10 +106624,10 @@ const CreateUploadInternalPolicyDocument = `mutation CreateUploadInternalPolicy 
 }
 `
 
-func (c *Client) CreateUploadInternalPolicy(ctx context.Context, input graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error) {
+func (c *Client) CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error) {
 	vars := map[string]any{
-		"input":   input,
-		"ownerID": ownerID,
+		"policyFile": policyFile,
+		"ownerID":    ownerID,
 	}
 
 	var res CreateUploadInternalPolicy

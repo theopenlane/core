@@ -4799,6 +4799,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Procedure",
 	)
 	graph.MustAddE(
+		"internal_policy",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.InternalPolicyTable,
+			Columns: file.InternalPolicyPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"InternalPolicy",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -5541,6 +5553,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"InternalPolicy",
 		"Risk",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.FilesTable,
+			Columns: internalpolicy.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"InternalPolicy",
+		"File",
 	)
 	graph.MustAddE(
 		"programs",
@@ -14163,6 +14187,20 @@ func (f *FileFilter) WhereHasProcedureWith(preds ...predicate.Procedure) {
 	})))
 }
 
+// WhereHasInternalPolicy applies a predicate to check if query has an edge internal_policy.
+func (f *FileFilter) WhereHasInternalPolicy() {
+	f.Where(entql.HasEdge("internal_policy"))
+}
+
+// WhereHasInternalPolicyWith applies a predicate to check if query has an edge internal_policy with a given conditions (other predicates).
+func (f *FileFilter) WhereHasInternalPolicyWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policy", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *FileHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -16390,6 +16428,20 @@ func (f *InternalPolicyFilter) WhereHasRisks() {
 // WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
 func (f *InternalPolicyFilter) WhereHasRisksWith(preds ...predicate.Risk) {
 	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *InternalPolicyFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

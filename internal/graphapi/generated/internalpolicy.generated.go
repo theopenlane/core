@@ -141,6 +141,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
 			case "risks":
 				return ec.fieldContext_InternalPolicy_risks(ctx, field)
+			case "files":
+				return ec.fieldContext_InternalPolicy_files(ctx, field)
 			case "programs":
 				return ec.fieldContext_InternalPolicy_programs(ctx, field)
 			}
@@ -262,6 +264,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
 			case "risks":
 				return ec.fieldContext_InternalPolicy_risks(ctx, field)
+			case "files":
+				return ec.fieldContext_InternalPolicy_files(ctx, field)
 			case "programs":
 				return ec.fieldContext_InternalPolicy_programs(ctx, field)
 			}
@@ -427,6 +431,8 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
 			case "risks":
 				return ec.fieldContext_InternalPolicy_risks(ctx, field)
+			case "files":
+				return ec.fieldContext_InternalPolicy_files(ctx, field)
 			case "programs":
 				return ec.fieldContext_InternalPolicy_programs(ctx, field)
 			}
@@ -595,6 +601,8 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
 			case "risks":
 				return ec.fieldContext_InternalPolicy_risks(ctx, field)
+			case "files":
+				return ec.fieldContext_InternalPolicy_files(ctx, field)
 			case "programs":
 				return ec.fieldContext_InternalPolicy_programs(ctx, field)
 			}

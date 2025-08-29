@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -630,6 +631,21 @@ func (_u *FileUpdate) AddProcedure(v ...*Procedure) *FileUpdate {
 	return _u.AddProcedureIDs(ids...)
 }
 
+// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+func (_u *FileUpdate) AddInternalPolicyIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
+}
+
+// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
+func (_u *FileUpdate) AddInternalPolicy(v ...*InternalPolicy) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddInternalPolicyIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (_u *FileUpdate) Mutation() *FileMutation {
 	return _u.mutation
@@ -948,6 +964,27 @@ func (_u *FileUpdate) RemoveProcedure(v ...*Procedure) *FileUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProcedureIDs(ids...)
+}
+
+// ClearInternalPolicy clears all "internal_policy" edges to the InternalPolicy entity.
+func (_u *FileUpdate) ClearInternalPolicy() *FileUpdate {
+	_u.mutation.ClearInternalPolicy()
+	return _u
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policy" edge to InternalPolicy entities by IDs.
+func (_u *FileUpdate) RemoveInternalPolicyIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveInternalPolicy removes "internal_policy" edges to InternalPolicy entities.
+func (_u *FileUpdate) RemoveInternalPolicy(v ...*InternalPolicy) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1867,6 +1904,54 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.InternalPolicyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.InternalPolicyTable,
+			Columns: file.InternalPolicyPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedInternalPolicyIDs(); len(nodes) > 0 && !_u.mutation.InternalPolicyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.InternalPolicyTable,
+			Columns: file.InternalPolicyPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPolicyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.InternalPolicyTable,
+			Columns: file.InternalPolicyPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.File
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2474,6 +2559,21 @@ func (_u *FileUpdateOne) AddProcedure(v ...*Procedure) *FileUpdateOne {
 	return _u.AddProcedureIDs(ids...)
 }
 
+// AddInternalPolicyIDs adds the "internal_policy" edge to the InternalPolicy entity by IDs.
+func (_u *FileUpdateOne) AddInternalPolicyIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
+}
+
+// AddInternalPolicy adds the "internal_policy" edges to the InternalPolicy entity.
+func (_u *FileUpdateOne) AddInternalPolicy(v ...*InternalPolicy) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddInternalPolicyIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (_u *FileUpdateOne) Mutation() *FileMutation {
 	return _u.mutation
@@ -2792,6 +2892,27 @@ func (_u *FileUpdateOne) RemoveProcedure(v ...*Procedure) *FileUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProcedureIDs(ids...)
+}
+
+// ClearInternalPolicy clears all "internal_policy" edges to the InternalPolicy entity.
+func (_u *FileUpdateOne) ClearInternalPolicy() *FileUpdateOne {
+	_u.mutation.ClearInternalPolicy()
+	return _u
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policy" edge to InternalPolicy entities by IDs.
+func (_u *FileUpdateOne) RemoveInternalPolicyIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveInternalPolicy removes "internal_policy" edges to InternalPolicy entities.
+func (_u *FileUpdateOne) RemoveInternalPolicy(v ...*InternalPolicy) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // Where appends a list predicates to the FileUpdate builder.
@@ -3736,6 +3857,54 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProcedureFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPolicyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.InternalPolicyTable,
+			Columns: file.InternalPolicyPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedInternalPolicyIDs(); len(nodes) > 0 && !_u.mutation.InternalPolicyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.InternalPolicyTable,
+			Columns: file.InternalPolicyPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPolicyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.InternalPolicyTable,
+			Columns: file.InternalPolicyPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

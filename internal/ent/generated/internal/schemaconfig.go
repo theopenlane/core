@@ -96,6 +96,7 @@ type SchemaConfig struct {
 	InternalPolicyNarratives           string // InternalPolicy-narratives->Narrative table.
 	InternalPolicyTasks                string // InternalPolicy-tasks->Task table.
 	InternalPolicyRisks                string // InternalPolicy-risks->Risk table.
+	InternalPolicyFiles                string // InternalPolicy-files->File table.
 	InternalPolicyHistory              string // InternalPolicyHistory table.
 	Invite                             string // Invite table.
 	InviteEvents                       string // Invite-events->Event table.

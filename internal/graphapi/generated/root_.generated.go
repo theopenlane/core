@@ -1311,6 +1311,7 @@ type ComplexityRoot struct {
 		Evidence              func(childComplexity int) int
 		Groups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                    func(childComplexity int) int
+		InternalPolicy        func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
 		Organization          func(childComplexity int) int
 		OrganizationSetting   func(childComplexity int) int
@@ -1805,6 +1806,7 @@ type ComplexityRoot struct {
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Files                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		Name                            func(childComplexity int) int
@@ -2475,7 +2477,7 @@ type ComplexityRoot struct {
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
-		CreateUploadInternalPolicy           func(childComplexity int, input graphql.Upload, ownerID *string) int
+		CreateUploadInternalPolicy           func(childComplexity int, policyFile graphql.Upload, ownerID *string) int
 		CreateUploadProcedure                func(childComplexity int, procedureFile graphql.Upload, ownerID *string) int
 		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
 		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
@@ -11026,6 +11028,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.ID(childComplexity), true
 
+	case "File.internalPolicy":
+		if e.complexity.File.InternalPolicy == nil {
+			break
+		}
+
+		return e.complexity.File.InternalPolicy(childComplexity), true
+
 	case "File.md5Hash":
 		if e.complexity.File.Md5Hash == nil {
 			break
@@ -13495,6 +13504,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "InternalPolicy.files":
+		if e.complexity.InternalPolicy.Files == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
 	case "InternalPolicy.id":
 		if e.complexity.InternalPolicy.ID == nil {
@@ -17438,7 +17459,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateUploadInternalPolicy(childComplexity, args["input"].(graphql.Upload), args["ownerID"].(*string)), true
+		return e.complexity.Mutation.CreateUploadInternalPolicy(childComplexity, args["policyFile"].(graphql.Upload), args["ownerID"].(*string)), true
 
 	case "Mutation.createUploadProcedure":
 		if e.complexity.Mutation.CreateUploadProcedure == nil {
@@ -43586,6 +43607,7 @@ input CreateFileInput {
   trustCenterSettingIDs: [ID!]
   subprocessorIDs: [ID!]
   procedureIDs: [ID!]
+  internalPolicyIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -43788,6 +43810,7 @@ input CreateInternalPolicyInput {
   narrativeIDs: [ID!]
   taskIDs: [ID!]
   riskIDs: [ID!]
+  fileIDs: [ID!]
   programIDs: [ID!]
 }
 """
@@ -50578,6 +50601,7 @@ type File implements Node {
   trustCenterSetting: [TrustCenterSetting!]
   subprocessor: [Subprocessor!]
   procedure: [Procedure!]
+  internalPolicy: [InternalPolicy!]
 }
 """
 A connection to a list of items.
@@ -51465,6 +51489,11 @@ input FileWhereInput {
   """
   hasProcedure: Boolean
   hasProcedureWith: [ProcedureWhereInput!]
+  """
+  internal_policy edge predicates
+  """
+  hasInternalPolicy: Boolean
+  hasInternalPolicyWith: [InternalPolicyWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -55765,6 +55794,37 @@ type InternalPolicy implements Node {
     """
     where: RiskWhereInput
   ): RiskConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   programs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -56665,6 +56725,11 @@ input InternalPolicyWhereInput {
   """
   hasRisks: Boolean
   hasRisksWith: [RiskWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
   """
   programs edge predicates
   """
@@ -85139,6 +85204,9 @@ input UpdateFileInput {
   addProcedureIDs: [ID!]
   removeProcedureIDs: [ID!]
   clearProcedure: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicy: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -85459,6 +85527,9 @@ input UpdateInternalPolicyInput {
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
@@ -90753,7 +90824,7 @@ extend type Mutation{
         """
         file containing values of the internalPolicy
         """
-        input: Upload!
+        policyFile: Upload!
         """
         ID of the owner organization
         """
@@ -90866,7 +90937,8 @@ type InternalPolicyBulkUpdatePayload {
     IDs of the updated internalPolicys
     """
     updatedIDs: [ID!]
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/invite.graphql", Input: `extend type Query {
     """
     Look up invite by ID

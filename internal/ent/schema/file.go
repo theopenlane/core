@@ -103,6 +103,7 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeFrom(f, TrustCenterSetting{}),
 		defaultEdgeFrom(f, Subprocessor{}),
 		defaultEdgeFrom(f, Procedure{}),
+		defaultEdgeFrom(f, InternalPolicy{}),
 	}
 }
 
