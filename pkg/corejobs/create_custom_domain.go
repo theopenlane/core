@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/cloudflare/cloudflare-go/v5"
-	"github.com/cloudflare/cloudflare-go/v5/custom_hostnames"
+	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/custom_hostnames"
 	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"

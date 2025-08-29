@@ -30,7 +30,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.87.2
 	github.com/brianvoe/gofakeit/v7 v7.4.0
 	github.com/cenkalti/backoff/v5 v5.0.3
-	github.com/cloudflare/cloudflare-go/v5 v5.1.0
 	github.com/cloudflare/cloudflare-go/v6 v6.0.0
 	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.18.0

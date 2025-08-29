@@ -7,8 +7,8 @@ package mocks
 import (
 	"context"
 
-	"github.com/cloudflare/cloudflare-go/v5/custom_hostnames"
-	"github.com/cloudflare/cloudflare-go/v5/option"
+	"github.com/cloudflare/cloudflare-go/v6/custom_hostnames"
+	"github.com/cloudflare/cloudflare-go/v6/option"
 	mock "github.com/stretchr/testify/mock"
 	"github.com/theopenlane/core/pkg/corejobs/internal/cloudflare"
 )
