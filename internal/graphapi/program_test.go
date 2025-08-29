@@ -813,6 +813,24 @@ func TestMutationUpdateProgram(t *testing.T) {
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
+		{
+			name:      "update allowed, program is not archived but updated to archived state",
+			programID: program.ID,
+			request: testclient.UpdateProgramInput{
+				Status: lo.ToPtr(enums.ProgramStatusArchived),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:      "update allowed, program is archived but updated to in progress state",
+			programID: program.ID,
+			request: testclient.UpdateProgramInput{
+				Status: lo.ToPtr(enums.ProgramStatusInProgress),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
 	}
 
 	for _, tc := range testCases {
