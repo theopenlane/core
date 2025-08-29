@@ -3407,6 +3407,8 @@ type CreateFileInput struct {
 	EventIDs               []string
 	TrustCenterSettingIDs  []string
 	SubprocessorIDs        []string
+	ProcedureIDs           []string
+	InternalPolicyIDs      []string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -3489,6 +3491,12 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.SubprocessorIDs; len(v) > 0 {
 		m.AddSubprocessorIDs(v...)
 	}
+	if v := i.ProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateFileInput on the FileCreate builder.
@@ -3567,6 +3575,12 @@ type UpdateFileInput struct {
 	ClearSubprocessor            bool
 	AddSubprocessorIDs           []string
 	RemoveSubprocessorIDs        []string
+	ClearProcedure               bool
+	AddProcedureIDs              []string
+	RemoveProcedureIDs           []string
+	ClearInternalPolicy          bool
+	AddInternalPolicyIDs         []string
+	RemoveInternalPolicyIDs      []string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -3774,6 +3788,24 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveSubprocessorIDs; len(v) > 0 {
 		m.RemoveSubprocessorIDs(v...)
+	}
+	if i.ClearProcedure {
+		m.ClearProcedure()
+	}
+	if v := i.AddProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.RemoveProcedureIDs; len(v) > 0 {
+		m.RemoveProcedureIDs(v...)
+	}
+	if i.ClearInternalPolicy {
+		m.ClearInternalPolicy()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 }
 
@@ -4723,6 +4755,7 @@ type CreateInternalPolicyInput struct {
 	NarrativeIDs                    []string
 	TaskIDs                         []string
 	RiskIDs                         []string
+	FileIDs                         []string
 	ProgramIDs                      []string
 }
 
@@ -4810,6 +4843,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
 	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
@@ -4895,6 +4931,9 @@ type UpdateInternalPolicyInput struct {
 	ClearRisks                            bool
 	AddRiskIDs                            []string
 	RemoveRiskIDs                         []string
+	ClearFiles                            bool
+	AddFileIDs                            []string
+	RemoveFileIDs                         []string
 	ClearPrograms                         bool
 	AddProgramIDs                         []string
 	RemoveProgramIDs                      []string
@@ -5117,6 +5156,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()
@@ -8004,6 +8052,7 @@ type CreateProcedureInput struct {
 	NarrativeIDs                    []string
 	RiskIDs                         []string
 	TaskIDs                         []string
+	FileIDs                         []string
 }
 
 // Mutate applies the CreateProcedureInput on the ProcedureMutation builder.
@@ -8087,6 +8136,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
 	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateProcedureInput on the ProcedureCreate builder.
@@ -8166,6 +8218,9 @@ type UpdateProcedureInput struct {
 	ClearTasks                            bool
 	AddTaskIDs                            []string
 	RemoveTaskIDs                         []string
+	ClearFiles                            bool
+	AddFileIDs                            []string
+	RemoveFileIDs                         []string
 }
 
 // Mutate applies the UpdateProcedureInput on the ProcedureMutation builder.
@@ -8376,6 +8431,15 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 }
 

@@ -139,6 +139,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "files":
+				return ec.fieldContext_Procedure_files(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -256,6 +258,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "files":
+				return ec.fieldContext_Procedure_files(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -417,6 +421,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "files":
+				return ec.fieldContext_Procedure_files(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -581,6 +587,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "files":
+				return ec.fieldContext_Procedure_files(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},

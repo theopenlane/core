@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -641,6 +642,21 @@ func (_u *InternalPolicyUpdate) AddRisks(v ...*Risk) *InternalPolicyUpdate {
 	return _u.AddRiskIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *InternalPolicyUpdate) AddFileIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *InternalPolicyUpdate) AddFiles(v ...*File) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
+}
+
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (_u *InternalPolicyUpdate) AddProgramIDs(ids ...string) *InternalPolicyUpdate {
 	_u.mutation.AddProgramIDs(ids...)
@@ -887,6 +903,27 @@ func (_u *InternalPolicyUpdate) RemoveRisks(v ...*Risk) *InternalPolicyUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveRiskIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *InternalPolicyUpdate) ClearFiles() *InternalPolicyUpdate {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *InternalPolicyUpdate) RemoveFileIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *InternalPolicyUpdate) RemoveFiles(v ...*File) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
@@ -1726,6 +1763,54 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.FilesTable,
+			Columns: internalpolicy.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.FilesTable,
+			Columns: internalpolicy.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.FilesTable,
+			Columns: internalpolicy.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2395,6 +2480,21 @@ func (_u *InternalPolicyUpdateOne) AddRisks(v ...*Risk) *InternalPolicyUpdateOne
 	return _u.AddRiskIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *InternalPolicyUpdateOne) AddFileIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *InternalPolicyUpdateOne) AddFiles(v ...*File) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
+}
+
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (_u *InternalPolicyUpdateOne) AddProgramIDs(ids ...string) *InternalPolicyUpdateOne {
 	_u.mutation.AddProgramIDs(ids...)
@@ -2641,6 +2741,27 @@ func (_u *InternalPolicyUpdateOne) RemoveRisks(v ...*Risk) *InternalPolicyUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveRiskIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *InternalPolicyUpdateOne) ClearFiles() *InternalPolicyUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *InternalPolicyUpdateOne) RemoveFileIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *InternalPolicyUpdateOne) RemoveFiles(v ...*File) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
@@ -3505,6 +3626,54 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 			},
 		}
 		edge.Schema = _u.schemaConfig.InternalPolicyRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.FilesTable,
+			Columns: internalpolicy.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.FilesTable,
+			Columns: internalpolicy.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.FilesTable,
+			Columns: internalpolicy.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

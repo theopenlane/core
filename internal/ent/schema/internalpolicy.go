@@ -57,6 +57,7 @@ func (i InternalPolicy) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, Narrative{}),
 		defaultEdgeToWithPagination(i, Task{}),
 		defaultEdgeToWithPagination(i, Risk{}),
+		defaultEdgeToWithPagination(i, File{}),
 
 		defaultEdgeFromWithPagination(i, Program{}),
 	}
@@ -98,6 +99,7 @@ func (i InternalPolicy) Annotations() []schema.Annotation {
 // Hooks of the InternalPolicy
 func (InternalPolicy) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookPolicy(),
 		hook.On(
 			hooks.OrgOwnedTuplesHookWithAdmin(),
 			ent.OpCreate,

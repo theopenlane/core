@@ -92,6 +92,11 @@ func (d *Disk) ManagerUpload(_ context.Context, files [][]byte) error {
 
 // Download is used to download a file from the storage backend
 func (d *Disk) Download(_ context.Context, opts *objects.DownloadFileOptions) (*objects.DownloadFileMetadata, error) {
+	// use the default bucket if not provided
+	if opts.Bucket == "" {
+		opts.Bucket = d.Opts.Bucket
+	}
+
 	file, err := os.ReadFile(filepath.Join(opts.Bucket, opts.FileName))
 	if err != nil {
 		return nil, err

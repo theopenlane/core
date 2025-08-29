@@ -56,6 +56,7 @@ func (p Procedure) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, Narrative{}),
 		defaultEdgeToWithPagination(p, Risk{}),
 		defaultEdgeToWithPagination(p, Task{}),
+		defaultEdgeToWithPagination(p, File{}),
 	}
 }
 
@@ -94,6 +95,7 @@ func (p Procedure) Annotations() []schema.Annotation {
 // Hooks of the Procedure
 func (Procedure) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookProcedure(),
 		hook.On(
 			hooks.OrgOwnedTuplesHookWithAdmin(),
 			ent.OpCreate,

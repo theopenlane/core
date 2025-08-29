@@ -1780,6 +1780,35 @@ func HasRisksWith(preds ...predicate.Risk) predicate.InternalPolicy {
 	})
 }
 
+// HasFiles applies the HasEdge predicate on the "files" edge.
+func HasFiles() predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.InternalPolicyFiles
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFilesWith applies the HasEdge predicate on the "files" edge with a given conditions (other predicates).
+func HasFilesWith(preds ...predicate.File) predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := newFilesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.InternalPolicyFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPrograms applies the HasEdge predicate on the "programs" edge.
 func HasPrograms() predicate.InternalPolicy {
 	return predicate.InternalPolicy(func(s *sql.Selector) {

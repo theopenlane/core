@@ -23,6 +23,19 @@ extend type Mutation{
         input: CreateInternalPolicyInput!
     ): InternalPolicyCreatePayload!
     """
+    Create a new internalPolicy via file upload
+    """
+    createUploadInternalPolicy(
+        """
+        file containing values of the internalPolicy
+        """
+        policyFile: Upload!
+        """
+        ID of the owner organization
+        """
+        ownerID: ID
+    ): InternalPolicyCreatePayload!
+    """
     Create multiple new internalPolicys
     """
     createBulkInternalPolicy(

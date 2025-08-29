@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -50,6 +51,7 @@ type InternalPolicyQuery struct {
 	withNarratives                  *NarrativeQuery
 	withTasks                       *TaskQuery
 	withRisks                       *RiskQuery
+	withFiles                       *FileQuery
 	withPrograms                    *ProgramQuery
 	loadTotal                       []func(context.Context, []*InternalPolicy) error
 	modifiers                       []func(*sql.Selector)
@@ -63,6 +65,7 @@ type InternalPolicyQuery struct {
 	withNamedNarratives             map[string]*NarrativeQuery
 	withNamedTasks                  map[string]*TaskQuery
 	withNamedRisks                  map[string]*RiskQuery
+	withNamedFiles                  map[string]*FileQuery
 	withNamedPrograms               map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -425,6 +428,31 @@ func (_q *InternalPolicyQuery) QueryRisks() *RiskQuery {
 	return query
 }
 
+// QueryFiles chains the current query on the "files" edge.
+func (_q *InternalPolicyQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.FilesTable, internalpolicy.FilesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.InternalPolicyFiles
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryPrograms chains the current query on the "programs" edge.
 func (_q *InternalPolicyQuery) QueryPrograms() *ProgramQuery {
 	query := (&ProgramClient{config: _q.config}).Query()
@@ -655,6 +683,7 @@ func (_q *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withNarratives:             _q.withNarratives.Clone(),
 		withTasks:                  _q.withTasks.Clone(),
 		withRisks:                  _q.withRisks.Clone(),
+		withFiles:                  _q.withFiles.Clone(),
 		withPrograms:               _q.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -806,6 +835,17 @@ func (_q *InternalPolicyQuery) WithRisks(opts ...func(*RiskQuery)) *InternalPoli
 	return _q
 }
 
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithFiles(opts ...func(*FileQuery)) *InternalPolicyQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFiles = query
+	return _q
+}
+
 // WithPrograms tells the query-builder to eager-load the nodes that are connected to
 // the "programs" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *InternalPolicyQuery) WithPrograms(opts ...func(*ProgramQuery)) *InternalPolicyQuery {
@@ -901,7 +941,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*InternalPolicy{}
 		_spec       = _q.querySpec()
-		loadedTypes = [14]bool{
+		loadedTypes = [15]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -915,6 +955,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withNarratives != nil,
 			_q.withTasks != nil,
 			_q.withRisks != nil,
+			_q.withFiles != nil,
 			_q.withPrograms != nil,
 		}
 	)
@@ -1033,6 +1074,13 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.Files = []*File{} },
+			func(n *InternalPolicy, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withPrograms; query != nil {
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *InternalPolicy) { n.Edges.Programs = []*Program{} },
@@ -1107,6 +1155,13 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadRisks(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedRisks(name) },
 			func(n *InternalPolicy, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedFiles(name) },
+			func(n *InternalPolicy, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1801,6 +1856,68 @@ func (_q *InternalPolicyQuery) loadRisks(ctx context.Context, query *RiskQuery, 
 	}
 	return nil
 }
+func (_q *InternalPolicyQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *File)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.FilesTable)
+		joinT.Schema(_q.schemaConfig.InternalPolicyFiles)
+		s.Join(joinT).On(s.C(file.FieldID), joinT.C(internalpolicy.FilesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.FilesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.FilesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "files" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *InternalPolicyQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Program)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*InternalPolicy)
@@ -2108,6 +2225,20 @@ func (_q *InternalPolicyQuery) WithNamedRisks(name string, opts ...func(*RiskQue
 		_q.withNamedRisks = make(map[string]*RiskQuery)
 	}
 	_q.withNamedRisks[name] = query
+	return _q
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *InternalPolicyQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
+	}
+	_q.withNamedFiles[name] = query
 	return _q
 }
 

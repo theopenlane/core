@@ -95,6 +95,38 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
   }
 }
 
+mutation CreateUploadProcedure($procedureFile: Upload!, $ownerID: ID) {
+  createUploadProcedure(procedureFile: $procedureFile, ownerID: $ownerID) {
+    procedure {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      procedureType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
 mutation DeleteProcedure($deleteProcedureId: ID!) {
   deleteProcedure(id: $deleteProcedureId) {
     deletedID

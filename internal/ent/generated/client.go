@@ -7474,6 +7474,44 @@ func (c *FileClient) QuerySubprocessor(_m *File) *SubprocessorQuery {
 	return query
 }
 
+// QueryProcedure queries the procedure edge of a File.
+func (c *FileClient) QueryProcedure(_m *File) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.ProcedureTable, file.ProcedurePrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.ProcedureFiles
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicy queries the internal_policy edge of a File.
+func (c *FileClient) QueryInternalPolicy(_m *File) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.InternalPolicyTable, file.InternalPolicyPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyFiles
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *FileClient) Hooks() []Hook {
 	hooks := c.hooks.File
@@ -10266,6 +10304,25 @@ func (c *InternalPolicyClient) QueryRisks(_m *InternalPolicy) *RiskQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.InternalPolicyRisks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryFiles(_m *InternalPolicy) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.FilesTable, internalpolicy.FilesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.InternalPolicyFiles
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -17109,6 +17166,25 @@ func (c *ProcedureClient) QueryTasks(_m *Procedure) *TaskQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.ProcedureTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Procedure.
+func (c *ProcedureClient) QueryFiles(_m *Procedure) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, procedure.FilesTable, procedure.FilesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.ProcedureFiles
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

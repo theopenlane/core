@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -624,6 +625,21 @@ func (_u *ProcedureUpdate) AddTasks(v ...*Task) *ProcedureUpdate {
 	return _u.AddTaskIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *ProcedureUpdate) AddFileIDs(ids ...string) *ProcedureUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *ProcedureUpdate) AddFiles(v ...*File) *ProcedureUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (_u *ProcedureUpdate) Mutation() *ProcedureMutation {
 	return _u.mutation
@@ -834,6 +850,27 @@ func (_u *ProcedureUpdate) RemoveTasks(v ...*Task) *ProcedureUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *ProcedureUpdate) ClearFiles() *ProcedureUpdate {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *ProcedureUpdate) RemoveFileIDs(ids ...string) *ProcedureUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *ProcedureUpdate) RemoveFiles(v ...*File) *ProcedureUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1604,6 +1641,54 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.FilesTable,
+			Columns: procedure.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.FilesTable,
+			Columns: procedure.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.FilesTable,
+			Columns: procedure.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Procedure
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2210,6 +2295,21 @@ func (_u *ProcedureUpdateOne) AddTasks(v ...*Task) *ProcedureUpdateOne {
 	return _u.AddTaskIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *ProcedureUpdateOne) AddFileIDs(ids ...string) *ProcedureUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *ProcedureUpdateOne) AddFiles(v ...*File) *ProcedureUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (_u *ProcedureUpdateOne) Mutation() *ProcedureMutation {
 	return _u.mutation
@@ -2420,6 +2520,27 @@ func (_u *ProcedureUpdateOne) RemoveTasks(v ...*Task) *ProcedureUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *ProcedureUpdateOne) ClearFiles() *ProcedureUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *ProcedureUpdateOne) RemoveFileIDs(ids ...string) *ProcedureUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *ProcedureUpdateOne) RemoveFiles(v ...*File) *ProcedureUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the ProcedureUpdate builder.
@@ -3215,6 +3336,54 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProcedureTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.FilesTable,
+			Columns: procedure.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.FilesTable,
+			Columns: procedure.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.FilesTable,
+			Columns: procedure.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ProcedureFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -107,13 +107,15 @@ type InternalPolicyEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [15]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [15]map[string]int
 
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
@@ -125,6 +127,7 @@ type InternalPolicyEdges struct {
 	namedNarratives             map[string][]*Narrative
 	namedTasks                  map[string][]*Task
 	namedRisks                  map[string][]*Risk
+	namedFiles                  map[string][]*File
 	namedPrograms               map[string][]*Program
 }
 
@@ -251,10 +254,19 @@ func (e InternalPolicyEdges) RisksOrErr() ([]*Risk, error) {
 	return nil, &NotLoadedError{edge: "risks"}
 }
 
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[13] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
+}
+
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -540,6 +552,11 @@ func (_m *InternalPolicy) QueryTasks() *TaskQuery {
 // QueryRisks queries the "risks" edge of the InternalPolicy entity.
 func (_m *InternalPolicy) QueryRisks() *RiskQuery {
 	return NewInternalPolicyClient(_m.config).QueryRisks(_m)
+}
+
+// QueryFiles queries the "files" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryFiles() *FileQuery {
+	return NewInternalPolicyClient(_m.config).QueryFiles(_m)
 }
 
 // QueryPrograms queries the "programs" edge of the InternalPolicy entity.
@@ -888,6 +905,30 @@ func (_m *InternalPolicy) appendNamedRisks(name string, edges ...*Risk) {
 		_m.Edges.namedRisks[name] = []*Risk{}
 	} else {
 		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
+	}
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFiles[name] = []*File{}
+	} else {
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

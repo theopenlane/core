@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -486,6 +487,21 @@ func (_c *ProcedureCreate) AddTasks(v ...*Task) *ProcedureCreate {
 	return _c.AddTaskIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_c *ProcedureCreate) AddFileIDs(ids ...string) *ProcedureCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_c *ProcedureCreate) AddFiles(v ...*File) *ProcedureCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFileIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (_c *ProcedureCreate) Mutation() *ProcedureMutation {
 	return _c.mutation
@@ -958,6 +974,23 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ProcedureTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.FilesTable,
+			Columns: procedure.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ProcedureFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
