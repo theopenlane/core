@@ -161,6 +161,16 @@ func Summary(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldSummary, v))
 }
 
+// FileID applies equality check predicate on the "file_id" field. It's identical to FileIDEQ.
+func FileID(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldFileID, v))
+}
+
+// URL applies equality check predicate on the "url" field. It's identical to URLEQ.
+func URL(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldURL, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1544,6 +1554,156 @@ func DismissedImprovementSuggestionsIsNil() predicate.ProcedureHistory {
 // DismissedImprovementSuggestionsNotNil applies the NotNil predicate on the "dismissed_improvement_suggestions" field.
 func DismissedImprovementSuggestionsNotNil() predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldNotNull(FieldDismissedImprovementSuggestions))
+}
+
+// FileIDEQ applies the EQ predicate on the "file_id" field.
+func FileIDEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldFileID, v))
+}
+
+// FileIDNEQ applies the NEQ predicate on the "file_id" field.
+func FileIDNEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNEQ(FieldFileID, v))
+}
+
+// FileIDIn applies the In predicate on the "file_id" field.
+func FileIDIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIn(FieldFileID, vs...))
+}
+
+// FileIDNotIn applies the NotIn predicate on the "file_id" field.
+func FileIDNotIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotIn(FieldFileID, vs...))
+}
+
+// FileIDGT applies the GT predicate on the "file_id" field.
+func FileIDGT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGT(FieldFileID, v))
+}
+
+// FileIDGTE applies the GTE predicate on the "file_id" field.
+func FileIDGTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGTE(FieldFileID, v))
+}
+
+// FileIDLT applies the LT predicate on the "file_id" field.
+func FileIDLT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLT(FieldFileID, v))
+}
+
+// FileIDLTE applies the LTE predicate on the "file_id" field.
+func FileIDLTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLTE(FieldFileID, v))
+}
+
+// FileIDContains applies the Contains predicate on the "file_id" field.
+func FileIDContains(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContains(FieldFileID, v))
+}
+
+// FileIDHasPrefix applies the HasPrefix predicate on the "file_id" field.
+func FileIDHasPrefix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasPrefix(FieldFileID, v))
+}
+
+// FileIDHasSuffix applies the HasSuffix predicate on the "file_id" field.
+func FileIDHasSuffix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasSuffix(FieldFileID, v))
+}
+
+// FileIDIsNil applies the IsNil predicate on the "file_id" field.
+func FileIDIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldFileID))
+}
+
+// FileIDNotNil applies the NotNil predicate on the "file_id" field.
+func FileIDNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldFileID))
+}
+
+// FileIDEqualFold applies the EqualFold predicate on the "file_id" field.
+func FileIDEqualFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEqualFold(FieldFileID, v))
+}
+
+// FileIDContainsFold applies the ContainsFold predicate on the "file_id" field.
+func FileIDContainsFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldFileID, v))
+}
+
+// URLEQ applies the EQ predicate on the "url" field.
+func URLEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldURL, v))
+}
+
+// URLNEQ applies the NEQ predicate on the "url" field.
+func URLNEQ(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNEQ(FieldURL, v))
+}
+
+// URLIn applies the In predicate on the "url" field.
+func URLIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIn(FieldURL, vs...))
+}
+
+// URLNotIn applies the NotIn predicate on the "url" field.
+func URLNotIn(vs ...string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotIn(FieldURL, vs...))
+}
+
+// URLGT applies the GT predicate on the "url" field.
+func URLGT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGT(FieldURL, v))
+}
+
+// URLGTE applies the GTE predicate on the "url" field.
+func URLGTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldGTE(FieldURL, v))
+}
+
+// URLLT applies the LT predicate on the "url" field.
+func URLLT(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLT(FieldURL, v))
+}
+
+// URLLTE applies the LTE predicate on the "url" field.
+func URLLTE(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldLTE(FieldURL, v))
+}
+
+// URLContains applies the Contains predicate on the "url" field.
+func URLContains(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContains(FieldURL, v))
+}
+
+// URLHasPrefix applies the HasPrefix predicate on the "url" field.
+func URLHasPrefix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasPrefix(FieldURL, v))
+}
+
+// URLHasSuffix applies the HasSuffix predicate on the "url" field.
+func URLHasSuffix(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldHasSuffix(FieldURL, v))
+}
+
+// URLIsNil applies the IsNil predicate on the "url" field.
+func URLIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldURL))
+}
+
+// URLNotNil applies the NotNil predicate on the "url" field.
+func URLNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldURL))
+}
+
+// URLEqualFold applies the EqualFold predicate on the "url" field.
+func URLEqualFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEqualFold(FieldURL, v))
+}
+
+// URLContainsFold applies the ContainsFold predicate on the "url" field.
+func URLContainsFold(v string) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldURL, v))
 }
 
 // And groups predicates with the AND operator between them.

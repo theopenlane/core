@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -73,6 +74,10 @@ type InternalPolicy struct {
 	ImprovementSuggestions []string `json:"improvement_suggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the policy
 	DismissedImprovementSuggestions []string `json:"dismissed_improvement_suggestions,omitempty"`
+	// This will contain the most recent file id if this policy was created from a file
+	FileID *string `json:"file_id,omitempty"`
+	// This will contain the url used to create/update the policy
+	URL *string `json:"url,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges        InternalPolicyEdges `json:"edges"`
@@ -107,10 +112,10 @@ type InternalPolicyEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
-	// Files holds the value of the files edge.
-	Files []*File `json:"files,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// File holds the value of the file edge.
+	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [15]bool
@@ -127,7 +132,6 @@ type InternalPolicyEdges struct {
 	namedNarratives             map[string][]*Narrative
 	namedTasks                  map[string][]*Task
 	namedRisks                  map[string][]*Risk
-	namedFiles                  map[string][]*File
 	namedPrograms               map[string][]*Program
 }
 
@@ -254,22 +258,24 @@ func (e InternalPolicyEdges) RisksOrErr() ([]*Risk, error) {
 	return nil, &NotLoadedError{edge: "risks"}
 }
 
-// FilesOrErr returns the Files value or an error if the edge
-// was not loaded in eager-loading.
-func (e InternalPolicyEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[13] {
-		return e.Files, nil
-	}
-	return nil, &NotLoadedError{edge: "files"}
-}
-
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[13] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
+}
+
+// FileOrErr returns the File value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e InternalPolicyEdges) FileOrErr() (*File, error) {
+	if e.File != nil {
+		return e.File, nil
+	} else if e.loadedTypes[14] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "file"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -281,7 +287,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case internalpolicy.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldFileID, internalpolicy.FieldURL:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -476,6 +482,20 @@ func (_m *InternalPolicy) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
 				}
 			}
+		case internalpolicy.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = new(string)
+				*_m.FileID = value.String
+			}
+		case internalpolicy.FieldURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field url", values[i])
+			} else if value.Valid {
+				_m.URL = new(string)
+				*_m.URL = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -554,14 +574,14 @@ func (_m *InternalPolicy) QueryRisks() *RiskQuery {
 	return NewInternalPolicyClient(_m.config).QueryRisks(_m)
 }
 
-// QueryFiles queries the "files" edge of the InternalPolicy entity.
-func (_m *InternalPolicy) QueryFiles() *FileQuery {
-	return NewInternalPolicyClient(_m.config).QueryFiles(_m)
-}
-
 // QueryPrograms queries the "programs" edge of the InternalPolicy entity.
 func (_m *InternalPolicy) QueryPrograms() *ProgramQuery {
 	return NewInternalPolicyClient(_m.config).QueryPrograms(_m)
+}
+
+// QueryFile queries the "file" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryFile() *FileQuery {
+	return NewInternalPolicyClient(_m.config).QueryFile(_m)
 }
 
 // Update returns a builder for updating this InternalPolicy.
@@ -664,6 +684,16 @@ func (_m *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_improvement_suggestions=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DismissedImprovementSuggestions))
+	builder.WriteString(", ")
+	if v := _m.FileID; v != nil {
+		builder.WriteString("file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.URL; v != nil {
+		builder.WriteString("url=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -905,30 +935,6 @@ func (_m *InternalPolicy) appendNamedRisks(name string, edges ...*Risk) {
 		_m.Edges.namedRisks[name] = []*Risk{}
 	} else {
 		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
-	}
-}
-
-// NamedFiles returns the Files named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *InternalPolicy) NamedFiles(name string) ([]*File, error) {
-	if _m.Edges.namedFiles == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedFiles[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *InternalPolicy) appendNamedFiles(name string, edges ...*File) {
-	if _m.Edges.namedFiles == nil {
-		_m.Edges.namedFiles = make(map[string][]*File)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedFiles[name] = []*File{}
-	} else {
-		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

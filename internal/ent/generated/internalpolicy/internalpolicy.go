@@ -70,6 +70,10 @@ const (
 	FieldImprovementSuggestions = "improvement_suggestions"
 	// FieldDismissedImprovementSuggestions holds the string denoting the dismissed_improvement_suggestions field in the database.
 	FieldDismissedImprovementSuggestions = "dismissed_improvement_suggestions"
+	// FieldFileID holds the string denoting the file_id field in the database.
+	FieldFileID = "file_id"
+	// FieldURL holds the string denoting the url field in the database.
+	FieldURL = "url"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -96,10 +100,10 @@ const (
 	EdgeTasks = "tasks"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
 	EdgeRisks = "risks"
-	// EdgeFiles holds the string denoting the files edge name in mutations.
-	EdgeFiles = "files"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgeFile holds the string denoting the file edge name in mutations.
+	EdgeFile = "file"
 	// Table holds the table name of the internalpolicy in the database.
 	Table = "internal_policies"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -175,16 +179,18 @@ const (
 	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RisksInverseTable = "risks"
-	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
-	FilesTable = "internal_policy_files"
-	// FilesInverseTable is the table name for the File entity.
-	// It exists in this package in order to avoid circular dependency with the "file" package.
-	FilesInverseTable = "files"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
 	ProgramsTable = "program_internal_policies"
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
+	// FileTable is the table that holds the file relation/edge.
+	FileTable = "internal_policies"
+	// FileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FileInverseTable = "files"
+	// FileColumn is the table column denoting the file relation/edge.
+	FileColumn = "file_id"
 )
 
 // Columns holds all SQL columns for internalpolicy fields.
@@ -216,6 +222,8 @@ var Columns = []string{
 	FieldDismissedControlSuggestions,
 	FieldImprovementSuggestions,
 	FieldDismissedImprovementSuggestions,
+	FieldFileID,
+	FieldURL,
 }
 
 var (
@@ -246,9 +254,6 @@ var (
 	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
 	// primary key for the risks relation (M2M).
 	RisksPrimaryKey = []string{"internal_policy_id", "risk_id"}
-	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
-	// primary key for the files relation (M2M).
-	FilesPrimaryKey = []string{"internal_policy_id", "file_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "internal_policy_id"}
@@ -436,6 +441,16 @@ func BySummary(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSummary, opts...).ToFunc()
 }
 
+// ByFileID orders the results by the file_id field.
+func ByFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileID, opts...).ToFunc()
+}
+
+// ByURL orders the results by the url field.
+func ByURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldURL, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -597,20 +612,6 @@ func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByFilesCount orders the results by files count.
-func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
-	}
-}
-
-// ByFiles orders the results by files terms.
-func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByProgramsCount orders the results by programs count.
 func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -622,6 +623,13 @@ func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFileField orders the results by file field.
+func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -715,18 +723,18 @@ func newRisksStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
 	)
 }
-func newFilesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FilesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
-	)
-}
 func newProgramsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+	)
+}
+func newFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
 	)
 }
 

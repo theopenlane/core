@@ -1614,6 +1614,12 @@ func (_m *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	if !reflect.DeepEqual(_m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldDismissedImprovementSuggestions, _m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
 	}
+	if !reflect.DeepEqual(_m.FileID, new.FileID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldFileID, _m.FileID, new.FileID))
+	}
+	if !reflect.DeepEqual(_m.URL, new.URL) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldURL, _m.URL, new.URL))
+	}
 	return changes
 }
 
@@ -2339,6 +2345,12 @@ func (_m *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
 		changes = append(changes, NewChange(procedurehistory.FieldDismissedImprovementSuggestions, _m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
+	}
+	if !reflect.DeepEqual(_m.FileID, new.FileID) {
+		changes = append(changes, NewChange(procedurehistory.FieldFileID, _m.FileID, new.FileID))
+	}
+	if !reflect.DeepEqual(_m.URL, new.URL) {
+		changes = append(changes, NewChange(procedurehistory.FieldURL, _m.URL, new.URL))
 	}
 	return changes
 }

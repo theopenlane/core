@@ -323,6 +323,34 @@ func (_c *ProcedureCreate) SetDismissedImprovementSuggestions(v []string) *Proce
 	return _c
 }
 
+// SetFileID sets the "file_id" field.
+func (_c *ProcedureCreate) SetFileID(v string) *ProcedureCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableFileID(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetFileID(*v)
+	}
+	return _c
+}
+
+// SetURL sets the "url" field.
+func (_c *ProcedureCreate) SetURL(v string) *ProcedureCreate {
+	_c.mutation.SetURL(v)
+	return _c
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableURL(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetURL(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ProcedureCreate) SetID(v string) *ProcedureCreate {
 	_c.mutation.SetID(v)
@@ -487,19 +515,9 @@ func (_c *ProcedureCreate) AddTasks(v ...*Task) *ProcedureCreate {
 	return _c.AddTaskIDs(ids...)
 }
 
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_c *ProcedureCreate) AddFileIDs(ids ...string) *ProcedureCreate {
-	_c.mutation.AddFileIDs(ids...)
-	return _c
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_c *ProcedureCreate) AddFiles(v ...*File) *ProcedureCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddFileIDs(ids...)
+// SetFile sets the "file" edge to the File entity.
+func (_c *ProcedureCreate) SetFile(v *File) *ProcedureCreate {
+	return _c.SetFileID(v.ID)
 }
 
 // Mutation returns the ProcedureMutation object of the builder.
@@ -772,6 +790,10 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 		_node.DismissedImprovementSuggestions = value
 	}
+	if value, ok := _c.mutation.URL(); ok {
+		_spec.SetField(procedure.FieldURL, field.TypeString, value)
+		_node.URL = &value
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -979,21 +1001,22 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   procedure.FilesTable,
-			Columns: procedure.FilesPrimaryKey,
+			Table:   procedure.FileTable,
+			Columns: []string{procedure.FileColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProcedureFiles
+		edge.Schema = _c.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.FileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

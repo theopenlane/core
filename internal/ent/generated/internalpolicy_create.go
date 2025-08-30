@@ -325,6 +325,34 @@ func (_c *InternalPolicyCreate) SetDismissedImprovementSuggestions(v []string) *
 	return _c
 }
 
+// SetFileID sets the "file_id" field.
+func (_c *InternalPolicyCreate) SetFileID(v string) *InternalPolicyCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableFileID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetFileID(*v)
+	}
+	return _c
+}
+
+// SetURL sets the "url" field.
+func (_c *InternalPolicyCreate) SetURL(v string) *InternalPolicyCreate {
+	_c.mutation.SetURL(v)
+	return _c
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableURL(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetURL(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *InternalPolicyCreate) SetID(v string) *InternalPolicyCreate {
 	_c.mutation.SetID(v)
@@ -504,21 +532,6 @@ func (_c *InternalPolicyCreate) AddRisks(v ...*Risk) *InternalPolicyCreate {
 	return _c.AddRiskIDs(ids...)
 }
 
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_c *InternalPolicyCreate) AddFileIDs(ids ...string) *InternalPolicyCreate {
-	_c.mutation.AddFileIDs(ids...)
-	return _c
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_c *InternalPolicyCreate) AddFiles(v ...*File) *InternalPolicyCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddFileIDs(ids...)
-}
-
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (_c *InternalPolicyCreate) AddProgramIDs(ids ...string) *InternalPolicyCreate {
 	_c.mutation.AddProgramIDs(ids...)
@@ -532,6 +545,11 @@ func (_c *InternalPolicyCreate) AddPrograms(v ...*Program) *InternalPolicyCreate
 		ids[i] = v[i].ID
 	}
 	return _c.AddProgramIDs(ids...)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_c *InternalPolicyCreate) SetFile(v *File) *InternalPolicyCreate {
+	return _c.SetFileID(v.ID)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -804,6 +822,10 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 		_spec.SetField(internalpolicy.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 		_node.DismissedImprovementSuggestions = value
 	}
+	if value, ok := _c.mutation.URL(); ok {
+		_spec.SetField(internalpolicy.FieldURL, field.TypeString, value)
+		_node.URL = &value
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1028,23 +1050,6 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.FilesTable,
-			Columns: internalpolicy.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.InternalPolicyFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := _c.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1060,6 +1065,24 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.FileTable,
+			Columns: []string{internalpolicy.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.FileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

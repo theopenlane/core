@@ -12569,32 +12569,6 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			_q.WithNamedSubprocessor(alias, func(wq *SubprocessorQuery) {
 				*wq = *query
 			})
-
-		case "procedure":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProcedureClient{config: _q.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
-				return err
-			}
-			_q.WithNamedProcedure(alias, func(wq *ProcedureQuery) {
-				*wq = *query
-			})
-
-		case "internalPolicy":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: _q.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
-				return err
-			}
-			_q.WithNamedInternalPolicy(alias, func(wq *InternalPolicyQuery) {
-				*wq = *query
-			})
 		case "createdAt":
 			if _, ok := fieldSeen[file.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, file.FieldCreatedAt)
@@ -19164,99 +19138,6 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				*wq = *query
 			})
 
-		case "files":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&FileClient{config: _q.config}).Query()
-			)
-			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
-			if err := validateFirstLast(args.first, args.last); err != nil {
-				return fmt.Errorf("validate first and last in path %q: %w", path, err)
-			}
-			pager, err := newFilePager(args.opts, args.last != nil)
-			if err != nil {
-				return fmt.Errorf("create new pager in path %q: %w", path, err)
-			}
-			if query, err = pager.applyFilter(query); err != nil {
-				return err
-			}
-			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
-			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
-				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
-				if hasPagination || ignoredEdges {
-					query := query.Clone()
-					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
-						ids := make([]driver.Value, len(nodes))
-						for i := range nodes {
-							ids[i] = nodes[i].ID
-						}
-						var v []struct {
-							NodeID string `sql:"internal_policy_id"`
-							Count  int    `sql:"count"`
-						}
-						query.Where(func(s *sql.Selector) {
-							joinT := sql.Table(internalpolicy.FilesTable)
-							s.Join(joinT).On(s.C(file.FieldID), joinT.C(internalpolicy.FilesPrimaryKey[1]))
-							s.Where(sql.InValues(joinT.C(internalpolicy.FilesPrimaryKey[0]), ids...))
-							s.Select(joinT.C(internalpolicy.FilesPrimaryKey[0]), sql.Count("*"))
-							s.GroupBy(joinT.C(internalpolicy.FilesPrimaryKey[0]))
-						})
-						if err := query.Select().Scan(ctx, &v); err != nil {
-							return err
-						}
-						m := make(map[string]int, len(v))
-						for i := range v {
-							m[v[i].NodeID] = v[i].Count
-						}
-						for i := range nodes {
-							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[13] == nil {
-								nodes[i].Edges.totalCount[13] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[13][alias] = n
-						}
-						return nil
-					})
-				} else {
-					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
-						for i := range nodes {
-							n := len(nodes[i].Edges.Files)
-							if nodes[i].Edges.totalCount[13] == nil {
-								nodes[i].Edges.totalCount[13] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[13][alias] = n
-						}
-						return nil
-					})
-				}
-			}
-			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
-				continue
-			}
-			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
-				return err
-			}
-			path = append(path, edgesField, nodeField)
-			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
-					return err
-				}
-			}
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				if oneNode {
-					pager.applyOrder(query.Limit(limit))
-				} else {
-					modify := entgql.LimitPerRow(internalpolicy.FilesPrimaryKey[0], limit, pager.orderExpr(query))
-					query.modifiers = append(query.modifiers, modify)
-				}
-			} else {
-				query = pager.applyOrder(query)
-			}
-			_q.WithNamedFiles(alias, func(wq *FileQuery) {
-				*wq = *query
-			})
-
 		case "programs":
 			var (
 				alias = field.Alias
@@ -19304,10 +19185,10 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[14] == nil {
-								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[14][alias] = n
+							nodes[i].Edges.totalCount[13][alias] = n
 						}
 						return nil
 					})
@@ -19315,10 +19196,10 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
-							if nodes[i].Edges.totalCount[14] == nil {
-								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[14][alias] = n
+							nodes[i].Edges.totalCount[13][alias] = n
 						}
 						return nil
 					})
@@ -19349,6 +19230,21 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			_q.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
+
+		case "file":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			_q.withFile = query
+			if _, ok := fieldSeen[internalpolicy.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldFileID)
+				fieldSeen[internalpolicy.FieldFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[internalpolicy.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldCreatedAt)
@@ -19468,6 +19364,16 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[internalpolicy.FieldDismissedImprovementSuggestions]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldDismissedImprovementSuggestions)
 				fieldSeen[internalpolicy.FieldDismissedImprovementSuggestions] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[internalpolicy.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldFileID)
+				fieldSeen[internalpolicy.FieldFileID] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[internalpolicy.FieldURL]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldURL)
+				fieldSeen[internalpolicy.FieldURL] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -19693,6 +19599,16 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[internalpolicyhistory.FieldDismissedImprovementSuggestions]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldDismissedImprovementSuggestions)
 				fieldSeen[internalpolicyhistory.FieldDismissedImprovementSuggestions] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldFileID)
+				fieldSeen[internalpolicyhistory.FieldFileID] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldURL]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldURL)
+				fieldSeen[internalpolicyhistory.FieldURL] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -32452,98 +32368,20 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				*wq = *query
 			})
 
-		case "files":
+		case "file":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&FileClient{config: _q.config}).Query()
 			)
-			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
-			if err := validateFirstLast(args.first, args.last); err != nil {
-				return fmt.Errorf("validate first and last in path %q: %w", path, err)
-			}
-			pager, err := newFilePager(args.opts, args.last != nil)
-			if err != nil {
-				return fmt.Errorf("create new pager in path %q: %w", path, err)
-			}
-			if query, err = pager.applyFilter(query); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
 				return err
 			}
-			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
-			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
-				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
-				if hasPagination || ignoredEdges {
-					query := query.Clone()
-					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
-						ids := make([]driver.Value, len(nodes))
-						for i := range nodes {
-							ids[i] = nodes[i].ID
-						}
-						var v []struct {
-							NodeID string `sql:"procedure_id"`
-							Count  int    `sql:"count"`
-						}
-						query.Where(func(s *sql.Selector) {
-							joinT := sql.Table(procedure.FilesTable)
-							s.Join(joinT).On(s.C(file.FieldID), joinT.C(procedure.FilesPrimaryKey[1]))
-							s.Where(sql.InValues(joinT.C(procedure.FilesPrimaryKey[0]), ids...))
-							s.Select(joinT.C(procedure.FilesPrimaryKey[0]), sql.Count("*"))
-							s.GroupBy(joinT.C(procedure.FilesPrimaryKey[0]))
-						})
-						if err := query.Select().Scan(ctx, &v); err != nil {
-							return err
-						}
-						m := make(map[string]int, len(v))
-						for i := range v {
-							m[v[i].NodeID] = v[i].Count
-						}
-						for i := range nodes {
-							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[12] == nil {
-								nodes[i].Edges.totalCount[12] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[12][alias] = n
-						}
-						return nil
-					})
-				} else {
-					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Procedure) error {
-						for i := range nodes {
-							n := len(nodes[i].Edges.Files)
-							if nodes[i].Edges.totalCount[12] == nil {
-								nodes[i].Edges.totalCount[12] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[12][alias] = n
-						}
-						return nil
-					})
-				}
+			_q.withFile = query
+			if _, ok := fieldSeen[procedure.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldFileID)
+				fieldSeen[procedure.FieldFileID] = struct{}{}
 			}
-			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
-				continue
-			}
-			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
-				return err
-			}
-			path = append(path, edgesField, nodeField)
-			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
-					return err
-				}
-			}
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				if oneNode {
-					pager.applyOrder(query.Limit(limit))
-				} else {
-					modify := entgql.LimitPerRow(procedure.FilesPrimaryKey[0], limit, pager.orderExpr(query))
-					query.modifiers = append(query.modifiers, modify)
-				}
-			} else {
-				query = pager.applyOrder(query)
-			}
-			_q.WithNamedFiles(alias, func(wq *FileQuery) {
-				*wq = *query
-			})
 		case "createdAt":
 			if _, ok := fieldSeen[procedure.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldCreatedAt)
@@ -32663,6 +32501,16 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if _, ok := fieldSeen[procedure.FieldDismissedImprovementSuggestions]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldDismissedImprovementSuggestions)
 				fieldSeen[procedure.FieldDismissedImprovementSuggestions] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[procedure.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldFileID)
+				fieldSeen[procedure.FieldFileID] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[procedure.FieldURL]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldURL)
+				fieldSeen[procedure.FieldURL] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -32888,6 +32736,16 @@ func (_q *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[procedurehistory.FieldDismissedImprovementSuggestions]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldDismissedImprovementSuggestions)
 				fieldSeen[procedurehistory.FieldDismissedImprovementSuggestions] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[procedurehistory.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldFileID)
+				fieldSeen[procedurehistory.FieldFileID] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[procedurehistory.FieldURL]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldURL)
+				fieldSeen[procedurehistory.FieldURL] = struct{}{}
 			}
 		case "id":
 		case "__typename":

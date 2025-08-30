@@ -4800,6 +4800,14 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
 	}
 
+	if fileID, exists := m.FileID(); exists {
+		create = create.SetNillableFileID(&fileID)
+	}
+
+	if url, exists := m.URL(); exists {
+		create = create.SetNillableURL(&url)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -4987,6 +4995,18 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetDismissedImprovementSuggestions(internalpolicy.DismissedImprovementSuggestions)
 		}
 
+		if fileID, exists := m.FileID(); exists {
+			create = create.SetNillableFileID(&fileID)
+		} else {
+			create = create.SetNillableFileID(internalpolicy.FileID)
+		}
+
+		if url, exists := m.URL(); exists {
+			create = create.SetNillableURL(&url)
+		} else {
+			create = create.SetNillableURL(internalpolicy.URL)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -5048,6 +5068,8 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDismissedControlSuggestions(internalpolicy.DismissedControlSuggestions).
 			SetImprovementSuggestions(internalpolicy.ImprovementSuggestions).
 			SetDismissedImprovementSuggestions(internalpolicy.DismissedImprovementSuggestions).
+			SetNillableFileID(internalpolicy.FileID).
+			SetNillableURL(internalpolicy.URL).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -7382,6 +7404,14 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
 	}
 
+	if fileID, exists := m.FileID(); exists {
+		create = create.SetNillableFileID(&fileID)
+	}
+
+	if url, exists := m.URL(); exists {
+		create = create.SetNillableURL(&url)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -7569,6 +7599,18 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDismissedImprovementSuggestions(procedure.DismissedImprovementSuggestions)
 		}
 
+		if fileID, exists := m.FileID(); exists {
+			create = create.SetNillableFileID(&fileID)
+		} else {
+			create = create.SetNillableFileID(procedure.FileID)
+		}
+
+		if url, exists := m.URL(); exists {
+			create = create.SetNillableURL(&url)
+		} else {
+			create = create.SetNillableURL(procedure.URL)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -7630,6 +7672,8 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDismissedControlSuggestions(procedure.DismissedControlSuggestions).
 			SetImprovementSuggestions(procedure.ImprovementSuggestions).
 			SetDismissedImprovementSuggestions(procedure.DismissedImprovementSuggestions).
+			SetNillableFileID(procedure.FileID).
+			SetNillableURL(procedure.URL).
 			Save(ctx)
 		if err != nil {
 			return err

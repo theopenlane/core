@@ -4281,6 +4281,7 @@ type AdminSearch_AdminSearch_InternalPolicies_Edges_Node struct {
 	DismissedImprovementSuggestions []string "json:\"dismissedImprovementSuggestions,omitempty\" graphql:\"dismissedImprovementSuggestions\""
 	DismissedTagSuggestions         []string "json:\"dismissedTagSuggestions,omitempty\" graphql:\"dismissedTagSuggestions\""
 	DisplayID                       string   "json:\"displayID\" graphql:\"displayID\""
+	FileID                          *string  "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string   "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
 	Name                            string   "json:\"name\" graphql:\"name\""
@@ -4289,6 +4290,7 @@ type AdminSearch_AdminSearch_InternalPolicies_Edges_Node struct {
 	Revision                        *string  "json:\"revision,omitempty\" graphql:\"revision\""
 	TagSuggestions                  []string "json:\"tagSuggestions,omitempty\" graphql:\"tagSuggestions\""
 	Tags                            []string "json:\"tags,omitempty\" graphql:\"tags\""
+	URL                             *string  "json:\"url,omitempty\" graphql:\"url\""
 }
 
 func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetApproverID() *string {
@@ -4339,6 +4341,12 @@ func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDisplayID() str
 	}
 	return t.DisplayID
 }
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetFileID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
+	}
+	return t.FileID
+}
 func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
@@ -4386,6 +4394,12 @@ func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetTags() []string
 		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetURL() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
+	}
+	return t.URL
 }
 
 type AdminSearch_AdminSearch_InternalPolicies_Edges struct {
@@ -5889,6 +5903,7 @@ type AdminSearch_AdminSearch_Procedures_Edges_Node struct {
 	DismissedImprovementSuggestions []string "json:\"dismissedImprovementSuggestions,omitempty\" graphql:\"dismissedImprovementSuggestions\""
 	DismissedTagSuggestions         []string "json:\"dismissedTagSuggestions,omitempty\" graphql:\"dismissedTagSuggestions\""
 	DisplayID                       string   "json:\"displayID\" graphql:\"displayID\""
+	FileID                          *string  "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string   "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
 	Name                            string   "json:\"name\" graphql:\"name\""
@@ -5897,6 +5912,7 @@ type AdminSearch_AdminSearch_Procedures_Edges_Node struct {
 	Revision                        *string  "json:\"revision,omitempty\" graphql:\"revision\""
 	TagSuggestions                  []string "json:\"tagSuggestions,omitempty\" graphql:\"tagSuggestions\""
 	Tags                            []string "json:\"tags,omitempty\" graphql:\"tags\""
+	URL                             *string  "json:\"url,omitempty\" graphql:\"url\""
 }
 
 func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetApproverID() *string {
@@ -5947,6 +5963,12 @@ func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDisplayID() string {
 	}
 	return t.DisplayID
 }
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetFileID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
+	}
+	return t.FileID
+}
 func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
@@ -5994,6 +6016,12 @@ func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetTags() []string {
 		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetURL() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
+	}
+	return t.URL
 }
 
 type AdminSearch_AdminSearch_Procedures_Edges struct {
@@ -97578,6 +97606,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					dismissedControlSuggestions
 					improvementSuggestions
 					dismissedImprovementSuggestions
+					fileID
+					url
 				}
 			}
 		}
@@ -97843,6 +97873,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					dismissedControlSuggestions
 					improvementSuggestions
 					dismissedImprovementSuggestions
+					fileID
+					url
 				}
 			}
 		}

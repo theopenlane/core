@@ -1335,6 +1335,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldDismissedControlSuggestions:     {Type: field.TypeJSON, Column: internalpolicy.FieldDismissedControlSuggestions},
 			internalpolicy.FieldImprovementSuggestions:          {Type: field.TypeJSON, Column: internalpolicy.FieldImprovementSuggestions},
 			internalpolicy.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: internalpolicy.FieldDismissedImprovementSuggestions},
+			internalpolicy.FieldFileID:                          {Type: field.TypeString, Column: internalpolicy.FieldFileID},
+			internalpolicy.FieldURL:                             {Type: field.TypeString, Column: internalpolicy.FieldURL},
 		},
 	}
 	graph.Nodes[41] = &sqlgraph.Node{
@@ -1377,6 +1379,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldDismissedControlSuggestions:     {Type: field.TypeJSON, Column: internalpolicyhistory.FieldDismissedControlSuggestions},
 			internalpolicyhistory.FieldImprovementSuggestions:          {Type: field.TypeJSON, Column: internalpolicyhistory.FieldImprovementSuggestions},
 			internalpolicyhistory.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: internalpolicyhistory.FieldDismissedImprovementSuggestions},
+			internalpolicyhistory.FieldFileID:                          {Type: field.TypeString, Column: internalpolicyhistory.FieldFileID},
+			internalpolicyhistory.FieldURL:                             {Type: field.TypeString, Column: internalpolicyhistory.FieldURL},
 		},
 	}
 	graph.Nodes[42] = &sqlgraph.Node{
@@ -2227,6 +2231,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldDismissedControlSuggestions:     {Type: field.TypeJSON, Column: procedure.FieldDismissedControlSuggestions},
 			procedure.FieldImprovementSuggestions:          {Type: field.TypeJSON, Column: procedure.FieldImprovementSuggestions},
 			procedure.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: procedure.FieldDismissedImprovementSuggestions},
+			procedure.FieldFileID:                          {Type: field.TypeString, Column: procedure.FieldFileID},
+			procedure.FieldURL:                             {Type: field.TypeString, Column: procedure.FieldURL},
 		},
 	}
 	graph.Nodes[72] = &sqlgraph.Node{
@@ -2269,6 +2275,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldDismissedControlSuggestions:     {Type: field.TypeJSON, Column: procedurehistory.FieldDismissedControlSuggestions},
 			procedurehistory.FieldImprovementSuggestions:          {Type: field.TypeJSON, Column: procedurehistory.FieldImprovementSuggestions},
 			procedurehistory.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: procedurehistory.FieldDismissedImprovementSuggestions},
+			procedurehistory.FieldFileID:                          {Type: field.TypeString, Column: procedurehistory.FieldFileID},
+			procedurehistory.FieldURL:                             {Type: field.TypeString, Column: procedurehistory.FieldURL},
 		},
 	}
 	graph.Nodes[73] = &sqlgraph.Node{
@@ -4787,30 +4795,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Subprocessor",
 	)
 	graph.MustAddE(
-		"procedure",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.ProcedureTable,
-			Columns: file.ProcedurePrimaryKey,
-			Bidi:    false,
-		},
-		"File",
-		"Procedure",
-	)
-	graph.MustAddE(
-		"internal_policy",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.InternalPolicyTable,
-			Columns: file.InternalPolicyPrimaryKey,
-			Bidi:    false,
-		},
-		"File",
-		"InternalPolicy",
-	)
-	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -5555,18 +5539,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Risk",
 	)
 	graph.MustAddE(
-		"files",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.FilesTable,
-			Columns: internalpolicy.FilesPrimaryKey,
-			Bidi:    false,
-		},
-		"InternalPolicy",
-		"File",
-	)
-	graph.MustAddE(
 		"programs",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5577,6 +5549,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"InternalPolicy",
 		"Program",
+	)
+	graph.MustAddE(
+		"file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.FileTable,
+			Columns: []string{internalpolicy.FileColumn},
+			Bidi:    false,
+		},
+		"InternalPolicy",
+		"File",
 	)
 	graph.MustAddE(
 		"owner",
@@ -7247,12 +7231,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Task",
 	)
 	graph.MustAddE(
-		"files",
+		"file",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   procedure.FilesTable,
-			Columns: procedure.FilesPrimaryKey,
+			Table:   procedure.FileTable,
+			Columns: []string{procedure.FileColumn},
 			Bidi:    false,
 		},
 		"Procedure",
@@ -14173,34 +14157,6 @@ func (f *FileFilter) WhereHasSubprocessorWith(preds ...predicate.Subprocessor) {
 	})))
 }
 
-// WhereHasProcedure applies a predicate to check if query has an edge procedure.
-func (f *FileFilter) WhereHasProcedure() {
-	f.Where(entql.HasEdge("procedure"))
-}
-
-// WhereHasProcedureWith applies a predicate to check if query has an edge procedure with a given conditions (other predicates).
-func (f *FileFilter) WhereHasProcedureWith(preds ...predicate.Procedure) {
-	f.Where(entql.HasEdgeWith("procedure", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasInternalPolicy applies a predicate to check if query has an edge internal_policy.
-func (f *FileFilter) WhereHasInternalPolicy() {
-	f.Where(entql.HasEdge("internal_policy"))
-}
-
-// WhereHasInternalPolicyWith applies a predicate to check if query has an edge internal_policy with a given conditions (other predicates).
-func (f *FileFilter) WhereHasInternalPolicyWith(preds ...predicate.InternalPolicy) {
-	f.Where(entql.HasEdgeWith("internal_policy", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // addPredicate implements the predicateAdder interface.
 func (_q *FileHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -16252,6 +16208,16 @@ func (f *InternalPolicyFilter) WhereDismissedImprovementSuggestions(p entql.Byte
 	f.Where(p.Field(internalpolicy.FieldDismissedImprovementSuggestions))
 }
 
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *InternalPolicyFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldFileID))
+}
+
+// WhereURL applies the entql string predicate on the url field.
+func (f *InternalPolicyFilter) WhereURL(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldURL))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *InternalPolicyFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -16434,20 +16400,6 @@ func (f *InternalPolicyFilter) WhereHasRisksWith(preds ...predicate.Risk) {
 	})))
 }
 
-// WhereHasFiles applies a predicate to check if query has an edge files.
-func (f *InternalPolicyFilter) WhereHasFiles() {
-	f.Where(entql.HasEdge("files"))
-}
-
-// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
-func (f *InternalPolicyFilter) WhereHasFilesWith(preds ...predicate.File) {
-	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasPrograms applies a predicate to check if query has an edge programs.
 func (f *InternalPolicyFilter) WhereHasPrograms() {
 	f.Where(entql.HasEdge("programs"))
@@ -16456,6 +16408,20 @@ func (f *InternalPolicyFilter) WhereHasPrograms() {
 // WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
 func (f *InternalPolicyFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFile applies a predicate to check if query has an edge file.
+func (f *InternalPolicyFilter) WhereHasFile() {
+	f.Where(entql.HasEdge("file"))
+}
+
+// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -16645,6 +16611,16 @@ func (f *InternalPolicyHistoryFilter) WhereImprovementSuggestions(p entql.BytesP
 // WhereDismissedImprovementSuggestions applies the entql json.RawMessage predicate on the dismissed_improvement_suggestions field.
 func (f *InternalPolicyHistoryFilter) WhereDismissedImprovementSuggestions(p entql.BytesP) {
 	f.Where(p.Field(internalpolicyhistory.FieldDismissedImprovementSuggestions))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *InternalPolicyHistoryFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldFileID))
+}
+
+// WhereURL applies the entql string predicate on the url field.
+func (f *InternalPolicyHistoryFilter) WhereURL(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldURL))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -21925,6 +21901,16 @@ func (f *ProcedureFilter) WhereDismissedImprovementSuggestions(p entql.BytesP) {
 	f.Where(p.Field(procedure.FieldDismissedImprovementSuggestions))
 }
 
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *ProcedureFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldFileID))
+}
+
+// WhereURL applies the entql string predicate on the url field.
+func (f *ProcedureFilter) WhereURL(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldURL))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ProcedureFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -22093,14 +22079,14 @@ func (f *ProcedureFilter) WhereHasTasksWith(preds ...predicate.Task) {
 	})))
 }
 
-// WhereHasFiles applies a predicate to check if query has an edge files.
-func (f *ProcedureFilter) WhereHasFiles() {
-	f.Where(entql.HasEdge("files"))
+// WhereHasFile applies a predicate to check if query has an edge file.
+func (f *ProcedureFilter) WhereHasFile() {
+	f.Where(entql.HasEdge("file"))
 }
 
-// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
-func (f *ProcedureFilter) WhereHasFilesWith(preds ...predicate.File) {
-	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
+func (f *ProcedureFilter) WhereHasFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -22290,6 +22276,16 @@ func (f *ProcedureHistoryFilter) WhereImprovementSuggestions(p entql.BytesP) {
 // WhereDismissedImprovementSuggestions applies the entql json.RawMessage predicate on the dismissed_improvement_suggestions field.
 func (f *ProcedureHistoryFilter) WhereDismissedImprovementSuggestions(p entql.BytesP) {
 	f.Where(p.Field(procedurehistory.FieldDismissedImprovementSuggestions))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *ProcedureHistoryFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldFileID))
+}
+
+// WhereURL applies the entql string predicate on the url field.
+func (f *ProcedureHistoryFilter) WhereURL(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldURL))
 }
 
 // addPredicate implements the predicateAdder interface.

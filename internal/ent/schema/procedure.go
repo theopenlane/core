@@ -1,8 +1,10 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
@@ -43,7 +45,20 @@ func (Procedure) PluralName() string {
 // Fields returns procedure fields.
 func (Procedure) Fields() []ent.Field {
 	// other fields are defined in the mixins
-	return []ent.Field{}
+	return []ent.Field{
+		field.String("file_id").
+			Comment("This will contain the most recent file id if this procedure was created from a file").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
+
+		field.String("url").
+			Comment("This will contain the url used to create/update the procedure").
+			Optional().
+			Nillable(),
+	}
 }
 
 // Edges of the Procedure
@@ -56,7 +71,12 @@ func (p Procedure) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, Narrative{}),
 		defaultEdgeToWithPagination(p, Risk{}),
 		defaultEdgeToWithPagination(p, Task{}),
-		defaultEdgeToWithPagination(p, File{}),
+
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: File{},
+			field:      "file_id",
+		}),
 	}
 }
 

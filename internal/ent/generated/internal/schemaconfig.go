@@ -96,7 +96,6 @@ type SchemaConfig struct {
 	InternalPolicyNarratives           string // InternalPolicy-narratives->Narrative table.
 	InternalPolicyTasks                string // InternalPolicy-tasks->Task table.
 	InternalPolicyRisks                string // InternalPolicy-risks->Risk table.
-	InternalPolicyFiles                string // InternalPolicy-files->File table.
 	InternalPolicyHistory              string // InternalPolicyHistory table.
 	Invite                             string // Invite table.
 	InviteEvents                       string // Invite-events->Event table.
@@ -154,7 +153,6 @@ type SchemaConfig struct {
 	ProcedureNarratives                string // Procedure-narratives->Narrative table.
 	ProcedureRisks                     string // Procedure-risks->Risk table.
 	ProcedureTasks                     string // Procedure-tasks->Task table.
-	ProcedureFiles                     string // Procedure-files->File table.
 	ProcedureHistory                   string // ProcedureHistory table.
 	Program                            string // Program table.
 	ProgramBlockedGroups               string // Program-blocked_groups->Group table.

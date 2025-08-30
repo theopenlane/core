@@ -101,15 +101,11 @@ type FileEdges struct {
 	TrustCenterSetting []*TrustCenterSetting `json:"trust_center_setting,omitempty"`
 	// Subprocessor holds the value of the subprocessor edge.
 	Subprocessor []*Subprocessor `json:"subprocessor,omitempty"`
-	// Procedure holds the value of the procedure edge.
-	Procedure []*Procedure `json:"procedure,omitempty"`
-	// InternalPolicy holds the value of the internal_policy edge.
-	InternalPolicy []*InternalPolicy `json:"internal_policy,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [14]map[string]int
 
 	namedUser                map[string][]*User
 	namedOrganization        map[string][]*Organization
@@ -125,8 +121,6 @@ type FileEdges struct {
 	namedEvents              map[string][]*Event
 	namedTrustCenterSetting  map[string][]*TrustCenterSetting
 	namedSubprocessor        map[string][]*Subprocessor
-	namedProcedure           map[string][]*Procedure
-	namedInternalPolicy      map[string][]*InternalPolicy
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -253,24 +247,6 @@ func (e FileEdges) SubprocessorOrErr() ([]*Subprocessor, error) {
 		return e.Subprocessor, nil
 	}
 	return nil, &NotLoadedError{edge: "subprocessor"}
-}
-
-// ProcedureOrErr returns the Procedure value or an error if the edge
-// was not loaded in eager-loading.
-func (e FileEdges) ProcedureOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[14] {
-		return e.Procedure, nil
-	}
-	return nil, &NotLoadedError{edge: "procedure"}
-}
-
-// InternalPolicyOrErr returns the InternalPolicy value or an error if the edge
-// was not loaded in eager-loading.
-func (e FileEdges) InternalPolicyOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[15] {
-		return e.InternalPolicy, nil
-	}
-	return nil, &NotLoadedError{edge: "internal_policy"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -534,16 +510,6 @@ func (_m *File) QueryTrustCenterSetting() *TrustCenterSettingQuery {
 // QuerySubprocessor queries the "subprocessor" edge of the File entity.
 func (_m *File) QuerySubprocessor() *SubprocessorQuery {
 	return NewFileClient(_m.config).QuerySubprocessor(_m)
-}
-
-// QueryProcedure queries the "procedure" edge of the File entity.
-func (_m *File) QueryProcedure() *ProcedureQuery {
-	return NewFileClient(_m.config).QueryProcedure(_m)
-}
-
-// QueryInternalPolicy queries the "internal_policy" edge of the File entity.
-func (_m *File) QueryInternalPolicy() *InternalPolicyQuery {
-	return NewFileClient(_m.config).QueryInternalPolicy(_m)
 }
 
 // Update returns a builder for updating this File.
@@ -968,54 +934,6 @@ func (_m *File) appendNamedSubprocessor(name string, edges ...*Subprocessor) {
 		_m.Edges.namedSubprocessor[name] = []*Subprocessor{}
 	} else {
 		_m.Edges.namedSubprocessor[name] = append(_m.Edges.namedSubprocessor[name], edges...)
-	}
-}
-
-// NamedProcedure returns the Procedure named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *File) NamedProcedure(name string) ([]*Procedure, error) {
-	if _m.Edges.namedProcedure == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedProcedure[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *File) appendNamedProcedure(name string, edges ...*Procedure) {
-	if _m.Edges.namedProcedure == nil {
-		_m.Edges.namedProcedure = make(map[string][]*Procedure)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedProcedure[name] = []*Procedure{}
-	} else {
-		_m.Edges.namedProcedure[name] = append(_m.Edges.namedProcedure[name], edges...)
-	}
-}
-
-// NamedInternalPolicy returns the InternalPolicy named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *File) NamedInternalPolicy(name string) ([]*InternalPolicy, error) {
-	if _m.Edges.namedInternalPolicy == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedInternalPolicy[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *File) appendNamedInternalPolicy(name string, edges ...*InternalPolicy) {
-	if _m.Edges.namedInternalPolicy == nil {
-		_m.Edges.namedInternalPolicy = make(map[string][]*InternalPolicy)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedInternalPolicy[name] = []*InternalPolicy{}
-	} else {
-		_m.Edges.namedInternalPolicy[name] = append(_m.Edges.namedInternalPolicy[name], edges...)
 	}
 }
 

@@ -20,11 +20,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -56,8 +54,6 @@ type FileQuery struct {
 	withEvents                   *EventQuery
 	withTrustCenterSetting       *TrustCenterSettingQuery
 	withSubprocessor             *SubprocessorQuery
-	withProcedure                *ProcedureQuery
-	withInternalPolicy           *InternalPolicyQuery
 	withFKs                      bool
 	loadTotal                    []func(context.Context, []*File) error
 	modifiers                    []func(*sql.Selector)
@@ -75,8 +71,6 @@ type FileQuery struct {
 	withNamedEvents              map[string]*EventQuery
 	withNamedTrustCenterSetting  map[string]*TrustCenterSettingQuery
 	withNamedSubprocessor        map[string]*SubprocessorQuery
-	withNamedProcedure           map[string]*ProcedureQuery
-	withNamedInternalPolicy      map[string]*InternalPolicyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -463,56 +457,6 @@ func (_q *FileQuery) QuerySubprocessor() *SubprocessorQuery {
 	return query
 }
 
-// QueryProcedure chains the current query on the "procedure" edge.
-func (_q *FileQuery) QueryProcedure() *ProcedureQuery {
-	query := (&ProcedureClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(file.Table, file.FieldID, selector),
-			sqlgraph.To(procedure.Table, procedure.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, file.ProcedureTable, file.ProcedurePrimaryKey...),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ProcedureFiles
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryInternalPolicy chains the current query on the "internal_policy" edge.
-func (_q *FileQuery) QueryInternalPolicy() *InternalPolicyQuery {
-	query := (&InternalPolicyClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(file.Table, file.FieldID, selector),
-			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, file.InternalPolicyTable, file.InternalPolicyPrimaryKey...),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyFiles
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // First returns the first File entity from the query.
 // Returns a *NotFoundError when no File was found.
 func (_q *FileQuery) First(ctx context.Context) (*File, error) {
@@ -719,8 +663,6 @@ func (_q *FileQuery) Clone() *FileQuery {
 		withEvents:              _q.withEvents.Clone(),
 		withTrustCenterSetting:  _q.withTrustCenterSetting.Clone(),
 		withSubprocessor:        _q.withSubprocessor.Clone(),
-		withProcedure:           _q.withProcedure.Clone(),
-		withInternalPolicy:      _q.withInternalPolicy.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -882,28 +824,6 @@ func (_q *FileQuery) WithSubprocessor(opts ...func(*SubprocessorQuery)) *FileQue
 	return _q
 }
 
-// WithProcedure tells the query-builder to eager-load the nodes that are connected to
-// the "procedure" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *FileQuery) WithProcedure(opts ...func(*ProcedureQuery)) *FileQuery {
-	query := (&ProcedureClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withProcedure = query
-	return _q
-}
-
-// WithInternalPolicy tells the query-builder to eager-load the nodes that are connected to
-// the "internal_policy" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *FileQuery) WithInternalPolicy(opts ...func(*InternalPolicyQuery)) *FileQuery {
-	query := (&InternalPolicyClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withInternalPolicy = query
-	return _q
-}
-
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -989,7 +909,7 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		nodes       = []*File{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [16]bool{
+		loadedTypes = [14]bool{
 			_q.withUser != nil,
 			_q.withOrganization != nil,
 			_q.withGroups != nil,
@@ -1004,8 +924,6 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			_q.withEvents != nil,
 			_q.withTrustCenterSetting != nil,
 			_q.withSubprocessor != nil,
-			_q.withProcedure != nil,
-			_q.withInternalPolicy != nil,
 		}
 	)
 	if withFKs {
@@ -1136,20 +1054,6 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
-	if query := _q.withProcedure; query != nil {
-		if err := _q.loadProcedure(ctx, query, nodes,
-			func(n *File) { n.Edges.Procedure = []*Procedure{} },
-			func(n *File, e *Procedure) { n.Edges.Procedure = append(n.Edges.Procedure, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withInternalPolicy; query != nil {
-		if err := _q.loadInternalPolicy(ctx, query, nodes,
-			func(n *File) { n.Edges.InternalPolicy = []*InternalPolicy{} },
-			func(n *File, e *InternalPolicy) { n.Edges.InternalPolicy = append(n.Edges.InternalPolicy, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range _q.withNamedUser {
 		if err := _q.loadUser(ctx, query, nodes,
 			func(n *File) { n.appendNamedUser(name) },
@@ -1245,20 +1149,6 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := _q.loadSubprocessor(ctx, query, nodes,
 			func(n *File) { n.appendNamedSubprocessor(name) },
 			func(n *File, e *Subprocessor) { n.appendNamedSubprocessor(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedProcedure {
-		if err := _q.loadProcedure(ctx, query, nodes,
-			func(n *File) { n.appendNamedProcedure(name) },
-			func(n *File, e *Procedure) { n.appendNamedProcedure(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedInternalPolicy {
-		if err := _q.loadInternalPolicy(ctx, query, nodes,
-			func(n *File) { n.appendNamedInternalPolicy(name) },
-			func(n *File, e *InternalPolicy) { n.appendNamedInternalPolicy(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2138,130 +2028,6 @@ func (_q *FileQuery) loadSubprocessor(ctx context.Context, query *SubprocessorQu
 	}
 	return nil
 }
-func (_q *FileQuery) loadProcedure(ctx context.Context, query *ProcedureQuery, nodes []*File, init func(*File), assign func(*File, *Procedure)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*File)
-	nids := make(map[string]map[*File]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(file.ProcedureTable)
-		joinT.Schema(_q.schemaConfig.ProcedureFiles)
-		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(file.ProcedurePrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(file.ProcedurePrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(file.ProcedurePrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Procedure](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "procedure" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (_q *FileQuery) loadInternalPolicy(ctx context.Context, query *InternalPolicyQuery, nodes []*File, init func(*File), assign func(*File, *InternalPolicy)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*File)
-	nids := make(map[string]map[*File]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(file.InternalPolicyTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyFiles)
-		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(file.InternalPolicyPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(file.InternalPolicyPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(file.InternalPolicyPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "internal_policy" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 
 func (_q *FileQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -2554,34 +2320,6 @@ func (_q *FileQuery) WithNamedSubprocessor(name string, opts ...func(*Subprocess
 		_q.withNamedSubprocessor = make(map[string]*SubprocessorQuery)
 	}
 	_q.withNamedSubprocessor[name] = query
-	return _q
-}
-
-// WithNamedProcedure tells the query-builder to eager-load the nodes that are connected to the "procedure"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *FileQuery) WithNamedProcedure(name string, opts ...func(*ProcedureQuery)) *FileQuery {
-	query := (&ProcedureClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedProcedure == nil {
-		_q.withNamedProcedure = make(map[string]*ProcedureQuery)
-	}
-	_q.withNamedProcedure[name] = query
-	return _q
-}
-
-// WithNamedInternalPolicy tells the query-builder to eager-load the nodes that are connected to the "internal_policy"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *FileQuery) WithNamedInternalPolicy(name string, opts ...func(*InternalPolicyQuery)) *FileQuery {
-	query := (&InternalPolicyClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedInternalPolicy == nil {
-		_q.withNamedInternalPolicy = make(map[string]*InternalPolicyQuery)
-	}
-	_q.withNamedInternalPolicy[name] = query
 	return _q
 }
 

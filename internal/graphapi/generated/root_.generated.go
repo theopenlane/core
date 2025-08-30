@@ -1311,13 +1311,11 @@ type ComplexityRoot struct {
 		Evidence              func(childComplexity int) int
 		Groups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                    func(childComplexity int) int
-		InternalPolicy        func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
 		Organization          func(childComplexity int) int
 		OrganizationSetting   func(childComplexity int) int
 		PersistedFileSize     func(childComplexity int) int
 		PresignedURL          func(childComplexity int) int
-		Procedure             func(childComplexity int) int
 		Program               func(childComplexity int) int
 		ProvidedFileExtension func(childComplexity int) int
 		ProvidedFileName      func(childComplexity int) int
@@ -1806,7 +1804,8 @@ type ComplexityRoot struct {
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Files                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		File                            func(childComplexity int) int
+		FileID                          func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		Name                            func(childComplexity int) int
@@ -1826,6 +1825,7 @@ type ComplexityRoot struct {
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
 		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
 	}
@@ -1870,6 +1870,7 @@ type ComplexityRoot struct {
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
+		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
@@ -1885,6 +1886,7 @@ type ComplexityRoot struct {
 		Summary                         func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
+		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
 	}
@@ -3191,7 +3193,8 @@ type ComplexityRoot struct {
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Files                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		File                            func(childComplexity int) int
+		FileID                          func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -3211,6 +3214,7 @@ type ComplexityRoot struct {
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
 		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
 	}
@@ -3255,6 +3259,7 @@ type ComplexityRoot struct {
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
+		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
@@ -3270,6 +3275,7 @@ type ComplexityRoot struct {
 		Summary                         func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
+		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
 	}
@@ -11033,13 +11039,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.ID(childComplexity), true
 
-	case "File.internalPolicy":
-		if e.complexity.File.InternalPolicy == nil {
-			break
-		}
-
-		return e.complexity.File.InternalPolicy(childComplexity), true
-
 	case "File.md5Hash":
 		if e.complexity.File.Md5Hash == nil {
 			break
@@ -11074,13 +11073,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.File.PresignedURL(childComplexity), true
-
-	case "File.procedure":
-		if e.complexity.File.Procedure == nil {
-			break
-		}
-
-		return e.complexity.File.Procedure(childComplexity), true
 
 	case "File.program":
 		if e.complexity.File.Program == nil {
@@ -13510,17 +13502,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
-	case "InternalPolicy.files":
-		if e.complexity.InternalPolicy.Files == nil {
+	case "InternalPolicy.file":
+		if e.complexity.InternalPolicy.File == nil {
 			break
 		}
 
-		args, err := ec.field_InternalPolicy_files_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
+		return e.complexity.InternalPolicy.File(childComplexity), true
+
+	case "InternalPolicy.fileID":
+		if e.complexity.InternalPolicy.FileID == nil {
+			break
 		}
 
-		return e.complexity.InternalPolicy.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+		return e.complexity.InternalPolicy.FileID(childComplexity), true
 
 	case "InternalPolicy.id":
 		if e.complexity.InternalPolicy.ID == nil {
@@ -13685,6 +13679,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
+	case "InternalPolicy.url":
+		if e.complexity.InternalPolicy.URL == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.URL(childComplexity), true
+
 	case "InternalPolicy.updatedAt":
 		if e.complexity.InternalPolicy.UpdatedAt == nil {
 			break
@@ -13846,6 +13847,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicyHistory.DisplayID(childComplexity), true
 
+	case "InternalPolicyHistory.fileID":
+		if e.complexity.InternalPolicyHistory.FileID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.FileID(childComplexity), true
+
 	case "InternalPolicyHistory.historyTime":
 		if e.complexity.InternalPolicyHistory.HistoryTime == nil {
 			break
@@ -13950,6 +13958,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicyHistory.Tags(childComplexity), true
+
+	case "InternalPolicyHistory.url":
+		if e.complexity.InternalPolicyHistory.URL == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.URL(childComplexity), true
 
 	case "InternalPolicyHistory.updatedAt":
 		if e.complexity.InternalPolicyHistory.UpdatedAt == nil {
@@ -22114,17 +22129,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
-	case "Procedure.files":
-		if e.complexity.Procedure.Files == nil {
+	case "Procedure.file":
+		if e.complexity.Procedure.File == nil {
 			break
 		}
 
-		args, err := ec.field_Procedure_files_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
+		return e.complexity.Procedure.File(childComplexity), true
+
+	case "Procedure.fileID":
+		if e.complexity.Procedure.FileID == nil {
+			break
 		}
 
-		return e.complexity.Procedure.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+		return e.complexity.Procedure.FileID(childComplexity), true
 
 	case "Procedure.id":
 		if e.complexity.Procedure.ID == nil {
@@ -22289,6 +22306,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
+	case "Procedure.url":
+		if e.complexity.Procedure.URL == nil {
+			break
+		}
+
+		return e.complexity.Procedure.URL(childComplexity), true
+
 	case "Procedure.updatedAt":
 		if e.complexity.Procedure.UpdatedAt == nil {
 			break
@@ -22450,6 +22474,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProcedureHistory.DisplayID(childComplexity), true
 
+	case "ProcedureHistory.fileID":
+		if e.complexity.ProcedureHistory.FileID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.FileID(childComplexity), true
+
 	case "ProcedureHistory.historyTime":
 		if e.complexity.ProcedureHistory.HistoryTime == nil {
 			break
@@ -22554,6 +22585,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureHistory.Tags(childComplexity), true
+
+	case "ProcedureHistory.url":
+		if e.complexity.ProcedureHistory.URL == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.URL(childComplexity), true
 
 	case "ProcedureHistory.updatedAt":
 		if e.complexity.ProcedureHistory.UpdatedAt == nil {
@@ -43631,8 +43669,6 @@ input CreateFileInput {
   eventIDs: [ID!]
   trustCenterSettingIDs: [ID!]
   subprocessorIDs: [ID!]
-  procedureIDs: [ID!]
-  internalPolicyIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -43822,6 +43858,10 @@ input CreateInternalPolicyInput {
   improvement suggestions dismissed by the user for the policy
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the url used to create/update the policy
+  """
+  url: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -43835,8 +43875,8 @@ input CreateInternalPolicyInput {
   narrativeIDs: [ID!]
   taskIDs: [ID!]
   riskIDs: [ID!]
-  fileIDs: [ID!]
   programIDs: [ID!]
+  fileID: ID
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -44420,6 +44460,10 @@ input CreateProcedureInput {
   improvement suggestions dismissed by the user for the procedure
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the url used to create/update the procedure
+  """
+  url: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -44432,7 +44476,7 @@ input CreateProcedureInput {
   narrativeIDs: [ID!]
   riskIDs: [ID!]
   taskIDs: [ID!]
-  fileIDs: [ID!]
+  fileID: ID
 }
 """
 CreateProgramInput is used for create Program object.
@@ -50625,8 +50669,6 @@ type File implements Node {
   ): EventConnection!
   trustCenterSetting: [TrustCenterSetting!]
   subprocessor: [Subprocessor!]
-  procedure: [Procedure!]
-  internalPolicy: [InternalPolicy!]
 }
 """
 A connection to a list of items.
@@ -51509,16 +51551,6 @@ input FileWhereInput {
   """
   hasSubprocessor: Boolean
   hasSubprocessorWith: [SubprocessorWhereInput!]
-  """
-  procedure edge predicates
-  """
-  hasProcedure: Boolean
-  hasProcedureWith: [ProcedureWhereInput!]
-  """
-  internal_policy edge predicates
-  """
-  hasInternalPolicy: Boolean
-  hasInternalPolicyWith: [InternalPolicyWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -55500,6 +55532,14 @@ type InternalPolicy implements Node {
   improvement suggestions dismissed by the user for the policy
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the most recent file id if this policy was created from a file
+  """
+  fileID: ID
+  """
+  This will contain the url used to create/update the policy
+  """
+  url: String
   owner: Organization
   blockedGroups(
     """
@@ -55819,37 +55859,6 @@ type InternalPolicy implements Node {
     """
     where: RiskWhereInput
   ): RiskConnection!
-  files(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Files returned from the connection.
-    """
-    orderBy: [FileOrder!]
-
-    """
-    Filtering options for Files returned from the connection.
-    """
-    where: FileWhereInput
-  ): FileConnection!
   programs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -55881,6 +55890,7 @@ type InternalPolicy implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  file: File
 }
 """
 A connection to a list of items.
@@ -56017,6 +56027,14 @@ type InternalPolicyHistory implements Node {
   improvement suggestions dismissed by the user for the policy
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the most recent file id if this policy was created from a file
+  """
+  fileID: String
+  """
+  This will contain the url used to create/update the policy
+  """
+  url: String
 }
 """
 A connection to a list of items.
@@ -56398,6 +56416,42 @@ input InternalPolicyHistoryWhereInput {
   delegateIDNotNil: Boolean
   delegateIDEqualFold: String
   delegateIDContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
 }
 """
 Ordering options for InternalPolicy connections
@@ -56686,6 +56740,42 @@ input InternalPolicyWhereInput {
   delegateIDEqualFold: ID
   delegateIDContainsFold: ID
   """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -56751,15 +56841,15 @@ input InternalPolicyWhereInput {
   hasRisks: Boolean
   hasRisksWith: [RiskWhereInput!]
   """
-  files edge predicates
-  """
-  hasFiles: Boolean
-  hasFilesWith: [FileWhereInput!]
-  """
   programs edge predicates
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 type Invite implements Node {
   id: ID!
@@ -66984,6 +67074,14 @@ type Procedure implements Node {
   improvement suggestions dismissed by the user for the procedure
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the most recent file id if this procedure was created from a file
+  """
+  fileID: ID
+  """
+  This will contain the url used to create/update the procedure
+  """
+  url: String
   owner: Organization
   blockedGroups(
     """
@@ -67272,37 +67370,7 @@ type Procedure implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
-  files(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Files returned from the connection.
-    """
-    orderBy: [FileOrder!]
-
-    """
-    Filtering options for Files returned from the connection.
-    """
-    where: FileWhereInput
-  ): FileConnection!
+  file: File
 }
 """
 A connection to a list of items.
@@ -67439,6 +67507,14 @@ type ProcedureHistory implements Node {
   improvement suggestions dismissed by the user for the procedure
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the most recent file id if this procedure was created from a file
+  """
+  fileID: String
+  """
+  This will contain the url used to create/update the procedure
+  """
+  url: String
 }
 """
 A connection to a list of items.
@@ -67820,6 +67896,42 @@ input ProcedureHistoryWhereInput {
   delegateIDNotNil: Boolean
   delegateIDEqualFold: String
   delegateIDContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
 }
 """
 Ordering options for Procedure connections
@@ -68108,6 +68220,42 @@ input ProcedureWhereInput {
   delegateIDEqualFold: ID
   delegateIDContainsFold: ID
   """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -68168,10 +68316,10 @@ input ProcedureWhereInput {
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
   """
-  files edge predicates
+  file edge predicates
   """
-  hasFiles: Boolean
-  hasFilesWith: [FileWhereInput!]
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 type Program implements Node {
   id: ID!
@@ -85226,12 +85374,6 @@ input UpdateFileInput {
   addSubprocessorIDs: [ID!]
   removeSubprocessorIDs: [ID!]
   clearSubprocessor: Boolean
-  addProcedureIDs: [ID!]
-  removeProcedureIDs: [ID!]
-  clearProcedure: Boolean
-  addInternalPolicyIDs: [ID!]
-  removeInternalPolicyIDs: [ID!]
-  clearInternalPolicy: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -85516,6 +85658,11 @@ input UpdateInternalPolicyInput {
   dismissedImprovementSuggestions: [String!]
   appendDismissedImprovementSuggestions: [String!]
   clearDismissedImprovementSuggestions: Boolean
+  """
+  This will contain the url used to create/update the policy
+  """
+  url: String
+  clearURL: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -85552,12 +85699,11 @@ input UpdateInternalPolicyInput {
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean
-  addFileIDs: [ID!]
-  removeFileIDs: [ID!]
-  clearFiles: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  fileID: ID
+  clearFile: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -86326,6 +86472,11 @@ input UpdateProcedureInput {
   dismissedImprovementSuggestions: [String!]
   appendDismissedImprovementSuggestions: [String!]
   clearDismissedImprovementSuggestions: Boolean
+  """
+  This will contain the url used to create/update the procedure
+  """
+  url: String
+  clearURL: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -86359,9 +86510,8 @@ input UpdateProcedureInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
-  addFileIDs: [ID!]
-  removeFileIDs: [ID!]
-  clearFiles: Boolean
+  fileID: ID
+  clearFile: Boolean
 }
 """
 UpdateProgramInput is used for update Program object.

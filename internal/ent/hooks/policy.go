@@ -18,27 +18,31 @@ func HookPolicy() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.InternalPolicyFunc(func(ctx context.Context, m *generated.InternalPolicyMutation) (generated.Value, error) {
 
-			fileIDs := objects.GetFileIDsFromContext(ctx)
+			_, exists := m.URL()
 
-			// no uploaded file. continue as expected
-			if len(fileIDs) == 0 {
-				return next.Mutate(ctx, m)
-			}
+			switch exists {
+			case true:
 
-			m.AddFileIDs(fileIDs...)
+				if err := importURLToSchema(m); err != nil {
+					return nil, err
+				}
 
-			ctx, err := checkPolicyFile(ctx, m)
-			if err != nil {
-				return nil, err
-			}
+			default:
 
-			if err := importedFileToSchema(ctx, m, m.ObjectManager, "policyFile"); err != nil {
-				return nil, err
+				ctx, err := checkPolicyFile(ctx, m)
+				if err != nil {
+					return nil, err
+				}
+
+				if err := importFileToSchema(ctx, m, m.ObjectManager, "policyFile"); err != nil {
+					return nil, err
+				}
+
 			}
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpCreate)
+	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
 func checkPolicyFile[T utils.GenericMutation](ctx context.Context, m T) (context.Context, error) {
