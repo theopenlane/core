@@ -12,6 +12,8 @@ type Config struct {
 	MaxPoolSize int `json:"maxPoolSize" koanf:"maxPoolSize" default:"100"`
 	// Modules contains the configuration for the module system
 	Modules Modules `json:"modules" koanf:"modules"`
+	// MaxSchemaImportSize is the maximum size allowed for schema imports in bytes
+	MaxSchemaImportSize int `json:"maxSchemaImportSize" koanf:"maxSchemaImportSize" default:"262144" description:"maximum size allowed for schema imports (256KB)"`
 }
 
 // Summarizer holds configuration for the text summarization functionality

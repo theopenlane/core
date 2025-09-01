@@ -63,11 +63,7 @@ func importURLToSchema(m importSchemaMutation) error {
 		return fmt.Errorf("%d not an accepted status code. Only 200 accepted", resp.StatusCode) // nolint:err113
 	}
 
-	// 256KB limit
-	// do we need to add this to the config?
-	const maxBodySize = 256 * 1024
-
-	reader := io.LimitReader(resp.Body, maxBodySize)
+	reader := io.LimitReader(resp.Body, int64(m.Client().EntConfig.MaxSchemaImportSize))
 	buf, err := io.ReadAll(reader)
 	if err != nil {
 		return fmt.Errorf("failed to read response body: %w", err) // nolint:err113

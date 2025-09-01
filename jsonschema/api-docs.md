@@ -390,6 +390,7 @@ Config holds the configuration for the ent server
 |[**windmill**](#entconfigwindmill)|`object`|Windmill holds configuration for the Windmill workflow automation platform<br/>||
 |**maxPoolSize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
 |[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
+|**maxSchemaImportSize**|`integer`|MaxSchemaImportSize is the maximum size allowed for schema imports in bytes<br/>||
 
 **Additional Properties:** not allowed  
 **Example**

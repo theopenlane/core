@@ -86,6 +86,7 @@ email:
 entConfig:
     entityTypes: null
     maxPoolSize: 100
+    maxSchemaImportSize: 262144
     modules:
         enabled: true
     summarizer:
