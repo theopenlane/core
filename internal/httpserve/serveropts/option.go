@@ -254,8 +254,7 @@ func WithMiddleware() ServerOption {
 
 		// default middleware
 		s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware,
-			echoprometheus.MetricsMiddleware(),
-			// add prometheus metrics
+			echoprometheus.MetricsMiddleware(),           // add prometheus metrics
 			echocontext.EchoContextToContextMiddleware(), // adds echo context to parent
 		)
 	})
