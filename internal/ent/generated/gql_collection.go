@@ -19230,6 +19230,21 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			_q.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
+
+		case "file":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			_q.withFile = query
+			if _, ok := fieldSeen[internalpolicy.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldFileID)
+				fieldSeen[internalpolicy.FieldFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[internalpolicy.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldCreatedAt)
@@ -19349,6 +19364,16 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[internalpolicy.FieldDismissedImprovementSuggestions]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldDismissedImprovementSuggestions)
 				fieldSeen[internalpolicy.FieldDismissedImprovementSuggestions] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[internalpolicy.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldFileID)
+				fieldSeen[internalpolicy.FieldFileID] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[internalpolicy.FieldURL]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldURL)
+				fieldSeen[internalpolicy.FieldURL] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -19574,6 +19599,16 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[internalpolicyhistory.FieldDismissedImprovementSuggestions]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldDismissedImprovementSuggestions)
 				fieldSeen[internalpolicyhistory.FieldDismissedImprovementSuggestions] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldFileID)
+				fieldSeen[internalpolicyhistory.FieldFileID] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldURL]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldURL)
+				fieldSeen[internalpolicyhistory.FieldURL] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -32332,6 +32367,21 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			_q.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
+
+		case "file":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			_q.withFile = query
+			if _, ok := fieldSeen[procedure.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldFileID)
+				fieldSeen[procedure.FieldFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[procedure.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldCreatedAt)
@@ -32451,6 +32501,16 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if _, ok := fieldSeen[procedure.FieldDismissedImprovementSuggestions]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldDismissedImprovementSuggestions)
 				fieldSeen[procedure.FieldDismissedImprovementSuggestions] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[procedure.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldFileID)
+				fieldSeen[procedure.FieldFileID] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[procedure.FieldURL]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldURL)
+				fieldSeen[procedure.FieldURL] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -32676,6 +32736,16 @@ func (_q *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[procedurehistory.FieldDismissedImprovementSuggestions]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldDismissedImprovementSuggestions)
 				fieldSeen[procedurehistory.FieldDismissedImprovementSuggestions] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[procedurehistory.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldFileID)
+				fieldSeen[procedurehistory.FieldFileID] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[procedurehistory.FieldURL]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldURL)
+				fieldSeen[procedurehistory.FieldURL] = struct{}{}
 			}
 		case "id":
 		case "__typename":

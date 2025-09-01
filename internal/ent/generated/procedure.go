@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -73,6 +74,10 @@ type Procedure struct {
 	ImprovementSuggestions []string `json:"improvement_suggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
 	DismissedImprovementSuggestions []string `json:"dismissed_improvement_suggestions,omitempty"`
+	// This will contain the most recent file id if this procedure was created from a file
+	FileID *string `json:"file_id,omitempty"`
+	// This will contain the url used to create/update the procedure
+	URL *string `json:"url,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProcedureQuery when eager-loading is set.
 	Edges                        ProcedureEdges `json:"edges"`
@@ -106,11 +111,13 @@ type ProcedureEdges struct {
 	Risks []*Risk `json:"risks,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// File holds the value of the file edge.
+	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [13]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -237,6 +244,17 @@ func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
 	return nil, &NotLoadedError{edge: "tasks"}
 }
 
+// FileOrErr returns the File value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProcedureEdges) FileOrErr() (*File, error) {
+	if e.File != nil {
+		return e.File, nil
+	} else if e.loadedTypes[12] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "file"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Procedure) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -246,7 +264,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedure.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary:
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldFileID, procedure.FieldURL:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -443,6 +461,20 @@ func (_m *Procedure) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
 				}
 			}
+		case procedure.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = new(string)
+				*_m.FileID = value.String
+			}
+		case procedure.FieldURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field url", values[i])
+			} else if value.Valid {
+				_m.URL = new(string)
+				*_m.URL = value.String
+			}
 		case procedure.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_procedures", values[i])
@@ -521,6 +553,11 @@ func (_m *Procedure) QueryRisks() *RiskQuery {
 // QueryTasks queries the "tasks" edge of the Procedure entity.
 func (_m *Procedure) QueryTasks() *TaskQuery {
 	return NewProcedureClient(_m.config).QueryTasks(_m)
+}
+
+// QueryFile queries the "file" edge of the Procedure entity.
+func (_m *Procedure) QueryFile() *FileQuery {
+	return NewProcedureClient(_m.config).QueryFile(_m)
 }
 
 // Update returns a builder for updating this Procedure.
@@ -623,6 +660,16 @@ func (_m *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_improvement_suggestions=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DismissedImprovementSuggestions))
+	builder.WriteString(", ")
+	if v := _m.FileID; v != nil {
+		builder.WriteString("file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.URL; v != nil {
+		builder.WriteString("url=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

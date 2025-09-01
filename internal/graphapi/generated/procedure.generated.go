@@ -115,6 +115,10 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
+			case "fileID":
+				return ec.fieldContext_Procedure_fileID(ctx, field)
+			case "url":
+				return ec.fieldContext_Procedure_url(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -139,6 +143,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "file":
+				return ec.fieldContext_Procedure_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -232,6 +238,10 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
+			case "fileID":
+				return ec.fieldContext_Procedure_fileID(ctx, field)
+			case "url":
+				return ec.fieldContext_Procedure_url(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -256,6 +266,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "file":
+				return ec.fieldContext_Procedure_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -393,6 +405,10 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
+			case "fileID":
+				return ec.fieldContext_Procedure_fileID(ctx, field)
+			case "url":
+				return ec.fieldContext_Procedure_url(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -417,6 +433,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "file":
+				return ec.fieldContext_Procedure_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -557,6 +575,10 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
+			case "fileID":
+				return ec.fieldContext_Procedure_fileID(ctx, field)
+			case "url":
+				return ec.fieldContext_Procedure_url(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -581,6 +603,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_risks(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Procedure_tasks(ctx, field)
+			case "file":
+				return ec.fieldContext_Procedure_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},

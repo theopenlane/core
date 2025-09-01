@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -51,6 +52,7 @@ type InternalPolicyQuery struct {
 	withTasks                       *TaskQuery
 	withRisks                       *RiskQuery
 	withPrograms                    *ProgramQuery
+	withFile                        *FileQuery
 	loadTotal                       []func(context.Context, []*InternalPolicy) error
 	modifiers                       []func(*sql.Selector)
 	withNamedBlockedGroups          map[string]*GroupQuery
@@ -450,6 +452,31 @@ func (_q *InternalPolicyQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryFile chains the current query on the "file" edge.
+func (_q *InternalPolicyQuery) QueryFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.FileTable, internalpolicy.FileColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first InternalPolicy entity from the query.
 // Returns a *NotFoundError when no InternalPolicy was found.
 func (_q *InternalPolicyQuery) First(ctx context.Context) (*InternalPolicy, error) {
@@ -656,6 +683,7 @@ func (_q *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withTasks:                  _q.withTasks.Clone(),
 		withRisks:                  _q.withRisks.Clone(),
 		withPrograms:               _q.withPrograms.Clone(),
+		withFile:                   _q.withFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -817,6 +845,17 @@ func (_q *InternalPolicyQuery) WithPrograms(opts ...func(*ProgramQuery)) *Intern
 	return _q
 }
 
+// WithFile tells the query-builder to eager-load the nodes that are connected to
+// the "file" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithFile(opts ...func(*FileQuery)) *InternalPolicyQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFile = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -901,7 +940,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*InternalPolicy{}
 		_spec       = _q.querySpec()
-		loadedTypes = [14]bool{
+		loadedTypes = [15]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -916,6 +955,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withTasks != nil,
 			_q.withRisks != nil,
 			_q.withPrograms != nil,
+			_q.withFile != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -1037,6 +1077,12 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *InternalPolicy) { n.Edges.Programs = []*Program{} },
 			func(n *InternalPolicy, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFile; query != nil {
+		if err := _q.loadFile(ctx, query, nodes, nil,
+			func(n *InternalPolicy, e *File) { n.Edges.File = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1863,6 +1909,38 @@ func (_q *InternalPolicyQuery) loadPrograms(ctx context.Context, query *ProgramQ
 	}
 	return nil
 }
+func (_q *InternalPolicyQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*InternalPolicy)
+	for i := range nodes {
+		if nodes[i].FileID == nil {
+			continue
+		}
+		fk := *nodes[i].FileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *InternalPolicyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1902,6 +1980,9 @@ func (_q *InternalPolicyQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withDelegate != nil {
 			_spec.Node.AddColumnOnce(internalpolicy.FieldDelegateID)
+		}
+		if _q.withFile != nil {
+			_spec.Node.AddColumnOnce(internalpolicy.FieldFileID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

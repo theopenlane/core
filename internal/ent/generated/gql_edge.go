@@ -3188,6 +3188,14 @@ func (_m *InternalPolicy) Programs(
 	return _m.QueryPrograms().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *InternalPolicy) File(ctx context.Context) (*File, error) {
+	result, err := _m.Edges.FileOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Invite) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -5372,6 +5380,14 @@ func (_m *Procedure) Tasks(
 		return conn, nil
 	}
 	return _m.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Procedure) File(ctx context.Context) (*File, error) {
+	result, err := _m.Edges.FileOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (_m *Program) Owner(ctx context.Context) (*Organization, error) {

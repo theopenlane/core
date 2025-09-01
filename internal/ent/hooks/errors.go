@@ -76,6 +76,9 @@ var (
 	// ErrArchivedProgramUpdateNotAllowed is returned when an archived program is updated. It only
 	// allows updates if the status is changed
 	ErrArchivedProgramUpdateNotAllowed = errors.New("you cannot update an archived program")
+	// ErrNotSingularUpload is returned when a user is importing content to create a schema
+	// and they upload more than one file
+	ErrNotSingularUpload = errors.New("multiple uploads not supported")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

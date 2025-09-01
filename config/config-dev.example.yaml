@@ -125,6 +125,7 @@ ratelimit:
   enabled: false
 
 entConfig:
+  maxSchemaImportSize: 262144
   modules:
     enabled: false
   entityTypes:

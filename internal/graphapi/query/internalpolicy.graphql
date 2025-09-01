@@ -148,6 +148,62 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
   }
 }
 
+mutation CreateUploadInternalPolicy($policyFile: Upload!, $ownerID: ID) {
+  createUploadInternalPolicy(policyFile: $policyFile, ownerID: $ownerID) {
+    internalPolicy {
+      approvalRequired
+      createdAt
+      createdBy
+      details
+      displayID
+      id
+      name
+      ownerID
+      policyType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tags
+      updatedAt
+      updatedBy
+      controls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      editors {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      blockedGroups {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      approver {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
+    }
+  }
+}
+
 mutation DeleteInternalPolicy($deleteInternalPolicyId: ID!) {
   deleteInternalPolicy(id: $deleteInternalPolicyId) {
     deletedID

@@ -761,6 +761,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "program",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "file": {
+	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "invite": {"owner": {
 	ObjectType:      "owner",
@@ -1336,6 +1340,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "tasks": {
 	ObjectType:      "task",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "file": {
+	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },

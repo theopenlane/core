@@ -1804,6 +1804,8 @@ type ComplexityRoot struct {
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		File                            func(childComplexity int) int
+		FileID                          func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		Name                            func(childComplexity int) int
@@ -1823,6 +1825,7 @@ type ComplexityRoot struct {
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
 		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
 	}
@@ -1867,6 +1870,7 @@ type ComplexityRoot struct {
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
+		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
@@ -1882,6 +1886,7 @@ type ComplexityRoot struct {
 		Summary                         func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
+		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
 	}
@@ -2475,6 +2480,8 @@ type ComplexityRoot struct {
 		CreateTrustCenterDomain              func(childComplexity int, input model.CreateTrustCenterDomainInput) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
+		CreateUploadInternalPolicy           func(childComplexity int, policyFile graphql.Upload, ownerID *string) int
+		CreateUploadProcedure                func(childComplexity int, procedureFile graphql.Upload, ownerID *string) int
 		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
 		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
 		DeleteAPIToken                       func(childComplexity int, id string) int
@@ -3186,6 +3193,8 @@ type ComplexityRoot struct {
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		File                            func(childComplexity int) int
+		FileID                          func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -3205,6 +3214,7 @@ type ComplexityRoot struct {
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
 		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
 	}
@@ -3249,6 +3259,7 @@ type ComplexityRoot struct {
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
+		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
@@ -3264,6 +3275,7 @@ type ComplexityRoot struct {
 		Summary                         func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
+		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
 	}
@@ -13490,6 +13502,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "InternalPolicy.file":
+		if e.complexity.InternalPolicy.File == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.File(childComplexity), true
+
+	case "InternalPolicy.fileID":
+		if e.complexity.InternalPolicy.FileID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.FileID(childComplexity), true
+
 	case "InternalPolicy.id":
 		if e.complexity.InternalPolicy.ID == nil {
 			break
@@ -13653,6 +13679,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
+	case "InternalPolicy.url":
+		if e.complexity.InternalPolicy.URL == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.URL(childComplexity), true
+
 	case "InternalPolicy.updatedAt":
 		if e.complexity.InternalPolicy.UpdatedAt == nil {
 			break
@@ -13814,6 +13847,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicyHistory.DisplayID(childComplexity), true
 
+	case "InternalPolicyHistory.fileID":
+		if e.complexity.InternalPolicyHistory.FileID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.FileID(childComplexity), true
+
 	case "InternalPolicyHistory.historyTime":
 		if e.complexity.InternalPolicyHistory.HistoryTime == nil {
 			break
@@ -13918,6 +13958,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicyHistory.Tags(childComplexity), true
+
+	case "InternalPolicyHistory.url":
+		if e.complexity.InternalPolicyHistory.URL == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.URL(childComplexity), true
 
 	case "InternalPolicyHistory.updatedAt":
 		if e.complexity.InternalPolicyHistory.UpdatedAt == nil {
@@ -17433,6 +17480,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateTrustCenterSubprocessor(childComplexity, args["input"].(generated.CreateTrustCenterSubprocessorInput)), true
+
+	case "Mutation.createUploadInternalPolicy":
+		if e.complexity.Mutation.CreateUploadInternalPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createUploadInternalPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateUploadInternalPolicy(childComplexity, args["policyFile"].(graphql.Upload), args["ownerID"].(*string)), true
+
+	case "Mutation.createUploadProcedure":
+		if e.complexity.Mutation.CreateUploadProcedure == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createUploadProcedure_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateUploadProcedure(childComplexity, args["procedureFile"].(graphql.Upload), args["ownerID"].(*string)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -22058,6 +22129,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Procedure.file":
+		if e.complexity.Procedure.File == nil {
+			break
+		}
+
+		return e.complexity.Procedure.File(childComplexity), true
+
+	case "Procedure.fileID":
+		if e.complexity.Procedure.FileID == nil {
+			break
+		}
+
+		return e.complexity.Procedure.FileID(childComplexity), true
+
 	case "Procedure.id":
 		if e.complexity.Procedure.ID == nil {
 			break
@@ -22221,6 +22306,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
+	case "Procedure.url":
+		if e.complexity.Procedure.URL == nil {
+			break
+		}
+
+		return e.complexity.Procedure.URL(childComplexity), true
+
 	case "Procedure.updatedAt":
 		if e.complexity.Procedure.UpdatedAt == nil {
 			break
@@ -22382,6 +22474,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProcedureHistory.DisplayID(childComplexity), true
 
+	case "ProcedureHistory.fileID":
+		if e.complexity.ProcedureHistory.FileID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.FileID(childComplexity), true
+
 	case "ProcedureHistory.historyTime":
 		if e.complexity.ProcedureHistory.HistoryTime == nil {
 			break
@@ -22486,6 +22585,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureHistory.Tags(childComplexity), true
+
+	case "ProcedureHistory.url":
+		if e.complexity.ProcedureHistory.URL == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.URL(childComplexity), true
 
 	case "ProcedureHistory.updatedAt":
 		if e.complexity.ProcedureHistory.UpdatedAt == nil {
@@ -43752,6 +43858,10 @@ input CreateInternalPolicyInput {
   improvement suggestions dismissed by the user for the policy
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the url used to create/update the policy
+  """
+  url: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -43766,6 +43876,7 @@ input CreateInternalPolicyInput {
   taskIDs: [ID!]
   riskIDs: [ID!]
   programIDs: [ID!]
+  fileID: ID
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -44349,6 +44460,10 @@ input CreateProcedureInput {
   improvement suggestions dismissed by the user for the procedure
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the url used to create/update the procedure
+  """
+  url: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -44361,6 +44476,7 @@ input CreateProcedureInput {
   narrativeIDs: [ID!]
   riskIDs: [ID!]
   taskIDs: [ID!]
+  fileID: ID
 }
 """
 CreateProgramInput is used for create Program object.
@@ -55416,6 +55532,14 @@ type InternalPolicy implements Node {
   improvement suggestions dismissed by the user for the policy
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the most recent file id if this policy was created from a file
+  """
+  fileID: ID
+  """
+  This will contain the url used to create/update the policy
+  """
+  url: String
   owner: Organization
   blockedGroups(
     """
@@ -55766,6 +55890,7 @@ type InternalPolicy implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  file: File
 }
 """
 A connection to a list of items.
@@ -55902,6 +56027,14 @@ type InternalPolicyHistory implements Node {
   improvement suggestions dismissed by the user for the policy
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the most recent file id if this policy was created from a file
+  """
+  fileID: String
+  """
+  This will contain the url used to create/update the policy
+  """
+  url: String
 }
 """
 A connection to a list of items.
@@ -56283,6 +56416,42 @@ input InternalPolicyHistoryWhereInput {
   delegateIDNotNil: Boolean
   delegateIDEqualFold: String
   delegateIDContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
 }
 """
 Ordering options for InternalPolicy connections
@@ -56571,6 +56740,42 @@ input InternalPolicyWhereInput {
   delegateIDEqualFold: ID
   delegateIDContainsFold: ID
   """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -56640,6 +56845,11 @@ input InternalPolicyWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 type Invite implements Node {
   id: ID!
@@ -66864,6 +67074,14 @@ type Procedure implements Node {
   improvement suggestions dismissed by the user for the procedure
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the most recent file id if this procedure was created from a file
+  """
+  fileID: ID
+  """
+  This will contain the url used to create/update the procedure
+  """
+  url: String
   owner: Organization
   blockedGroups(
     """
@@ -67152,6 +67370,7 @@ type Procedure implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  file: File
 }
 """
 A connection to a list of items.
@@ -67288,6 +67507,14 @@ type ProcedureHistory implements Node {
   improvement suggestions dismissed by the user for the procedure
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  This will contain the most recent file id if this procedure was created from a file
+  """
+  fileID: String
+  """
+  This will contain the url used to create/update the procedure
+  """
+  url: String
 }
 """
 A connection to a list of items.
@@ -67669,6 +67896,42 @@ input ProcedureHistoryWhereInput {
   delegateIDNotNil: Boolean
   delegateIDEqualFold: String
   delegateIDContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
 }
 """
 Ordering options for Procedure connections
@@ -67957,6 +68220,42 @@ input ProcedureWhereInput {
   delegateIDEqualFold: ID
   delegateIDContainsFold: ID
   """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -68016,6 +68315,11 @@ input ProcedureWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 type Program implements Node {
   id: ID!
@@ -85354,6 +85658,11 @@ input UpdateInternalPolicyInput {
   dismissedImprovementSuggestions: [String!]
   appendDismissedImprovementSuggestions: [String!]
   clearDismissedImprovementSuggestions: Boolean
+  """
+  This will contain the url used to create/update the policy
+  """
+  url: String
+  clearURL: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -85393,6 +85702,8 @@ input UpdateInternalPolicyInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  fileID: ID
+  clearFile: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -86161,6 +86472,11 @@ input UpdateProcedureInput {
   dismissedImprovementSuggestions: [String!]
   appendDismissedImprovementSuggestions: [String!]
   clearDismissedImprovementSuggestions: Boolean
+  """
+  This will contain the url used to create/update the procedure
+  """
+  url: String
+  clearURL: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -86194,6 +86510,8 @@ input UpdateProcedureInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  fileID: ID
+  clearFile: Boolean
 }
 """
 UpdateProgramInput is used for update Program object.
@@ -90675,6 +90993,19 @@ extend type Mutation{
         input: CreateInternalPolicyInput!
     ): InternalPolicyCreatePayload!
     """
+    Create a new internalPolicy via file upload
+    """
+    createUploadInternalPolicy(
+        """
+        file containing values of the internalPolicy
+        """
+        policyFile: Upload!
+        """
+        ID of the owner organization
+        """
+        ownerID: ID
+    ): InternalPolicyCreatePayload!
+    """
     Create multiple new internalPolicys
     """
     createBulkInternalPolicy(
@@ -90781,7 +91112,8 @@ type InternalPolicyBulkUpdatePayload {
     IDs of the updated internalPolicys
     """
     updatedIDs: [ID!]
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/invite.graphql", Input: `extend type Query {
     """
     Look up invite by ID
@@ -92116,6 +92448,19 @@ extend type Mutation{
         values of the procedure
         """
         input: CreateProcedureInput!
+    ): ProcedureCreatePayload!
+    """
+    Create a new procedure via file upload
+    """
+    createUploadProcedure(
+        """
+        file containing values of the procedure
+        """
+        procedureFile: Upload!
+        """
+        ID of the owner organization
+        """
+        ownerID: ID
     ): ProcedureCreatePayload!
     """
     Create multiple new procedures

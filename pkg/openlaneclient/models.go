@@ -4809,20 +4809,23 @@ type CreateInternalPolicyInput struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the policy
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
-	OwnerID                         *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs                 []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs                       []string `json:"editorIDs,omitempty"`
-	ApproverID                      *string  `json:"approverID,omitempty"`
-	DelegateID                      *string  `json:"delegateID,omitempty"`
-	ControlObjectiveIDs             []string `json:"controlObjectiveIDs,omitempty"`
-	ControlImplementationIDs        []string `json:"controlImplementationIDs,omitempty"`
-	ControlIDs                      []string `json:"controlIDs,omitempty"`
-	SubcontrolIDs                   []string `json:"subcontrolIDs,omitempty"`
-	ProcedureIDs                    []string `json:"procedureIDs,omitempty"`
-	NarrativeIDs                    []string `json:"narrativeIDs,omitempty"`
-	TaskIDs                         []string `json:"taskIDs,omitempty"`
-	RiskIDs                         []string `json:"riskIDs,omitempty"`
-	ProgramIDs                      []string `json:"programIDs,omitempty"`
+	// This will contain the url used to create/update the policy
+	URL                      *string  `json:"url,omitempty"`
+	OwnerID                  *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs          []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                []string `json:"editorIDs,omitempty"`
+	ApproverID               *string  `json:"approverID,omitempty"`
+	DelegateID               *string  `json:"delegateID,omitempty"`
+	ControlObjectiveIDs      []string `json:"controlObjectiveIDs,omitempty"`
+	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
+	ControlIDs               []string `json:"controlIDs,omitempty"`
+	SubcontrolIDs            []string `json:"subcontrolIDs,omitempty"`
+	ProcedureIDs             []string `json:"procedureIDs,omitempty"`
+	NarrativeIDs             []string `json:"narrativeIDs,omitempty"`
+	TaskIDs                  []string `json:"taskIDs,omitempty"`
+	RiskIDs                  []string `json:"riskIDs,omitempty"`
+	ProgramIDs               []string `json:"programIDs,omitempty"`
+	FileID                   *string  `json:"fileID,omitempty"`
 }
 
 // CreateInviteInput is used for create Invite object.
@@ -5206,18 +5209,21 @@ type CreateProcedureInput struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
-	OwnerID                         *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs                 []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs                       []string `json:"editorIDs,omitempty"`
-	ApproverID                      *string  `json:"approverID,omitempty"`
-	DelegateID                      *string  `json:"delegateID,omitempty"`
-	ControlIDs                      []string `json:"controlIDs,omitempty"`
-	SubcontrolIDs                   []string `json:"subcontrolIDs,omitempty"`
-	InternalPolicyIDs               []string `json:"internalPolicyIDs,omitempty"`
-	ProgramIDs                      []string `json:"programIDs,omitempty"`
-	NarrativeIDs                    []string `json:"narrativeIDs,omitempty"`
-	RiskIDs                         []string `json:"riskIDs,omitempty"`
-	TaskIDs                         []string `json:"taskIDs,omitempty"`
+	// This will contain the url used to create/update the procedure
+	URL               *string  `json:"url,omitempty"`
+	OwnerID           *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string `json:"editorIDs,omitempty"`
+	ApproverID        *string  `json:"approverID,omitempty"`
+	DelegateID        *string  `json:"delegateID,omitempty"`
+	ControlIDs        []string `json:"controlIDs,omitempty"`
+	SubcontrolIDs     []string `json:"subcontrolIDs,omitempty"`
+	InternalPolicyIDs []string `json:"internalPolicyIDs,omitempty"`
+	ProgramIDs        []string `json:"programIDs,omitempty"`
+	NarrativeIDs      []string `json:"narrativeIDs,omitempty"`
+	RiskIDs           []string `json:"riskIDs,omitempty"`
+	TaskIDs           []string `json:"taskIDs,omitempty"`
+	FileID            *string  `json:"fileID,omitempty"`
 }
 
 // CreateProgramInput is used for create Program object.
@@ -12063,10 +12069,14 @@ type InternalPolicy struct {
 	// suggested improvements for the policy
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the policy
-	DismissedImprovementSuggestions []string         `json:"dismissedImprovementSuggestions,omitempty"`
-	Owner                           *Organization    `json:"owner,omitempty"`
-	BlockedGroups                   *GroupConnection `json:"blockedGroups"`
-	Editors                         *GroupConnection `json:"editors"`
+	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the most recent file id if this policy was created from a file
+	FileID *string `json:"fileID,omitempty"`
+	// This will contain the url used to create/update the policy
+	URL           *string          `json:"url,omitempty"`
+	Owner         *Organization    `json:"owner,omitempty"`
+	BlockedGroups *GroupConnection `json:"blockedGroups"`
+	Editors       *GroupConnection `json:"editors"`
 	// the group of users who are responsible for approving the policy
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the policy, used for temporary approval
@@ -12080,6 +12090,7 @@ type InternalPolicy struct {
 	Tasks                  *TaskConnection                  `json:"tasks"`
 	Risks                  *RiskConnection                  `json:"risks"`
 	Programs               *ProgramConnection               `json:"programs"`
+	File                   *File                            `json:"file,omitempty"`
 }
 
 func (InternalPolicy) IsNode() {}
@@ -12176,6 +12187,10 @@ type InternalPolicyHistory struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the policy
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the most recent file id if this policy was created from a file
+	FileID *string `json:"fileID,omitempty"`
+	// This will contain the url used to create/update the policy
+	URL *string `json:"url,omitempty"`
 }
 
 func (InternalPolicyHistory) IsNode() {}
@@ -12461,6 +12476,38 @@ type InternalPolicyHistoryWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// url field predicates
+	URL             *string  `json:"url,omitempty"`
+	URLNeq          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGt           *string  `json:"urlGT,omitempty"`
+	URLGte          *string  `json:"urlGTE,omitempty"`
+	URLLt           *string  `json:"urlLT,omitempty"`
+	URLLte          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
+	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
 }
 
 // Ordering options for InternalPolicy connections
@@ -12702,6 +12749,38 @@ type InternalPolicyWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// url field predicates
+	URL             *string  `json:"url,omitempty"`
+	URLNeq          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGt           *string  `json:"urlGT,omitempty"`
+	URLGte          *string  `json:"urlGTE,omitempty"`
+	URLLt           *string  `json:"urlLT,omitempty"`
+	URLLte          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
+	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -12744,6 +12823,9 @@ type InternalPolicyWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// file edge predicates
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 type Invite struct {
@@ -18702,10 +18784,14 @@ type Procedure struct {
 	// suggested improvements for the procedure
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
-	DismissedImprovementSuggestions []string         `json:"dismissedImprovementSuggestions,omitempty"`
-	Owner                           *Organization    `json:"owner,omitempty"`
-	BlockedGroups                   *GroupConnection `json:"blockedGroups"`
-	Editors                         *GroupConnection `json:"editors"`
+	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the most recent file id if this procedure was created from a file
+	FileID *string `json:"fileID,omitempty"`
+	// This will contain the url used to create/update the procedure
+	URL           *string          `json:"url,omitempty"`
+	Owner         *Organization    `json:"owner,omitempty"`
+	BlockedGroups *GroupConnection `json:"blockedGroups"`
+	Editors       *GroupConnection `json:"editors"`
 	// the group of users who are responsible for approving the procedure
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the procedure, used for temporary approval
@@ -18717,6 +18803,7 @@ type Procedure struct {
 	Narratives       *NarrativeConnection      `json:"narratives"`
 	Risks            *RiskConnection           `json:"risks"`
 	Tasks            *TaskConnection           `json:"tasks"`
+	File             *File                     `json:"file,omitempty"`
 }
 
 func (Procedure) IsNode() {}
@@ -18813,6 +18900,10 @@ type ProcedureHistory struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// This will contain the most recent file id if this procedure was created from a file
+	FileID *string `json:"fileID,omitempty"`
+	// This will contain the url used to create/update the procedure
+	URL *string `json:"url,omitempty"`
 }
 
 func (ProcedureHistory) IsNode() {}
@@ -19098,6 +19189,38 @@ type ProcedureHistoryWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// url field predicates
+	URL             *string  `json:"url,omitempty"`
+	URLNeq          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGt           *string  `json:"urlGT,omitempty"`
+	URLGte          *string  `json:"urlGTE,omitempty"`
+	URLLt           *string  `json:"urlLT,omitempty"`
+	URLLte          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
+	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
 }
 
 // Ordering options for Procedure connections
@@ -19339,6 +19462,38 @@ type ProcedureWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// url field predicates
+	URL             *string  `json:"url,omitempty"`
+	URLNeq          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGt           *string  `json:"urlGT,omitempty"`
+	URLGte          *string  `json:"urlGTE,omitempty"`
+	URLLt           *string  `json:"urlLT,omitempty"`
+	URLLte          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
+	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -19375,6 +19530,9 @@ type ProcedureWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// file edge predicates
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 type Program struct {
@@ -28801,49 +28959,54 @@ type UpdateInternalPolicyInput struct {
 	AppendImprovementSuggestions []string `json:"appendImprovementSuggestions,omitempty"`
 	ClearImprovementSuggestions  *bool    `json:"clearImprovementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the policy
-	DismissedImprovementSuggestions       []string            `json:"dismissedImprovementSuggestions,omitempty"`
-	AppendDismissedImprovementSuggestions []string            `json:"appendDismissedImprovementSuggestions,omitempty"`
-	ClearDismissedImprovementSuggestions  *bool               `json:"clearDismissedImprovementSuggestions,omitempty"`
-	OwnerID                               *string             `json:"ownerID,omitempty"`
-	ClearOwner                            *bool               `json:"clearOwner,omitempty"`
-	AddBlockedGroupIDs                    []string            `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs                 []string            `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups                    *bool               `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs                          []string            `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs                       []string            `json:"removeEditorIDs,omitempty"`
-	ClearEditors                          *bool               `json:"clearEditors,omitempty"`
-	ApproverID                            *string             `json:"approverID,omitempty"`
-	ClearApprover                         *bool               `json:"clearApprover,omitempty"`
-	DelegateID                            *string             `json:"delegateID,omitempty"`
-	ClearDelegate                         *bool               `json:"clearDelegate,omitempty"`
-	AddControlObjectiveIDs                []string            `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs             []string            `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjectives                *bool               `json:"clearControlObjectives,omitempty"`
-	AddControlImplementationIDs           []string            `json:"addControlImplementationIDs,omitempty"`
-	RemoveControlImplementationIDs        []string            `json:"removeControlImplementationIDs,omitempty"`
-	ClearControlImplementations           *bool               `json:"clearControlImplementations,omitempty"`
-	AddControlIDs                         []string            `json:"addControlIDs,omitempty"`
-	RemoveControlIDs                      []string            `json:"removeControlIDs,omitempty"`
-	ClearControls                         *bool               `json:"clearControls,omitempty"`
-	AddSubcontrolIDs                      []string            `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs                   []string            `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols                      *bool               `json:"clearSubcontrols,omitempty"`
-	AddProcedureIDs                       []string            `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs                    []string            `json:"removeProcedureIDs,omitempty"`
-	ClearProcedures                       *bool               `json:"clearProcedures,omitempty"`
-	AddNarrativeIDs                       []string            `json:"addNarrativeIDs,omitempty"`
-	RemoveNarrativeIDs                    []string            `json:"removeNarrativeIDs,omitempty"`
-	ClearNarratives                       *bool               `json:"clearNarratives,omitempty"`
-	AddTaskIDs                            []string            `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs                         []string            `json:"removeTaskIDs,omitempty"`
-	ClearTasks                            *bool               `json:"clearTasks,omitempty"`
-	AddRiskIDs                            []string            `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs                         []string            `json:"removeRiskIDs,omitempty"`
-	ClearRisks                            *bool               `json:"clearRisks,omitempty"`
-	AddProgramIDs                         []string            `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs                      []string            `json:"removeProgramIDs,omitempty"`
-	ClearPrograms                         *bool               `json:"clearPrograms,omitempty"`
-	RevisionBump                          *models.VersionBump `json:"RevisionBump,omitempty"`
+	DismissedImprovementSuggestions       []string `json:"dismissedImprovementSuggestions,omitempty"`
+	AppendDismissedImprovementSuggestions []string `json:"appendDismissedImprovementSuggestions,omitempty"`
+	ClearDismissedImprovementSuggestions  *bool    `json:"clearDismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create/update the policy
+	URL                            *string             `json:"url,omitempty"`
+	ClearURL                       *bool               `json:"clearURL,omitempty"`
+	OwnerID                        *string             `json:"ownerID,omitempty"`
+	ClearOwner                     *bool               `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs             []string            `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs          []string            `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups             *bool               `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                   []string            `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs                []string            `json:"removeEditorIDs,omitempty"`
+	ClearEditors                   *bool               `json:"clearEditors,omitempty"`
+	ApproverID                     *string             `json:"approverID,omitempty"`
+	ClearApprover                  *bool               `json:"clearApprover,omitempty"`
+	DelegateID                     *string             `json:"delegateID,omitempty"`
+	ClearDelegate                  *bool               `json:"clearDelegate,omitempty"`
+	AddControlObjectiveIDs         []string            `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs      []string            `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives         *bool               `json:"clearControlObjectives,omitempty"`
+	AddControlImplementationIDs    []string            `json:"addControlImplementationIDs,omitempty"`
+	RemoveControlImplementationIDs []string            `json:"removeControlImplementationIDs,omitempty"`
+	ClearControlImplementations    *bool               `json:"clearControlImplementations,omitempty"`
+	AddControlIDs                  []string            `json:"addControlIDs,omitempty"`
+	RemoveControlIDs               []string            `json:"removeControlIDs,omitempty"`
+	ClearControls                  *bool               `json:"clearControls,omitempty"`
+	AddSubcontrolIDs               []string            `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs            []string            `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols               *bool               `json:"clearSubcontrols,omitempty"`
+	AddProcedureIDs                []string            `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs             []string            `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures                *bool               `json:"clearProcedures,omitempty"`
+	AddNarrativeIDs                []string            `json:"addNarrativeIDs,omitempty"`
+	RemoveNarrativeIDs             []string            `json:"removeNarrativeIDs,omitempty"`
+	ClearNarratives                *bool               `json:"clearNarratives,omitempty"`
+	AddTaskIDs                     []string            `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs                  []string            `json:"removeTaskIDs,omitempty"`
+	ClearTasks                     *bool               `json:"clearTasks,omitempty"`
+	AddRiskIDs                     []string            `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs                  []string            `json:"removeRiskIDs,omitempty"`
+	ClearRisks                     *bool               `json:"clearRisks,omitempty"`
+	AddProgramIDs                  []string            `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs               []string            `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                  *bool               `json:"clearPrograms,omitempty"`
+	FileID                         *string             `json:"fileID,omitempty"`
+	ClearFile                      *bool               `json:"clearFile,omitempty"`
+	RevisionBump                   *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateInviteInput is used for update Invite object.
@@ -29441,43 +29604,48 @@ type UpdateProcedureInput struct {
 	AppendImprovementSuggestions []string `json:"appendImprovementSuggestions,omitempty"`
 	ClearImprovementSuggestions  *bool    `json:"clearImprovementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
-	DismissedImprovementSuggestions       []string            `json:"dismissedImprovementSuggestions,omitempty"`
-	AppendDismissedImprovementSuggestions []string            `json:"appendDismissedImprovementSuggestions,omitempty"`
-	ClearDismissedImprovementSuggestions  *bool               `json:"clearDismissedImprovementSuggestions,omitempty"`
-	OwnerID                               *string             `json:"ownerID,omitempty"`
-	ClearOwner                            *bool               `json:"clearOwner,omitempty"`
-	AddBlockedGroupIDs                    []string            `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs                 []string            `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups                    *bool               `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs                          []string            `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs                       []string            `json:"removeEditorIDs,omitempty"`
-	ClearEditors                          *bool               `json:"clearEditors,omitempty"`
-	ApproverID                            *string             `json:"approverID,omitempty"`
-	ClearApprover                         *bool               `json:"clearApprover,omitempty"`
-	DelegateID                            *string             `json:"delegateID,omitempty"`
-	ClearDelegate                         *bool               `json:"clearDelegate,omitempty"`
-	AddControlIDs                         []string            `json:"addControlIDs,omitempty"`
-	RemoveControlIDs                      []string            `json:"removeControlIDs,omitempty"`
-	ClearControls                         *bool               `json:"clearControls,omitempty"`
-	AddSubcontrolIDs                      []string            `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs                   []string            `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols                      *bool               `json:"clearSubcontrols,omitempty"`
-	AddInternalPolicyIDs                  []string            `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs               []string            `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies                 *bool               `json:"clearInternalPolicies,omitempty"`
-	AddProgramIDs                         []string            `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs                      []string            `json:"removeProgramIDs,omitempty"`
-	ClearPrograms                         *bool               `json:"clearPrograms,omitempty"`
-	AddNarrativeIDs                       []string            `json:"addNarrativeIDs,omitempty"`
-	RemoveNarrativeIDs                    []string            `json:"removeNarrativeIDs,omitempty"`
-	ClearNarratives                       *bool               `json:"clearNarratives,omitempty"`
-	AddRiskIDs                            []string            `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs                         []string            `json:"removeRiskIDs,omitempty"`
-	ClearRisks                            *bool               `json:"clearRisks,omitempty"`
-	AddTaskIDs                            []string            `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs                         []string            `json:"removeTaskIDs,omitempty"`
-	ClearTasks                            *bool               `json:"clearTasks,omitempty"`
-	RevisionBump                          *models.VersionBump `json:"RevisionBump,omitempty"`
+	DismissedImprovementSuggestions       []string `json:"dismissedImprovementSuggestions,omitempty"`
+	AppendDismissedImprovementSuggestions []string `json:"appendDismissedImprovementSuggestions,omitempty"`
+	ClearDismissedImprovementSuggestions  *bool    `json:"clearDismissedImprovementSuggestions,omitempty"`
+	// This will contain the url used to create/update the procedure
+	URL                     *string             `json:"url,omitempty"`
+	ClearURL                *bool               `json:"clearURL,omitempty"`
+	OwnerID                 *string             `json:"ownerID,omitempty"`
+	ClearOwner              *bool               `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs      []string            `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string            `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool               `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string            `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string            `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool               `json:"clearEditors,omitempty"`
+	ApproverID              *string             `json:"approverID,omitempty"`
+	ClearApprover           *bool               `json:"clearApprover,omitempty"`
+	DelegateID              *string             `json:"delegateID,omitempty"`
+	ClearDelegate           *bool               `json:"clearDelegate,omitempty"`
+	AddControlIDs           []string            `json:"addControlIDs,omitempty"`
+	RemoveControlIDs        []string            `json:"removeControlIDs,omitempty"`
+	ClearControls           *bool               `json:"clearControls,omitempty"`
+	AddSubcontrolIDs        []string            `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs     []string            `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols        *bool               `json:"clearSubcontrols,omitempty"`
+	AddInternalPolicyIDs    []string            `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs []string            `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies   *bool               `json:"clearInternalPolicies,omitempty"`
+	AddProgramIDs           []string            `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string            `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool               `json:"clearPrograms,omitempty"`
+	AddNarrativeIDs         []string            `json:"addNarrativeIDs,omitempty"`
+	RemoveNarrativeIDs      []string            `json:"removeNarrativeIDs,omitempty"`
+	ClearNarratives         *bool               `json:"clearNarratives,omitempty"`
+	AddRiskIDs              []string            `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs           []string            `json:"removeRiskIDs,omitempty"`
+	ClearRisks              *bool               `json:"clearRisks,omitempty"`
+	AddTaskIDs              []string            `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs           []string            `json:"removeTaskIDs,omitempty"`
+	ClearTasks              *bool               `json:"clearTasks,omitempty"`
+	FileID                  *string             `json:"fileID,omitempty"`
+	ClearFile               *bool               `json:"clearFile,omitempty"`
+	RevisionBump            *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateProgramInput is used for update Program object.

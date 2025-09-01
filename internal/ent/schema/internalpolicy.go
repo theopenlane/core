@@ -1,8 +1,10 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
@@ -43,7 +45,20 @@ func (InternalPolicy) PluralName() string {
 // Fields returns policy fields.
 func (InternalPolicy) Fields() []ent.Field {
 	// other fields are defined in the mixins
-	return []ent.Field{}
+	return []ent.Field{
+		field.String("file_id").
+			Comment("This will contain the most recent file id if this policy was created from a file").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
+
+		field.String("url").
+			Comment("This will contain the url used to create/update the policy").
+			Optional().
+			Nillable(),
+	}
 }
 
 // Edges of the InternalPolicy
@@ -59,6 +74,12 @@ func (i InternalPolicy) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, Risk{}),
 
 		defaultEdgeFromWithPagination(i, Program{}),
+
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: File{},
+			field:      "file_id",
+		}),
 	}
 }
 
@@ -98,6 +119,7 @@ func (i InternalPolicy) Annotations() []schema.Annotation {
 // Hooks of the InternalPolicy
 func (InternalPolicy) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookPolicy(),
 		hook.On(
 			hooks.OrgOwnedTuplesHookWithAdmin(),
 			ent.OpCreate,

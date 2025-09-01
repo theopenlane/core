@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -324,6 +325,34 @@ func (_c *InternalPolicyCreate) SetDismissedImprovementSuggestions(v []string) *
 	return _c
 }
 
+// SetFileID sets the "file_id" field.
+func (_c *InternalPolicyCreate) SetFileID(v string) *InternalPolicyCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableFileID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetFileID(*v)
+	}
+	return _c
+}
+
+// SetURL sets the "url" field.
+func (_c *InternalPolicyCreate) SetURL(v string) *InternalPolicyCreate {
+	_c.mutation.SetURL(v)
+	return _c
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableURL(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetURL(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *InternalPolicyCreate) SetID(v string) *InternalPolicyCreate {
 	_c.mutation.SetID(v)
@@ -516,6 +545,11 @@ func (_c *InternalPolicyCreate) AddPrograms(v ...*Program) *InternalPolicyCreate
 		ids[i] = v[i].ID
 	}
 	return _c.AddProgramIDs(ids...)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_c *InternalPolicyCreate) SetFile(v *File) *InternalPolicyCreate {
+	return _c.SetFileID(v.ID)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -788,6 +822,10 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 		_spec.SetField(internalpolicy.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 		_node.DismissedImprovementSuggestions = value
 	}
+	if value, ok := _c.mutation.URL(); ok {
+		_spec.SetField(internalpolicy.FieldURL, field.TypeString, value)
+		_node.URL = &value
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1027,6 +1065,24 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.FileTable,
+			Columns: []string{internalpolicy.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.FileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

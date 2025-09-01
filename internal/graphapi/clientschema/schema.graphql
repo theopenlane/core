@@ -8157,6 +8157,10 @@ input CreateInternalPolicyInput {
 	improvement suggestions dismissed by the user for the policy
 	"""
 	dismissedImprovementSuggestions: [String!]
+	"""
+	This will contain the url used to create/update the policy
+	"""
+	url: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -8171,6 +8175,7 @@ input CreateInternalPolicyInput {
 	taskIDs: [ID!]
 	riskIDs: [ID!]
 	programIDs: [ID!]
+	fileID: ID
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -8759,6 +8764,10 @@ input CreateProcedureInput {
 	improvement suggestions dismissed by the user for the procedure
 	"""
 	dismissedImprovementSuggestions: [String!]
+	"""
+	This will contain the url used to create/update the procedure
+	"""
+	url: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -8771,6 +8780,7 @@ input CreateProcedureInput {
 	narrativeIDs: [ID!]
 	riskIDs: [ID!]
 	taskIDs: [ID!]
+	fileID: ID
 }
 """
 CreateProgramInput is used for create Program object.
@@ -20502,6 +20512,14 @@ type InternalPolicy implements Node {
 	improvement suggestions dismissed by the user for the policy
 	"""
 	dismissedImprovementSuggestions: [String!]
+	"""
+	This will contain the most recent file id if this policy was created from a file
+	"""
+	fileID: ID
+	"""
+	This will contain the url used to create/update the policy
+	"""
+	url: String
 	owner: Organization
 	blockedGroups(
 		"""
@@ -20852,6 +20870,7 @@ type InternalPolicy implements Node {
 		"""
 		where: ProgramWhereInput
 	): ProgramConnection!
+	file: File
 }
 """
 Return response for createBulkInternalPolicy mutation
@@ -21028,6 +21047,14 @@ type InternalPolicyHistory implements Node {
 	improvement suggestions dismissed by the user for the policy
 	"""
 	dismissedImprovementSuggestions: [String!]
+	"""
+	This will contain the most recent file id if this policy was created from a file
+	"""
+	fileID: String
+	"""
+	This will contain the url used to create/update the policy
+	"""
+	url: String
 }
 """
 A connection to a list of items.
@@ -21409,6 +21436,42 @@ input InternalPolicyHistoryWhereInput {
 	delegateIDNotNil: Boolean
 	delegateIDEqualFold: String
 	delegateIDContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: String
+	fileIDNEQ: String
+	fileIDIn: [String!]
+	fileIDNotIn: [String!]
+	fileIDGT: String
+	fileIDGTE: String
+	fileIDLT: String
+	fileIDLTE: String
+	fileIDContains: String
+	fileIDHasPrefix: String
+	fileIDHasSuffix: String
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: String
+	fileIDContainsFold: String
+	"""
+	url field predicates
+	"""
+	url: String
+	urlNEQ: String
+	urlIn: [String!]
+	urlNotIn: [String!]
+	urlGT: String
+	urlGTE: String
+	urlLT: String
+	urlLTE: String
+	urlContains: String
+	urlHasPrefix: String
+	urlHasSuffix: String
+	urlIsNil: Boolean
+	urlNotNil: Boolean
+	urlEqualFold: String
+	urlContainsFold: String
 }
 """
 Ordering options for InternalPolicy connections
@@ -21706,6 +21769,42 @@ input InternalPolicyWhereInput {
 	delegateIDEqualFold: ID
 	delegateIDContainsFold: ID
 	"""
+	file_id field predicates
+	"""
+	fileID: ID
+	fileIDNEQ: ID
+	fileIDIn: [ID!]
+	fileIDNotIn: [ID!]
+	fileIDGT: ID
+	fileIDGTE: ID
+	fileIDLT: ID
+	fileIDLTE: ID
+	fileIDContains: ID
+	fileIDHasPrefix: ID
+	fileIDHasSuffix: ID
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: ID
+	fileIDContainsFold: ID
+	"""
+	url field predicates
+	"""
+	url: String
+	urlNEQ: String
+	urlIn: [String!]
+	urlNotIn: [String!]
+	urlGT: String
+	urlGTE: String
+	urlLT: String
+	urlLTE: String
+	urlContains: String
+	urlHasPrefix: String
+	urlHasSuffix: String
+	urlIsNil: Boolean
+	urlNotNil: Boolean
+	urlEqualFold: String
+	urlContainsFold: String
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -21775,6 +21874,11 @@ input InternalPolicyWhereInput {
 	"""
 	hasPrograms: Boolean
 	hasProgramsWith: [ProgramWhereInput!]
+	"""
+	file edge predicates
+	"""
+	hasFile: Boolean
+	hasFileWith: [FileWhereInput!]
 }
 type Invite implements Node {
 	id: ID!
@@ -26525,6 +26629,20 @@ type Mutation {
 		input: CreateInternalPolicyInput!
 	): InternalPolicyCreatePayload!
 	"""
+	Create a new internalPolicy via file upload
+	"""
+	createUploadInternalPolicy(
+		"""
+		file containing values of the internalPolicy
+		"""
+		policyFile: Upload!
+
+		"""
+		ID of the owner organization
+		"""
+		ownerID: ID
+	): InternalPolicyCreatePayload!
+	"""
 	Create multiple new internalPolicys
 	"""
 	createBulkInternalPolicy(
@@ -27158,6 +27276,20 @@ type Mutation {
 		values of the procedure
 		"""
 		input: CreateProcedureInput!
+	): ProcedureCreatePayload!
+	"""
+	Create a new procedure via file upload
+	"""
+	createUploadProcedure(
+		"""
+		file containing values of the procedure
+		"""
+		procedureFile: Upload!
+
+		"""
+		ID of the owner organization
+		"""
+		ownerID: ID
 	): ProcedureCreatePayload!
 	"""
 	Create multiple new procedures
@@ -35138,6 +35270,14 @@ type Procedure implements Node {
 	improvement suggestions dismissed by the user for the procedure
 	"""
 	dismissedImprovementSuggestions: [String!]
+	"""
+	This will contain the most recent file id if this procedure was created from a file
+	"""
+	fileID: ID
+	"""
+	This will contain the url used to create/update the procedure
+	"""
+	url: String
 	owner: Organization
 	blockedGroups(
 		"""
@@ -35426,6 +35566,7 @@ type Procedure implements Node {
 		"""
 		where: TaskWhereInput
 	): TaskConnection!
+	file: File
 }
 """
 Return response for createBulkProcedure mutation
@@ -35602,6 +35743,14 @@ type ProcedureHistory implements Node {
 	improvement suggestions dismissed by the user for the procedure
 	"""
 	dismissedImprovementSuggestions: [String!]
+	"""
+	This will contain the most recent file id if this procedure was created from a file
+	"""
+	fileID: String
+	"""
+	This will contain the url used to create/update the procedure
+	"""
+	url: String
 }
 """
 A connection to a list of items.
@@ -35983,6 +36132,42 @@ input ProcedureHistoryWhereInput {
 	delegateIDNotNil: Boolean
 	delegateIDEqualFold: String
 	delegateIDContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: String
+	fileIDNEQ: String
+	fileIDIn: [String!]
+	fileIDNotIn: [String!]
+	fileIDGT: String
+	fileIDGTE: String
+	fileIDLT: String
+	fileIDLTE: String
+	fileIDContains: String
+	fileIDHasPrefix: String
+	fileIDHasSuffix: String
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: String
+	fileIDContainsFold: String
+	"""
+	url field predicates
+	"""
+	url: String
+	urlNEQ: String
+	urlIn: [String!]
+	urlNotIn: [String!]
+	urlGT: String
+	urlGTE: String
+	urlLT: String
+	urlLTE: String
+	urlContains: String
+	urlHasPrefix: String
+	urlHasSuffix: String
+	urlIsNil: Boolean
+	urlNotNil: Boolean
+	urlEqualFold: String
+	urlContainsFold: String
 }
 """
 Ordering options for Procedure connections
@@ -36280,6 +36465,42 @@ input ProcedureWhereInput {
 	delegateIDEqualFold: ID
 	delegateIDContainsFold: ID
 	"""
+	file_id field predicates
+	"""
+	fileID: ID
+	fileIDNEQ: ID
+	fileIDIn: [ID!]
+	fileIDNotIn: [ID!]
+	fileIDGT: ID
+	fileIDGTE: ID
+	fileIDLT: ID
+	fileIDLTE: ID
+	fileIDContains: ID
+	fileIDHasPrefix: ID
+	fileIDHasSuffix: ID
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: ID
+	fileIDContainsFold: ID
+	"""
+	url field predicates
+	"""
+	url: String
+	urlNEQ: String
+	urlIn: [String!]
+	urlNotIn: [String!]
+	urlGT: String
+	urlGTE: String
+	urlLT: String
+	urlLTE: String
+	urlContains: String
+	urlHasPrefix: String
+	urlHasSuffix: String
+	urlIsNil: Boolean
+	urlNotNil: Boolean
+	urlEqualFold: String
+	urlContainsFold: String
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -36339,6 +36560,11 @@ input ProcedureWhereInput {
 	"""
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
+	"""
+	file edge predicates
+	"""
+	hasFile: Boolean
+	hasFileWith: [FileWhereInput!]
 }
 type Program implements Node {
 	id: ID!
@@ -57671,6 +57897,11 @@ input UpdateInternalPolicyInput {
 	dismissedImprovementSuggestions: [String!]
 	appendDismissedImprovementSuggestions: [String!]
 	clearDismissedImprovementSuggestions: Boolean
+	"""
+	This will contain the url used to create/update the policy
+	"""
+	url: String
+	clearURL: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -57710,6 +57941,8 @@ input UpdateInternalPolicyInput {
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
+	fileID: ID
+	clearFile: Boolean
 	RevisionBump: VersionBump
 }
 """
@@ -58482,6 +58715,11 @@ input UpdateProcedureInput {
 	dismissedImprovementSuggestions: [String!]
 	appendDismissedImprovementSuggestions: [String!]
 	clearDismissedImprovementSuggestions: Boolean
+	"""
+	This will contain the url used to create/update the procedure
+	"""
+	url: String
+	clearURL: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -58515,6 +58753,8 @@ input UpdateProcedureInput {
 	addTaskIDs: [ID!]
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean
+	fileID: ID
+	clearFile: Boolean
 	RevisionBump: VersionBump
 }
 """

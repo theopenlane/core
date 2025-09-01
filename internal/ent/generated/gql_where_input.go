@@ -33254,6 +33254,40 @@ type InternalPolicyWhereInput struct {
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
 
+	// "file_id" field predicates.
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIDNEQ          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIDGT           *string  `json:"fileIDGT,omitempty"`
+	FileIDGTE          *string  `json:"fileIDGTE,omitempty"`
+	FileIDLT           *string  `json:"fileIDLT,omitempty"`
+	FileIDLTE          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        bool     `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       bool     `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+
+	// "url" field predicates.
+	URL             *string  `json:"url,omitempty"`
+	URLNEQ          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGT           *string  `json:"urlGT,omitempty"`
+	URLGTE          *string  `json:"urlGTE,omitempty"`
+	URLLT           *string  `json:"urlLT,omitempty"`
+	URLLTE          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        bool     `json:"urlIsNil,omitempty"`
+	URLNotNil       bool     `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -33309,6 +33343,10 @@ type InternalPolicyWhereInput struct {
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+
+	// "file" edge predicates.
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -33988,6 +34026,96 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	if i.DelegateIDContainsFold != nil {
 		predicates = append(predicates, internalpolicy.DelegateIDContainsFold(*i.DelegateIDContainsFold))
 	}
+	if i.FileID != nil {
+		predicates = append(predicates, internalpolicy.FileIDEQ(*i.FileID))
+	}
+	if i.FileIDNEQ != nil {
+		predicates = append(predicates, internalpolicy.FileIDNEQ(*i.FileIDNEQ))
+	}
+	if len(i.FileIDIn) > 0 {
+		predicates = append(predicates, internalpolicy.FileIDIn(i.FileIDIn...))
+	}
+	if len(i.FileIDNotIn) > 0 {
+		predicates = append(predicates, internalpolicy.FileIDNotIn(i.FileIDNotIn...))
+	}
+	if i.FileIDGT != nil {
+		predicates = append(predicates, internalpolicy.FileIDGT(*i.FileIDGT))
+	}
+	if i.FileIDGTE != nil {
+		predicates = append(predicates, internalpolicy.FileIDGTE(*i.FileIDGTE))
+	}
+	if i.FileIDLT != nil {
+		predicates = append(predicates, internalpolicy.FileIDLT(*i.FileIDLT))
+	}
+	if i.FileIDLTE != nil {
+		predicates = append(predicates, internalpolicy.FileIDLTE(*i.FileIDLTE))
+	}
+	if i.FileIDContains != nil {
+		predicates = append(predicates, internalpolicy.FileIDContains(*i.FileIDContains))
+	}
+	if i.FileIDHasPrefix != nil {
+		predicates = append(predicates, internalpolicy.FileIDHasPrefix(*i.FileIDHasPrefix))
+	}
+	if i.FileIDHasSuffix != nil {
+		predicates = append(predicates, internalpolicy.FileIDHasSuffix(*i.FileIDHasSuffix))
+	}
+	if i.FileIDIsNil {
+		predicates = append(predicates, internalpolicy.FileIDIsNil())
+	}
+	if i.FileIDNotNil {
+		predicates = append(predicates, internalpolicy.FileIDNotNil())
+	}
+	if i.FileIDEqualFold != nil {
+		predicates = append(predicates, internalpolicy.FileIDEqualFold(*i.FileIDEqualFold))
+	}
+	if i.FileIDContainsFold != nil {
+		predicates = append(predicates, internalpolicy.FileIDContainsFold(*i.FileIDContainsFold))
+	}
+	if i.URL != nil {
+		predicates = append(predicates, internalpolicy.URLEQ(*i.URL))
+	}
+	if i.URLNEQ != nil {
+		predicates = append(predicates, internalpolicy.URLNEQ(*i.URLNEQ))
+	}
+	if len(i.URLIn) > 0 {
+		predicates = append(predicates, internalpolicy.URLIn(i.URLIn...))
+	}
+	if len(i.URLNotIn) > 0 {
+		predicates = append(predicates, internalpolicy.URLNotIn(i.URLNotIn...))
+	}
+	if i.URLGT != nil {
+		predicates = append(predicates, internalpolicy.URLGT(*i.URLGT))
+	}
+	if i.URLGTE != nil {
+		predicates = append(predicates, internalpolicy.URLGTE(*i.URLGTE))
+	}
+	if i.URLLT != nil {
+		predicates = append(predicates, internalpolicy.URLLT(*i.URLLT))
+	}
+	if i.URLLTE != nil {
+		predicates = append(predicates, internalpolicy.URLLTE(*i.URLLTE))
+	}
+	if i.URLContains != nil {
+		predicates = append(predicates, internalpolicy.URLContains(*i.URLContains))
+	}
+	if i.URLHasPrefix != nil {
+		predicates = append(predicates, internalpolicy.URLHasPrefix(*i.URLHasPrefix))
+	}
+	if i.URLHasSuffix != nil {
+		predicates = append(predicates, internalpolicy.URLHasSuffix(*i.URLHasSuffix))
+	}
+	if i.URLIsNil {
+		predicates = append(predicates, internalpolicy.URLIsNil())
+	}
+	if i.URLNotNil {
+		predicates = append(predicates, internalpolicy.URLNotNil())
+	}
+	if i.URLEqualFold != nil {
+		predicates = append(predicates, internalpolicy.URLEqualFold(*i.URLEqualFold))
+	}
+	if i.URLContainsFold != nil {
+		predicates = append(predicates, internalpolicy.URLContainsFold(*i.URLContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := internalpolicy.HasOwner()
@@ -34240,6 +34368,24 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, internalpolicy.HasProgramsWith(with...))
+	}
+	if i.HasFile != nil {
+		p := internalpolicy.HasFile()
+		if !*i.HasFile {
+			p = internalpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFileWith))
+		for _, w := range i.HasFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, internalpolicy.HasFileWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -34526,6 +34672,40 @@ type InternalPolicyHistoryWhereInput struct {
 	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
+	// "file_id" field predicates.
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIDNEQ          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIDGT           *string  `json:"fileIDGT,omitempty"`
+	FileIDGTE          *string  `json:"fileIDGTE,omitempty"`
+	FileIDLT           *string  `json:"fileIDLT,omitempty"`
+	FileIDLTE          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        bool     `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       bool     `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+
+	// "url" field predicates.
+	URL             *string  `json:"url,omitempty"`
+	URLNEQ          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGT           *string  `json:"urlGT,omitempty"`
+	URLGTE          *string  `json:"urlGTE,omitempty"`
+	URLLT           *string  `json:"urlLT,omitempty"`
+	URLLTE          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        bool     `json:"urlIsNil,omitempty"`
+	URLNotNil       bool     `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -35285,6 +35465,96 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	}
 	if i.DelegateIDContainsFold != nil {
 		predicates = append(predicates, internalpolicyhistory.DelegateIDContainsFold(*i.DelegateIDContainsFold))
+	}
+	if i.FileID != nil {
+		predicates = append(predicates, internalpolicyhistory.FileIDEQ(*i.FileID))
+	}
+	if i.FileIDNEQ != nil {
+		predicates = append(predicates, internalpolicyhistory.FileIDNEQ(*i.FileIDNEQ))
+	}
+	if len(i.FileIDIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.FileIDIn(i.FileIDIn...))
+	}
+	if len(i.FileIDNotIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.FileIDNotIn(i.FileIDNotIn...))
+	}
+	if i.FileIDGT != nil {
+		predicates = append(predicates, internalpolicyhistory.FileIDGT(*i.FileIDGT))
+	}
+	if i.FileIDGTE != nil {
+		predicates = append(predicates, internalpolicyhistory.FileIDGTE(*i.FileIDGTE))
+	}
+	if i.FileIDLT != nil {
+		predicates = append(predicates, internalpolicyhistory.FileIDLT(*i.FileIDLT))
+	}
+	if i.FileIDLTE != nil {
+		predicates = append(predicates, internalpolicyhistory.FileIDLTE(*i.FileIDLTE))
+	}
+	if i.FileIDContains != nil {
+		predicates = append(predicates, internalpolicyhistory.FileIDContains(*i.FileIDContains))
+	}
+	if i.FileIDHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.FileIDHasPrefix(*i.FileIDHasPrefix))
+	}
+	if i.FileIDHasSuffix != nil {
+		predicates = append(predicates, internalpolicyhistory.FileIDHasSuffix(*i.FileIDHasSuffix))
+	}
+	if i.FileIDIsNil {
+		predicates = append(predicates, internalpolicyhistory.FileIDIsNil())
+	}
+	if i.FileIDNotNil {
+		predicates = append(predicates, internalpolicyhistory.FileIDNotNil())
+	}
+	if i.FileIDEqualFold != nil {
+		predicates = append(predicates, internalpolicyhistory.FileIDEqualFold(*i.FileIDEqualFold))
+	}
+	if i.FileIDContainsFold != nil {
+		predicates = append(predicates, internalpolicyhistory.FileIDContainsFold(*i.FileIDContainsFold))
+	}
+	if i.URL != nil {
+		predicates = append(predicates, internalpolicyhistory.URLEQ(*i.URL))
+	}
+	if i.URLNEQ != nil {
+		predicates = append(predicates, internalpolicyhistory.URLNEQ(*i.URLNEQ))
+	}
+	if len(i.URLIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.URLIn(i.URLIn...))
+	}
+	if len(i.URLNotIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.URLNotIn(i.URLNotIn...))
+	}
+	if i.URLGT != nil {
+		predicates = append(predicates, internalpolicyhistory.URLGT(*i.URLGT))
+	}
+	if i.URLGTE != nil {
+		predicates = append(predicates, internalpolicyhistory.URLGTE(*i.URLGTE))
+	}
+	if i.URLLT != nil {
+		predicates = append(predicates, internalpolicyhistory.URLLT(*i.URLLT))
+	}
+	if i.URLLTE != nil {
+		predicates = append(predicates, internalpolicyhistory.URLLTE(*i.URLLTE))
+	}
+	if i.URLContains != nil {
+		predicates = append(predicates, internalpolicyhistory.URLContains(*i.URLContains))
+	}
+	if i.URLHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.URLHasPrefix(*i.URLHasPrefix))
+	}
+	if i.URLHasSuffix != nil {
+		predicates = append(predicates, internalpolicyhistory.URLHasSuffix(*i.URLHasSuffix))
+	}
+	if i.URLIsNil {
+		predicates = append(predicates, internalpolicyhistory.URLIsNil())
+	}
+	if i.URLNotNil {
+		predicates = append(predicates, internalpolicyhistory.URLNotNil())
+	}
+	if i.URLEqualFold != nil {
+		predicates = append(predicates, internalpolicyhistory.URLEqualFold(*i.URLEqualFold))
+	}
+	if i.URLContainsFold != nil {
+		predicates = append(predicates, internalpolicyhistory.URLContainsFold(*i.URLContainsFold))
 	}
 
 	switch len(predicates) {
@@ -54388,6 +54658,40 @@ type ProcedureWhereInput struct {
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
 
+	// "file_id" field predicates.
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIDNEQ          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIDGT           *string  `json:"fileIDGT,omitempty"`
+	FileIDGTE          *string  `json:"fileIDGTE,omitempty"`
+	FileIDLT           *string  `json:"fileIDLT,omitempty"`
+	FileIDLTE          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        bool     `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       bool     `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+
+	// "url" field predicates.
+	URL             *string  `json:"url,omitempty"`
+	URLNEQ          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGT           *string  `json:"urlGT,omitempty"`
+	URLGTE          *string  `json:"urlGTE,omitempty"`
+	URLLT           *string  `json:"urlLT,omitempty"`
+	URLLTE          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        bool     `json:"urlIsNil,omitempty"`
+	URLNotNil       bool     `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -54435,6 +54739,10 @@ type ProcedureWhereInput struct {
 	// "tasks" edge predicates.
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+
+	// "file" edge predicates.
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -55114,6 +55422,96 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	if i.DelegateIDContainsFold != nil {
 		predicates = append(predicates, procedure.DelegateIDContainsFold(*i.DelegateIDContainsFold))
 	}
+	if i.FileID != nil {
+		predicates = append(predicates, procedure.FileIDEQ(*i.FileID))
+	}
+	if i.FileIDNEQ != nil {
+		predicates = append(predicates, procedure.FileIDNEQ(*i.FileIDNEQ))
+	}
+	if len(i.FileIDIn) > 0 {
+		predicates = append(predicates, procedure.FileIDIn(i.FileIDIn...))
+	}
+	if len(i.FileIDNotIn) > 0 {
+		predicates = append(predicates, procedure.FileIDNotIn(i.FileIDNotIn...))
+	}
+	if i.FileIDGT != nil {
+		predicates = append(predicates, procedure.FileIDGT(*i.FileIDGT))
+	}
+	if i.FileIDGTE != nil {
+		predicates = append(predicates, procedure.FileIDGTE(*i.FileIDGTE))
+	}
+	if i.FileIDLT != nil {
+		predicates = append(predicates, procedure.FileIDLT(*i.FileIDLT))
+	}
+	if i.FileIDLTE != nil {
+		predicates = append(predicates, procedure.FileIDLTE(*i.FileIDLTE))
+	}
+	if i.FileIDContains != nil {
+		predicates = append(predicates, procedure.FileIDContains(*i.FileIDContains))
+	}
+	if i.FileIDHasPrefix != nil {
+		predicates = append(predicates, procedure.FileIDHasPrefix(*i.FileIDHasPrefix))
+	}
+	if i.FileIDHasSuffix != nil {
+		predicates = append(predicates, procedure.FileIDHasSuffix(*i.FileIDHasSuffix))
+	}
+	if i.FileIDIsNil {
+		predicates = append(predicates, procedure.FileIDIsNil())
+	}
+	if i.FileIDNotNil {
+		predicates = append(predicates, procedure.FileIDNotNil())
+	}
+	if i.FileIDEqualFold != nil {
+		predicates = append(predicates, procedure.FileIDEqualFold(*i.FileIDEqualFold))
+	}
+	if i.FileIDContainsFold != nil {
+		predicates = append(predicates, procedure.FileIDContainsFold(*i.FileIDContainsFold))
+	}
+	if i.URL != nil {
+		predicates = append(predicates, procedure.URLEQ(*i.URL))
+	}
+	if i.URLNEQ != nil {
+		predicates = append(predicates, procedure.URLNEQ(*i.URLNEQ))
+	}
+	if len(i.URLIn) > 0 {
+		predicates = append(predicates, procedure.URLIn(i.URLIn...))
+	}
+	if len(i.URLNotIn) > 0 {
+		predicates = append(predicates, procedure.URLNotIn(i.URLNotIn...))
+	}
+	if i.URLGT != nil {
+		predicates = append(predicates, procedure.URLGT(*i.URLGT))
+	}
+	if i.URLGTE != nil {
+		predicates = append(predicates, procedure.URLGTE(*i.URLGTE))
+	}
+	if i.URLLT != nil {
+		predicates = append(predicates, procedure.URLLT(*i.URLLT))
+	}
+	if i.URLLTE != nil {
+		predicates = append(predicates, procedure.URLLTE(*i.URLLTE))
+	}
+	if i.URLContains != nil {
+		predicates = append(predicates, procedure.URLContains(*i.URLContains))
+	}
+	if i.URLHasPrefix != nil {
+		predicates = append(predicates, procedure.URLHasPrefix(*i.URLHasPrefix))
+	}
+	if i.URLHasSuffix != nil {
+		predicates = append(predicates, procedure.URLHasSuffix(*i.URLHasSuffix))
+	}
+	if i.URLIsNil {
+		predicates = append(predicates, procedure.URLIsNil())
+	}
+	if i.URLNotNil {
+		predicates = append(predicates, procedure.URLNotNil())
+	}
+	if i.URLEqualFold != nil {
+		predicates = append(predicates, procedure.URLEqualFold(*i.URLEqualFold))
+	}
+	if i.URLContainsFold != nil {
+		predicates = append(predicates, procedure.URLContainsFold(*i.URLContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := procedure.HasOwner()
@@ -55330,6 +55728,24 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, procedure.HasTasksWith(with...))
+	}
+	if i.HasFile != nil {
+		p := procedure.HasFile()
+		if !*i.HasFile {
+			p = procedure.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFileWith))
+		for _, w := range i.HasFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, procedure.HasFileWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -55616,6 +56032,40 @@ type ProcedureHistoryWhereInput struct {
 	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
+	// "file_id" field predicates.
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIDNEQ          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIDGT           *string  `json:"fileIDGT,omitempty"`
+	FileIDGTE          *string  `json:"fileIDGTE,omitempty"`
+	FileIDLT           *string  `json:"fileIDLT,omitempty"`
+	FileIDLTE          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        bool     `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       bool     `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+
+	// "url" field predicates.
+	URL             *string  `json:"url,omitempty"`
+	URLNEQ          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGT           *string  `json:"urlGT,omitempty"`
+	URLGTE          *string  `json:"urlGTE,omitempty"`
+	URLLT           *string  `json:"urlLT,omitempty"`
+	URLLTE          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        bool     `json:"urlIsNil,omitempty"`
+	URLNotNil       bool     `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -56375,6 +56825,96 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 	}
 	if i.DelegateIDContainsFold != nil {
 		predicates = append(predicates, procedurehistory.DelegateIDContainsFold(*i.DelegateIDContainsFold))
+	}
+	if i.FileID != nil {
+		predicates = append(predicates, procedurehistory.FileIDEQ(*i.FileID))
+	}
+	if i.FileIDNEQ != nil {
+		predicates = append(predicates, procedurehistory.FileIDNEQ(*i.FileIDNEQ))
+	}
+	if len(i.FileIDIn) > 0 {
+		predicates = append(predicates, procedurehistory.FileIDIn(i.FileIDIn...))
+	}
+	if len(i.FileIDNotIn) > 0 {
+		predicates = append(predicates, procedurehistory.FileIDNotIn(i.FileIDNotIn...))
+	}
+	if i.FileIDGT != nil {
+		predicates = append(predicates, procedurehistory.FileIDGT(*i.FileIDGT))
+	}
+	if i.FileIDGTE != nil {
+		predicates = append(predicates, procedurehistory.FileIDGTE(*i.FileIDGTE))
+	}
+	if i.FileIDLT != nil {
+		predicates = append(predicates, procedurehistory.FileIDLT(*i.FileIDLT))
+	}
+	if i.FileIDLTE != nil {
+		predicates = append(predicates, procedurehistory.FileIDLTE(*i.FileIDLTE))
+	}
+	if i.FileIDContains != nil {
+		predicates = append(predicates, procedurehistory.FileIDContains(*i.FileIDContains))
+	}
+	if i.FileIDHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.FileIDHasPrefix(*i.FileIDHasPrefix))
+	}
+	if i.FileIDHasSuffix != nil {
+		predicates = append(predicates, procedurehistory.FileIDHasSuffix(*i.FileIDHasSuffix))
+	}
+	if i.FileIDIsNil {
+		predicates = append(predicates, procedurehistory.FileIDIsNil())
+	}
+	if i.FileIDNotNil {
+		predicates = append(predicates, procedurehistory.FileIDNotNil())
+	}
+	if i.FileIDEqualFold != nil {
+		predicates = append(predicates, procedurehistory.FileIDEqualFold(*i.FileIDEqualFold))
+	}
+	if i.FileIDContainsFold != nil {
+		predicates = append(predicates, procedurehistory.FileIDContainsFold(*i.FileIDContainsFold))
+	}
+	if i.URL != nil {
+		predicates = append(predicates, procedurehistory.URLEQ(*i.URL))
+	}
+	if i.URLNEQ != nil {
+		predicates = append(predicates, procedurehistory.URLNEQ(*i.URLNEQ))
+	}
+	if len(i.URLIn) > 0 {
+		predicates = append(predicates, procedurehistory.URLIn(i.URLIn...))
+	}
+	if len(i.URLNotIn) > 0 {
+		predicates = append(predicates, procedurehistory.URLNotIn(i.URLNotIn...))
+	}
+	if i.URLGT != nil {
+		predicates = append(predicates, procedurehistory.URLGT(*i.URLGT))
+	}
+	if i.URLGTE != nil {
+		predicates = append(predicates, procedurehistory.URLGTE(*i.URLGTE))
+	}
+	if i.URLLT != nil {
+		predicates = append(predicates, procedurehistory.URLLT(*i.URLLT))
+	}
+	if i.URLLTE != nil {
+		predicates = append(predicates, procedurehistory.URLLTE(*i.URLLTE))
+	}
+	if i.URLContains != nil {
+		predicates = append(predicates, procedurehistory.URLContains(*i.URLContains))
+	}
+	if i.URLHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.URLHasPrefix(*i.URLHasPrefix))
+	}
+	if i.URLHasSuffix != nil {
+		predicates = append(predicates, procedurehistory.URLHasSuffix(*i.URLHasSuffix))
+	}
+	if i.URLIsNil {
+		predicates = append(predicates, procedurehistory.URLIsNil())
+	}
+	if i.URLNotNil {
+		predicates = append(predicates, procedurehistory.URLNotNil())
+	}
+	if i.URLEqualFold != nil {
+		predicates = append(predicates, procedurehistory.URLEqualFold(*i.URLEqualFold))
+	}
+	if i.URLContainsFold != nil {
+		predicates = append(predicates, procedurehistory.URLContainsFold(*i.URLContainsFold))
 	}
 
 	switch len(predicates) {

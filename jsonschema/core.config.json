@@ -507,6 +507,10 @@
         "modules": {
           "$ref": "#/$defs/entconfig.Modules",
           "description": "Modules contains the configuration for the module system"
+        },
+        "maxSchemaImportSize": {
+          "type": "integer",
+          "description": "MaxSchemaImportSize is the maximum size allowed for schema imports in bytes"
         }
       },
       "additionalProperties": false,

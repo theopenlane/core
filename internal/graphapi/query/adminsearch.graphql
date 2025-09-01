@@ -398,6 +398,8 @@ query AdminSearch($query: String!) {
           dismissedControlSuggestions
           improvementSuggestions
           dismissedImprovementSuggestions
+          fileID
+          url
         }
       }
     }
@@ -663,6 +665,8 @@ query AdminSearch($query: String!) {
           dismissedControlSuggestions
           improvementSuggestions
           dismissedImprovementSuggestions
+          fileID
+          url
         }
       }
     }

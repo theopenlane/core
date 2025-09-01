@@ -70,6 +70,10 @@ const (
 	FieldImprovementSuggestions = "improvement_suggestions"
 	// FieldDismissedImprovementSuggestions holds the string denoting the dismissed_improvement_suggestions field in the database.
 	FieldDismissedImprovementSuggestions = "dismissed_improvement_suggestions"
+	// FieldFileID holds the string denoting the file_id field in the database.
+	FieldFileID = "file_id"
+	// FieldURL holds the string denoting the url field in the database.
+	FieldURL = "url"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -98,6 +102,8 @@ const (
 	EdgeRisks = "risks"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgeFile holds the string denoting the file edge name in mutations.
+	EdgeFile = "file"
 	// Table holds the table name of the internalpolicy in the database.
 	Table = "internal_policies"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -178,6 +184,13 @@ const (
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
+	// FileTable is the table that holds the file relation/edge.
+	FileTable = "internal_policies"
+	// FileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FileInverseTable = "files"
+	// FileColumn is the table column denoting the file relation/edge.
+	FileColumn = "file_id"
 )
 
 // Columns holds all SQL columns for internalpolicy fields.
@@ -209,6 +222,8 @@ var Columns = []string{
 	FieldDismissedControlSuggestions,
 	FieldImprovementSuggestions,
 	FieldDismissedImprovementSuggestions,
+	FieldFileID,
+	FieldURL,
 }
 
 var (
@@ -260,7 +275,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [13]ent.Hook
+	Hooks        [14]ent.Hook
 	Interceptors [5]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -424,6 +439,16 @@ func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
 // BySummary orders the results by the summary field.
 func BySummary(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSummary, opts...).ToFunc()
+}
+
+// ByFileID orders the results by the file_id field.
+func ByFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileID, opts...).ToFunc()
+}
+
+// ByURL orders the results by the url field.
+func ByURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldURL, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -600,6 +625,13 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByFileField orders the results by file field.
+func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -696,6 +728,13 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+	)
+}
+func newFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
 	)
 }
 

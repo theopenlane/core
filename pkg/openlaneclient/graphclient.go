@@ -337,6 +337,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProcedure, error)
 	CreateBulkProcedure(ctx context.Context, input []*CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProcedure, error)
 	CreateProcedure(ctx context.Context, input CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateProcedure, error)
+	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error)
 	DeleteProcedure(ctx context.Context, deleteProcedureID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProcedure, error)
 	GetAllProcedures(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProcedures, error)
 	GetProcedureByID(ctx context.Context, procedureID string, interceptors ...clientv2.RequestInterceptor) (*GetProcedureByID, error)
@@ -45004,6 +45005,196 @@ func (t *CreateProcedure_CreateProcedure) GetProcedure() *CreateProcedure_Create
 	return &t.Procedure
 }
 
+type CreateUploadProcedure_CreateUploadProcedure_Procedure struct {
+	ApprovalRequired                *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	ApproverID                      *string               "json:\"approverID,omitempty\" graphql:\"approverID\""
+	ControlSuggestions              []string              "json:\"controlSuggestions,omitempty\" graphql:\"controlSuggestions\""
+	CreatedAt                       *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                       *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DelegateID                      *string               "json:\"delegateID,omitempty\" graphql:\"delegateID\""
+	Details                         *string               "json:\"details,omitempty\" graphql:\"details\""
+	DismissedControlSuggestions     []string              "json:\"dismissedControlSuggestions,omitempty\" graphql:\"dismissedControlSuggestions\""
+	DismissedImprovementSuggestions []string              "json:\"dismissedImprovementSuggestions,omitempty\" graphql:\"dismissedImprovementSuggestions\""
+	DismissedTagSuggestions         []string              "json:\"dismissedTagSuggestions,omitempty\" graphql:\"dismissedTagSuggestions\""
+	DisplayID                       string                "json:\"displayID\" graphql:\"displayID\""
+	ID                              string                "json:\"id\" graphql:\"id\""
+	ImprovementSuggestions          []string              "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	Name                            string                "json:\"name\" graphql:\"name\""
+	OwnerID                         *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType                   *string               "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	ReviewDue                       *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency                 *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision                        *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Status                          *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Summary                         *string               "json:\"summary,omitempty\" graphql:\"summary\""
+	TagSuggestions                  []string              "json:\"tagSuggestions,omitempty\" graphql:\"tagSuggestions\""
+	Tags                            []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                       *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                       *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ApprovalRequired
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetApproverID() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ApproverID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetControlSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ControlSuggestions
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetDelegateID() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.DelegateID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetDetails() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Details
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetDismissedControlSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.DismissedControlSuggestions
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetDismissedImprovementSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.DismissedImprovementSuggestions
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetDismissedTagSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.DismissedTagSuggestions
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetDisplayID() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.DisplayID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetID() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetImprovementSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ImprovementSuggestions
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetName() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Name
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.OwnerID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetProcedureType() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ProcedureType
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ReviewDue
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ReviewFrequency
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetRevision() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Revision
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Status
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetSummary() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Summary
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetTagSuggestions() []string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.TagSuggestions
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetTags() []string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Tags
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateUploadProcedure_CreateUploadProcedure struct {
+	Procedure CreateUploadProcedure_CreateUploadProcedure_Procedure "json:\"procedure\" graphql:\"procedure\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure) GetProcedure() *CreateUploadProcedure_CreateUploadProcedure_Procedure {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure{}
+	}
+	return &t.Procedure
+}
+
 type DeleteProcedure_DeleteProcedure struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -78636,6 +78827,17 @@ func (t *CreateProcedure) GetCreateProcedure() *CreateProcedure_CreateProcedure 
 	return &t.CreateProcedure
 }
 
+type CreateUploadProcedure struct {
+	CreateUploadProcedure CreateUploadProcedure_CreateUploadProcedure "json:\"createUploadProcedure\" graphql:\"createUploadProcedure\""
+}
+
+func (t *CreateUploadProcedure) GetCreateUploadProcedure() *CreateUploadProcedure_CreateUploadProcedure {
+	if t == nil {
+		t = &CreateUploadProcedure{}
+	}
+	return &t.CreateUploadProcedure
+}
+
 type DeleteProcedure struct {
 	DeleteProcedure DeleteProcedure_DeleteProcedure "json:\"deleteProcedure\" graphql:\"deleteProcedure\""
 }
@@ -94542,6 +94744,57 @@ func (c *Client) CreateProcedure(ctx context.Context, input CreateProcedureInput
 	return &res, nil
 }
 
+const CreateUploadProcedureDocument = `mutation CreateUploadProcedure ($procedureFile: Upload!, $ownerID: ID) {
+	createUploadProcedure(procedureFile: $procedureFile, ownerID: $ownerID) {
+		procedure {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			id
+			improvementSuggestions
+			name
+			ownerID
+			procedureType
+			reviewDue
+			reviewFrequency
+			revision
+			status
+			summary
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error) {
+	vars := map[string]any{
+		"procedureFile": procedureFile,
+		"ownerID":       ownerID,
+	}
+
+	var res CreateUploadProcedure
+	if err := c.Client.Post(ctx, "CreateUploadProcedure", CreateUploadProcedureDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const DeleteProcedureDocument = `mutation DeleteProcedure ($deleteProcedureId: ID!) {
 	deleteProcedure(id: $deleteProcedureId) {
 		deletedID
@@ -103415,6 +103668,7 @@ var DocumentOperationNames = map[string]string{
 	CreateBulkCSVProcedureDocument:                 "CreateBulkCSVProcedure",
 	CreateBulkProcedureDocument:                    "CreateBulkProcedure",
 	CreateProcedureDocument:                        "CreateProcedure",
+	CreateUploadProcedureDocument:                  "CreateUploadProcedure",
 	DeleteProcedureDocument:                        "DeleteProcedure",
 	GetAllProceduresDocument:                       "GetAllProcedures",
 	GetProcedureByIDDocument:                       "GetProcedureByID",

@@ -871,6 +871,8 @@ func adminSearchInternalPolicies(ctx context.Context, query string, after *entgq
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(dismissed_improvement_suggestions)::text LIKE $16", likeQuery)) // search by DismissedImprovementSuggestions
 				},
+				internalpolicy.FileIDContainsFold(query), // search by FileID
+				internalpolicy.URLContainsFold(query),    // search by URL
 			),
 		)
 
@@ -1406,6 +1408,8 @@ func adminSearchProcedures(ctx context.Context, query string, after *entgql.Curs
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(dismissed_improvement_suggestions)::text LIKE $16", likeQuery)) // search by DismissedImprovementSuggestions
 				},
+				procedure.FileIDContainsFold(query), // search by FileID
+				procedure.URLContainsFold(query),    // search by URL
 			),
 		)
 

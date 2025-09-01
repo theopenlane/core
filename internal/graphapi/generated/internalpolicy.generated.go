@@ -115,6 +115,10 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
+			case "fileID":
+				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
+			case "url":
+				return ec.fieldContext_InternalPolicy_url(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -143,6 +147,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_risks(ctx, field)
 			case "programs":
 				return ec.fieldContext_InternalPolicy_programs(ctx, field)
+			case "file":
+				return ec.fieldContext_InternalPolicy_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -236,6 +242,10 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
+			case "fileID":
+				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
+			case "url":
+				return ec.fieldContext_InternalPolicy_url(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -264,6 +274,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_risks(ctx, field)
 			case "programs":
 				return ec.fieldContext_InternalPolicy_programs(ctx, field)
+			case "file":
+				return ec.fieldContext_InternalPolicy_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -401,6 +413,10 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
+			case "fileID":
+				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
+			case "url":
+				return ec.fieldContext_InternalPolicy_url(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -429,6 +445,8 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_risks(ctx, field)
 			case "programs":
 				return ec.fieldContext_InternalPolicy_programs(ctx, field)
+			case "file":
+				return ec.fieldContext_InternalPolicy_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -569,6 +587,10 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
+			case "fileID":
+				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
+			case "url":
+				return ec.fieldContext_InternalPolicy_url(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -597,6 +619,8 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_risks(ctx, field)
 			case "programs":
 				return ec.fieldContext_InternalPolicy_programs(ctx, field)
+			case "file":
+				return ec.fieldContext_InternalPolicy_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},

@@ -34,6 +34,30 @@ func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input gener
 	}, nil
 }
 
+// CreateUploadInternalPolicy is the resolver for the createUploadInternalPolicy field.
+func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error) {
+	var internalPolicyInput generated.CreateInternalPolicyInput
+
+	if ownerID != nil && *ownerID != "" {
+		internalPolicyInput.OwnerID = ownerID
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	res, err := withTransactionalMutation(ctx).InternalPolicy.Create().SetInput(internalPolicyInput).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "internalpolicy"})
+	}
+
+	return &model.InternalPolicyCreatePayload{
+		InternalPolicy: res,
+	}, nil
+}
+
 // CreateBulkInternalPolicy is the resolver for the createBulkInternalPolicy field.
 func (r *mutationResolver) CreateBulkInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error) {
 	if len(input) == 0 {
@@ -99,7 +123,7 @@ func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, 
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendTagSuggestions(input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.AppendDismissedImprovementSuggestions)
 
 	res, err = req.Save(ctx)
 	if err != nil {

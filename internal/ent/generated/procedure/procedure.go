@@ -70,6 +70,10 @@ const (
 	FieldImprovementSuggestions = "improvement_suggestions"
 	// FieldDismissedImprovementSuggestions holds the string denoting the dismissed_improvement_suggestions field in the database.
 	FieldDismissedImprovementSuggestions = "dismissed_improvement_suggestions"
+	// FieldFileID holds the string denoting the file_id field in the database.
+	FieldFileID = "file_id"
+	// FieldURL holds the string denoting the url field in the database.
+	FieldURL = "url"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -94,6 +98,8 @@ const (
 	EdgeRisks = "risks"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
+	// EdgeFile holds the string denoting the file edge name in mutations.
+	EdgeFile = "file"
 	// Table holds the table name of the procedure in the database.
 	Table = "procedures"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -162,6 +168,13 @@ const (
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
+	// FileTable is the table that holds the file relation/edge.
+	FileTable = "procedures"
+	// FileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FileInverseTable = "files"
+	// FileColumn is the table column denoting the file relation/edge.
+	FileColumn = "file_id"
 )
 
 // Columns holds all SQL columns for procedure fields.
@@ -193,6 +206,8 @@ var Columns = []string{
 	FieldDismissedControlSuggestions,
 	FieldImprovementSuggestions,
 	FieldDismissedImprovementSuggestions,
+	FieldFileID,
+	FieldURL,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "procedures"
@@ -252,7 +267,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [13]ent.Hook
+	Hooks        [14]ent.Hook
 	Interceptors [5]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -418,6 +433,16 @@ func BySummary(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSummary, opts...).ToFunc()
 }
 
+// ByFileID orders the results by the file_id field.
+func ByFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileID, opts...).ToFunc()
+}
+
+// ByURL orders the results by the url field.
+func ByURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldURL, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -564,6 +589,13 @@ func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByFileField orders the results by file field.
+func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -646,6 +678,13 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+	)
+}
+func newFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
 	)
 }
 

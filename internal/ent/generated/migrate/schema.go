@@ -1953,8 +1953,10 @@ var (
 		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// InternalPoliciesTable holds the schema information for the "internal_policies" table.
@@ -1965,19 +1967,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "internal_policies_groups_approver",
-				Columns:    []*schema.Column{InternalPoliciesColumns[24]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "internal_policies_groups_delegate",
 				Columns:    []*schema.Column{InternalPoliciesColumns[25]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "internal_policies_organizations_internal_policies",
+				Symbol:     "internal_policies_groups_delegate",
 				Columns:    []*schema.Column{InternalPoliciesColumns[26]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "internal_policies_files_file",
+				Columns:    []*schema.Column{InternalPoliciesColumns[27]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "internal_policies_organizations_internal_policies",
+				Columns:    []*schema.Column{InternalPoliciesColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1986,12 +1994,12 @@ var (
 			{
 				Name:    "internalpolicy_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[26]},
+				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[28]},
 			},
 			{
 				Name:    "internalpolicy_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{InternalPoliciesColumns[26]},
+				Columns: []*schema.Column{InternalPoliciesColumns[28]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2030,6 +2038,8 @@ var (
 		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true},
 	}
 	// InternalPolicyHistoryTable holds the schema information for the "internal_policy_history" table.
 	InternalPolicyHistoryTable = &schema.Table{
@@ -3313,10 +3323,12 @@ var (
 		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "control_objective_procedures", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
 	}
 	// ProceduresTable holds the schema information for the "procedures" table.
 	ProceduresTable = &schema.Table{
@@ -3326,26 +3338,32 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "procedures_control_objectives_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[24]},
+				Columns:    []*schema.Column{ProceduresColumns[25]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_organizations_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[25]},
+				Columns:    []*schema.Column{ProceduresColumns[26]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_groups_approver",
-				Columns:    []*schema.Column{ProceduresColumns[26]},
+				Columns:    []*schema.Column{ProceduresColumns[27]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_groups_delegate",
-				Columns:    []*schema.Column{ProceduresColumns[27]},
+				Columns:    []*schema.Column{ProceduresColumns[28]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_files_file",
+				Columns:    []*schema.Column{ProceduresColumns[29]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -3353,12 +3371,12 @@ var (
 			{
 				Name:    "procedure_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProceduresColumns[7], ProceduresColumns[25]},
+				Columns: []*schema.Column{ProceduresColumns[7], ProceduresColumns[26]},
 			},
 			{
 				Name:    "procedure_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ProceduresColumns[25]},
+				Columns: []*schema.Column{ProceduresColumns[26]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3397,6 +3415,8 @@ var (
 		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true},
 	}
 	// ProcedureHistoryTable holds the schema information for the "procedure_history" table.
 	ProcedureHistoryTable = &schema.Table{
@@ -8195,7 +8215,8 @@ func init() {
 	}
 	InternalPoliciesTable.ForeignKeys[0].RefTable = GroupsTable
 	InternalPoliciesTable.ForeignKeys[1].RefTable = GroupsTable
-	InternalPoliciesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	InternalPoliciesTable.ForeignKeys[2].RefTable = FilesTable
+	InternalPoliciesTable.ForeignKeys[3].RefTable = OrganizationsTable
 	InternalPolicyHistoryTable.Annotation = &entsql.Annotation{
 		Table: "internal_policy_history",
 	}
@@ -8264,6 +8285,7 @@ func init() {
 	ProceduresTable.ForeignKeys[1].RefTable = OrganizationsTable
 	ProceduresTable.ForeignKeys[2].RefTable = GroupsTable
 	ProceduresTable.ForeignKeys[3].RefTable = GroupsTable
+	ProceduresTable.ForeignKeys[4].RefTable = FilesTable
 	ProcedureHistoryTable.Annotation = &entsql.Annotation{
 		Table: "procedure_history",
 	}

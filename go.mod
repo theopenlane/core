@@ -43,6 +43,7 @@ require (
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/goccy/go-yaml v1.18.0
 	github.com/golang-jwt/jwt/v5 v5.3.0
+	github.com/gomarkdown/markdown v0.0.0-20250810172220-2e2c11897d1a
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
 	github.com/hashicorp/go-multierror v1.1.1
@@ -92,7 +93,7 @@ require (
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.4
 	github.com/theopenlane/entx v0.14.1
-	github.com/theopenlane/gqlgen-plugins v0.7.1
+	github.com/theopenlane/gqlgen-plugins v0.8.0
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.16.1
 	github.com/theopenlane/newman v0.2.0
@@ -100,6 +101,7 @@ require (
 	github.com/theopenlane/utils v0.4.8
 	github.com/tink-crypto/tink-go/v2 v2.4.0
 	github.com/tmc/langchaingo v0.1.13
+	github.com/unidoc/unioffice v1.39.0
 	github.com/urfave/cli/v3 v3.4.1
 	github.com/vektah/gqlparser/v2 v2.5.30
 	github.com/windmill-labs/windmill-go-client v1.538.0
@@ -313,6 +315,7 @@ require (
 	github.com/prometheus/common v0.65.0 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
 	github.com/resend/resend-go/v2 v2.21.0 // indirect
+	github.com/richardlehane/msoleps v1.0.3 // indirect
 	github.com/riverqueue/river/riverdriver v0.24.0 // indirect
 	github.com/riverqueue/river/rivershared v0.24.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect

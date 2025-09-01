@@ -4710,6 +4710,7 @@ type CreateInternalPolicyInput struct {
 	DismissedControlSuggestions     []string
 	ImprovementSuggestions          []string
 	DismissedImprovementSuggestions []string
+	URL                             *string
 	OwnerID                         *string
 	BlockedGroupIDs                 []string
 	EditorIDs                       []string
@@ -4724,6 +4725,7 @@ type CreateInternalPolicyInput struct {
 	TaskIDs                         []string
 	RiskIDs                         []string
 	ProgramIDs                      []string
+	FileID                          *string
 }
 
 // Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -4771,6 +4773,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.DismissedImprovementSuggestions; v != nil {
 		m.SetDismissedImprovementSuggestions(v)
 	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -4812,6 +4817,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
 	}
 }
 
@@ -4859,6 +4867,8 @@ type UpdateInternalPolicyInput struct {
 	ClearDismissedImprovementSuggestions  bool
 	DismissedImprovementSuggestions       []string
 	AppendDismissedImprovementSuggestions []string
+	ClearURL                              bool
+	URL                                   *string
 	ClearOwner                            bool
 	OwnerID                               *string
 	ClearBlockedGroups                    bool
@@ -4898,6 +4908,8 @@ type UpdateInternalPolicyInput struct {
 	ClearPrograms                         bool
 	AddProgramIDs                         []string
 	RemoveProgramIDs                      []string
+	ClearFile                             bool
+	FileID                                *string
 }
 
 // Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -5009,6 +5021,12 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if i.AppendDismissedImprovementSuggestions != nil {
 		m.AppendDismissedImprovementSuggestions(i.DismissedImprovementSuggestions)
+	}
+	if i.ClearURL {
+		m.ClearURL()
+	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -5126,6 +5144,12 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearFile {
+		m.ClearFile()
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
 	}
 }
 
@@ -7992,6 +8016,7 @@ type CreateProcedureInput struct {
 	DismissedControlSuggestions     []string
 	ImprovementSuggestions          []string
 	DismissedImprovementSuggestions []string
+	URL                             *string
 	OwnerID                         *string
 	BlockedGroupIDs                 []string
 	EditorIDs                       []string
@@ -8004,6 +8029,7 @@ type CreateProcedureInput struct {
 	NarrativeIDs                    []string
 	RiskIDs                         []string
 	TaskIDs                         []string
+	FileID                          *string
 }
 
 // Mutate applies the CreateProcedureInput on the ProcedureMutation builder.
@@ -8051,6 +8077,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.DismissedImprovementSuggestions; v != nil {
 		m.SetDismissedImprovementSuggestions(v)
 	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -8086,6 +8115,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
 	}
 }
 
@@ -8133,6 +8165,8 @@ type UpdateProcedureInput struct {
 	ClearDismissedImprovementSuggestions  bool
 	DismissedImprovementSuggestions       []string
 	AppendDismissedImprovementSuggestions []string
+	ClearURL                              bool
+	URL                                   *string
 	ClearOwner                            bool
 	OwnerID                               *string
 	ClearBlockedGroups                    bool
@@ -8166,6 +8200,8 @@ type UpdateProcedureInput struct {
 	ClearTasks                            bool
 	AddTaskIDs                            []string
 	RemoveTaskIDs                         []string
+	ClearFile                             bool
+	FileID                                *string
 }
 
 // Mutate applies the UpdateProcedureInput on the ProcedureMutation builder.
@@ -8278,6 +8314,12 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	if i.AppendDismissedImprovementSuggestions != nil {
 		m.AppendDismissedImprovementSuggestions(i.DismissedImprovementSuggestions)
 	}
+	if i.ClearURL {
+		m.ClearURL()
+	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
 	if i.ClearOwner {
 		m.ClearOwner()
 	}
@@ -8376,6 +8418,12 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearFile {
+		m.ClearFile()
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
 	}
 }
 

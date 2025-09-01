@@ -34,6 +34,30 @@ func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.
 	}, nil
 }
 
+// CreateUploadProcedure is the resolver for the createUploadProcedure field.
+func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string) (*model.ProcedureCreatePayload, error) {
+	var procedureInput generated.CreateProcedureInput
+
+	if ownerID != nil && *ownerID != "" {
+		procedureInput.OwnerID = ownerID
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	res, err := withTransactionalMutation(ctx).Procedure.Create().SetInput(procedureInput).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "procedure"})
+	}
+
+	return &model.ProcedureCreatePayload{
+		Procedure: res,
+	}, nil
+}
+
 // CreateBulkProcedure is the resolver for the createBulkProcedure field.
 func (r *mutationResolver) CreateBulkProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error) {
 	if len(input) == 0 {
@@ -99,7 +123,7 @@ func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendTagSuggestions(input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.AppendDismissedImprovementSuggestions)
 
 	res, err = req.Save(ctx)
 	if err != nil {

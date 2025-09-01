@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -474,6 +475,46 @@ func (_u *ProcedureUpdate) ClearDismissedImprovementSuggestions() *ProcedureUpda
 	return _u
 }
 
+// SetFileID sets the "file_id" field.
+func (_u *ProcedureUpdate) SetFileID(v string) *ProcedureUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableFileID(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *ProcedureUpdate) ClearFileID() *ProcedureUpdate {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
+// SetURL sets the "url" field.
+func (_u *ProcedureUpdate) SetURL(v string) *ProcedureUpdate {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableURL(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *ProcedureUpdate) ClearURL() *ProcedureUpdate {
+	_u.mutation.ClearURL()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ProcedureUpdate) SetOwner(v *Organization) *ProcedureUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -622,6 +663,11 @@ func (_u *ProcedureUpdate) AddTasks(v ...*Task) *ProcedureUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddTaskIDs(ids...)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_u *ProcedureUpdate) SetFile(v *File) *ProcedureUpdate {
+	return _u.SetFileID(v.ID)
 }
 
 // Mutation returns the ProcedureMutation object of the builder.
@@ -834,6 +880,12 @@ func (_u *ProcedureUpdate) RemoveTasks(v ...*Task) *ProcedureUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (_u *ProcedureUpdate) ClearFile() *ProcedureUpdate {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1078,6 +1130,12 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedure.FieldDismissedImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(procedure.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(procedure.FieldURL, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1599,6 +1657,37 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProcedureTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.FileTable,
+			Columns: []string{procedure.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.FileTable,
+			Columns: []string{procedure.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2060,6 +2149,46 @@ func (_u *ProcedureUpdateOne) ClearDismissedImprovementSuggestions() *ProcedureU
 	return _u
 }
 
+// SetFileID sets the "file_id" field.
+func (_u *ProcedureUpdateOne) SetFileID(v string) *ProcedureUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableFileID(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *ProcedureUpdateOne) ClearFileID() *ProcedureUpdateOne {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
+// SetURL sets the "url" field.
+func (_u *ProcedureUpdateOne) SetURL(v string) *ProcedureUpdateOne {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableURL(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *ProcedureUpdateOne) ClearURL() *ProcedureUpdateOne {
+	_u.mutation.ClearURL()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ProcedureUpdateOne) SetOwner(v *Organization) *ProcedureUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -2208,6 +2337,11 @@ func (_u *ProcedureUpdateOne) AddTasks(v ...*Task) *ProcedureUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddTaskIDs(ids...)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_u *ProcedureUpdateOne) SetFile(v *File) *ProcedureUpdateOne {
+	return _u.SetFileID(v.ID)
 }
 
 // Mutation returns the ProcedureMutation object of the builder.
@@ -2420,6 +2554,12 @@ func (_u *ProcedureUpdateOne) RemoveTasks(v ...*Task) *ProcedureUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (_u *ProcedureUpdateOne) ClearFile() *ProcedureUpdateOne {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // Where appends a list predicates to the ProcedureUpdate builder.
@@ -2694,6 +2834,12 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedure.FieldDismissedImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(procedure.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(procedure.FieldURL, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3215,6 +3361,37 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProcedureTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.FileTable,
+			Columns: []string{procedure.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   procedure.FileTable,
+			Columns: []string{procedure.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

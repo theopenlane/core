@@ -348,6 +348,34 @@ func (_c *InternalPolicyHistoryCreate) SetDismissedImprovementSuggestions(v []st
 	return _c
 }
 
+// SetFileID sets the "file_id" field.
+func (_c *InternalPolicyHistoryCreate) SetFileID(v string) *InternalPolicyHistoryCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableFileID(v *string) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetFileID(*v)
+	}
+	return _c
+}
+
+// SetURL sets the "url" field.
+func (_c *InternalPolicyHistoryCreate) SetURL(v string) *InternalPolicyHistoryCreate {
+	_c.mutation.SetURL(v)
+	return _c
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableURL(v *string) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetURL(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *InternalPolicyHistoryCreate) SetID(v string) *InternalPolicyHistoryCreate {
 	_c.mutation.SetID(v)
@@ -658,6 +686,14 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 	if value, ok := _c.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 		_node.DismissedImprovementSuggestions = value
+	}
+	if value, ok := _c.mutation.FileID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldFileID, field.TypeString, value)
+		_node.FileID = &value
+	}
+	if value, ok := _c.mutation.URL(); ok {
+		_spec.SetField(internalpolicyhistory.FieldURL, field.TypeString, value)
+		_node.URL = &value
 	}
 	return _node, _spec
 }

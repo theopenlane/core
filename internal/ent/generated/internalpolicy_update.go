@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -476,6 +477,46 @@ func (_u *InternalPolicyUpdate) ClearDismissedImprovementSuggestions() *Internal
 	return _u
 }
 
+// SetFileID sets the "file_id" field.
+func (_u *InternalPolicyUpdate) SetFileID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableFileID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *InternalPolicyUpdate) ClearFileID() *InternalPolicyUpdate {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
+// SetURL sets the "url" field.
+func (_u *InternalPolicyUpdate) SetURL(v string) *InternalPolicyUpdate {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableURL(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *InternalPolicyUpdate) ClearURL() *InternalPolicyUpdate {
+	_u.mutation.ClearURL()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *InternalPolicyUpdate) SetOwner(v *Organization) *InternalPolicyUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -654,6 +695,11 @@ func (_u *InternalPolicyUpdate) AddPrograms(v ...*Program) *InternalPolicyUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramIDs(ids...)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_u *InternalPolicyUpdate) SetFile(v *File) *InternalPolicyUpdate {
+	return _u.SetFileID(v.ID)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -910,6 +956,12 @@ func (_u *InternalPolicyUpdate) RemovePrograms(v ...*Program) *InternalPolicyUpd
 	return _u.RemoveProgramIDs(ids...)
 }
 
+// ClearFile clears the "file" edge to the File entity.
+func (_u *InternalPolicyUpdate) ClearFile() *InternalPolicyUpdate {
+	_u.mutation.ClearFile()
+	return _u
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *InternalPolicyUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
@@ -1152,6 +1204,12 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldDismissedImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(internalpolicy.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(internalpolicy.FieldURL, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1769,6 +1827,37 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.FileTable,
+			Columns: []string{internalpolicy.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.FileTable,
+			Columns: []string{internalpolicy.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2230,6 +2319,46 @@ func (_u *InternalPolicyUpdateOne) ClearDismissedImprovementSuggestions() *Inter
 	return _u
 }
 
+// SetFileID sets the "file_id" field.
+func (_u *InternalPolicyUpdateOne) SetFileID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableFileID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *InternalPolicyUpdateOne) ClearFileID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
+// SetURL sets the "url" field.
+func (_u *InternalPolicyUpdateOne) SetURL(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetURL(v)
+	return _u
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableURL(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetURL(*v)
+	}
+	return _u
+}
+
+// ClearURL clears the value of the "url" field.
+func (_u *InternalPolicyUpdateOne) ClearURL() *InternalPolicyUpdateOne {
+	_u.mutation.ClearURL()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *InternalPolicyUpdateOne) SetOwner(v *Organization) *InternalPolicyUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -2408,6 +2537,11 @@ func (_u *InternalPolicyUpdateOne) AddPrograms(v ...*Program) *InternalPolicyUpd
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramIDs(ids...)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_u *InternalPolicyUpdateOne) SetFile(v *File) *InternalPolicyUpdateOne {
+	return _u.SetFileID(v.ID)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -2662,6 +2796,12 @@ func (_u *InternalPolicyUpdateOne) RemovePrograms(v ...*Program) *InternalPolicy
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramIDs(ids...)
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (_u *InternalPolicyUpdateOne) ClearFile() *InternalPolicyUpdateOne {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // Where appends a list predicates to the InternalPolicyUpdate builder.
@@ -2936,6 +3076,12 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(internalpolicy.FieldDismissedImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.URL(); ok {
+		_spec.SetField(internalpolicy.FieldURL, field.TypeString, value)
+	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(internalpolicy.FieldURL, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3553,6 +3699,37 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.FileTable,
+			Columns: []string{internalpolicy.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.FileTable,
+			Columns: []string{internalpolicy.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

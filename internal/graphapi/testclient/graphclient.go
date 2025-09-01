@@ -214,6 +214,7 @@ type TestGraphClient interface {
 	CreateBulkInternalPolicy(ctx context.Context, input []*CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInternalPolicy, error)
 	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkInternalPolicy, error)
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
+	CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error)
 	DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInternalPolicy, error)
 	GetAllInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
 	GetInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, where *InternalPolicyWhereInput, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error)
@@ -332,6 +333,7 @@ type TestGraphClient interface {
 	CreateBulkProcedure(ctx context.Context, input []*CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProcedure, error)
 	UpdateBulkProcedure(ctx context.Context, ids []string, input UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProcedure, error)
 	CreateProcedure(ctx context.Context, input CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateProcedure, error)
+	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error)
 	DeleteProcedure(ctx context.Context, deleteProcedureID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProcedure, error)
 	GetAllProcedures(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProcedures, error)
 	GetProcedureByID(ctx context.Context, procedureID string, interceptors ...clientv2.RequestInterceptor) (*GetProcedureByID, error)
@@ -4279,6 +4281,7 @@ type AdminSearch_AdminSearch_InternalPolicies_Edges_Node struct {
 	DismissedImprovementSuggestions []string "json:\"dismissedImprovementSuggestions,omitempty\" graphql:\"dismissedImprovementSuggestions\""
 	DismissedTagSuggestions         []string "json:\"dismissedTagSuggestions,omitempty\" graphql:\"dismissedTagSuggestions\""
 	DisplayID                       string   "json:\"displayID\" graphql:\"displayID\""
+	FileID                          *string  "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string   "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
 	Name                            string   "json:\"name\" graphql:\"name\""
@@ -4287,6 +4290,7 @@ type AdminSearch_AdminSearch_InternalPolicies_Edges_Node struct {
 	Revision                        *string  "json:\"revision,omitempty\" graphql:\"revision\""
 	TagSuggestions                  []string "json:\"tagSuggestions,omitempty\" graphql:\"tagSuggestions\""
 	Tags                            []string "json:\"tags,omitempty\" graphql:\"tags\""
+	URL                             *string  "json:\"url,omitempty\" graphql:\"url\""
 }
 
 func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetApproverID() *string {
@@ -4337,6 +4341,12 @@ func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDisplayID() str
 	}
 	return t.DisplayID
 }
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetFileID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
+	}
+	return t.FileID
+}
 func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
@@ -4384,6 +4394,12 @@ func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetTags() []string
 		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetURL() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
+	}
+	return t.URL
 }
 
 type AdminSearch_AdminSearch_InternalPolicies_Edges struct {
@@ -5887,6 +5903,7 @@ type AdminSearch_AdminSearch_Procedures_Edges_Node struct {
 	DismissedImprovementSuggestions []string "json:\"dismissedImprovementSuggestions,omitempty\" graphql:\"dismissedImprovementSuggestions\""
 	DismissedTagSuggestions         []string "json:\"dismissedTagSuggestions,omitempty\" graphql:\"dismissedTagSuggestions\""
 	DisplayID                       string   "json:\"displayID\" graphql:\"displayID\""
+	FileID                          *string  "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string   "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
 	Name                            string   "json:\"name\" graphql:\"name\""
@@ -5895,6 +5912,7 @@ type AdminSearch_AdminSearch_Procedures_Edges_Node struct {
 	Revision                        *string  "json:\"revision,omitempty\" graphql:\"revision\""
 	TagSuggestions                  []string "json:\"tagSuggestions,omitempty\" graphql:\"tagSuggestions\""
 	Tags                            []string "json:\"tags,omitempty\" graphql:\"tags\""
+	URL                             *string  "json:\"url,omitempty\" graphql:\"url\""
 }
 
 func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetApproverID() *string {
@@ -5945,6 +5963,12 @@ func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDisplayID() string {
 	}
 	return t.DisplayID
 }
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetFileID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
+	}
+	return t.FileID
+}
 func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
@@ -5992,6 +6016,12 @@ func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetTags() []string {
 		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetURL() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
+	}
+	return t.URL
 }
 
 type AdminSearch_AdminSearch_Procedures_Edges struct {
@@ -37228,6 +37258,331 @@ func (t *CreateInternalPolicy_CreateInternalPolicy) GetInternalPolicy() *CreateI
 	return &t.InternalPolicy
 }
 
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges struct {
+	Node *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges) GetNode() *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges_Node {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls struct {
+	Edges []*CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls) GetEdges() []*CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls_Edges {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls{}
+	}
+	return t.Edges
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges_Node{}
+	}
+	return t.Name
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges struct {
+	Node *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges) GetNode() *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges_Node {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges{}
+	}
+	return t.Node
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors struct {
+	Edges []*CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors) GetEdges() []*CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors_Edges {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors{}
+	}
+	return t.Edges
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges_Node) GetName() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges_Node{}
+	}
+	return t.Name
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges struct {
+	Node *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges) GetNode() *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges_Node {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges{}
+	}
+	return t.Node
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups struct {
+	Edges []*CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups) GetEdges() []*CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups_Edges {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups{}
+	}
+	return t.Edges
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Approver struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Approver) GetID() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Approver{}
+	}
+	return t.ID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Approver) GetName() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Approver{}
+	}
+	return t.Name
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Delegate struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Delegate) GetID() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Delegate{}
+	}
+	return t.ID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Delegate) GetName() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Delegate{}
+	}
+	return t.Name
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy struct {
+	ApprovalRequired *bool                                                                              "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	Approver         *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Approver     "json:\"approver,omitempty\" graphql:\"approver\""
+	BlockedGroups    CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups "json:\"blockedGroups\" graphql:\"blockedGroups\""
+	Controls         CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls      "json:\"controls\" graphql:\"controls\""
+	CreatedAt        *time.Time                                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate         *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Delegate     "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Details          *string                                                                            "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                                             "json:\"displayID\" graphql:\"displayID\""
+	Editors          CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors       "json:\"editors\" graphql:\"editors\""
+	ID               string                                                                             "json:\"id\" graphql:\"id\""
+	Name             string                                                                             "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string                                                                            "json:\"policyType,omitempty\" graphql:\"policyType\""
+	ReviewDue        *time.Time                                                                         "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                                                   "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                                            "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                                              "json:\"status,omitempty\" graphql:\"status\""
+	Summary          *string                                                                            "json:\"summary,omitempty\" graphql:\"summary\""
+	Tags             []string                                                                           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.ApprovalRequired
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetApprover() *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Approver {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Approver
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetBlockedGroups() *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_BlockedGroups {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return &t.BlockedGroups
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetControls() *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Controls {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return &t.Controls
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetDelegate() *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Delegate {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Delegate
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetDetails() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Details
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetDisplayID() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.DisplayID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetEditors() *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy_Editors {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return &t.Editors
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetID() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.ID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetName() string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Name
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.OwnerID
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetPolicyType() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.PolicyType
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.ReviewDue
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.ReviewFrequency
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetRevision() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Revision
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Status
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetSummary() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Summary
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetTags() []string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.Tags
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateUploadInternalPolicy_CreateUploadInternalPolicy struct {
+	InternalPolicy CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy "json:\"internalPolicy\" graphql:\"internalPolicy\""
+}
+
+func (t *CreateUploadInternalPolicy_CreateUploadInternalPolicy) GetInternalPolicy() *CreateUploadInternalPolicy_CreateUploadInternalPolicy_InternalPolicy {
+	if t == nil {
+		t = &CreateUploadInternalPolicy_CreateUploadInternalPolicy{}
+	}
+	return &t.InternalPolicy
+}
+
 type DeleteInternalPolicy_DeleteInternalPolicy struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -54834,6 +55189,284 @@ type CreateProcedure_CreateProcedure struct {
 func (t *CreateProcedure_CreateProcedure) GetProcedure() *CreateProcedure_CreateProcedure_Procedure {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure{}
+	}
+	return &t.Procedure
+}
+
+type CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges_Node{}
+	}
+	return t.Name
+}
+
+type CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges struct {
+	Node *CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges) GetNode() *CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges_Node {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges{}
+	}
+	return t.Node
+}
+
+type CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors struct {
+	Edges []*CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors) GetEdges() []*CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors_Edges {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors{}
+	}
+	return t.Edges
+}
+
+type CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges_Node) GetName() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges_Node{}
+	}
+	return t.Name
+}
+
+type CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges struct {
+	Node *CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges) GetNode() *CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges_Node {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges{}
+	}
+	return t.Node
+}
+
+type CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups struct {
+	Edges []*CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups) GetEdges() []*CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups_Edges {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups{}
+	}
+	return t.Edges
+}
+
+type CreateUploadProcedure_CreateUploadProcedure_Procedure_Approver struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_Approver) GetID() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_Approver{}
+	}
+	return t.ID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_Approver) GetName() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_Approver{}
+	}
+	return t.Name
+}
+
+type CreateUploadProcedure_CreateUploadProcedure_Procedure_Delegate struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_Delegate) GetID() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_Delegate{}
+	}
+	return t.ID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure_Delegate) GetName() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure_Delegate{}
+	}
+	return t.Name
+}
+
+type CreateUploadProcedure_CreateUploadProcedure_Procedure struct {
+	ApprovalRequired *bool                                                               "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	Approver         *CreateUploadProcedure_CreateUploadProcedure_Procedure_Approver     "json:\"approver,omitempty\" graphql:\"approver\""
+	BlockedGroups    CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups "json:\"blockedGroups\" graphql:\"blockedGroups\""
+	CreatedAt        *time.Time                                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate         *CreateUploadProcedure_CreateUploadProcedure_Procedure_Delegate     "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Details          *string                                                             "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                              "json:\"displayID\" graphql:\"displayID\""
+	Editors          CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors       "json:\"editors\" graphql:\"editors\""
+	ID               string                                                              "json:\"id\" graphql:\"id\""
+	Name             string                                                              "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string                                                             "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	ReviewDue        *time.Time                                                          "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                                    "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                             "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                               "json:\"status,omitempty\" graphql:\"status\""
+	Summary          *string                                                             "json:\"summary,omitempty\" graphql:\"summary\""
+	Tags             []string                                                            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ApprovalRequired
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetApprover() *CreateUploadProcedure_CreateUploadProcedure_Procedure_Approver {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Approver
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetBlockedGroups() *CreateUploadProcedure_CreateUploadProcedure_Procedure_BlockedGroups {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return &t.BlockedGroups
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetDelegate() *CreateUploadProcedure_CreateUploadProcedure_Procedure_Delegate {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Delegate
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetDetails() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Details
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetDisplayID() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.DisplayID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetEditors() *CreateUploadProcedure_CreateUploadProcedure_Procedure_Editors {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return &t.Editors
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetID() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetName() string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Name
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.OwnerID
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetProcedureType() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ProcedureType
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ReviewDue
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.ReviewFrequency
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetRevision() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Revision
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Status
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetSummary() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Summary
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetTags() []string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.Tags
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateUploadProcedure_CreateUploadProcedure_Procedure) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure_Procedure{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateUploadProcedure_CreateUploadProcedure struct {
+	Procedure CreateUploadProcedure_CreateUploadProcedure_Procedure "json:\"procedure\" graphql:\"procedure\""
+}
+
+func (t *CreateUploadProcedure_CreateUploadProcedure) GetProcedure() *CreateUploadProcedure_CreateUploadProcedure_Procedure {
+	if t == nil {
+		t = &CreateUploadProcedure_CreateUploadProcedure{}
 	}
 	return &t.Procedure
 }
@@ -92719,6 +93352,17 @@ func (t *CreateInternalPolicy) GetCreateInternalPolicy() *CreateInternalPolicy_C
 	return &t.CreateInternalPolicy
 }
 
+type CreateUploadInternalPolicy struct {
+	CreateUploadInternalPolicy CreateUploadInternalPolicy_CreateUploadInternalPolicy "json:\"createUploadInternalPolicy\" graphql:\"createUploadInternalPolicy\""
+}
+
+func (t *CreateUploadInternalPolicy) GetCreateUploadInternalPolicy() *CreateUploadInternalPolicy_CreateUploadInternalPolicy {
+	if t == nil {
+		t = &CreateUploadInternalPolicy{}
+	}
+	return &t.CreateUploadInternalPolicy
+}
+
 type DeleteInternalPolicy struct {
 	DeleteInternalPolicy DeleteInternalPolicy_DeleteInternalPolicy "json:\"deleteInternalPolicy\" graphql:\"deleteInternalPolicy\""
 }
@@ -94015,6 +94659,17 @@ func (t *CreateProcedure) GetCreateProcedure() *CreateProcedure_CreateProcedure 
 		t = &CreateProcedure{}
 	}
 	return &t.CreateProcedure
+}
+
+type CreateUploadProcedure struct {
+	CreateUploadProcedure CreateUploadProcedure_CreateUploadProcedure "json:\"createUploadProcedure\" graphql:\"createUploadProcedure\""
+}
+
+func (t *CreateUploadProcedure) GetCreateUploadProcedure() *CreateUploadProcedure_CreateUploadProcedure {
+	if t == nil {
+		t = &CreateUploadProcedure{}
+	}
+	return &t.CreateUploadProcedure
 }
 
 type DeleteProcedure struct {
@@ -96951,6 +97606,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					dismissedControlSuggestions
 					improvementSuggestions
 					dismissedImprovementSuggestions
+					fileID
+					url
 				}
 			}
 		}
@@ -97216,6 +97873,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					dismissedControlSuggestions
 					improvementSuggestions
 					dismissedImprovementSuggestions
+					fileID
+					url
 				}
 			}
 		}
@@ -106201,6 +106860,81 @@ func (c *Client) CreateInternalPolicy(ctx context.Context, input CreateInternalP
 	return &res, nil
 }
 
+const CreateUploadInternalPolicyDocument = `mutation CreateUploadInternalPolicy ($policyFile: Upload!, $ownerID: ID) {
+	createUploadInternalPolicy(policyFile: $policyFile, ownerID: $ownerID) {
+		internalPolicy {
+			approvalRequired
+			createdAt
+			createdBy
+			details
+			displayID
+			id
+			name
+			ownerID
+			policyType
+			reviewDue
+			reviewFrequency
+			revision
+			status
+			summary
+			tags
+			updatedAt
+			updatedBy
+			controls {
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadInternalPolicy, error) {
+	vars := map[string]any{
+		"policyFile": policyFile,
+		"ownerID":    ownerID,
+	}
+
+	var res CreateUploadInternalPolicy
+	if err := c.Client.Post(ctx, "CreateUploadInternalPolicy", CreateUploadInternalPolicyDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const DeleteInternalPolicyDocument = `mutation DeleteInternalPolicy ($deleteInternalPolicyId: ID!) {
 	deleteInternalPolicy(id: $deleteInternalPolicyId) {
 		deletedID
@@ -111547,6 +112281,73 @@ func (c *Client) CreateProcedure(ctx context.Context, input CreateProcedureInput
 
 	var res CreateProcedure
 	if err := c.Client.Post(ctx, "CreateProcedure", CreateProcedureDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateUploadProcedureDocument = `mutation CreateUploadProcedure ($procedureFile: Upload!, $ownerID: ID) {
+	createUploadProcedure(procedureFile: $procedureFile, ownerID: $ownerID) {
+		procedure {
+			approvalRequired
+			createdAt
+			createdBy
+			details
+			displayID
+			id
+			name
+			ownerID
+			procedureType
+			reviewDue
+			reviewFrequency
+			revision
+			status
+			summary
+			tags
+			updatedAt
+			updatedBy
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string, interceptors ...clientv2.RequestInterceptor) (*CreateUploadProcedure, error) {
+	vars := map[string]any{
+		"procedureFile": procedureFile,
+		"ownerID":       ownerID,
+	}
+
+	var res CreateUploadProcedure
+	if err := c.Client.Post(ctx, "CreateUploadProcedure", CreateUploadProcedureDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -121503,6 +122304,7 @@ var DocumentOperationNames = map[string]string{
 	CreateBulkInternalPolicyDocument:               "CreateBulkInternalPolicy",
 	UpdateBulkInternalPolicyDocument:               "UpdateBulkInternalPolicy",
 	CreateInternalPolicyDocument:                   "CreateInternalPolicy",
+	CreateUploadInternalPolicyDocument:             "CreateUploadInternalPolicy",
 	DeleteInternalPolicyDocument:                   "DeleteInternalPolicy",
 	GetAllInternalPoliciesDocument:                 "GetAllInternalPolicies",
 	GetInternalPoliciesDocument:                    "GetInternalPolicies",
@@ -121621,6 +122423,7 @@ var DocumentOperationNames = map[string]string{
 	CreateBulkProcedureDocument:                    "CreateBulkProcedure",
 	UpdateBulkProcedureDocument:                    "UpdateBulkProcedure",
 	CreateProcedureDocument:                        "CreateProcedure",
+	CreateUploadProcedureDocument:                  "CreateUploadProcedure",
 	DeleteProcedureDocument:                        "DeleteProcedure",
 	GetAllProceduresDocument:                       "GetAllProcedures",
 	GetProcedureByIDDocument:                       "GetProcedureByID",

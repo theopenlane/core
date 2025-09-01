@@ -120,6 +120,7 @@ type MutationResolver interface {
 	DeleteHush(ctx context.Context, id string) (*model.HushDeletePayload, error)
 	DeleteIntegration(ctx context.Context, id string) (*model.IntegrationDeletePayload, error)
 	CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error)
+	CreateUploadInternalPolicy(ctx context.Context, policyFile graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error)
 	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error)
@@ -180,6 +181,7 @@ type MutationResolver interface {
 	UpdatePersonalAccessToken(ctx context.Context, id string, input generated.UpdatePersonalAccessTokenInput) (*model.PersonalAccessTokenUpdatePayload, error)
 	DeletePersonalAccessToken(ctx context.Context, id string) (*model.PersonalAccessTokenDeletePayload, error)
 	CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error)
+	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string) (*model.ProcedureCreatePayload, error)
 	CreateBulkProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error)
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkCreatePayload, error)
 	UpdateBulkProcedure(ctx context.Context, ids []string, input generated.UpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error)
@@ -1855,6 +1857,38 @@ func (ec *executionContext) field_Mutation_createTrustCenter_args(ctx context.Co
 		return nil, err
 	}
 	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createUploadInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "policyFile", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["policyFile"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalOID2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["ownerID"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createUploadProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "procedureFile", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["procedureFile"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalOID2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["ownerID"] = arg1
 	return args, nil
 }
 
@@ -10072,6 +10106,65 @@ func (ec *executionContext) fieldContext_Mutation_createInternalPolicy(ctx conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createUploadInternalPolicy(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createUploadInternalPolicy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateUploadInternalPolicy(rctx, fc.Args["policyFile"].(graphql.Upload), fc.Args["ownerID"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.InternalPolicyCreatePayload)
+	fc.Result = res
+	return ec.marshalNInternalPolicyCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyCreatePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createUploadInternalPolicy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "internalPolicy":
+				return ec.fieldContext_InternalPolicyCreatePayload_internalPolicy(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type InternalPolicyCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createUploadInternalPolicy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createBulkInternalPolicy(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createBulkInternalPolicy(ctx, field)
 	if err != nil {
@@ -13608,6 +13701,65 @@ func (ec *executionContext) fieldContext_Mutation_createProcedure(ctx context.Co
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_createProcedure_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createUploadProcedure(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createUploadProcedure(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateUploadProcedure(rctx, fc.Args["procedureFile"].(graphql.Upload), fc.Args["ownerID"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.ProcedureCreatePayload)
+	fc.Result = res
+	return ec.marshalNProcedureCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureCreatePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createUploadProcedure(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "procedure":
+				return ec.fieldContext_ProcedureCreatePayload_procedure(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProcedureCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createUploadProcedure_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -20114,6 +20266,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createUploadInternalPolicy":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createUploadInternalPolicy(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createBulkInternalPolicy":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createBulkInternalPolicy(ctx, field)
@@ -20530,6 +20689,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "createProcedure":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createProcedure(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createUploadProcedure":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createUploadProcedure(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

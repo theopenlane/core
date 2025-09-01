@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -47,6 +48,7 @@ type ProcedureQuery struct {
 	withNarratives            *NarrativeQuery
 	withRisks                 *RiskQuery
 	withTasks                 *TaskQuery
+	withFile                  *FileQuery
 	withFKs                   bool
 	loadTotal                 []func(context.Context, []*Procedure) error
 	modifiers                 []func(*sql.Selector)
@@ -395,6 +397,31 @@ func (_q *ProcedureQuery) QueryTasks() *TaskQuery {
 	return query
 }
 
+// QueryFile chains the current query on the "file" edge.
+func (_q *ProcedureQuery) QueryFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, procedure.FileTable, procedure.FileColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Procedure
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Procedure entity from the query.
 // Returns a *NotFoundError when no Procedure was found.
 func (_q *ProcedureQuery) First(ctx context.Context) (*Procedure, error) {
@@ -599,6 +626,7 @@ func (_q *ProcedureQuery) Clone() *ProcedureQuery {
 		withNarratives:       _q.withNarratives.Clone(),
 		withRisks:            _q.withRisks.Clone(),
 		withTasks:            _q.withTasks.Clone(),
+		withFile:             _q.withFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -738,6 +766,17 @@ func (_q *ProcedureQuery) WithTasks(opts ...func(*TaskQuery)) *ProcedureQuery {
 	return _q
 }
 
+// WithFile tells the query-builder to eager-load the nodes that are connected to
+// the "file" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProcedureQuery) WithFile(opts ...func(*FileQuery)) *ProcedureQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFile = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -823,7 +862,7 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		nodes       = []*Procedure{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [12]bool{
+		loadedTypes = [13]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -836,6 +875,7 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			_q.withNarratives != nil,
 			_q.withRisks != nil,
 			_q.withTasks != nil,
+			_q.withFile != nil,
 		}
 	)
 	if withFKs {
@@ -942,6 +982,12 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Tasks = []*Task{} },
 			func(n *Procedure, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFile; query != nil {
+		if err := _q.loadFile(ctx, query, nodes, nil,
+			func(n *Procedure, e *File) { n.Edges.File = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1661,6 +1707,38 @@ func (_q *ProcedureQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes
 	}
 	return nil
 }
+func (_q *ProcedureQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Procedure)
+	for i := range nodes {
+		if nodes[i].FileID == nil {
+			continue
+		}
+		fk := *nodes[i].FileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *ProcedureQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1700,6 +1778,9 @@ func (_q *ProcedureQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withDelegate != nil {
 			_spec.Node.AddColumnOnce(procedure.FieldDelegateID)
+		}
+		if _q.withFile != nil {
+			_spec.Node.AddColumnOnce(procedure.FieldFileID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
