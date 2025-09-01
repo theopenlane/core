@@ -97,8 +97,8 @@ func createRequester(cfg entconfig.Config) (*httpsling.Requester, error) {
 		),
 
 		httpsling.URL(cfg.Windmill.BaseURL),
-		httpsling.AddHeader(httpsling.HeaderAuthorization, "Bearer "+cfg.Windmill.Token),
-		httpsling.AddHeader(httpsling.HeaderContentType, httpsling.ContentTypeJSON),
+		httpsling.Header(httpsling.HeaderAuthorization, "Bearer "+cfg.Windmill.Token),
+		httpsling.Header(httpsling.HeaderContentType, httpsling.ContentTypeJSON),
 	)
 }
 

@@ -19,7 +19,6 @@ import (
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/providers/webauthn"
 	"github.com/theopenlane/iam/sessions"
@@ -42,7 +41,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/csrf"
-	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
@@ -256,9 +254,8 @@ func WithMiddleware() ServerOption {
 
 		// default middleware
 		s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware,
-			echoprometheus.MetricsMiddleware(),                                                 // add prometheus metrics
-			echocontext.EchoContextToContextMiddleware(),                                       // adds echo context to parent
-			mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8}), // add mime middleware
+			echoprometheus.MetricsMiddleware(),           // add prometheus metrics
+			echocontext.EchoContextToContextMiddleware(), // adds echo context to parent
 		)
 	})
 }

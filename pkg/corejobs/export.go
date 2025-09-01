@@ -117,8 +117,8 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 		w.requester, err = httpsling.New(
 			httpsling.URL(w.Config.OpenlaneAPIHost),
 			httpsling.BearerAuth(w.Config.OpenlaneAPIToken),
-			httpsling.Header("Content-Type", "application/json"),
-			httpsling.Header("Accept", "application/graphql-response+json"),
+			httpsling.Header(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8),
+			httpsling.Header(httpsling.HeaderAccept, "application/graphql-response+json"),
 		)
 		if err != nil {
 			return err
@@ -161,12 +161,11 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 	hasWhere := len(where) > 0
 
 	exportType := strings.ToLower(export.Export.ExportType.String())
-	singular := exportType
-	rootQuery := pluralize.NewClient().Plural(singular)
+	rootQuery := pluralize.NewClient().Plural(exportType)
 
 	fields := export.Export.Fields
 
-	query := w.buildGraphQLQuery(rootQuery, singular, fields, hasWhere)
+	query := w.buildGraphQLQuery(rootQuery, exportType, fields, hasWhere)
 
 	var allNodes []map[string]any
 	var after *string
