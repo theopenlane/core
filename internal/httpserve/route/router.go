@@ -9,11 +9,12 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/echox/middleware"
+	"github.com/theopenlane/httpsling"
 
 	"github.com/theopenlane/core/internal/httpserve/common"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
+	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/utils/contextx"
@@ -601,7 +602,9 @@ func baseMiddleware(router *Router) []echo.MiddlewareFunc {
 		EntDBClient: router.Handler.DBClient,
 	}
 
-	return append(mw, middleware.Recover(), transactionConfig.Middleware)
+	mimeMiddleware := mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8})
+
+	return append(mw, mimeMiddleware, transactionConfig.Middleware)
 }
 
 // restrictedMiddleware returns the middleware for the router that is used on restricted routes
