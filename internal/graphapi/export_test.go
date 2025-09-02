@@ -12,6 +12,7 @@ import (
 )
 
 func TestMutationCreateExport(t *testing.T) {
+	emptyFilter := "{}"
 	testCases := []struct {
 		name        string
 		request     testclient.CreateExportInput
@@ -24,7 +25,8 @@ func TestMutationCreateExport(t *testing.T) {
 			request: testclient.CreateExportInput{
 				ExportType: enums.ExportTypeInternalPolicy,
 				Format:     enums.ExportFormatCsv,
-				Fields:     []string{"name", "details"},
+				Fields:     []string{"name", "details", "summary", "updatedAt"},
+				Filters:    &emptyFilter,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
