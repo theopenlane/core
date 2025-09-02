@@ -103,9 +103,9 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 				DNSVerificationID: cd.Node.DNSVerificationID,
 			})
 		}
-
-		return nil
 	}
+
+	log.Info().Int("num_custom_domains", len(customDomains)).Msg("Processing custom domains")
 
 	// Process each custom domain
 	for _, customDomain := range customDomains {

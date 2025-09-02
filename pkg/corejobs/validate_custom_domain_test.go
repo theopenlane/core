@@ -245,3 +245,172 @@ func TestValidateCustomDomainWorker(t *testing.T) {
 		})
 	}
 }
+
+func TestValidateCustomDomainWorkerAllDomains(t *testing.T) {
+	cfMock := cfmocks.NewMockClient(t)
+	cfHostnamesMock := cfmocks.NewMockCustomHostnamesService(t)
+	olMock := olmocks.NewMockOpenlaneGraphClient(t)
+	mappableDomainID := "mappableDomainID123"
+
+	olMock.EXPECT().GetAllCustomDomains(mock.Anything).Return(&openlaneclient.GetAllCustomDomains{
+		CustomDomains: openlaneclient.GetAllCustomDomains_CustomDomains{
+			Edges: []*openlaneclient.GetAllCustomDomains_CustomDomains_Edges{
+				// Domain 1: Already active, no updates needed
+				{
+					Node: &openlaneclient.GetAllCustomDomains_CustomDomains_Edges_Node{
+						CnameRecord:       "trust.meow.io",
+						DNSVerification:   &openlaneclient.GetAllCustomDomains_CustomDomains_Edges_Node_DNSVerification{},
+						DNSVerificationID: lo.ToPtr("dnsVerificationID1"),
+						ID:                "1",
+						MappableDomainID:  mappableDomainID,
+						OwnerID:           lo.ToPtr("ownerID1"),
+					},
+				},
+				// Domain 2: Needs DNS verification update (pending -> active)
+				{
+					Node: &openlaneclient.GetAllCustomDomains_CustomDomains_Edges_Node{
+						CnameRecord:       "app.example.com",
+						DNSVerification:   &openlaneclient.GetAllCustomDomains_CustomDomains_Edges_Node_DNSVerification{},
+						DNSVerificationID: lo.ToPtr("dnsVerificationID2"),
+						ID:                "2",
+						MappableDomainID:  mappableDomainID,
+						OwnerID:           lo.ToPtr("ownerID2"),
+					},
+				},
+				// Domain 3: No DNS verification ID - should be skipped
+				{
+					Node: &openlaneclient.GetAllCustomDomains_CustomDomains_Edges_Node{
+						CnameRecord:       "portal.test.com",
+						DNSVerification:   nil,
+						DNSVerificationID: nil,
+						ID:                "3",
+						MappableDomainID:  mappableDomainID,
+						OwnerID:           lo.ToPtr("ownerID3"),
+					},
+				},
+				// Domain 4: Needs ACME challenge update (initializing -> active with new challenge data)
+				{
+					Node: &openlaneclient.GetAllCustomDomains_CustomDomains_Edges_Node{
+						CnameRecord:       "secure.domain.org",
+						DNSVerification:   &openlaneclient.GetAllCustomDomains_CustomDomains_Edges_Node_DNSVerification{},
+						DNSVerificationID: lo.ToPtr("dnsVerificationID4"),
+						ID:                "4",
+						MappableDomainID:  mappableDomainID,
+						OwnerID:           lo.ToPtr("ownerID4"),
+					},
+				},
+			},
+			PageInfo:   openlaneclient.GetAllCustomDomains_CustomDomains_PageInfo{},
+			TotalCount: 4,
+		},
+	}, nil)
+	// Mock expectations for mappable domain (shared by all domains)
+	olMock.EXPECT().GetMappableDomainByID(mock.Anything, mappableDomainID).Return(&openlaneclient.GetMappableDomainByID{
+		MappableDomain: openlaneclient.GetMappableDomainByID_MappableDomain{
+			ID:     mappableDomainID,
+			ZoneID: "zoneID1",
+		},
+	}, nil).Times(3) // Called for domains 1, 2, and 4 (domain 3 is skipped)
+
+	// Domain 1: Already active, no updates needed
+	olMock.EXPECT().GetDNSVerificationByID(mock.Anything, "dnsVerificationID1").Return(&openlaneclient.GetDNSVerificationByID{
+		DNSVerification: openlaneclient.GetDNSVerificationByID_DNSVerification{
+			ID:                    "dnsVerificationID1",
+			CloudflareHostnameID:  "cloudflareHostnameID1",
+			AcmeChallengePath:     lo.ToPtr("acmeChallengePath1"),
+			AcmeChallengeStatus:   enums.SSLVerificationStatusActive,
+			DNSVerificationStatus: enums.DNSVerificationStatusActive,
+		},
+	}, nil)
+	cfMock.EXPECT().CustomHostnames().Return(cfHostnamesMock)
+	cfHostnamesMock.EXPECT().Get(mock.Anything, "cloudflareHostnameID1", mock.Anything).Return(
+		&custom_hostnames.CustomHostnameGetResponse{
+			ID:     "cloudflareHostnameID1",
+			Status: "active",
+			SSL: custom_hostnames.CustomHostnameGetResponseSSL{
+				Status: "active",
+			},
+		},
+		nil,
+	)
+
+	// Domain 2: Needs DNS verification update (pending -> active)
+	olMock.EXPECT().GetDNSVerificationByID(mock.Anything, "dnsVerificationID2").Return(&openlaneclient.GetDNSVerificationByID{
+		DNSVerification: openlaneclient.GetDNSVerificationByID_DNSVerification{
+			ID:                    "dnsVerificationID2",
+			CloudflareHostnameID:  "cloudflareHostnameID2",
+			AcmeChallengePath:     nil,
+			AcmeChallengeStatus:   enums.SSLVerificationStatusInitializing,
+			DNSVerificationStatus: enums.DNSVerificationStatusPending,
+		},
+	}, nil)
+	cfMock.EXPECT().CustomHostnames().Return(cfHostnamesMock)
+	cfHostnamesMock.EXPECT().Get(mock.Anything, "cloudflareHostnameID2", mock.Anything).Return(
+		&custom_hostnames.CustomHostnameGetResponse{
+			ID:     "cloudflareHostnameID2",
+			Status: "active",
+			SSL: custom_hostnames.CustomHostnameGetResponseSSL{
+				Status: "active",
+			},
+		},
+		nil,
+	)
+	// Expect update for domain 2
+	olMock.EXPECT().UpdateDNSVerification(mock.Anything, "dnsVerificationID2", mock.MatchedBy(func(input openlaneclient.UpdateDNSVerificationInput) bool {
+		return input.DNSVerificationStatus != nil && *input.DNSVerificationStatus == enums.DNSVerificationStatusActive &&
+			input.AcmeChallengeStatus != nil && *input.AcmeChallengeStatus == enums.SSLVerificationStatusActive
+	})).Return(&openlaneclient.UpdateDNSVerification{}, nil)
+
+	// Domain 4: Needs ACME challenge update (initializing -> active with new challenge data)
+	olMock.EXPECT().GetDNSVerificationByID(mock.Anything, "dnsVerificationID4").Return(&openlaneclient.GetDNSVerificationByID{
+		DNSVerification: openlaneclient.GetDNSVerificationByID_DNSVerification{
+			ID:                         "dnsVerificationID4",
+			CloudflareHostnameID:       "cloudflareHostnameID4",
+			AcmeChallengePath:          nil,
+			AcmeChallengeStatus:        enums.SSLVerificationStatusInitializing,
+			DNSVerificationStatus:      enums.DNSVerificationStatusPending,
+			ExpectedAcmeChallengeValue: nil,
+		},
+	}, nil)
+	cfMock.EXPECT().CustomHostnames().Return(cfHostnamesMock)
+	cfHostnamesMock.EXPECT().Get(mock.Anything, "cloudflareHostnameID4", mock.Anything).Return(
+		&custom_hostnames.CustomHostnameGetResponse{
+			ID:     "cloudflareHostnameID4",
+			Status: "active",
+			SSL: custom_hostnames.CustomHostnameGetResponseSSL{
+				Status: "active",
+				ValidationRecords: []custom_hostnames.CustomHostnameGetResponseSSLValidationRecord{
+					{
+						HTTPURL:  "http://secure.domain.org/.well-known/acme-challenge/newChallengePath4",
+						HTTPBody: "newChallengeValue4",
+					},
+				},
+			},
+		},
+		nil,
+	)
+	// Expect update for domain 4 with new ACME challenge data
+	olMock.EXPECT().UpdateDNSVerification(mock.Anything, "dnsVerificationID4", mock.MatchedBy(func(input openlaneclient.UpdateDNSVerificationInput) bool {
+		return input.AcmeChallengePath != nil && *input.AcmeChallengePath == "newChallengePath4" &&
+			input.ExpectedAcmeChallengeValue != nil && *input.ExpectedAcmeChallengeValue == "newChallengeValue4" &&
+			input.AcmeChallengeStatus != nil && *input.AcmeChallengeStatus == enums.SSLVerificationStatusActive &&
+			input.DNSVerificationStatus != nil && *input.DNSVerificationStatus == enums.DNSVerificationStatusActive
+	})).Return(&openlaneclient.UpdateDNSVerification{}, nil)
+
+	worker := &corejobs.ValidateCustomDomainWorker{
+		Config: corejobs.CustomDomainConfig{
+			CloudflareAPIKey: "test",
+		},
+	}
+
+	worker.WithCloudflareClient(cfMock)
+	worker.WithOpenlaneClient(olMock)
+
+	ctx := context.Background()
+	err := worker.Work(ctx, &river.Job[corejobs.ValidateCustomDomainArgs]{Args: corejobs.ValidateCustomDomainArgs{
+		CustomDomainID: "",
+	}})
+
+	require.NoError(t, err)
+
+}
