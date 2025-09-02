@@ -45,10 +45,12 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 		return nil, errFieldsNotProvided
 	}
 
-	requestorID, err := auth.GetSubjectIDFromContext(ctx)
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
+
+	requestorID := au.SubjectID
 
 	m.SetRequestorID(requestorID)
 
@@ -63,7 +65,9 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 	}
 
 	_, err = m.Job.Insert(ctx, corejobs.ExportContentArgs{
-		ExportID: id,
+		ExportID:       id,
+		UserID:         requestorID,
+		OrganizationID: au.OrganizationID,
 	}, nil)
 
 	return v, err

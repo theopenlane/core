@@ -41,6 +41,7 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/csrf"
+	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
@@ -188,7 +189,7 @@ func WithAuth() ServerOption {
 
 		s.Config.Handler.WebAuthn = webauthn.NewWithConfig(s.Config.Settings.Auth.Providers.Webauthn)
 
-		s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, authmw.Authenticate(&conf))
+		s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, authmw.Authenticate(&conf), impersonation.SystemAdminUserContextMiddleware())
 		s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, authmw.Authenticate(&conf))
 	})
 }
