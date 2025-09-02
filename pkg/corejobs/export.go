@@ -16,9 +16,8 @@ import (
 	"github.com/gocarina/gocsv"
 	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/httpsling"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 
 	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
 	"github.com/theopenlane/core/pkg/enums"
@@ -27,8 +26,7 @@ import (
 )
 
 const (
-	defaultHTTPTimeoutSeconds = 30
-	defaultPageSize           = 2
+	defaultPageSize = 100
 )
 
 var (
@@ -264,8 +262,7 @@ func (w *ExportContentWorker) buildGraphQLQuery(root string, singular string, fi
 	var varStr string
 	var argStr string
 	if hasWhere {
-		caser := cases.Title(language.English)
-		whereInputType := caser.String(singular) + "WhereInput"
+		whereInputType := strcase.UpperCamelCase(singular) + "WhereInput"
 		varStr = fmt.Sprintf(", $where: %s!", whereInputType)
 		argStr = ", where: $where"
 	}
