@@ -23,7 +23,7 @@ func TestParseDocument(t *testing.T) {
 			name:     "markdown",
 			content:  []byte("# Hello\n\nThis is **bold** text."),
 			mimeType: "text/markdown",
-			expected: "<h1 id=\"hello\">Hello</h1>\n\n<p>This is <strong>bold</strong> text.</p>\n",
+			expected: "# Hello\n\nThis is **bold** text.",
 			hasError: false,
 		},
 		{

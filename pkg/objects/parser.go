@@ -6,9 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/gomarkdown/markdown"
-	"github.com/gomarkdown/markdown/html"
-	"github.com/gomarkdown/markdown/parser"
 	"github.com/unidoc/unioffice/document"
 )
 
@@ -27,8 +24,6 @@ func ParseDocument(content []byte, mimeType string) (string, error) {
 	switch mimeType {
 	case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 		return parseDocx(content)
-	case "text/markdown":
-		return parseMarkdown(content)
 	default:
 		return string(content), nil
 	}
@@ -55,16 +50,4 @@ func parseDocx(content []byte) (string, error) {
 	}
 
 	return strings.TrimSpace(w.String()), nil
-}
-
-func parseMarkdown(content []byte) (string, error) {
-	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock
-	p := parser.NewWithExtensions(extensions)
-
-	flags := html.CommonFlags | html.HrefTargetBlank
-	renderer := html.NewRenderer(html.RendererOptions{Flags: flags})
-
-	doc := p.Parse(content)
-
-	return string(markdown.Render(doc, renderer)), nil
 }
