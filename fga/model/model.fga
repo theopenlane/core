@@ -148,9 +148,10 @@ type group
 
 
 # files have their permissions defined by the parent object (like a control or a procedure), users with access to the parent object will have access to the file
+# user:* and service:* are used for public files (e.g. trust center logos/favicons) that are available to all users
 type file
   relations
-    define can_view: [user, service, organization#member] or parent_viewer
+    define can_view: [user:*, service:*, user, service, organization#member] or parent_viewer
     define can_edit: [user, service] or parent_editor
     define can_delete: [user, service] or parent_deleter
 

@@ -382,21 +382,29 @@ func getObjectIDFromEntValue(m ent.Value) (string, error) {
 // this is intended to be used in place of GetAuthorizedObjectIDs when you already have the object ids
 // and just need to filter them based on the user's permissions
 func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs []string) ([]string, error) {
-	user, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		return []string{}, nil
+	var context *map[string]any
+	var subjectID string
+	if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
+		subjectID = strings.ReplaceAll(anon.SubjectID, "anon:", "")
+	} else {
+		user, err := auth.GetAuthenticatedUserFromContext(ctx)
+		if err != nil {
+			return []string{}, nil
+		}
+		subjectID = user.SubjectID
+		context = utils.NewOrganizationContextKey(user.SubjectEmail)
 	}
 
 	checks := []fgax.AccessCheck{}
 
 	for _, id := range objectIDs {
 		ac := fgax.AccessCheck{
-			SubjectID:   user.SubjectID,
+			SubjectID:   subjectID,
 			SubjectType: auth.GetAuthzSubjectType(ctx),
 			ObjectID:    id,
 			ObjectType:  fgax.Kind(strcase.SnakeCase(objectType)), // convert to snake case e.g. InternalPolicy -> internal_policy
 			Relation:    fgax.CanView,
-			Context:     utils.NewOrganizationContextKey(user.SubjectEmail), // required for any check that goes back up to the organization
+			Context:     context,
 		}
 
 		checks = append(checks, ac)
