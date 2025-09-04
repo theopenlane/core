@@ -605,19 +605,14 @@ func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID s
 		return nil, err
 	}
 
-	org, err := client.(*entgen.Client).Organization.Query().Where(organization.ID(orgSetting.OrganizationID)).WithOrgSubscriptions().Only(ctx)
+	org, err := client.(*entgen.Client).Organization.
+		Query().
+		Where(organization.ID(orgSetting.OrganizationID)).
+		Only(ctx)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msgf("Failed to fetch organization by organization setting ID %s after 3 attempts", orgSettingID)
 
 		return nil, err
-	}
-
-	personalOrg := org.PersonalOrg
-
-	if len(org.Edges.OrgSubscriptions) > 1 {
-		zerolog.Ctx(ctx).Warn().Str("organization_id", org.ID).Msg("organization has multiple subscriptions")
-
-		return nil, ErrTooManySubscriptions
 	}
 
 	stripeCustomerID := ""
@@ -630,7 +625,7 @@ func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID s
 		OrganizationName:       org.Name,
 		StripeCustomerID:       stripeCustomerID,
 		OrganizationSettingsID: orgSetting.ID,
-		PersonalOrg:            personalOrg,
+		PersonalOrg:            org.PersonalOrg,
 		ContactInfo: entitlements.ContactInfo{
 			Email:      orgSetting.BillingEmail,
 			Phone:      orgSetting.BillingPhone,

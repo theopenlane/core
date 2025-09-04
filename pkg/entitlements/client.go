@@ -16,6 +16,12 @@ type StripeClient struct {
 	backends *stripe.Backends
 }
 
+// Enabled checks if the entitlements feature is enabled based on the status of the Stripe client settings
+// this is a helper function for more readable code
+func Enabled(s *StripeClient) bool {
+	return s != nil
+}
+
 // NewStripeClient creates a new Stripe client
 func NewStripeClient(opts ...StripeOptions) (*StripeClient, error) {
 	sc := &StripeClient{}

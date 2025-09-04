@@ -117,3 +117,16 @@ func GetIntersection(s1 []string, s2 []string) []string {
 
 	return intersection
 }
+
+// ModulesEnabled checks if the modules feature is enabled for the given client
+func ModulesEnabled(client *generated.Client) bool {
+	if client == nil {
+		return false
+	}
+
+	if client.EntConfig == nil {
+		return false
+	}
+
+	return client.EntConfig.Modules.Enabled
+}

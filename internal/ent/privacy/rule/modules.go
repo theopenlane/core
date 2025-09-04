@@ -22,7 +22,7 @@ import (
 
 // HasFeature reports whether the current organization has the given feature enabled
 func HasFeature(ctx context.Context, feature string) (bool, error) {
-	feats, err := orgFeatures(ctx)
+	feats, err := GetOrgFeatures(ctx)
 	if err != nil {
 		return false, err
 	}
@@ -34,16 +34,11 @@ func HasFeature(ctx context.Context, feature string) (bool, error) {
 	return false, nil
 }
 
-// orgFeatures returns the enabled features for the authenticated organization
-func orgFeatures(ctx context.Context) ([]string, error) {
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil || au.OrganizationID == "" {
-		return nil, nil
-	}
-
+// GetFeaturesForSpecificOrganization returns the enabled features for a specific organization
+func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]string, error) {
 	// try feature cache first
 	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
-		moduleFeats, err := cache.GetFeatures(ctx, au.OrganizationID)
+		moduleFeats, err := cache.GetFeatures(ctx, orgID)
 		if err != nil {
 			log.Err(err).Msg("failed to get feature cache")
 		} else if len(moduleFeats) > 0 {
@@ -61,8 +56,8 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 	}
 
 	req := fgax.ListRequest{
-		SubjectID:   au.OrganizationID,
-		SubjectType: generated.TypeOrganization,
+		SubjectID:   orgID,
+		SubjectType: strings.ToLower(generated.TypeOrganization),
 		ObjectType:  "feature",
 		Relation:    "enabled",
 	}
@@ -88,12 +83,22 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 		for _, f := range feats {
 			moduleFeats = append(moduleFeats, models.OrgModule(f))
 		}
-		if err := cache.SetFeatures(ctx, au.OrganizationID, moduleFeats); err != nil {
+		if err := cache.SetFeatures(ctx, orgID, moduleFeats); err != nil {
 			log.Err(err).Msg("failed to set feature cache")
 		}
 	}
 
 	return feats, nil
+}
+
+// GetOrgFeatures returns the enabled features for the authenticated organization
+func GetOrgFeatures(ctx context.Context) ([]string, error) {
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil || au.OrganizationID == "" {
+		return nil, nil
+	}
+
+	return GetFeaturesForSpecificOrganization(ctx, au.OrganizationID)
 }
 
 // AllowIfHasFeature is a privacy rule allowing the operation if the feature is enabled
@@ -128,7 +133,7 @@ func HasAllFeatures(ctx context.Context, feats ...models.OrgModule) (bool, model
 //
 // If false, at least one must be enabled.
 func checkFeatures(ctx context.Context, requireAll bool, modules ...models.OrgModule) (bool, models.OrgModule, error) {
-	enabled, err := orgFeatures(ctx)
+	enabled, err := GetOrgFeatures(ctx)
 	if err != nil {
 		return false, models.OrgModule(""), err
 	}
@@ -234,9 +239,8 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 // DenyIfMissingAllModules acts as a prerequisite check - denies if features missing, Allows if present
 func DenyIfMissingAllModules() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
-
 		if mut, ok := m.(interface{ Client() *generated.Client }); ok {
-			if client := mut.Client(); client != nil && client.EntConfig != nil && !client.EntConfig.Modules.Enabled {
+			if !utils.ModulesEnabled(mut.Client()) {
 				return privacy.Skip
 			}
 		}

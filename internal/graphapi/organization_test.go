@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -494,19 +493,15 @@ func TestMutationCreateOrganization(t *testing.T) {
 			et, err := suite.client.api.GetEntityTypes(newCtx, &testclient.EntityTypeWhereInput{
 				OwnerID: &resp.CreateOrganization.Organization.ID,
 			})
-			// entity type modules are not added to a new org by default
-			// so fetching it should return an error with the feature not available
-			assert.ErrorContains(t, err, interceptors.ErrFeatureNotEnabled.Error())
+			assert.NilError(t, err)
 
-			assert.Assert(t, is.Len(et.EntityTypes.Edges, 0))
+			assert.Assert(t, is.Len(et.EntityTypes.Edges, 1))
 
 			// ensure managed groups are created
-			// groups and programs require the compliance module which is not added by default
 			managedGroups, err := suite.client.api.GetGroups(newCtx, &testclient.GroupWhereInput{
 				IsManaged: lo.ToPtr(true),
 			})
-
-			assert.ErrorContains(t, err, interceptors.ErrFeatureNotEnabled.Error())
+			assert.NilError(t, err)
 
 			// ensure owner is in the managed group
 			for _, g := range managedGroups.Groups.Edges {

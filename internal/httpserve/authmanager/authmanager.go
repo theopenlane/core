@@ -139,13 +139,13 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 
 // checkActiveSubscription checks if the organization has an active subscription
 func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) {
-	// if the entitlement manager is disabled or modules not enabled, we can skip the check
+	// if the entitlement manager is disabled, we can skip the check
 	if !a.GetDBClient().EntConfig.Modules.Enabled || a.db.EntitlementManager == nil {
 		return true, nil
 	}
 
 	if orgID == "" {
-		log.Debug().Msg("organization ID is required to check for active subscription")
+		log.Warn().Msg("organization ID is required to check for active subscription")
 
 		return false, nil
 	}
@@ -287,8 +287,8 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 	}
 
 	active, err := a.checkActiveSubscription(ctx, orgID)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to find org subscription for organization")
+	if err != nil && !generated.IsNotFound(err) {
+		log.Error().Err(err).Msg("failed to check for org subscription for organization")
 
 		return "", err
 	}

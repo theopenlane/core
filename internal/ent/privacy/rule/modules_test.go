@@ -25,7 +25,15 @@ import (
 
 func createExportMutation(t *testing.T) ent.Mutation {
 	t.Helper()
-	return generated.NewClient().Export.Create().Mutation()
+	return generated.NewClient(
+		generated.EntConfig(
+			&entconfig.Config{
+				Modules: entconfig.Modules{
+					Enabled: true,
+				},
+			},
+		),
+	).Export.Create().Mutation()
 }
 
 func setupContext(t *testing.T, org string, feats []models.OrgModule) context.Context {

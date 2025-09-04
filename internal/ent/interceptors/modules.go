@@ -24,7 +24,6 @@ type moduleInterceptorKey struct{}
 // from the auto generated pipeline
 func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 	return entintercept.TraverseFunc(func(ctx context.Context, q entintercept.Query) error {
-
 		if !modulesEnabled {
 			return nil
 		}

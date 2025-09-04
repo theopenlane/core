@@ -86,7 +86,6 @@ type HandlerTestSuite struct {
 	api                  *testclient.TestClient
 	h                    *handlers.Handler
 	router               *route.Router
-	fga                  *fgax.Client
 	tf                   *testutils.TestFixture
 	ofgaTF               *fgatest.OpenFGATestFixture
 	stripeMockBackend    *mocks.MockStripeBackend
@@ -119,7 +118,14 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	suite.tf = entdb.NewTestFixture()
 
 	// setup openFGA container
-	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile))
+	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
+		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithEnvVars(map[string]string{
+			"OPENFGA_MAX_CHECKS_PER_BATCH_CHECK":          "100",
+			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",
+			"OPENFGA_LIST_OBJECTS_ITERATOR_CACHE_ENABLED": "false",
+		}),
+	)
 
 	// create shared instances once to avoid expensive recreation in each test
 	var err error
@@ -170,6 +176,10 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
+	// setup mock entitlements client
+	entitlements, err := suite.mockStripeClient()
+	require.NoError(t, err)
+
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
 		ent.Emailer(&emailtemplates.Config{
@@ -184,6 +194,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 		}),
 		ent.TOTP(suite.sharedOTPManager),
 		ent.PondPool(suite.sharedPondPool),
+		ent.EntitlementManager(entitlements),
 	}
 
 	// create database connection

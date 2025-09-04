@@ -110,7 +110,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
 		fgatest.WithModelFile(fgaModelFile),
 		fgatest.WithEnvVars(map[string]string{
-			"OPENFGA_MAX_CHECKS_PER_BATCH_CHECK": "100",
+			"OPENFGA_MAX_CHECKS_PER_BATCH_CHECK":          "100",
+			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",
+			"OPENFGA_LIST_OBJECTS_ITERATOR_CACHE_ENABLED": "false",
 		},
 		))
 

@@ -3,8 +3,60 @@ package entitlements
 import (
 	"context"
 
+	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/permissioncache"
 	"github.com/theopenlane/iam/fgax"
 )
+
+const (
+	subjectType = "organization"
+	objectType  = "feature"
+	relation    = "enabled"
+)
+
+var baseTupleRequest = fgax.TupleRequest{
+	SubjectType: subjectType,
+	ObjectType:  objectType,
+	Relation:    relation,
+}
+
+// DeleteModuleTuple removes the enabled feature from the organization in the authorization service
+func DeleteModuleTuple(ctx context.Context, authz *fgax.Client, orgID, moduleName string) error {
+	deleteTuple := getFeatureTupleKey(orgID, moduleName)
+
+	_, err := authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{deleteTuple})
+
+	return err
+}
+
+// CreateFeatureTuples writes default feature tuples to FGA and inserts them into
+// the feature cache if available.
+func CreateFeatureTuples(ctx context.Context, authz *fgax.Client, orgID string, feats []models.OrgModule) error {
+	tuples := make([]fgax.TupleKey, 0, len(feats))
+
+	for _, f := range feats {
+		tuples = append(tuples, getFeatureTupleKey(orgID, f.String()))
+	}
+
+	if _, err := authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
+		return err
+	}
+
+	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
+		return cache.SetFeatures(ctx, orgID, feats)
+	}
+
+	return nil
+}
+
+func getFeatureTupleKey(orgID, module string) fgax.TupleKey {
+	tuple := baseTupleRequest
+
+	tuple.SubjectID = orgID
+	tuple.ObjectID = module
+
+	return fgax.GetTupleKey(tuple)
+}
 
 // SyncTuples updates openFGA tuples for a given subject and object type/relation.
 // It adds tuples for items in 'newItems' not in 'oldItems', and deletes tuples for items in 'oldItems' not in 'newItems'.

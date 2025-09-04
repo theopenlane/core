@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	gc "github.com/theopenlane/core/pkg/catalog/gencatalog"
+	"github.com/theopenlane/core/pkg/entitlements"
 )
 
 // InterceptorSubscriptionURL is an ent interceptor to fetch data from an external source (in this case stripe) and populate the URLs in the graph return response
@@ -66,7 +67,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 
 // setSubscriptionURL sets the subscription URL for the org subscription response
 func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, q *generated.OrgSubscriptionQuery) error {
-	if orgSub == nil || q.EntitlementManager == nil {
+	if orgSub == nil || !entitlements.Enabled(q.EntitlementManager) {
 		log.Debug().Ctx(ctx).Msg("organization does not have a subscription or entitlement manager is nil, skipping URL setting")
 
 		return nil

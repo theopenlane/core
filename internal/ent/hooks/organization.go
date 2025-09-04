@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/catalog"
 	cataloggen "github.com/theopenlane/core/pkg/catalog/gencatalog"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
@@ -315,7 +316,8 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
-	if m.EntConfig.Modules.Enabled {
+	// create subscriptions if the entitlement manager is enabled
+	if entitlements.Enabled(m.EntitlementManager) {
 		orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
 		if err != nil {
 			return err
@@ -597,13 +599,6 @@ type orgModuleConfig struct {
 
 // orgModuleOption sets fields on orgModuleConfig
 type orgModuleOption func(*orgModuleConfig)
-
-// withPersonalOrg sets the personalOrg flag to true, allowing personal org modules to be included
-func withPersonalOrg() orgModuleOption {
-	return func(c *orgModuleConfig) {
-		c.personalOrg = true
-	}
-}
 
 // withTrial sets the trial flag to true, allowing trial modules to be included
 func withTrial() orgModuleOption {
