@@ -7,7 +7,6 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/require"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/enums"
@@ -124,12 +123,6 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	require.NoError(t, err)
 
 	testUser.OrganizationID = testOrg.ID
-
-	// add dummy subscription to the organization
-	err = suite.db.OrgSubscription.Update().Where(orgsubscription.OwnerID(testOrg.ID)).
-		SetFeatureLookupKeys([]string{"base_module"}).
-		Exec(userCtx)
-	require.NoError(t, err)
 
 	// setup user context with the org (and not the personal org)
 	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)

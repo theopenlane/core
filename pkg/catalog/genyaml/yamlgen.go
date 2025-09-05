@@ -170,6 +170,10 @@ func featureLit(f catalog.Feature) *jen.Statement {
 		jen.Id("Audience"):    jen.Lit(f.Audience),
 	}
 
+	if f.PersonalOrg {
+		dict[jen.Id("PersonalOrg")] = jen.Lit(true)
+	}
+
 	if f.IncludeWithTrial {
 		dict[jen.Id("IncludeWithTrial")] = jen.Lit(true)
 	}
@@ -265,6 +269,10 @@ func writeModuleConstants(path string, c catalog.Catalog) error {
 	for k, v := range c.Modules {
 		modKey := string(k)
 		modKeys = append(modKeys, modKey)
+		if v.PersonalOrg {
+			trialMods = append(trialMods, modKey)
+		}
+
 		if v.IncludeWithTrial {
 			trialMods = append(trialMods, modKey)
 		}
@@ -273,6 +281,10 @@ func writeModuleConstants(path string, c catalog.Catalog) error {
 	for k, v := range c.Addons {
 		modKey := string(k)
 		modKeys = append(modKeys, modKey)
+		if v.PersonalOrg {
+			trialMods = append(trialMods, modKey)
+		}
+
 		if v.IncludeWithTrial {
 			trialMods = append(trialMods, modKey)
 		}

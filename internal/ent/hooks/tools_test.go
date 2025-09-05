@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/entdb"
+	"github.com/theopenlane/core/pkg/entitlements"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/emailtemplates"
@@ -96,12 +97,19 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 		},
 	}
 
+	entitilements := &entitlements.StripeClient{
+		Config: &entitlements.Config{
+			Enabled: false,
+		},
+	}
+
 	opts := []generated.Option{
 		generated.Authz(*fgaClient),
 		generated.TokenManager(tm),
 		generated.SessionConfig(&sessionConfig),
 		generated.Emailer(&emailtemplates.Config{}),
 		generated.EntConfig(entCfg),
+		generated.EntitlementManager(entitilements),
 	}
 
 	suite.tf = entdb.NewTestFixture()

@@ -137,10 +137,13 @@ func (sc *StripeClient) retrieveActiveEntitlements(ctx context.Context, customer
 
 // MapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
 func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.Subscription) *Subscription {
-	subscript := Subscription{}
-
 	prices := []Price{}
 	productID := ""
+
+	if subs == nil || subs.Items == nil {
+		log.Warn().Msg("subscription or subscription items is nil, unable to map data")
+		return nil
+	}
 
 	if len(subs.Items.Data) > 1 {
 		log.Warn().Msg("customer has more than one subscription")
@@ -164,6 +167,7 @@ func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.
 		if item.Price.Recurring != nil {
 			interval = string(item.Price.Recurring.Interval)
 		}
+
 		prices = append(prices, Price{
 			ID:          item.Price.ID,
 			Price:       float64(item.Price.UnitAmount) / 100, // nolint:mnd
@@ -172,8 +176,6 @@ func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.
 			Interval:    interval,
 			Currency:    string(item.Price.Currency),
 		})
-
-		subscript.Prices = append(subscript.Prices, prices...)
 	}
 
 	return &Subscription{
@@ -185,7 +187,6 @@ func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.
 		StripeCustomerID: subs.Customer.ID,
 		OrganizationID:   subs.Metadata["organization_id"],
 		DaysUntilDue:     subs.DaysUntilDue,
-		Features:         subscript.Features,
 	}
 }
 

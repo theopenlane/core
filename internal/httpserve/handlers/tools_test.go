@@ -329,6 +329,7 @@ func (suite *HandlerTestSuite) mockStripeClient() (*entitlements.StripeClient, e
 
 	return entitlements.NewStripeClient(entitlements.WithAPIKey("sk_test_testing"),
 		entitlements.WithConfig(entitlements.Config{
+			Enabled:             true,
 			StripeWebhookSecret: webhookSecret,
 		},
 		),

@@ -69,6 +69,8 @@ type Feature struct {
 	Usage *Usage `json:"usage,omitempty" yaml:"usage,omitempty" jsonschema:"description=Usage limits granted by the feature"`
 	// ProductID is the Stripe product ID associated with this feature
 	ProductID string `json:"product_id,omitempty" yaml:"product_id,omitempty" jsonschema:"description=Stripe product ID"`
+	// PersonalOrg indicates if the feature should be automatically added to personal organizations
+	PersonalOrg bool `json:"personal_org,omitempty" yaml:"personal_org,omitempty" jsonschema:"description=Include feature in personal organizations"`
 	// IncludeWithTrial indicates if the feature should be automatically included with trial subscriptions
 	IncludeWithTrial bool `json:"include_with_trial,omitempty" yaml:"include_with_trial,omitempty" jsonschema:"description=Include feature with trial subscriptions"`
 }

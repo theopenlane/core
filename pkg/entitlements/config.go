@@ -86,3 +86,8 @@ func NewConfig(opts ...ConfigOpts) *Config {
 
 	return c
 }
+
+// IsEnabled checks if the entitlements feature is enabled based on the status of the Stripe client settings
+func (c *Config) IsEnabled() bool {
+	return c.Enabled
+}

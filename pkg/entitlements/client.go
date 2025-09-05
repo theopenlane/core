@@ -11,15 +11,9 @@ type StripeClient struct {
 	// apikey is the Stripe API key
 	apikey string
 	// config is the configuration for the Stripe client
-	Config Config
+	Config *Config
 	// Backends is a map of backend services
 	backends *stripe.Backends
-}
-
-// Enabled checks if the entitlements feature is enabled based on the status of the Stripe client settings
-// this is a helper function for more readable code
-func Enabled(s *StripeClient) bool {
-	return s != nil
 }
 
 // NewStripeClient creates a new Stripe client
@@ -44,7 +38,7 @@ type StripeOptions func(*StripeClient)
 // WithConfig sets the config for the Stripe client
 func WithConfig(config Config) StripeOptions {
 	return func(sc *StripeClient) {
-		sc.Config = config
+		sc.Config = &config
 	}
 }
 

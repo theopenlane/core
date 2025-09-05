@@ -27,7 +27,6 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/catalog"
 	cataloggen "github.com/theopenlane/core/pkg/catalog/gencatalog"
-	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
@@ -317,7 +316,7 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 	}
 
 	// create subscriptions if the entitlement manager is enabled
-	if entitlements.Enabled(m.EntitlementManager) {
+	if m.EntitlementManager.Config.IsEnabled() {
 		orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
 		if err != nil {
 			return err
@@ -616,7 +615,7 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 
 	modulesCreated := make([]string, 0)
 
-	// the catalog contains config for which things should be in a trial, or added for a personal org
+	// the catalog contains config for which things should be in a trial
 	for moduleName, mod := range cataloggen.GetModules(m.Client().EntConfig.Modules.UseSandbox) {
 		if !cfg.trial || !mod.IncludeWithTrial {
 			continue

@@ -16,7 +16,7 @@ import (
 func HookOrgModule() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrgModuleFunc(func(ctx context.Context, omm *generated.OrgModuleMutation) (generated.Value, error) {
-			if !entitlements.Enabled(omm.EntitlementManager) {
+			if !omm.EntitlementManager.Config.IsEnabled() {
 				return next.Mutate(ctx, omm)
 			}
 
@@ -51,7 +51,7 @@ func HookOrgModule() ent.Hook {
 func HookOrgModuleUpdate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrgModuleFunc(func(ctx context.Context, omm *generated.OrgModuleMutation) (generated.Value, error) {
-			if !entitlements.Enabled(omm.EntitlementManager) {
+			if !omm.EntitlementManager.Config.IsEnabled() {
 				return next.Mutate(ctx, omm)
 			}
 

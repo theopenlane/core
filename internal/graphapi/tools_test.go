@@ -333,11 +333,28 @@ func (suite *GraphTestSuite) mockStripeClient() (*entitlements.StripeClient, err
 
 	return entitlements.NewStripeClient(entitlements.WithAPIKey("sk_test_testing"),
 		entitlements.WithConfig(entitlements.Config{
+			Enabled:             true,
 			StripeWebhookSecret: webhookSecret,
 		},
 		),
 		entitlements.WithBackends(stripeTestBackends),
 	)
+}
+
+var mockItems = []*stripe.SubscriptionItem{
+	{
+		Price: &stripe.Price{
+			Product: &stripe.Product{
+				ID: "prod_test_product",
+			},
+			ID: "price_test_price",
+			Recurring: &stripe.PriceRecurring{
+				Interval: "month",
+			},
+			Currency:   "usd",
+			UnitAmount: 1000,
+		},
+	},
 }
 
 // mockCustomer for webhook tests
@@ -351,18 +368,7 @@ var mockCustomer = &stripe.Customer{
 				},
 				ID: seedStripeSubscriptionID,
 				Items: &stripe.SubscriptionItemList{
-					Data: []*stripe.SubscriptionItem{
-						{
-							Price: &stripe.Price{
-								UnitAmount: 1000,
-								ID:         "price_test_price",
-								Currency:   "usd",
-								Recurring: &stripe.PriceRecurring{
-									Interval: "month",
-								},
-							},
-						},
-					},
+					Data: mockItems,
 				},
 			},
 		},
@@ -370,26 +376,19 @@ var mockCustomer = &stripe.Customer{
 }
 
 var mockSubscription = &stripe.Subscription{
-	ID: "sub_test_subscription",
+	ID:     "sub_test_subscription",
+	Status: "active",
 	Items: &stripe.SubscriptionItemList{
-		Data: []*stripe.SubscriptionItem{
-			{
-				Price: &stripe.Price{
-					Product: &stripe.Product{
-						ID: "prod_test_product",
-					},
-					ID: "price_test_price",
-					Recurring: &stripe.PriceRecurring{
-						Interval: "month",
-					},
-					Currency: "usd",
-				},
-			},
-		},
+		Data: mockItems,
 	},
 	Metadata: map[string]string{
 		"organization_id": ulids.New().String(),
 	},
+	Customer: &stripe.Customer{
+		ID: "cus_test_customer",
+	},
+	TrialEnd:     time.Now().Add(7 * 24 * time.Hour).Unix(), // 7 days from now
+	DaysUntilDue: 15,
 }
 
 var mockProduct = &stripe.Product{
@@ -452,7 +451,7 @@ func (suite *GraphTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// setup mocks for getting entitlements
-	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
+	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.EntitlementsActiveEntitlementList)
 
 		*mockCustomerSearchResult = stripe.EntitlementsActiveEntitlementList{
