@@ -77,6 +77,7 @@ func genyamlApp() *cli.Command {
 			catalogName := "DefaultCatalog"
 
 			if sandbox {
+				fmt.Println("Generating sandbox catalog")
 				output = sandboxOutput
 				input = sandboxCatalog
 				catalogName = "DefaultSandboxCatalog"
@@ -264,13 +265,14 @@ func priceLit(p catalog.Price) *jen.Statement {
 // catalog file. The output is formatted Go code under pkg/models
 func writeModuleConstants(path string, c catalog.Catalog) error {
 	modKeys := make([]string, 0, len(c.Modules)+len(c.Addons))
+	personalMods := make([]string, 0, len(c.Modules)+len(c.Addons))
 	trialMods := make([]string, 0, len(c.Modules)+len(c.Addons))
 
 	for k, v := range c.Modules {
 		modKey := string(k)
 		modKeys = append(modKeys, modKey)
 		if v.PersonalOrg {
-			trialMods = append(trialMods, modKey)
+			personalMods = append(personalMods, modKey)
 		}
 
 		if v.IncludeWithTrial {
@@ -282,7 +284,7 @@ func writeModuleConstants(path string, c catalog.Catalog) error {
 		modKey := string(k)
 		modKeys = append(modKeys, modKey)
 		if v.PersonalOrg {
-			trialMods = append(trialMods, modKey)
+			personalMods = append(personalMods, modKey)
 		}
 
 		if v.IncludeWithTrial {

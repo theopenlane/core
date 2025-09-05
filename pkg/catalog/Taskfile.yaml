@@ -13,19 +13,15 @@ tasks:
 
   genyaml:
     desc: generates the go code output from the catalog yaml
+    vars:
+      OPENLANE_CATALOG_SANDBOX: "{{ .OPENLANE_CATALOG_SANDBOX | default false }}"
     cmds:
       - go run genyaml/yamlgen.go
 
   all:
     desc: runs all the generation tasks
-    cmds:
-      - task: genjsonschema
-      - task: genyaml
-
-  all:sandbox:
-    desc: runs all the generation tasks for the sandbox catalog
-    env:
-      OPENLANE_CATALOG_SANDBOX: "true"
+    vars:
+      OPENLANE_CATALOG_SANDBOX: "{{ .OPENLANE_CATALOG_SANDBOX | default false }}"
     cmds:
       - task: genjsonschema
       - task: genyaml

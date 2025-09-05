@@ -105,6 +105,7 @@ var DefaultSandboxCatalog = catalog.Catalog{
 			DisplayName:      "Base Module",
 			IncludeWithTrial: true,
 			LookupKey:        "base_module",
+			PersonalOrg:      true,
 			ProductID:        "prod_Szq52Y33Hzvxc6",
 		},
 		string(models.CatalogComplianceModule): catalog.Feature{
