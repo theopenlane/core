@@ -14,14 +14,16 @@ tasks:
   genyaml:
     desc: generates the go code output from the catalog yaml
     vars:
-      OPENLANE_CATALOG_SANDBOX: "{{ .OPENLANE_CATALOG_SANDBOX | default false }}"
+      USE_SANDBOX: "{{ .CORE_ENTCONFIG_MODULES_USESANDBOX }}"
+      OPENLANE_CATALOG_SANDBOX: "{{if .USE_SANDBOX}}{{.USE_SANDBOX}}{{else}}{{.OPENLANE_CATALOG_SANDBOX | default false}}{{end}}"
     cmds:
       - go run genyaml/yamlgen.go
 
   all:
     desc: runs all the generation tasks
     vars:
-      OPENLANE_CATALOG_SANDBOX: "{{ .OPENLANE_CATALOG_SANDBOX | default false }}"
+      USE_SANDBOX: "{{ .CORE_ENTCONFIG_MODULES_USESANDBOX }}"
+      OPENLANE_CATALOG_SANDBOX: "{{if .USE_SANDBOX}}{{.USE_SANDBOX}}{{else}}{{.OPENLANE_CATALOG_SANDBOX | default false}}{{end}}"
     cmds:
       - task: genjsonschema
       - task: genyaml
