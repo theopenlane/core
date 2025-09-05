@@ -6,6 +6,29 @@ import (
 	catalog "github.com/theopenlane/core/pkg/catalog"
 )
 
+// GetDefaultCatalog returns the default catalog; if useSandbox is true, it returns the sandbox catalog
+func GetDefaultCatalog(useSandbox bool) catalog.Catalog {
+	if useSandbox {
+		return DefaultSandboxCatalog
+	}
+
+	return DefaultCatalog
+}
+
+// GetModules returns a list of all module names in the default catalog
+func GetModules(useSandbox bool) catalog.FeatureSet {
+	c := GetDefaultCatalog(useSandbox)
+
+	return c.Modules
+}
+
+// GetCatalogByAudience returns a catalog filtered by audience; if useSandbox is true, it uses the sandbox catalog
+func GetCatalogByAudience(useSandbox bool, audience string) *catalog.Catalog {
+	c := GetDefaultCatalog(useSandbox)
+
+	return c.Visible(audience)
+}
+
 // PersonalOrgMonthlyPriceIDs returns Stripe price IDs for monthly prices of modules marked as PersonalOrg enabled
 func PersonalOrgMonthlyPriceIDs() []string {
 	return monthlyPriceIDs(func(f catalog.Feature) bool {

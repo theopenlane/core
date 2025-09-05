@@ -16,12 +16,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/permissioncache"
 )
 
 // HasFeature reports whether the current organization has the given feature enabled
 func HasFeature(ctx context.Context, feature string) (bool, error) {
+	// all organizations have access to the base module
+	if feature == models.CatalogBaseModule.String() {
+		return true, nil
+	}
+
 	feats, err := GetOrgFeatures(ctx)
 	if err != nil {
 		return false, err
@@ -58,8 +64,8 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 	req := fgax.ListRequest{
 		SubjectID:   orgID,
 		SubjectType: strings.ToLower(generated.TypeOrganization),
-		ObjectType:  "feature",
-		Relation:    "enabled",
+		ObjectType:  entitlements.TupleObjectType,
+		Relation:    entitlements.TupleRelation,
 	}
 
 	resp, err := ac.ListObjectsRequest(ctx, req)
@@ -94,8 +100,17 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 // GetOrgFeatures returns the enabled features for the authenticated organization
 func GetOrgFeatures(ctx context.Context) ([]string, error) {
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil || au.OrganizationID == "" {
+	if err != nil {
+		// this intentionally returns nil for the error
+		// this is so requests that aren't yet authenticated, but only require the base module
+		// e.g. sso login, will continue
 		return nil, nil
+	}
+
+	// if there is only one authorized org on the pat, set it as the authorized organization
+	// more organization require using the X-Organization-ID header
+	if au.OrganizationID == "" && len(au.OrganizationIDs) == 1 {
+		au.OrganizationID = au.OrganizationIDs[0]
 	}
 
 	return GetFeaturesForSpecificOrganization(ctx, au.OrganizationID)
@@ -119,12 +134,12 @@ func AllowIfHasFeature(feature string) privacy.QueryMutationRule {
 }
 
 // HasAnyFeature checks if any of the provided features are enabled for the organization
-func HasAnyFeature(ctx context.Context, feats ...models.OrgModule) (bool, models.OrgModule, error) {
+func HasAnyFeature(ctx context.Context, feats ...models.OrgModule) (bool, *models.OrgModule, error) {
 	return checkFeatures(ctx, false, feats...)
 }
 
 // HasAllFeatures checks if all of the provided features are enabled for the organization
-func HasAllFeatures(ctx context.Context, feats ...models.OrgModule) (bool, models.OrgModule, error) {
+func HasAllFeatures(ctx context.Context, feats ...models.OrgModule) (bool, *models.OrgModule, error) {
 	return checkFeatures(ctx, true, feats...)
 }
 
@@ -132,41 +147,41 @@ func HasAllFeatures(ctx context.Context, feats ...models.OrgModule) (bool, model
 // If requireAll is true, all features must be enabled.
 //
 // If false, at least one must be enabled.
-func checkFeatures(ctx context.Context, requireAll bool, modules ...models.OrgModule) (bool, models.OrgModule, error) {
+func checkFeatures(ctx context.Context, requireAll bool, modules ...models.OrgModule) (bool, *models.OrgModule, error) {
 	enabled, err := GetOrgFeatures(ctx)
 	if err != nil {
-		return false, models.OrgModule(""), err
+		return false, nil, err
 	}
 
-	if len(enabled) == 0 {
-		return true, models.OrgModule(""), nil
-	}
-
-	enabledSet := make(map[string]struct{}, len(enabled))
-
-	for _, f := range enabled {
-		enabledSet[f] = struct{}{}
-	}
+	enabledSet := utils.SliceToMap(enabled)
 
 	if requireAll {
 		// all features must be enabled
 		for _, f := range modules {
-			if _, ok := enabledSet[string(f)]; !ok {
-				return false, f, nil
+			if f == models.CatalogBaseModule {
+				continue
+			}
+
+			if _, ok := enabledSet[f.String()]; !ok {
+				return false, &f, nil
 			}
 		}
-		return true, models.OrgModule(""), nil
+		return true, nil, nil
 	}
 
 	// at least one feature must be enabled
 	for _, f := range modules {
-		if _, ok := enabledSet[string(f)]; ok {
-			return true, models.OrgModule(""), nil
+		if f == models.CatalogBaseModule {
+			return true, nil, nil
+		}
+
+		if _, ok := enabledSet[f.String()]; ok {
+			return true, nil, nil
 		}
 	}
 
 	// return the first feature by default
-	return false, modules[0], nil
+	return false, &modules[0], nil
 }
 
 // AllowIfHasAnyFeature allows the operation if any of the provided features are enabled
@@ -220,7 +235,12 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 		return true
 	}
 
-	if w := token.WebauthCreationContextKeyFromContext(ctx); w != nil {
+	if w := token.WebauthnCreationContextKeyFromContext(ctx); w != nil {
+		return true
+	}
+
+	// bypass module checks on trust center users
+	if _, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
 		return true
 	}
 

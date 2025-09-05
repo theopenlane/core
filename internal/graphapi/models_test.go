@@ -24,10 +24,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -478,25 +478,13 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 
 // enableModules enables the selected organization modules for the given organization
 func (o *OrganizationBuilder) enableModules(ctx context.Context, t *testing.T, orgID string) {
-
 	features := o.Features
 
 	if len(o.Features) == 0 {
 		features = models.AllOrgModules
 	}
 
-	tuples := make([]fgax.TupleKey, 0, len(features))
-	for _, feature := range features {
-		tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
-			SubjectID:   orgID,
-			SubjectType: generated.TypeOrganization,
-			ObjectID:    string(feature),
-			ObjectType:  "feature",
-			Relation:    "enabled",
-		}))
-	}
-
-	_, err := o.client.db.Authz.WriteTupleKeys(ctx, tuples, nil)
+	err := entitlements.CreateFeatureTuples(ctx, o.client.fga, orgID, features)
 	assert.NilError(t, err)
 
 	for _, feature := range features {

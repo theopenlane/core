@@ -9,15 +9,15 @@ import (
 )
 
 const (
-	subjectType = "organization"
-	objectType  = "feature"
-	relation    = "enabled"
+	subjectType     = "organization"
+	TupleObjectType = "feature"
+	TupleRelation   = "enabled"
 )
 
 var baseTupleRequest = fgax.TupleRequest{
 	SubjectType: subjectType,
-	ObjectType:  objectType,
-	Relation:    relation,
+	ObjectType:  TupleObjectType,
+	Relation:    TupleRelation,
 }
 
 // DeleteModuleTuple removes the enabled feature from the organization in the authorization service

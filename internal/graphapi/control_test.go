@@ -425,15 +425,6 @@ func TestMutationCreateControl(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "using pat with no owner id",
-			request: testclient.CreateControlInput{
-				RefCode: "A-4",
-			},
-			client:      suite.client.apiWithPAT,
-			ctx:         context.Background(),
-			expectedErr: "owner_id is required",
-		},
-		{
 			name: "using api token",
 			request: testclient.CreateControlInput{
 				RefCode: "A-5",
@@ -841,17 +832,6 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedNumProgram: 1, // control was cloned, so the previous program will still be here
 			client:             suite.client.apiWithPAT,
 			ctx:                context.Background(),
-		},
-		{
-			name: "clone single control using personal access token, missing owner id",
-			request: testclient.CloneControlInput{
-				ControlIDs: []string{controls[:1][0].ID},
-			},
-			expectedStandard: &publicStandard.ShortName,
-			expectedControls: controls[:1],
-			client:           suite.client.apiWithPAT,
-			ctx:              context.Background(),
-			expectedErr:      "owner_id is required",
 		},
 		{
 			name: "happy path, clone single control using api token",
@@ -1800,7 +1780,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 	// create another without a category to test multiple controls in "No Category"
 	control8 := (&ControlBuilder{client: suite.client}).MustNew(user1.UserCtx, t)
 
-	cursor := ""
+	var cursor string
 	testCases := []struct {
 		name               string
 		client             *testclient.TestClient

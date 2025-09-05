@@ -120,7 +120,7 @@ func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, 
 	}
 
 	moduleURLs := map[string]string{}
-	visible := gc.DefaultCatalog.Visible("")
+	visible := gc.GetCatalogByAudience(q.EntConfig.Modules.UseSandbox, "")
 	for name, feat := range visible.Modules {
 		if len(feat.Billing.Prices) == 0 {
 			continue

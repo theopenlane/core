@@ -245,6 +245,7 @@ func (c *Catalog) getProductMap(ctx context.Context, sc *entitlements.StripeClie
 
 	products, err := sc.ListProducts(ctx)
 	if err != nil {
+		log.Error().Err(err).Msg("failed to list products from Stripe")
 		return nil, err
 	}
 
@@ -275,6 +276,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 	}
 
 	create := func(name string, f Feature) (Feature, error) {
+		log.Info().Str("feature", name).Msg("ensuring feature prices exist in Stripe")
 		prod, _ := resolveProduct(ctx, sc, prodMap, f)
 
 		lookup := name
@@ -285,6 +287,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 		var feature *stripe.EntitlementsFeature
 		feature, err = sc.GetFeatureByLookupKey(ctx, lookup)
 		if err != nil {
+			log.Err(err).Msg("failed to get feature by lookup key")
 			return f, err
 		}
 
@@ -295,6 +298,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 			}
 			prod, err = sc.CreateProduct(ctx, f.DisplayName, f.Description, metadata)
 			if err != nil {
+				log.Error().Err(err).Msg("failed to create product")
 				return f, ErrFailedToCreateProduct
 			}
 
@@ -320,6 +324,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 
 			updatedProd, err := sc.UpdateProductWithParams(ctx, prod.ID, updateParams)
 			if err != nil {
+				log.Error().Err(err).Msg("failed to update product metadata")
 				return f, fmt.Errorf("failed to update product metadata: %w", err)
 			}
 
@@ -328,15 +333,18 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 		}
 
 		if feature == nil {
+			log.Info().Str("feature", name).Msg("creating entitlement feature in Stripe")
 			feature, err = sc.CreateProductFeatureWithOptions(ctx,
 				&stripe.EntitlementsFeatureCreateParams{},
 				entitlements.WithFeatureName(f.DisplayName),
 				entitlements.WithFeatureLookupKey(lookup),
 			)
 			if err != nil {
+				log.Error().Err(err).Msg("failed to create entitlement feature")
 				return f, err
 			}
 
+			log.Info().Str("feature", name).Str("id", feature.ID).Msg("created entitlement feature in Stripe")
 			_, _ = sc.AttachFeatureToProductWithOptions(ctx,
 				&stripe.ProductFeatureCreateParams{},
 				entitlements.WithProductFeatureProductID(prod.ID),
@@ -354,13 +362,15 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 			maps.Copy(md, p.Metadata)
 
 			price, err := sc.FindPriceForProduct(ctx, prod.ID, p.PriceID, p.UnitAmount, currency, p.Interval, p.Nickname, p.LookupKey, md)
-			if err != nil {
+			if err != nil && !notFound(err) {
 				return f, err
 			}
 
 			if price == nil {
+				log.Info().Str("feature", name).Msg("creating missing price in Stripe")
 				price, err = sc.CreatePrice(ctx, prod.ID, p.UnitAmount, currency, p.Interval, p.Nickname, p.LookupKey, md)
 				if err != nil {
+					log.Error().Err(err).Msg("failed to create price")
 					return f, ErrFailedToCreatePrice
 				}
 			}
@@ -377,6 +387,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 
 		if monthPriceID != "" && yearPriceID != "" {
 			if err := sc.TagPriceUpsell(ctx, monthPriceID, yearPriceID); err != nil {
+				log.Error().Err(err).Msg("failed to tag price upsell")
 				return f, err
 			}
 		}
@@ -390,6 +401,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 
 			feat, err = create(name, feat)
 			if err != nil {
+				log.Error().Err(err).Msg("failed to create feature")
 				return err
 			}
 
@@ -400,6 +412,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 	}
 
 	if err := ensure(c.Modules); err != nil {
+		log.Error().Err(err).Msg("failed to ensure module features")
 		return err
 	}
 

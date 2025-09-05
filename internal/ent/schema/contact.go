@@ -137,7 +137,6 @@ func (c Contact) Policy() ent.Policy {
 
 func (Contact) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
 		models.CatalogEntityManagementModule,
 	}
 }

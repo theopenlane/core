@@ -618,16 +618,8 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 	modulesCreated := make([]string, 0)
 
 	// the catalog contains config for which things should be in a trial, or added for a personal org
-	for moduleName, mod := range cataloggen.DefaultCatalog.Modules {
-		if !cfg.personalOrg && !cfg.trial {
-			continue
-		}
-
-		if !mod.PersonalOrg {
-			continue
-		}
-
-		if !mod.IncludeWithTrial {
+	for moduleName, mod := range cataloggen.GetModules(m.Client().EntConfig.Modules.UseSandbox) {
+		if !cfg.trial || !mod.IncludeWithTrial {
 			continue
 		}
 

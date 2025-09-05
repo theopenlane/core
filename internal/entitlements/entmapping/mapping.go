@@ -372,12 +372,12 @@ func ApplyStripeSubscriptionItem[T OrgModuleSetter[T]](ctx context.Context, b T,
 }
 
 // PopulatePricesForOrganizationCustomer sets Prices on the OrganizationCustomer and returns it.
-func PopulatePricesForOrganizationCustomer(o *entitlements.OrganizationCustomer) *entitlements.OrganizationCustomer {
+func PopulatePricesForOrganizationCustomer(o *entitlements.OrganizationCustomer, useSandbox bool) *entitlements.OrganizationCustomer {
 	var priceIDs []string
 	if o.PersonalOrg {
-		priceIDs = catalog.PersonalOrgMonthlyPriceIDs()
+		priceIDs = catalog.PersonalOrgMonthlyPriceIDs(useSandbox)
 	} else {
-		priceIDs = catalog.TrialMonthlyPriceIDs()
+		priceIDs = catalog.TrialMonthlyPriceIDs(useSandbox)
 	}
 
 	o.Prices = make([]entitlements.Price, len(priceIDs))

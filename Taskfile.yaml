@@ -49,7 +49,7 @@ dotenv: ['docker/configs/windmill/.env']
 
 tasks:
   default:
-    silent: true
+    silent: false
     cmds:
       - task --list
 
@@ -317,7 +317,7 @@ tasks:
     silent: true
     aliases: ['testsum:graph']
     cmds:
-      - gotestsum --packages "github.com/theopenlane/core/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
+      - gotestsum --packages "github.com/theopenlane/core/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format standard-verbose --hide-summary output -- -p 20 -tags test
 
   go:fmt:
     desc: format all go code

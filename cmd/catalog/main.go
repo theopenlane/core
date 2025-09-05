@@ -10,6 +10,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/rs/zerolog/log"
 	"github.com/urfave/cli/v3"
 
 	"github.com/stripe/stripe-go/v82"
@@ -469,7 +470,11 @@ func promptAndCreateMissing(ctx context.Context, cat *catalog.Catalog, sc *entit
 
 	answer = strings.ToLower(strings.TrimSpace(answer))
 	if answer == "y" || answer == "yes" {
-		return cat.EnsurePrices(ctx, sc, "usd")
+		if err := cat.EnsurePrices(ctx, sc, "usd"); err != nil {
+			log.Error().Err(err).Msg("failed to ensure prices")
+
+			return err
+		}
 	}
 
 	return nil

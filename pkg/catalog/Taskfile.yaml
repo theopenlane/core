@@ -2,7 +2,7 @@ version: "3"
 
 tasks:
   default:
-    silent: true
+    silent: false
     cmds:
       - task --list
 
@@ -18,6 +18,14 @@ tasks:
 
   all:
     desc: runs all the generation tasks
+    cmds:
+      - task: genjsonschema
+      - task: genyaml
+
+  all:sandbox:
+    desc: runs all the generation tasks for the sandbox catalog
+    env:
+      OPENLANE_CATALOG_SANDBOX: "true"
     cmds:
       - task: genjsonschema
       - task: genyaml

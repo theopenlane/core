@@ -105,7 +105,6 @@ var DefaultCatalog = catalog.Catalog{
 			DisplayName:      "Base Module",
 			IncludeWithTrial: true,
 			LookupKey:        "base_module",
-			PersonalOrg:      true,
 			ProductID:        "base",
 		},
 		string(models.CatalogComplianceModule): catalog.Feature{

@@ -127,7 +127,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 
 	// add dummy subscription to the organization
 	err = suite.db.OrgSubscription.Update().Where(orgsubscription.OwnerID(testOrg.ID)).
-		SetFeatureLookupKeys([]string{"dummy_feature"}).
+		SetFeatureLookupKeys([]string{"base_module"}).
 		Exec(userCtx)
 	require.NoError(t, err)
 

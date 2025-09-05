@@ -246,6 +246,12 @@ func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
 
 // RegisterListeners is currently used to globally register what listeners get applied on the entdb client
 func RegisterListeners(e *Eventer) error {
+	if e.Emitter == nil {
+		log.Error().Msg("Emitter is nil on Eventer, cannot register listeners")
+
+		return ErrFailedToRegisterListener
+	}
+
 	_, err := e.Emitter.On(OrganizationCreate, handleOrganizationCreated)
 	if err != nil {
 		log.Error().Err(ErrFailedToRegisterListener)
@@ -433,7 +439,12 @@ func handleOrganizationDelete(event soiree.Event) error {
 
 // handleOrganizationCreated checks for the creation of an organization subscription and creates a customer in Stripe
 func handleOrganizationCreated(event soiree.Event) error {
-	client := event.Client().(*entgen.Client)
+	client, ok := event.Client().(*entgen.Client)
+	if !ok {
+		zerolog.Ctx(event.Context()).Debug().Msg("failed to cast event client to entgen.Client, skipping customer creation")
+
+		return nil
+	}
 	entMgr := client.EntitlementManager
 
 	if entMgr == nil {
@@ -471,7 +482,7 @@ func handleOrganizationCreated(event soiree.Event) error {
 	}
 
 	// personalOrg flag is set by updateOrgCustomerWithSubscription so compute pricing afterwards
-	orgCustomer = catalog.PopulatePricesForOrganizationCustomer(orgCustomer)
+	orgCustomer = catalog.PopulatePricesForOrganizationCustomer(orgCustomer, client.EntConfig.Modules.UseSandbox)
 
 	zerolog.Ctx(event.Context()).Debug().Msgf("Prices attached to organization customer: %+v", orgCustomer.Prices)
 
@@ -492,7 +503,7 @@ func handleOrganizationCreated(event soiree.Event) error {
 
 // updateCustomerOrgSub maps the customer fields to the organization subscription and update the organization subscription in the database
 func updateCustomerOrgSub(ctx context.Context, customer *entitlements.OrganizationCustomer, client any) error {
-	if customer.OrganizationSubscriptionID == "" {
+	if customer == nil || customer.OrganizationSubscriptionID == "" {
 		zerolog.Ctx(ctx).Error().Msg("organization subscription ID is empty on customer, unable to update organization subscription")
 
 		return ErrNoSubscriptions
@@ -543,7 +554,7 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 // by querying the organization and organization settings
 func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgSubscription,
 	o *entitlements.OrganizationCustomer, org *entgen.Organization) (*entitlements.OrganizationCustomer, error) {
-	if orgSubs == nil {
+	if orgSubs == nil || org == nil {
 		return nil, ErrNoSubscriptions
 	}
 
@@ -566,9 +577,14 @@ func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgS
 // the event is only emitted if the billing settings change; so we proceed to update the customer in stripe
 // based on the current organization settings
 func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
-	client := event.Client().(*entgen.Client)
-	entMgr := client.EntitlementManager
+	client, ok := event.Client().(*entgen.Client)
+	if !ok {
+		zerolog.Ctx(event.Context()).Debug().Msg("failed to cast event client to entgen.Client, skipping customer creation")
 
+		return nil
+	}
+
+	entMgr := client.EntitlementManager
 	if entMgr == nil {
 		zerolog.Ctx(event.Context()).Debug().Msg("EntitlementManager not found on client, skipping customer creation")
 

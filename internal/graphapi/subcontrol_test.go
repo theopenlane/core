@@ -320,16 +320,6 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 			expectedRefFramework: control1.ReferenceFramework,
 		},
 		{
-			name: "using pat, missing owner ID",
-			request: testclient.CreateSubcontrolInput{
-				RefCode:   "SC-1",
-				ControlID: control1.ID,
-			},
-			client:      suite.client.apiWithPAT,
-			ctx:         context.Background(),
-			expectedErr: "owner_id is required",
-		},
-		{
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreateSubcontrolInput{
 				RefCode:   "SC-1",

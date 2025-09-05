@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -140,7 +141,7 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 // checkActiveSubscription checks if the organization has an active subscription
 func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) {
 	// if the entitlement manager is disabled, we can skip the check
-	if !a.GetDBClient().EntConfig.Modules.Enabled || a.db.EntitlementManager == nil {
+	if !entitlements.Enabled(a.GetDBClient().EntitlementManager) {
 		return true, nil
 	}
 
@@ -258,7 +259,6 @@ func (a *Client) generateOauthUserSession(ctx context.Context, w http.ResponseWr
 // if the user does not have access to the target organization, the user's default org is used (or falls back)
 // to their personal org
 func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID string) (string, error) {
-
 	skip := skipOrgValidation(ctx)
 	if orgID == "" {
 		// get the default org for the user to check access

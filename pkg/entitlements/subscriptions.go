@@ -149,6 +149,12 @@ func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.
 	}
 
 	for _, item := range subs.Items.Data {
+		if item.Price == nil || item.Price.Product == nil {
+			log.Warn().Msg("failed to map subscription item")
+
+			continue
+		}
+
 		productID = item.Price.Product.ID
 
 		product, err := sc.GetProductByID(ctx, productID)
@@ -156,12 +162,16 @@ func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.
 			log.Warn().Err(err).Msg("failed to get product by ID")
 		}
 
+		interval := "month"
+		if item.Price.Recurring != nil {
+			interval = string(item.Price.Recurring.Interval)
+		}
 		prices = append(prices, Price{
 			ID:          item.Price.ID,
 			Price:       float64(item.Price.UnitAmount) / 100, // nolint:mnd
 			ProductID:   productID,
 			ProductName: product.Name,
-			Interval:    string(item.Price.Recurring.Interval),
+			Interval:    interval,
 			Currency:    string(item.Price.Currency),
 		})
 
