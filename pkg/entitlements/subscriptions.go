@@ -93,13 +93,11 @@ func (sc *StripeClient) CreateSubscriptionWithPrices(ctx context.Context, cust *
 		CollectionMethod: stripe.String(string(stripe.SubscriptionCollectionMethodChargeAutomatically)),
 	}
 
-	if !o.PersonalOrg {
-		params.TrialPeriodDays = stripe.Int64(trialdays)
-		params.TrialSettings = &stripe.SubscriptionCreateTrialSettingsParams{
-			EndBehavior: &stripe.SubscriptionCreateTrialSettingsEndBehaviorParams{
-				MissingPaymentMethod: stripe.String(stripe.SubscriptionTrialSettingsEndBehaviorMissingPaymentMethodPause),
-			},
-		}
+	params.TrialPeriodDays = stripe.Int64(trialdays)
+	params.TrialSettings = &stripe.SubscriptionCreateTrialSettingsParams{
+		EndBehavior: &stripe.SubscriptionCreateTrialSettingsEndBehaviorParams{
+			MissingPaymentMethod: stripe.String(stripe.SubscriptionTrialSettingsEndBehaviorMissingPaymentMethodPause),
+		},
 	}
 
 	subs, err := sc.CreateSubscriptionWithOptions(ctx, params)

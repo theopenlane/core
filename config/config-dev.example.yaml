@@ -129,6 +129,9 @@ entConfig:
   modules:
     # this should only be enabled if you have subscriptions enabled as well
     enabled: false
+    # this will use the catalog-sandbox.yaml, otherwise it will use catalog.yaml
+    # this should allow you to use the sandbox without requiring seeding new price data
+    useSandbox: true
   entityTypes:
     - vendor
     - account

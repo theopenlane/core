@@ -276,7 +276,7 @@ func DenyIfMissingAllModules() privacy.MutationRule {
 			return privacy.Skip
 		}
 
-		ok, _, err := HasAllFeatures(ctx, schemaFeatures...)
+		ok, _, err := HasAnyFeature(ctx, schemaFeatures...)
 		if err != nil {
 			return err
 		}

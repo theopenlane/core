@@ -432,8 +432,6 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// mock for product retrieve params
-	//{"level":"error","time":"2025-09-04T13:10:43-06:00","message":"Panic occurred processing event: \n\nmock: Unexpected Method Call\n-----------------------------\n\nCall(string,string,string,*stripe.ProductRetrieveParams,*stripe.Product)\n\t\t0: \"GET\"\n\t\t1: \"/v1/products/prod_test_product\"\n\t\t2: \"sk_test_testing\"\n\t\t3: &stripe.ProductRetrieveParams{Params:stripe.Params{Context:(*context.valueCtx)(0x140013345d0), Expand:[]*string(nil), Extra:(*stripe.ExtraValues)(nil), Headers:http.Header(nil), IdempotencyKey:(*string)(nil), Metadata:map[string]string(nil), StripeAccount:(*string)(nil), StripeContext:(*string)(nil), usage:[]string(nil)}, Expand:[]*string(nil)}\n\t\t4: &stripe.Product{APIResource:stripe.APIResource{LastResponse:(*stripe.APIResponse)(nil)}, Active:false, Created:0, DefaultPrice:(*stripe.Price)(nil), Deleted:false, Description:\"\", ID:\"\", Images:[]string(nil), Livemode:false, MarketingFeatures:[]*stripe.ProductMarketingFeature(nil), Metadata:map[string]string(nil), Name:\"\", Object:
-
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.ProductRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
 		mockProductRetrieveResult := args.Get(4).(*stripe.Product)
 
@@ -442,8 +440,6 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// mock for product params
-	// l(string,string,string,*stripe.ProductRetrieveParams,*stripe.Product)\n\t\t0: \"GET\"\n\t\t1: \"/v1/products/prod_test_product\"\n\t\t2: \"sk_test_testing\"\n\t\t3: &stripe.ProductRetrieveParams{Params:stripe.Params{Context:(*context.valueCtx)(0x1400149e9f0), Expand:[]*string(nil), Extra:(*stripe.ExtraValues)(nil), Headers:http.Header(nil), IdempotencyKey:(*string)(nil), Metadata:map[string]string(nil), StripeAccount:(*string)(nil), StripeContext:(*string)(nil), usage:[]string(nil)}, Expand:[]*string(nil)}\n\t\t4: &stripe.Product{APIResource:stripe.APIResource{LastResponse:(*stripe.APIResponse)(nil)}, Active:false, Created:0, DefaultPrice:(*stripe.Price)(nil), Deleted:false, Description:\"\", ID:\"\", Images:[]string(nil), Livemode:false, MarketingFeatures:[]*stripe.ProductMarketingFeature(nil), Metadata:map[string]string(nil), Name:\"\", Object:
-
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
 		mockSubscriptionRetrieveResult := args.Get(4).(*stripe.Subscription)
 

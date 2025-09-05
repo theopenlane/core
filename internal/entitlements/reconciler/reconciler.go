@@ -133,12 +133,16 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 		}
 	}
 
+	if org.PersonalOrg {
+		// no need to create a customer for personal organizations
+		return nil
+	}
+
 	cust := &entitlements.OrganizationCustomer{
 		OrganizationID:             org.ID,
 		OrganizationSettingsID:     org.Edges.Setting.ID,
 		OrganizationSubscriptionID: sub.ID,
 		OrganizationName:           org.Name,
-		PersonalOrg:                org.PersonalOrg,
 		ContactInfo: entitlements.ContactInfo{
 			Email:      org.Edges.Setting.BillingEmail,
 			Phone:      org.Edges.Setting.BillingPhone,

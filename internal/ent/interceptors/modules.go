@@ -46,7 +46,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 		// prevent infinite recursion. HasAllFeatures calls the OrgModule queries in some scenarios.
 		// This prevents a scenario where this interceptor is called again when already inside this function
 		ctxWithKey := contextx.With(ctx, moduleInterceptorKey{})
-		ok, module, err := rule.HasAllFeatures(ctxWithKey, schemaFeatures...)
+		ok, module, err := rule.HasAnyFeature(ctxWithKey, schemaFeatures...)
 		if err != nil || !ok {
 
 			if err == nil {

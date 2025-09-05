@@ -47,7 +47,7 @@ func genyamlApp() *cli.Command {
 				Name:    "in",
 				Value:   "catalog.yaml",
 				Usage:   "Path to the catalog YAML file",
-				Sources: cli.EnvVars("CC"),
+				Sources: cli.EnvVars("OPENLANE_CATALOG_FILE"),
 			},
 			&cli.StringFlag{
 				Name:    "out",

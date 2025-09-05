@@ -139,7 +139,7 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 }
 
 // checkActiveSubscription checks if the organization has an active subscription
-func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) {
+func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) { //nolint:unused
 	// if the entitlement manager is disabled, we can skip the check
 	if !entitlements.Enabled(a.GetDBClient().EntitlementManager) {
 		return true, nil
@@ -286,13 +286,6 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		orgID = au.OrganizationID
 	}
 
-	active, err := a.checkActiveSubscription(ctx, orgID)
-	if err != nil && !generated.IsNotFound(err) {
-		log.Error().Err(err).Msg("failed to check for org subscription for organization")
-
-		return "", err
-	}
-
 	// ensure user is already a member of the destination organization
 	req := fgax.AccessCheck{
 		SubjectID:   au.SubjectID,
@@ -309,7 +302,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 	}
 
 	// if the org is active and they are allowed, we can return the org
-	if active && allow {
+	if allow {
 		return orgID, nil
 	}
 

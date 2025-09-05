@@ -467,6 +467,11 @@ func handleOrganizationCreated(event soiree.Event) error {
 		return err
 	}
 
+	if org.PersonalOrg {
+		// no need to create a customer for personal organizations
+		return nil
+	}
+
 	orgSubs, err := client.OrgSubscription.Query().Where(orgsubscription.OwnerID(org.ID)).First(allowCtx)
 	if err != nil {
 		return err
@@ -481,7 +486,6 @@ func handleOrganizationCreated(event soiree.Event) error {
 		return nil
 	}
 
-	// personalOrg flag is set by updateOrgCustomerWithSubscription so compute pricing afterwards
 	orgCustomer = catalog.PopulatePricesForOrganizationCustomer(orgCustomer, client.EntConfig.Modules.UseSandbox)
 
 	zerolog.Ctx(event.Context()).Debug().Msgf("Prices attached to organization customer: %+v", orgCustomer.Prices)
@@ -567,7 +571,6 @@ func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgS
 	o.OrganizationID = org.ID
 	o.OrganizationName = org.Name
 	o.OrganizationSettingsID = org.Edges.Setting.ID
-	o.PersonalOrg = org.PersonalOrg
 	o.Email = org.Edges.Setting.BillingEmail
 
 	return o, nil
@@ -641,7 +644,6 @@ func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID s
 		OrganizationName:       org.Name,
 		StripeCustomerID:       stripeCustomerID,
 		OrganizationSettingsID: orgSetting.ID,
-		PersonalOrg:            org.PersonalOrg,
 		ContactInfo: entitlements.ContactInfo{
 			Email:      orgSetting.BillingEmail,
 			Phone:      orgSetting.BillingPhone,
