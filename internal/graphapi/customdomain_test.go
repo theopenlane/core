@@ -173,48 +173,48 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
-		// {
-		// 	name: "happy path, adminUser",
-		// 	request: testclient.CreateCustomDomainInput{
-		// 		CnameRecord:      "test.example.com",
-		// 		MappableDomainID: mappableDomain.ID,
-		// 		OwnerID:          lo.ToPtr(testUser1.OrganizationID),
-		// 	},
-		// 	client: suite.client.api,
-		// 	ctx:    adminUser.UserCtx,
-		// },
-		// {
-		// 	name: "not authorized",
-		// 	request: testclient.CreateCustomDomainInput{
-		// 		CnameRecord:      "test.example.com",
-		// 		MappableDomainID: mappableDomain.ID,
-		// 		OwnerID:          lo.ToPtr(testUser1.OrganizationID),
-		// 	},
-		// 	client:      suite.client.api,
-		// 	ctx:         viewOnlyUser.UserCtx,
-		// 	expectedErr: notAuthorizedErrorMsg,
-		// },
-		// {
-		// 	name: "invalid domain",
-		// 	request: testclient.CreateCustomDomainInput{
-		// 		CnameRecord:      "!invalid-domain",
-		// 		MappableDomainID: mappableDomain.ID,
-		// 		OwnerID:          lo.ToPtr(testUser1.OrganizationID),
-		// 	},
-		// 	client:      suite.client.api,
-		// 	ctx:         testUser1.UserCtx,
-		// 	expectedErr: "invalid or unparsable field: url",
-		// },
-		// {
-		// 	name: "missing mappable domain",
-		// 	request: testclient.CreateCustomDomainInput{
-		// 		CnameRecord: "test2.example.com",
-		// 		OwnerID:     lo.ToPtr(testUser1.OrganizationID),
-		// 	},
-		// 	client:      suite.client.api,
-		// 	ctx:         testUser1.UserCtx,
-		// 	expectedErr: "mappable_domain_id",
-		// },
+		{
+			name: "happy path, adminUser",
+			request: testclient.CreateCustomDomainInput{
+				CnameRecord:      "test.example.com",
+				MappableDomainID: mappableDomain.ID,
+				OwnerID:          lo.ToPtr(testUser1.OrganizationID),
+			},
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
+		},
+		{
+			name: "not authorized",
+			request: testclient.CreateCustomDomainInput{
+				CnameRecord:      "test.example.com",
+				MappableDomainID: mappableDomain.ID,
+				OwnerID:          lo.ToPtr(testUser1.OrganizationID),
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "invalid domain",
+			request: testclient.CreateCustomDomainInput{
+				CnameRecord:      "!invalid-domain",
+				MappableDomainID: mappableDomain.ID,
+				OwnerID:          lo.ToPtr(testUser1.OrganizationID),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "invalid or unparsable field: url",
+		},
+		{
+			name: "missing mappable domain",
+			request: testclient.CreateCustomDomainInput{
+				CnameRecord: "test2.example.com",
+				OwnerID:     lo.ToPtr(testUser1.OrganizationID),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "mappable_domain_id",
+		},
 	}
 
 	for _, tc := range testCases {

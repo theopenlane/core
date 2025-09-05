@@ -593,8 +593,7 @@ func updateDefaultOrgIfPersonal(ctx context.Context, userID, orgID string, clien
 
 // orgModuleConfig controls which modules are selected when creating default module records - small functional options wrapper
 type orgModuleConfig struct {
-	personalOrg bool
-	trial       bool
+	trial bool
 }
 
 // orgModuleOption sets fields on orgModuleConfig
