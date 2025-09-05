@@ -46,6 +46,8 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 	logoFile, _ := objects.FilesFromContextWithKey(ctx, logoKey)
 	faviconFile, _ := objects.FilesFromContextWithKey(ctx, faviconKey)
 
+	var fileTuples []fgax.TupleKey
+
 	// this should always be true, but check just in case
 	if logoFile != nil && logoFile[0].FieldName == logoKey {
 		// we should only have one file
@@ -58,6 +60,10 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 		logoFile[0].Parent.Type = "trust_center_setting"
 
 		ctx = objects.UpdateFileInContextByKey(ctx, logoKey, logoFile[0])
+
+		// add wildcard viewer tuples to allow any user to access the logo file
+		wildcardTuples := fgax.CreateWildcardViewerTuple(logoFile[0].ID, generated.TypeFile)
+		fileTuples = append(fileTuples, wildcardTuples...)
 	}
 
 	if faviconFile != nil && faviconFile[0].FieldName == faviconKey {
@@ -71,6 +77,19 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 		faviconFile[0].Parent.Type = "trust_center_setting"
 
 		ctx = objects.UpdateFileInContextByKey(ctx, faviconKey, faviconFile[0])
+
+		// add wildcard viewer tuples to allow any user to access the favicon file
+		wildcardTuples := fgax.CreateWildcardViewerTuple(faviconFile[0].ID, generated.TypeFile)
+		fileTuples = append(fileTuples, wildcardTuples...)
+	}
+
+	// write the wildcard tuples to allow any user to access the files
+	if len(fileTuples) > 0 {
+		if _, err := m.Authz.WriteTupleKeys(ctx, fileTuples, nil); err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create wildcard file access tuples")
+			return ctx, fmt.Errorf("failed to create file access permissions: %w", err)
+		}
+		zerolog.Ctx(ctx).Debug().Interface("tuples", fileTuples).Msg("created wildcard file access tuples")
 	}
 
 	return ctx, nil

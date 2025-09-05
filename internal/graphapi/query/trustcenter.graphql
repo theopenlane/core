@@ -24,6 +24,11 @@ mutation CreateTrustCenter($input: CreateTrustCenterInput!) {
         logoFile {
           presignedURL
         }
+        faviconRemoteURL
+        faviconLocalFileID
+        faviconFile {
+          presignedURL
+        }
         themeMode
         font
         foregroundColor
@@ -74,6 +79,11 @@ query GetAllTrustCenters {
           logoFile {
             presignedURL
           }
+          faviconRemoteURL
+          faviconLocalFileID
+          faviconFile {
+            presignedURL
+          }
           themeMode
           font
           foregroundColor
@@ -107,6 +117,11 @@ query GetTrustCenterByID($trustCenterId: ID!) {
       logoRemoteURL
       logoLocalFileID
       logoFile {
+        presignedURL
+      }
+      faviconRemoteURL
+      faviconLocalFileID
+      faviconFile {
         presignedURL
       }
       themeMode
@@ -152,6 +167,11 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
           logoFile {
             presignedURL
           }
+          faviconRemoteURL
+          faviconLocalFileID
+          faviconFile {
+            presignedURL
+          }
           themeMode
           font
           foregroundColor
@@ -186,6 +206,11 @@ mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterI
         logoRemoteURL
         logoLocalFileID
         logoFile {
+          presignedURL
+        }
+        faviconRemoteURL
+        faviconLocalFileID
+        faviconFile {
           presignedURL
         }
         themeMode
