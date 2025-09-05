@@ -129,7 +129,11 @@ func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) 
 		BearerToken: pat.Token,
 	}
 
-	apiClientPat, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderPAT))
+	apiClientPat, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore,
+		openlaneclient.WithCredentials(authHeaderPAT),
+		openlaneclient.WithInterceptors(
+			openlaneclient.WithOrganizationHeader(user.OrganizationID),
+		))
 	requireNoError(err)
 
 	return apiClientPat

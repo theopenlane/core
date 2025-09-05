@@ -88,7 +88,6 @@ func (ActionPlan) Modules() []models.OrgModule {
 		models.CatalogComplianceModule,
 		models.CatalogPolicyManagementAddon,
 		models.CatalogRiskManagementAddon,
-		models.CatalogBaseModule,
 		models.CatalogEntityManagementModule,
 	}
 }

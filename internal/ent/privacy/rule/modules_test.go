@@ -25,7 +25,28 @@ import (
 
 func createExportMutation(t *testing.T) ent.Mutation {
 	t.Helper()
-	return generated.NewClient().Export.Create().Mutation()
+	return generated.NewClient(
+		generated.EntConfig(
+			&entconfig.Config{
+				Modules: entconfig.Modules{
+					Enabled: true,
+				},
+			},
+		),
+	).Export.Create().Mutation()
+}
+
+func createControlMutation(t *testing.T) ent.Mutation {
+	t.Helper()
+	return generated.NewClient(
+		generated.EntConfig(
+			&entconfig.Config{
+				Modules: entconfig.Modules{
+					Enabled: true,
+				},
+			},
+		),
+	).Control.Create().Mutation()
 }
 
 func setupContext(t *testing.T, org string, feats []models.OrgModule) context.Context {
@@ -82,14 +103,14 @@ func TestHasAllFeatures(t *testing.T) {
 	ok, missingModule, err := rule.HasAllFeatures(ctx, models.CatalogTrustCenterModule)
 	require.NoError(t, err)
 	assert.False(t, ok)
-	assert.Equal(t, models.CatalogTrustCenterModule, missingModule)
+	assert.Equal(t, models.CatalogTrustCenterModule, *missingModule)
 
 	ok, _, err = rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule)
 	require.NoError(t, err)
 	assert.True(t, ok)
 }
 
-func TestDenyIfMissingAllModules(t *testing.T) {
+func TestDenyIfMissingAllModulesBase(t *testing.T) {
 	tests := []struct {
 		title            string
 		createMutationFn func() ent.Mutation
@@ -107,20 +128,63 @@ func TestDenyIfMissingAllModules(t *testing.T) {
 			shouldSkip: true,
 		},
 		{
-			title: "Export features missing should deny",
+			title: "Export features only requires base, should allow",
 			createMutationFn: func() ent.Mutation {
 				return createExportMutation(t)
 			},
-			modules:       []models.OrgModule{models.CatalogComplianceModule}, // missing base module
-			shouldDeny:    true,
-			expectedError: "features are not enabled",
+			modules:    []models.OrgModule{models.CatalogComplianceModule},
+			shouldSkip: true,
 		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.title, func(t *testing.T) {
+
+			ctx := setupContext(t, "test-org", tt.modules)
+
+			err := rule.DenyIfMissingAllModules().EvalMutation(ctx, tt.createMutationFn())
+
+			if tt.shouldSkip {
+				require.Error(t, err)
+				assert.Contains(t, err.Error(), "skip rule")
+				return
+			}
+
+			if tt.shouldDeny {
+				require.Error(t, err)
+				assert.Contains(t, err.Error(), tt.expectedError)
+				assert.NotContains(t, err.Error(), "skip rule")
+				return
+			}
+
+			require.NoError(t, err)
+		})
+	}
+}
+
+func TestDenyIfMissingAllModules(t *testing.T) {
+	tests := []struct {
+		title            string
+		createMutationFn func() ent.Mutation
+		modules          []models.OrgModule
+		shouldSkip       bool
+		shouldDeny       bool
+		expectedError    string
+	}{
 		{
-			title: "features present should skip",
+			title: "Missing compliance module",
 			createMutationFn: func() ent.Mutation {
-				return createExportMutation(t)
+				return createControlMutation(t)
 			},
 			modules:    []models.OrgModule{models.CatalogBaseModule},
+			shouldDeny: true,
+		},
+		{
+			title: "Allowed, has compliance module",
+			createMutationFn: func() ent.Mutation {
+				return createControlMutation(t)
+			},
+			modules:    []models.OrgModule{models.CatalogComplianceModule},
 			shouldSkip: true,
 		},
 	}
@@ -207,7 +271,7 @@ func TestDenyIfMissingAllModules_BypassScenarios(t *testing.T) {
 	})
 }
 
-func TestModulesEnabled(t *testing.T) {
+func TestModulesEnabledBase(t *testing.T) {
 	tests := []struct {
 		title       string
 		modules     []models.OrgModule
@@ -225,13 +289,63 @@ func TestModulesEnabled(t *testing.T) {
 			shouldAllow: true,
 		},
 		{
-			title:       "No modules enabled should allow (fallback behavior)",
+			title:       "No modules enabled but base (by default), should allow",
 			modules:     []models.OrgModule{},
 			shouldAllow: true,
 		},
 		{
-			title:       "Wrong module enabled should deny",
-			modules:     []models.OrgModule{models.CatalogComplianceModule}, // missing base module for export
+			title:       "Base module is always allowed",
+			modules:     []models.OrgModule{models.CatalogComplianceModule}, // base module always allowed
+			shouldAllow: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.title, func(t *testing.T) {
+			ctx := setupContext(t, "test-org", tt.modules)
+			mutation := createExportMutation(t)
+
+			rule := rule.DenyIfMissingAllModules()
+			err := rule.EvalMutation(ctx, mutation)
+
+			if tt.shouldAllow {
+				require.Error(t, err)
+				assert.Contains(t, err.Error(), "skip rule")
+			} else {
+				require.Error(t, err)
+				assert.Contains(t, err.Error(), tt.expectedErr)
+				assert.NotContains(t, err.Error(), "skip rule")
+			}
+		})
+	}
+}
+
+func TestModulesEnabled(t *testing.T) {
+	tests := []struct {
+		title       string
+		modules     []models.OrgModule
+		shouldAllow bool
+		expectedErr string
+	}{
+		{
+			title:       "Compliance module enabled should allow",
+			modules:     []models.OrgModule{models.CatalogComplianceModule},
+			shouldAllow: true,
+		},
+		{
+			title:       "Multiple modules enabled should allow",
+			modules:     []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogExtraEvidenceStorageAddon},
+			shouldAllow: true,
+		},
+		{
+			title:       "No modules enabled should allow enabled should deny",
+			modules:     []models.OrgModule{},
+			shouldAllow: false,
+			expectedErr: "features are not enabled",
+		},
+		{
+			title:       "Missing Compliance module",
+			modules:     []models.OrgModule{models.CatalogBaseModule, models.CatalogTrustCenterModule},
 			shouldAllow: false,
 			expectedErr: "features are not enabled",
 		},
@@ -240,7 +354,7 @@ func TestModulesEnabled(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.title, func(t *testing.T) {
 			ctx := setupContext(t, "test-org", tt.modules)
-			mutation := createExportMutation(t)
+			mutation := createControlMutation(t)
 
 			rule := rule.DenyIfMissingAllModules()
 			err := rule.EvalMutation(ctx, mutation)

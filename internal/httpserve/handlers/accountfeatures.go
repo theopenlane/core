@@ -1,14 +1,17 @@
 package handlers
 
 import (
+	"sort"
+
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 
 	sliceutil "github.com/theopenlane/utils/slice"
@@ -35,23 +38,22 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	// TODO: get this from FGA instead of org subscriptions once that work is done
-	// so the backend and frontend are in sync
-	org, err := h.DBClient.Organization.Query().WithOrgSubscriptions().Where(organization.ID(in.ID)).Only(reqCtx)
+	var features []string
+
+	if in.ID != "" {
+		features, err = rule.GetFeaturesForSpecificOrganization(reqCtx, in.ID)
+	} else {
+		features, err = rule.GetOrgFeatures(reqCtx)
+	}
+
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting organization")
+		log.Error().Err(err).Msg("error getting features")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
-	if len(org.Edges.OrgSubscriptions) != 1 {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting organization subscription")
-
-		return h.BadRequest(ctx, ErrInvalidInput, openapi)
-	}
-
-	// get the features from the subscription
-	features := org.Edges.OrgSubscriptions[0].FeatureLookupKeys
+	// sort for consistency
+	sort.Strings(features)
 
 	return h.Success(ctx, models.AccountFeaturesReply{
 		Reply:          rout.Reply{Success: true},

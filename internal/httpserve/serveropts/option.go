@@ -544,16 +544,24 @@ func WithObjectStorage() ServerOption {
 // WithEntitlements sets up the entitlements client for the server which currently only supports stripe
 func WithEntitlements() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
+		// ensure we have a struct to be able to check the enabled flag
+		// on the config
+		client := &entitlements.StripeClient{
+			Config: &s.Config.Settings.Entitlements,
+		}
+
 		if s.Config.Settings.Entitlements.Enabled {
-			client, err := entitlements.NewStripeClient(
+			var err error
+			client, err = entitlements.NewStripeClient(
 				entitlements.WithAPIKey(s.Config.Settings.Entitlements.PrivateStripeKey),
 				entitlements.WithConfig(s.Config.Settings.Entitlements))
 			if err != nil {
 				log.Panic().Err(err).Msg("Error creating entitlements client")
 			}
 
-			s.Config.Handler.Entitlements = client
 		}
+
+		s.Config.Handler.Entitlements = client
 	})
 }
 

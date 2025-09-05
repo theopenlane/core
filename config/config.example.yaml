@@ -89,6 +89,7 @@ entConfig:
     maxSchemaImportSize: 262144
     modules:
         enabled: true
+        useSandbox: false
     summarizer:
         llm:
             anthropic:
@@ -281,7 +282,6 @@ slack:
     webhookURL: ""
 subscription:
     enabled: false
-    personalOrgSubscriptionPriceID: price_1QycPyBvxky1R7Svz0gOWnNh
     privateStripeKey: ""
     publicStripeKey: ""
     stripeBillingPortalSuccessURL: https://console.openlane.com/billing
@@ -289,7 +289,6 @@ subscription:
     stripeWebhookEvents: null
     stripeWebhookSecret: ""
     stripeWebhookURL: https://api.openlane.com/v1/stripe/webhook
-    trialSubscriptionPriceID: price_1QKLyeBvxky1R7SvaZYGWyQb
 totp:
     codeLength: 6
     enabled: true

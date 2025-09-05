@@ -20,7 +20,8 @@ var ErrTooManyFaviconFiles = errors.New("too many favicon files uploaded, only o
 func HookTrustCenterSetting() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterSettingFunc(func(ctx context.Context, m *generated.TrustCenterSettingMutation) (generated.Value, error) {
-			zerolog.Ctx(ctx).Info().Msg("trust center setting hook")
+			zerolog.Ctx(ctx).Debug().Msg("trust center setting hook")
+
 			// check for uploaded files (e.g. logo image)
 			fileIDs := objects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
@@ -121,7 +122,8 @@ func trustCenterSettingCreateHook(ctx context.Context, m *generated.TrustCenterS
 		if err != nil {
 			return err
 		}
-		zerolog.Ctx(ctx).Info().Msg(fmt.Sprintf("org tuple: %+v, request: %+v", orgTuple, req))
+
+		zerolog.Ctx(ctx).Debug().Msg(fmt.Sprintf("org tuple: %+v, request: %+v", orgTuple, req))
 
 		if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{orgTuple}, nil); err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")

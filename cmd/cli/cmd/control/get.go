@@ -52,7 +52,7 @@ func get(ctx context.Context) error {
 	if refCode != "" {
 		o, err := client.GetControls(ctx, cmd.First, cmd.Last, &openlaneclient.ControlWhereInput{
 			RefCode: &refCode,
-		}, nil)
+		})
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)

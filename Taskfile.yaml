@@ -378,7 +378,16 @@ tasks:
   # dev tasks
   run-dev:
     dotenv: ["{{.ENV}}/.env-dev"]
-    desc: runs the core server in dev mode
+    desc: runs the core server in dev mode with the minimum parts
+    deps: ['go:build-cli']
+    cmds:
+      - task: compose:redis
+      - task: compose:fga
+      - task: run-api
+
+  run-dev-full:
+    dotenv: ["{{.ENV}}/.env-dev"]
+    desc: runs the core server in dev mode with riverboat and metrics
     deps: ['go:build-cli']
     cmds:
       - task: compose:redis

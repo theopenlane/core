@@ -60,13 +60,18 @@ func (e CustomError) Module() models.OrgModule {
 }
 
 // NewCustomErrorWithModule creates a custom error with the given code, error and module
-func NewCustomErrorWithModule(code, message string, err error, module models.OrgModule) CustomError {
-	return CustomError{
+func NewCustomErrorWithModule(code, message string, err error, module *models.OrgModule) CustomError {
+	cErr := CustomError{
 		code:    code,
 		message: message,
 		err:     err,
-		module:  module,
 	}
+
+	if module != nil {
+		cErr.module = *module
+	}
+
+	return cErr
 }
 
 // NewCustomError creates a new CustomError with the given code and error

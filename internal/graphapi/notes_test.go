@@ -51,17 +51,6 @@ func TestMutationUpdateNote(t *testing.T) {
 			expectedErr: "value is less than the required length",
 		},
 		{
-			name: "owner id must be present with pat",
-			request: testclient.UpdateTaskInput{
-				AddComment: &testclient.CreateNoteInput{
-					Text: "This is a test note using PAT",
-				},
-			},
-			client:      suite.client.apiWithPAT,
-			ctx:         context.Background(),
-			expectedErr: "owner_id is required",
-		},
-		{
 			name: "task not found",
 			request: testclient.UpdateTaskInput{
 				AddComment: &testclient.CreateNoteInput{

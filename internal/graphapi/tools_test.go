@@ -12,6 +12,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/mock"
+	"github.com/stripe/stripe-go/v82"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"gotest.tools/v3/assert"
 
@@ -30,6 +31,8 @@ import (
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
 	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
@@ -47,17 +50,19 @@ const (
 	redacted = "*****************************"
 
 	// common error message strings
-	notFoundErrorMsg      = "not found"
-	notExistsErrorMsg     = "does not exist"
-	notAuthorizedErrorMsg = "you are not authorized to perform this action"
-	couldNotFindUser      = "could not identify authenticated user in request"
+	notFoundErrorMsg         = "not found"
+	notAuthorizedErrorMsg    = "you are not authorized to perform this action"
+	couldNotFindUser         = "could not identify authenticated user in request"
+	seedStripeSubscriptionID = "sub_test_subscription"
+	webhookSecret            = "whsec_test_secret"
 )
 
 // GraphTestSuite handles the setup and teardown between tests
 type GraphTestSuite struct {
-	client *client
-	tf     *testutils.TestFixture
-	ofgaTF *fgatest.OpenFGATestFixture
+	client            *client
+	tf                *testutils.TestFixture
+	ofgaTF            *fgatest.OpenFGATestFixture
+	stripeMockBackend *mocks.MockStripeBackend
 }
 
 // client contains all the clients the test need to interact with
@@ -110,7 +115,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
 		fgatest.WithModelFile(fgaModelFile),
 		fgatest.WithEnvVars(map[string]string{
-			"OPENFGA_MAX_CHECKS_PER_BATCH_CHECK": "100",
+			"OPENFGA_MAX_CHECKS_PER_BATCH_CHECK":          "100",
+			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",
+			"OPENFGA_LIST_OBJECTS_ITERATOR_CACHE_ENABLED": "false",
 		},
 		))
 
@@ -168,6 +175,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		soiree.WithName("ent_client_pool"),
 	)
 
+	// setup mock entitlements client
+	entitlements, err := suite.mockStripeClient()
+	requireNoError(err)
+
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
 		ent.Emailer(&emailtemplates.Config{}), // add noop email config
@@ -179,6 +190,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		ent.EntConfig(entCfg),
 		ent.Summarizer(summarizerClient),
 		ent.PondPool(pool),
+		ent.EntitlementManager(entitlements),
 	}
 
 	// create database connection
@@ -306,4 +318,152 @@ func requireNoError(err error) {
 
 		os.Exit(1)
 	}
+}
+
+// mockStripeClient creates a new stripe client with mock backend
+func (suite *GraphTestSuite) mockStripeClient() (*entitlements.StripeClient, error) {
+	suite.stripeMockBackend = new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{
+		API:     suite.stripeMockBackend,
+		Connect: suite.stripeMockBackend,
+		Uploads: suite.stripeMockBackend,
+	}
+
+	suite.orgSubscriptionMocks()
+
+	return entitlements.NewStripeClient(entitlements.WithAPIKey("sk_test_testing"),
+		entitlements.WithConfig(entitlements.Config{
+			Enabled:             true,
+			StripeWebhookSecret: webhookSecret,
+		},
+		),
+		entitlements.WithBackends(stripeTestBackends),
+	)
+}
+
+var mockItems = []*stripe.SubscriptionItem{
+	{
+		Price: &stripe.Price{
+			Product: &stripe.Product{
+				ID: "prod_test_product",
+			},
+			ID: "price_test_price",
+			Recurring: &stripe.PriceRecurring{
+				Interval: "month",
+			},
+			Currency:   "usd",
+			UnitAmount: 1000,
+		},
+	},
+}
+
+// mockCustomer for webhook tests
+var mockCustomer = &stripe.Customer{
+	ID: "cus_test_customer",
+	Subscriptions: &stripe.SubscriptionList{
+		Data: []*stripe.Subscription{
+			{
+				Customer: &stripe.Customer{
+					ID: "cus_test_customer",
+				},
+				ID: seedStripeSubscriptionID,
+				Items: &stripe.SubscriptionItemList{
+					Data: mockItems,
+				},
+			},
+		},
+	},
+}
+
+var mockSubscription = &stripe.Subscription{
+	ID:     "sub_test_subscription",
+	Status: "active",
+	Items: &stripe.SubscriptionItemList{
+		Data: mockItems,
+	},
+	Metadata: map[string]string{
+		"organization_id": ulids.New().String(),
+	},
+	Customer: &stripe.Customer{
+		ID: "cus_test_customer",
+	},
+	TrialEnd:     time.Now().Add(7 * 24 * time.Hour).Unix(), // 7 days from now
+	DaysUntilDue: 15,
+}
+
+var mockProduct = &stripe.Product{
+	ID:   "prod_test_product",
+	Name: "Test Product",
+}
+
+// orgSubscriptionMocks mocks the stripe calls for org subscription during the webhook tests
+func (suite *GraphTestSuite) orgSubscriptionMocks() {
+	// setup mocks for search
+	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.CustomerSearchResult")).Run(func(args mock.Arguments) {
+		mockCustomerSearchResult := args.Get(4).(*stripe.CustomerSearchResult)
+
+		data := []*stripe.Customer{}
+		data = append(data, mockCustomer)
+		*mockCustomerSearchResult = stripe.CustomerSearchResult{
+			Data: data,
+		}
+
+	}).Return(nil)
+
+	// setup mocks for get customer by id
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerRetrieveParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
+		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
+
+		*mockCustomerSearchResult = *mockCustomer
+
+	}).Return(nil)
+
+	// setup mocks for creating customer params
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerCreateParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
+		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
+
+		*mockCustomerSearchResult = *mockCustomer
+
+	}).Return(nil)
+
+	// mock for subscription create params
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionCreateParams"), mock.AnythingOfType("*stripe.Subscription")).Run(func(args mock.Arguments) {
+		mockSubscriptionSearchResult := args.Get(4).(*stripe.Subscription)
+
+		*mockSubscriptionSearchResult = *mockSubscription
+
+	}).Return(nil)
+
+	// mock for product retrieve params
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.ProductRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
+		mockProductRetrieveResult := args.Get(4).(*stripe.Product)
+
+		*mockProductRetrieveResult = *mockProduct
+
+	}).Return(nil)
+
+	// mock for product params
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
+		mockSubscriptionRetrieveResult := args.Get(4).(*stripe.Subscription)
+
+		*mockSubscriptionRetrieveResult = *mockSubscription
+
+	}).Return(nil)
+
+	// setup mocks for getting entitlements
+	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
+		mockCustomerSearchResult := args.Get(4).(*stripe.EntitlementsActiveEntitlementList)
+
+		*mockCustomerSearchResult = stripe.EntitlementsActiveEntitlementList{
+			Data: []*stripe.EntitlementsActiveEntitlement{
+				{
+					Feature: &stripe.EntitlementsFeature{
+						ID:        "feat_test_feature",
+						LookupKey: "test_feature",
+					},
+				},
+			},
+		}
+
+	}).Return(nil)
 }

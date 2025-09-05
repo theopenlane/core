@@ -85,6 +85,7 @@ data:
   CORE_ENTCONFIG_WINDMILL_ONSUCCESSSCRIPT: {{ .Values.openlane.coreConfiguration.entConfig.windmill.onSuccessScript | quote }}
   CORE_ENTCONFIG_MAXPOOLSIZE: {{ .Values.openlane.coreConfiguration.entConfig.maxPoolSize | quote | default "100" }}
   CORE_ENTCONFIG_MODULES_ENABLED: {{ .Values.openlane.coreConfiguration.entConfig.modules.enabled | quote | default "true" }}
+  CORE_ENTCONFIG_MODULES_USESANDBOX: {{ .Values.openlane.coreConfiguration.entConfig.modules.useSandbox | quote | default "false" }}
   CORE_ENTCONFIG_MAXSCHEMAIMPORTSIZE: {{ .Values.openlane.coreConfiguration.entConfig.maxSchemaImportSize | quote | default "262144" }}
   CORE_AUTH_ENABLED: {{ .Values.openlane.coreConfiguration.auth.enabled | quote | default "true" }}
   CORE_AUTH_TOKEN_KID: {{ .Values.openlane.coreConfiguration.auth.token.kid | quote }}
@@ -315,8 +316,6 @@ data:
   CORE_OBJECTSTORAGE_MAXMEMORYMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxMemoryMB | quote }}
   CORE_SUBSCRIPTION_ENABLED: {{ .Values.openlane.coreConfiguration.subscription.enabled | quote | default "false" }}
   CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: {{ .Values.openlane.coreConfiguration.subscription.publicStripeKey | quote }}
-  CORE_SUBSCRIPTION_TRIALSUBSCRIPTIONPRICEID: {{ .Values.openlane.coreConfiguration.subscription.trialSubscriptionPriceID | quote | default "price_1QKLyeBvxky1R7SvaZYGWyQb" }}
-  CORE_SUBSCRIPTION_PERSONALORGSUBSCRIPTIONPRICEID: {{ .Values.openlane.coreConfiguration.subscription.personalOrgSubscriptionPriceID | quote | default "price_1QycPyBvxky1R7Svz0gOWnNh" }}
 {{- if .Values.openlane.coreConfiguration.subscription.stripeWebhookURL }}
   CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookURL }}
 {{- else if .Values.domain }}

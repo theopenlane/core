@@ -75,7 +75,7 @@ func (d DocumentData) Edges() []ent.Edge {
 
 func (DocumentData) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogComplianceModule,
 	}
 }
 

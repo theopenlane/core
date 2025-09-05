@@ -7,8 +7,8 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/require"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
@@ -16,9 +16,8 @@ import (
 )
 
 var (
-	testUser1     testUserDetails
-	testUser2     testUserDetails
-	dummyFeatures = []string{"feature1", "feature2"}
+	testUser1 testUserDetails
+	testUser2 testUserDetails
 )
 
 // testUserDetails is a struct that holds the details of a test user
@@ -125,12 +124,6 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 
 	testUser.OrganizationID = testOrg.ID
 
-	// add dummy subscription to the organization
-	err = suite.db.OrgSubscription.Update().Where(orgsubscription.OwnerID(testOrg.ID)).
-		SetFeatureLookupKeys(dummyFeatures).
-		Exec(userCtx)
-	require.NoError(t, err)
-
 	// setup user context with the org (and not the personal org)
 	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
 
@@ -151,7 +144,6 @@ func (suite *HandlerTestSuite) enableModules(ctx context.Context, userID, orgID 
 	}
 
 	newCtx := auth.NewTestContextWithOrgID(userID, orgID)
-	newCtx = privacy.DecisionContext(newCtx, privacy.Allow)
 	newCtx = ent.NewContext(newCtx, suite.db)
 
 	for _, feature := range features {
@@ -163,6 +155,9 @@ func (suite *HandlerTestSuite) enableModules(ctx context.Context, userID, orgID 
 			Save(newCtx)
 		require.NoError(suite.T(), err)
 	}
+
+	err := entitlements.CreateFeatureTuples(newCtx, &suite.db.OrgModule.Authz, orgID, features)
+	require.NoError(suite.T(), err)
 }
 
 // setupTestData creates test users and sets up the clients with the necessary tokens

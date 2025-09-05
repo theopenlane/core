@@ -30,7 +30,7 @@ func SupportedEventTypeStrings() []string {
 func (sc *StripeClient) CreateWebhookEndpoint(ctx context.Context, url string, events []string) (*stripe.WebhookEndpoint, error) {
 	if len(events) == 0 {
 		switch {
-		case len(sc.Config.StripeWebhookEvents) > 0:
+		case sc.Config != nil && len(sc.Config.StripeWebhookEvents) > 0:
 			events = sc.Config.StripeWebhookEvents
 		default:
 			events = SupportedEventTypeStrings()

@@ -98,7 +98,7 @@ func (e EntityType) Policy() ent.Policy {
 
 func (EntityType) Modules() []models.OrgModule {
 	return []models.OrgModule{
+		// entity types we seed for the user, so we can just include the base module
 		models.CatalogBaseModule,
-		models.CatalogEntityManagementModule,
 	}
 }

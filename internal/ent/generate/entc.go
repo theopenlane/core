@@ -17,6 +17,7 @@ import (
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
+	"github.com/theopenlane/core/internal/entitlements/genfeatures"
 	"github.com/theopenlane/core/internal/genhelpers"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/enums/exportenums"
@@ -161,6 +162,10 @@ func main() {
 			entfgaExt,
 		)); err != nil {
 		log.Fatal().Err(err).Msg("running ent codegen")
+	}
+
+	if err := genfeatures.GenerateModulePerSchema(schemaPath, featureMapDir); err != nil {
+		log.Fatal().Err(err).Msg("generating module per schema")
 	}
 }
 

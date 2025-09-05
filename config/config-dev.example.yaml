@@ -127,7 +127,11 @@ ratelimit:
 entConfig:
   maxSchemaImportSize: 262144
   modules:
+    # this should only be enabled if you have subscriptions enabled as well
     enabled: false
+    # this will use the catalog-sandbox.yaml, otherwise it will use catalog.yaml
+    # this should allow you to use the sandbox without requiring seeding new price data
+    useSandbox: true
   entityTypes:
     - vendor
     - account
@@ -155,6 +159,12 @@ objectStorage:
 
 subscription:
   enabled: false
+  publicStripeKey: pk_test_redacted
+  privateStripeKey: sk_test_redacted
+  stripeBillingPortalSuccessURL: http://localhost:3001/organization-settings/billing
+  stripeCancellationReturnURL: http://localhost:3001/organization-settings/billing/subscription_canceled
+  stripeWebhookURL: https://localhost:17608/v1/stripe/webhook
+  stripeWebhookSecret: ""
 
 integrationOauthProvider:
   successRedirectUrl: "http://localhost:3001/organization-settings/integrations"

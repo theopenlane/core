@@ -33,7 +33,12 @@ func WithCredentials(creds Credentials) ClientOption {
 // WithInterceptors sets the interceptors for the APIv1 client
 func WithInterceptors(interceptors clientv2.RequestInterceptor) ClientOption {
 	return func(c *APIv1) error {
-		c.Config.Interceptors = []clientv2.RequestInterceptor{interceptors}
+		if c.Config.Interceptors == nil {
+			c.Config.Interceptors = []clientv2.RequestInterceptor{}
+		}
+
+		c.Config.Interceptors = append(c.Config.Interceptors, interceptors)
+
 		return nil
 	}
 }

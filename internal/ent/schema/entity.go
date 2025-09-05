@@ -148,7 +148,6 @@ func (e Entity) Policy() ent.Policy {
 
 func (Entity) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
 		models.CatalogEntityManagementModule,
 	}
 }

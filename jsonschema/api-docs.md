@@ -548,6 +548,7 @@ Modules settings for features access
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled indicates whether to check and verify module access<br/>||
+|**useSandbox**|`boolean`|UseSandbox indicates whether to use the sandbox catalog for module access checks<br/>||
 
 **Additional Properties:** not allowed  
 <a name="auth"></a>
@@ -1139,8 +1140,6 @@ Config is the configuration for the object store
 |**publicStripeKey**|`string`|PublicStripeKey is the key for the stripe service<br/>||
 |**privateStripeKey**|`string`|PrivateStripeKey is the key for the stripe service<br/>||
 |**stripeWebhookSecret**|`string`|StripeWebhookSecret is the secret for the stripe service<br/>||
-|**trialSubscriptionPriceID**|`string`|TrialSubscriptionPriceID is the price ID for the trial subscription<br/>||
-|**personalOrgSubscriptionPriceID**|`string`|PersonalOrgSubscriptionPriceID is the price ID for the personal org subscription<br/>||
 |**stripeWebhookURL**|`string`|StripeWebhookURL is the URL for the stripe webhook<br/>||
 |**stripeBillingPortalSuccessURL**|`string`|StripeBillingPortalSuccessURL<br/>||
 |**stripeCancellationReturnURL**|`string`|StripeCancellationReturnURL is the URL for the stripe cancellation return<br/>||

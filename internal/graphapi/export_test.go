@@ -51,16 +51,6 @@ func TestMutationCreateExport(t *testing.T) {
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
 		},
-		{
-			name: "missing owner id with PAT",
-			request: testclient.CreateExportInput{
-				ExportType: enums.ExportTypeControl,
-				Format:     enums.ExportFormatCsv,
-			},
-			client:      suite.client.apiWithPAT,
-			ctx:         context.Background(),
-			expectedErr: "owner_id is required",
-		},
 	}
 
 	for _, tc := range testCases {

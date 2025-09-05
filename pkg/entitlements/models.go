@@ -12,7 +12,6 @@ type OrganizationCustomer struct {
 	OrganizationSettingsID     string `json:"organization_settings_id"`
 	StripeCustomerID           string `json:"stripe_customer_id"`
 	OrganizationName           string `json:"organization_name"`
-	PersonalOrg                bool   `json:"personal_org"`
 	OrganizationSubscriptionID string `json:"organization_subscription_id"`
 	StripeSubscriptionID       string `json:"stripe_subscription_id"`
 	PaymentMethodAdded         bool   `json:"payment_method_added"`

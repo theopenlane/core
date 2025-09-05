@@ -8,10 +8,11 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 func testInterceptorLogic(client *generated.Client) bool {
-	if client != nil && client.EntConfig != nil && !client.EntConfig.Modules.Enabled {
+	if utils.ModulesEnabled(client) {
 		return true
 	}
 
@@ -27,12 +28,12 @@ func TestInterceptorModules(t *testing.T) {
 		{
 			title:            "modules enabled - should continue processing",
 			entConfigEnabled: lo.ToPtr(true),
-			expectedSkip:     false,
+			expectedSkip:     true,
 		},
 		{
 			title:            "modules disabled - should skip",
 			entConfigEnabled: lo.ToPtr(false),
-			expectedSkip:     true,
+			expectedSkip:     false,
 		},
 		{
 			title:            "no EntConfig - should not panic and continue",

@@ -85,11 +85,11 @@ func TestMutationCreateTrustCenterDomain(t *testing.T) {
 		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter4.ID}).MustDelete(testUserDomainExists.UserCtx, t)
 	})
 
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(t.Context(), t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
 }
 
-func TestMutationCreateTrustCenterDomainMappableDomainDNE(t *testing.T) {
+func TestMutationCreateTrustCenterDomainMappableDomainNotExists(t *testing.T) {
 	// Create a new user to avoid slug conflicts
 	testUser := suite.userBuilder(t.Context(), t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)

@@ -9,10 +9,6 @@ type Config struct {
 	PrivateStripeKey string `json:"privateStripeKey" koanf:"privateStripeKey" default:"" sensitive:"true"`
 	// StripeWebhookSecret is the secret for the stripe service
 	StripeWebhookSecret string `json:"stripeWebhookSecret" koanf:"stripeWebhookSecret" default:"" sensitive:"true"`
-	// TrialSubscriptionPriceID is the price ID for the trial subscription
-	TrialSubscriptionPriceID string `json:"trialSubscriptionPriceID" koanf:"trialSubscriptionPriceID" default:"price_1QKLyeBvxky1R7SvaZYGWyQb"`
-	// PersonalOrgSubscriptionPriceID is the price ID for the personal org subscription
-	PersonalOrgSubscriptionPriceID string `json:"personalOrgSubscriptionPriceID" koanf:"personalOrgSubscriptionPriceID" default:"price_1QycPyBvxky1R7Svz0gOWnNh"`
 	// StripeWebhookURL is the URL for the stripe webhook
 	StripeWebhookURL string `json:"stripeWebhookURL" koanf:"stripeWebhookURL" default:"https://api.openlane.com/v1/stripe/webhook" domain:"inherit" domainPrefix:"https://api" domainSuffix:"/v1/stripe/webhook"`
 	// StripeBillingPortalSuccessURL
@@ -53,13 +49,6 @@ func WithStripeWebhookSecret(stripeWebhookSecret string) ConfigOpts {
 	}
 }
 
-// WithTrialSubscriptionPriceID sets the trial subscription price ID
-func WithTrialSubscriptionPriceID(trialSubscriptionPriceID string) ConfigOpts {
-	return func(c *Config) {
-		c.TrialSubscriptionPriceID = trialSubscriptionPriceID
-	}
-}
-
 // WithStripeWebhookURL sets the stripe webhook URL
 func WithStripeWebhookURL(stripeWebhookURL string) ConfigOpts {
 	return func(c *Config) {
@@ -71,13 +60,6 @@ func WithStripeWebhookURL(stripeWebhookURL string) ConfigOpts {
 func WithStripeBillingPortalSuccessURL(stripeBillingPortalSuccessURL string) ConfigOpts {
 	return func(c *Config) {
 		c.StripeBillingPortalSuccessURL = stripeBillingPortalSuccessURL
-	}
-}
-
-// WithPersonalOrgSubscriptionPriceID sets the personal org subscription price ID
-func WithPersonalOrgSubscriptionPriceID(personalOrgSubscriptionPriceID string) ConfigOpts {
-	return func(c *Config) {
-		c.PersonalOrgSubscriptionPriceID = personalOrgSubscriptionPriceID
 	}
 }
 
@@ -103,4 +85,9 @@ func NewConfig(opts ...ConfigOpts) *Config {
 	}
 
 	return c
+}
+
+// IsEnabled checks if the entitlements feature is enabled based on the status of the Stripe client settings
+func (c *Config) IsEnabled() bool {
+	return c.Enabled
 }
