@@ -23,6 +23,16 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 	operation := suite.createImpersonationOperation("AccountFeaturesHandler", "Get account features")
 	suite.registerTestHandler("POST", "account/features", operation, suite.h.AccountFeaturesHandler)
 
+	// add modules for the user
+	modulesEnabled := []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule}
+
+	featuresExpected := []string{}
+	for _, m := range modulesEnabled {
+		featuresExpected = append(featuresExpected, m.String())
+	}
+
+	suite.enableModules(testUser1.UserCtx, testUser1.ID, testUser1.OrganizationID, modulesEnabled)
+
 	testCases := []struct {
 		name             string
 		request          models.AccountFeaturesRequest
@@ -34,12 +44,12 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 			request: models.AccountFeaturesRequest{
 				ID: testUser1.OrganizationID,
 			},
-			expectedFeatures: dummyFeatures,
+			expectedFeatures: featuresExpected,
 		},
 		{
 			name:             "no id provided, get from context",
 			request:          models.AccountFeaturesRequest{},
-			expectedFeatures: dummyFeatures,
+			expectedFeatures: featuresExpected,
 		},
 	}
 

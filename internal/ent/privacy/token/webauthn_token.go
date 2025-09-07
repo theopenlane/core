@@ -17,7 +17,7 @@ func NewContextWithWebauthnCreationContextKey(parent context.Context) context.Co
 	return contextx.With(parent, &WebauthnCreationContextKey{})
 }
 
-func WebauthCreationContextKeyFromContext(ctx context.Context) *WebauthnCreationContextKey {
+func WebauthnCreationContextKeyFromContext(ctx context.Context) *WebauthnCreationContextKey {
 	w, ok := contextx.From[*WebauthnCreationContextKey](ctx)
 	if !ok {
 		return nil

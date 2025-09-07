@@ -1,7 +1,6 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -11,19 +10,12 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
 	"github.com/stripe/stripe-go/v82/webhook"
 
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/entitlements/mocks"
-)
-
-var (
-	seedStripeSubscriptionID = "sub_test_subscription"
 )
 
 func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
@@ -37,13 +29,6 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		SetOwnerID(testUser1.OrganizationID).
 		SetStripeSubscriptionID(seedStripeSubscriptionID).
 		ExecX(testUser1.UserCtx)
-
-	// setup mock entitlements client
-	entitlements, err := suite.mockStripeClient()
-	require.NoError(t, err)
-
-	suite.h.DBClient.EntitlementManager = entitlements
-	suite.h.Entitlements = entitlements
 
 	// add handler
 	// Create operation for WebhookReceiverHandler
@@ -206,93 +191,4 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			}
 		})
 	}
-}
-
-// mockStripeClient creates a new stripe client with mock backend
-func (suite *HandlerTestSuite) mockStripeClient() (*entitlements.StripeClient, error) {
-	suite.stripeMockBackend = new(mocks.MockStripeBackend)
-	stripeTestBackends := &stripe.Backends{
-		API:     suite.stripeMockBackend,
-		Connect: suite.stripeMockBackend,
-		Uploads: suite.stripeMockBackend,
-	}
-
-	suite.orgSubscriptionMocks()
-
-	return entitlements.NewStripeClient(entitlements.WithAPIKey("sk_test_testing"),
-		entitlements.WithConfig(entitlements.Config{
-			StripeWebhookSecret: webhookSecret,
-		},
-		),
-		entitlements.WithBackends(stripeTestBackends),
-	)
-}
-
-// mockCustomer for webhook tests
-var mockCustomer = &stripe.Customer{
-	ID: "cus_test_customer",
-	Subscriptions: &stripe.SubscriptionList{
-		Data: []*stripe.Subscription{
-			{
-				Customer: &stripe.Customer{
-					ID: "cus_test_customer",
-				},
-				ID: seedStripeSubscriptionID,
-				Items: &stripe.SubscriptionItemList{
-					Data: []*stripe.SubscriptionItem{
-						{
-							Price: &stripe.Price{
-								UnitAmount: 1000,
-								ID:         "price_test_price",
-								Currency:   "usd",
-								Recurring: &stripe.PriceRecurring{
-									Interval: "month",
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-	},
-}
-
-// orgSubscriptionMocks mocks the stripe calls for org subscription during the webhook tests
-func (suite *HandlerTestSuite) orgSubscriptionMocks() {
-	// setup mocks for search
-	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.CustomerSearchResult")).Run(func(args mock.Arguments) {
-		mockCustomerSearchResult := args.Get(4).(*stripe.CustomerSearchResult)
-
-		data := []*stripe.Customer{}
-		data = append(data, mockCustomer)
-		*mockCustomerSearchResult = stripe.CustomerSearchResult{
-			Data: data,
-		}
-
-	}).Return(nil)
-
-	// setup mocks for get customer by id
-	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerRetrieveParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
-		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
-
-		*mockCustomerSearchResult = *mockCustomer
-
-	}).Return(nil)
-
-	// setup mocks for getting entitlements
-	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
-		mockCustomerSearchResult := args.Get(4).(*stripe.EntitlementsActiveEntitlementList)
-
-		*mockCustomerSearchResult = stripe.EntitlementsActiveEntitlementList{
-			Data: []*stripe.EntitlementsActiveEntitlement{
-				{
-					Feature: &stripe.EntitlementsFeature{
-						ID:        "feat_test_feature",
-						LookupKey: "test_feature",
-					},
-				},
-			},
-		}
-
-	}).Return(nil)
 }

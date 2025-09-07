@@ -75,7 +75,6 @@ func (a Asset) Edges() []ent.Edge {
 
 func (a Asset) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
 		models.CatalogEntityManagementModule,
 	}
 }

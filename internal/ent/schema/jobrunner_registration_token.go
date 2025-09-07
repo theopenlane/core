@@ -117,7 +117,7 @@ func (JobRunnerRegistrationToken) Indexes() []ent.Index {
 
 func (JobRunnerRegistrationToken) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogComplianceModule,
 	}
 }
 

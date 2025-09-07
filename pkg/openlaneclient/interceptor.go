@@ -76,3 +76,15 @@ func WithImpersonationInterceptor(userID string, orgID string) clientv2.RequestI
 		return next(ctx, req, gqlInfo, res)
 	}
 }
+
+// WithOrganizationHeader adds the organization id header to the request
+// this is required when using personal access tokens that are authorized for more than one organization
+func WithOrganizationHeader(orgID string) clientv2.RequestInterceptor {
+	return func(ctx context.Context, req *http.Request, gqlInfo *clientv2.GQLRequestInfo, res interface{}, next clientv2.RequestInterceptorFunc) error {
+		if orgID != "" {
+			req.Header.Set(auth.OrganizationIDHeader, orgID)
+		}
+
+		return next(ctx, req, gqlInfo, res)
+	}
+}

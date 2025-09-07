@@ -90,6 +90,17 @@ fmt.Println(diff)
 
 ## Seeding a Stripe Sandbox
 
+If you are just doing local development and **not** changing the catalog, you can use the existing `Sandbox` sandbox and skip the below. If you update your `.config.yaml` with:
+
+```
+entConfig:
+  modules:
+    enabled: true
+    useSandbox: true
+```
+
+And grab the sandbox api keys, this is already seeded with the existing catalog_sandbox.yaml. Do not commit changes to this file unless they were synced to stripe to allow for multiple users to test in this development environment. If instead, you are doing development on the actual catalog, you should use a new sandbox until the changes are ready to be merged.
+
 Best way to test this setup is to create a new Stripe sandbox, grab the API key, and seed it with your products and prices (creating a new catalog file and removing the existing product ID's and price ID's is best method), similar to below (NOTE: the 404's are intentional, this is a pre-check to ensure the configured catalog doesn't have products and prices in the stripe instance, and that results in 404 errors for "didn't find product and price"):
 
 ```bash

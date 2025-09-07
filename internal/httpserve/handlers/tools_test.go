@@ -7,8 +7,10 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+	"github.com/stripe/stripe-go/v82"
 
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
@@ -20,6 +22,7 @@ import (
 	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/testutils"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -30,9 +33,9 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/objects"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
@@ -75,7 +78,8 @@ var (
 )
 
 const (
-	fgaModelFile = "../../../fga/model/model.fga"
+	fgaModelFile             = "../../../fga/model/model.fga"
+	seedStripeSubscriptionID = "sub_test_subscription"
 )
 
 // HandlerTestSuite handles the setup and teardown between tests
@@ -86,7 +90,6 @@ type HandlerTestSuite struct {
 	api                  *testclient.TestClient
 	h                    *handlers.Handler
 	router               *route.Router
-	fga                  *fgax.Client
 	tf                   *testutils.TestFixture
 	ofgaTF               *fgatest.OpenFGATestFixture
 	stripeMockBackend    *mocks.MockStripeBackend
@@ -119,7 +122,14 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	suite.tf = entdb.NewTestFixture()
 
 	// setup openFGA container
-	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile))
+	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
+		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithEnvVars(map[string]string{
+			"OPENFGA_MAX_CHECKS_PER_BATCH_CHECK":          "100",
+			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",
+			"OPENFGA_LIST_OBJECTS_ITERATOR_CACHE_ENABLED": "false",
+		}),
+	)
 
 	// create shared instances once to avoid expensive recreation in each test
 	var err error
@@ -170,6 +180,10 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
+	// setup mock entitlements client
+	entitlements, err := suite.mockStripeClient()
+	require.NoError(t, err)
+
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
 		ent.Emailer(&emailtemplates.Config{
@@ -184,6 +198,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 		}),
 		ent.TOTP(suite.sharedOTPManager),
 		ent.PondPool(suite.sharedPondPool),
+		ent.EntitlementManager(entitlements),
 	}
 
 	// create database connection
@@ -280,22 +295,6 @@ func setupRouter() (*route.Router, error) {
 	})
 }
 
-func setupEcho(dbClient *ent.Client) *echo.Echo {
-	// create echo context with middleware
-	e := echo.New()
-
-	transactionConfig := transaction.Client{
-		EntDBClient: dbClient,
-	}
-
-	e.Use(transactionConfig.Middleware)
-
-	coreMW := cors.MustNew([]string{"*"})
-	e.Use(coreMW)
-
-	return e
-}
-
 // handlerSetup to be used for required references in the handler tests
 func handlerSetup(db *ent.Client) *handlers.Handler {
 	as := authmanager.New(db)
@@ -315,4 +314,154 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 	}
 
 	return h
+}
+
+// mockStripeClient creates a new stripe client with mock backend
+func (suite *HandlerTestSuite) mockStripeClient() (*entitlements.StripeClient, error) {
+	suite.stripeMockBackend = new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{
+		API:     suite.stripeMockBackend,
+		Connect: suite.stripeMockBackend,
+		Uploads: suite.stripeMockBackend,
+	}
+
+	suite.orgSubscriptionMocks()
+
+	return entitlements.NewStripeClient(entitlements.WithAPIKey("sk_test_testing"),
+		entitlements.WithConfig(entitlements.Config{
+			Enabled:             true,
+			StripeWebhookSecret: webhookSecret,
+		},
+		),
+		entitlements.WithBackends(stripeTestBackends),
+	)
+}
+
+// mockCustomer for webhook tests
+var mockCustomer = &stripe.Customer{
+	ID: "cus_test_customer",
+	Subscriptions: &stripe.SubscriptionList{
+		Data: []*stripe.Subscription{
+			{
+				Customer: &stripe.Customer{
+					ID: "cus_test_customer",
+				},
+				ID: seedStripeSubscriptionID,
+				Items: &stripe.SubscriptionItemList{
+					Data: []*stripe.SubscriptionItem{
+						{
+							Price: &stripe.Price{
+								UnitAmount: 1000,
+								ID:         "price_test_price",
+								Currency:   "usd",
+								Recurring: &stripe.PriceRecurring{
+									Interval: "month",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+}
+
+var mockSubscription = &stripe.Subscription{
+	ID: "sub_test_subscription",
+	Items: &stripe.SubscriptionItemList{
+		Data: []*stripe.SubscriptionItem{
+			{
+				Price: &stripe.Price{
+					Product: &stripe.Product{
+						ID: "prod_test_product",
+					},
+					ID: "price_test_price",
+					Recurring: &stripe.PriceRecurring{
+						Interval: "month",
+					},
+					Currency: "usd",
+				},
+			},
+		},
+	},
+	Metadata: map[string]string{
+		"organization_id": ulids.New().String(),
+	},
+}
+
+var mockProduct = &stripe.Product{
+	ID:   "prod_test_product",
+	Name: "Test Product",
+}
+
+// orgSubscriptionMocks mocks the stripe calls for org subscription during the webhook tests
+func (suite *HandlerTestSuite) orgSubscriptionMocks() {
+	// setup mocks for search
+	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.CustomerSearchResult")).Run(func(args mock.Arguments) {
+		mockCustomerSearchResult := args.Get(4).(*stripe.CustomerSearchResult)
+
+		data := []*stripe.Customer{}
+		data = append(data, mockCustomer)
+		*mockCustomerSearchResult = stripe.CustomerSearchResult{
+			Data: data,
+		}
+
+	}).Return(nil)
+
+	// setup mocks for get customer by id
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerRetrieveParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
+		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
+
+		*mockCustomerSearchResult = *mockCustomer
+
+	}).Return(nil)
+
+	// setup mocks for creating customer params
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerCreateParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
+		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
+
+		*mockCustomerSearchResult = *mockCustomer
+
+	}).Return(nil)
+
+	// mock for subscription create params
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionCreateParams"), mock.AnythingOfType("*stripe.Subscription")).Run(func(args mock.Arguments) {
+		mockSubscriptionSearchResult := args.Get(4).(*stripe.Subscription)
+
+		*mockSubscriptionSearchResult = *mockSubscription
+
+	}).Return(nil)
+
+	// mock for product retrieve params
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.ProductRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
+		mockProductRetrieveResult := args.Get(4).(*stripe.Product)
+
+		*mockProductRetrieveResult = *mockProduct
+
+	}).Return(nil)
+
+	// mock for product params
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
+		mockSubscriptionRetrieveResult := args.Get(4).(*stripe.Subscription)
+
+		*mockSubscriptionRetrieveResult = *mockSubscription
+
+	}).Return(nil)
+
+	// setup mocks for getting entitlements
+	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
+		mockCustomerSearchResult := args.Get(4).(*stripe.EntitlementsActiveEntitlementList)
+
+		*mockCustomerSearchResult = stripe.EntitlementsActiveEntitlementList{
+			Data: []*stripe.EntitlementsActiveEntitlement{
+				{
+					Feature: &stripe.EntitlementsFeature{
+						ID:        "feat_test_feature",
+						LookupKey: "test_feature",
+					},
+				},
+			},
+		}
+
+	}).Return(nil)
 }

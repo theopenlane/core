@@ -237,7 +237,7 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(t.Context(), t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestMutationDeleteCustomDomain(t *testing.T) {

@@ -66,7 +66,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 
 // setSubscriptionURL sets the subscription URL for the org subscription response
 func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, q *generated.OrgSubscriptionQuery) error {
-	if orgSub == nil || q.EntitlementManager == nil {
+	if orgSub == nil || !q.EntitlementManager.Config.IsEnabled() {
 		log.Debug().Ctx(ctx).Msg("organization does not have a subscription or entitlement manager is nil, skipping URL setting")
 
 		return nil
@@ -119,7 +119,7 @@ func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, 
 	}
 
 	moduleURLs := map[string]string{}
-	visible := gc.DefaultCatalog.Visible("")
+	visible := gc.GetCatalogByAudience(q.EntConfig.Modules.UseSandbox, "")
 	for name, feat := range visible.Modules {
 		if len(feat.Billing.Prices) == 0 {
 			continue

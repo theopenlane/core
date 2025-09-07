@@ -125,4 +125,6 @@ type Windmill struct {
 type Modules struct {
 	// Enabled indicates whether to check and verify module access
 	Enabled bool `json:"enabled" koanf:"enabled" default:"true"`
+	// UseSandbox indicates whether to use the sandbox catalog for module access checks
+	UseSandbox bool `json:"useSandbox" koanf:"useSandbox" default:"false"`
 }

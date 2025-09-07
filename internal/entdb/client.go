@@ -23,6 +23,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 
 	_ "github.com/jackc/pgx/v5/stdlib" // add pgx driver
 )
@@ -152,10 +153,7 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	db.Intercept(interceptors.QueryLogger())
 	db.Intercept(BlockInterceptor())
 
-	modulesEnabled := true
-	if db.EntConfig != nil {
-		modulesEnabled = db.EntConfig.Modules.Enabled
-	}
+	modulesEnabled := utils.ModulesEnabled(db)
 
 	db.Intercept(interceptors.InterceptorModules(modulesEnabled))
 

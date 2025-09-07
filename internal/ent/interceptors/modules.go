@@ -9,6 +9,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gertd/go-pluralize"
+	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/internal/ent/generated"
 	entintercept "github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	features "github.com/theopenlane/core/internal/entitlements/features"
@@ -20,11 +22,10 @@ import (
 
 type moduleInterceptorKey struct{}
 
-// InterceptorModules usese the query type to automatically validate the modules
+// InterceptorModules uses the query type to automatically validate the modules
 // from the auto generated pipeline
 func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 	return entintercept.TraverseFunc(func(ctx context.Context, q entintercept.Query) error {
-
 		if !modulesEnabled {
 			return nil
 		}
@@ -45,7 +46,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 		// prevent infinite recursion. HasAllFeatures calls the OrgModule queries in some scenarios.
 		// This prevents a scenario where this interceptor is called again when already inside this function
 		ctxWithKey := contextx.With(ctx, moduleInterceptorKey{})
-		ok, module, err := rule.HasAllFeatures(ctxWithKey, schemaFeatures...)
+		ok, module, err := rule.HasAnyFeature(ctxWithKey, schemaFeatures...)
 		if err != nil || !ok {
 
 			if err == nil {
@@ -107,11 +108,19 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 				path = append(path, ast.PathName(entity))
 			}
 
-			graphql.AddError(ctx, &gqlerror.Error{
-				Err:     gqlerrors.NewCustomErrorWithModule(gqlerrors.NoAccessToModule, ErrFeatureNotEnabled.Error(), err, module),
-				Message: ErrFeatureNotEnabled.Error(),
-				Path:    path,
-			})
+			if graphql.HasOperationContext(ctx) {
+				graphql.AddError(ctx, &gqlerror.Error{
+					Err:     gqlerrors.NewCustomErrorWithModule(gqlerrors.NoAccessToModule, ErrFeatureNotEnabled.Error(), err, module),
+					Message: ErrFeatureNotEnabled.Error(),
+					Path:    path,
+				})
+			} else {
+				// this shouldn't happen unless a REST request is requesting data that isn't in the base module
+				// adding warning here to indicate potential misconfiguration
+				log.Error().Err(err).Msg("graphql operation not found, unable to set graphql error for missing module")
+
+				return generated.ErrPermissionDenied
+			}
 		}
 
 		return nil

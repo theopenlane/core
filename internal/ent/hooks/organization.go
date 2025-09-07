@@ -315,7 +315,8 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
-	if m.EntConfig.Modules.Enabled {
+	// create subscriptions if the entitlement manager is enabled
+	if m.EntitlementManager.Config.IsEnabled() {
 		orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
 		if err != nil {
 			return err
@@ -591,19 +592,11 @@ func updateDefaultOrgIfPersonal(ctx context.Context, userID, orgID string, clien
 
 // orgModuleConfig controls which modules are selected when creating default module records - small functional options wrapper
 type orgModuleConfig struct {
-	personalOrg bool
-	trial       bool
+	trial bool
 }
 
 // orgModuleOption sets fields on orgModuleConfig
 type orgModuleOption func(*orgModuleConfig)
-
-// withPersonalOrg sets the personalOrg flag to true, allowing personal org modules to be included
-func withPersonalOrg() orgModuleOption {
-	return func(c *orgModuleConfig) {
-		c.personalOrg = true
-	}
-}
 
 // withTrial sets the trial flag to true, allowing trial modules to be included
 func withTrial() orgModuleOption {
@@ -622,17 +615,9 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 
 	modulesCreated := make([]string, 0)
 
-	// the catalog contains config for which things should be in a trial, or added for a personal org
-	for moduleName, mod := range cataloggen.DefaultCatalog.Modules {
-		if !cfg.personalOrg && !cfg.trial {
-			continue
-		}
-
-		if !mod.PersonalOrg {
-			continue
-		}
-
-		if !mod.IncludeWithTrial {
+	// the catalog contains config for which things should be in a trial
+	for moduleName, mod := range cataloggen.GetModules(m.Client().EntConfig.Modules.UseSandbox) {
+		if !cfg.trial || !mod.IncludeWithTrial {
 			continue
 		}
 

@@ -138,14 +138,14 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 }
 
 // checkActiveSubscription checks if the organization has an active subscription
-func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) {
-	// if the entitlement manager is disabled or modules not enabled, we can skip the check
-	if !a.GetDBClient().EntConfig.Modules.Enabled || a.db.EntitlementManager == nil {
+func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) { //nolint:unused
+	// if the entitlement manager is disabled, we can skip the check
+	if !a.GetDBClient().EntitlementManager.Config.IsEnabled() {
 		return true, nil
 	}
 
 	if orgID == "" {
-		log.Debug().Msg("organization ID is required to check for active subscription")
+		log.Warn().Msg("organization ID is required to check for active subscription")
 
 		return false, nil
 	}
@@ -258,7 +258,6 @@ func (a *Client) generateOauthUserSession(ctx context.Context, w http.ResponseWr
 // if the user does not have access to the target organization, the user's default org is used (or falls back)
 // to their personal org
 func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID string) (string, error) {
-
 	skip := skipOrgValidation(ctx)
 	if orgID == "" {
 		// get the default org for the user to check access
@@ -286,13 +285,6 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		orgID = au.OrganizationID
 	}
 
-	active, err := a.checkActiveSubscription(ctx, orgID)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to find org subscription for organization")
-
-		return "", err
-	}
-
 	// ensure user is already a member of the destination organization
 	req := fgax.AccessCheck{
 		SubjectID:   au.SubjectID,
@@ -309,7 +301,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 	}
 
 	// if the org is active and they are allowed, we can return the org
-	if active && allow {
+	if allow {
 		return orgID, nil
 	}
 

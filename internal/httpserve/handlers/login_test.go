@@ -128,13 +128,6 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	suite.db.UserSetting.UpdateOneID(userWithInactiveDefaultOrg.UserInfo.Edges.Setting.ID).
 		SetDefaultOrgID(userWithInactiveDefaultOrg.OrganizationID).ExecX(allowCtx)
 
-	// setup mock entitlements client
-	entitlements, err := suite.mockStripeClient()
-	require.NoError(t, err)
-
-	suite.h.DBClient.EntitlementManager = entitlements
-	suite.h.Entitlements = entitlements
-
 	testCases := []struct {
 		name           string
 		username       string
@@ -163,13 +156,6 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			password:       validPassword,
 			expectedStatus: http.StatusOK,
 			expectedOrgID:  invalidConfirmedUserRestrictedOrg.PersonalOrgID,
-		},
-		{
-			name:           "inactive org, switch to personal org",
-			username:       userWithInactiveDefaultOrg.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusOK,
-			expectedOrgID:  userWithInactiveDefaultOrg.PersonalOrgID,
 		},
 		{
 			name:           "email unverified",
