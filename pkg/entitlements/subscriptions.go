@@ -145,10 +145,6 @@ func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.
 		return nil
 	}
 
-	if len(subs.Items.Data) > 1 {
-		log.Warn().Msg("customer has more than one subscription")
-	}
-
 	for _, item := range subs.Items.Data {
 		if item.Price == nil || item.Price.Product == nil {
 			log.Warn().Msg("failed to map subscription item")

@@ -642,7 +642,10 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 		orgMod, err := m.Client().OrgModule.Create().
 			SetModule(models.OrgModule(moduleName)).
 			SetSubscriptionID(orgSubs.ID).
+			SetStatus(string(stripe.SubscriptionStatusTrialing)).
 			SetOwnerID(orgCreated.ID).
+			SetModuleLookupKey(mod.LookupKey).
+			SetStripePriceID(monthlyPrice.PriceID).
 			SetActive(true).
 			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
 			Save(newCtx)
@@ -668,18 +671,24 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 
 		// we care mostly about which price ID we used in stripe, so we create the local reference for the price because it's the resource which dictates most of the billing toggles in stripe
 		// we don't actually care that it's active or not, but it's relevant to set because we could end up with many prices on a product, and many products on a module
-		if err := m.Client().OrgPrice.Create().
+		orgPrice, err := m.Client().OrgPrice.Create().
 			SetProductID(orgProduct.ID).
 			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
 			SetOwnerID(orgCreated.ID).
 			SetSubscriptionID(orgSubs.ID).
 			SetStripePriceID(monthlyPrice.PriceID).
 			SetActive(true).
-			Exec(newCtx); err != nil {
+			Save(newCtx)
+		if err != nil {
 			return nil, fmt.Errorf("failed to create OrgPrice for module %s: %w", moduleName, err)
 		}
 
 		zerolog.Ctx(ctx).Debug().Msgf("created OrgPrice for %s with Stripe Price ID %s", moduleName, monthlyPrice.PriceID)
+
+		// update the org modules with the price ID
+		if _, err := m.Client().OrgModule.UpdateOne(orgMod).SetPriceID(orgPrice.ID).Save(newCtx); err != nil {
+			return nil, fmt.Errorf("failed to update OrgModule with price ID for module %s: %w", moduleName, err)
+		}
 
 		modulesCreated = append(modulesCreated, moduleName)
 	}

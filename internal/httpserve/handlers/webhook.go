@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"slices"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -254,7 +253,7 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 		return
 	}
 
-	if err = h.syncSubscriptionItemsWithStripe(ctx, s); err != nil {
+	if err = h.syncSubscriptionItemsWithStripe(ctx, s.ID, s.Items.Data, s.Status); err != nil {
 		return
 	}
 
@@ -284,7 +283,7 @@ func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subsc
 		return err
 	}
 
-	return h.syncSubscriptionItemsWithStripe(ctx, s)
+	return h.syncSubscriptionItemsWithStripe(ctx, s.ID, s.Items.Data, s.Status)
 }
 
 // handleTrialWillEnd handles trial will end events, currently just calls handleSubscriptionUpdated
@@ -317,11 +316,11 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 }
 
 // getOrgSubscription retrieves the OrgSubscription from the database based on the Stripe subscription ID
-func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) (*ent.OrgSubscription, error) {
+func getOrgSubscription(ctx context.Context, subscriptionID string) (*ent.OrgSubscription, error) {
 	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
 
 	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().
-		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).Only(allowCtx)
+		Where(orgsubscription.StripeSubscriptionID(subscriptionID)).Only(allowCtx)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to find org subscription")
 		return nil, err
@@ -333,7 +332,7 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 // syncOrgSubscriptionWithStripe updates the internal OrgSubscription record with data from Stripe and
 // returns the owner (organization) ID of the OrgSubscription to be used for further operations if needed
 func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
-	orgSubscription, err := getOrgSubscription(ctx, subscription)
+	orgSubscription, err := getOrgSubscription(ctx, subscription.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -351,14 +350,6 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 		changed = true
 
 		log.Debug().Str("subscription_id", orgSubscription.ID).Str("status", orgSubscription.StripeSubscriptionStatus).Msg("stripe subscription status changed")
-	}
-
-	if !slices.Equal(orgSubscription.Features, stripeOrgSubscription.Features) {
-		mutation.SetFeatures(stripeOrgSubscription.Features)
-
-		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Strs("features", orgSubscription.Features).Msg("features changes")
 	}
 
 	if orgSubscription.ProductPrice != stripeOrgSubscription.ProductPrice {
@@ -381,14 +372,6 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 		changed = true
 
 		log.Debug().Str("subscription_id", orgSubscription.ID).Str("trial_expires_at", stripeOrgSubscription.TrialExpiresAt.String()).Msg("subscription trial expiration changed")
-	}
-
-	if !slices.Equal(orgSubscription.FeatureLookupKeys, stripeOrgSubscription.FeatureLookupKeys) {
-		mutation.SetFeatureLookupKeys(stripeOrgSubscription.FeatureLookupKeys)
-
-		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Strs("feature_lookup_keys", orgSubscription.FeatureLookupKeys).Msg("feature lookup keys changed")
 	}
 
 	if orgSubscription.TrialExpiresAt != nil && orgSubscription.TrialExpiresAt != stripeOrgSubscription.TrialExpiresAt {
@@ -434,6 +417,7 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 	return &orgSubscription.OwnerID, nil
 }
 
+// clearFeatureCache clears the feature cache for an organization in Redis
 func (h *Handler) clearFeatureCache(ctx context.Context, orgID string) error {
 	if h.RedisClient != nil {
 		key := "features:" + orgID
