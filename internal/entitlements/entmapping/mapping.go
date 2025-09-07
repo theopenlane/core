@@ -348,7 +348,7 @@ func ApplyStripeSubscriptionItem[T OrgModuleSetter[T]](ctx context.Context, b T,
 		Currency: string(item.Price.Currency),
 	}
 
-	productMetadata := getProductMetadata(ctx, item.Price.Product, client)
+	productMetadata := GetProductMetadata(ctx, item.Price.Product, client)
 	if moduleKey := strings.TrimSpace(productMetadata["module"]); moduleKey != "" {
 		b.SetModule(models.OrgModule(moduleKey))
 	}
@@ -383,7 +383,9 @@ func PopulatePricesForOrganizationCustomer(o *entitlements.OrganizationCustomer,
 	return o
 }
 
-func getProductMetadata(ctx context.Context, product *stripe.Product, client *entitlements.StripeClient) map[string]string {
+// GetProductMetadata retrieves the metadata for a Stripe product, either from the provided
+// product object or by fetching the full product details using the Stripe client.
+func GetProductMetadata(ctx context.Context, product *stripe.Product, client *entitlements.StripeClient) map[string]string {
 	if product == nil {
 		return nil
 	}

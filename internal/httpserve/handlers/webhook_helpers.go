@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"strings"
 
 	"github.com/rs/zerolog"
 	"github.com/stripe/stripe-go/v82"
@@ -16,24 +17,21 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/pkg/models"
 
+	"github.com/theopenlane/core/internal/entitlements/entmapping"
 	em "github.com/theopenlane/core/internal/entitlements/entmapping"
 )
 
 // syncSubscriptionItemsWithStripe ensures OrgProduct, OrgPrice, and OrgModule
 // records exist and are updated based on the given Stripe subscription data.
-func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, sub *stripe.Subscription) error {
-	orgSub, err := getOrgSubscription(ctx, sub)
+func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, subscriptionID string, items []*stripe.SubscriptionItem, subStatus stripe.SubscriptionStatus) error {
+	orgSub, err := getOrgSubscription(ctx, subscriptionID)
 	if err != nil {
 		return err
 	}
 
-	err = upsertOrgStripeCustomer(ctx, orgSub, sub.Customer.ID)
-	if err != nil {
-		return err
-	}
-
-	for _, item := range sub.Items.Data {
+	for _, item := range items {
 		if item.Price == nil || item.Price.Product == nil {
 			continue
 		}
@@ -52,7 +50,7 @@ func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, sub *stri
 
 		zerolog.Ctx(ctx).Info().Str("price_subscription_ID", price.SubscriptionID).Msg("org price created for subscription")
 
-		mod, err := upsertOrgModule(ctx, orgSub, price, item, h.Entitlements, string(sub.Status))
+		mod, err := upsertOrgModule(ctx, orgSub, price, item, h.Entitlements, string(subStatus))
 		if err != nil {
 			return err
 		}
@@ -162,7 +160,15 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
 	tx := transaction.FromContext(ctx)
 
-	existing, err := tx.OrgModule.Query().Where(orgmodule.StripePriceID(item.Price.ID), orgmodule.SubscriptionID(orgSub.ID)).Only(allowCtx)
+	productMetadata := entmapping.GetProductMetadata(ctx, item.Price.Product, client)
+	moduleKey := strings.TrimSpace(productMetadata["module"])
+
+	existing, err := tx.OrgModule.Query().Where(
+		orgmodule.And(
+			orgmodule.ModuleEQ(models.OrgModule(moduleKey)),
+			orgmodule.OwnerID(orgSub.OwnerID),
+		),
+		orgmodule.SubscriptionID(orgSub.ID)).Only(allowCtx)
 	if err != nil && !ent.IsNotFound(err) {
 		return nil, err
 	}
@@ -184,7 +190,5 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 
 	builder.SetPriceID(price.ID)
 
-	_, err = builder.Save(allowCtx)
-
-	return existing, err
+	return builder.Save(allowCtx)
 }
