@@ -22,18 +22,25 @@ import (
 // then other schemas and is not always required so keeping it separate
 func InterceptorFile() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		au, err := auth.GetAuthenticatedUserFromContext(ctx)
-		if err != nil {
-			return err
+		zerolog.Ctx(ctx).Debug().Msg("InterceptorFile")
+		var orgs []string
+		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
+			// q.WhereP(trustcenter.IDEQ(anon.TrustCenterID))
+			orgs = []string{anon.OrganizationID}
+		} else {
+			au, err := auth.GetAuthenticatedUserFromContext(ctx)
+			if err != nil {
+				return err
+			}
+
+			if au.IsSystemAdmin {
+				log.Debug().Msg("user is system admin, skipping organization filter")
+
+				return nil
+			}
+
+			orgs = au.OrganizationIDs
 		}
-
-		if au.IsSystemAdmin {
-			log.Debug().Msg("user is system admin, skipping organization filter")
-
-			return nil
-		}
-
-		orgs := au.OrganizationIDs
 
 		if len(orgs) == 0 {
 			return nil
@@ -57,6 +64,7 @@ func InterceptorFile() ent.Interceptor {
 func InterceptorPresignedURL() ent.Interceptor {
 	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 		return intercept.FileFunc(func(ctx context.Context, q *generated.FileQuery) (generated.Value, error) {
+			zerolog.Ctx(ctx).Debug().Msg("InterceptorPresignedURL")
 			v, err := next.Query(ctx, q)
 			if err != nil {
 				return nil, err

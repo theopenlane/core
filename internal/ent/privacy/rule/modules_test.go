@@ -79,9 +79,10 @@ func TestHasAllFeatures(t *testing.T) {
 	require.NoError(t, err)
 	assert.True(t, ok)
 
-	ok, _, err = rule.HasAllFeatures(ctx, models.CatalogTrustCenterModule)
+	ok, missingModule, err := rule.HasAllFeatures(ctx, models.CatalogTrustCenterModule)
 	require.NoError(t, err)
 	assert.False(t, ok)
+	assert.Equal(t, models.CatalogTrustCenterModule, missingModule)
 
 	ok, _, err = rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule)
 	require.NoError(t, err)

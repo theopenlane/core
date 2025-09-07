@@ -4,13 +4,14 @@ import (
 	"context"
 	"time"
 
-	echo "github.com/theopenlane/echox"
-
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 const (
@@ -20,6 +21,8 @@ const (
 	ServerLatencyExtensionKey = "server_latency"
 	// TraceExtensionKey is the key used to store the trace id in the extensions map
 	TraceExtensionKey = "trace_id"
+	// ModulesExtensionKey is the key used to store the missing module in the extensions map
+	ModulesExtensionKey = "missing_module"
 )
 
 // Auth contains the authentication data to be added to the extensions map
@@ -46,6 +49,34 @@ func AddAllExtensions(h *handler.Server) {
 	latencyExtension(h)
 	// add the trace extension
 	traceExtension(h)
+	// add the modules extension
+	modulesExtension(h)
+}
+
+// modulesExtension adds the missing module value if it exists into the extension map of the response
+func modulesExtension(h *handler.Server) {
+	h.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
+		resp := next(ctx)
+
+		resp = initExtensionResponse(resp)
+
+		if missingModule := getMissingModuleFromErrors(resp.Errors); missingModule != "" {
+			resp.Extensions[ModulesExtensionKey] = missingModule
+		}
+
+		return resp
+	})
+}
+
+func getMissingModuleFromErrors(errorList gqlerror.List) string {
+	for _, err := range errorList {
+		if customErr, ok := err.Err.(gqlerrors.CustomErrorType); ok {
+			if module := customErr.Module(); module.String() != "" {
+				return module.String()
+			}
+		}
+	}
+	return ""
 }
 
 // authExtension adds the auth data to the extensions map in the response
