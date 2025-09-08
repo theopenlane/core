@@ -2,15 +2,10 @@ package hooks
 
 import (
 	"context"
-	"errors"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-)
-
-var (
-	errInvalidStoragePath = errors.New("invalid path when deleting file from object storage")
 )
 
 // HookFileDelete makes sure to clean up the file from external storage once deleted
@@ -24,7 +19,7 @@ func HookFileDelete() ent.Hook {
 
 					id, ok := m.ID()
 					if !ok {
-						return nil, errInvalidStoragePath
+						return next.Mutate(ctx, m)
 					}
 
 					file, err := m.Client().File.Get(ctx, id)
