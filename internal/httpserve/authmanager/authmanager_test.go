@@ -11,11 +11,11 @@ import (
 
 func TestCreateClaimsWithOrg(t *testing.T) {
 	user := &generated.User{ID: "u1", Edges: generated.UserEdges{Setting: &generated.UserSetting{Edges: generated.UserSettingEdges{DefaultOrg: &generated.Organization{ID: "org1"}}}}}
-	c := createClaimsWithOrg(user, "")
+	c := createClaimsWithOrg(context.Background(), user, "")
 	if c.OrgID != "org1" || c.UserID != "u1" {
 		t.Fatalf("unexpected claims: %#v", c)
 	}
-	c2 := createClaimsWithOrg(user, "org2")
+	c2 := createClaimsWithOrg(context.Background(), user, "org2")
 	if c2.OrgID != "org2" {
 		t.Fatalf("target org not used")
 	}
