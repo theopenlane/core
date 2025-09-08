@@ -3395,11 +3395,9 @@ func init() {
 	mappedcontrolMixinInters1 := mappedcontrolMixin[1].Interceptors()
 	mappedcontrolMixinInters2 := mappedcontrolMixin[2].Interceptors()
 	mappedcontrolMixinInters6 := mappedcontrolMixin[6].Interceptors()
-	mappedcontrolInters := schema.MappedControl{}.Interceptors()
 	mappedcontrol.Interceptors[0] = mappedcontrolMixinInters1[0]
 	mappedcontrol.Interceptors[1] = mappedcontrolMixinInters2[0]
 	mappedcontrol.Interceptors[2] = mappedcontrolMixinInters6[0]
-	mappedcontrol.Interceptors[3] = mappedcontrolInters[0]
 	mappedcontrolMixinFields0 := mappedcontrolMixin[0].Fields()
 	_ = mappedcontrolMixinFields0
 	mappedcontrolMixinFields3 := mappedcontrolMixin[3].Fields()

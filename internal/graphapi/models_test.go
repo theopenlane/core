@@ -342,6 +342,18 @@ type FileBuilder struct {
 	Name string
 }
 
+type TemplateBuilder struct {
+	client *client
+
+	// Fields
+	Name         string
+	Description  string
+	Kind         enums.TemplateKind
+	TemplateType enums.DocumentType
+	JSONConfig   map[string]any
+	UISchema     map[string]any
+}
+
 // Faker structs with random injected data
 type Faker struct {
 	Name string
@@ -1967,4 +1979,33 @@ func (fb *FileBuilder) MustNew(ctx context.Context, t *testing.T) *ent.File {
 	requireNoError(err)
 
 	return file
+}
+
+// MustNew template builder is used to create, without authz checks, templates in the database
+func (tb *TemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Template {
+	ctx = setContext(ctx, tb.client.db)
+
+	if tb.Name == "" {
+		tb.Name = gofakeit.Name()
+	}
+
+	if tb.Description == "" {
+		tb.Description = gofakeit.HipsterSentence(5)
+	}
+
+	if tb.JSONConfig == nil {
+		tb.JSONConfig = map[string]any{
+			"key":   "value",
+			"array": []string{"one", "two", "three"},
+		}
+	}
+	mutation := tb.client.db.Template.Create().
+		SetName(tb.Name).
+		SetDescription(tb.Description).
+		SetJsonconfig(tb.JSONConfig)
+
+	template, err := mutation.Save(ctx)
+	requireNoError(err)
+
+	return template
 }

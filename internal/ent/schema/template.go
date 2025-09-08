@@ -56,10 +56,18 @@ func (Template) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("TEMPLATE_TYPE"),
 			).
-			Default(string(enums.Document)),
+			Default(enums.Document.String()),
 		field.String("description").
 			Comment("the description of the template").
 			Optional(),
+		field.Enum("kind").
+			Comment("the kind of template, e.g. questionnaire").
+			GoType(enums.TemplateKind("")).
+			Optional().
+			Annotations(
+				entgql.OrderField("KIND"),
+			).
+			Default(enums.TemplateKindQuestionnaire.String()),
 		field.JSON("jsonconfig", map[string]any{}).
 			Comment("the jsonschema object of the template").
 			Annotations(

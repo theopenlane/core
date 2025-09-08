@@ -23,6 +23,17 @@ func TestQueryMappedControl(t *testing.T) {
 	toControls := mappedControl.Edges.ToControls
 	fromControls := mappedControl.Edges.FromControls
 
+	// create a system owned mappedControl to ensure we can still query it
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	systemToControl := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
+	systemFromControl := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
+
+	systemMappedControl := (&MappedControlBuilder{client: suite.client, ToControlIDs: []string{systemToControl.ID}, FromControlIDs: []string{systemFromControl.ID}, Source: enums.MappingSourceSuggested}).MustNew(systemAdminUser.UserCtx, t)
+
+	if systemMappedControl == nil {
+		t.Fatal("expected systemMappedControl to be returned")
+	}
+
 	// add test cases for querying the mappedControl
 	testCases := []struct {
 		name     string
@@ -40,6 +51,12 @@ func TestQueryMappedControl(t *testing.T) {
 		{
 			name:    "happy path, read only user, should have read access",
 			queryID: mappedControl.ID,
+			client:  suite.client.api,
+			ctx:     viewOnlyUser.UserCtx,
+		},
+		{
+			name:    "happy path, read only user, should have read access to system owned mappedControl",
+			queryID: systemMappedControl.ID,
 			client:  suite.client.api,
 			ctx:     viewOnlyUser.UserCtx,
 		},
@@ -89,6 +106,8 @@ func TestQueryMappedControl(t *testing.T) {
 
 	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: mappedControl.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{toControls[0].ID, fromControls[0].ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: systemMappedControl.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemToControl.ID, systemFromControl.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestQueryMappedControls(t *testing.T) {
