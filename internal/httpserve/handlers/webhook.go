@@ -133,7 +133,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 
 		if err = h.HandleEvent(newCtx, &event); err != nil {
 			webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
-			log.Error().Err(err).Msg("failed to handle event")
+			log.Error().Str("event", string(event.Type)).Err(err).Msg("failed to handle event")
 
 			return h.InternalServerError(ctx, err, openapi)
 		}
