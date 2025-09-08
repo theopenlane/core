@@ -3390,6 +3390,8 @@ func init() {
 	mappedcontrol.Hooks[6] = mappedcontrolMixinHooks7[1]
 
 	mappedcontrol.Hooks[7] = mappedcontrolHooks[0]
+
+	mappedcontrol.Hooks[8] = mappedcontrolHooks[1]
 	mappedcontrolMixinInters1 := mappedcontrolMixin[1].Interceptors()
 	mappedcontrolMixinInters2 := mappedcontrolMixin[2].Interceptors()
 	mappedcontrolMixinInters6 := mappedcontrolMixin[6].Interceptors()
@@ -3404,8 +3406,6 @@ func init() {
 	_ = mappedcontrolMixinFields3
 	mappedcontrolMixinFields4 := mappedcontrolMixin[4].Fields()
 	_ = mappedcontrolMixinFields4
-	mappedcontrolMixinFields6 := mappedcontrolMixin[6].Fields()
-	_ = mappedcontrolMixinFields6
 	mappedcontrolFields := schema.MappedControl{}.Fields()
 	_ = mappedcontrolFields
 	// mappedcontrolDescCreatedAt is the schema descriptor for created_at field.
@@ -3422,10 +3422,6 @@ func init() {
 	mappedcontrolDescTags := mappedcontrolMixinFields4[0].Descriptor()
 	// mappedcontrol.DefaultTags holds the default value on creation for the tags field.
 	mappedcontrol.DefaultTags = mappedcontrolDescTags.Default.([]string)
-	// mappedcontrolDescOwnerID is the schema descriptor for owner_id field.
-	mappedcontrolDescOwnerID := mappedcontrolMixinFields6[0].Descriptor()
-	// mappedcontrol.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	mappedcontrol.OwnerIDValidator = mappedcontrolDescOwnerID.Validators[0].(func(string) error)
 	// mappedcontrolDescConfidence is the schema descriptor for confidence field.
 	mappedcontrolDescConfidence := mappedcontrolFields[2].Descriptor()
 	// mappedcontrol.ConfidenceValidator is a validator for the "confidence" field. It is called by the builders before save.
@@ -6079,6 +6075,7 @@ func init() {
 	templateMixinHooks1 := templateMixin[1].Hooks()
 	templateMixinHooks2 := templateMixin[2].Hooks()
 	templateMixinHooks6 := templateMixin[6].Hooks()
+	templateHooks := schema.Template{}.Hooks()
 
 	template.Hooks[1] = templateMixinHooks0[0]
 
@@ -6087,6 +6084,8 @@ func init() {
 	template.Hooks[3] = templateMixinHooks2[0]
 
 	template.Hooks[4] = templateMixinHooks6[0]
+
+	template.Hooks[5] = templateHooks[0]
 	templateMixinInters1 := templateMixin[1].Interceptors()
 	templateMixinInters2 := templateMixin[2].Interceptors()
 	templateMixinInters6 := templateMixin[6].Interceptors()
@@ -6099,8 +6098,6 @@ func init() {
 	_ = templateMixinFields3
 	templateMixinFields4 := templateMixin[4].Fields()
 	_ = templateMixinFields4
-	templateMixinFields6 := templateMixin[6].Fields()
-	_ = templateMixinFields6
 	templateFields := schema.Template{}.Fields()
 	_ = templateFields
 	// templateDescCreatedAt is the schema descriptor for created_at field.
@@ -6117,10 +6114,6 @@ func init() {
 	templateDescTags := templateMixinFields4[0].Descriptor()
 	// template.DefaultTags holds the default value on creation for the tags field.
 	template.DefaultTags = templateDescTags.Default.([]string)
-	// templateDescOwnerID is the schema descriptor for owner_id field.
-	templateDescOwnerID := templateMixinFields6[0].Descriptor()
-	// template.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	template.OwnerIDValidator = templateDescOwnerID.Validators[0].(func(string) error)
 	// templateDescName is the schema descriptor for name field.
 	templateDescName := templateFields[0].Descriptor()
 	// template.NameValidator is a validator for the "name" field. It is called by the builders before save.

@@ -9,7 +9,9 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -73,7 +75,7 @@ func (Template) Fields() []ent.Field {
 func (t Template) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(t),
+			newOrgOwnedMixin(t, withSkipForSystemAdmin(true)),
 		},
 	}.getMixins(t)
 }
@@ -99,10 +101,18 @@ func (Template) Indexes() []ent.Index {
 	}
 }
 
+// Hooks of the Template
+func (Template) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookTemplate(),
+	}
+}
+
 // Policy of the Template
 func (Template) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.AllowMutationIfSystemAdmin(),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess()),
 	)

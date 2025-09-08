@@ -52,6 +52,7 @@ const (
 	// common error message strings
 	notFoundErrorMsg         = "not found"
 	notAuthorizedErrorMsg    = "you are not authorized to perform this action"
+	invalidInputErrorMsg     = "invalid input"
 	couldNotFindUser         = "could not identify authenticated user in request"
 	seedStripeSubscriptionID = "sub_test_subscription"
 	webhookSecret            = "whsec_test_secret"

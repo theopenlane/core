@@ -294,11 +294,6 @@ func (_c *TemplateCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *TemplateCreate) check() error {
-	if v, ok := _c.mutation.OwnerID(); ok {
-		if err := template.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Template.owner_id": %w`, err)}
-		}
-	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Template.name"`)}
 	}

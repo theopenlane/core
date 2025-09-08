@@ -164,6 +164,10 @@ func TestMutationCreateMappedControl(t *testing.T) {
 	toSubcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	fromSubcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	// create system owned controls
+	systemToControl := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	systemFromControl := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     testclient.CreateMappedControlInput
@@ -190,6 +194,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				Relation:          lo.ToPtr("Controls are equal"),
 				Confidence:        lo.ToPtr(int64(87)),
 				Tags:              []string{"tag1", "tag2"},
+				Source:            lo.ToPtr(enums.MappingSourceManual),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -204,6 +209,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				Relation:          lo.ToPtr("Controls are a subset"),
 				Confidence:        lo.ToPtr(int64(21)),
 				Tags:              []string{"tag1", "tag2"},
+				Source:            lo.ToPtr(enums.MappingSourceImported),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -217,9 +223,33 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				Relation:          lo.ToPtr("Controls are a subset"),
 				Confidence:        lo.ToPtr(int64(21)),
 				Tags:              []string{"tag1", "tag2"},
+				Source:            lo.ToPtr(enums.MappingSourceImported),
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
+		},
+		{
+			name: "user not authorized authorized to created suggested mapping, must be system admin",
+			request: testclient.CreateMappedControlInput{
+				MappingType:    &enums.MappingTypeEqual,
+				ToControlIDs:   []string{toControl.ID},
+				FromControlIDs: []string{fromControl.ID},
+				Source:         lo.ToPtr(enums.MappingSourceSuggested),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: invalidInputErrorMsg,
+		},
+		{
+			name: "system admin can create suggested mapping",
+			request: testclient.CreateMappedControlInput{
+				MappingType:    &enums.MappingTypeEqual,
+				ToControlIDs:   []string{systemToControl.ID},
+				FromControlIDs: []string{systemFromControl.ID},
+				Source:         lo.ToPtr(enums.MappingSourceSuggested),
+			},
+			client: suite.client.api,
+			ctx:    systemAdminUser.UserCtx,
 		},
 		{
 			name: "user not authorized, not enough permissions",
@@ -331,6 +361,8 @@ func TestMutationCreateMappedControl(t *testing.T) {
 	// cleanup the controls created for the mappedControl
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{toControl.ID, fromControl.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{toSubcontrol.ID, fromSubcontrol.ID}}).MustDelete(testUser1.UserCtx, t)
+	// cleanup system owned controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemToControl.ID, systemFromControl.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateMappedControl(t *testing.T) {
@@ -411,6 +443,16 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name:      "update not allowed, cannot update suggested mapping, not system admin",
+			requestID: mappedControl.ID,
+			request: testclient.UpdateMappedControlInput{
+				Source: lo.ToPtr(enums.MappingSourceSuggested),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: invalidInputErrorMsg,
 		},
 		{
 			name:      "update not allowed, owned by another org",
