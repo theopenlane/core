@@ -129,12 +129,13 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		SetDefaultOrgID(userWithInactiveDefaultOrg.OrganizationID).ExecX(allowCtx)
 
 	testCases := []struct {
-		name           string
-		username       string
-		password       string
-		expectedOrgID  string
-		expectedErr    error
-		expectedStatus int
+		name            string
+		username        string
+		password        string
+		expectedOrgID   string
+		expectedErr     error
+		expectedStatus  int
+		expectedModules []interface{}
 	}{
 		{
 			name:           "happy path, valid credentials",
@@ -142,6 +143,10 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			password:       validPassword,
 			expectedStatus: http.StatusOK,
 			expectedOrgID:  validConfirmedUser.OrganizationID,
+			expectedModules: []interface{}{
+				models.CatalogBaseModule.String(),
+				models.CatalogComplianceModule.String(),
+			},
 		},
 		{
 			name:           "happy path, domain restricted org, but owner so domains can be mismatched",
@@ -149,13 +154,18 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			password:       validPassword,
 			expectedStatus: http.StatusOK,
 			expectedOrgID:  org.ID,
+			expectedModules: []interface{}{
+				models.CatalogBaseModule.String(),
+				models.CatalogComplianceModule.String(),
+			},
 		},
 		{
-			name:           "domain restricted org, email not allowed, switch to personal org",
-			username:       invalidConfirmedUserRestrictedOrg.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusOK,
-			expectedOrgID:  invalidConfirmedUserRestrictedOrg.PersonalOrgID,
+			name:            "domain restricted org, email not allowed, switch to personal org",
+			username:        invalidConfirmedUserRestrictedOrg.UserInfo.Email,
+			password:        validPassword,
+			expectedStatus:  http.StatusOK,
+			expectedOrgID:   invalidConfirmedUserRestrictedOrg.PersonalOrgID,
+			expectedModules: nil, // personal orgs have no modules enabled, we just assume `base` is always available
 		},
 		{
 			name:           "email unverified",
@@ -240,6 +250,12 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 				require.True(t, ok)
 
 				assert.Equal(t, tc.expectedOrgID, claims["org"])
+
+				if tc.expectedModules != nil {
+					assert.Equal(t, tc.expectedModules, claims["modules"])
+				} else {
+					assert.Empty(t, claims["modules"])
+				}
 			} else {
 				assert.Contains(t, out.Error, tc.expectedErr.Error())
 			}

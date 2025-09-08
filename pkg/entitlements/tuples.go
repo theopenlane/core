@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/permissioncache"
 	"github.com/theopenlane/iam/fgax"
 )
 
@@ -40,10 +39,6 @@ func CreateFeatureTuples(ctx context.Context, authz *fgax.Client, orgID string, 
 
 	if _, err := authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
 		return err
-	}
-
-	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
-		return cache.SetFeatures(ctx, orgID, feats)
 	}
 
 	return nil
