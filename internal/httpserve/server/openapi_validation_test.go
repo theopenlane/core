@@ -109,8 +109,8 @@ func TestEchoToOpenAPIConversion(t *testing.T) {
 
 	// Verify that known paths with parameters are properly converted
 	expectedPaths := []string{
-		"/account/roles/organization/{id}",
-		"/account/features/{id}",
+		"/v1/account/roles/organization/{id}",
+		"/v1/account/features/{id}",
 		"/.well-known/acme-challenge/{path}",
 		// Note: /files/{name} is only registered when LocalFilePath is set
 	}
