@@ -85,4 +85,5 @@ func TestQueryTemplate(t *testing.T) {
 	}
 
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: templateRoot.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
