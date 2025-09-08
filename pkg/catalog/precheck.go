@@ -105,9 +105,9 @@ func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts 
 				if cfg.failFast {
 					return nil
 				}
-			}
 
-			fmt.Printf("product %s already exists as %s\n", name, prod.ID)
+				fmt.Printf("product %s already exists as %s\n", name, prod.ID)
+			}
 
 			if f.LookupKey != "" {
 				feat, err := sc.GetFeatureByLookupKey(ctx, f.LookupKey)

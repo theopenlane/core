@@ -50,6 +50,7 @@ func TestLookupKeyConflicts(t *testing.T) {
 			"m1": {
 				LookupKey: "dup_feat",
 				Billing:   catalog.Billing{Prices: []catalog.Price{{LookupKey: "dup"}}},
+				ProductID: "m1",
 			},
 		},
 	}
