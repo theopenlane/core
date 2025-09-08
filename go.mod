@@ -113,7 +113,7 @@ require (
 	golang.org/x/oauth2 v0.31.0
 	golang.org/x/sync v0.17.0
 	golang.org/x/term v0.35.0
-	golang.org/x/text v0.28.0
+	golang.org/x/text v0.29.0
 	golang.org/x/tools v0.36.0
 	google.golang.org/api v0.248.0
 	gopkg.in/cheggaaa/pb.v2 v2.0.7
