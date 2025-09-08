@@ -505,6 +505,62 @@ func (r *Router) AddUnversionedHandlerRoute(config Config) error {
 	return nil
 }
 
+// AddGraphQLToOpenAPI adds the GraphQL endpoint to the OpenAPI specification
+func (r *Router) AddGraphQLToOpenAPI() {
+	// Create GraphQL request schema
+	queryProp := openapi3.NewStringSchema()
+	queryProp.Description = "The GraphQL query string"
+
+	variablesProp := openapi3.NewObjectSchema()
+	variablesProp.Description = "A JSON object containing variables for the query"
+
+	operationNameProp := openapi3.NewStringSchema()
+	operationNameProp.Description = "The name of the operation to execute (optional)"
+
+	requestSchema := openapi3.NewObjectSchema()
+	requestSchema.WithProperty("query", queryProp)
+	requestSchema.WithProperty("variables", variablesProp)
+	requestSchema.WithProperty("operationName", operationNameProp)
+	requestSchema.Example = map[string]any{
+		"query":     "query GetBooks {\n  books {\n    id\n    title\n  }\n}",
+		"variables": map[string]any{},
+	}
+
+	// Create GraphQL response schema
+	dataProp := openapi3.NewObjectSchema()
+	dataProp.Description = "The data returned by the GraphQL operation"
+
+	errorItem := openapi3.NewObjectSchema()
+	errorItem.Description = "An array of error objects if the operation failed"
+
+	errorsProp := openapi3.NewArraySchema()
+	errorsProp.WithItems(errorItem)
+
+	responseSchema := openapi3.NewObjectSchema()
+	responseSchema.WithProperty("data", dataProp)
+	responseSchema.WithProperty("errors", errorsProp)
+
+	// Create the GraphQL operation
+	operation := openapi3.NewOperation()
+	operation.Summary = "GraphQL Endpoint"
+	operation.Description = "Handles all GraphQL queries, mutations, and subscriptions"
+
+	// Add request body
+	requestBody := openapi3.NewRequestBody()
+	requestBody.Required = true
+	requestBody.WithJSONSchema(requestSchema)
+	operation.RequestBody = &openapi3.RequestBodyRef{Value: requestBody}
+
+	// Add response
+	response := openapi3.NewResponse()
+	response.WithDescription("Successful GraphQL response")
+	response.WithJSONSchema(responseSchema)
+	operation.AddResponse(200, response)
+
+	// Add the operation to the OpenAPI spec
+	r.OAS.AddOperation("/query", "POST", operation)
+}
+
 // RegisterRoutes with the echo routers - Router is defined within openapi.go
 func RegisterRoutes(router *Router) error {
 	// base middleware for all routes that does not included additional middleware
@@ -588,6 +644,9 @@ func RegisterRoutes(router *Router) error {
 			return err
 		}
 	}
+
+	// Add GraphQL endpoint to OpenAPI specification
+	router.AddGraphQLToOpenAPI()
 
 	return nil
 }
