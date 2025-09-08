@@ -426,7 +426,7 @@ func (r *Router) AddV1HandlerRoute(config Config) error {
 	}
 
 	// Add operation to OpenAPI schema (convert Echo path syntax to OpenAPI syntax)
-	openAPIPath := convertEchoPathToOpenAPI(config.Path)
+	openAPIPath := convertEchoPathToOpenAPI("/v1" + config.Path)
 	r.OAS.AddOperation(openAPIPath, config.Method, operation)
 
 	return nil
