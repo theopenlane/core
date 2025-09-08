@@ -240,8 +240,10 @@ func parseRequestError(err error, a action) error {
 			Msg("validation error")
 
 		if strings.Contains(strings.ToLower(validationError.Error()), "generated:") {
-			errMsg := strings.SplitN(validationError.Error(), "generated: ", 2)
-			if len(errMsg) == 2 {
+			numParts := 2
+
+			errMsg := strings.SplitN(validationError.Error(), "generated: ", numParts)
+			if len(errMsg) == numParts {
 				return newValidationError(errMsg[1])
 			}
 		}
