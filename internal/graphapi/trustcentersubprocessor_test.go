@@ -14,11 +14,16 @@ import (
 
 func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 	// Create test data
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	testUser := suite.userBuilder(context.Background(), t)
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+
+	// Create test data
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	// Create subprocessors for testing
-	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
@@ -37,7 +42,7 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 				Countries:      []string{"US", "CA"},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 		},
 		{
 			name: "not authorized - view only user cannot create trust center subprocessor",
@@ -48,7 +53,7 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 				Countries:      []string{"US"},
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         viewOnlyUserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -72,7 +77,7 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 				Countries:      []string{"US"},
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -84,7 +89,7 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 				Countries:      []string{"US"},
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -95,7 +100,7 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 				Countries:      []string{"US"},
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -124,15 +129,13 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 	}
 
 	// Clean up test data
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor1.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor2.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
 func TestMutationCreateTrustCenterSubprocessorAsAnonymousUser(t *testing.T) {
-	t.Parallel()
-
 	// create new test users
 	testUser := suite.userBuilder(context.Background(), t)
 
@@ -183,11 +186,15 @@ func TestMutationCreateTrustCenterSubprocessorAsAnonymousUser(t *testing.T) {
 
 func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 	// Create test data
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	testUser := suite.userBuilder(context.Background(), t)
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	subprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	// Create a trust center subprocessor using GraphQL mutation
-	createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+	createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 		SubprocessorID: subprocessor.ID,
 		TrustCenterID:  &trustCenter.ID,
 		Category:       "Data Processing",
@@ -220,21 +227,21 @@ func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 			name:             "happy path - get trust center subprocessor",
 			queryID:          tcSubprocessor.ID,
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              testUser.UserCtx,
 			expectedCategory: "Data Processing",
 		},
 		{
 			name:             "happy path - view only user can get trust center subprocessor",
 			queryID:          tcSubprocessor.ID,
 			client:           suite.client.api,
-			ctx:              viewOnlyUser.UserCtx,
+			ctx:              viewOnlyUserCtx,
 			expectedCategory: "Data Processing",
 		},
 		{
 			name:             "happy path - anon user",
 			queryID:          tcSubprocessor.ID,
 			client:           suite.client.api,
-			ctx:              createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
+			ctx:              createAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID),
 			expectedCategory: "Data Processing",
 		},
 		{
@@ -255,7 +262,7 @@ func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 			name:     "not found - non-existent ID",
 			queryID:  "non-existent-id",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      testUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -278,23 +285,28 @@ func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 	}
 
 	// Clean up
-	(&Cleanup[*generated.TrustCenterSubprocessorDeleteOne]{client: suite.client.db.TrustCenterSubprocessor, ID: tcSubprocessor.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterSubprocessorDeleteOne]{client: suite.client.db.TrustCenterSubprocessor, ID: tcSubprocessor.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterSubprocessorDeleteOne]{client: suite.client.db.TrustCenterSubprocessor, ID: tcSubprocessor2.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor2.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 	// Create test data
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subprocessor3 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subprocessor4 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subprocessor5 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subprocessor6 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	testUser := suite.userBuilder(context.Background(), t)
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+
+	// Create test data
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	subprocessor3 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	subprocessor4 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	subprocessor5 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	subprocessor6 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	// Create another trust center subprocessor for different org
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
@@ -322,7 +334,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 		{
 			name: "happy path - update category and countries",
 			setupFunc: func() string {
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor1.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -336,12 +348,12 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				Countries: newCountries,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 		},
 		{
 			name: "happy path - update subprocessor",
 			setupFunc: func() string {
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor2.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -354,12 +366,12 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				SubprocessorID: &subprocessor3.ID,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 		},
 		{
 			name: "happy path - append countries",
 			setupFunc: func() string {
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor4.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -372,12 +384,12 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				AppendCountries: []string{"MX"},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 		},
 		{
 			name: "happy path - clear countries",
 			setupFunc: func() string {
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor5.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -390,12 +402,12 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				ClearCountries: lo.ToPtr(true),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 		},
 		{
 			name: "not authorized - view only user cannot update",
 			setupFunc: func() string {
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor6.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -408,14 +420,14 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				Category: &newCategory,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         viewOnlyUserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "not authorized - anon user cannot update",
 			setupFunc: func() string {
-				subprocessoranon := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+				subprocessoranon := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessoranon.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -428,15 +440,15 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				Category: &newCategory,
 			},
 			client:      suite.client.api,
-			ctx:         createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
+			ctx:         createAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID),
 			expectedErr: couldNotFindUser,
 		},
 		{
 			name: "not authorized - different org user cannot update",
 			setupFunc: func() string {
 				// Create a separate subprocessor for this test to avoid conflicts
-				subprocessor7 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+				subprocessor7 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor7.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -459,7 +471,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				Category: &newCategory,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -498,18 +510,16 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 
 	// Clean up created trust center subprocessors
 	if len(createdIDs) > 0 {
-		(&Cleanup[*generated.TrustCenterSubprocessorDeleteOne]{client: suite.client.db.TrustCenterSubprocessor, IDs: createdIDs}).MustDelete(testUser1.UserCtx, t)
+		(&Cleanup[*generated.TrustCenterSubprocessorDeleteOne]{client: suite.client.db.TrustCenterSubprocessor, IDs: createdIDs}).MustDelete(testUser.UserCtx, t)
 	}
 	(&Cleanup[*generated.TrustCenterSubprocessorDeleteOne]{client: suite.client.db.TrustCenterSubprocessor, ID: tcSubprocessor2.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, IDs: []string{subprocessor1.ID, subprocessor2.ID, subprocessor3.ID, subprocessor4.ID, subprocessor5.ID, subprocessor6.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, IDs: []string{subprocessor1.ID, subprocessor2.ID, subprocessor3.ID, subprocessor4.ID, subprocessor5.ID, subprocessor6.ID}}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessorOtherOrg.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
 func TestMutationDeleteTrustCenterSubprocessor(t *testing.T) {
-	t.Parallel()
-
 	// Create test data
 	testUser := suite.userBuilder(context.Background(), t)
 	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
