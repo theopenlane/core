@@ -239,6 +239,15 @@ func parseRequestError(err error, a action) error {
 			Str("field", validationError.Name).
 			Msg("validation error")
 
+		if strings.Contains(strings.ToLower(validationError.Error()), "generated:") {
+			numParts := 2
+
+			errMsg := strings.SplitN(validationError.Error(), "generated: ", numParts)
+			if len(errMsg) == numParts {
+				return newValidationError(errMsg[1])
+			}
+		}
+
 		return newValidationError(validationError.Error())
 	case generated.IsConstraintError(err):
 		constraintError := err.(*generated.ConstraintError)
