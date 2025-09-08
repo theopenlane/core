@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v82"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
@@ -143,8 +142,6 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 	}
 
 	if ent.IsNotFound(err) {
-		log.Warn().Str("module", moduleKey).Msg("org module not found, creating new module")
-
 		builder := tx.OrgModule.Create().
 			SetOwnerID(orgSub.OwnerID).
 			SetSubscriptionID(orgSub.ID).
