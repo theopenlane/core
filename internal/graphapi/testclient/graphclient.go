@@ -81906,24 +81906,14 @@ func (t *GetTaskHistories_TaskHistories) GetEdges() []*GetTaskHistories_TaskHist
 	return t.Edges
 }
 
-type CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates_Owner) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates_Owner{}
-	}
-	return t.ID
-}
-
 type CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates struct {
-	Description *string                                                      "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                                       "json:\"id\" graphql:\"id\""
-	Jsonconfig  map[string]any                                               "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name        string                                                       "json:\"name\" graphql:\"name\""
-	Owner       *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	Uischema    map[string]any                                               "json:\"uischema,omitempty\" graphql:\"uischema\""
+	Description *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID          string              "json:\"id\" graphql:\"id\""
+	Jsonconfig  map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind        *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string              "json:\"name\" graphql:\"name\""
+	OwnerID     *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Uischema    map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
 }
 
 func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetDescription() *string {
@@ -81944,17 +81934,23 @@ func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetJsonconfig() 
 	}
 	return t.Jsonconfig
 }
+func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates{}
+	}
+	return t.Kind
+}
 func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates{}
 	}
 	return t.Name
 }
-func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetOwner() *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates_Owner {
+func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates{}
 	}
-	return t.Owner
+	return t.OwnerID
 }
 func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetUischema() map[string]any {
 	if t == nil {
@@ -81974,24 +81970,14 @@ func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate) GetTemplates() []*CreateBu
 	return t.Templates
 }
 
-type CreateBulkTemplate_CreateBulkTemplate_Templates_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkTemplate_CreateBulkTemplate_Templates_Owner) GetID() string {
-	if t == nil {
-		t = &CreateBulkTemplate_CreateBulkTemplate_Templates_Owner{}
-	}
-	return t.ID
-}
-
 type CreateBulkTemplate_CreateBulkTemplate_Templates struct {
-	Description *string                                                "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                                 "json:\"id\" graphql:\"id\""
-	Jsonconfig  map[string]any                                         "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name        string                                                 "json:\"name\" graphql:\"name\""
-	Owner       *CreateBulkTemplate_CreateBulkTemplate_Templates_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	Uischema    map[string]any                                         "json:\"uischema,omitempty\" graphql:\"uischema\""
+	Description *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID          string              "json:\"id\" graphql:\"id\""
+	Jsonconfig  map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind        *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string              "json:\"name\" graphql:\"name\""
+	OwnerID     *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Uischema    map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
 }
 
 func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetDescription() *string {
@@ -82012,17 +81998,23 @@ func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetJsonconfig() map[st
 	}
 	return t.Jsonconfig
 }
+func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &CreateBulkTemplate_CreateBulkTemplate_Templates{}
+	}
+	return t.Kind
+}
 func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetName() string {
 	if t == nil {
 		t = &CreateBulkTemplate_CreateBulkTemplate_Templates{}
 	}
 	return t.Name
 }
-func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetOwner() *CreateBulkTemplate_CreateBulkTemplate_Templates_Owner {
+func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateBulkTemplate_CreateBulkTemplate_Templates{}
 	}
-	return t.Owner
+	return t.OwnerID
 }
 func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetUischema() map[string]any {
 	if t == nil {
@@ -82042,24 +82034,14 @@ func (t *CreateBulkTemplate_CreateBulkTemplate) GetTemplates() []*CreateBulkTemp
 	return t.Templates
 }
 
-type CreateTemplate_CreateTemplate_Template_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateTemplate_CreateTemplate_Template_Owner) GetID() string {
-	if t == nil {
-		t = &CreateTemplate_CreateTemplate_Template_Owner{}
-	}
-	return t.ID
-}
-
 type CreateTemplate_CreateTemplate_Template struct {
-	Description *string                                       "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                        "json:\"id\" graphql:\"id\""
-	Jsonconfig  map[string]any                                "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name        string                                        "json:\"name\" graphql:\"name\""
-	Owner       *CreateTemplate_CreateTemplate_Template_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	Uischema    map[string]any                                "json:\"uischema,omitempty\" graphql:\"uischema\""
+	Description *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID          string              "json:\"id\" graphql:\"id\""
+	Jsonconfig  map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind        *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string              "json:\"name\" graphql:\"name\""
+	OwnerID     *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Uischema    map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
 }
 
 func (t *CreateTemplate_CreateTemplate_Template) GetDescription() *string {
@@ -82080,17 +82062,23 @@ func (t *CreateTemplate_CreateTemplate_Template) GetJsonconfig() map[string]any 
 	}
 	return t.Jsonconfig
 }
+func (t *CreateTemplate_CreateTemplate_Template) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &CreateTemplate_CreateTemplate_Template{}
+	}
+	return t.Kind
+}
 func (t *CreateTemplate_CreateTemplate_Template) GetName() string {
 	if t == nil {
 		t = &CreateTemplate_CreateTemplate_Template{}
 	}
 	return t.Name
 }
-func (t *CreateTemplate_CreateTemplate_Template) GetOwner() *CreateTemplate_CreateTemplate_Template_Owner {
+func (t *CreateTemplate_CreateTemplate_Template) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateTemplate_CreateTemplate_Template{}
 	}
-	return t.Owner
+	return t.OwnerID
 }
 func (t *CreateTemplate_CreateTemplate_Template) GetUischema() map[string]any {
 	if t == nil {
@@ -82110,28 +82098,18 @@ func (t *CreateTemplate_CreateTemplate) GetTemplate() *CreateTemplate_CreateTemp
 	return &t.Template
 }
 
-type GetAllTemplates_Templates_Edges_Node_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllTemplates_Templates_Edges_Node_Owner) GetID() string {
-	if t == nil {
-		t = &GetAllTemplates_Templates_Edges_Node_Owner{}
-	}
-	return t.ID
-}
-
 type GetAllTemplates_Templates_Edges_Node struct {
-	CreatedAt   *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                     "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                      "json:\"id\" graphql:\"id\""
-	Jsonconfig  map[string]any                              "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name        string                                      "json:\"name\" graphql:\"name\""
-	Owner       *GetAllTemplates_Templates_Edges_Node_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	Uischema    map[string]any                              "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt   *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID          string              "json:\"id\" graphql:\"id\""
+	Jsonconfig  map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind        *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string              "json:\"name\" graphql:\"name\""
+	OwnerID     *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Uischema    map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt   *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllTemplates_Templates_Edges_Node) GetCreatedAt() *time.Time {
@@ -82164,17 +82142,23 @@ func (t *GetAllTemplates_Templates_Edges_Node) GetJsonconfig() map[string]any {
 	}
 	return t.Jsonconfig
 }
+func (t *GetAllTemplates_Templates_Edges_Node) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &GetAllTemplates_Templates_Edges_Node{}
+	}
+	return t.Kind
+}
 func (t *GetAllTemplates_Templates_Edges_Node) GetName() string {
 	if t == nil {
 		t = &GetAllTemplates_Templates_Edges_Node{}
 	}
 	return t.Name
 }
-func (t *GetAllTemplates_Templates_Edges_Node) GetOwner() *GetAllTemplates_Templates_Edges_Node_Owner {
+func (t *GetAllTemplates_Templates_Edges_Node) GetOwnerID() *string {
 	if t == nil {
 		t = &GetAllTemplates_Templates_Edges_Node{}
 	}
-	return t.Owner
+	return t.OwnerID
 }
 func (t *GetAllTemplates_Templates_Edges_Node) GetUischema() map[string]any {
 	if t == nil {
@@ -82217,28 +82201,18 @@ func (t *GetAllTemplates_Templates) GetEdges() []*GetAllTemplates_Templates_Edge
 	return t.Edges
 }
 
-type GetTemplateByID_Template_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetTemplateByID_Template_Owner) GetID() string {
-	if t == nil {
-		t = &GetTemplateByID_Template_Owner{}
-	}
-	return t.ID
-}
-
 type GetTemplateByID_Template struct {
-	CreatedAt   *time.Time                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                         "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                          "json:\"id\" graphql:\"id\""
-	Jsonconfig  map[string]any                  "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name        string                          "json:\"name\" graphql:\"name\""
-	Owner       *GetTemplateByID_Template_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	Uischema    map[string]any                  "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt   *time.Time                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID          string              "json:\"id\" graphql:\"id\""
+	Jsonconfig  map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind        *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string              "json:\"name\" graphql:\"name\""
+	OwnerID     *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Uischema    map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt   *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTemplateByID_Template) GetCreatedAt() *time.Time {
@@ -82271,17 +82245,23 @@ func (t *GetTemplateByID_Template) GetJsonconfig() map[string]any {
 	}
 	return t.Jsonconfig
 }
+func (t *GetTemplateByID_Template) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &GetTemplateByID_Template{}
+	}
+	return t.Kind
+}
 func (t *GetTemplateByID_Template) GetName() string {
 	if t == nil {
 		t = &GetTemplateByID_Template{}
 	}
 	return t.Name
 }
-func (t *GetTemplateByID_Template) GetOwner() *GetTemplateByID_Template_Owner {
+func (t *GetTemplateByID_Template) GetOwnerID() *string {
 	if t == nil {
 		t = &GetTemplateByID_Template{}
 	}
-	return t.Owner
+	return t.OwnerID
 }
 func (t *GetTemplateByID_Template) GetUischema() map[string]any {
 	if t == nil {
@@ -82302,28 +82282,18 @@ func (t *GetTemplateByID_Template) GetUpdatedBy() *string {
 	return t.UpdatedBy
 }
 
-type UpdateTemplate_UpdateTemplate_Template_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateTemplate_UpdateTemplate_Template_Owner) GetID() string {
-	if t == nil {
-		t = &UpdateTemplate_UpdateTemplate_Template_Owner{}
-	}
-	return t.ID
-}
-
 type UpdateTemplate_UpdateTemplate_Template struct {
-	CreatedAt   *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                       "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                        "json:\"id\" graphql:\"id\""
-	Jsonconfig  map[string]any                                "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name        string                                        "json:\"name\" graphql:\"name\""
-	Owner       *UpdateTemplate_UpdateTemplate_Template_Owner "json:\"owner,omitempty\" graphql:\"owner\""
-	Uischema    map[string]any                                "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt   *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID          string              "json:\"id\" graphql:\"id\""
+	Jsonconfig  map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind        *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string              "json:\"name\" graphql:\"name\""
+	OwnerID     *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Uischema    map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt   *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateTemplate_UpdateTemplate_Template) GetCreatedAt() *time.Time {
@@ -82356,17 +82326,23 @@ func (t *UpdateTemplate_UpdateTemplate_Template) GetJsonconfig() map[string]any 
 	}
 	return t.Jsonconfig
 }
+func (t *UpdateTemplate_UpdateTemplate_Template) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &UpdateTemplate_UpdateTemplate_Template{}
+	}
+	return t.Kind
+}
 func (t *UpdateTemplate_UpdateTemplate_Template) GetName() string {
 	if t == nil {
 		t = &UpdateTemplate_UpdateTemplate_Template{}
 	}
 	return t.Name
 }
-func (t *UpdateTemplate_UpdateTemplate_Template) GetOwner() *UpdateTemplate_UpdateTemplate_Template_Owner {
+func (t *UpdateTemplate_UpdateTemplate_Template) GetOwnerID() *string {
 	if t == nil {
 		t = &UpdateTemplate_UpdateTemplate_Template{}
 	}
-	return t.Owner
+	return t.OwnerID
 }
 func (t *UpdateTemplate_UpdateTemplate_Template) GetUischema() map[string]any {
 	if t == nil {
@@ -119397,9 +119373,8 @@ const CreateBulkCSVTemplateDocument = `mutation CreateBulkCSVTemplate ($input: U
 			jsonconfig
 			name
 			uischema
-			owner {
-				id
-			}
+			kind
+			ownerID
 		}
 	}
 }
@@ -119430,9 +119405,8 @@ const CreateBulkTemplateDocument = `mutation CreateBulkTemplate ($input: [Create
 			jsonconfig
 			name
 			uischema
-			owner {
-				id
-			}
+			kind
+			ownerID
 		}
 	}
 }
@@ -119463,9 +119437,8 @@ const CreateTemplateDocument = `mutation CreateTemplate ($input: CreateTemplateI
 			jsonconfig
 			name
 			uischema
-			owner {
-				id
-			}
+			kind
+			ownerID
 		}
 	}
 }
@@ -119499,11 +119472,10 @@ const GetAllTemplatesDocument = `query GetAllTemplates {
 				jsonconfig
 				name
 				uischema
+				kind
 				updatedAt
 				updatedBy
-				owner {
-					id
-				}
+				ownerID
 			}
 		}
 	}
@@ -119536,9 +119508,8 @@ const GetTemplateByIDDocument = `query GetTemplateByID ($getTemplateId: ID!) {
 		uischema
 		updatedAt
 		updatedBy
-		owner {
-			id
-		}
+		kind
+		ownerID
 	}
 }
 `
@@ -119572,9 +119543,8 @@ const UpdateTemplateDocument = `mutation UpdateTemplate ($updateTemplateId: ID!,
 			uischema
 			updatedAt
 			updatedBy
-			owner {
-				id
-			}
+			kind
+			ownerID
 		}
 	}
 }

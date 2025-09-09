@@ -85,6 +85,8 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 				return ec.fieldContext_Template_templateType(ctx, field)
 			case "description":
 				return ec.fieldContext_Template_description(ctx, field)
+			case "kind":
+				return ec.fieldContext_Template_kind(ctx, field)
 			case "jsonconfig":
 				return ec.fieldContext_Template_jsonconfig(ctx, field)
 			case "uischema":
@@ -161,6 +163,8 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 				return ec.fieldContext_Template_templateType(ctx, field)
 			case "description":
 				return ec.fieldContext_Template_description(ctx, field)
+			case "kind":
+				return ec.fieldContext_Template_kind(ctx, field)
 			case "jsonconfig":
 				return ec.fieldContext_Template_jsonconfig(ctx, field)
 			case "uischema":
@@ -281,6 +285,8 @@ func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ contex
 				return ec.fieldContext_Template_templateType(ctx, field)
 			case "description":
 				return ec.fieldContext_Template_description(ctx, field)
+			case "kind":
+				return ec.fieldContext_Template_kind(ctx, field)
 			case "jsonconfig":
 				return ec.fieldContext_Template_jsonconfig(ctx, field)
 			case "uischema":

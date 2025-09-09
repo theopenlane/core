@@ -194,6 +194,20 @@ func (_c *TemplateHistoryCreate) SetNillableDescription(v *string) *TemplateHist
 	return _c
 }
 
+// SetKind sets the "kind" field.
+func (_c *TemplateHistoryCreate) SetKind(v enums.TemplateKind) *TemplateHistoryCreate {
+	_c.mutation.SetKind(v)
+	return _c
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableKind(v *enums.TemplateKind) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetKind(*v)
+	}
+	return _c
+}
+
 // SetJsonconfig sets the "jsonconfig" field.
 func (_c *TemplateHistoryCreate) SetJsonconfig(v map[string]interface{}) *TemplateHistoryCreate {
 	_c.mutation.SetJsonconfig(v)
@@ -286,6 +300,10 @@ func (_c *TemplateHistoryCreate) defaults() error {
 		v := templatehistory.DefaultTemplateType
 		_c.mutation.SetTemplateType(v)
 	}
+	if _, ok := _c.mutation.Kind(); !ok {
+		v := templatehistory.DefaultKind
+		_c.mutation.SetKind(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if templatehistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized templatehistory.DefaultID (forgotten import generated/runtime?)")
@@ -318,6 +336,11 @@ func (_c *TemplateHistoryCreate) check() error {
 	if v, ok := _c.mutation.TemplateType(); ok {
 		if err := templatehistory.TemplateTypeValidator(v); err != nil {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.template_type": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Kind(); ok {
+		if err := templatehistory.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.kind": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.Jsonconfig(); !ok {
@@ -414,6 +437,10 @@ func (_c *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(templatehistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := _c.mutation.Kind(); ok {
+		_spec.SetField(templatehistory.FieldKind, field.TypeEnum, value)
+		_node.Kind = value
 	}
 	if value, ok := _c.mutation.Jsonconfig(); ok {
 		_spec.SetField(templatehistory.FieldJsonconfig, field.TypeJSON, value)

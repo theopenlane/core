@@ -2960,6 +2960,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldName:         {Type: field.TypeString, Column: template.FieldName},
 			template.FieldTemplateType: {Type: field.TypeEnum, Column: template.FieldTemplateType},
 			template.FieldDescription:  {Type: field.TypeString, Column: template.FieldDescription},
+			template.FieldKind:         {Type: field.TypeEnum, Column: template.FieldKind},
 			template.FieldJsonconfig:   {Type: field.TypeJSON, Column: template.FieldJsonconfig},
 			template.FieldUischema:     {Type: field.TypeJSON, Column: template.FieldUischema},
 		},
@@ -2989,6 +2990,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldName:         {Type: field.TypeString, Column: templatehistory.FieldName},
 			templatehistory.FieldTemplateType: {Type: field.TypeEnum, Column: templatehistory.FieldTemplateType},
 			templatehistory.FieldDescription:  {Type: field.TypeString, Column: templatehistory.FieldDescription},
+			templatehistory.FieldKind:         {Type: field.TypeEnum, Column: templatehistory.FieldKind},
 			templatehistory.FieldJsonconfig:   {Type: field.TypeJSON, Column: templatehistory.FieldJsonconfig},
 			templatehistory.FieldUischema:     {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
 		},
@@ -26427,6 +26429,11 @@ func (f *TemplateFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(template.FieldDescription))
 }
 
+// WhereKind applies the entql string predicate on the kind field.
+func (f *TemplateFilter) WhereKind(p entql.StringP) {
+	f.Where(p.Field(template.FieldKind))
+}
+
 // WhereJsonconfig applies the entql json.RawMessage predicate on the jsonconfig field.
 func (f *TemplateFilter) WhereJsonconfig(p entql.BytesP) {
 	f.Where(p.Field(template.FieldJsonconfig))
@@ -26587,6 +26594,11 @@ func (f *TemplateHistoryFilter) WhereTemplateType(p entql.StringP) {
 // WhereDescription applies the entql string predicate on the description field.
 func (f *TemplateHistoryFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(templatehistory.FieldDescription))
+}
+
+// WhereKind applies the entql string predicate on the kind field.
+func (f *TemplateHistoryFilter) WhereKind(p entql.StringP) {
+	f.Where(p.Field(templatehistory.FieldKind))
 }
 
 // WhereJsonconfig applies the entql json.RawMessage predicate on the jsonconfig field.

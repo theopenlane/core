@@ -194,6 +194,26 @@ func (_u *TemplateUpdate) ClearDescription() *TemplateUpdate {
 	return _u
 }
 
+// SetKind sets the "kind" field.
+func (_u *TemplateUpdate) SetKind(v enums.TemplateKind) *TemplateUpdate {
+	_u.mutation.SetKind(v)
+	return _u
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableKind(v *enums.TemplateKind) *TemplateUpdate {
+	if v != nil {
+		_u.SetKind(*v)
+	}
+	return _u
+}
+
+// ClearKind clears the value of the "kind" field.
+func (_u *TemplateUpdate) ClearKind() *TemplateUpdate {
+	_u.mutation.ClearKind()
+	return _u
+}
+
 // SetJsonconfig sets the "jsonconfig" field.
 func (_u *TemplateUpdate) SetJsonconfig(v map[string]interface{}) *TemplateUpdate {
 	_u.mutation.SetJsonconfig(v)
@@ -354,6 +374,11 @@ func (_u *TemplateUpdate) check() error {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "Template.template_type": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Kind(); ok {
+		if err := template.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "Template.kind": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -427,6 +452,12 @@ func (_u *TemplateUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(template.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.Kind(); ok {
+		_spec.SetField(template.FieldKind, field.TypeEnum, value)
+	}
+	if _u.mutation.KindCleared() {
+		_spec.ClearField(template.FieldKind, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Jsonconfig(); ok {
 		_spec.SetField(template.FieldJsonconfig, field.TypeJSON, value)
@@ -746,6 +777,26 @@ func (_u *TemplateUpdateOne) ClearDescription() *TemplateUpdateOne {
 	return _u
 }
 
+// SetKind sets the "kind" field.
+func (_u *TemplateUpdateOne) SetKind(v enums.TemplateKind) *TemplateUpdateOne {
+	_u.mutation.SetKind(v)
+	return _u
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableKind(v *enums.TemplateKind) *TemplateUpdateOne {
+	if v != nil {
+		_u.SetKind(*v)
+	}
+	return _u
+}
+
+// ClearKind clears the value of the "kind" field.
+func (_u *TemplateUpdateOne) ClearKind() *TemplateUpdateOne {
+	_u.mutation.ClearKind()
+	return _u
+}
+
 // SetJsonconfig sets the "jsonconfig" field.
 func (_u *TemplateUpdateOne) SetJsonconfig(v map[string]interface{}) *TemplateUpdateOne {
 	_u.mutation.SetJsonconfig(v)
@@ -919,6 +970,11 @@ func (_u *TemplateUpdateOne) check() error {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "Template.template_type": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Kind(); ok {
+		if err := template.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "Template.kind": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1009,6 +1065,12 @@ func (_u *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err 
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(template.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.Kind(); ok {
+		_spec.SetField(template.FieldKind, field.TypeEnum, value)
+	}
+	if _u.mutation.KindCleared() {
+		_spec.ClearField(template.FieldKind, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Jsonconfig(); ok {
 		_spec.SetField(template.FieldJsonconfig, field.TypeJSON, value)

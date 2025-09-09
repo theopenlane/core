@@ -162,6 +162,20 @@ func (_c *TemplateCreate) SetNillableDescription(v *string) *TemplateCreate {
 	return _c
 }
 
+// SetKind sets the "kind" field.
+func (_c *TemplateCreate) SetKind(v enums.TemplateKind) *TemplateCreate {
+	_c.mutation.SetKind(v)
+	return _c
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableKind(v *enums.TemplateKind) *TemplateCreate {
+	if v != nil {
+		_c.SetKind(*v)
+	}
+	return _c
+}
+
 // SetJsonconfig sets the "jsonconfig" field.
 func (_c *TemplateCreate) SetJsonconfig(v map[string]interface{}) *TemplateCreate {
 	_c.mutation.SetJsonconfig(v)
@@ -282,6 +296,10 @@ func (_c *TemplateCreate) defaults() error {
 		v := template.DefaultTemplateType
 		_c.mutation.SetTemplateType(v)
 	}
+	if _, ok := _c.mutation.Kind(); !ok {
+		v := template.DefaultKind
+		_c.mutation.SetKind(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if template.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized template.DefaultID (forgotten import generated/runtime?)")
@@ -308,6 +326,11 @@ func (_c *TemplateCreate) check() error {
 	if v, ok := _c.mutation.TemplateType(); ok {
 		if err := template.TemplateTypeValidator(v); err != nil {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "Template.template_type": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Kind(); ok {
+		if err := template.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "Template.kind": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.Jsonconfig(); !ok {
@@ -388,6 +411,10 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(template.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := _c.mutation.Kind(); ok {
+		_spec.SetField(template.FieldKind, field.TypeEnum, value)
+		_node.Kind = value
 	}
 	if value, ok := _c.mutation.Jsonconfig(); ok {
 		_spec.SetField(template.FieldJsonconfig, field.TypeJSON, value)

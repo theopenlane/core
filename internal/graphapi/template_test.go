@@ -81,6 +81,7 @@ func TestQueryTemplate(t *testing.T) {
 			assert.Assert(t, resp != nil)
 
 			assert.Check(t, is.Equal(tc.queryID, resp.Template.ID))
+			assert.Check(t, is.Equal(enums.TemplateKindQuestionnaire, *resp.Template.Kind))
 		})
 	}
 
