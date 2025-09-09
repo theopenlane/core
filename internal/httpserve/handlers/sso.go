@@ -55,7 +55,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 	}
 
 	// if a return URL is provided, set it as a cookie for redirect after login
-	cfg := newCookieConfig(!h.IsTest)
+	cfg := *h.SessionConfig.CookieConfig
 
 	if in.ReturnURL != "" {
 		sessions.SetCookie(ctx.Response().Writer, in.ReturnURL, "return", cfg)
@@ -81,8 +81,12 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 	// build the OIDC auth URL with state and nonce
 	authURL := rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonce))
 
-	// redirect the user to the IdP for authentication
-	return h.Redirect(ctx, authURL, openapi)
+	out := models.SSOLoginReply{
+		Reply:       rout.Reply{Success: true},
+		RedirectURI: authURL,
+	}
+
+	return h.Success(ctx, out, openapi)
 }
 
 // SSOCallbackHandler completes the OIDC login flow after the user returns from the IdP
@@ -273,10 +277,7 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 }
 
 // ssoCallbackURL builds the callback URL for OIDC flows, ensuring a single path segment is appended
-func (h *Handler) ssoCallbackURL() string {
-	base := strings.TrimSuffix(h.OauthProvider.RedirectURL, "/")
-	return fmt.Sprintf("%s/v1/sso/callback", base)
-}
+func (h *Handler) ssoCallbackURL() string { return h.OauthProvider.RedirectURL }
 
 // ssoOrgForUser checks if the user's default org requires SSO login and the user is not an owner
 // Returns the org ID and true if SSO is enforced and the user must use SSO, otherwise false
