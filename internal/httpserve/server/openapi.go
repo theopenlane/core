@@ -88,7 +88,7 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 		Servers: openapi3.Servers{
 			&openapi3.Server{
 				Description: "Openlane API Server",
-				URL:         "https://api.theopenlane.io/v1",
+				URL:         "https://api.theopenlane.io",
 			},
 		},
 		ExternalDocs: &openapi3.ExternalDocs{

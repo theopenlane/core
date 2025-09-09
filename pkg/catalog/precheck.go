@@ -82,7 +82,7 @@ func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts 
 
 	check := func(kind string, fs FeatureSet) error {
 		for name, f := range fs {
-			prod, err := sc.GetProduct(ctx, name)
+			prod, err := sc.GetProduct(ctx, f.ProductID)
 			if err != nil {
 				if !notFound(err) {
 					return err
@@ -105,6 +105,8 @@ func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts 
 				if cfg.failFast {
 					return nil
 				}
+
+				fmt.Printf("product %s already exists as %s\n", name, prod.ID)
 			}
 
 			if f.LookupKey != "" {

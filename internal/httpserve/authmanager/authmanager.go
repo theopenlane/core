@@ -170,19 +170,25 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 
 // createClaims creates the claims for the JWT token using the id for the user and organization
 // if not target org is provided, the user's default org is used
-func createClaimsWithOrg(u *generated.User, targetOrgID string) *tokens.Claims {
+func createClaimsWithOrg(ctx context.Context, u *generated.User, targetOrgID string) *tokens.Claims {
 	if targetOrgID == "" {
 		if u.Edges.Setting.Edges.DefaultOrg != nil {
 			targetOrgID = u.Edges.Setting.Edges.DefaultOrg.ID
 		}
 	}
 
+	modules, err := rule.GetFeaturesForSpecificOrganization(ctx, targetOrgID)
+	if err != nil {
+		log.Error().Err(err).Msg("error obtaining org features for claims, skipping modules in JWT")
+	}
+
 	return &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: u.ID,
 		},
-		UserID: u.ID,
-		OrgID:  targetOrgID,
+		UserID:  u.ID,
+		OrgID:   targetOrgID,
+		Modules: modules,
 	}
 }
 
@@ -200,7 +206,7 @@ func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targ
 	}
 
 	// create new claims for the user
-	newClaims := createClaimsWithOrg(user, targetOrgID)
+	newClaims := createClaimsWithOrg(ctx, user, targetOrgID)
 
 	// create a new token pair for the user
 	access, refresh, err := a.db.TokenManager.CreateTokenPair(newClaims)

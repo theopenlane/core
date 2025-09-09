@@ -383,6 +383,7 @@ tasks:
     cmds:
       - task: compose:redis
       - task: compose:fga
+      - task: compose:riverboat
       - task: run-api
 
   run-dev-full:
