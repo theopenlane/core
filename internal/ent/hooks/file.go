@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
@@ -49,13 +50,14 @@ func HookFileDelete() ent.Hook {
 					return nil, err
 				}
 
-				for _, id := range ids {
+				files, err := m.Client().File.Query().Where(file.IDIn(ids...)).
+					Select(file.FieldStoragePath).
+					All(ctx)
+				if err != nil {
+					return nil, err
+				}
 
-					file, err := m.Client().File.Get(ctx, id)
-					if err != nil {
-						return nil, err
-					}
-
+				for _, file := range files {
 					if file.StoragePath != "" {
 						if err := m.ObjectManager.Storage.Delete(ctx, file.StoragePath); err != nil {
 							return nil, err
