@@ -2,10 +2,15 @@ package hooks
 
 import (
 	"context"
+	"errors"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+)
+
+var (
+	errInvalidStoragePath = errors.New("invalid path when deleting file from object storage")
 )
 
 // HookFileDelete makes sure to clean up the file from external storage once deleted
@@ -15,19 +20,29 @@ func HookFileDelete() ent.Hook {
 			func(ctx context.Context, m *generated.FileMutation) (generated.Value, error) {
 
 				var storagePath string
-				if m.ObjectManager != nil && isDeleteOp(ctx, m) {
+				if m.ObjectManager == nil && !isDeleteOp(ctx, m) {
+					return next.Mutate(ctx, m)
+				}
 
-					id, ok := m.ID()
-					if !ok {
-						return next.Mutate(ctx, m)
-					}
+				var ids []string
 
-					file, err := m.Client().File.Get(ctx, id)
+				switch m.Op() {
+				case ent.OpDelete:
+					dbIDs, err := m.IDs(ctx)
 					if err != nil {
 						return nil, err
 					}
 
-					storagePath = file.StoragePath
+					ids = append(ids, dbIDs...)
+
+				case ent.OpDeleteOne:
+
+					id, ok := m.ID()
+					if !ok {
+						return nil, errInvalidStoragePath
+					}
+
+					ids = append(ids, id)
 				}
 
 				v, err := next.Mutate(ctx, m)
@@ -35,9 +50,19 @@ func HookFileDelete() ent.Hook {
 					return nil, err
 				}
 
-				if storagePath != "" {
-					if err := m.ObjectManager.Storage.Delete(ctx, storagePath); err != nil {
+				for _, id := range ids {
+
+					file, err := m.Client().File.Get(ctx, id)
+					if err != nil {
 						return nil, err
+					}
+
+					storagePath = file.StoragePath
+
+					if storagePath != "" {
+						if err := m.ObjectManager.Storage.Delete(ctx, storagePath); err != nil {
+							return nil, err
+						}
 					}
 				}
 
