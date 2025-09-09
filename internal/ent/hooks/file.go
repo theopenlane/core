@@ -19,7 +19,6 @@ func HookFileDelete() ent.Hook {
 		return hook.FileFunc(
 			func(ctx context.Context, m *generated.FileMutation) (generated.Value, error) {
 
-				var storagePath string
 				if m.ObjectManager == nil && !isDeleteOp(ctx, m) {
 					return next.Mutate(ctx, m)
 				}
@@ -57,10 +56,8 @@ func HookFileDelete() ent.Hook {
 						return nil, err
 					}
 
-					storagePath = file.StoragePath
-
-					if storagePath != "" {
-						if err := m.ObjectManager.Storage.Delete(ctx, storagePath); err != nil {
+					if file.StoragePath != "" {
+						if err := m.ObjectManager.Storage.Delete(ctx, file.StoragePath); err != nil {
 							return nil, err
 						}
 					}
