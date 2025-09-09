@@ -2004,6 +2004,18 @@ func (tb *TemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Templ
 		SetDescription(tb.Description).
 		SetJsonconfig(tb.JSONConfig)
 
+	if tb.Kind != "" {
+		mutation.SetKind(tb.Kind)
+	}
+
+	if tb.TemplateType != "" {
+		mutation.SetTemplateType(tb.TemplateType)
+	}
+
+	if tb.UISchema != nil {
+		mutation.SetUischema(tb.UISchema)
+	}
+
 	template, err := mutation.Save(ctx)
 	requireNoError(err)
 
