@@ -42,7 +42,7 @@ func (sc *StripeClient) GetSubscriptionByID(ctx context.Context, id string) (*st
 
 	subscription, err := sc.Client.V1Subscriptions.Retrieve(ctx, id, &stripe.SubscriptionRetrieveParams{
 		Params: stripe.Params{
-			Expand: []*string{stripe.String("customer")},
+			Expand: []*string{stripe.String("customer"), stripe.String("schedule")},
 		},
 	})
 
@@ -96,7 +96,8 @@ func (sc *StripeClient) CreateSubscriptionWithPrices(ctx context.Context, cust *
 	params.TrialPeriodDays = stripe.Int64(trialdays)
 	params.TrialSettings = &stripe.SubscriptionCreateTrialSettingsParams{
 		EndBehavior: &stripe.SubscriptionCreateTrialSettingsEndBehaviorParams{
-			MissingPaymentMethod: stripe.String(stripe.SubscriptionTrialSettingsEndBehaviorMissingPaymentMethodPause),
+			// stripe does not allow you to use subscription schedules with a trial that ends in a "pause" status so we have to cancel instead
+			MissingPaymentMethod: stripe.String(stripe.SubscriptionTrialSettingsEndBehaviorMissingPaymentMethodCancel),
 		},
 	}
 
@@ -109,7 +110,28 @@ func (sc *StripeClient) CreateSubscriptionWithPrices(ctx context.Context, cust *
 
 	log.Debug().Msgf("Created subscription with ID: %s", subs.ID)
 
-	return sc.MapStripeSubscription(ctx, subs), nil
+	sched, err := sc.CreateSubscriptionScheduleFromSubs(ctx, subs.ID)
+	if err != nil {
+		log.Err(err).Msg("Failed to create subscription schedule from subscription")
+
+		return nil, err
+	}
+
+	return sc.MapStripeSubscription(ctx, subs, sched), nil
+}
+
+// CreateSubscriptionScheduleFromSubs creates a subscription schedule from an existing subscription
+func (sc *StripeClient) CreateSubscriptionScheduleFromSubs(ctx context.Context, subscriptionID string) (*stripe.SubscriptionSchedule, error) {
+	schedule, err := sc.Client.V1SubscriptionSchedules.Create(ctx, &stripe.SubscriptionScheduleCreateParams{
+		FromSubscription: stripe.String(subscriptionID),
+	})
+	if err != nil {
+		log.Err(err).Msg("failed to create subscription schedule from subscription")
+
+		return nil, err
+	}
+
+	return schedule, nil
 }
 
 // retrieveActiveEntitlements retrieves active entitlements for a customer
@@ -136,7 +158,7 @@ func (sc *StripeClient) retrieveActiveEntitlements(ctx context.Context, customer
 }
 
 // MapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
-func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.Subscription) *Subscription {
+func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.Subscription, sched *stripe.SubscriptionSchedule) *Subscription {
 	prices := []Price{}
 	productID := ""
 
@@ -175,14 +197,15 @@ func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.
 	}
 
 	return &Subscription{
-		ID:               subs.ID,
-		Prices:           prices,
-		TrialEnd:         subs.TrialEnd,
-		ProductID:        productID,
-		Status:           string(subs.Status),
-		StripeCustomerID: subs.Customer.ID,
-		OrganizationID:   subs.Metadata["organization_id"],
-		DaysUntilDue:     subs.DaysUntilDue,
+		ID:                           subs.ID,
+		Prices:                       prices,
+		TrialEnd:                     subs.TrialEnd,
+		ProductID:                    productID,
+		Status:                       string(subs.Status),
+		StripeCustomerID:             subs.Customer.ID,
+		StripeSubscriptionScheduleID: sched.ID,
+		OrganizationID:               subs.Metadata["organization_id"],
+		DaysUntilDue:                 subs.DaysUntilDue,
 	}
 }
 

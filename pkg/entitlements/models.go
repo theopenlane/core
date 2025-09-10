@@ -8,15 +8,16 @@ import (
 
 // OrganizationCustomer is a struct which holds both internal organization infos and external stripe infos
 type OrganizationCustomer struct {
-	OrganizationID             string `json:"organization_id"`
-	OrganizationSettingsID     string `json:"organization_settings_id"`
-	StripeCustomerID           string `json:"stripe_customer_id"`
-	OrganizationName           string `json:"organization_name"`
-	OrganizationSubscriptionID string `json:"organization_subscription_id"`
-	StripeSubscriptionID       string `json:"stripe_subscription_id"`
-	PaymentMethodAdded         bool   `json:"payment_method_added"`
-	Features                   []string
-	FeatureNames               []string
+	OrganizationID               string `json:"organization_id"`
+	OrganizationSettingsID       string `json:"organization_settings_id"`
+	StripeCustomerID             string `json:"stripe_customer_id"`
+	OrganizationName             string `json:"organization_name"`
+	OrganizationSubscriptionID   string `json:"organization_subscription_id"`
+	StripeSubscriptionID         string `json:"stripe_subscription_id"`
+	StripeSubscriptionScheduleID string `json:"stripe_subscription_schedule_id"`
+	PaymentMethodAdded           bool   `json:"payment_method_added"`
+	Features                     []string
+	FeatureNames                 []string
 
 	Subscription
 	ContactInfo
@@ -51,19 +52,20 @@ func (o *OrganizationCustomer) Validate() error {
 
 // Subscription is the recurring context that holds the payment information
 type Subscription struct {
-	ID               string `json:"plan_id" yaml:"plan_id"`
-	ProductID        string `json:"product_id" yaml:"product_id"`
-	PriceID          string `json:"price_id" yaml:"price_id"`
-	StartDate        int64  `json:"start_date" yaml:"start_date"`
-	EndDate          int64  `json:"end_date" yaml:"end_date"`
-	Features         []Feature
-	Prices           []Price
-	TrialEnd         int64
-	Status           string
-	StripeCustomerID string
-	OrganizationID   string
-	DaysUntilDue     int64
-	Metadata         map[string]string
+	ID                           string `json:"plan_id" yaml:"plan_id"`
+	ProductID                    string `json:"product_id" yaml:"product_id"`
+	PriceID                      string `json:"price_id" yaml:"price_id"`
+	StartDate                    int64  `json:"start_date" yaml:"start_date"`
+	EndDate                      int64  `json:"end_date" yaml:"end_date"`
+	Features                     []Feature
+	Prices                       []Price
+	TrialEnd                     int64
+	Status                       string
+	StripeCustomerID             string
+	OrganizationID               string
+	StripeSubscriptionScheduleID string
+	DaysUntilDue                 int64
+	Metadata                     map[string]string
 }
 
 // BillingPortalSession holds the billing portal session information

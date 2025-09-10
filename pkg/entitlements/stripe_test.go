@@ -358,6 +358,10 @@ func TestMapStripeSubscription(t *testing.T) {
 		},
 	}
 
+	stripeSubscriptionSchedule := &stripe.SubscriptionSchedule{
+		ID: "sub_sched_123",
+	}
+
 	expectedSubscription := &entitlements.Subscription{
 		ID: "sub_123",
 		Prices: []entitlements.Price{
@@ -370,11 +374,12 @@ func TestMapStripeSubscription(t *testing.T) {
 				Currency:    "usd",
 			},
 		},
-		TrialEnd:         1620000000,
-		ProductID:        "prod_123",
-		Status:           "active",
-		StripeCustomerID: "cus_123",
-		OrganizationID:   "org_123",
+		TrialEnd:                     1620000000,
+		ProductID:                    "prod_123",
+		Status:                       "active",
+		StripeCustomerID:             "cus_123",
+		OrganizationID:               "org_123",
+		StripeSubscriptionScheduleID: "sub_sched_123",
 	}
 
 	stripeBackendMock := new(mocks.MockStripeBackend)
@@ -399,7 +404,7 @@ func TestMapStripeSubscription(t *testing.T) {
 		Client: mockStripeClient,
 	}
 
-	subscription := service.MapStripeSubscription(context.Background(), stripeSubscription)
+	subscription := service.MapStripeSubscription(context.Background(), stripeSubscription, stripeSubscriptionSchedule)
 	c.Equal(expectedSubscription, subscription)
 }
 
