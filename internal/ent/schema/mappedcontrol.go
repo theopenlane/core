@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
@@ -115,7 +115,7 @@ func (m MappedControl) Edges() []ent.Edge {
 func (m MappedControl) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(m),
+			newOrgOwnedMixin(m, withSkipForSystemAdmin(true)),
 			// add group edit permissions to the mapped control
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
@@ -136,14 +136,7 @@ func (MappedControl) Hooks() []ent.Hook {
 			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,
 		),
-	}
-}
-
-// Interceptors of the MappedControl
-func (MappedControl) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		// mapped controls are org owned, but we need to ensure the groups are filtered as well
-		interceptors.FilterQueryResults[generated.MappedControl](),
+		hooks.HookMappedControl(),
 	}
 }
 
@@ -151,6 +144,7 @@ func (MappedControl) Interceptors() []ent.Interceptor {
 func (MappedControl) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.AllowMutationIfSystemAdmin(),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.MappedControlMutation](),
 		),

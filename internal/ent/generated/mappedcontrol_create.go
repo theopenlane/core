@@ -369,11 +369,6 @@ func (_c *MappedControlCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *MappedControlCreate) check() error {
-	if v, ok := _c.mutation.OwnerID(); ok {
-		if err := mappedcontrol.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "MappedControl.owner_id": %w`, err)}
-		}
-	}
 	if _, ok := _c.mutation.MappingType(); !ok {
 		return &ValidationError{Name: "mapping_type", err: errors.New(`generated: missing required field "MappedControl.mapping_type"`)}
 	}

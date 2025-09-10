@@ -504,11 +504,6 @@ func (_u *MappedControlUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *MappedControlUpdate) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := mappedcontrol.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "MappedControl.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.MappingType(); ok {
 		if err := mappedcontrol.MappingTypeValidator(v); err != nil {
 			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControl.mapping_type": %w`, err)}
@@ -1433,11 +1428,6 @@ func (_u *MappedControlUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *MappedControlUpdateOne) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := mappedcontrol.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "MappedControl.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.MappingType(); ok {
 		if err := mappedcontrol.MappingTypeValidator(v); err != nil {
 			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControl.mapping_type": %w`, err)}

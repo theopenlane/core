@@ -65728,18 +65728,19 @@ func (t *GetTaskHistories_TaskHistories) GetTotalCount() int64 {
 }
 
 type CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates struct {
-	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string            "json:\"description,omitempty\" graphql:\"description\""
-	ID           string             "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any     "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name         string             "json:\"name\" graphql:\"name\""
-	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string           "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any     "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID           string              "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string              "json:\"name\" graphql:\"name\""
+	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetCreatedAt() *time.Time {
@@ -65771,6 +65772,12 @@ func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetJsonconfig() 
 		t = &CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates{}
 	}
 	return t.Jsonconfig
+}
+func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates{}
+	}
+	return t.Kind
 }
 func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetName() string {
 	if t == nil {
@@ -65827,18 +65834,19 @@ func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate) GetTemplates() []*CreateBu
 }
 
 type CreateBulkTemplate_CreateBulkTemplate_Templates struct {
-	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string            "json:\"description,omitempty\" graphql:\"description\""
-	ID           string             "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any     "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name         string             "json:\"name\" graphql:\"name\""
-	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string           "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any     "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID           string              "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string              "json:\"name\" graphql:\"name\""
+	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetCreatedAt() *time.Time {
@@ -65870,6 +65878,12 @@ func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetJsonconfig() map[st
 		t = &CreateBulkTemplate_CreateBulkTemplate_Templates{}
 	}
 	return t.Jsonconfig
+}
+func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &CreateBulkTemplate_CreateBulkTemplate_Templates{}
+	}
+	return t.Kind
 }
 func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetName() string {
 	if t == nil {
@@ -65926,18 +65940,19 @@ func (t *CreateBulkTemplate_CreateBulkTemplate) GetTemplates() []*CreateBulkTemp
 }
 
 type CreateTemplate_CreateTemplate_Template struct {
-	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string            "json:\"description,omitempty\" graphql:\"description\""
-	ID           string             "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any     "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name         string             "json:\"name\" graphql:\"name\""
-	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string           "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any     "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID           string              "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string              "json:\"name\" graphql:\"name\""
+	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateTemplate_CreateTemplate_Template) GetCreatedAt() *time.Time {
@@ -65969,6 +65984,12 @@ func (t *CreateTemplate_CreateTemplate_Template) GetJsonconfig() map[string]any 
 		t = &CreateTemplate_CreateTemplate_Template{}
 	}
 	return t.Jsonconfig
+}
+func (t *CreateTemplate_CreateTemplate_Template) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &CreateTemplate_CreateTemplate_Template{}
+	}
+	return t.Kind
 }
 func (t *CreateTemplate_CreateTemplate_Template) GetName() string {
 	if t == nil {
@@ -66068,18 +66089,19 @@ func (t *GetAllTemplates_Templates_PageInfo) GetStartCursor() *string {
 }
 
 type GetAllTemplates_Templates_Edges_Node struct {
-	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string            "json:\"description,omitempty\" graphql:\"description\""
-	ID           string             "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any     "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name         string             "json:\"name\" graphql:\"name\""
-	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string           "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any     "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID           string              "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string              "json:\"name\" graphql:\"name\""
+	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllTemplates_Templates_Edges_Node) GetCreatedAt() *time.Time {
@@ -66111,6 +66133,12 @@ func (t *GetAllTemplates_Templates_Edges_Node) GetJsonconfig() map[string]any {
 		t = &GetAllTemplates_Templates_Edges_Node{}
 	}
 	return t.Jsonconfig
+}
+func (t *GetAllTemplates_Templates_Edges_Node) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &GetAllTemplates_Templates_Edges_Node{}
+	}
+	return t.Kind
 }
 func (t *GetAllTemplates_Templates_Edges_Node) GetName() string {
 	if t == nil {
@@ -66192,18 +66220,19 @@ func (t *GetAllTemplates_Templates) GetTotalCount() int64 {
 }
 
 type GetTemplateByID_Template struct {
-	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string            "json:\"description,omitempty\" graphql:\"description\""
-	ID           string             "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any     "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name         string             "json:\"name\" graphql:\"name\""
-	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string           "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any     "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID           string              "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string              "json:\"name\" graphql:\"name\""
+	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTemplateByID_Template) GetCreatedAt() *time.Time {
@@ -66235,6 +66264,12 @@ func (t *GetTemplateByID_Template) GetJsonconfig() map[string]any {
 		t = &GetTemplateByID_Template{}
 	}
 	return t.Jsonconfig
+}
+func (t *GetTemplateByID_Template) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &GetTemplateByID_Template{}
+	}
+	return t.Kind
 }
 func (t *GetTemplateByID_Template) GetName() string {
 	if t == nil {
@@ -66312,18 +66347,19 @@ func (t *GetTemplates_Templates_PageInfo) GetStartCursor() *string {
 }
 
 type GetTemplates_Templates_Edges_Node struct {
-	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string            "json:\"description,omitempty\" graphql:\"description\""
-	ID           string             "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any     "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name         string             "json:\"name\" graphql:\"name\""
-	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string           "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any     "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID           string              "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string              "json:\"name\" graphql:\"name\""
+	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTemplates_Templates_Edges_Node) GetCreatedAt() *time.Time {
@@ -66355,6 +66391,12 @@ func (t *GetTemplates_Templates_Edges_Node) GetJsonconfig() map[string]any {
 		t = &GetTemplates_Templates_Edges_Node{}
 	}
 	return t.Jsonconfig
+}
+func (t *GetTemplates_Templates_Edges_Node) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &GetTemplates_Templates_Edges_Node{}
+	}
+	return t.Kind
 }
 func (t *GetTemplates_Templates_Edges_Node) GetName() string {
 	if t == nil {
@@ -66436,18 +66478,19 @@ func (t *GetTemplates_Templates) GetTotalCount() int64 {
 }
 
 type UpdateTemplate_UpdateTemplate_Template struct {
-	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string            "json:\"description,omitempty\" graphql:\"description\""
-	ID           string             "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any     "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Name         string             "json:\"name\" graphql:\"name\""
-	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string           "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any     "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID           string              "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string              "json:\"name\" graphql:\"name\""
+	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateTemplate_UpdateTemplate_Template) GetCreatedAt() *time.Time {
@@ -66479,6 +66522,12 @@ func (t *UpdateTemplate_UpdateTemplate_Template) GetJsonconfig() map[string]any 
 		t = &UpdateTemplate_UpdateTemplate_Template{}
 	}
 	return t.Jsonconfig
+}
+func (t *UpdateTemplate_UpdateTemplate_Template) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &UpdateTemplate_UpdateTemplate_Template{}
+	}
+	return t.Kind
 }
 func (t *UpdateTemplate_UpdateTemplate_Template) GetName() string {
 	if t == nil {
@@ -67305,19 +67354,33 @@ func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile) GetPr
 	return t.PresignedURL
 }
 
+type CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
 type CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting struct {
-	AccentColor     *string                                                           "json:\"accentColor,omitempty\" graphql:\"accentColor\""
-	BackgroundColor *string                                                           "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
-	Font            *string                                                           "json:\"font,omitempty\" graphql:\"font\""
-	ForegroundColor *string                                                           "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
-	ID              string                                                            "json:\"id\" graphql:\"id\""
-	LogoFile        *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
-	LogoLocalFileID *string                                                           "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL   *string                                                           "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
-	Overview        *string                                                           "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor    *string                                                           "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	ThemeMode       *enums.TrustCenterThemeMode                                       "json:\"themeMode,omitempty\" graphql:\"themeMode\""
-	Title           *string                                                           "json:\"title,omitempty\" graphql:\"title\""
+	AccentColor        *string                                                              "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor    *string                                                              "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	FaviconFile        *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                              "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                              "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	Font               *string                                                              "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor    *string                                                              "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID                 string                                                               "json:\"id\" graphql:\"id\""
+	LogoFile           *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                              "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                              "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                              "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                              "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode          *enums.TrustCenterThemeMode                                          "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title              *string                                                              "json:\"title,omitempty\" graphql:\"title\""
 }
 
 func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetAccentColor() *string {
@@ -67331,6 +67394,24 @@ func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetBackgroundC
 		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
 	}
 	return t.BackgroundColor
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetFaviconFile() *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_FaviconFile {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.FaviconFile
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.FaviconRemoteURL
 }
 func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetFont() *string {
 	if t == nil {
@@ -67557,19 +67638,33 @@ func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile) GetPresign
 	return t.PresignedURL
 }
 
+type GetAllTrustCenters_TrustCenters_Edges_Node_Setting_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetAllTrustCenters_TrustCenters_Edges_Node_Setting struct {
-	AccentColor     *string                                                      "json:\"accentColor,omitempty\" graphql:\"accentColor\""
-	BackgroundColor *string                                                      "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
-	Font            *string                                                      "json:\"font,omitempty\" graphql:\"font\""
-	ForegroundColor *string                                                      "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
-	ID              string                                                       "json:\"id\" graphql:\"id\""
-	LogoFile        *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
-	LogoLocalFileID *string                                                      "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL   *string                                                      "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
-	Overview        *string                                                      "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor    *string                                                      "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	ThemeMode       *enums.TrustCenterThemeMode                                  "json:\"themeMode,omitempty\" graphql:\"themeMode\""
-	Title           *string                                                      "json:\"title,omitempty\" graphql:\"title\""
+	AccentColor        *string                                                         "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor    *string                                                         "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	FaviconFile        *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                         "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                         "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	Font               *string                                                         "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor    *string                                                         "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID                 string                                                          "json:\"id\" graphql:\"id\""
+	LogoFile           *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                         "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                         "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                         "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                         "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode          *enums.TrustCenterThemeMode                                     "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title              *string                                                         "json:\"title,omitempty\" graphql:\"title\""
 }
 
 func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetAccentColor() *string {
@@ -67583,6 +67678,24 @@ func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetBackgroundColor(
 		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
 	}
 	return t.BackgroundColor
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetFaviconFile() *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_FaviconFile {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.FaviconFile
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.FaviconRemoteURL
 }
 func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetFont() *string {
 	if t == nil {
@@ -67791,19 +67904,33 @@ func (t *GetTrustCenterByID_TrustCenter_Setting_LogoFile) GetPresignedURL() *str
 	return t.PresignedURL
 }
 
+type GetTrustCenterByID_TrustCenter_Setting_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterByID_TrustCenter_Setting_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetTrustCenterByID_TrustCenter_Setting struct {
-	AccentColor     *string                                          "json:\"accentColor,omitempty\" graphql:\"accentColor\""
-	BackgroundColor *string                                          "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
-	Font            *string                                          "json:\"font,omitempty\" graphql:\"font\""
-	ForegroundColor *string                                          "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
-	ID              string                                           "json:\"id\" graphql:\"id\""
-	LogoFile        *GetTrustCenterByID_TrustCenter_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
-	LogoLocalFileID *string                                          "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL   *string                                          "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
-	Overview        *string                                          "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor    *string                                          "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	ThemeMode       *enums.TrustCenterThemeMode                      "json:\"themeMode,omitempty\" graphql:\"themeMode\""
-	Title           *string                                          "json:\"title,omitempty\" graphql:\"title\""
+	AccentColor        *string                                             "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor    *string                                             "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	FaviconFile        *GetTrustCenterByID_TrustCenter_Setting_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                             "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                             "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	Font               *string                                             "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor    *string                                             "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID                 string                                              "json:\"id\" graphql:\"id\""
+	LogoFile           *GetTrustCenterByID_TrustCenter_Setting_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                             "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                             "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                             "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                             "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode          *enums.TrustCenterThemeMode                         "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title              *string                                             "json:\"title,omitempty\" graphql:\"title\""
 }
 
 func (t *GetTrustCenterByID_TrustCenter_Setting) GetAccentColor() *string {
@@ -67817,6 +67944,24 @@ func (t *GetTrustCenterByID_TrustCenter_Setting) GetBackgroundColor() *string {
 		t = &GetTrustCenterByID_TrustCenter_Setting{}
 	}
 	return t.BackgroundColor
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetFaviconFile() *GetTrustCenterByID_TrustCenter_Setting_FaviconFile {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.FaviconFile
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.FaviconRemoteURL
 }
 func (t *GetTrustCenterByID_TrustCenter_Setting) GetFont() *string {
 	if t == nil {
@@ -68021,19 +68166,33 @@ func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile) GetPresignedU
 	return t.PresignedURL
 }
 
+type GetTrustCenters_TrustCenters_Edges_Node_Setting_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetTrustCenters_TrustCenters_Edges_Node_Setting struct {
-	AccentColor     *string                                                   "json:\"accentColor,omitempty\" graphql:\"accentColor\""
-	BackgroundColor *string                                                   "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
-	Font            *string                                                   "json:\"font,omitempty\" graphql:\"font\""
-	ForegroundColor *string                                                   "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
-	ID              string                                                    "json:\"id\" graphql:\"id\""
-	LogoFile        *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
-	LogoLocalFileID *string                                                   "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL   *string                                                   "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
-	Overview        *string                                                   "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor    *string                                                   "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	ThemeMode       *enums.TrustCenterThemeMode                               "json:\"themeMode,omitempty\" graphql:\"themeMode\""
-	Title           *string                                                   "json:\"title,omitempty\" graphql:\"title\""
+	AccentColor        *string                                                      "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor    *string                                                      "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	FaviconFile        *GetTrustCenters_TrustCenters_Edges_Node_Setting_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                      "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                      "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	Font               *string                                                      "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor    *string                                                      "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID                 string                                                       "json:\"id\" graphql:\"id\""
+	LogoFile           *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                      "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                      "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                      "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                      "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode          *enums.TrustCenterThemeMode                                  "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title              *string                                                      "json:\"title,omitempty\" graphql:\"title\""
 }
 
 func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetAccentColor() *string {
@@ -68047,6 +68206,24 @@ func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetBackgroundColor() *
 		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
 	}
 	return t.BackgroundColor
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetFaviconFile() *GetTrustCenters_TrustCenters_Edges_Node_Setting_FaviconFile {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.FaviconFile
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.FaviconRemoteURL
 }
 func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetFont() *string {
 	if t == nil {
@@ -68255,19 +68432,33 @@ func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile) GetPr
 	return t.PresignedURL
 }
 
+type UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
 type UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting struct {
-	AccentColor     *string                                                           "json:\"accentColor,omitempty\" graphql:\"accentColor\""
-	BackgroundColor *string                                                           "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
-	Font            *string                                                           "json:\"font,omitempty\" graphql:\"font\""
-	ForegroundColor *string                                                           "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
-	ID              string                                                            "json:\"id\" graphql:\"id\""
-	LogoFile        *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
-	LogoLocalFileID *string                                                           "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL   *string                                                           "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
-	Overview        *string                                                           "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor    *string                                                           "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	ThemeMode       *enums.TrustCenterThemeMode                                       "json:\"themeMode,omitempty\" graphql:\"themeMode\""
-	Title           *string                                                           "json:\"title,omitempty\" graphql:\"title\""
+	AccentColor        *string                                                              "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor    *string                                                              "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	FaviconFile        *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                              "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                              "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	Font               *string                                                              "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor    *string                                                              "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID                 string                                                               "json:\"id\" graphql:\"id\""
+	LogoFile           *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                              "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                              "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                              "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                              "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode          *enums.TrustCenterThemeMode                                          "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title              *string                                                              "json:\"title,omitempty\" graphql:\"title\""
 }
 
 func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetAccentColor() *string {
@@ -68281,6 +68472,24 @@ func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetBackgroundC
 		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
 	}
 	return t.BackgroundColor
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetFaviconFile() *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_FaviconFile {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.FaviconFile
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.FaviconRemoteURL
 }
 func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetFont() *string {
 	if t == nil {
@@ -100354,6 +100563,7 @@ const CreateBulkCSVTemplateDocument = `mutation CreateBulkCSVTemplate ($input: U
 			uischema
 			updatedAt
 			updatedBy
+			kind
 		}
 	}
 }
@@ -100391,6 +100601,7 @@ const CreateBulkTemplateDocument = `mutation CreateBulkTemplate ($input: [Create
 			uischema
 			updatedAt
 			updatedBy
+			kind
 		}
 	}
 }
@@ -100428,6 +100639,7 @@ const CreateTemplateDocument = `mutation CreateTemplate ($input: CreateTemplateI
 			uischema
 			updatedAt
 			updatedBy
+			kind
 		}
 	}
 }
@@ -100497,6 +100709,7 @@ const GetAllTemplatesDocument = `query GetAllTemplates {
 				uischema
 				updatedAt
 				updatedBy
+				kind
 			}
 		}
 	}
@@ -100532,6 +100745,7 @@ const GetTemplateByIDDocument = `query GetTemplateByID ($templateId: ID!) {
 		uischema
 		updatedAt
 		updatedBy
+		kind
 	}
 }
 `
@@ -100576,6 +100790,7 @@ const GetTemplatesDocument = `query GetTemplates ($first: Int, $last: Int, $wher
 				uischema
 				updatedAt
 				updatedBy
+				kind
 			}
 		}
 	}
@@ -100616,6 +100831,7 @@ const UpdateTemplateDocument = `mutation UpdateTemplate ($updateTemplateId: ID!,
 			uischema
 			updatedAt
 			updatedBy
+			kind
 		}
 	}
 }
@@ -100934,6 +101150,11 @@ const CreateTrustCenterDocument = `mutation CreateTrustCenter ($input: CreateTru
 				logoFile {
 					presignedURL
 				}
+				faviconRemoteURL
+				faviconLocalFileID
+				faviconFile {
+					presignedURL
+				}
 				themeMode
 				font
 				foregroundColor
@@ -101020,6 +101241,11 @@ const GetAllTrustCentersDocument = `query GetAllTrustCenters {
 					logoFile {
 						presignedURL
 					}
+					faviconRemoteURL
+					faviconLocalFileID
+					faviconFile {
+						presignedURL
+					}
 					themeMode
 					font
 					foregroundColor
@@ -101070,6 +101296,11 @@ const GetTrustCenterByIDDocument = `query GetTrustCenterByID ($trustCenterId: ID
 			logoRemoteURL
 			logoLocalFileID
 			logoFile {
+				presignedURL
+			}
+			faviconRemoteURL
+			faviconLocalFileID
+			faviconFile {
 				presignedURL
 			}
 			themeMode
@@ -101133,6 +101364,11 @@ const GetTrustCentersDocument = `query GetTrustCenters ($first: Int, $last: Int,
 					logoFile {
 						presignedURL
 					}
+					faviconRemoteURL
+					faviconLocalFileID
+					faviconFile {
+						presignedURL
+					}
 					themeMode
 					font
 					foregroundColor
@@ -101188,6 +101424,11 @@ const UpdateTrustCenterDocument = `mutation UpdateTrustCenter ($updateTrustCente
 				logoRemoteURL
 				logoLocalFileID
 				logoFile {
+					presignedURL
+				}
+				faviconRemoteURL
+				faviconLocalFileID
+				faviconFile {
 					presignedURL
 				}
 				themeMode

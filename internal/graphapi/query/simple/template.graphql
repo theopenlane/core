@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVTemplate($input: Upload!) {
   createBulkCSVTemplate(input: $input) {
     templates {
@@ -14,6 +13,7 @@ mutation CreateBulkCSVTemplate($input: Upload!) {
       uischema
       updatedAt
       updatedBy
+      kind
     }
   }
 }
@@ -33,6 +33,7 @@ mutation CreateBulkTemplate($input: [CreateTemplateInput!]) {
       uischema
       updatedAt
       updatedBy
+      kind
     }
   }
 }
@@ -52,6 +53,7 @@ mutation CreateTemplate($input: CreateTemplateInput!) {
       uischema
       updatedAt
       updatedBy
+      kind
     }
   }
 }
@@ -85,10 +87,12 @@ query GetAllTemplates {
         uischema
         updatedAt
         updatedBy
+        kind
       }
     }
   }
 }
+
 query GetTemplateByID($templateId: ID!) {
   template(id: $templateId) {
     createdAt
@@ -103,6 +107,7 @@ query GetTemplateByID($templateId: ID!) {
     uischema
     updatedAt
     updatedBy
+    kind
   }
 }
 
@@ -129,10 +134,12 @@ query GetTemplates($first: Int, $last: Int, $where: TemplateWhereInput) {
         uischema
         updatedAt
         updatedBy
+        kind
       }
     }
   }
 }
+
 mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
   updateTemplate(id: $updateTemplateId, input: $input) {
     template {
@@ -148,6 +155,7 @@ mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
       uischema
       updatedAt
       updatedBy
+      kind
     }
   }
 }

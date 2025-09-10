@@ -40,6 +40,8 @@ const (
 	FieldTemplateType = "template_type"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldKind holds the string denoting the kind field in the database.
+	FieldKind = "kind"
 	// FieldJsonconfig holds the string denoting the jsonconfig field in the database.
 	FieldJsonconfig = "jsonconfig"
 	// FieldUischema holds the string denoting the uischema field in the database.
@@ -87,6 +89,7 @@ var Columns = []string{
 	FieldName,
 	FieldTemplateType,
 	FieldDescription,
+	FieldKind,
 	FieldJsonconfig,
 	FieldUischema,
 }
@@ -113,7 +116,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [5]ent.Hook
+	Hooks        [6]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -124,8 +127,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
@@ -141,6 +142,18 @@ func TemplateTypeValidator(tt enums.DocumentType) error {
 		return nil
 	default:
 		return fmt.Errorf("template: invalid enum value for template_type field: %q", tt)
+	}
+}
+
+const DefaultKind enums.TemplateKind = "QUESTIONNAIRE"
+
+// KindValidator is a validator for the "kind" field enum values. It is called by the builders before save.
+func KindValidator(k enums.TemplateKind) error {
+	switch k.String() {
+	case "QUESTIONNAIRE":
+		return nil
+	default:
+		return fmt.Errorf("template: invalid enum value for kind field: %q", k)
 	}
 }
 
@@ -200,6 +213,11 @@ func ByTemplateType(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByKind orders the results by the kind field.
+func ByKind(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldKind, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -263,4 +281,11 @@ var (
 	_ graphql.Marshaler = (*enums.DocumentType)(nil)
 	// enums.DocumentType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.DocumentType)(nil)
+)
+
+var (
+	// enums.TemplateKind must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TemplateKind)(nil)
+	// enums.TemplateKind must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TemplateKind)(nil)
 )

@@ -46,6 +46,8 @@ const (
 	FieldTemplateType = "template_type"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldKind holds the string denoting the kind field in the database.
+	FieldKind = "kind"
 	// FieldJsonconfig holds the string denoting the jsonconfig field in the database.
 	FieldJsonconfig = "jsonconfig"
 	// FieldUischema holds the string denoting the uischema field in the database.
@@ -71,6 +73,7 @@ var Columns = []string{
 	FieldName,
 	FieldTemplateType,
 	FieldDescription,
+	FieldKind,
 	FieldJsonconfig,
 	FieldUischema,
 }
@@ -127,6 +130,18 @@ func TemplateTypeValidator(tt enums.DocumentType) error {
 		return nil
 	default:
 		return fmt.Errorf("templatehistory: invalid enum value for template_type field: %q", tt)
+	}
+}
+
+const DefaultKind enums.TemplateKind = "QUESTIONNAIRE"
+
+// KindValidator is a validator for the "kind" field enum values. It is called by the builders before save.
+func KindValidator(k enums.TemplateKind) error {
+	switch k.String() {
+	case "QUESTIONNAIRE":
+		return nil
+	default:
+		return fmt.Errorf("templatehistory: invalid enum value for kind field: %q", k)
 	}
 }
 
@@ -203,6 +218,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
+// ByKind orders the results by the kind field.
+func ByKind(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldKind, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
@@ -215,4 +235,11 @@ var (
 	_ graphql.Marshaler = (*enums.DocumentType)(nil)
 	// enums.DocumentType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.DocumentType)(nil)
+)
+
+var (
+	// enums.TemplateKind must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TemplateKind)(nil)
+	// enums.TemplateKind must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TemplateKind)(nil)
 )

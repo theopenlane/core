@@ -6,9 +6,8 @@ mutation CreateBulkCSVTemplate($input: Upload!) {
       jsonconfig
       name
       uischema
-      owner {
-        id
-      }
+      kind
+      ownerID
     }
   }
 }
@@ -21,9 +20,8 @@ mutation CreateBulkTemplate($input: [CreateTemplateInput!]) {
       jsonconfig
       name
       uischema
-      owner {
-        id
-      }
+      kind
+      ownerID
     }
   }
 }
@@ -36,9 +34,8 @@ mutation CreateTemplate($input: CreateTemplateInput!) {
       jsonconfig
       name
       uischema
-      owner {
-        id
-      }
+      kind
+      ownerID
     }
   }
 }
@@ -54,11 +51,10 @@ query GetAllTemplates {
         jsonconfig
         name
         uischema
+        kind
         updatedAt
         updatedBy
-        owner {
-          id
-        }
+        ownerID
       }
     }
   }
@@ -75,9 +71,8 @@ query GetTemplateByID($getTemplateId: ID!) {
     uischema
     updatedAt
     updatedBy
-    owner {
-      id
-    }
+    kind
+    ownerID
   }
 }
 
@@ -93,9 +88,8 @@ mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
       uischema
       updatedAt
       updatedBy
-      owner {
-        id
-      }
+      kind
+      ownerID
     }
   }
 }

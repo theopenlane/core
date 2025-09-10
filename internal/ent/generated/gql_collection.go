@@ -42791,6 +42791,11 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, template.FieldDescription)
 				fieldSeen[template.FieldDescription] = struct{}{}
 			}
+		case "kind":
+			if _, ok := fieldSeen[template.FieldKind]; !ok {
+				selectedFields = append(selectedFields, template.FieldKind)
+				fieldSeen[template.FieldKind] = struct{}{}
+			}
 		case "jsonconfig":
 			if _, ok := fieldSeen[template.FieldJsonconfig]; !ok {
 				selectedFields = append(selectedFields, template.FieldJsonconfig)
@@ -42950,6 +42955,11 @@ func (_q *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[templatehistory.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, templatehistory.FieldDescription)
 				fieldSeen[templatehistory.FieldDescription] = struct{}{}
+			}
+		case "kind":
+			if _, ok := fieldSeen[templatehistory.FieldKind]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldKind)
+				fieldSeen[templatehistory.FieldKind] = struct{}{}
 			}
 		case "jsonconfig":
 			if _, ok := fieldSeen[templatehistory.FieldJsonconfig]; !ok {
