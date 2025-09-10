@@ -651,8 +651,8 @@ github.com/theopenlane/gqlgen-plugins v0.9.0 h1:+iquxZ7c26/Xl81mpQgYlN74ccKELhqJ
 github.com/theopenlane/gqlgen-plugins v0.9.0/go.mod h1:dqM495rz+kXQBfFoSpB08FoNQdOnnqcphG1XDMHhmgs=
 github.com/theopenlane/httpsling v0.2.2 h1:QqJo/VsjeiM6/RnWZpRQX3I7T62j5u9WdXo52zUWyi0=
 github.com/theopenlane/httpsling v0.2.2/go.mod h1:mrSaIZs4lhcBsOJCv/n67N7eDZ/skD6vA8l8y9MDrKk=
-github.com/theopenlane/iam v0.16.2 h1:+2vbBaFBk4MAsQhbY38oz8GyD//H6ElhXOTso3pjtec=
-github.com/theopenlane/iam v0.16.2/go.mod h1:NZmuJ0eanj56dlRqAewbEYpDU3fAqKijW1LIsG5iQw4=
+github.com/theopenlane/iam v0.17.0 h1:5GldItgooRez588BQr+ubfHA3Xt+bcxomHb3KSCoMAA=
+github.com/theopenlane/iam v0.17.0/go.mod h1:9rURPH5sHseDtNGorXgUg+/rp+xY4U4Ghcs1TuSPBA8=
 github.com/theopenlane/newman v0.2.0 h1:kgiDIq8m2lRM9mGVzzuZrmo3KN4FAZB2Eu2CxAdqgFI=
 github.com/theopenlane/newman v0.2.0/go.mod h1:JaSL7sgV7VJD5RMkhUESA3kDxX4TeP6XIdg6vUDDfoE=
 github.com/theopenlane/riverboat v0.4.0 h1:uw2tScCJy0FdH+sKSTnm5U58n7N1eqBt8lGE6oNaNJE=
@@ -835,8 +835,8 @@ google.golang.org/genproto/googleapis/rpc v0.0.0-20250826171959-ef028d996bc1 h1:
 google.golang.org/genproto/googleapis/rpc v0.0.0-20250826171959-ef028d996bc1/go.mod h1:GmFNa4BdJZ2a8G+wCe9Bg3wwThLrJun751XstdJt5Og=
 google.golang.org/grpc v1.75.0 h1:+TW+dqTd2Biwe6KKfhE5JpiYIBWq865PhKGSXiivqt4=
 google.golang.org/grpc v1.75.0/go.mod h1:JtPAzKiq4v1xcAB2hydNlWI2RnF85XXcV0mhKXr2ecQ=
-google.golang.org/protobuf v1.36.8 h1:xHScyCOEuuwZEc6UtSOvPbAT4zRh0xcNRYekJwfqyMc=
-google.golang.org/protobuf v1.36.8/go.mod h1:fuxRtAxBytpl4zzqUh6/eyUujkJdNiuEkXntxiD/uRU=
+google.golang.org/protobuf v1.36.9 h1:w2gp2mA27hUeUzj9Ex9FBjsBm40zfaDtEWow293U7Iw=
+google.golang.org/protobuf v1.36.9/go.mod h1:fuxRtAxBytpl4zzqUh6/eyUujkJdNiuEkXntxiD/uRU=
 gopkg.in/VividCortex/ewma.v1 v1.1.1 h1:tWHEKkKq802K/JT9RiqGCBU5fW3raAPnJGTE9ostZvg=
 gopkg.in/VividCortex/ewma.v1 v1.1.1/go.mod h1:TekXuFipeiHWiAlO1+wSS23vTcyFau5u3rxXUSXj710=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=

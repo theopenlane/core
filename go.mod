@@ -94,7 +94,7 @@ require (
 	github.com/theopenlane/entx v0.14.2
 	github.com/theopenlane/gqlgen-plugins v0.9.0
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.16.2
+	github.com/theopenlane/iam v0.17.0
 	github.com/theopenlane/newman v0.2.0
 	github.com/theopenlane/riverboat v0.4.0
 	github.com/theopenlane/utils v0.4.8
@@ -367,5 +367,5 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20250826171959-ef028d996bc1 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250826171959-ef028d996bc1 // indirect
 	google.golang.org/grpc v1.75.0 // indirect
-	google.golang.org/protobuf v1.36.8 // indirect
+	google.golang.org/protobuf v1.36.9 // indirect
 )
