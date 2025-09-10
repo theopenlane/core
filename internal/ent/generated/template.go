@@ -42,6 +42,8 @@ type Template struct {
 	TemplateType enums.DocumentType `json:"template_type,omitempty"`
 	// the description of the template
 	Description string `json:"description,omitempty"`
+	// the kind of template, e.g. questionnaire
+	Kind enums.TemplateKind `json:"kind,omitempty"`
 	// the jsonschema object of the template
 	Jsonconfig map[string]interface{} `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
@@ -106,7 +108,7 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case template.FieldTags, template.FieldJsonconfig, template.FieldUischema:
 			values[i] = new([]byte)
-		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldDeletedBy, template.FieldOwnerID, template.FieldName, template.FieldTemplateType, template.FieldDescription:
+		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldDeletedBy, template.FieldOwnerID, template.FieldName, template.FieldTemplateType, template.FieldDescription, template.FieldKind:
 			values[i] = new(sql.NullString)
 		case template.FieldCreatedAt, template.FieldUpdatedAt, template.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -198,6 +200,12 @@ func (_m *Template) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				_m.Description = value.String
+			}
+		case template.FieldKind:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field kind", values[i])
+			} else if value.Valid {
+				_m.Kind = enums.TemplateKind(value.String)
 			}
 		case template.FieldJsonconfig:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -298,6 +306,9 @@ func (_m *Template) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("kind=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Kind))
 	builder.WriteString(", ")
 	builder.WriteString("jsonconfig=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Jsonconfig))

@@ -5561,6 +5561,8 @@ type CreateTemplateInput struct {
 	TemplateType *enums.DocumentType `json:"templateType,omitempty"`
 	// the description of the template
 	Description *string `json:"description,omitempty"`
+	// the kind of template, e.g. questionnaire
+	Kind *enums.TemplateKind `json:"kind,omitempty"`
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
@@ -25668,6 +25670,8 @@ type Template struct {
 	TemplateType enums.DocumentType `json:"templateType"`
 	// the description of the template
 	Description *string `json:"description,omitempty"`
+	// the kind of template, e.g. questionnaire
+	Kind *enums.TemplateKind `json:"kind,omitempty"`
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
@@ -25734,6 +25738,8 @@ type TemplateHistory struct {
 	TemplateType enums.DocumentType `json:"templateType"`
 	// the description of the template
 	Description *string `json:"description,omitempty"`
+	// the kind of template, e.g. questionnaire
+	Kind *enums.TemplateKind `json:"kind,omitempty"`
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
@@ -25920,6 +25926,13 @@ type TemplateHistoryWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// kind field predicates
+	Kind       *enums.TemplateKind  `json:"kind,omitempty"`
+	KindNeq    *enums.TemplateKind  `json:"kindNEQ,omitempty"`
+	KindIn     []enums.TemplateKind `json:"kindIn,omitempty"`
+	KindNotIn  []enums.TemplateKind `json:"kindNotIn,omitempty"`
+	KindIsNil  *bool                `json:"kindIsNil,omitempty"`
+	KindNotNil *bool                `json:"kindNotNil,omitempty"`
 }
 
 // Ordering options for Template connections
@@ -26058,6 +26071,13 @@ type TemplateWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// kind field predicates
+	Kind       *enums.TemplateKind  `json:"kind,omitempty"`
+	KindNeq    *enums.TemplateKind  `json:"kindNEQ,omitempty"`
+	KindIn     []enums.TemplateKind `json:"kindIn,omitempty"`
+	KindNotIn  []enums.TemplateKind `json:"kindNotIn,omitempty"`
+	KindIsNil  *bool                `json:"kindIsNil,omitempty"`
+	KindNotNil *bool                `json:"kindNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -30195,6 +30215,9 @@ type UpdateTemplateInput struct {
 	// the description of the template
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// the kind of template, e.g. questionnaire
+	Kind      *enums.TemplateKind `json:"kind,omitempty"`
+	ClearKind *bool               `json:"clearKind,omitempty"`
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
@@ -37366,6 +37389,7 @@ const (
 	TemplateHistoryOrderFieldUpdatedAt    TemplateHistoryOrderField = "updated_at"
 	TemplateHistoryOrderFieldName         TemplateHistoryOrderField = "name"
 	TemplateHistoryOrderFieldTemplateType TemplateHistoryOrderField = "TEMPLATE_TYPE"
+	TemplateHistoryOrderFieldKind         TemplateHistoryOrderField = "KIND"
 )
 
 var AllTemplateHistoryOrderField = []TemplateHistoryOrderField{
@@ -37374,11 +37398,12 @@ var AllTemplateHistoryOrderField = []TemplateHistoryOrderField{
 	TemplateHistoryOrderFieldUpdatedAt,
 	TemplateHistoryOrderFieldName,
 	TemplateHistoryOrderFieldTemplateType,
+	TemplateHistoryOrderFieldKind,
 }
 
 func (e TemplateHistoryOrderField) IsValid() bool {
 	switch e {
-	case TemplateHistoryOrderFieldHistoryTime, TemplateHistoryOrderFieldCreatedAt, TemplateHistoryOrderFieldUpdatedAt, TemplateHistoryOrderFieldName, TemplateHistoryOrderFieldTemplateType:
+	case TemplateHistoryOrderFieldHistoryTime, TemplateHistoryOrderFieldCreatedAt, TemplateHistoryOrderFieldUpdatedAt, TemplateHistoryOrderFieldName, TemplateHistoryOrderFieldTemplateType, TemplateHistoryOrderFieldKind:
 		return true
 	}
 	return false
@@ -37427,6 +37452,7 @@ const (
 	TemplateOrderFieldUpdatedAt    TemplateOrderField = "updated_at"
 	TemplateOrderFieldName         TemplateOrderField = "name"
 	TemplateOrderFieldTemplateType TemplateOrderField = "TEMPLATE_TYPE"
+	TemplateOrderFieldKind         TemplateOrderField = "KIND"
 )
 
 var AllTemplateOrderField = []TemplateOrderField{
@@ -37434,11 +37460,12 @@ var AllTemplateOrderField = []TemplateOrderField{
 	TemplateOrderFieldUpdatedAt,
 	TemplateOrderFieldName,
 	TemplateOrderFieldTemplateType,
+	TemplateOrderFieldKind,
 }
 
 func (e TemplateOrderField) IsValid() bool {
 	switch e {
-	case TemplateOrderFieldCreatedAt, TemplateOrderFieldUpdatedAt, TemplateOrderFieldName, TemplateOrderFieldTemplateType:
+	case TemplateOrderFieldCreatedAt, TemplateOrderFieldUpdatedAt, TemplateOrderFieldName, TemplateOrderFieldTemplateType, TemplateOrderFieldKind:
 		return true
 	}
 	return false

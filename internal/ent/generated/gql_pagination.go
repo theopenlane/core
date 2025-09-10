@@ -35820,6 +35820,20 @@ var (
 			}
 		},
 	}
+	// TemplateOrderFieldKind orders Template by kind.
+	TemplateOrderFieldKind = &TemplateOrderField{
+		Value: func(_m *Template) (ent.Value, error) {
+			return _m.Kind, nil
+		},
+		column: template.FieldKind,
+		toTerm: template.ByKind,
+		toCursor: func(_m *Template) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Kind,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -35834,6 +35848,8 @@ func (f TemplateOrderField) String() string {
 		str = "name"
 	case TemplateOrderFieldTemplateType.column:
 		str = "TEMPLATE_TYPE"
+	case TemplateOrderFieldKind.column:
+		str = "KIND"
 	}
 	return str
 }
@@ -35858,6 +35874,8 @@ func (f *TemplateOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TemplateOrderFieldName
 	case "TEMPLATE_TYPE":
 		*f = *TemplateOrderFieldTemplateType
+	case "KIND":
+		*f = *TemplateOrderFieldKind
 	default:
 		return fmt.Errorf("%s is not a valid TemplateOrderField", str)
 	}
@@ -36184,6 +36202,20 @@ var (
 			}
 		},
 	}
+	// TemplateHistoryOrderFieldKind orders TemplateHistory by kind.
+	TemplateHistoryOrderFieldKind = &TemplateHistoryOrderField{
+		Value: func(_m *TemplateHistory) (ent.Value, error) {
+			return _m.Kind, nil
+		},
+		column: templatehistory.FieldKind,
+		toTerm: templatehistory.ByKind,
+		toCursor: func(_m *TemplateHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Kind,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -36200,6 +36232,8 @@ func (f TemplateHistoryOrderField) String() string {
 		str = "name"
 	case TemplateHistoryOrderFieldTemplateType.column:
 		str = "TEMPLATE_TYPE"
+	case TemplateHistoryOrderFieldKind.column:
+		str = "KIND"
 	}
 	return str
 }
@@ -36226,6 +36260,8 @@ func (f *TemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TemplateHistoryOrderFieldName
 	case "TEMPLATE_TYPE":
 		*f = *TemplateHistoryOrderFieldTemplateType
+	case "KIND":
+		*f = *TemplateHistoryOrderFieldKind
 	default:
 		return fmt.Errorf("%s is not a valid TemplateHistoryOrderField", str)
 	}

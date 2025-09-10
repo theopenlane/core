@@ -1,2 +1,2 @@
-Tags,Name,TemplateType,Description,Jsonconfig,Uischema,OwnerId,DocumentIDs,FileIDs
-example_tags,example_name,example_templatetype,example_description,example_jsonconfig,example_uischema,example_ownerid,example_documentids,example_fileids
+Tags,Name,TemplateType,Description,Kind,Jsonconfig,Uischema,OwnerId,DocumentIDs,FileIDs
+example_tags,example_name,example_templatetype,example_description,example_kind,example_jsonconfig,example_uischema,example_ownerid,example_documentids,example_fileids

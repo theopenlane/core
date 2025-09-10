@@ -3129,6 +3129,9 @@ func (_m *TemplateHistory) changes(new *TemplateHistory) []Change {
 	if !reflect.DeepEqual(_m.Description, new.Description) {
 		changes = append(changes, NewChange(templatehistory.FieldDescription, _m.Description, new.Description))
 	}
+	if !reflect.DeepEqual(_m.Kind, new.Kind) {
+		changes = append(changes, NewChange(templatehistory.FieldKind, _m.Kind, new.Kind))
+	}
 	if !reflect.DeepEqual(_m.Jsonconfig, new.Jsonconfig) {
 		changes = append(changes, NewChange(templatehistory.FieldJsonconfig, _m.Jsonconfig, new.Jsonconfig))
 	}

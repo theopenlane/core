@@ -76373,6 +76373,14 @@ type TemplateWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "kind" field predicates.
+	Kind       *enums.TemplateKind  `json:"kind,omitempty"`
+	KindNEQ    *enums.TemplateKind  `json:"kindNEQ,omitempty"`
+	KindIn     []enums.TemplateKind `json:"kindIn,omitempty"`
+	KindNotIn  []enums.TemplateKind `json:"kindNotIn,omitempty"`
+	KindIsNil  bool                 `json:"kindIsNil,omitempty"`
+	KindNotNil bool                 `json:"kindNotNil,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -76778,6 +76786,24 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, template.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.Kind != nil {
+		predicates = append(predicates, template.KindEQ(*i.Kind))
+	}
+	if i.KindNEQ != nil {
+		predicates = append(predicates, template.KindNEQ(*i.KindNEQ))
+	}
+	if len(i.KindIn) > 0 {
+		predicates = append(predicates, template.KindIn(i.KindIn...))
+	}
+	if len(i.KindNotIn) > 0 {
+		predicates = append(predicates, template.KindNotIn(i.KindNotIn...))
+	}
+	if i.KindIsNil {
+		predicates = append(predicates, template.KindIsNil())
+	}
+	if i.KindNotNil {
+		predicates = append(predicates, template.KindNotNil())
+	}
 
 	if i.HasOwner != nil {
 		p := template.HasOwner()
@@ -77007,6 +77033,14 @@ type TemplateHistoryWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "kind" field predicates.
+	Kind       *enums.TemplateKind  `json:"kind,omitempty"`
+	KindNEQ    *enums.TemplateKind  `json:"kindNEQ,omitempty"`
+	KindIn     []enums.TemplateKind `json:"kindIn,omitempty"`
+	KindNotIn  []enums.TemplateKind `json:"kindNotIn,omitempty"`
+	KindIsNil  bool                 `json:"kindIsNil,omitempty"`
+	KindNotNil bool                 `json:"kindNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -77481,6 +77515,24 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, templatehistory.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.Kind != nil {
+		predicates = append(predicates, templatehistory.KindEQ(*i.Kind))
+	}
+	if i.KindNEQ != nil {
+		predicates = append(predicates, templatehistory.KindNEQ(*i.KindNEQ))
+	}
+	if len(i.KindIn) > 0 {
+		predicates = append(predicates, templatehistory.KindIn(i.KindIn...))
+	}
+	if len(i.KindNotIn) > 0 {
+		predicates = append(predicates, templatehistory.KindNotIn(i.KindNotIn...))
+	}
+	if i.KindIsNil {
+		predicates = append(predicates, templatehistory.KindIsNil())
+	}
+	if i.KindNotNil {
+		predicates = append(predicates, templatehistory.KindNotNil())
 	}
 
 	switch len(predicates) {

@@ -10300,6 +10300,10 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDescription(description)
 	}
 
+	if kind, exists := m.Kind(); exists {
+		create = create.SetKind(kind)
+	}
+
 	if jsonconfig, exists := m.Jsonconfig(); exists {
 		create = create.SetJsonconfig(jsonconfig)
 	}
@@ -10405,6 +10409,12 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDescription(template.Description)
 		}
 
+		if kind, exists := m.Kind(); exists {
+			create = create.SetKind(kind)
+		} else {
+			create = create.SetKind(template.Kind)
+		}
+
 		if jsonconfig, exists := m.Jsonconfig(); exists {
 			create = create.SetJsonconfig(jsonconfig)
 		} else {
@@ -10463,6 +10473,7 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetName(template.Name).
 			SetTemplateType(template.TemplateType).
 			SetDescription(template.Description).
+			SetKind(template.Kind).
 			SetJsonconfig(template.Jsonconfig).
 			SetUischema(template.Uischema).
 			Save(ctx)

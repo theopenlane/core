@@ -191,6 +191,26 @@ func (_u *TemplateHistoryUpdate) ClearDescription() *TemplateHistoryUpdate {
 	return _u
 }
 
+// SetKind sets the "kind" field.
+func (_u *TemplateHistoryUpdate) SetKind(v enums.TemplateKind) *TemplateHistoryUpdate {
+	_u.mutation.SetKind(v)
+	return _u
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (_u *TemplateHistoryUpdate) SetNillableKind(v *enums.TemplateKind) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetKind(*v)
+	}
+	return _u
+}
+
+// ClearKind clears the value of the "kind" field.
+func (_u *TemplateHistoryUpdate) ClearKind() *TemplateHistoryUpdate {
+	_u.mutation.ClearKind()
+	return _u
+}
+
 // SetJsonconfig sets the "jsonconfig" field.
 func (_u *TemplateHistoryUpdate) SetJsonconfig(v map[string]interface{}) *TemplateHistoryUpdate {
 	_u.mutation.SetJsonconfig(v)
@@ -261,6 +281,11 @@ func (_u *TemplateHistoryUpdate) check() error {
 	if v, ok := _u.mutation.TemplateType(); ok {
 		if err := templatehistory.TemplateTypeValidator(v); err != nil {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.template_type": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Kind(); ok {
+		if err := templatehistory.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.kind": %w`, err)}
 		}
 	}
 	return nil
@@ -345,6 +370,12 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(templatehistory.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.Kind(); ok {
+		_spec.SetField(templatehistory.FieldKind, field.TypeEnum, value)
+	}
+	if _u.mutation.KindCleared() {
+		_spec.ClearField(templatehistory.FieldKind, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Jsonconfig(); ok {
 		_spec.SetField(templatehistory.FieldJsonconfig, field.TypeJSON, value)
@@ -537,6 +568,26 @@ func (_u *TemplateHistoryUpdateOne) ClearDescription() *TemplateHistoryUpdateOne
 	return _u
 }
 
+// SetKind sets the "kind" field.
+func (_u *TemplateHistoryUpdateOne) SetKind(v enums.TemplateKind) *TemplateHistoryUpdateOne {
+	_u.mutation.SetKind(v)
+	return _u
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (_u *TemplateHistoryUpdateOne) SetNillableKind(v *enums.TemplateKind) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetKind(*v)
+	}
+	return _u
+}
+
+// ClearKind clears the value of the "kind" field.
+func (_u *TemplateHistoryUpdateOne) ClearKind() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearKind()
+	return _u
+}
+
 // SetJsonconfig sets the "jsonconfig" field.
 func (_u *TemplateHistoryUpdateOne) SetJsonconfig(v map[string]interface{}) *TemplateHistoryUpdateOne {
 	_u.mutation.SetJsonconfig(v)
@@ -620,6 +671,11 @@ func (_u *TemplateHistoryUpdateOne) check() error {
 	if v, ok := _u.mutation.TemplateType(); ok {
 		if err := templatehistory.TemplateTypeValidator(v); err != nil {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.template_type": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Kind(); ok {
+		if err := templatehistory.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.kind": %w`, err)}
 		}
 	}
 	return nil
@@ -721,6 +777,12 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(templatehistory.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.Kind(); ok {
+		_spec.SetField(templatehistory.FieldKind, field.TypeEnum, value)
+	}
+	if _u.mutation.KindCleared() {
+		_spec.ClearField(templatehistory.FieldKind, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Jsonconfig(); ok {
 		_spec.SetField(templatehistory.FieldJsonconfig, field.TypeJSON, value)

@@ -743,6 +743,46 @@ func DescriptionContainsFold(v string) predicate.Template {
 	return predicate.Template(sql.FieldContainsFold(FieldDescription, v))
 }
 
+// KindEQ applies the EQ predicate on the "kind" field.
+func KindEQ(v enums.TemplateKind) predicate.Template {
+	vc := v
+	return predicate.Template(sql.FieldEQ(FieldKind, vc))
+}
+
+// KindNEQ applies the NEQ predicate on the "kind" field.
+func KindNEQ(v enums.TemplateKind) predicate.Template {
+	vc := v
+	return predicate.Template(sql.FieldNEQ(FieldKind, vc))
+}
+
+// KindIn applies the In predicate on the "kind" field.
+func KindIn(vs ...enums.TemplateKind) predicate.Template {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Template(sql.FieldIn(FieldKind, v...))
+}
+
+// KindNotIn applies the NotIn predicate on the "kind" field.
+func KindNotIn(vs ...enums.TemplateKind) predicate.Template {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Template(sql.FieldNotIn(FieldKind, v...))
+}
+
+// KindIsNil applies the IsNil predicate on the "kind" field.
+func KindIsNil() predicate.Template {
+	return predicate.Template(sql.FieldIsNull(FieldKind))
+}
+
+// KindNotNil applies the NotNil predicate on the "kind" field.
+func KindNotNil() predicate.Template {
+	return predicate.Template(sql.FieldNotNull(FieldKind))
+}
+
 // UischemaIsNil applies the IsNil predicate on the "uischema" field.
 func UischemaIsNil() predicate.Template {
 	return predicate.Template(sql.FieldIsNull(FieldUischema))

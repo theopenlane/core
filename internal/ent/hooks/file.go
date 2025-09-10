@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
@@ -19,20 +20,29 @@ func HookFileDelete() ent.Hook {
 		return hook.FileFunc(
 			func(ctx context.Context, m *generated.FileMutation) (generated.Value, error) {
 
-				var storagePath string
-				if m.ObjectManager != nil && isDeleteOp(ctx, m) {
+				if m.ObjectManager == nil && !isDeleteOp(ctx, m) {
+					return next.Mutate(ctx, m)
+				}
+
+				var ids []string
+
+				switch m.Op() {
+				case ent.OpDelete:
+					dbIDs, err := m.IDs(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					ids = append(ids, dbIDs...)
+
+				case ent.OpDeleteOne:
 
 					id, ok := m.ID()
 					if !ok {
 						return nil, errInvalidStoragePath
 					}
 
-					file, err := m.Client().File.Get(ctx, id)
-					if err != nil {
-						return nil, err
-					}
-
-					storagePath = file.StoragePath
+					ids = append(ids, id)
 				}
 
 				v, err := next.Mutate(ctx, m)
@@ -40,9 +50,18 @@ func HookFileDelete() ent.Hook {
 					return nil, err
 				}
 
-				if storagePath != "" {
-					if err := m.ObjectManager.Storage.Delete(ctx, storagePath); err != nil {
-						return nil, err
+				files, err := m.Client().File.Query().Where(file.IDIn(ids...)).
+					Select(file.FieldStoragePath).
+					All(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				for _, file := range files {
+					if file.StoragePath != "" {
+						if err := m.ObjectManager.Storage.Delete(ctx, file.StoragePath); err != nil {
+							return nil, err
+						}
 					}
 				}
 

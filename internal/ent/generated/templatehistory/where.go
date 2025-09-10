@@ -886,6 +886,46 @@ func DescriptionContainsFold(v string) predicate.TemplateHistory {
 	return predicate.TemplateHistory(sql.FieldContainsFold(FieldDescription, v))
 }
 
+// KindEQ applies the EQ predicate on the "kind" field.
+func KindEQ(v enums.TemplateKind) predicate.TemplateHistory {
+	vc := v
+	return predicate.TemplateHistory(sql.FieldEQ(FieldKind, vc))
+}
+
+// KindNEQ applies the NEQ predicate on the "kind" field.
+func KindNEQ(v enums.TemplateKind) predicate.TemplateHistory {
+	vc := v
+	return predicate.TemplateHistory(sql.FieldNEQ(FieldKind, vc))
+}
+
+// KindIn applies the In predicate on the "kind" field.
+func KindIn(vs ...enums.TemplateKind) predicate.TemplateHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TemplateHistory(sql.FieldIn(FieldKind, v...))
+}
+
+// KindNotIn applies the NotIn predicate on the "kind" field.
+func KindNotIn(vs ...enums.TemplateKind) predicate.TemplateHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TemplateHistory(sql.FieldNotIn(FieldKind, v...))
+}
+
+// KindIsNil applies the IsNil predicate on the "kind" field.
+func KindIsNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldIsNull(FieldKind))
+}
+
+// KindNotNil applies the NotNil predicate on the "kind" field.
+func KindNotNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNotNull(FieldKind))
+}
+
 // UischemaIsNil applies the IsNil predicate on the "uischema" field.
 func UischemaIsNil() predicate.TemplateHistory {
 	return predicate.TemplateHistory(sql.FieldIsNull(FieldUischema))

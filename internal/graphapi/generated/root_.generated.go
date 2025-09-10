@@ -4560,6 +4560,7 @@ type ComplexityRoot struct {
 		Files        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID           func(childComplexity int) int
 		Jsonconfig   func(childComplexity int) int
+		Kind         func(childComplexity int) int
 		Name         func(childComplexity int) int
 		Owner        func(childComplexity int) int
 		OwnerID      func(childComplexity int) int
@@ -4600,6 +4601,7 @@ type ComplexityRoot struct {
 		HistoryTime  func(childComplexity int) int
 		ID           func(childComplexity int) int
 		Jsonconfig   func(childComplexity int) int
+		Kind         func(childComplexity int) int
 		Name         func(childComplexity int) int
 		Operation    func(childComplexity int) int
 		OwnerID      func(childComplexity int) int
@@ -30739,6 +30741,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Template.Jsonconfig(childComplexity), true
 
+	case "Template.kind":
+		if e.complexity.Template.Kind == nil {
+			break
+		}
+
+		return e.complexity.Template.Kind(childComplexity), true
+
 	case "Template.name":
 		if e.complexity.Template.Name == nil {
 			break
@@ -30892,6 +30901,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TemplateHistory.Jsonconfig(childComplexity), true
+
+	case "TemplateHistory.kind":
+		if e.complexity.TemplateHistory.Kind == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.Kind(childComplexity), true
 
 	case "TemplateHistory.name":
 		if e.complexity.TemplateHistory.Name == nil {
@@ -44999,6 +45015,10 @@ input CreateTemplateInput {
   the description of the template
   """
   description: String
+  """
+  the kind of template, e.g. questionnaire
+  """
+  kind: TemplateTemplateKind
   """
   the jsonschema object of the template
   """
@@ -81350,6 +81370,10 @@ type Template implements Node {
   """
   description: String
   """
+  the kind of template, e.g. questionnaire
+  """
+  kind: TemplateTemplateKind
+  """
   the jsonschema object of the template
   """
   jsonconfig: Map!
@@ -81488,6 +81512,10 @@ type TemplateHistory implements Node {
   """
   description: String
   """
+  the kind of template, e.g. questionnaire
+  """
+  kind: TemplateHistoryTemplateKind
+  """
   the jsonschema object of the template
   """
   jsonconfig: Map!
@@ -81563,6 +81591,13 @@ enum TemplateHistoryOrderField {
   updated_at
   name
   TEMPLATE_TYPE
+  KIND
+}
+"""
+TemplateHistoryTemplateKind is enum for the field kind
+"""
+enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
+  QUESTIONNAIRE
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -81742,6 +81777,15 @@ input TemplateHistoryWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """
+  kind field predicates
+  """
+  kind: TemplateHistoryTemplateKind
+  kindNEQ: TemplateHistoryTemplateKind
+  kindIn: [TemplateHistoryTemplateKind!]
+  kindNotIn: [TemplateHistoryTemplateKind!]
+  kindIsNil: Boolean
+  kindNotNil: Boolean
 }
 """
 Ordering options for Template connections
@@ -81764,6 +81808,13 @@ enum TemplateOrderField {
   updated_at
   name
   TEMPLATE_TYPE
+  KIND
+}
+"""
+TemplateTemplateKind is enum for the field kind
+"""
+enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
+  QUESTIONNAIRE
 }
 """
 TemplateWhereInput is used for filtering Template objects.
@@ -81907,6 +81958,15 @@ input TemplateWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """
+  kind field predicates
+  """
+  kind: TemplateTemplateKind
+  kindNEQ: TemplateTemplateKind
+  kindIn: [TemplateTemplateKind!]
+  kindNotIn: [TemplateTemplateKind!]
+  kindIsNil: Boolean
+  kindNotNil: Boolean
   """
   owner edge predicates
   """
@@ -87243,6 +87303,11 @@ input UpdateTemplateInput {
   """
   description: String
   clearDescription: Boolean
+  """
+  the kind of template, e.g. questionnaire
+  """
+  kind: TemplateTemplateKind
+  clearKind: Boolean
   """
   the jsonschema object of the template
   """
