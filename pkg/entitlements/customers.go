@@ -101,11 +101,20 @@ func (sc *StripeClient) CreateCustomerAndSubscription(ctx context.Context, o *Or
 
 	o.StripeSubscriptionID = subscription.ID
 	o.Subscription = *subscription
+	o.StripeSubscriptionScheduleID = subscription.StripeSubscriptionScheduleID
 
 	log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subscription.ID).Msg("subscription created")
 
 	if err := sc.retrieveFeatureLists(ctx, o); err != nil {
 		return ErrCustomerNotFound
+	}
+
+	_, err = sc.Client.V1Customers.Update(ctx, customer.ID, sc.UpdateCustomerWithOptions(
+		&stripe.CustomerUpdateParams{}, WithUpdateCustomerMetadata(map[string]string{"subscription_schedule_id": subscription.StripeSubscriptionScheduleID})))
+	if err != nil {
+		log.Err(err).Msg("Failed to update customer with subscription schedule ID")
+
+		return err
 	}
 
 	return nil
