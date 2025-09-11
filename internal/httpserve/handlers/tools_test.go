@@ -449,6 +449,27 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
+	// setup mocks for org subscription schedule
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionScheduleCreateParams"), mock.AnythingOfType("*stripe.SubscriptionSchedule")).Run(func(args mock.Arguments) {
+		mockSubscriptionScheduleResult := args.Get(4).(*stripe.SubscriptionSchedule)
+
+		*mockSubscriptionScheduleResult = stripe.SubscriptionSchedule{
+			ID: "sub_sched_test_schedule",
+			Phases: []*stripe.SubscriptionSchedulePhase{
+				{
+					Items: []*stripe.SubscriptionSchedulePhaseItem{
+						{
+							Price:    mockProduct.DefaultPrice,
+							Quantity: 1,
+						},
+					},
+				},
+			},
+			Object: "subscription_schedule",
+		}
+
+	}).Return(nil)
+
 	// setup mocks for getting entitlements
 	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.EntitlementsActiveEntitlementList)

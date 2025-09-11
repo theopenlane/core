@@ -39,7 +39,6 @@ type testUserDetails struct {
 // userBuilder creates a new test user and returns the details
 // this includes a test user and an organization the user is the owner of
 func (suite *HandlerTestSuite) userBuilder(ctx context.Context) testUserDetails {
-	suite.orgSubscriptionMocks()
 	return suite.userBuilderWithInput(ctx, nil)
 }
 
