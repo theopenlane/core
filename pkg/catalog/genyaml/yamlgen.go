@@ -165,10 +165,11 @@ func featureSetLit(fs catalog.FeatureSet) *jen.Statement {
 // featureLit generates the main structure for a catalog.Feature
 func featureLit(f catalog.Feature) *jen.Statement {
 	dict := jen.Dict{
-		jen.Id("DisplayName"): jen.Lit(f.DisplayName),
-		jen.Id("LookupKey"):   jen.Lit(f.LookupKey),
-		jen.Id("Description"): jen.Lit(f.Description),
-		jen.Id("Audience"):    jen.Lit(f.Audience),
+		jen.Id("DisplayName"):          jen.Lit(f.DisplayName),
+		jen.Id("LookupKey"):            jen.Lit(f.LookupKey),
+		jen.Id("Description"):          jen.Lit(f.Description),
+		jen.Id("MarketingDescription"): jen.Lit(f.MarketingDescription),
+		jen.Id("Audience"):             jen.Lit(f.Audience),
 	}
 
 	if f.PersonalOrg {

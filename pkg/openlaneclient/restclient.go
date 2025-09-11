@@ -6,45 +6,45 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
 
-	"github.com/theopenlane/core/pkg/models"
+	api "github.com/theopenlane/core/pkg/openapi"
 )
 
 // OpenlaneRestClient is the interface that wraps the openlane API REST client methods
 type OpenlaneRestClient interface {
 	// Register a new user with the API
-	Register(context.Context, *models.RegisterRequest) (*models.RegisterReply, error)
+	Register(context.Context, *api.RegisterRequest) (*api.RegisterReply, error)
 	// Login to the API
-	Login(context.Context, *models.LoginRequest) (*models.LoginReply, error)
+	Login(context.Context, *api.LoginRequest) (*api.LoginReply, error)
 	// Refresh a user's access token
-	Refresh(context.Context, *models.RefreshRequest) (*models.RefreshReply, error)
+	Refresh(context.Context, *api.RefreshRequest) (*api.RefreshReply, error)
 	// Switch the current organization context
-	Switch(context.Context, *models.SwitchOrganizationRequest) (*models.SwitchOrganizationReply, error)
+	Switch(context.Context, *api.SwitchOrganizationRequest) (*api.SwitchOrganizationReply, error)
 	// VerifyEmail verifies the email address of a user
-	VerifyEmail(context.Context, *models.VerifyRequest) (*models.VerifyReply, error)
+	VerifyEmail(context.Context, *api.VerifyRequest) (*api.VerifyReply, error)
 	// ResendEmail re-sends the verification email to the user
-	ResendEmail(context.Context, *models.ResendRequest) (*models.ResendReply, error)
+	ResendEmail(context.Context, *api.ResendRequest) (*api.ResendReply, error)
 	// ForgotPassword sends a password reset email to the user
-	ForgotPassword(context.Context, *models.ForgotPasswordRequest) (*models.ForgotPasswordReply, error)
+	ForgotPassword(context.Context, *api.ForgotPasswordRequest) (*api.ForgotPasswordReply, error)
 	// ResetPassword resets the user's password
-	ResetPassword(context.Context, *models.ResetPasswordRequest) (*models.ResetPasswordReply, error)
+	ResetPassword(context.Context, *api.ResetPasswordRequest) (*api.ResetPasswordReply, error)
 	// AcceptInvite accepts an invite to join an organization
-	AcceptInvite(context.Context, *models.InviteRequest) (*models.InviteReply, error)
+	AcceptInvite(context.Context, *api.InviteRequest) (*api.InviteReply, error)
 	// Webfinger retrieves SSO status information via the webfinger endpoint
-	Webfinger(context.Context, string) (*models.SSOStatusReply, error)
+	Webfinger(context.Context, string) (*api.SSOStatusReply, error)
 	// OAuthRegister registers or logs in a user using an OAuth provider
-	OAuthRegister(context.Context, *models.OauthTokenRequest) (*models.LoginReply, error)
+	OAuthRegister(context.Context, *api.OauthTokenRequest) (*api.LoginReply, error)
 	// ValidateTOTP validates a user's TOTP or recovery code
-	ValidateTOTP(context.Context, *models.TFARequest) (*models.TFAReply, error)
+	ValidateTOTP(context.Context, *api.TFARequest) (*api.TFAReply, error)
 	// AccountAccess checks if a subject has a specific relation to an object
-	AccountAccess(context.Context, *models.AccountAccessRequest) (*models.AccountAccessReply, error)
+	AccountAccess(context.Context, *api.AccountAccessRequest) (*api.AccountAccessReply, error)
 	// AccountRoles lists the relations a subject has in relation to an object
-	AccountRoles(context.Context, *models.AccountRolesRequest) (*models.AccountRolesReply, error)
+	AccountRoles(context.Context, *api.AccountRolesRequest) (*api.AccountRolesReply, error)
 	// AccountRolesOrganization lists roles a user has for an organization
-	AccountRolesOrganization(context.Context, *models.AccountRolesOrganizationRequest) (*models.AccountRolesOrganizationReply, error)
+	AccountRolesOrganization(context.Context, *api.AccountRolesOrganizationRequest) (*api.AccountRolesOrganizationReply, error)
 	// AccountFeatures lists features a user has for an organization
-	AccountFeatures(context.Context, *models.AccountFeaturesRequest) (*models.AccountFeaturesReply, error)
+	AccountFeatures(context.Context, *api.AccountFeaturesRequest) (*api.AccountFeaturesReply, error)
 	// RegisterRunner registers a new job runner node with the server
-	RegisterRunner(context.Context, *models.JobRunnerRegistrationRequest) (*models.JobRunnerRegistrationReply, error)
+	RegisterRunner(context.Context, *api.JobRunnerRegistrationRequest) (*api.JobRunnerRegistrationReply, error)
 }
 
 // New creates a new API v1 client that implements the Openlane Client interface
@@ -79,7 +79,7 @@ func NewRestClient(config Config, opts ...ClientOption) (_ OpenlaneRestClient, e
 var _ OpenlaneRestClient = &APIv1{}
 
 // Register a new user with the API
-func (s *APIv1) Register(ctx context.Context, in *models.RegisterRequest) (out *models.RegisterReply, err error) {
+func (s *APIv1) Register(ctx context.Context, in *api.RegisterRequest) (out *api.RegisterReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(v1Path("register")),
 		httpsling.Body(in))
@@ -97,7 +97,7 @@ func (s *APIv1) Register(ctx context.Context, in *models.RegisterRequest) (out *
 }
 
 // Login to the API
-func (s *APIv1) Login(ctx context.Context, in *models.LoginRequest) (out *models.LoginReply, err error) {
+func (s *APIv1) Login(ctx context.Context, in *api.LoginRequest) (out *api.LoginReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(v1Path("login")),
 		httpsling.Body(in))
@@ -115,7 +115,7 @@ func (s *APIv1) Login(ctx context.Context, in *models.LoginRequest) (out *models
 }
 
 // Refresh a user's access token
-func (s *APIv1) Refresh(ctx context.Context, in *models.RefreshRequest) (out *models.RefreshReply, err error) {
+func (s *APIv1) Refresh(ctx context.Context, in *api.RefreshRequest) (out *api.RefreshReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(v1Path("refresh")),
 		httpsling.Body(in))
@@ -133,7 +133,7 @@ func (s *APIv1) Refresh(ctx context.Context, in *models.RefreshRequest) (out *mo
 }
 
 // Switch the current organization context
-func (s *APIv1) Switch(ctx context.Context, in *models.SwitchOrganizationRequest) (out *models.SwitchOrganizationReply, err error) {
+func (s *APIv1) Switch(ctx context.Context, in *api.SwitchOrganizationRequest) (out *api.SwitchOrganizationReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(v1Path("switch")),
 		httpsling.Body(in))
@@ -151,7 +151,7 @@ func (s *APIv1) Switch(ctx context.Context, in *models.SwitchOrganizationRequest
 }
 
 // VerifyEmail verifies the email address of a user
-func (s *APIv1) VerifyEmail(ctx context.Context, in *models.VerifyRequest) (out *models.VerifyReply, err error) {
+func (s *APIv1) VerifyEmail(ctx context.Context, in *api.VerifyRequest) (out *api.VerifyReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Get(v1Path("verify")),
 		httpsling.QueryParam("token", in.Token))
@@ -169,7 +169,7 @@ func (s *APIv1) VerifyEmail(ctx context.Context, in *models.VerifyRequest) (out 
 }
 
 // ResendEmail resends the verification email to the user
-func (s *APIv1) ResendEmail(ctx context.Context, in *models.ResendRequest) (out *models.ResendReply, err error) {
+func (s *APIv1) ResendEmail(ctx context.Context, in *api.ResendRequest) (out *api.ResendReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(v1Path("resend")),
 		httpsling.Body(in))
@@ -187,7 +187,7 @@ func (s *APIv1) ResendEmail(ctx context.Context, in *models.ResendRequest) (out 
 }
 
 // ForgotPassword sends a password reset email to the user
-func (s *APIv1) ForgotPassword(ctx context.Context, in *models.ForgotPasswordRequest) (out *models.ForgotPasswordReply, err error) {
+func (s *APIv1) ForgotPassword(ctx context.Context, in *api.ForgotPasswordRequest) (out *api.ForgotPasswordReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(v1Path("forgot-password")),
 		httpsling.Body(in))
@@ -205,7 +205,7 @@ func (s *APIv1) ForgotPassword(ctx context.Context, in *models.ForgotPasswordReq
 }
 
 // ResetPassword resets the user's password
-func (s *APIv1) ResetPassword(ctx context.Context, in *models.ResetPasswordRequest) (out *models.ResetPasswordReply, err error) {
+func (s *APIv1) ResetPassword(ctx context.Context, in *api.ResetPasswordRequest) (out *api.ResetPasswordReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(v1Path("password-reset")),
 		httpsling.Body(in))
@@ -223,7 +223,7 @@ func (s *APIv1) ResetPassword(ctx context.Context, in *models.ResetPasswordReque
 }
 
 // AcceptInvite accepts an invite to join an organization
-func (s *APIv1) AcceptInvite(ctx context.Context, in *models.InviteRequest) (out *models.InviteReply, err error) {
+func (s *APIv1) AcceptInvite(ctx context.Context, in *api.InviteRequest) (out *api.InviteReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Get(v1Path("invite")),
 		httpsling.QueryParam("token", in.Token))
@@ -241,7 +241,7 @@ func (s *APIv1) AcceptInvite(ctx context.Context, in *models.InviteRequest) (out
 }
 
 // VerifySubscriberEmail verifies the email address of a subscriber
-func (s *APIv1) VerifySubscriberEmail(ctx context.Context, in *models.VerifySubscribeRequest) (out *models.VerifySubscribeReply, err error) {
+func (s *APIv1) VerifySubscriberEmail(ctx context.Context, in *api.VerifySubscribeRequest) (out *api.VerifySubscribeReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Get(v1Path("subscribe/verify")),
 		httpsling.QueryParam("token", in.Token))
@@ -259,7 +259,7 @@ func (s *APIv1) VerifySubscriberEmail(ctx context.Context, in *models.VerifySubs
 }
 
 // Webfinger retrieves SSO status information via the webfinger endpoint.
-func (s *APIv1) Webfinger(ctx context.Context, resource string) (out *models.SSOStatusReply, err error) {
+func (s *APIv1) Webfinger(ctx context.Context, resource string) (out *api.SSOStatusReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Get("/.well-known/webfinger"),
 		httpsling.QueryParam("resource", resource))
@@ -277,7 +277,7 @@ func (s *APIv1) Webfinger(ctx context.Context, resource string) (out *models.SSO
 }
 
 // OAuthRegister registers or logs in a user using an OAuth provider.
-func (s *APIv1) OAuthRegister(ctx context.Context, in *models.OauthTokenRequest) (out *models.LoginReply, err error) {
+func (s *APIv1) OAuthRegister(ctx context.Context, in *api.OauthTokenRequest) (out *api.LoginReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post("/oauth/register"),
 		httpsling.Body(in))
@@ -295,7 +295,7 @@ func (s *APIv1) OAuthRegister(ctx context.Context, in *models.OauthTokenRequest)
 }
 
 // ValidateTOTP validates a user's TOTP or recovery code.
-func (s *APIv1) ValidateTOTP(ctx context.Context, in *models.TFARequest) (out *models.TFAReply, err error) {
+func (s *APIv1) ValidateTOTP(ctx context.Context, in *api.TFARequest) (out *api.TFAReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(v1Path("2fa/validate")),
 		httpsling.Body(in))
@@ -313,7 +313,7 @@ func (s *APIv1) ValidateTOTP(ctx context.Context, in *models.TFARequest) (out *m
 }
 
 // AccountAccess checks if a subject has access to an object.
-func (s *APIv1) AccountAccess(ctx context.Context, in *models.AccountAccessRequest) (out *models.AccountAccessReply, err error) {
+func (s *APIv1) AccountAccess(ctx context.Context, in *api.AccountAccessRequest) (out *api.AccountAccessReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(v1Path("account/access")),
 		httpsling.Body(in))
@@ -331,7 +331,7 @@ func (s *APIv1) AccountAccess(ctx context.Context, in *models.AccountAccessReque
 }
 
 // AccountRoles lists the relations a subject has in relation to an object.
-func (s *APIv1) AccountRoles(ctx context.Context, in *models.AccountRolesRequest) (out *models.AccountRolesReply, err error) {
+func (s *APIv1) AccountRoles(ctx context.Context, in *api.AccountRolesRequest) (out *api.AccountRolesReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(v1Path("account/roles")),
 		httpsling.Body(in))
@@ -349,7 +349,7 @@ func (s *APIv1) AccountRoles(ctx context.Context, in *models.AccountRolesRequest
 }
 
 // AccountRolesOrganization lists roles a user has for an organization.
-func (s *APIv1) AccountRolesOrganization(ctx context.Context, in *models.AccountRolesOrganizationRequest) (out *models.AccountRolesOrganizationReply, err error) {
+func (s *APIv1) AccountRolesOrganization(ctx context.Context, in *api.AccountRolesOrganizationRequest) (out *api.AccountRolesOrganizationReply, err error) {
 	path := v1Path("account/roles/organization")
 	if in.ID != "" {
 		path += "/" + in.ID
@@ -371,7 +371,7 @@ func (s *APIv1) AccountRolesOrganization(ctx context.Context, in *models.Account
 }
 
 // AccountFeatures lists features a user has for an organization.
-func (s *APIv1) AccountFeatures(ctx context.Context, in *models.AccountFeaturesRequest) (out *models.AccountFeaturesReply, err error) {
+func (s *APIv1) AccountFeatures(ctx context.Context, in *api.AccountFeaturesRequest) (out *api.AccountFeaturesReply, err error) {
 	path := v1Path("account/features")
 	if in.ID != "" {
 		path += "/" + in.ID
@@ -393,7 +393,7 @@ func (s *APIv1) AccountFeatures(ctx context.Context, in *models.AccountFeaturesR
 }
 
 // RegisterRunner registers a new job runner node with the server.
-func (s *APIv1) RegisterRunner(ctx context.Context, in *models.JobRunnerRegistrationRequest) (out *models.JobRunnerRegistrationReply, err error) {
+func (s *APIv1) RegisterRunner(ctx context.Context, in *api.JobRunnerRegistrationRequest) (out *api.JobRunnerRegistrationReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(v1Path("runners")),
 		httpsling.Body(in))

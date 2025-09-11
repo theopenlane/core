@@ -379,7 +379,6 @@ tasks:
   run-dev:
     dotenv: ["{{.ENV}}/.env-dev"]
     desc: runs the core server in dev mode with the minimum parts
-    deps: ['go:build-cli']
     cmds:
       - task: compose:redis
       - task: compose:fga

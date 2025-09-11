@@ -23,9 +23,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/core/pkg/models"
+	apimodels "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/utils/rout"
 )
 
 func newCookieConfig(secure bool) sessions.CookieConfig {
@@ -41,7 +41,7 @@ func newCookieConfig(secure bool) sessions.CookieConfig {
 // It sets state and nonce cookies, builds the OIDC auth URL, and issues a redirect
 // see docs/SSO.md for more details on the SSO flow
 func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleSSOLoginRequest, rout.Reply{}, openapi.Registry)
+	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSSOLoginRequest, rout.Reply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -90,7 +90,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) error {
 	reqCtx := ctx.Request().Context()
 
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleSSOCallbackRequest, models.LoginReply{}, openapi.Registry)
+	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSSOCallbackRequest, apimodels.LoginReply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -138,7 +138,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
 	// build the OAuth session request
-	oauthReq := models.OauthTokenRequest{
+	oauthReq := apimodels.OauthTokenRequest{
 		Email:            tokens.IDTokenClaims.Email,
 		ExternalUserName: tokens.IDTokenClaims.Name,
 		AuthProvider:     "oidc",
@@ -162,7 +162,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		sessions.RemoveCookie(ctx.Response().Writer, "token_type", sessions.CookieConfig{Path: "/"})
 	}
 
-	out := models.LoginReply{
+	out := apimodels.LoginReply{
 		Reply:      rout.Reply{Success: true},
 		TFAEnabled: entUser.Edges.Setting.IsTfaEnabled,
 		Message:    "success",

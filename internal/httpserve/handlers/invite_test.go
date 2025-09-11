@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	apimodels "github.com/theopenlane/core/pkg/openapi"
 )
 
 func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
@@ -119,7 +120,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.InviteReply
+			var out *apimodels.InviteReply
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

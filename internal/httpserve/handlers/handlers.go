@@ -25,7 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/common"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/metrics"
-	"github.com/theopenlane/core/pkg/models"
+	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/utils/contextx"

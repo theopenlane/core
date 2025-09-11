@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/httpsling"
-
 	"github.com/theopenlane/core/pkg/models"
+	apimodels "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/httpsling"
 )
 
 func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
@@ -35,20 +35,20 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 
 	testCases := []struct {
 		name             string
-		request          models.AccountFeaturesRequest
+		request          apimodels.AccountFeaturesRequest
 		expectedFeatures []string
 		errMsg           string
 	}{
 		{
 			name: "happy path, feature access",
-			request: models.AccountFeaturesRequest{
+			request: apimodels.AccountFeaturesRequest{
 				ID: testUser1.OrganizationID,
 			},
 			expectedFeatures: featuresExpected,
 		},
 		{
 			name:             "no id provided, get from context",
-			request:          models.AccountFeaturesRequest{},
+			request:          apimodels.AccountFeaturesRequest{},
 			expectedFeatures: featuresExpected,
 		},
 	}
@@ -74,7 +74,7 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.AccountFeaturesReply
+			var out *apimodels.AccountFeaturesReply
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

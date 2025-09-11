@@ -5,12 +5,11 @@ import (
 	"slices"
 
 	"github.com/rs/zerolog/log"
+	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/utils/rout"
-
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // ValidateTOTP validates a user's TOTP code

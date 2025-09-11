@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 
-	api "github.com/theopenlane/core/pkg/models"
+	api "github.com/theopenlane/core/pkg/openapi"
 )
 
 const (

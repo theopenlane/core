@@ -1,4 +1,4 @@
-package models
+package openapi
 
 import (
 	"errors"
@@ -14,6 +14,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/pkg/catalog"
+	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/utils/passwd"
@@ -2034,4 +2036,43 @@ var ExampleOAuthCallbackResponse = OAuthCallbackResponse{
 	Reply:   rout.Reply{Success: true},
 	Success: true,
 	Message: "Successfully connected GitHub integration",
+}
+
+// =========
+// PRODUCTS
+// =========
+
+// ProductCatalogRequest
+type ProductCatalogRequest struct {
+	IncludeBeta    bool `query:"include_beta" description:"Whether to include beta products in the catalog" example:"false"`
+	IncludePrivate bool `query:"include_private" description:"Whether to include private products in the catalog" example:"false"`
+}
+
+// ProductCatalogReply holds the fields that are sent on a response to the `/products` endpoint
+type ProductCatalogReply struct {
+	rout.Reply
+	catalog.Catalog
+}
+
+// ExampleResponse returns an example ProductCatalogReply for OpenAPI documentation
+func (r *ProductCatalogReply) ExampleResponse() any {
+	return ExampleProductCatalogReply
+}
+
+// Validate ensures the required fields are set on the ProductCatalogRequest
+func (r *ProductCatalogRequest) Validate() error {
+	// all fields are optional, if none are set only public proucts are returned
+	return nil
+}
+
+// ExampleProductCatalogRequest is an example of a successful `/products` request for OpenAPI documentation
+var ExampleProductCatalogRequest = ProductCatalogRequest{
+	IncludeBeta:    false,
+	IncludePrivate: false,
+}
+
+// ExampleProductCatalogReply is an example of a successful `/products` response for OpenAPI documentation
+var ExampleProductCatalogReply = ProductCatalogReply{
+	Reply:   rout.Reply{Success: true},
+	Catalog: gencatalog.DefaultSandboxCatalog,
 }

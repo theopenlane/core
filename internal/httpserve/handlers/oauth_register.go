@@ -15,7 +15,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
+	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 // OauthRegister returns the TokenResponse for a verified authenticated external oauth user

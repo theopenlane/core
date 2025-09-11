@@ -28,7 +28,7 @@ import (
 	hushschema "github.com/theopenlane/core/internal/ent/generated/hush"
 	integrationschema "github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/models"
+	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 var errSlackAPI = errors.New("slack API error")

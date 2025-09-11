@@ -193,7 +193,8 @@ func (suite *HandlerTestSuite) SetupTest() {
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(&entconfig.Config{
 			Modules: entconfig.Modules{
-				Enabled: true,
+				Enabled:    true,
+				UseSandbox: true,
 			},
 		}),
 		ent.TOTP(suite.sharedOTPManager),

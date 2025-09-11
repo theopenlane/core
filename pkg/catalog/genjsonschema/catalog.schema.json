@@ -74,6 +74,13 @@
             "Provides advanced analytics and reporting capabilities"
           ]
         },
+        "marketing_description": {
+          "type": "string",
+          "description": "Optional long description of the feature used for marketing material",
+          "examples": [
+            "Automate evidence collection and task tracking to simplify certification workflows."
+          ]
+        },
         "billing": {
           "$ref": "#/$defs/Billing",
           "description": "Billing information for the feature"
