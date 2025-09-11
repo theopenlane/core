@@ -5,8 +5,8 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
+	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 // FileUploadHandler is responsible for uploading files

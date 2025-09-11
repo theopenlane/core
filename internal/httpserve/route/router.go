@@ -622,6 +622,7 @@ func RegisterRoutes(router *Router) error {
 		registerTrustCenterAnonymousJWTHandler,
 		registerStartImpersonationHandler,
 		registerEndImpersonationHandler,
+		registerProductCatalogHandler,
 
 		// JOB Runners
 		// TODO(adelowo): at some point in the future, maybe we should extract these into

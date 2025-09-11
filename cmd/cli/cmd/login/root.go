@@ -12,7 +12,7 @@ import (
 	"golang.org/x/term"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/models"
+	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
