@@ -2,8 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
-	"net/http"
 	"strings"
 	"time"
 
@@ -27,15 +25,6 @@ import (
 
 	"github.com/theopenlane/core/pkg/models"
 )
-
-func newCookieConfig(secure bool) sessions.CookieConfig {
-	return sessions.CookieConfig{
-		Path:     "/",
-		HTTPOnly: true,
-		SameSite: http.SameSiteLaxMode,
-		Secure:   secure,
-	}
-}
 
 // SSOLoginHandler redirects the user to the organization's configured IdP for authentication
 // It sets state and nonce cookies, builds the OIDC auth URL, and issues a redirect
