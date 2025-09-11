@@ -44,7 +44,7 @@ func (h *Handler) filterCatalog(in *models.ProductCatalogRequest) catalog.Catalo
 }
 
 func doFilter(includeBeta, includePrivate bool, cat catalog.Catalog) catalog.Catalog {
-	filtered := catalog.Catalog{}
+	filtered := cat
 
 	modules := catalog.FeatureSet{}
 	for k, v := range cat.Modules {

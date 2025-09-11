@@ -95,6 +95,9 @@ func (suite *HandlerTestSuite) TestProductCatalogHandler() {
 			// we should always have public products in the catalog
 			assert.NotEqual(t, 0, len(out.Catalog.Modules))
 
+			assert.NotEmpty(t, out.Version)
+			assert.NotEmpty(t, out.SHA)
+
 			for _, v := range out.Catalog.Modules {
 				switch v.Audience {
 				case handlers.PublicAudience:
