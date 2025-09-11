@@ -92,10 +92,10 @@ require (
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.4
 	github.com/theopenlane/entx v0.15.0
-	github.com/theopenlane/gqlgen-plugins v0.9.0
+	github.com/theopenlane/gqlgen-plugins v0.9.1
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.17.0
-	github.com/theopenlane/newman v0.2.0
+	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.4.0
 	github.com/theopenlane/utils v0.5.0
 	github.com/tink-crypto/tink-go/v2 v2.4.0
@@ -103,7 +103,7 @@ require (
 	github.com/unidoc/unioffice v1.39.0
 	github.com/urfave/cli/v3 v3.4.1
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/windmill-labs/windmill-go-client v1.542.0
+	github.com/windmill-labs/windmill-go-client v1.542.1
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.44.0
