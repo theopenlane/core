@@ -70,7 +70,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 	// build the OIDC auth URL with state and nonce
 	authURL := rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonce))
 
-	out := models.SSOLoginReply{
+	out := apimodels.SSOLoginReply{
 		Reply:       rout.Reply{Success: true},
 		RedirectURI: authURL,
 	}
