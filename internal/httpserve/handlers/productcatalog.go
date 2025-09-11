@@ -9,9 +9,12 @@ import (
 )
 
 const (
+	// PrivateAudience defines a product only not publicly available
 	PrivateAudience = "private"
-	BetaAudience    = "beta"
-	PublicAudience  = "public"
+	// BetaAudience defines a product available to beta users
+	BetaAudience = "beta"
+	// PublicAudience defines a product available to all users
+	PublicAudience = "public"
 )
 
 // ProductCatalogHandler lists all products in the catalog
@@ -29,6 +32,7 @@ func (h *Handler) ProductCatalogHandler(ctx echo.Context, openapi *OpenAPIContex
 	return h.Success(ctx, out, openapi)
 }
 
+// filterCatalog filters the catalog based on the request parameters
 func (h *Handler) filterCatalog(in *models.ProductCatalogRequest) catalog.Catalog {
 	cat := gencatalog.DefaultCatalog
 
@@ -43,6 +47,7 @@ func (h *Handler) filterCatalog(in *models.ProductCatalogRequest) catalog.Catalo
 	return doFilter(in.IncludeBeta, in.IncludePrivate, cat)
 }
 
+// doFilter filters loops through the modules and addons and filters them based on the audience
 func doFilter(includeBeta, includePrivate bool, cat catalog.Catalog) catalog.Catalog {
 	filtered := cat
 
@@ -66,6 +71,7 @@ func doFilter(includeBeta, includePrivate bool, cat catalog.Catalog) catalog.Cat
 	return filtered
 }
 
+// include returns true if the audience should be included based on the request parameters
 func include(aud string, includeBeta, includePrivate bool) bool {
 	switch aud {
 	case PublicAudience:
