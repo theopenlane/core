@@ -28,7 +28,7 @@ func registerWebfingerHandler(router *Router) error {
 func registerSSOLoginHandler(router *Router) error {
 	config := Config{
 		Path:        "/sso/login",
-		Method:      http.MethodGet,
+		Method:      http.MethodPost,
 		Name:        "SSOLogin",
 		Description: "Initiate SSO login flow",
 		Tags:        []string{"sso"},
@@ -45,7 +45,7 @@ func registerSSOLoginHandler(router *Router) error {
 func registerSSOCallbackHandler(router *Router) error {
 	config := Config{
 		Path:        "/sso/callback",
-		Method:      http.MethodGet,
+		Method:      http.MethodPost,
 		Name:        "SSOCallback",
 		Description: "Complete SSO login flow callback",
 		Tags:        []string{"sso"},

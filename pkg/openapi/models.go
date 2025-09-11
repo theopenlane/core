@@ -1517,6 +1517,12 @@ func (r *SSOStatusRequest) Validate() error {
 	return nil
 }
 
+// SSOStatusReply is the response for the SSO login
+type SSOLoginReply struct {
+	rout.Reply
+	RedirectURI string `json:"redirect_uri,omitempty"`
+}
+
 // SSOStatusReply is the response for SSOStatusRequest
 type SSOStatusReply struct {
 	rout.Reply

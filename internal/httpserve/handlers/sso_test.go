@@ -293,10 +293,7 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusFound, rec.Code)
-	loc, err := rec.Result().Location()
-	assert.NoError(t, err)
-	assert.Contains(t, loc.String(), oidc.server.URL+"/auth")
+	assert.Equal(t, http.StatusOK, rec.Code)
 
 	cookies := rec.Result().Cookies()
 	var state, nonce *http.Cookie
