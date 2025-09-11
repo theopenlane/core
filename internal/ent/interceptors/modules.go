@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog/log"
@@ -28,6 +27,16 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 	return entintercept.TraverseFunc(func(ctx context.Context, q entintercept.Query) error {
 		if !modulesEnabled {
 			return nil
+		}
+
+		fCtx := graphql.GetFieldContext(ctx)
+
+		fieldCheck := ""
+
+		if fCtx != nil {
+			if fCtx.Object == "Query" {
+				fieldCheck = fCtx.Field.Name
+			}
 		}
 
 		if _, ok := contextx.From[moduleInterceptorKey](ctx); ok {
@@ -108,7 +117,8 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 				path = append(path, ast.PathName(entity))
 			}
 
-			if graphql.HasOperationContext(ctx) {
+			// ignore the error graph enrichment when a global search is done
+			if graphql.HasOperationContext(ctx) && fieldCheck != "search" {
 				graphql.AddError(ctx, &gqlerror.Error{
 					Err:     gqlerrors.NewCustomErrorWithModule(gqlerrors.NoAccessToModule, ErrFeatureNotEnabled.Error(), err, module),
 					Message: ErrFeatureNotEnabled.Error(),
