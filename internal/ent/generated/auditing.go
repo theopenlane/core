@@ -1815,6 +1815,12 @@ func (_m *MappedControlHistory) changes(new *MappedControlHistory) []Change {
 	if !reflect.DeepEqual(_m.Source, new.Source) {
 		changes = append(changes, NewChange(mappedcontrolhistory.FieldSource, _m.Source, new.Source))
 	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.InternalID, new.InternalID) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldInternalID, _m.InternalID, new.InternalID))
+	}
 	return changes
 }
 

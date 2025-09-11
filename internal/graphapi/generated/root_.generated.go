@@ -2269,6 +2269,8 @@ type ComplexityRoot struct {
 		FromControls    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		FromSubcontrols func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		ID              func(childComplexity int) int
+		InternalID      func(childComplexity int) int
+		InternalNotes   func(childComplexity int) int
 		MappingType     func(childComplexity int) int
 		Owner           func(childComplexity int) int
 		OwnerID         func(childComplexity int) int
@@ -2305,20 +2307,22 @@ type ComplexityRoot struct {
 	}
 
 	MappedControlHistory struct {
-		Confidence  func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		MappingType func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Relation    func(childComplexity int) int
-		Source      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		Confidence    func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		InternalID    func(childComplexity int) int
+		InternalNotes func(childComplexity int) int
+		MappingType   func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		Relation      func(childComplexity int) int
+		Source        func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	MappedControlHistoryConnection struct {
@@ -15537,6 +15541,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControl.ID(childComplexity), true
 
+	case "MappedControl.internalID":
+		if e.complexity.MappedControl.InternalID == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.InternalID(childComplexity), true
+
+	case "MappedControl.internalNotes":
+		if e.complexity.MappedControl.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.InternalNotes(childComplexity), true
+
 	case "MappedControl.mappingType":
 		if e.complexity.MappedControl.MappingType == nil {
 			break
@@ -15707,6 +15725,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControlHistory.ID(childComplexity), true
+
+	case "MappedControlHistory.internalID":
+		if e.complexity.MappedControlHistory.InternalID == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.InternalID(childComplexity), true
+
+	case "MappedControlHistory.internalNotes":
+		if e.complexity.MappedControlHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.InternalNotes(childComplexity), true
 
 	case "MappedControlHistory.mappingType":
 		if e.complexity.MappedControlHistory.MappingType == nil {
@@ -44110,6 +44142,14 @@ input CreateMappedControlInput {
   source of the mapping, e.g. manual, suggested, etc.
   """
   source: MappedControlMappingSource
+  """
+  internal notes about the mapping, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  internalID: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -59559,6 +59599,14 @@ type MappedControl implements Node {
   source of the mapping, e.g. manual, suggested, etc.
   """
   source: MappedControlMappingSource
+  """
+  internal notes about the mapping, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  internalID: String
   owner: Organization
   blockedGroups(
     """
@@ -59810,6 +59858,14 @@ type MappedControlHistory implements Node {
   source of the mapping, e.g. manual, suggested, etc.
   """
   source: MappedControlHistoryMappingSource
+  """
+  internal notes about the mapping, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  internalID: String
 }
 """
 A connection to a list of items.
@@ -60074,6 +60130,42 @@ input MappedControlHistoryWhereInput {
   sourceNotIn: [MappedControlHistoryMappingSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  internal_id field predicates
+  """
+  internalID: String
+  internalIDNEQ: String
+  internalIDIn: [String!]
+  internalIDNotIn: [String!]
+  internalIDGT: String
+  internalIDGTE: String
+  internalIDLT: String
+  internalIDLTE: String
+  internalIDContains: String
+  internalIDHasPrefix: String
+  internalIDHasSuffix: String
+  internalIDIsNil: Boolean
+  internalIDNotNil: Boolean
+  internalIDEqualFold: String
+  internalIDContainsFold: String
 }
 """
 MappedControlMappingSource is enum for the field source
@@ -60263,6 +60355,42 @@ input MappedControlWhereInput {
   sourceNotIn: [MappedControlMappingSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  internal_id field predicates
+  """
+  internalID: String
+  internalIDNEQ: String
+  internalIDIn: [String!]
+  internalIDNotIn: [String!]
+  internalIDGT: String
+  internalIDGTE: String
+  internalIDLT: String
+  internalIDLTE: String
+  internalIDContains: String
+  internalIDHasPrefix: String
+  internalIDHasSuffix: String
+  internalIDIsNil: Boolean
+  internalIDNotNil: Boolean
+  internalIDEqualFold: String
+  internalIDContainsFold: String
   """
   owner edge predicates
   """
@@ -85996,6 +86124,16 @@ input UpdateMappedControlInput {
   """
   source: MappedControlMappingSource
   clearSource: Boolean
+  """
+  internal notes about the mapping, this field is only available to system admins
+  """
+  internalNotes: String
+  clearInternalNotes: Boolean
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  internalID: String
+  clearInternalID: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]

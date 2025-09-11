@@ -5936,6 +5936,8 @@ type CreateMappedControlInput struct {
 	Relation          *string
 	Confidence        *int
 	Source            *enums.MappingSource
+	InternalNotes     *string
+	InternalID        *string
 	OwnerID           *string
 	BlockedGroupIDs   []string
 	EditorIDs         []string
@@ -5961,6 +5963,12 @@ func (i *CreateMappedControlInput) Mutate(m *MappedControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.InternalID; v != nil {
+		m.SetInternalID(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -6003,6 +6011,10 @@ type UpdateMappedControlInput struct {
 	Confidence              *int
 	ClearSource             bool
 	Source                  *enums.MappingSource
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearInternalID         bool
+	InternalID              *string
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearBlockedGroups      bool
@@ -6056,6 +6068,18 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearInternalID {
+		m.ClearInternalID()
+	}
+	if v := i.InternalID; v != nil {
+		m.SetInternalID(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

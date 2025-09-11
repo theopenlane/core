@@ -42,6 +42,10 @@ const (
 	FieldConfidence = "confidence"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
+	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
+	FieldInternalNotes = "internal_notes"
+	// FieldInternalID holds the string denoting the internal_id field in the database.
+	FieldInternalID = "internal_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -112,6 +116,8 @@ var Columns = []string{
 	FieldRelation,
 	FieldConfidence,
 	FieldSource,
+	FieldInternalNotes,
+	FieldInternalID,
 }
 
 var (
@@ -253,6 +259,16 @@ func ByConfidence(opts ...sql.OrderTermOption) OrderOption {
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// ByInternalNotes orders the results by the internal_notes field.
+func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalNotes, opts...).ToFunc()
+}
+
+// ByInternalID orders the results by the internal_id field.
+func ByInternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

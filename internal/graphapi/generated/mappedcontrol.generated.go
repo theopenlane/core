@@ -87,6 +87,10 @@ func (ec *executionContext) fieldContext_MappedControlBulkCreatePayload_mappedCo
 				return ec.fieldContext_MappedControl_confidence(ctx, field)
 			case "source":
 				return ec.fieldContext_MappedControl_source(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_MappedControl_internalNotes(ctx, field)
+			case "internalID":
+				return ec.fieldContext_MappedControl_internalID(ctx, field)
 			case "owner":
 				return ec.fieldContext_MappedControl_owner(ctx, field)
 			case "blockedGroups":
@@ -169,6 +173,10 @@ func (ec *executionContext) fieldContext_MappedControlCreatePayload_mappedContro
 				return ec.fieldContext_MappedControl_confidence(ctx, field)
 			case "source":
 				return ec.fieldContext_MappedControl_source(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_MappedControl_internalNotes(ctx, field)
+			case "internalID":
+				return ec.fieldContext_MappedControl_internalID(ctx, field)
 			case "owner":
 				return ec.fieldContext_MappedControl_owner(ctx, field)
 			case "blockedGroups":
@@ -295,6 +303,10 @@ func (ec *executionContext) fieldContext_MappedControlUpdatePayload_mappedContro
 				return ec.fieldContext_MappedControl_confidence(ctx, field)
 			case "source":
 				return ec.fieldContext_MappedControl_source(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_MappedControl_internalNotes(ctx, field)
+			case "internalID":
+				return ec.fieldContext_MappedControl_internalID(ctx, field)
 			case "owner":
 				return ec.fieldContext_MappedControl_owner(ctx, field)
 			case "blockedGroups":

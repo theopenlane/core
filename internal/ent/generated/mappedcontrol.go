@@ -44,6 +44,10 @@ type MappedControl struct {
 	Confidence *int `json:"confidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
 	Source enums.MappingSource `json:"source,omitempty"`
+	// internal notes about the mapping, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	InternalID *string `json:"internal_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MappedControlQuery when eager-loading is set.
 	Edges        MappedControlEdges `json:"edges"`
@@ -154,7 +158,7 @@ func (*MappedControl) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case mappedcontrol.FieldConfidence:
 			values[i] = new(sql.NullInt64)
-		case mappedcontrol.FieldID, mappedcontrol.FieldCreatedBy, mappedcontrol.FieldUpdatedBy, mappedcontrol.FieldDeletedBy, mappedcontrol.FieldOwnerID, mappedcontrol.FieldMappingType, mappedcontrol.FieldRelation, mappedcontrol.FieldSource:
+		case mappedcontrol.FieldID, mappedcontrol.FieldCreatedBy, mappedcontrol.FieldUpdatedBy, mappedcontrol.FieldDeletedBy, mappedcontrol.FieldOwnerID, mappedcontrol.FieldMappingType, mappedcontrol.FieldRelation, mappedcontrol.FieldSource, mappedcontrol.FieldInternalNotes, mappedcontrol.FieldInternalID:
 			values[i] = new(sql.NullString)
 		case mappedcontrol.FieldCreatedAt, mappedcontrol.FieldUpdatedAt, mappedcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -253,6 +257,20 @@ func (_m *MappedControl) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
 				_m.Source = enums.MappingSource(value.String)
+			}
+		case mappedcontrol.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case mappedcontrol.FieldInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_id", values[i])
+			} else if value.Valid {
+				_m.InternalID = new(string)
+				*_m.InternalID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -362,6 +380,16 @@ func (_m *MappedControl) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Source))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.InternalID; v != nil {
+		builder.WriteString("internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

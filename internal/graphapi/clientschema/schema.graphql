@@ -8393,6 +8393,14 @@ input CreateMappedControlInput {
 	source of the mapping, e.g. manual, suggested, etc.
 	"""
 	source: MappedControlMappingSource
+	"""
+	internal notes about the mapping, this field is only available to system admins
+	"""
+	internalNotes: String
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	internalID: String
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -24796,6 +24804,14 @@ type MappedControl implements Node {
 	source of the mapping, e.g. manual, suggested, etc.
 	"""
 	source: MappedControlMappingSource
+	"""
+	internal notes about the mapping, this field is only available to system admins
+	"""
+	internalNotes: String
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	internalID: String
 	owner: Organization
 	blockedGroups(
 		"""
@@ -25074,6 +25090,14 @@ type MappedControlHistory implements Node {
 	source of the mapping, e.g. manual, suggested, etc.
 	"""
 	source: MappedControlHistoryMappingSource
+	"""
+	internal notes about the mapping, this field is only available to system admins
+	"""
+	internalNotes: String
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	internalID: String
 }
 """
 A connection to a list of items.
@@ -25338,6 +25362,42 @@ input MappedControlHistoryWhereInput {
 	sourceNotIn: [MappedControlHistoryMappingSource!]
 	sourceIsNil: Boolean
 	sourceNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	internal_id field predicates
+	"""
+	internalID: String
+	internalIDNEQ: String
+	internalIDIn: [String!]
+	internalIDNotIn: [String!]
+	internalIDGT: String
+	internalIDGTE: String
+	internalIDLT: String
+	internalIDLTE: String
+	internalIDContains: String
+	internalIDHasPrefix: String
+	internalIDHasSuffix: String
+	internalIDIsNil: Boolean
+	internalIDNotNil: Boolean
+	internalIDEqualFold: String
+	internalIDContainsFold: String
 }
 """
 MappedControlMappingSource is enum for the field source
@@ -25536,6 +25596,42 @@ input MappedControlWhereInput {
 	sourceNotIn: [MappedControlMappingSource!]
 	sourceIsNil: Boolean
 	sourceNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	internal_id field predicates
+	"""
+	internalID: String
+	internalIDNEQ: String
+	internalIDIn: [String!]
+	internalIDNotIn: [String!]
+	internalIDGT: String
+	internalIDGTE: String
+	internalIDLT: String
+	internalIDLTE: String
+	internalIDContains: String
+	internalIDHasPrefix: String
+	internalIDHasSuffix: String
+	internalIDIsNil: Boolean
+	internalIDNotNil: Boolean
+	internalIDEqualFold: String
+	internalIDContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -58220,6 +58316,16 @@ input UpdateMappedControlInput {
 	"""
 	source: MappedControlMappingSource
 	clearSource: Boolean
+	"""
+	internal notes about the mapping, this field is only available to system admins
+	"""
+	internalNotes: String
+	clearInternalNotes: Boolean
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	internalID: String
+	clearInternalID: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]

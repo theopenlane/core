@@ -121,6 +121,16 @@ func Confidence(v int) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldEQ(FieldConfidence, v))
 }
 
+// InternalNotes applies equality check predicate on the "internal_notes" field. It's identical to InternalNotesEQ.
+func InternalNotes(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// InternalID applies equality check predicate on the "internal_id" field. It's identical to InternalIDEQ.
+func InternalID(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEQ(FieldInternalID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -909,6 +919,156 @@ func SourceIsNil() predicate.MappedControlHistory {
 // SourceNotNil applies the NotNil predicate on the "source" field.
 func SourceNotNil() predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldNotNull(FieldSource))
+}
+
+// InternalNotesEQ applies the EQ predicate on the "internal_notes" field.
+func InternalNotesEQ(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesNEQ applies the NEQ predicate on the "internal_notes" field.
+func InternalNotesNEQ(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesIn applies the In predicate on the "internal_notes" field.
+func InternalNotesIn(vs ...string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesNotIn applies the NotIn predicate on the "internal_notes" field.
+func InternalNotesNotIn(vs ...string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNotIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesGT applies the GT predicate on the "internal_notes" field.
+func InternalNotesGT(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldGT(FieldInternalNotes, v))
+}
+
+// InternalNotesGTE applies the GTE predicate on the "internal_notes" field.
+func InternalNotesGTE(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldGTE(FieldInternalNotes, v))
+}
+
+// InternalNotesLT applies the LT predicate on the "internal_notes" field.
+func InternalNotesLT(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldLT(FieldInternalNotes, v))
+}
+
+// InternalNotesLTE applies the LTE predicate on the "internal_notes" field.
+func InternalNotesLTE(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldLTE(FieldInternalNotes, v))
+}
+
+// InternalNotesContains applies the Contains predicate on the "internal_notes" field.
+func InternalNotesContains(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldContains(FieldInternalNotes, v))
+}
+
+// InternalNotesHasPrefix applies the HasPrefix predicate on the "internal_notes" field.
+func InternalNotesHasPrefix(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldHasPrefix(FieldInternalNotes, v))
+}
+
+// InternalNotesHasSuffix applies the HasSuffix predicate on the "internal_notes" field.
+func InternalNotesHasSuffix(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldHasSuffix(FieldInternalNotes, v))
+}
+
+// InternalNotesIsNil applies the IsNil predicate on the "internal_notes" field.
+func InternalNotesIsNil() predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldIsNull(FieldInternalNotes))
+}
+
+// InternalNotesNotNil applies the NotNil predicate on the "internal_notes" field.
+func InternalNotesNotNil() predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNotNull(FieldInternalNotes))
+}
+
+// InternalNotesEqualFold applies the EqualFold predicate on the "internal_notes" field.
+func InternalNotesEqualFold(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEqualFold(FieldInternalNotes, v))
+}
+
+// InternalNotesContainsFold applies the ContainsFold predicate on the "internal_notes" field.
+func InternalNotesContainsFold(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldContainsFold(FieldInternalNotes, v))
+}
+
+// InternalIDEQ applies the EQ predicate on the "internal_id" field.
+func InternalIDEQ(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEQ(FieldInternalID, v))
+}
+
+// InternalIDNEQ applies the NEQ predicate on the "internal_id" field.
+func InternalIDNEQ(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNEQ(FieldInternalID, v))
+}
+
+// InternalIDIn applies the In predicate on the "internal_id" field.
+func InternalIDIn(vs ...string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldIn(FieldInternalID, vs...))
+}
+
+// InternalIDNotIn applies the NotIn predicate on the "internal_id" field.
+func InternalIDNotIn(vs ...string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNotIn(FieldInternalID, vs...))
+}
+
+// InternalIDGT applies the GT predicate on the "internal_id" field.
+func InternalIDGT(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldGT(FieldInternalID, v))
+}
+
+// InternalIDGTE applies the GTE predicate on the "internal_id" field.
+func InternalIDGTE(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldGTE(FieldInternalID, v))
+}
+
+// InternalIDLT applies the LT predicate on the "internal_id" field.
+func InternalIDLT(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldLT(FieldInternalID, v))
+}
+
+// InternalIDLTE applies the LTE predicate on the "internal_id" field.
+func InternalIDLTE(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldLTE(FieldInternalID, v))
+}
+
+// InternalIDContains applies the Contains predicate on the "internal_id" field.
+func InternalIDContains(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldContains(FieldInternalID, v))
+}
+
+// InternalIDHasPrefix applies the HasPrefix predicate on the "internal_id" field.
+func InternalIDHasPrefix(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldHasPrefix(FieldInternalID, v))
+}
+
+// InternalIDHasSuffix applies the HasSuffix predicate on the "internal_id" field.
+func InternalIDHasSuffix(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldHasSuffix(FieldInternalID, v))
+}
+
+// InternalIDIsNil applies the IsNil predicate on the "internal_id" field.
+func InternalIDIsNil() predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldIsNull(FieldInternalID))
+}
+
+// InternalIDNotNil applies the NotNil predicate on the "internal_id" field.
+func InternalIDNotNil() predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNotNull(FieldInternalID))
+}
+
+// InternalIDEqualFold applies the EqualFold predicate on the "internal_id" field.
+func InternalIDEqualFold(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEqualFold(FieldInternalID, v))
+}
+
+// InternalIDContainsFold applies the ContainsFold predicate on the "internal_id" field.
+func InternalIDContainsFold(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldContainsFold(FieldInternalID, v))
 }
 
 // And groups predicates with the AND operator between them.

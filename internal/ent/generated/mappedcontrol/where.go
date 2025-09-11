@@ -113,6 +113,16 @@ func Confidence(v int) predicate.MappedControl {
 	return predicate.MappedControl(sql.FieldEQ(FieldConfidence, v))
 }
 
+// InternalNotes applies equality check predicate on the "internal_notes" field. It's identical to InternalNotesEQ.
+func InternalNotes(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// InternalID applies equality check predicate on the "internal_id" field. It's identical to InternalIDEQ.
+func InternalID(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldEQ(FieldInternalID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.MappedControl {
 	return predicate.MappedControl(sql.FieldEQ(FieldCreatedAt, v))
@@ -766,6 +776,156 @@ func SourceIsNil() predicate.MappedControl {
 // SourceNotNil applies the NotNil predicate on the "source" field.
 func SourceNotNil() predicate.MappedControl {
 	return predicate.MappedControl(sql.FieldNotNull(FieldSource))
+}
+
+// InternalNotesEQ applies the EQ predicate on the "internal_notes" field.
+func InternalNotesEQ(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesNEQ applies the NEQ predicate on the "internal_notes" field.
+func InternalNotesNEQ(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldNEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesIn applies the In predicate on the "internal_notes" field.
+func InternalNotesIn(vs ...string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesNotIn applies the NotIn predicate on the "internal_notes" field.
+func InternalNotesNotIn(vs ...string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldNotIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesGT applies the GT predicate on the "internal_notes" field.
+func InternalNotesGT(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldGT(FieldInternalNotes, v))
+}
+
+// InternalNotesGTE applies the GTE predicate on the "internal_notes" field.
+func InternalNotesGTE(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldGTE(FieldInternalNotes, v))
+}
+
+// InternalNotesLT applies the LT predicate on the "internal_notes" field.
+func InternalNotesLT(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldLT(FieldInternalNotes, v))
+}
+
+// InternalNotesLTE applies the LTE predicate on the "internal_notes" field.
+func InternalNotesLTE(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldLTE(FieldInternalNotes, v))
+}
+
+// InternalNotesContains applies the Contains predicate on the "internal_notes" field.
+func InternalNotesContains(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldContains(FieldInternalNotes, v))
+}
+
+// InternalNotesHasPrefix applies the HasPrefix predicate on the "internal_notes" field.
+func InternalNotesHasPrefix(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldHasPrefix(FieldInternalNotes, v))
+}
+
+// InternalNotesHasSuffix applies the HasSuffix predicate on the "internal_notes" field.
+func InternalNotesHasSuffix(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldHasSuffix(FieldInternalNotes, v))
+}
+
+// InternalNotesIsNil applies the IsNil predicate on the "internal_notes" field.
+func InternalNotesIsNil() predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldIsNull(FieldInternalNotes))
+}
+
+// InternalNotesNotNil applies the NotNil predicate on the "internal_notes" field.
+func InternalNotesNotNil() predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldNotNull(FieldInternalNotes))
+}
+
+// InternalNotesEqualFold applies the EqualFold predicate on the "internal_notes" field.
+func InternalNotesEqualFold(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldEqualFold(FieldInternalNotes, v))
+}
+
+// InternalNotesContainsFold applies the ContainsFold predicate on the "internal_notes" field.
+func InternalNotesContainsFold(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldContainsFold(FieldInternalNotes, v))
+}
+
+// InternalIDEQ applies the EQ predicate on the "internal_id" field.
+func InternalIDEQ(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldEQ(FieldInternalID, v))
+}
+
+// InternalIDNEQ applies the NEQ predicate on the "internal_id" field.
+func InternalIDNEQ(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldNEQ(FieldInternalID, v))
+}
+
+// InternalIDIn applies the In predicate on the "internal_id" field.
+func InternalIDIn(vs ...string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldIn(FieldInternalID, vs...))
+}
+
+// InternalIDNotIn applies the NotIn predicate on the "internal_id" field.
+func InternalIDNotIn(vs ...string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldNotIn(FieldInternalID, vs...))
+}
+
+// InternalIDGT applies the GT predicate on the "internal_id" field.
+func InternalIDGT(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldGT(FieldInternalID, v))
+}
+
+// InternalIDGTE applies the GTE predicate on the "internal_id" field.
+func InternalIDGTE(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldGTE(FieldInternalID, v))
+}
+
+// InternalIDLT applies the LT predicate on the "internal_id" field.
+func InternalIDLT(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldLT(FieldInternalID, v))
+}
+
+// InternalIDLTE applies the LTE predicate on the "internal_id" field.
+func InternalIDLTE(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldLTE(FieldInternalID, v))
+}
+
+// InternalIDContains applies the Contains predicate on the "internal_id" field.
+func InternalIDContains(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldContains(FieldInternalID, v))
+}
+
+// InternalIDHasPrefix applies the HasPrefix predicate on the "internal_id" field.
+func InternalIDHasPrefix(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldHasPrefix(FieldInternalID, v))
+}
+
+// InternalIDHasSuffix applies the HasSuffix predicate on the "internal_id" field.
+func InternalIDHasSuffix(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldHasSuffix(FieldInternalID, v))
+}
+
+// InternalIDIsNil applies the IsNil predicate on the "internal_id" field.
+func InternalIDIsNil() predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldIsNull(FieldInternalID))
+}
+
+// InternalIDNotNil applies the NotNil predicate on the "internal_id" field.
+func InternalIDNotNil() predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldNotNull(FieldInternalID))
+}
+
+// InternalIDEqualFold applies the EqualFold predicate on the "internal_id" field.
+func InternalIDEqualFold(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldEqualFold(FieldInternalID, v))
+}
+
+// InternalIDContainsFold applies the ContainsFold predicate on the "internal_id" field.
+func InternalIDContainsFold(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldContainsFold(FieldInternalID, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

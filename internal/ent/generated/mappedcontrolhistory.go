@@ -49,7 +49,11 @@ type MappedControlHistory struct {
 	// percentage (0-100) of confidence in the mapping
 	Confidence *int `json:"confidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
-	Source       enums.MappingSource `json:"source,omitempty"`
+	Source enums.MappingSource `json:"source,omitempty"`
+	// internal notes about the mapping, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	InternalID   *string `json:"internal_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -64,7 +68,7 @@ func (*MappedControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case mappedcontrolhistory.FieldConfidence:
 			values[i] = new(sql.NullInt64)
-		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldOwnerID, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation, mappedcontrolhistory.FieldSource:
+		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldOwnerID, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation, mappedcontrolhistory.FieldSource, mappedcontrolhistory.FieldInternalNotes, mappedcontrolhistory.FieldInternalID:
 			values[i] = new(sql.NullString)
 		case mappedcontrolhistory.FieldHistoryTime, mappedcontrolhistory.FieldCreatedAt, mappedcontrolhistory.FieldUpdatedAt, mappedcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -182,6 +186,20 @@ func (_m *MappedControlHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				_m.Source = enums.MappingSource(value.String)
 			}
+		case mappedcontrolhistory.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case mappedcontrolhistory.FieldInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_id", values[i])
+			} else if value.Valid {
+				_m.InternalID = new(string)
+				*_m.InternalID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -264,6 +282,16 @@ func (_m *MappedControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Source))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.InternalID; v != nil {
+		builder.WriteString("internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

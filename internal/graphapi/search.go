@@ -1115,8 +1115,10 @@ func adminSearchMappedControls(ctx context.Context, query string, after *entgql.
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				mappedcontrol.OwnerIDContainsFold(query),  // search by OwnerID
-				mappedcontrol.RelationContainsFold(query), // search by Relation
+				mappedcontrol.OwnerIDContainsFold(query),       // search by OwnerID
+				mappedcontrol.RelationContainsFold(query),      // search by Relation
+				mappedcontrol.InternalNotesContainsFold(query), // search by InternalNotes
+				mappedcontrol.InternalIDContainsFold(query),    // search by InternalID
 			),
 		)
 

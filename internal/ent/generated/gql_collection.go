@@ -22340,6 +22340,16 @@ func (_q *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, mappedcontrol.FieldSource)
 				fieldSeen[mappedcontrol.FieldSource] = struct{}{}
 			}
+		case "internalNotes":
+			if _, ok := fieldSeen[mappedcontrol.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldInternalNotes)
+				fieldSeen[mappedcontrol.FieldInternalNotes] = struct{}{}
+			}
+		case "internalID":
+			if _, ok := fieldSeen[mappedcontrol.FieldInternalID]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldInternalID)
+				fieldSeen[mappedcontrol.FieldInternalID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -22494,6 +22504,16 @@ func (_q *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldSource]; !ok {
 				selectedFields = append(selectedFields, mappedcontrolhistory.FieldSource)
 				fieldSeen[mappedcontrolhistory.FieldSource] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldInternalNotes)
+				fieldSeen[mappedcontrolhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "internalID":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldInternalID]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldInternalID)
+				fieldSeen[mappedcontrolhistory.FieldInternalID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

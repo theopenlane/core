@@ -228,6 +228,46 @@ func (_u *MappedControlUpdate) ClearSource() *MappedControlUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *MappedControlUpdate) SetInternalNotes(v string) *MappedControlUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *MappedControlUpdate) SetNillableInternalNotes(v *string) *MappedControlUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *MappedControlUpdate) ClearInternalNotes() *MappedControlUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetInternalID sets the "internal_id" field.
+func (_u *MappedControlUpdate) SetInternalID(v string) *MappedControlUpdate {
+	_u.mutation.SetInternalID(v)
+	return _u
+}
+
+// SetNillableInternalID sets the "internal_id" field if the given value is not nil.
+func (_u *MappedControlUpdate) SetNillableInternalID(v *string) *MappedControlUpdate {
+	if v != nil {
+		_u.SetInternalID(*v)
+	}
+	return _u
+}
+
+// ClearInternalID clears the value of the "internal_id" field.
+func (_u *MappedControlUpdate) ClearInternalID() *MappedControlUpdate {
+	_u.mutation.ClearInternalID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *MappedControlUpdate) SetOwner(v *Organization) *MappedControlUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -604,6 +644,18 @@ func (_u *MappedControlUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(mappedcontrol.FieldSource, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(mappedcontrol.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(mappedcontrol.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalID(); ok {
+		_spec.SetField(mappedcontrol.FieldInternalID, field.TypeString, value)
+	}
+	if _u.mutation.InternalIDCleared() {
+		_spec.ClearField(mappedcontrol.FieldInternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1139,6 +1191,46 @@ func (_u *MappedControlUpdateOne) ClearSource() *MappedControlUpdateOne {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *MappedControlUpdateOne) SetInternalNotes(v string) *MappedControlUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *MappedControlUpdateOne) SetNillableInternalNotes(v *string) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *MappedControlUpdateOne) ClearInternalNotes() *MappedControlUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetInternalID sets the "internal_id" field.
+func (_u *MappedControlUpdateOne) SetInternalID(v string) *MappedControlUpdateOne {
+	_u.mutation.SetInternalID(v)
+	return _u
+}
+
+// SetNillableInternalID sets the "internal_id" field if the given value is not nil.
+func (_u *MappedControlUpdateOne) SetNillableInternalID(v *string) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetInternalID(*v)
+	}
+	return _u
+}
+
+// ClearInternalID clears the value of the "internal_id" field.
+func (_u *MappedControlUpdateOne) ClearInternalID() *MappedControlUpdateOne {
+	_u.mutation.ClearInternalID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *MappedControlUpdateOne) SetOwner(v *Organization) *MappedControlUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1545,6 +1637,18 @@ func (_u *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedCon
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(mappedcontrol.FieldSource, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(mappedcontrol.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(mappedcontrol.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalID(); ok {
+		_spec.SetField(mappedcontrol.FieldInternalID, field.TypeString, value)
+	}
+	if _u.mutation.InternalIDCleared() {
+		_spec.ClearField(mappedcontrol.FieldInternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
