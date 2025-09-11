@@ -5,9 +5,8 @@ import (
 	"net/http"
 
 	"github.com/rs/zerolog/log"
+	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
-
-	"github.com/theopenlane/core/pkg/models"
 )
 
 //go:embed csv/*.csv

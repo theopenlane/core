@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/keyring"
 
-	"github.com/theopenlane/core/pkg/models"
+	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 

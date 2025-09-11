@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	api "github.com/theopenlane/core/pkg/models"
+	api "github.com/theopenlane/core/pkg/openapi"
 )
 
 // Option allows users to optionally supply configuration to the Authorization middleware.

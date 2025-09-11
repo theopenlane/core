@@ -16,7 +16,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/pkg/models"
+	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 // VerifySubscriptionHandler is the handler for the subscription verification endpoint

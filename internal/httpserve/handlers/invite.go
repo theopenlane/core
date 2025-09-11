@@ -19,7 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/core/pkg/models"
+	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 // Invite holds the Token, InviteToken references, and the additional user input to complete acceptance of the invitation

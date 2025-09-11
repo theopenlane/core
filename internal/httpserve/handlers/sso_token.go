@@ -19,11 +19,12 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/models"
+	apimodels "github.com/theopenlane/core/pkg/openapi"
 )
 
 // SSOTokenAuthorizeHandler marks a token as authorized for SSO for an organization
 func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleSSOTokenAuthorizeRequest, models.SSOTokenAuthorizeReply{}, openapi.Registry)
+	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSSOTokenAuthorizeRequest, apimodels.SSOTokenAuthorizeReply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -82,7 +83,7 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPICon
 // It validates the state and nonce, exchanges the code if required and updates
 // the token's SSO authorizations for the organization.
 func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleSSOTokenCallbackRequest, models.SSOTokenAuthorizeReply{}, openapi.Registry)
+	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSSOTokenCallbackRequest, apimodels.SSOTokenAuthorizeReply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -171,7 +172,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 		sessions.RemoveCookie(ctx.Response().Writer, name, sessions.CookieConfig{Path: "/"})
 	}
 
-	out := models.SSOTokenAuthorizeReply{
+	out := apimodels.SSOTokenAuthorizeReply{
 		Reply:          rout.Reply{Success: true},
 		OrganizationID: orgCookie.Value,
 		TokenID:        tokenIDCookie.Value,

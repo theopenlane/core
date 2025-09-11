@@ -24,7 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/models"
+	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 const (

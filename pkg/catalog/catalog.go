@@ -58,6 +58,8 @@ type Feature struct {
 	LookupKey string `json:"lookup_key,omitempty" yaml:"lookup_key,omitempty" jsonschema:"description=Stable identifier for the feature,example=compliance,pattern=^[a-z0-9_-]+$"`
 	// Description provides additional context about the feature
 	Description string `json:"description" yaml:"description,omitempty" jsonschema:"description=Optional description of the feature,example=Provides advanced analytics and reporting capabilities"`
+	// MarketingDescription is a longer description of the feature used for marketing material
+	MarketingDescription string `json:"marketing_description,omitempty" yaml:"marketing_description,omitempty" jsonschema:"description=Optional long description of the feature used for marketing material,example=Automate evidence collection and task tracking to simplify certification workflows."`
 	// Billing contains the pricing information for the feature
 	Billing Billing `json:"billing" yaml:"billing" jsonschema:"description=Billing information for the feature"`
 	// Audience indicates the intended audience for the feature - it can either be "public", "private", or "beta".

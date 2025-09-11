@@ -26,7 +26,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
+	models "github.com/theopenlane/core/pkg/models"
+	apimodels "github.com/theopenlane/core/pkg/openapi"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
@@ -206,7 +207,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			loginJSON := models.LoginRequest{
+			loginJSON := apimodels.LoginRequest{
 				Username: tc.username,
 				Password: tc.password,
 			}
@@ -228,7 +229,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.LoginReply
+			var out *apimodels.LoginReply
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -310,7 +311,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testUserCtx)
 
 	// Attempt login for the non-owner user (should fail due to SSO enforcement)
-	body, _ := json.Marshal(models.LoginRequest{Username: testUser.UserInfo.Email, Password: "$uper$ecretP@ssword"})
+	body, _ := json.Marshal(apimodels.LoginRequest{Username: testUser.UserInfo.Email, Password: "$uper$ecretP@ssword"})
 	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
 	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
 	rec := httptest.NewRecorder()
@@ -351,14 +352,14 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 
 	suite.db.UserSetting.UpdateOneID(ownerUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(ownerCtx)
 
-	body, _ := json.Marshal(models.LoginRequest{Username: ownerUser.UserInfo.Email, Password: "0wn3rP@ssw0rd"})
+	body, _ := json.Marshal(apimodels.LoginRequest{Username: ownerUser.UserInfo.Email, Password: "0wn3rP@ssw0rd"})
 	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
 	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
 	require.Equal(t, http.StatusOK, rec.Code)
-	var out models.LoginReply
+	var out apimodels.LoginReply
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
 }

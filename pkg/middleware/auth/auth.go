@@ -26,7 +26,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
-	api "github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/models"
+	api "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/permissioncache"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
@@ -529,8 +530,8 @@ func isPATSSOAuthorized(ctx context.Context, db *ent.Client, tokenID, orgID stri
 		return false, err
 	}
 
-	ctx = api.WithSSOAuthorizations(ctx, &pat.SSOAuthorizations)
-	auths, ok := api.SSOAuthorizationsFromContext(ctx)
+	ctx = models.WithSSOAuthorizations(ctx, &pat.SSOAuthorizations)
+	auths, ok := models.SSOAuthorizationsFromContext(ctx)
 	if !ok || auths == nil {
 		return false, nil
 	}

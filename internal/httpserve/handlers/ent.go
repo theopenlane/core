@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
+	apimodels "github.com/theopenlane/core/pkg/openapi"
 )
 
 // updateUserLastSeen updates the last seen timestamp of the user and login method used
@@ -562,7 +563,7 @@ func (h *Handler) getOrgByJobRunnerVerificationToken(ctx context.Context, token 
 	return registrationToken, nil
 }
 
-func (h *Handler) createJobRunner(ctx context.Context, token *ent.JobRunnerRegistrationToken, req models.JobRunnerRegistrationRequest) error {
+func (h *Handler) createJobRunner(ctx context.Context, token *ent.JobRunnerRegistrationToken, req apimodels.JobRunnerRegistrationRequest) error {
 	input := ent.CreateJobRunnerInput{
 		Name:    req.Name,
 		Tags:    req.Tags,
