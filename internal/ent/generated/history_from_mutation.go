@@ -5611,6 +5611,14 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetSource(source)
 	}
 
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if internalID, exists := m.InternalID(); exists {
+		create = create.SetNillableInternalID(&internalID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -5714,6 +5722,18 @@ func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetSource(mappedcontrol.Source)
 		}
 
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(mappedcontrol.InternalNotes)
+		}
+
+		if internalID, exists := m.InternalID(); exists {
+			create = create.SetNillableInternalID(&internalID)
+		} else {
+			create = create.SetNillableInternalID(mappedcontrol.InternalID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -5761,6 +5781,8 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetRelation(mappedcontrol.Relation).
 			SetNillableConfidence(mappedcontrol.Confidence).
 			SetSource(mappedcontrol.Source).
+			SetNillableInternalNotes(mappedcontrol.InternalNotes).
+			SetNillableInternalID(mappedcontrol.InternalID).
 			Save(ctx)
 		if err != nil {
 			return err

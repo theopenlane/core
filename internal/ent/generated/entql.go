@@ -1641,18 +1641,20 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "MappedControl",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			mappedcontrol.FieldCreatedAt:   {Type: field.TypeTime, Column: mappedcontrol.FieldCreatedAt},
-			mappedcontrol.FieldUpdatedAt:   {Type: field.TypeTime, Column: mappedcontrol.FieldUpdatedAt},
-			mappedcontrol.FieldCreatedBy:   {Type: field.TypeString, Column: mappedcontrol.FieldCreatedBy},
-			mappedcontrol.FieldUpdatedBy:   {Type: field.TypeString, Column: mappedcontrol.FieldUpdatedBy},
-			mappedcontrol.FieldDeletedAt:   {Type: field.TypeTime, Column: mappedcontrol.FieldDeletedAt},
-			mappedcontrol.FieldDeletedBy:   {Type: field.TypeString, Column: mappedcontrol.FieldDeletedBy},
-			mappedcontrol.FieldTags:        {Type: field.TypeJSON, Column: mappedcontrol.FieldTags},
-			mappedcontrol.FieldOwnerID:     {Type: field.TypeString, Column: mappedcontrol.FieldOwnerID},
-			mappedcontrol.FieldMappingType: {Type: field.TypeEnum, Column: mappedcontrol.FieldMappingType},
-			mappedcontrol.FieldRelation:    {Type: field.TypeString, Column: mappedcontrol.FieldRelation},
-			mappedcontrol.FieldConfidence:  {Type: field.TypeInt, Column: mappedcontrol.FieldConfidence},
-			mappedcontrol.FieldSource:      {Type: field.TypeEnum, Column: mappedcontrol.FieldSource},
+			mappedcontrol.FieldCreatedAt:     {Type: field.TypeTime, Column: mappedcontrol.FieldCreatedAt},
+			mappedcontrol.FieldUpdatedAt:     {Type: field.TypeTime, Column: mappedcontrol.FieldUpdatedAt},
+			mappedcontrol.FieldCreatedBy:     {Type: field.TypeString, Column: mappedcontrol.FieldCreatedBy},
+			mappedcontrol.FieldUpdatedBy:     {Type: field.TypeString, Column: mappedcontrol.FieldUpdatedBy},
+			mappedcontrol.FieldDeletedAt:     {Type: field.TypeTime, Column: mappedcontrol.FieldDeletedAt},
+			mappedcontrol.FieldDeletedBy:     {Type: field.TypeString, Column: mappedcontrol.FieldDeletedBy},
+			mappedcontrol.FieldTags:          {Type: field.TypeJSON, Column: mappedcontrol.FieldTags},
+			mappedcontrol.FieldOwnerID:       {Type: field.TypeString, Column: mappedcontrol.FieldOwnerID},
+			mappedcontrol.FieldMappingType:   {Type: field.TypeEnum, Column: mappedcontrol.FieldMappingType},
+			mappedcontrol.FieldRelation:      {Type: field.TypeString, Column: mappedcontrol.FieldRelation},
+			mappedcontrol.FieldConfidence:    {Type: field.TypeInt, Column: mappedcontrol.FieldConfidence},
+			mappedcontrol.FieldSource:        {Type: field.TypeEnum, Column: mappedcontrol.FieldSource},
+			mappedcontrol.FieldInternalNotes: {Type: field.TypeString, Column: mappedcontrol.FieldInternalNotes},
+			mappedcontrol.FieldInternalID:    {Type: field.TypeString, Column: mappedcontrol.FieldInternalID},
 		},
 	}
 	graph.Nodes[52] = &sqlgraph.Node{
@@ -1666,21 +1668,23 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "MappedControlHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			mappedcontrolhistory.FieldHistoryTime: {Type: field.TypeTime, Column: mappedcontrolhistory.FieldHistoryTime},
-			mappedcontrolhistory.FieldRef:         {Type: field.TypeString, Column: mappedcontrolhistory.FieldRef},
-			mappedcontrolhistory.FieldOperation:   {Type: field.TypeEnum, Column: mappedcontrolhistory.FieldOperation},
-			mappedcontrolhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: mappedcontrolhistory.FieldCreatedAt},
-			mappedcontrolhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: mappedcontrolhistory.FieldUpdatedAt},
-			mappedcontrolhistory.FieldCreatedBy:   {Type: field.TypeString, Column: mappedcontrolhistory.FieldCreatedBy},
-			mappedcontrolhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: mappedcontrolhistory.FieldUpdatedBy},
-			mappedcontrolhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: mappedcontrolhistory.FieldDeletedAt},
-			mappedcontrolhistory.FieldDeletedBy:   {Type: field.TypeString, Column: mappedcontrolhistory.FieldDeletedBy},
-			mappedcontrolhistory.FieldTags:        {Type: field.TypeJSON, Column: mappedcontrolhistory.FieldTags},
-			mappedcontrolhistory.FieldOwnerID:     {Type: field.TypeString, Column: mappedcontrolhistory.FieldOwnerID},
-			mappedcontrolhistory.FieldMappingType: {Type: field.TypeEnum, Column: mappedcontrolhistory.FieldMappingType},
-			mappedcontrolhistory.FieldRelation:    {Type: field.TypeString, Column: mappedcontrolhistory.FieldRelation},
-			mappedcontrolhistory.FieldConfidence:  {Type: field.TypeInt, Column: mappedcontrolhistory.FieldConfidence},
-			mappedcontrolhistory.FieldSource:      {Type: field.TypeEnum, Column: mappedcontrolhistory.FieldSource},
+			mappedcontrolhistory.FieldHistoryTime:   {Type: field.TypeTime, Column: mappedcontrolhistory.FieldHistoryTime},
+			mappedcontrolhistory.FieldRef:           {Type: field.TypeString, Column: mappedcontrolhistory.FieldRef},
+			mappedcontrolhistory.FieldOperation:     {Type: field.TypeEnum, Column: mappedcontrolhistory.FieldOperation},
+			mappedcontrolhistory.FieldCreatedAt:     {Type: field.TypeTime, Column: mappedcontrolhistory.FieldCreatedAt},
+			mappedcontrolhistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: mappedcontrolhistory.FieldUpdatedAt},
+			mappedcontrolhistory.FieldCreatedBy:     {Type: field.TypeString, Column: mappedcontrolhistory.FieldCreatedBy},
+			mappedcontrolhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: mappedcontrolhistory.FieldUpdatedBy},
+			mappedcontrolhistory.FieldDeletedAt:     {Type: field.TypeTime, Column: mappedcontrolhistory.FieldDeletedAt},
+			mappedcontrolhistory.FieldDeletedBy:     {Type: field.TypeString, Column: mappedcontrolhistory.FieldDeletedBy},
+			mappedcontrolhistory.FieldTags:          {Type: field.TypeJSON, Column: mappedcontrolhistory.FieldTags},
+			mappedcontrolhistory.FieldOwnerID:       {Type: field.TypeString, Column: mappedcontrolhistory.FieldOwnerID},
+			mappedcontrolhistory.FieldMappingType:   {Type: field.TypeEnum, Column: mappedcontrolhistory.FieldMappingType},
+			mappedcontrolhistory.FieldRelation:      {Type: field.TypeString, Column: mappedcontrolhistory.FieldRelation},
+			mappedcontrolhistory.FieldConfidence:    {Type: field.TypeInt, Column: mappedcontrolhistory.FieldConfidence},
+			mappedcontrolhistory.FieldSource:        {Type: field.TypeEnum, Column: mappedcontrolhistory.FieldSource},
+			mappedcontrolhistory.FieldInternalNotes: {Type: field.TypeString, Column: mappedcontrolhistory.FieldInternalNotes},
+			mappedcontrolhistory.FieldInternalID:    {Type: field.TypeString, Column: mappedcontrolhistory.FieldInternalID},
 		},
 	}
 	graph.Nodes[53] = &sqlgraph.Node{
@@ -17945,6 +17949,16 @@ func (f *MappedControlFilter) WhereSource(p entql.StringP) {
 	f.Where(p.Field(mappedcontrol.FieldSource))
 }
 
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *MappedControlFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(mappedcontrol.FieldInternalNotes))
+}
+
+// WhereInternalID applies the entql string predicate on the internal_id field.
+func (f *MappedControlFilter) WhereInternalID(p entql.StringP) {
+	f.Where(p.Field(mappedcontrol.FieldInternalID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *MappedControlFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -18156,6 +18170,16 @@ func (f *MappedControlHistoryFilter) WhereConfidence(p entql.IntP) {
 // WhereSource applies the entql string predicate on the source field.
 func (f *MappedControlHistoryFilter) WhereSource(p entql.StringP) {
 	f.Where(p.Field(mappedcontrolhistory.FieldSource))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *MappedControlHistoryFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(mappedcontrolhistory.FieldInternalNotes))
+}
+
+// WhereInternalID applies the entql string predicate on the internal_id field.
+func (f *MappedControlHistoryFilter) WhereInternalID(p entql.StringP) {
+	f.Where(p.Field(mappedcontrolhistory.FieldInternalID))
 }
 
 // addPredicate implements the predicateAdder interface.

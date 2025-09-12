@@ -2461,6 +2461,8 @@ var (
 		{Name: "relation", Type: field.TypeString, Nullable: true},
 		{Name: "confidence", Type: field.TypeInt, Nullable: true},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL", "SUGGESTED", "IMPORTED"}, Default: "MANUAL"},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// MappedControlsTable holds the schema information for the "mapped_controls" table.
@@ -2471,7 +2473,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "mapped_controls_organizations_mapped_controls",
-				Columns:    []*schema.Column{MappedControlsColumns[12]},
+				Columns:    []*schema.Column{MappedControlsColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2480,7 +2482,7 @@ var (
 			{
 				Name:    "mappedcontrol_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{MappedControlsColumns[12]},
+				Columns: []*schema.Column{MappedControlsColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2505,6 +2507,8 @@ var (
 		{Name: "relation", Type: field.TypeString, Nullable: true},
 		{Name: "confidence", Type: field.TypeInt, Nullable: true},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL", "SUGGESTED", "IMPORTED"}, Default: "MANUAL"},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "internal_id", Type: field.TypeString, Nullable: true},
 	}
 	// MappedControlHistoryTable holds the schema information for the "mapped_control_history" table.
 	MappedControlHistoryTable = &schema.Table{

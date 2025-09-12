@@ -216,6 +216,34 @@ func (_c *MappedControlHistoryCreate) SetNillableSource(v *enums.MappingSource) 
 	return _c
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *MappedControlHistoryCreate) SetInternalNotes(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *MappedControlHistoryCreate) SetNillableInternalNotes(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetInternalID sets the "internal_id" field.
+func (_c *MappedControlHistoryCreate) SetInternalID(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetInternalID(v)
+	return _c
+}
+
+// SetNillableInternalID sets the "internal_id" field if the given value is not nil.
+func (_c *MappedControlHistoryCreate) SetNillableInternalID(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetInternalID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *MappedControlHistoryCreate) SetID(v string) *MappedControlHistoryCreate {
 	_c.mutation.SetID(v)
@@ -431,6 +459,14 @@ func (_c *MappedControlHistoryCreate) createSpec() (*MappedControlHistory, *sqlg
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldSource, field.TypeEnum, value)
 		_node.Source = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.InternalID(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldInternalID, field.TypeString, value)
+		_node.InternalID = &value
 	}
 	return _node, _spec
 }

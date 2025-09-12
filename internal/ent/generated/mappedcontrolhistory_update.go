@@ -224,6 +224,46 @@ func (_u *MappedControlHistoryUpdate) ClearSource() *MappedControlHistoryUpdate 
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *MappedControlHistoryUpdate) SetInternalNotes(v string) *MappedControlHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *MappedControlHistoryUpdate) SetNillableInternalNotes(v *string) *MappedControlHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *MappedControlHistoryUpdate) ClearInternalNotes() *MappedControlHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetInternalID sets the "internal_id" field.
+func (_u *MappedControlHistoryUpdate) SetInternalID(v string) *MappedControlHistoryUpdate {
+	_u.mutation.SetInternalID(v)
+	return _u
+}
+
+// SetNillableInternalID sets the "internal_id" field if the given value is not nil.
+func (_u *MappedControlHistoryUpdate) SetNillableInternalID(v *string) *MappedControlHistoryUpdate {
+	if v != nil {
+		_u.SetInternalID(*v)
+	}
+	return _u
+}
+
+// ClearInternalID clears the value of the "internal_id" field.
+func (_u *MappedControlHistoryUpdate) ClearInternalID() *MappedControlHistoryUpdate {
+	_u.mutation.ClearInternalID()
+	return _u
+}
+
 // Mutation returns the MappedControlHistoryMutation object of the builder.
 func (_u *MappedControlHistoryUpdate) Mutation() *MappedControlHistoryMutation {
 	return _u.mutation
@@ -377,6 +417,18 @@ func (_u *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSource, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalID(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldInternalID, field.TypeString, value)
+	}
+	if _u.mutation.InternalIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldInternalID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.MappedControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -593,6 +645,46 @@ func (_u *MappedControlHistoryUpdateOne) ClearSource() *MappedControlHistoryUpda
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *MappedControlHistoryUpdateOne) SetInternalNotes(v string) *MappedControlHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *MappedControlHistoryUpdateOne) SetNillableInternalNotes(v *string) *MappedControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *MappedControlHistoryUpdateOne) ClearInternalNotes() *MappedControlHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetInternalID sets the "internal_id" field.
+func (_u *MappedControlHistoryUpdateOne) SetInternalID(v string) *MappedControlHistoryUpdateOne {
+	_u.mutation.SetInternalID(v)
+	return _u
+}
+
+// SetNillableInternalID sets the "internal_id" field if the given value is not nil.
+func (_u *MappedControlHistoryUpdateOne) SetNillableInternalID(v *string) *MappedControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalID(*v)
+	}
+	return _u
+}
+
+// ClearInternalID clears the value of the "internal_id" field.
+func (_u *MappedControlHistoryUpdateOne) ClearInternalID() *MappedControlHistoryUpdateOne {
+	_u.mutation.ClearInternalID()
+	return _u
+}
+
 // Mutation returns the MappedControlHistoryMutation object of the builder.
 func (_u *MappedControlHistoryUpdateOne) Mutation() *MappedControlHistoryMutation {
 	return _u.mutation
@@ -776,6 +868,18 @@ func (_u *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ma
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSource, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalID(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldInternalID, field.TypeString, value)
+	}
+	if _u.mutation.InternalIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldInternalID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.MappedControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

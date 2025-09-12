@@ -278,6 +278,8 @@ type MappedControlBuilder struct {
 	Relation          string
 	Confidence        int
 	Source            enums.MappingSource
+	InternalID        string
+	InternalNotes     string
 }
 
 type EvidenceBuilder struct {
@@ -1429,6 +1431,11 @@ func (e *MappedControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.M
 
 	if e.Source != "" {
 		mutation.SetSource(e.Source)
+	}
+
+	if ctx == systemAdminUser.UserCtx {
+		mutation.SetInternalID(ulids.New().String())
+		mutation.SetInternalNotes("Created by system admin user")
 	}
 
 	mappedControl, err := mutation.Save(ctx)

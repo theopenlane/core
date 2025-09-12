@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -66,6 +67,14 @@ func (MappedControl) Fields() []ent.Field {
 			).
 			Default(enums.MappingSourceManual.String()).
 			Comment("source of the mapping, e.g. manual, suggested, etc."),
+		field.String("internal_notes").
+			Optional().
+			Comment("internal notes about the mapping, this field is only available to system admins").
+			Nillable(),
+		field.String("internal_id").
+			Optional().
+			Comment("an internal identifier for the mapping, this field is only available to system admins").
+			Nillable(),
 	}
 }
 
@@ -137,6 +146,13 @@ func (MappedControl) Hooks() []ent.Hook {
 			ent.OpCreate,
 		),
 		hooks.HookMappedControl(),
+	}
+}
+
+// Interceptors of the MappedControl
+func (MappedControl) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorMappedControls(),
 	}
 }
 

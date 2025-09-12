@@ -77,6 +77,8 @@ mutation CreateMappedControl($input: CreateMappedControlInput!) {
       tags
       updatedAt
       updatedBy
+      internalID
+      internalNotes
       fromControls {
         edges {
           node {
@@ -140,6 +142,8 @@ query GetAllMappedControls {
         tags
         updatedAt
         updatedBy
+        internalID
+        internalNotes
         fromControls {
           edges {
             node {
@@ -189,6 +193,8 @@ query GetMappedControlByID($mappedControlId: ID!) {
     tags
     updatedAt
     updatedBy
+    internalID
+    internalNotes
     fromControls {
       edges {
         node {
@@ -245,6 +251,8 @@ query GetMappedControls($first: Int, $last: Int, $where: MappedControlWhereInput
         tags
         updatedAt
         updatedBy
+        internalID
+        internalNotes
         fromControls {
           edges {
             node {
@@ -295,6 +303,8 @@ mutation UpdateMappedControl($updateMappedControlId: ID!, $input: UpdateMappedCo
       tags
       updatedAt
       updatedBy
+      internalID
+      internalNotes
       fromControls {
         edges {
           node {
