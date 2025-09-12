@@ -182,7 +182,7 @@ const DefaultIdentityProvider enums.SSOProvider = "NONE"
 // IdentityProviderValidator is a validator for the "identity_provider" field enum values. It is called by the builders before save.
 func IdentityProviderValidator(ip enums.SSOProvider) error {
 	switch ip.String() {
-	case "OKTA", "ONELOGIN", "GOOGLEWORKSPACE", "SLACK", "GITHUB", "NONE":
+	case "OKTA", "ONE_LOGIN", "GOOGLE_WORKSPACE", "SLACK", "GITHUB", "NONE":
 		return nil
 	default:
 		return fmt.Errorf("organizationsettinghistory: invalid enum value for identity_provider field: %q", ip)
