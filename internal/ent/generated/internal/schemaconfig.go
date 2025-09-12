@@ -68,6 +68,7 @@ type SchemaConfig struct {
 	Export                             string // Export table.
 	File                               string // File table.
 	FileEvents                         string // File-events->Event table.
+	FileSecrets                        string // File-secrets->Hush table.
 	FileHistory                        string // FileHistory table.
 	Group                              string // Group table.
 	GroupEvents                        string // Group-events->Event table.

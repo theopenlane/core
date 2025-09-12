@@ -3889,19 +3889,22 @@ func (t *AdminSearch_AdminSearch_Files_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_Files_Edges_Node struct {
-	CategoryType          *string  "json:\"categoryType,omitempty\" graphql:\"categoryType\""
-	DetectedContentType   string   "json:\"detectedContentType\" graphql:\"detectedContentType\""
-	DetectedMimeType      *string  "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
-	ID                    string   "json:\"id\" graphql:\"id\""
-	Md5Hash               *string  "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
-	ProvidedFileExtension string   "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
-	ProvidedFileName      string   "json:\"providedFileName\" graphql:\"providedFileName\""
-	StoragePath           *string  "json:\"storagePath,omitempty\" graphql:\"storagePath\""
-	StorageScheme         *string  "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
-	StorageVolume         *string  "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
-	StoreKey              *string  "json:\"storeKey,omitempty\" graphql:\"storeKey\""
-	Tags                  []string "json:\"tags,omitempty\" graphql:\"tags\""
-	URI                   *string  "json:\"uri,omitempty\" graphql:\"uri\""
+	CategoryType          *string        "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	DetectedContentType   string         "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string        "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	Md5Hash               *string        "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	ProvidedFileExtension string         "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string         "json:\"providedFileName\" graphql:\"providedFileName\""
+	StoragePath           *string        "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageProvider       *string        "json:\"storageProvider,omitempty\" graphql:\"storageProvider\""
+	StorageRegion         *string        "json:\"storageRegion,omitempty\" graphql:\"storageRegion\""
+	StorageScheme         *string        "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string        "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string        "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	URI                   *string        "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
 func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetCategoryType() *string {
@@ -3934,6 +3937,12 @@ func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetMd5Hash() *string {
 	}
 	return t.Md5Hash
 }
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
+	}
+	return t.Metadata
+}
 func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetProvidedFileExtension() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
@@ -3951,6 +3960,18 @@ func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetStoragePath() *string {
 		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.StoragePath
+}
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetStorageProvider() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
+	}
+	return t.StorageProvider
+}
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetStorageRegion() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
+	}
+	return t.StorageRegion
 }
 func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetStorageScheme() *string {
 	if t == nil {
@@ -4166,11 +4187,13 @@ func (t *AdminSearch_AdminSearch_Integrations_PageInfo) GetStartCursor() *string
 }
 
 type AdminSearch_AdminSearch_Integrations_Edges_Node struct {
-	ID      string   "json:\"id\" graphql:\"id\""
-	Kind    *string  "json:\"kind,omitempty\" graphql:\"kind\""
-	Name    string   "json:\"name\" graphql:\"name\""
-	OwnerID *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags    []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID              string         "json:\"id\" graphql:\"id\""
+	IntegrationType *string        "json:\"integrationType,omitempty\" graphql:\"integrationType\""
+	Kind            *string        "json:\"kind,omitempty\" graphql:\"kind\""
+	Metadata        map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name            string         "json:\"name\" graphql:\"name\""
+	OwnerID         *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetID() string {
@@ -4179,11 +4202,23 @@ func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
+func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetIntegrationType() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Integrations_Edges_Node{}
+	}
+	return t.IntegrationType
+}
 func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetKind() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Integrations_Edges_Node{}
 	}
 	return t.Kind
+}
+func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Integrations_Edges_Node{}
+	}
+	return t.Metadata
 }
 func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetName() string {
 	if t == nil {
@@ -29734,25 +29769,29 @@ func (t *DeleteFile_DeleteFile) GetDeletedID() string {
 }
 
 type GetAllFiles_Files_Edges_Node struct {
-	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
-	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
-	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
-	ID                    string     "json:\"id\" graphql:\"id\""
-	Md5Hash               *string    "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
-	PersistedFileSize     *int64     "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
-	ProvidedFileExtension string     "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
-	ProvidedFileName      string     "json:\"providedFileName\" graphql:\"providedFileName\""
-	ProvidedFileSize      *int64     "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
-	StoragePath           *string    "json:\"storagePath,omitempty\" graphql:\"storagePath\""
-	StorageScheme         *string    "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
-	StorageVolume         *string    "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
-	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
-	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
+	CategoryType          *string        "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string         "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string        "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	LastAccessedAt        *time.Time     "json:\"lastAccessedAt,omitempty\" graphql:\"lastAccessedAt\""
+	Md5Hash               *string        "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	PersistedFileSize     *int64         "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string         "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string         "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64         "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	StoragePath           *string        "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageProvider       *string        "json:\"storageProvider,omitempty\" graphql:\"storageProvider\""
+	StorageRegion         *string        "json:\"storageRegion,omitempty\" graphql:\"storageRegion\""
+	StorageScheme         *string        "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string        "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string        "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string        "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
 func (t *GetAllFiles_Files_Edges_Node) GetCategoryType() *string {
@@ -29791,11 +29830,23 @@ func (t *GetAllFiles_Files_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetAllFiles_Files_Edges_Node) GetLastAccessedAt() *time.Time {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.LastAccessedAt
+}
 func (t *GetAllFiles_Files_Edges_Node) GetMd5Hash() *string {
 	if t == nil {
 		t = &GetAllFiles_Files_Edges_Node{}
 	}
 	return t.Md5Hash
+}
+func (t *GetAllFiles_Files_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.Metadata
 }
 func (t *GetAllFiles_Files_Edges_Node) GetPersistedFileSize() *int64 {
 	if t == nil {
@@ -29826,6 +29877,18 @@ func (t *GetAllFiles_Files_Edges_Node) GetStoragePath() *string {
 		t = &GetAllFiles_Files_Edges_Node{}
 	}
 	return t.StoragePath
+}
+func (t *GetAllFiles_Files_Edges_Node) GetStorageProvider() *string {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.StorageProvider
+}
+func (t *GetAllFiles_Files_Edges_Node) GetStorageRegion() *string {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.StorageRegion
 }
 func (t *GetAllFiles_Files_Edges_Node) GetStorageScheme() *string {
 	if t == nil {
@@ -29893,25 +29956,29 @@ func (t *GetAllFiles_Files) GetEdges() []*GetAllFiles_Files_Edges {
 }
 
 type GetFileByID_File struct {
-	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
-	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
-	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
-	ID                    string     "json:\"id\" graphql:\"id\""
-	Md5Hash               *string    "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
-	PersistedFileSize     *int64     "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
-	ProvidedFileExtension string     "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
-	ProvidedFileName      string     "json:\"providedFileName\" graphql:\"providedFileName\""
-	ProvidedFileSize      *int64     "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
-	StoragePath           *string    "json:\"storagePath,omitempty\" graphql:\"storagePath\""
-	StorageScheme         *string    "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
-	StorageVolume         *string    "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
-	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
-	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
+	CategoryType          *string        "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string         "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string        "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	LastAccessedAt        *time.Time     "json:\"lastAccessedAt,omitempty\" graphql:\"lastAccessedAt\""
+	Md5Hash               *string        "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	PersistedFileSize     *int64         "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string         "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string         "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64         "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	StoragePath           *string        "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageProvider       *string        "json:\"storageProvider,omitempty\" graphql:\"storageProvider\""
+	StorageRegion         *string        "json:\"storageRegion,omitempty\" graphql:\"storageRegion\""
+	StorageScheme         *string        "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string        "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string        "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string        "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
 func (t *GetFileByID_File) GetCategoryType() *string {
@@ -29950,11 +30017,23 @@ func (t *GetFileByID_File) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetFileByID_File) GetLastAccessedAt() *time.Time {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.LastAccessedAt
+}
 func (t *GetFileByID_File) GetMd5Hash() *string {
 	if t == nil {
 		t = &GetFileByID_File{}
 	}
 	return t.Md5Hash
+}
+func (t *GetFileByID_File) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.Metadata
 }
 func (t *GetFileByID_File) GetPersistedFileSize() *int64 {
 	if t == nil {
@@ -29985,6 +30064,18 @@ func (t *GetFileByID_File) GetStoragePath() *string {
 		t = &GetFileByID_File{}
 	}
 	return t.StoragePath
+}
+func (t *GetFileByID_File) GetStorageProvider() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.StorageProvider
+}
+func (t *GetFileByID_File) GetStorageRegion() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.StorageRegion
 }
 func (t *GetFileByID_File) GetStorageScheme() *string {
 	if t == nil {
@@ -30030,25 +30121,29 @@ func (t *GetFileByID_File) GetURI() *string {
 }
 
 type GetFiles_Files_Edges_Node struct {
-	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
-	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
-	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
-	ID                    string     "json:\"id\" graphql:\"id\""
-	Md5Hash               *string    "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
-	PersistedFileSize     *int64     "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
-	ProvidedFileExtension string     "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
-	ProvidedFileName      string     "json:\"providedFileName\" graphql:\"providedFileName\""
-	ProvidedFileSize      *int64     "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
-	StoragePath           *string    "json:\"storagePath,omitempty\" graphql:\"storagePath\""
-	StorageScheme         *string    "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
-	StorageVolume         *string    "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
-	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
-	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
+	CategoryType          *string        "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string         "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string        "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	LastAccessedAt        *time.Time     "json:\"lastAccessedAt,omitempty\" graphql:\"lastAccessedAt\""
+	Md5Hash               *string        "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	PersistedFileSize     *int64         "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string         "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string         "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64         "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	StoragePath           *string        "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageProvider       *string        "json:\"storageProvider,omitempty\" graphql:\"storageProvider\""
+	StorageRegion         *string        "json:\"storageRegion,omitempty\" graphql:\"storageRegion\""
+	StorageScheme         *string        "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string        "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string        "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string        "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
 func (t *GetFiles_Files_Edges_Node) GetCategoryType() *string {
@@ -30087,11 +30182,23 @@ func (t *GetFiles_Files_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetFiles_Files_Edges_Node) GetLastAccessedAt() *time.Time {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.LastAccessedAt
+}
 func (t *GetFiles_Files_Edges_Node) GetMd5Hash() *string {
 	if t == nil {
 		t = &GetFiles_Files_Edges_Node{}
 	}
 	return t.Md5Hash
+}
+func (t *GetFiles_Files_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.Metadata
 }
 func (t *GetFiles_Files_Edges_Node) GetPersistedFileSize() *int64 {
 	if t == nil {
@@ -30122,6 +30229,18 @@ func (t *GetFiles_Files_Edges_Node) GetStoragePath() *string {
 		t = &GetFiles_Files_Edges_Node{}
 	}
 	return t.StoragePath
+}
+func (t *GetFiles_Files_Edges_Node) GetStorageProvider() *string {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.StorageProvider
+}
+func (t *GetFiles_Files_Edges_Node) GetStorageRegion() *string {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.StorageRegion
 }
 func (t *GetFiles_Files_Edges_Node) GetStorageScheme() *string {
 	if t == nil {
@@ -35752,15 +35871,17 @@ func (t *DeleteIntegration_DeleteIntegration) GetDeletedID() string {
 }
 
 type GetAllIntegrations_Integrations_Edges_Node struct {
-	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string    "json:\"description,omitempty\" graphql:\"description\""
-	ID          string     "json:\"id\" graphql:\"id\""
-	Kind        *string    "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string     "json:\"name\" graphql:\"name\""
-	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
+	ID              string         "json:\"id\" graphql:\"id\""
+	IntegrationType *string        "json:\"integrationType,omitempty\" graphql:\"integrationType\""
+	Kind            *string        "json:\"kind,omitempty\" graphql:\"kind\""
+	Metadata        map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name            string         "json:\"name\" graphql:\"name\""
+	OwnerID         *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetCreatedAt() *time.Time {
@@ -35787,11 +35908,23 @@ func (t *GetAllIntegrations_Integrations_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetAllIntegrations_Integrations_Edges_Node) GetIntegrationType() *string {
+	if t == nil {
+		t = &GetAllIntegrations_Integrations_Edges_Node{}
+	}
+	return t.IntegrationType
+}
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetKind() *string {
 	if t == nil {
 		t = &GetAllIntegrations_Integrations_Edges_Node{}
 	}
 	return t.Kind
+}
+func (t *GetAllIntegrations_Integrations_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetAllIntegrations_Integrations_Edges_Node{}
+	}
+	return t.Metadata
 }
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetName() string {
 	if t == nil {
@@ -35841,15 +35974,17 @@ func (t *GetAllIntegrations_Integrations) GetEdges() []*GetAllIntegrations_Integ
 }
 
 type GetIntegrationByID_Integration struct {
-	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string    "json:\"description,omitempty\" graphql:\"description\""
-	ID          string     "json:\"id\" graphql:\"id\""
-	Kind        *string    "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string     "json:\"name\" graphql:\"name\""
-	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
+	ID              string         "json:\"id\" graphql:\"id\""
+	IntegrationType *string        "json:\"integrationType,omitempty\" graphql:\"integrationType\""
+	Kind            *string        "json:\"kind,omitempty\" graphql:\"kind\""
+	Metadata        map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name            string         "json:\"name\" graphql:\"name\""
+	OwnerID         *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetIntegrationByID_Integration) GetCreatedAt() *time.Time {
@@ -35876,11 +36011,23 @@ func (t *GetIntegrationByID_Integration) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetIntegrationByID_Integration) GetIntegrationType() *string {
+	if t == nil {
+		t = &GetIntegrationByID_Integration{}
+	}
+	return t.IntegrationType
+}
 func (t *GetIntegrationByID_Integration) GetKind() *string {
 	if t == nil {
 		t = &GetIntegrationByID_Integration{}
 	}
 	return t.Kind
+}
+func (t *GetIntegrationByID_Integration) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetIntegrationByID_Integration{}
+	}
+	return t.Metadata
 }
 func (t *GetIntegrationByID_Integration) GetName() string {
 	if t == nil {
@@ -35908,7 +36055,9 @@ func (t *GetIntegrationByID_Integration) GetUpdatedBy() *string {
 }
 
 type GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
+	ID   string  "json:\"id\" graphql:\"id\""
+	Kind *string "json:\"kind,omitempty\" graphql:\"kind\""
+	Name string  "json:\"name\" graphql:\"name\""
 }
 
 func (t *GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node) GetID() string {
@@ -35916,6 +36065,18 @@ func (t *GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node) GetID() s
 		t = &GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node) GetKind() *string {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node{}
+	}
+	return t.Kind
+}
+func (t *GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node{}
+	}
+	return t.Name
 }
 
 type GetIntegrationByIDWithSecrets_Integration_Secrets_Edges struct {
@@ -35941,16 +36102,18 @@ func (t *GetIntegrationByIDWithSecrets_Integration_Secrets) GetEdges() []*GetInt
 }
 
 type GetIntegrationByIDWithSecrets_Integration struct {
-	CreatedAt   *time.Time                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                           "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                            "json:\"id\" graphql:\"id\""
-	Kind        *string                                           "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string                                            "json:\"name\" graphql:\"name\""
-	OwnerID     *string                                           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Secrets     GetIntegrationByIDWithSecrets_Integration_Secrets "json:\"secrets\" graphql:\"secrets\""
-	UpdatedAt   *time.Time                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                           "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                            "json:\"id\" graphql:\"id\""
+	IntegrationType *string                                           "json:\"integrationType,omitempty\" graphql:\"integrationType\""
+	Kind            *string                                           "json:\"kind,omitempty\" graphql:\"kind\""
+	Metadata        map[string]any                                    "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name            string                                            "json:\"name\" graphql:\"name\""
+	OwnerID         *string                                           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Secrets         GetIntegrationByIDWithSecrets_Integration_Secrets "json:\"secrets\" graphql:\"secrets\""
+	UpdatedAt       *time.Time                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetIntegrationByIDWithSecrets_Integration) GetCreatedAt() *time.Time {
@@ -35977,11 +36140,23 @@ func (t *GetIntegrationByIDWithSecrets_Integration) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetIntegrationByIDWithSecrets_Integration) GetIntegrationType() *string {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
+	}
+	return t.IntegrationType
+}
 func (t *GetIntegrationByIDWithSecrets_Integration) GetKind() *string {
 	if t == nil {
 		t = &GetIntegrationByIDWithSecrets_Integration{}
 	}
 	return t.Kind
+}
+func (t *GetIntegrationByIDWithSecrets_Integration) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
+	}
+	return t.Metadata
 }
 func (t *GetIntegrationByIDWithSecrets_Integration) GetName() string {
 	if t == nil {
@@ -36026,7 +36201,9 @@ func (t *GetIntegrations_Integrations_Edges_Node_Owner) GetID() string {
 }
 
 type GetIntegrations_Integrations_Edges_Node_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
+	ID   string  "json:\"id\" graphql:\"id\""
+	Kind *string "json:\"kind,omitempty\" graphql:\"kind\""
+	Name string  "json:\"name\" graphql:\"name\""
 }
 
 func (t *GetIntegrations_Integrations_Edges_Node_Secrets_Edges_Node) GetID() string {
@@ -36034,6 +36211,18 @@ func (t *GetIntegrations_Integrations_Edges_Node_Secrets_Edges_Node) GetID() str
 		t = &GetIntegrations_Integrations_Edges_Node_Secrets_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetIntegrations_Integrations_Edges_Node_Secrets_Edges_Node) GetKind() *string {
+	if t == nil {
+		t = &GetIntegrations_Integrations_Edges_Node_Secrets_Edges_Node{}
+	}
+	return t.Kind
+}
+func (t *GetIntegrations_Integrations_Edges_Node_Secrets_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetIntegrations_Integrations_Edges_Node_Secrets_Edges_Node{}
+	}
+	return t.Name
 }
 
 type GetIntegrations_Integrations_Edges_Node_Secrets_Edges struct {
@@ -36059,17 +36248,19 @@ func (t *GetIntegrations_Integrations_Edges_Node_Secrets) GetEdges() []*GetInteg
 }
 
 type GetIntegrations_Integrations_Edges_Node struct {
-	CreatedAt   *time.Time                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                         "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                          "json:\"id\" graphql:\"id\""
-	Kind        *string                                         "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string                                          "json:\"name\" graphql:\"name\""
-	Owner       *GetIntegrations_Integrations_Edges_Node_Owner  "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID     *string                                         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Secrets     GetIntegrations_Integrations_Edges_Node_Secrets "json:\"secrets\" graphql:\"secrets\""
-	UpdatedAt   *time.Time                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                         "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                          "json:\"id\" graphql:\"id\""
+	IntegrationType *string                                         "json:\"integrationType,omitempty\" graphql:\"integrationType\""
+	Kind            *string                                         "json:\"kind,omitempty\" graphql:\"kind\""
+	Metadata        map[string]any                                  "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name            string                                          "json:\"name\" graphql:\"name\""
+	Owner           *GetIntegrations_Integrations_Edges_Node_Owner  "json:\"owner,omitempty\" graphql:\"owner\""
+	OwnerID         *string                                         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Secrets         GetIntegrations_Integrations_Edges_Node_Secrets "json:\"secrets\" graphql:\"secrets\""
+	UpdatedAt       *time.Time                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetIntegrations_Integrations_Edges_Node) GetCreatedAt() *time.Time {
@@ -36096,11 +36287,23 @@ func (t *GetIntegrations_Integrations_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetIntegrations_Integrations_Edges_Node) GetIntegrationType() *string {
+	if t == nil {
+		t = &GetIntegrations_Integrations_Edges_Node{}
+	}
+	return t.IntegrationType
+}
 func (t *GetIntegrations_Integrations_Edges_Node) GetKind() *string {
 	if t == nil {
 		t = &GetIntegrations_Integrations_Edges_Node{}
 	}
 	return t.Kind
+}
+func (t *GetIntegrations_Integrations_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetIntegrations_Integrations_Edges_Node{}
+	}
+	return t.Metadata
 }
 func (t *GetIntegrations_Integrations_Edges_Node) GetName() string {
 	if t == nil {
@@ -97676,6 +97879,9 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					storageScheme
 					storageVolume
 					storagePath
+					metadata
+					storageRegion
+					storageProvider
 				}
 			}
 		}
@@ -97713,6 +97919,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					name
 					kind
+					integrationType
+					metadata
 				}
 			}
 		}
@@ -104709,6 +104917,10 @@ const GetAllFilesDocument = `query GetAllFiles {
 				updatedAt
 				updatedBy
 				uri
+				storageRegion
+				storageProvider
+				metadata
+				lastAccessedAt
 			}
 		}
 	}
@@ -104751,6 +104963,10 @@ const GetFileByIDDocument = `query GetFileByID ($fileId: ID!) {
 		updatedAt
 		updatedBy
 		uri
+		storageRegion
+		storageProvider
+		metadata
+		lastAccessedAt
 	}
 }
 `
@@ -104795,6 +105011,10 @@ const GetFilesDocument = `query GetFiles ($where: FileWhereInput) {
 				updatedAt
 				updatedBy
 				uri
+				storageRegion
+				storageProvider
+				metadata
+				lastAccessedAt
 			}
 		}
 	}
@@ -106557,6 +106777,8 @@ const GetAllIntegrationsDocument = `query GetAllIntegrations {
 				createdBy
 				updatedAt
 				updatedBy
+				integrationType
+				metadata
 			}
 		}
 	}
@@ -106589,6 +106811,8 @@ const GetIntegrationByIDDocument = `query GetIntegrationByID ($integrationId: ID
 		createdBy
 		updatedAt
 		updatedBy
+		integrationType
+		metadata
 	}
 }
 `
@@ -106621,6 +106845,8 @@ const GetIntegrationByIDWithSecretsDocument = `query GetIntegrationByIDWithSecre
 			edges {
 				node {
 					id
+					name
+					kind
 				}
 			}
 		}
@@ -106628,6 +106854,8 @@ const GetIntegrationByIDWithSecretsDocument = `query GetIntegrationByIDWithSecre
 		createdBy
 		updatedAt
 		updatedBy
+		integrationType
+		metadata
 	}
 }
 `
@@ -106665,6 +106893,8 @@ const GetIntegrationsDocument = `query GetIntegrations ($where: IntegrationWhere
 					edges {
 						node {
 							id
+							name
+							kind
 						}
 					}
 				}
@@ -106672,6 +106902,8 @@ const GetIntegrationsDocument = `query GetIntegrations ($where: IntegrationWhere
 				createdBy
 				updatedAt
 				updatedBy
+				integrationType
+				metadata
 			}
 		}
 	}

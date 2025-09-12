@@ -730,6 +730,12 @@ func adminSearchFiles(ctx context.Context, query string, after *entgql.Cursor[st
 				file.StorageSchemeContainsFold(query),         // search by StorageScheme
 				file.StorageVolumeContainsFold(query),         // search by StorageVolume
 				file.StoragePathContainsFold(query),           // search by StoragePath
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $14", likeQuery)) // search by Metadata
+				},
+				file.StorageRegionContainsFold(query),   // search by StorageRegion
+				file.StorageProviderContainsFold(query), // search by StorageProvider
 			),
 		)
 
@@ -801,9 +807,14 @@ func adminSearchIntegrations(ctx context.Context, query string, after *entgql.Cu
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				integration.OwnerIDContainsFold(query), // search by OwnerID
-				integration.NameContainsFold(query),    // search by Name
-				integration.KindContainsFold(query),    // search by Kind
+				integration.OwnerIDContainsFold(query),         // search by OwnerID
+				integration.NameContainsFold(query),            // search by Name
+				integration.KindContainsFold(query),            // search by Kind
+				integration.IntegrationTypeContainsFold(query), // search by IntegrationType
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $7", likeQuery)) // search by Metadata
+				},
 			),
 		)
 

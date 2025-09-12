@@ -63,3 +63,7 @@ SSOAuthorizationMap is a map of organization IDs to SSO verification timestamps.
 This scalar is used to track SSO verification times for organizations in the context of token authorization.
 """
 scalar SSOAuthorizationMap
+"""
+CredentialSet is a json of of credential keys that are used to authenticate to a third party
+"""
+scalar CredentialSet

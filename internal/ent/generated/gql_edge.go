@@ -2037,6 +2037,48 @@ func (_m *File) Subprocessor(ctx context.Context) (result []*Subprocessor, err e
 	return result, err
 }
 
+func (_m *File) Integrations(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*IntegrationOrder, where *IntegrationWhereInput,
+) (*IntegrationConnection, error) {
+	opts := []IntegrationPaginateOption{
+		WithIntegrationOrder(orderBy),
+		WithIntegrationFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[14][alias]
+	if nodes, err := _m.NamedIntegrations(alias); err == nil || hasTotalCount {
+		pager, err := newIntegrationPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &IntegrationConnection{Edges: []*IntegrationEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryIntegrations().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *File) Secrets(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*HushOrder, where *HushWhereInput,
+) (*HushConnection, error) {
+	opts := []HushPaginateOption{
+		WithHushOrder(orderBy),
+		WithHushFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[15][alias]
+	if nodes, err := _m.NamedSecrets(alias); err == nil || hasTotalCount {
+		pager, err := newHushPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &HushConnection{Edges: []*HushEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QuerySecrets().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Group) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -2862,6 +2904,27 @@ func (_m *Hush) Integrations(
 	return _m.QueryIntegrations().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Hush) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Hush) Events(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EventOrder, where *EventWhereInput,
 ) (*EventConnection, error) {
@@ -2870,7 +2933,7 @@ func (_m *Hush) Events(
 		WithEventFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
 	if nodes, err := _m.NamedEvents(alias); err == nil || hasTotalCount {
 		pager, err := newEventPager(opts, last != nil)
 		if err != nil {
@@ -2912,6 +2975,27 @@ func (_m *Integration) Secrets(
 	return _m.QuerySecrets().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Integration) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Integration) Events(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EventOrder, where *EventWhereInput,
 ) (*EventConnection, error) {
@@ -2920,7 +3004,7 @@ func (_m *Integration) Events(
 		WithEventFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
 	if nodes, err := _m.NamedEvents(alias); err == nil || hasTotalCount {
 		pager, err := newEventPager(opts, last != nil)
 		if err != nil {

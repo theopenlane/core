@@ -23863,6 +23863,52 @@ type FileWhereInput struct {
 	StoragePathEqualFold    *string  `json:"storagePathEqualFold,omitempty"`
 	StoragePathContainsFold *string  `json:"storagePathContainsFold,omitempty"`
 
+	// "storage_region" field predicates.
+	StorageRegion             *string  `json:"storageRegion,omitempty"`
+	StorageRegionNEQ          *string  `json:"storageRegionNEQ,omitempty"`
+	StorageRegionIn           []string `json:"storageRegionIn,omitempty"`
+	StorageRegionNotIn        []string `json:"storageRegionNotIn,omitempty"`
+	StorageRegionGT           *string  `json:"storageRegionGT,omitempty"`
+	StorageRegionGTE          *string  `json:"storageRegionGTE,omitempty"`
+	StorageRegionLT           *string  `json:"storageRegionLT,omitempty"`
+	StorageRegionLTE          *string  `json:"storageRegionLTE,omitempty"`
+	StorageRegionContains     *string  `json:"storageRegionContains,omitempty"`
+	StorageRegionHasPrefix    *string  `json:"storageRegionHasPrefix,omitempty"`
+	StorageRegionHasSuffix    *string  `json:"storageRegionHasSuffix,omitempty"`
+	StorageRegionIsNil        bool     `json:"storageRegionIsNil,omitempty"`
+	StorageRegionNotNil       bool     `json:"storageRegionNotNil,omitempty"`
+	StorageRegionEqualFold    *string  `json:"storageRegionEqualFold,omitempty"`
+	StorageRegionContainsFold *string  `json:"storageRegionContainsFold,omitempty"`
+
+	// "storage_provider" field predicates.
+	StorageProvider             *string  `json:"storageProvider,omitempty"`
+	StorageProviderNEQ          *string  `json:"storageProviderNEQ,omitempty"`
+	StorageProviderIn           []string `json:"storageProviderIn,omitempty"`
+	StorageProviderNotIn        []string `json:"storageProviderNotIn,omitempty"`
+	StorageProviderGT           *string  `json:"storageProviderGT,omitempty"`
+	StorageProviderGTE          *string  `json:"storageProviderGTE,omitempty"`
+	StorageProviderLT           *string  `json:"storageProviderLT,omitempty"`
+	StorageProviderLTE          *string  `json:"storageProviderLTE,omitempty"`
+	StorageProviderContains     *string  `json:"storageProviderContains,omitempty"`
+	StorageProviderHasPrefix    *string  `json:"storageProviderHasPrefix,omitempty"`
+	StorageProviderHasSuffix    *string  `json:"storageProviderHasSuffix,omitempty"`
+	StorageProviderIsNil        bool     `json:"storageProviderIsNil,omitempty"`
+	StorageProviderNotNil       bool     `json:"storageProviderNotNil,omitempty"`
+	StorageProviderEqualFold    *string  `json:"storageProviderEqualFold,omitempty"`
+	StorageProviderContainsFold *string  `json:"storageProviderContainsFold,omitempty"`
+
+	// "last_accessed_at" field predicates.
+	LastAccessedAt       *time.Time  `json:"lastAccessedAt,omitempty"`
+	LastAccessedAtNEQ    *time.Time  `json:"lastAccessedAtNEQ,omitempty"`
+	LastAccessedAtIn     []time.Time `json:"lastAccessedAtIn,omitempty"`
+	LastAccessedAtNotIn  []time.Time `json:"lastAccessedAtNotIn,omitempty"`
+	LastAccessedAtGT     *time.Time  `json:"lastAccessedAtGT,omitempty"`
+	LastAccessedAtGTE    *time.Time  `json:"lastAccessedAtGTE,omitempty"`
+	LastAccessedAtLT     *time.Time  `json:"lastAccessedAtLT,omitempty"`
+	LastAccessedAtLTE    *time.Time  `json:"lastAccessedAtLTE,omitempty"`
+	LastAccessedAtIsNil  bool        `json:"lastAccessedAtIsNil,omitempty"`
+	LastAccessedAtNotNil bool        `json:"lastAccessedAtNotNil,omitempty"`
+
 	// "user" edge predicates.
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
@@ -23918,6 +23964,14 @@ type FileWhereInput struct {
 	// "subprocessor" edge predicates.
 	HasSubprocessor     *bool                     `json:"hasSubprocessor,omitempty"`
 	HasSubprocessorWith []*SubprocessorWhereInput `json:"hasSubprocessorWith,omitempty"`
+
+	// "integrations" edge predicates.
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+
+	// "secrets" edge predicates.
+	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
+	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -24708,6 +24762,126 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	if i.StoragePathContainsFold != nil {
 		predicates = append(predicates, file.StoragePathContainsFold(*i.StoragePathContainsFold))
 	}
+	if i.StorageRegion != nil {
+		predicates = append(predicates, file.StorageRegionEQ(*i.StorageRegion))
+	}
+	if i.StorageRegionNEQ != nil {
+		predicates = append(predicates, file.StorageRegionNEQ(*i.StorageRegionNEQ))
+	}
+	if len(i.StorageRegionIn) > 0 {
+		predicates = append(predicates, file.StorageRegionIn(i.StorageRegionIn...))
+	}
+	if len(i.StorageRegionNotIn) > 0 {
+		predicates = append(predicates, file.StorageRegionNotIn(i.StorageRegionNotIn...))
+	}
+	if i.StorageRegionGT != nil {
+		predicates = append(predicates, file.StorageRegionGT(*i.StorageRegionGT))
+	}
+	if i.StorageRegionGTE != nil {
+		predicates = append(predicates, file.StorageRegionGTE(*i.StorageRegionGTE))
+	}
+	if i.StorageRegionLT != nil {
+		predicates = append(predicates, file.StorageRegionLT(*i.StorageRegionLT))
+	}
+	if i.StorageRegionLTE != nil {
+		predicates = append(predicates, file.StorageRegionLTE(*i.StorageRegionLTE))
+	}
+	if i.StorageRegionContains != nil {
+		predicates = append(predicates, file.StorageRegionContains(*i.StorageRegionContains))
+	}
+	if i.StorageRegionHasPrefix != nil {
+		predicates = append(predicates, file.StorageRegionHasPrefix(*i.StorageRegionHasPrefix))
+	}
+	if i.StorageRegionHasSuffix != nil {
+		predicates = append(predicates, file.StorageRegionHasSuffix(*i.StorageRegionHasSuffix))
+	}
+	if i.StorageRegionIsNil {
+		predicates = append(predicates, file.StorageRegionIsNil())
+	}
+	if i.StorageRegionNotNil {
+		predicates = append(predicates, file.StorageRegionNotNil())
+	}
+	if i.StorageRegionEqualFold != nil {
+		predicates = append(predicates, file.StorageRegionEqualFold(*i.StorageRegionEqualFold))
+	}
+	if i.StorageRegionContainsFold != nil {
+		predicates = append(predicates, file.StorageRegionContainsFold(*i.StorageRegionContainsFold))
+	}
+	if i.StorageProvider != nil {
+		predicates = append(predicates, file.StorageProviderEQ(*i.StorageProvider))
+	}
+	if i.StorageProviderNEQ != nil {
+		predicates = append(predicates, file.StorageProviderNEQ(*i.StorageProviderNEQ))
+	}
+	if len(i.StorageProviderIn) > 0 {
+		predicates = append(predicates, file.StorageProviderIn(i.StorageProviderIn...))
+	}
+	if len(i.StorageProviderNotIn) > 0 {
+		predicates = append(predicates, file.StorageProviderNotIn(i.StorageProviderNotIn...))
+	}
+	if i.StorageProviderGT != nil {
+		predicates = append(predicates, file.StorageProviderGT(*i.StorageProviderGT))
+	}
+	if i.StorageProviderGTE != nil {
+		predicates = append(predicates, file.StorageProviderGTE(*i.StorageProviderGTE))
+	}
+	if i.StorageProviderLT != nil {
+		predicates = append(predicates, file.StorageProviderLT(*i.StorageProviderLT))
+	}
+	if i.StorageProviderLTE != nil {
+		predicates = append(predicates, file.StorageProviderLTE(*i.StorageProviderLTE))
+	}
+	if i.StorageProviderContains != nil {
+		predicates = append(predicates, file.StorageProviderContains(*i.StorageProviderContains))
+	}
+	if i.StorageProviderHasPrefix != nil {
+		predicates = append(predicates, file.StorageProviderHasPrefix(*i.StorageProviderHasPrefix))
+	}
+	if i.StorageProviderHasSuffix != nil {
+		predicates = append(predicates, file.StorageProviderHasSuffix(*i.StorageProviderHasSuffix))
+	}
+	if i.StorageProviderIsNil {
+		predicates = append(predicates, file.StorageProviderIsNil())
+	}
+	if i.StorageProviderNotNil {
+		predicates = append(predicates, file.StorageProviderNotNil())
+	}
+	if i.StorageProviderEqualFold != nil {
+		predicates = append(predicates, file.StorageProviderEqualFold(*i.StorageProviderEqualFold))
+	}
+	if i.StorageProviderContainsFold != nil {
+		predicates = append(predicates, file.StorageProviderContainsFold(*i.StorageProviderContainsFold))
+	}
+	if i.LastAccessedAt != nil {
+		predicates = append(predicates, file.LastAccessedAtEQ(*i.LastAccessedAt))
+	}
+	if i.LastAccessedAtNEQ != nil {
+		predicates = append(predicates, file.LastAccessedAtNEQ(*i.LastAccessedAtNEQ))
+	}
+	if len(i.LastAccessedAtIn) > 0 {
+		predicates = append(predicates, file.LastAccessedAtIn(i.LastAccessedAtIn...))
+	}
+	if len(i.LastAccessedAtNotIn) > 0 {
+		predicates = append(predicates, file.LastAccessedAtNotIn(i.LastAccessedAtNotIn...))
+	}
+	if i.LastAccessedAtGT != nil {
+		predicates = append(predicates, file.LastAccessedAtGT(*i.LastAccessedAtGT))
+	}
+	if i.LastAccessedAtGTE != nil {
+		predicates = append(predicates, file.LastAccessedAtGTE(*i.LastAccessedAtGTE))
+	}
+	if i.LastAccessedAtLT != nil {
+		predicates = append(predicates, file.LastAccessedAtLT(*i.LastAccessedAtLT))
+	}
+	if i.LastAccessedAtLTE != nil {
+		predicates = append(predicates, file.LastAccessedAtLTE(*i.LastAccessedAtLTE))
+	}
+	if i.LastAccessedAtIsNil {
+		predicates = append(predicates, file.LastAccessedAtIsNil())
+	}
+	if i.LastAccessedAtNotNil {
+		predicates = append(predicates, file.LastAccessedAtNotNil())
+	}
 
 	if i.HasUser != nil {
 		p := file.HasUser()
@@ -24960,6 +25134,42 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, file.HasSubprocessorWith(with...))
+	}
+	if i.HasIntegrations != nil {
+		p := file.HasIntegrations()
+		if !*i.HasIntegrations {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasIntegrationsWith) > 0 {
+		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		for _, w := range i.HasIntegrationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasIntegrationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasIntegrationsWith(with...))
+	}
+	if i.HasSecrets != nil {
+		p := file.HasSecrets()
+		if !*i.HasSecrets {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSecretsWith) > 0 {
+		with := make([]predicate.Hush, 0, len(i.HasSecretsWith))
+		for _, w := range i.HasSecretsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSecretsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasSecretsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -25285,6 +25495,52 @@ type FileHistoryWhereInput struct {
 	StoragePathNotNil       bool     `json:"storagePathNotNil,omitempty"`
 	StoragePathEqualFold    *string  `json:"storagePathEqualFold,omitempty"`
 	StoragePathContainsFold *string  `json:"storagePathContainsFold,omitempty"`
+
+	// "storage_region" field predicates.
+	StorageRegion             *string  `json:"storageRegion,omitempty"`
+	StorageRegionNEQ          *string  `json:"storageRegionNEQ,omitempty"`
+	StorageRegionIn           []string `json:"storageRegionIn,omitempty"`
+	StorageRegionNotIn        []string `json:"storageRegionNotIn,omitempty"`
+	StorageRegionGT           *string  `json:"storageRegionGT,omitempty"`
+	StorageRegionGTE          *string  `json:"storageRegionGTE,omitempty"`
+	StorageRegionLT           *string  `json:"storageRegionLT,omitempty"`
+	StorageRegionLTE          *string  `json:"storageRegionLTE,omitempty"`
+	StorageRegionContains     *string  `json:"storageRegionContains,omitempty"`
+	StorageRegionHasPrefix    *string  `json:"storageRegionHasPrefix,omitempty"`
+	StorageRegionHasSuffix    *string  `json:"storageRegionHasSuffix,omitempty"`
+	StorageRegionIsNil        bool     `json:"storageRegionIsNil,omitempty"`
+	StorageRegionNotNil       bool     `json:"storageRegionNotNil,omitempty"`
+	StorageRegionEqualFold    *string  `json:"storageRegionEqualFold,omitempty"`
+	StorageRegionContainsFold *string  `json:"storageRegionContainsFold,omitempty"`
+
+	// "storage_provider" field predicates.
+	StorageProvider             *string  `json:"storageProvider,omitempty"`
+	StorageProviderNEQ          *string  `json:"storageProviderNEQ,omitempty"`
+	StorageProviderIn           []string `json:"storageProviderIn,omitempty"`
+	StorageProviderNotIn        []string `json:"storageProviderNotIn,omitempty"`
+	StorageProviderGT           *string  `json:"storageProviderGT,omitempty"`
+	StorageProviderGTE          *string  `json:"storageProviderGTE,omitempty"`
+	StorageProviderLT           *string  `json:"storageProviderLT,omitempty"`
+	StorageProviderLTE          *string  `json:"storageProviderLTE,omitempty"`
+	StorageProviderContains     *string  `json:"storageProviderContains,omitempty"`
+	StorageProviderHasPrefix    *string  `json:"storageProviderHasPrefix,omitempty"`
+	StorageProviderHasSuffix    *string  `json:"storageProviderHasSuffix,omitempty"`
+	StorageProviderIsNil        bool     `json:"storageProviderIsNil,omitempty"`
+	StorageProviderNotNil       bool     `json:"storageProviderNotNil,omitempty"`
+	StorageProviderEqualFold    *string  `json:"storageProviderEqualFold,omitempty"`
+	StorageProviderContainsFold *string  `json:"storageProviderContainsFold,omitempty"`
+
+	// "last_accessed_at" field predicates.
+	LastAccessedAt       *time.Time  `json:"lastAccessedAt,omitempty"`
+	LastAccessedAtNEQ    *time.Time  `json:"lastAccessedAtNEQ,omitempty"`
+	LastAccessedAtIn     []time.Time `json:"lastAccessedAtIn,omitempty"`
+	LastAccessedAtNotIn  []time.Time `json:"lastAccessedAtNotIn,omitempty"`
+	LastAccessedAtGT     *time.Time  `json:"lastAccessedAtGT,omitempty"`
+	LastAccessedAtGTE    *time.Time  `json:"lastAccessedAtGTE,omitempty"`
+	LastAccessedAtLT     *time.Time  `json:"lastAccessedAtLT,omitempty"`
+	LastAccessedAtLTE    *time.Time  `json:"lastAccessedAtLTE,omitempty"`
+	LastAccessedAtIsNil  bool        `json:"lastAccessedAtIsNil,omitempty"`
+	LastAccessedAtNotNil bool        `json:"lastAccessedAtNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -26155,6 +26411,126 @@ func (i *FileHistoryWhereInput) P() (predicate.FileHistory, error) {
 	}
 	if i.StoragePathContainsFold != nil {
 		predicates = append(predicates, filehistory.StoragePathContainsFold(*i.StoragePathContainsFold))
+	}
+	if i.StorageRegion != nil {
+		predicates = append(predicates, filehistory.StorageRegionEQ(*i.StorageRegion))
+	}
+	if i.StorageRegionNEQ != nil {
+		predicates = append(predicates, filehistory.StorageRegionNEQ(*i.StorageRegionNEQ))
+	}
+	if len(i.StorageRegionIn) > 0 {
+		predicates = append(predicates, filehistory.StorageRegionIn(i.StorageRegionIn...))
+	}
+	if len(i.StorageRegionNotIn) > 0 {
+		predicates = append(predicates, filehistory.StorageRegionNotIn(i.StorageRegionNotIn...))
+	}
+	if i.StorageRegionGT != nil {
+		predicates = append(predicates, filehistory.StorageRegionGT(*i.StorageRegionGT))
+	}
+	if i.StorageRegionGTE != nil {
+		predicates = append(predicates, filehistory.StorageRegionGTE(*i.StorageRegionGTE))
+	}
+	if i.StorageRegionLT != nil {
+		predicates = append(predicates, filehistory.StorageRegionLT(*i.StorageRegionLT))
+	}
+	if i.StorageRegionLTE != nil {
+		predicates = append(predicates, filehistory.StorageRegionLTE(*i.StorageRegionLTE))
+	}
+	if i.StorageRegionContains != nil {
+		predicates = append(predicates, filehistory.StorageRegionContains(*i.StorageRegionContains))
+	}
+	if i.StorageRegionHasPrefix != nil {
+		predicates = append(predicates, filehistory.StorageRegionHasPrefix(*i.StorageRegionHasPrefix))
+	}
+	if i.StorageRegionHasSuffix != nil {
+		predicates = append(predicates, filehistory.StorageRegionHasSuffix(*i.StorageRegionHasSuffix))
+	}
+	if i.StorageRegionIsNil {
+		predicates = append(predicates, filehistory.StorageRegionIsNil())
+	}
+	if i.StorageRegionNotNil {
+		predicates = append(predicates, filehistory.StorageRegionNotNil())
+	}
+	if i.StorageRegionEqualFold != nil {
+		predicates = append(predicates, filehistory.StorageRegionEqualFold(*i.StorageRegionEqualFold))
+	}
+	if i.StorageRegionContainsFold != nil {
+		predicates = append(predicates, filehistory.StorageRegionContainsFold(*i.StorageRegionContainsFold))
+	}
+	if i.StorageProvider != nil {
+		predicates = append(predicates, filehistory.StorageProviderEQ(*i.StorageProvider))
+	}
+	if i.StorageProviderNEQ != nil {
+		predicates = append(predicates, filehistory.StorageProviderNEQ(*i.StorageProviderNEQ))
+	}
+	if len(i.StorageProviderIn) > 0 {
+		predicates = append(predicates, filehistory.StorageProviderIn(i.StorageProviderIn...))
+	}
+	if len(i.StorageProviderNotIn) > 0 {
+		predicates = append(predicates, filehistory.StorageProviderNotIn(i.StorageProviderNotIn...))
+	}
+	if i.StorageProviderGT != nil {
+		predicates = append(predicates, filehistory.StorageProviderGT(*i.StorageProviderGT))
+	}
+	if i.StorageProviderGTE != nil {
+		predicates = append(predicates, filehistory.StorageProviderGTE(*i.StorageProviderGTE))
+	}
+	if i.StorageProviderLT != nil {
+		predicates = append(predicates, filehistory.StorageProviderLT(*i.StorageProviderLT))
+	}
+	if i.StorageProviderLTE != nil {
+		predicates = append(predicates, filehistory.StorageProviderLTE(*i.StorageProviderLTE))
+	}
+	if i.StorageProviderContains != nil {
+		predicates = append(predicates, filehistory.StorageProviderContains(*i.StorageProviderContains))
+	}
+	if i.StorageProviderHasPrefix != nil {
+		predicates = append(predicates, filehistory.StorageProviderHasPrefix(*i.StorageProviderHasPrefix))
+	}
+	if i.StorageProviderHasSuffix != nil {
+		predicates = append(predicates, filehistory.StorageProviderHasSuffix(*i.StorageProviderHasSuffix))
+	}
+	if i.StorageProviderIsNil {
+		predicates = append(predicates, filehistory.StorageProviderIsNil())
+	}
+	if i.StorageProviderNotNil {
+		predicates = append(predicates, filehistory.StorageProviderNotNil())
+	}
+	if i.StorageProviderEqualFold != nil {
+		predicates = append(predicates, filehistory.StorageProviderEqualFold(*i.StorageProviderEqualFold))
+	}
+	if i.StorageProviderContainsFold != nil {
+		predicates = append(predicates, filehistory.StorageProviderContainsFold(*i.StorageProviderContainsFold))
+	}
+	if i.LastAccessedAt != nil {
+		predicates = append(predicates, filehistory.LastAccessedAtEQ(*i.LastAccessedAt))
+	}
+	if i.LastAccessedAtNEQ != nil {
+		predicates = append(predicates, filehistory.LastAccessedAtNEQ(*i.LastAccessedAtNEQ))
+	}
+	if len(i.LastAccessedAtIn) > 0 {
+		predicates = append(predicates, filehistory.LastAccessedAtIn(i.LastAccessedAtIn...))
+	}
+	if len(i.LastAccessedAtNotIn) > 0 {
+		predicates = append(predicates, filehistory.LastAccessedAtNotIn(i.LastAccessedAtNotIn...))
+	}
+	if i.LastAccessedAtGT != nil {
+		predicates = append(predicates, filehistory.LastAccessedAtGT(*i.LastAccessedAtGT))
+	}
+	if i.LastAccessedAtGTE != nil {
+		predicates = append(predicates, filehistory.LastAccessedAtGTE(*i.LastAccessedAtGTE))
+	}
+	if i.LastAccessedAtLT != nil {
+		predicates = append(predicates, filehistory.LastAccessedAtLT(*i.LastAccessedAtLT))
+	}
+	if i.LastAccessedAtLTE != nil {
+		predicates = append(predicates, filehistory.LastAccessedAtLTE(*i.LastAccessedAtLTE))
+	}
+	if i.LastAccessedAtIsNil {
+		predicates = append(predicates, filehistory.LastAccessedAtIsNil())
+	}
+	if i.LastAccessedAtNotNil {
+		predicates = append(predicates, filehistory.LastAccessedAtNotNil())
 	}
 
 	switch len(predicates) {
@@ -30598,6 +30974,30 @@ type HushWhereInput struct {
 	SecretNameEqualFold    *string  `json:"secretNameEqualFold,omitempty"`
 	SecretNameContainsFold *string  `json:"secretNameContainsFold,omitempty"`
 
+	// "last_used_at" field predicates.
+	LastUsedAt       *time.Time  `json:"lastUsedAt,omitempty"`
+	LastUsedAtNEQ    *time.Time  `json:"lastUsedAtNEQ,omitempty"`
+	LastUsedAtIn     []time.Time `json:"lastUsedAtIn,omitempty"`
+	LastUsedAtNotIn  []time.Time `json:"lastUsedAtNotIn,omitempty"`
+	LastUsedAtGT     *time.Time  `json:"lastUsedAtGT,omitempty"`
+	LastUsedAtGTE    *time.Time  `json:"lastUsedAtGTE,omitempty"`
+	LastUsedAtLT     *time.Time  `json:"lastUsedAtLT,omitempty"`
+	LastUsedAtLTE    *time.Time  `json:"lastUsedAtLTE,omitempty"`
+	LastUsedAtIsNil  bool        `json:"lastUsedAtIsNil,omitempty"`
+	LastUsedAtNotNil bool        `json:"lastUsedAtNotNil,omitempty"`
+
+	// "expires_at" field predicates.
+	ExpiresAt       *time.Time  `json:"expiresAt,omitempty"`
+	ExpiresAtNEQ    *time.Time  `json:"expiresAtNEQ,omitempty"`
+	ExpiresAtIn     []time.Time `json:"expiresAtIn,omitempty"`
+	ExpiresAtNotIn  []time.Time `json:"expiresAtNotIn,omitempty"`
+	ExpiresAtGT     *time.Time  `json:"expiresAtGT,omitempty"`
+	ExpiresAtGTE    *time.Time  `json:"expiresAtGTE,omitempty"`
+	ExpiresAtLT     *time.Time  `json:"expiresAtLT,omitempty"`
+	ExpiresAtLTE    *time.Time  `json:"expiresAtLTE,omitempty"`
+	ExpiresAtIsNil  bool        `json:"expiresAtIsNil,omitempty"`
+	ExpiresAtNotNil bool        `json:"expiresAtNotNil,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -30605,6 +31005,10 @@ type HushWhereInput struct {
 	// "integrations" edge predicates.
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 
 	// "events" edge predicates.
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
@@ -31036,6 +31440,66 @@ func (i *HushWhereInput) P() (predicate.Hush, error) {
 	if i.SecretNameContainsFold != nil {
 		predicates = append(predicates, hush.SecretNameContainsFold(*i.SecretNameContainsFold))
 	}
+	if i.LastUsedAt != nil {
+		predicates = append(predicates, hush.LastUsedAtEQ(*i.LastUsedAt))
+	}
+	if i.LastUsedAtNEQ != nil {
+		predicates = append(predicates, hush.LastUsedAtNEQ(*i.LastUsedAtNEQ))
+	}
+	if len(i.LastUsedAtIn) > 0 {
+		predicates = append(predicates, hush.LastUsedAtIn(i.LastUsedAtIn...))
+	}
+	if len(i.LastUsedAtNotIn) > 0 {
+		predicates = append(predicates, hush.LastUsedAtNotIn(i.LastUsedAtNotIn...))
+	}
+	if i.LastUsedAtGT != nil {
+		predicates = append(predicates, hush.LastUsedAtGT(*i.LastUsedAtGT))
+	}
+	if i.LastUsedAtGTE != nil {
+		predicates = append(predicates, hush.LastUsedAtGTE(*i.LastUsedAtGTE))
+	}
+	if i.LastUsedAtLT != nil {
+		predicates = append(predicates, hush.LastUsedAtLT(*i.LastUsedAtLT))
+	}
+	if i.LastUsedAtLTE != nil {
+		predicates = append(predicates, hush.LastUsedAtLTE(*i.LastUsedAtLTE))
+	}
+	if i.LastUsedAtIsNil {
+		predicates = append(predicates, hush.LastUsedAtIsNil())
+	}
+	if i.LastUsedAtNotNil {
+		predicates = append(predicates, hush.LastUsedAtNotNil())
+	}
+	if i.ExpiresAt != nil {
+		predicates = append(predicates, hush.ExpiresAtEQ(*i.ExpiresAt))
+	}
+	if i.ExpiresAtNEQ != nil {
+		predicates = append(predicates, hush.ExpiresAtNEQ(*i.ExpiresAtNEQ))
+	}
+	if len(i.ExpiresAtIn) > 0 {
+		predicates = append(predicates, hush.ExpiresAtIn(i.ExpiresAtIn...))
+	}
+	if len(i.ExpiresAtNotIn) > 0 {
+		predicates = append(predicates, hush.ExpiresAtNotIn(i.ExpiresAtNotIn...))
+	}
+	if i.ExpiresAtGT != nil {
+		predicates = append(predicates, hush.ExpiresAtGT(*i.ExpiresAtGT))
+	}
+	if i.ExpiresAtGTE != nil {
+		predicates = append(predicates, hush.ExpiresAtGTE(*i.ExpiresAtGTE))
+	}
+	if i.ExpiresAtLT != nil {
+		predicates = append(predicates, hush.ExpiresAtLT(*i.ExpiresAtLT))
+	}
+	if i.ExpiresAtLTE != nil {
+		predicates = append(predicates, hush.ExpiresAtLTE(*i.ExpiresAtLTE))
+	}
+	if i.ExpiresAtIsNil {
+		predicates = append(predicates, hush.ExpiresAtIsNil())
+	}
+	if i.ExpiresAtNotNil {
+		predicates = append(predicates, hush.ExpiresAtNotNil())
+	}
 
 	if i.HasOwner != nil {
 		p := hush.HasOwner()
@@ -31072,6 +31536,24 @@ func (i *HushWhereInput) P() (predicate.Hush, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, hush.HasIntegrationsWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := hush.HasFiles()
+		if !*i.HasFiles {
+			p = hush.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, hush.HasFilesWith(with...))
 	}
 	if i.HasEvents != nil {
 		p := hush.HasEvents()
@@ -31276,6 +31758,30 @@ type HushHistoryWhereInput struct {
 	SecretNameNotNil       bool     `json:"secretNameNotNil,omitempty"`
 	SecretNameEqualFold    *string  `json:"secretNameEqualFold,omitempty"`
 	SecretNameContainsFold *string  `json:"secretNameContainsFold,omitempty"`
+
+	// "last_used_at" field predicates.
+	LastUsedAt       *time.Time  `json:"lastUsedAt,omitempty"`
+	LastUsedAtNEQ    *time.Time  `json:"lastUsedAtNEQ,omitempty"`
+	LastUsedAtIn     []time.Time `json:"lastUsedAtIn,omitempty"`
+	LastUsedAtNotIn  []time.Time `json:"lastUsedAtNotIn,omitempty"`
+	LastUsedAtGT     *time.Time  `json:"lastUsedAtGT,omitempty"`
+	LastUsedAtGTE    *time.Time  `json:"lastUsedAtGTE,omitempty"`
+	LastUsedAtLT     *time.Time  `json:"lastUsedAtLT,omitempty"`
+	LastUsedAtLTE    *time.Time  `json:"lastUsedAtLTE,omitempty"`
+	LastUsedAtIsNil  bool        `json:"lastUsedAtIsNil,omitempty"`
+	LastUsedAtNotNil bool        `json:"lastUsedAtNotNil,omitempty"`
+
+	// "expires_at" field predicates.
+	ExpiresAt       *time.Time  `json:"expiresAt,omitempty"`
+	ExpiresAtNEQ    *time.Time  `json:"expiresAtNEQ,omitempty"`
+	ExpiresAtIn     []time.Time `json:"expiresAtIn,omitempty"`
+	ExpiresAtNotIn  []time.Time `json:"expiresAtNotIn,omitempty"`
+	ExpiresAtGT     *time.Time  `json:"expiresAtGT,omitempty"`
+	ExpiresAtGTE    *time.Time  `json:"expiresAtGTE,omitempty"`
+	ExpiresAtLT     *time.Time  `json:"expiresAtLT,omitempty"`
+	ExpiresAtLTE    *time.Time  `json:"expiresAtLTE,omitempty"`
+	ExpiresAtIsNil  bool        `json:"expiresAtIsNil,omitempty"`
+	ExpiresAtNotNil bool        `json:"expiresAtNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -31784,6 +32290,66 @@ func (i *HushHistoryWhereInput) P() (predicate.HushHistory, error) {
 	if i.SecretNameContainsFold != nil {
 		predicates = append(predicates, hushhistory.SecretNameContainsFold(*i.SecretNameContainsFold))
 	}
+	if i.LastUsedAt != nil {
+		predicates = append(predicates, hushhistory.LastUsedAtEQ(*i.LastUsedAt))
+	}
+	if i.LastUsedAtNEQ != nil {
+		predicates = append(predicates, hushhistory.LastUsedAtNEQ(*i.LastUsedAtNEQ))
+	}
+	if len(i.LastUsedAtIn) > 0 {
+		predicates = append(predicates, hushhistory.LastUsedAtIn(i.LastUsedAtIn...))
+	}
+	if len(i.LastUsedAtNotIn) > 0 {
+		predicates = append(predicates, hushhistory.LastUsedAtNotIn(i.LastUsedAtNotIn...))
+	}
+	if i.LastUsedAtGT != nil {
+		predicates = append(predicates, hushhistory.LastUsedAtGT(*i.LastUsedAtGT))
+	}
+	if i.LastUsedAtGTE != nil {
+		predicates = append(predicates, hushhistory.LastUsedAtGTE(*i.LastUsedAtGTE))
+	}
+	if i.LastUsedAtLT != nil {
+		predicates = append(predicates, hushhistory.LastUsedAtLT(*i.LastUsedAtLT))
+	}
+	if i.LastUsedAtLTE != nil {
+		predicates = append(predicates, hushhistory.LastUsedAtLTE(*i.LastUsedAtLTE))
+	}
+	if i.LastUsedAtIsNil {
+		predicates = append(predicates, hushhistory.LastUsedAtIsNil())
+	}
+	if i.LastUsedAtNotNil {
+		predicates = append(predicates, hushhistory.LastUsedAtNotNil())
+	}
+	if i.ExpiresAt != nil {
+		predicates = append(predicates, hushhistory.ExpiresAtEQ(*i.ExpiresAt))
+	}
+	if i.ExpiresAtNEQ != nil {
+		predicates = append(predicates, hushhistory.ExpiresAtNEQ(*i.ExpiresAtNEQ))
+	}
+	if len(i.ExpiresAtIn) > 0 {
+		predicates = append(predicates, hushhistory.ExpiresAtIn(i.ExpiresAtIn...))
+	}
+	if len(i.ExpiresAtNotIn) > 0 {
+		predicates = append(predicates, hushhistory.ExpiresAtNotIn(i.ExpiresAtNotIn...))
+	}
+	if i.ExpiresAtGT != nil {
+		predicates = append(predicates, hushhistory.ExpiresAtGT(*i.ExpiresAtGT))
+	}
+	if i.ExpiresAtGTE != nil {
+		predicates = append(predicates, hushhistory.ExpiresAtGTE(*i.ExpiresAtGTE))
+	}
+	if i.ExpiresAtLT != nil {
+		predicates = append(predicates, hushhistory.ExpiresAtLT(*i.ExpiresAtLT))
+	}
+	if i.ExpiresAtLTE != nil {
+		predicates = append(predicates, hushhistory.ExpiresAtLTE(*i.ExpiresAtLTE))
+	}
+	if i.ExpiresAtIsNil {
+		predicates = append(predicates, hushhistory.ExpiresAtIsNil())
+	}
+	if i.ExpiresAtNotNil {
+		predicates = append(predicates, hushhistory.ExpiresAtNotNil())
+	}
 
 	switch len(predicates) {
 	case 0:
@@ -31921,6 +32487,23 @@ type IntegrationWhereInput struct {
 	KindEqualFold    *string  `json:"kindEqualFold,omitempty"`
 	KindContainsFold *string  `json:"kindContainsFold,omitempty"`
 
+	// "integration_type" field predicates.
+	IntegrationType             *string  `json:"integrationType,omitempty"`
+	IntegrationTypeNEQ          *string  `json:"integrationTypeNEQ,omitempty"`
+	IntegrationTypeIn           []string `json:"integrationTypeIn,omitempty"`
+	IntegrationTypeNotIn        []string `json:"integrationTypeNotIn,omitempty"`
+	IntegrationTypeGT           *string  `json:"integrationTypeGT,omitempty"`
+	IntegrationTypeGTE          *string  `json:"integrationTypeGTE,omitempty"`
+	IntegrationTypeLT           *string  `json:"integrationTypeLT,omitempty"`
+	IntegrationTypeLTE          *string  `json:"integrationTypeLTE,omitempty"`
+	IntegrationTypeContains     *string  `json:"integrationTypeContains,omitempty"`
+	IntegrationTypeHasPrefix    *string  `json:"integrationTypeHasPrefix,omitempty"`
+	IntegrationTypeHasSuffix    *string  `json:"integrationTypeHasSuffix,omitempty"`
+	IntegrationTypeIsNil        bool     `json:"integrationTypeIsNil,omitempty"`
+	IntegrationTypeNotNil       bool     `json:"integrationTypeNotNil,omitempty"`
+	IntegrationTypeEqualFold    *string  `json:"integrationTypeEqualFold,omitempty"`
+	IntegrationTypeContainsFold *string  `json:"integrationTypeContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -31928,6 +32511,10 @@ type IntegrationWhereInput struct {
 	// "secrets" edge predicates.
 	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 
 	// "events" edge predicates.
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
@@ -32314,6 +32901,51 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	if i.KindContainsFold != nil {
 		predicates = append(predicates, integration.KindContainsFold(*i.KindContainsFold))
 	}
+	if i.IntegrationType != nil {
+		predicates = append(predicates, integration.IntegrationTypeEQ(*i.IntegrationType))
+	}
+	if i.IntegrationTypeNEQ != nil {
+		predicates = append(predicates, integration.IntegrationTypeNEQ(*i.IntegrationTypeNEQ))
+	}
+	if len(i.IntegrationTypeIn) > 0 {
+		predicates = append(predicates, integration.IntegrationTypeIn(i.IntegrationTypeIn...))
+	}
+	if len(i.IntegrationTypeNotIn) > 0 {
+		predicates = append(predicates, integration.IntegrationTypeNotIn(i.IntegrationTypeNotIn...))
+	}
+	if i.IntegrationTypeGT != nil {
+		predicates = append(predicates, integration.IntegrationTypeGT(*i.IntegrationTypeGT))
+	}
+	if i.IntegrationTypeGTE != nil {
+		predicates = append(predicates, integration.IntegrationTypeGTE(*i.IntegrationTypeGTE))
+	}
+	if i.IntegrationTypeLT != nil {
+		predicates = append(predicates, integration.IntegrationTypeLT(*i.IntegrationTypeLT))
+	}
+	if i.IntegrationTypeLTE != nil {
+		predicates = append(predicates, integration.IntegrationTypeLTE(*i.IntegrationTypeLTE))
+	}
+	if i.IntegrationTypeContains != nil {
+		predicates = append(predicates, integration.IntegrationTypeContains(*i.IntegrationTypeContains))
+	}
+	if i.IntegrationTypeHasPrefix != nil {
+		predicates = append(predicates, integration.IntegrationTypeHasPrefix(*i.IntegrationTypeHasPrefix))
+	}
+	if i.IntegrationTypeHasSuffix != nil {
+		predicates = append(predicates, integration.IntegrationTypeHasSuffix(*i.IntegrationTypeHasSuffix))
+	}
+	if i.IntegrationTypeIsNil {
+		predicates = append(predicates, integration.IntegrationTypeIsNil())
+	}
+	if i.IntegrationTypeNotNil {
+		predicates = append(predicates, integration.IntegrationTypeNotNil())
+	}
+	if i.IntegrationTypeEqualFold != nil {
+		predicates = append(predicates, integration.IntegrationTypeEqualFold(*i.IntegrationTypeEqualFold))
+	}
+	if i.IntegrationTypeContainsFold != nil {
+		predicates = append(predicates, integration.IntegrationTypeContainsFold(*i.IntegrationTypeContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := integration.HasOwner()
@@ -32350,6 +32982,24 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, integration.HasSecretsWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := integration.HasFiles()
+		if !*i.HasFiles {
+			p = integration.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, integration.HasFilesWith(with...))
 	}
 	if i.HasEvents != nil {
 		p := integration.HasEvents()
@@ -32537,6 +33187,23 @@ type IntegrationHistoryWhereInput struct {
 	KindNotNil       bool     `json:"kindNotNil,omitempty"`
 	KindEqualFold    *string  `json:"kindEqualFold,omitempty"`
 	KindContainsFold *string  `json:"kindContainsFold,omitempty"`
+
+	// "integration_type" field predicates.
+	IntegrationType             *string  `json:"integrationType,omitempty"`
+	IntegrationTypeNEQ          *string  `json:"integrationTypeNEQ,omitempty"`
+	IntegrationTypeIn           []string `json:"integrationTypeIn,omitempty"`
+	IntegrationTypeNotIn        []string `json:"integrationTypeNotIn,omitempty"`
+	IntegrationTypeGT           *string  `json:"integrationTypeGT,omitempty"`
+	IntegrationTypeGTE          *string  `json:"integrationTypeGTE,omitempty"`
+	IntegrationTypeLT           *string  `json:"integrationTypeLT,omitempty"`
+	IntegrationTypeLTE          *string  `json:"integrationTypeLTE,omitempty"`
+	IntegrationTypeContains     *string  `json:"integrationTypeContains,omitempty"`
+	IntegrationTypeHasPrefix    *string  `json:"integrationTypeHasPrefix,omitempty"`
+	IntegrationTypeHasSuffix    *string  `json:"integrationTypeHasSuffix,omitempty"`
+	IntegrationTypeIsNil        bool     `json:"integrationTypeIsNil,omitempty"`
+	IntegrationTypeNotNil       bool     `json:"integrationTypeNotNil,omitempty"`
+	IntegrationTypeEqualFold    *string  `json:"integrationTypeEqualFold,omitempty"`
+	IntegrationTypeContainsFold *string  `json:"integrationTypeContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -32999,6 +33666,51 @@ func (i *IntegrationHistoryWhereInput) P() (predicate.IntegrationHistory, error)
 	}
 	if i.KindContainsFold != nil {
 		predicates = append(predicates, integrationhistory.KindContainsFold(*i.KindContainsFold))
+	}
+	if i.IntegrationType != nil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeEQ(*i.IntegrationType))
+	}
+	if i.IntegrationTypeNEQ != nil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeNEQ(*i.IntegrationTypeNEQ))
+	}
+	if len(i.IntegrationTypeIn) > 0 {
+		predicates = append(predicates, integrationhistory.IntegrationTypeIn(i.IntegrationTypeIn...))
+	}
+	if len(i.IntegrationTypeNotIn) > 0 {
+		predicates = append(predicates, integrationhistory.IntegrationTypeNotIn(i.IntegrationTypeNotIn...))
+	}
+	if i.IntegrationTypeGT != nil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeGT(*i.IntegrationTypeGT))
+	}
+	if i.IntegrationTypeGTE != nil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeGTE(*i.IntegrationTypeGTE))
+	}
+	if i.IntegrationTypeLT != nil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeLT(*i.IntegrationTypeLT))
+	}
+	if i.IntegrationTypeLTE != nil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeLTE(*i.IntegrationTypeLTE))
+	}
+	if i.IntegrationTypeContains != nil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeContains(*i.IntegrationTypeContains))
+	}
+	if i.IntegrationTypeHasPrefix != nil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeHasPrefix(*i.IntegrationTypeHasPrefix))
+	}
+	if i.IntegrationTypeHasSuffix != nil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeHasSuffix(*i.IntegrationTypeHasSuffix))
+	}
+	if i.IntegrationTypeIsNil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeIsNil())
+	}
+	if i.IntegrationTypeNotNil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeNotNil())
+	}
+	if i.IntegrationTypeEqualFold != nil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeEqualFold(*i.IntegrationTypeEqualFold))
+	}
+	if i.IntegrationTypeContainsFold != nil {
+		predicates = append(predicates, integrationhistory.IntegrationTypeContainsFold(*i.IntegrationTypeContainsFold))
 	}
 
 	switch len(predicates) {

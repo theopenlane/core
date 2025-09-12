@@ -19,6 +19,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -404,6 +406,78 @@ func (_u *FileUpdate) ClearFileContents() *FileUpdate {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *FileUpdate) SetMetadata(v map[string]interface{}) *FileUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *FileUpdate) ClearMetadata() *FileUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetStorageRegion sets the "storage_region" field.
+func (_u *FileUpdate) SetStorageRegion(v string) *FileUpdate {
+	_u.mutation.SetStorageRegion(v)
+	return _u
+}
+
+// SetNillableStorageRegion sets the "storage_region" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableStorageRegion(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetStorageRegion(*v)
+	}
+	return _u
+}
+
+// ClearStorageRegion clears the value of the "storage_region" field.
+func (_u *FileUpdate) ClearStorageRegion() *FileUpdate {
+	_u.mutation.ClearStorageRegion()
+	return _u
+}
+
+// SetStorageProvider sets the "storage_provider" field.
+func (_u *FileUpdate) SetStorageProvider(v string) *FileUpdate {
+	_u.mutation.SetStorageProvider(v)
+	return _u
+}
+
+// SetNillableStorageProvider sets the "storage_provider" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableStorageProvider(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetStorageProvider(*v)
+	}
+	return _u
+}
+
+// ClearStorageProvider clears the value of the "storage_provider" field.
+func (_u *FileUpdate) ClearStorageProvider() *FileUpdate {
+	_u.mutation.ClearStorageProvider()
+	return _u
+}
+
+// SetLastAccessedAt sets the "last_accessed_at" field.
+func (_u *FileUpdate) SetLastAccessedAt(v time.Time) *FileUpdate {
+	_u.mutation.SetLastAccessedAt(v)
+	return _u
+}
+
+// SetNillableLastAccessedAt sets the "last_accessed_at" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableLastAccessedAt(v *time.Time) *FileUpdate {
+	if v != nil {
+		_u.SetLastAccessedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastAccessedAt clears the value of the "last_accessed_at" field.
+func (_u *FileUpdate) ClearLastAccessedAt() *FileUpdate {
+	_u.mutation.ClearLastAccessedAt()
+	return _u
+}
+
 // AddUserIDs adds the "user" edge to the User entity by IDs.
 func (_u *FileUpdate) AddUserIDs(ids ...string) *FileUpdate {
 	_u.mutation.AddUserIDs(ids...)
@@ -612,6 +686,36 @@ func (_u *FileUpdate) AddSubprocessor(v ...*Subprocessor) *FileUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddSubprocessorIDs(ids...)
+}
+
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_u *FileUpdate) AddIntegrationIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_u *FileUpdate) AddIntegrations(v ...*Integration) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
+func (_u *FileUpdate) AddSecretIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddSecretIDs(ids...)
+	return _u
+}
+
+// AddSecrets adds the "secrets" edges to the Hush entity.
+func (_u *FileUpdate) AddSecrets(v ...*Hush) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSecretIDs(ids...)
 }
 
 // Mutation returns the FileMutation object of the builder.
@@ -913,6 +1017,48 @@ func (_u *FileUpdate) RemoveSubprocessor(v ...*Subprocessor) *FileUpdate {
 	return _u.RemoveSubprocessorIDs(ids...)
 }
 
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (_u *FileUpdate) ClearIntegrations() *FileUpdate {
+	_u.mutation.ClearIntegrations()
+	return _u
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (_u *FileUpdate) RemoveIntegrationIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (_u *FileUpdate) RemoveIntegrations(v ...*Integration) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearSecrets clears all "secrets" edges to the Hush entity.
+func (_u *FileUpdate) ClearSecrets() *FileUpdate {
+	_u.mutation.ClearSecrets()
+	return _u
+}
+
+// RemoveSecretIDs removes the "secrets" edge to Hush entities by IDs.
+func (_u *FileUpdate) RemoveSecretIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveSecretIDs(ids...)
+	return _u
+}
+
+// RemoveSecrets removes "secrets" edges to Hush entities.
+func (_u *FileUpdate) RemoveSecrets(v ...*Hush) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSecretIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *FileUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
@@ -1109,6 +1255,30 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.FileContentsCleared() {
 		_spec.ClearField(file.FieldFileContents, field.TypeBytes)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(file.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(file.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.StorageRegion(); ok {
+		_spec.SetField(file.FieldStorageRegion, field.TypeString, value)
+	}
+	if _u.mutation.StorageRegionCleared() {
+		_spec.ClearField(file.FieldStorageRegion, field.TypeString)
+	}
+	if value, ok := _u.mutation.StorageProvider(); ok {
+		_spec.SetField(file.FieldStorageProvider, field.TypeString, value)
+	}
+	if _u.mutation.StorageProviderCleared() {
+		_spec.ClearField(file.FieldStorageProvider, field.TypeString)
+	}
+	if value, ok := _u.mutation.LastAccessedAt(); ok {
+		_spec.SetField(file.FieldLastAccessedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastAccessedAtCleared() {
+		_spec.ClearField(file.FieldLastAccessedAt, field.TypeTime)
 	}
 	if _u.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1777,6 +1947,102 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   file.IntegrationsTable,
+			Columns: []string{file.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   file.IntegrationsTable,
+			Columns: []string{file.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   file.IntegrationsTable,
+			Columns: []string{file.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SecretsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.SecretsTable,
+			Columns: file.SecretsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !_u.mutation.SecretsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.SecretsTable,
+			Columns: file.SecretsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SecretsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.SecretsTable,
+			Columns: file.SecretsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2164,6 +2430,78 @@ func (_u *FileUpdateOne) ClearFileContents() *FileUpdateOne {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *FileUpdateOne) SetMetadata(v map[string]interface{}) *FileUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *FileUpdateOne) ClearMetadata() *FileUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetStorageRegion sets the "storage_region" field.
+func (_u *FileUpdateOne) SetStorageRegion(v string) *FileUpdateOne {
+	_u.mutation.SetStorageRegion(v)
+	return _u
+}
+
+// SetNillableStorageRegion sets the "storage_region" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableStorageRegion(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetStorageRegion(*v)
+	}
+	return _u
+}
+
+// ClearStorageRegion clears the value of the "storage_region" field.
+func (_u *FileUpdateOne) ClearStorageRegion() *FileUpdateOne {
+	_u.mutation.ClearStorageRegion()
+	return _u
+}
+
+// SetStorageProvider sets the "storage_provider" field.
+func (_u *FileUpdateOne) SetStorageProvider(v string) *FileUpdateOne {
+	_u.mutation.SetStorageProvider(v)
+	return _u
+}
+
+// SetNillableStorageProvider sets the "storage_provider" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableStorageProvider(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetStorageProvider(*v)
+	}
+	return _u
+}
+
+// ClearStorageProvider clears the value of the "storage_provider" field.
+func (_u *FileUpdateOne) ClearStorageProvider() *FileUpdateOne {
+	_u.mutation.ClearStorageProvider()
+	return _u
+}
+
+// SetLastAccessedAt sets the "last_accessed_at" field.
+func (_u *FileUpdateOne) SetLastAccessedAt(v time.Time) *FileUpdateOne {
+	_u.mutation.SetLastAccessedAt(v)
+	return _u
+}
+
+// SetNillableLastAccessedAt sets the "last_accessed_at" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableLastAccessedAt(v *time.Time) *FileUpdateOne {
+	if v != nil {
+		_u.SetLastAccessedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastAccessedAt clears the value of the "last_accessed_at" field.
+func (_u *FileUpdateOne) ClearLastAccessedAt() *FileUpdateOne {
+	_u.mutation.ClearLastAccessedAt()
+	return _u
+}
+
 // AddUserIDs adds the "user" edge to the User entity by IDs.
 func (_u *FileUpdateOne) AddUserIDs(ids ...string) *FileUpdateOne {
 	_u.mutation.AddUserIDs(ids...)
@@ -2372,6 +2710,36 @@ func (_u *FileUpdateOne) AddSubprocessor(v ...*Subprocessor) *FileUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddSubprocessorIDs(ids...)
+}
+
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_u *FileUpdateOne) AddIntegrationIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_u *FileUpdateOne) AddIntegrations(v ...*Integration) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
+func (_u *FileUpdateOne) AddSecretIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddSecretIDs(ids...)
+	return _u
+}
+
+// AddSecrets adds the "secrets" edges to the Hush entity.
+func (_u *FileUpdateOne) AddSecrets(v ...*Hush) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSecretIDs(ids...)
 }
 
 // Mutation returns the FileMutation object of the builder.
@@ -2673,6 +3041,48 @@ func (_u *FileUpdateOne) RemoveSubprocessor(v ...*Subprocessor) *FileUpdateOne {
 	return _u.RemoveSubprocessorIDs(ids...)
 }
 
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (_u *FileUpdateOne) ClearIntegrations() *FileUpdateOne {
+	_u.mutation.ClearIntegrations()
+	return _u
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (_u *FileUpdateOne) RemoveIntegrationIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (_u *FileUpdateOne) RemoveIntegrations(v ...*Integration) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearSecrets clears all "secrets" edges to the Hush entity.
+func (_u *FileUpdateOne) ClearSecrets() *FileUpdateOne {
+	_u.mutation.ClearSecrets()
+	return _u
+}
+
+// RemoveSecretIDs removes the "secrets" edge to Hush entities by IDs.
+func (_u *FileUpdateOne) RemoveSecretIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveSecretIDs(ids...)
+	return _u
+}
+
+// RemoveSecrets removes "secrets" edges to Hush entities.
+func (_u *FileUpdateOne) RemoveSecrets(v ...*Hush) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSecretIDs(ids...)
+}
+
 // Where appends a list predicates to the FileUpdate builder.
 func (_u *FileUpdateOne) Where(ps ...predicate.File) *FileUpdateOne {
 	_u.mutation.Where(ps...)
@@ -2899,6 +3309,30 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	}
 	if _u.mutation.FileContentsCleared() {
 		_spec.ClearField(file.FieldFileContents, field.TypeBytes)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(file.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(file.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.StorageRegion(); ok {
+		_spec.SetField(file.FieldStorageRegion, field.TypeString, value)
+	}
+	if _u.mutation.StorageRegionCleared() {
+		_spec.ClearField(file.FieldStorageRegion, field.TypeString)
+	}
+	if value, ok := _u.mutation.StorageProvider(); ok {
+		_spec.SetField(file.FieldStorageProvider, field.TypeString, value)
+	}
+	if _u.mutation.StorageProviderCleared() {
+		_spec.ClearField(file.FieldStorageProvider, field.TypeString)
+	}
+	if value, ok := _u.mutation.LastAccessedAt(); ok {
+		_spec.SetField(file.FieldLastAccessedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastAccessedAtCleared() {
+		_spec.ClearField(file.FieldLastAccessedAt, field.TypeTime)
 	}
 	if _u.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3567,6 +4001,102 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   file.IntegrationsTable,
+			Columns: []string{file.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   file.IntegrationsTable,
+			Columns: []string{file.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   file.IntegrationsTable,
+			Columns: []string{file.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SecretsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.SecretsTable,
+			Columns: file.SecretsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !_u.mutation.SecretsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.SecretsTable,
+			Columns: file.SecretsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SecretsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.SecretsTable,
+			Columns: file.SecretsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

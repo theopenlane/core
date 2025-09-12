@@ -7474,6 +7474,44 @@ func (c *FileClient) QuerySubprocessor(_m *File) *SubprocessorQuery {
 	return query
 }
 
+// QueryIntegrations queries the integrations edge of a File.
+func (c *FileClient) QueryIntegrations(_m *File) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, file.IntegrationsTable, file.IntegrationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Integration
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySecrets queries the secrets edge of a File.
+func (c *FileClient) QuerySecrets(_m *File) *HushQuery {
+	query := (&HushClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(hush.Table, hush.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, file.SecretsTable, file.SecretsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Hush
+		step.Edge.Schema = schemaConfig.FileSecrets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *FileClient) Hooks() []Hook {
 	hooks := c.hooks.File
@@ -9409,6 +9447,25 @@ func (c *HushClient) QueryIntegrations(_m *Hush) *IntegrationQuery {
 	return query
 }
 
+// QueryFiles queries the files edge of a Hush.
+func (c *HushClient) QueryFiles(_m *Hush) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(hush.Table, hush.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, hush.FilesTable, hush.FilesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.FileSecrets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEvents queries the events edge of a Hush.
 func (c *HushClient) QueryEvents(_m *Hush) *EventQuery {
 	query := (&EventClient{config: c.config}).Query()
@@ -9730,6 +9787,25 @@ func (c *IntegrationClient) QuerySecrets(_m *Integration) *HushQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Hush
 		step.Edge.Schema = schemaConfig.IntegrationSecrets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Integration.
+func (c *IntegrationClient) QueryFiles(_m *Integration) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.FilesTable, integration.FilesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

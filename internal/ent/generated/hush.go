@@ -3,6 +3,7 @@
 package generated
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -11,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Hush is the model entity for the Hush schema.
@@ -42,6 +44,14 @@ type Hush struct {
 	SecretName string `json:"secret_name,omitempty"`
 	// the secret value
 	SecretValue string `json:"-"`
+	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+	CredentialSet models.CredentialSet `json:"credential_set,omitempty"`
+	// additional metadata about the credential
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// LastUsedAt holds the value of the "last_used_at" field.
+	LastUsedAt *time.Time `json:"last_used_at,omitempty"`
+	// when the token expires
+	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the HushQuery when eager-loading is set.
 	Edges        HushEdges `json:"edges"`
@@ -54,15 +64,18 @@ type HushEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// the integration associated with the secret
 	Integrations []*Integration `json:"integrations,omitempty"`
+	// files associated with the integration
+	Files []*File `json:"files,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
 	namedIntegrations map[string][]*Integration
+	namedFiles        map[string][]*File
 	namedEvents       map[string][]*Event
 }
 
@@ -86,10 +99,19 @@ func (e HushEdges) IntegrationsOrErr() ([]*Integration, error) {
 	return nil, &NotLoadedError{edge: "integrations"}
 }
 
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e HushEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[2] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
+}
+
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e HushEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -100,9 +122,11 @@ func (*Hush) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case hush.FieldCredentialSet, hush.FieldMetadata:
+			values[i] = new([]byte)
 		case hush.FieldID, hush.FieldCreatedBy, hush.FieldUpdatedBy, hush.FieldDeletedBy, hush.FieldOwnerID, hush.FieldName, hush.FieldDescription, hush.FieldKind, hush.FieldSecretName, hush.FieldSecretValue:
 			values[i] = new(sql.NullString)
-		case hush.FieldCreatedAt, hush.FieldUpdatedAt, hush.FieldDeletedAt:
+		case hush.FieldCreatedAt, hush.FieldUpdatedAt, hush.FieldDeletedAt, hush.FieldLastUsedAt, hush.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -197,6 +221,36 @@ func (_m *Hush) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SecretValue = value.String
 			}
+		case hush.FieldCredentialSet:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field credential_set", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.CredentialSet); err != nil {
+					return fmt.Errorf("unmarshal field credential_set: %w", err)
+				}
+			}
+		case hush.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
+		case hush.FieldLastUsedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_used_at", values[i])
+			} else if value.Valid {
+				_m.LastUsedAt = new(time.Time)
+				*_m.LastUsedAt = value.Time
+			}
+		case hush.FieldExpiresAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
+			} else if value.Valid {
+				_m.ExpiresAt = new(time.Time)
+				*_m.ExpiresAt = value.Time
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -218,6 +272,11 @@ func (_m *Hush) QueryOwner() *OrganizationQuery {
 // QueryIntegrations queries the "integrations" edge of the Hush entity.
 func (_m *Hush) QueryIntegrations() *IntegrationQuery {
 	return NewHushClient(_m.config).QueryIntegrations(_m)
+}
+
+// QueryFiles queries the "files" edge of the Hush entity.
+func (_m *Hush) QueryFiles() *FileQuery {
+	return NewHushClient(_m.config).QueryFiles(_m)
 }
 
 // QueryEvents queries the "events" edge of the Hush entity.
@@ -282,6 +341,22 @@ func (_m *Hush) String() string {
 	builder.WriteString(_m.SecretName)
 	builder.WriteString(", ")
 	builder.WriteString("secret_value=<sensitive>")
+	builder.WriteString(", ")
+	builder.WriteString("credential_set=")
+	builder.WriteString(fmt.Sprintf("%v", _m.CredentialSet))
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	if v := _m.LastUsedAt; v != nil {
+		builder.WriteString("last_used_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.ExpiresAt; v != nil {
+		builder.WriteString("expires_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -307,6 +382,30 @@ func (_m *Hush) appendNamedIntegrations(name string, edges ...*Integration) {
 		_m.Edges.namedIntegrations[name] = []*Integration{}
 	} else {
 		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
+	}
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Hush) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Hush) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFiles[name] = []*File{}
+	} else {
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

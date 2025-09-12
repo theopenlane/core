@@ -175,6 +175,21 @@ func FileContents(v []byte) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldFileContents, v))
 }
 
+// StorageRegion applies equality check predicate on the "storage_region" field. It's identical to StorageRegionEQ.
+func StorageRegion(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldStorageRegion, v))
+}
+
+// StorageProvider applies equality check predicate on the "storage_provider" field. It's identical to StorageProviderEQ.
+func StorageProvider(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldStorageProvider, v))
+}
+
+// LastAccessedAt applies equality check predicate on the "last_accessed_at" field. It's identical to LastAccessedAtEQ.
+func LastAccessedAt(v time.Time) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldLastAccessedAt, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1638,6 +1653,216 @@ func FileContentsIsNil() predicate.FileHistory {
 // FileContentsNotNil applies the NotNil predicate on the "file_contents" field.
 func FileContentsNotNil() predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldNotNull(FieldFileContents))
+}
+
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldMetadata))
+}
+
+// StorageRegionEQ applies the EQ predicate on the "storage_region" field.
+func StorageRegionEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldStorageRegion, v))
+}
+
+// StorageRegionNEQ applies the NEQ predicate on the "storage_region" field.
+func StorageRegionNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldStorageRegion, v))
+}
+
+// StorageRegionIn applies the In predicate on the "storage_region" field.
+func StorageRegionIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldStorageRegion, vs...))
+}
+
+// StorageRegionNotIn applies the NotIn predicate on the "storage_region" field.
+func StorageRegionNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldStorageRegion, vs...))
+}
+
+// StorageRegionGT applies the GT predicate on the "storage_region" field.
+func StorageRegionGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldStorageRegion, v))
+}
+
+// StorageRegionGTE applies the GTE predicate on the "storage_region" field.
+func StorageRegionGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldStorageRegion, v))
+}
+
+// StorageRegionLT applies the LT predicate on the "storage_region" field.
+func StorageRegionLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldStorageRegion, v))
+}
+
+// StorageRegionLTE applies the LTE predicate on the "storage_region" field.
+func StorageRegionLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldStorageRegion, v))
+}
+
+// StorageRegionContains applies the Contains predicate on the "storage_region" field.
+func StorageRegionContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldStorageRegion, v))
+}
+
+// StorageRegionHasPrefix applies the HasPrefix predicate on the "storage_region" field.
+func StorageRegionHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldStorageRegion, v))
+}
+
+// StorageRegionHasSuffix applies the HasSuffix predicate on the "storage_region" field.
+func StorageRegionHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldStorageRegion, v))
+}
+
+// StorageRegionIsNil applies the IsNil predicate on the "storage_region" field.
+func StorageRegionIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldStorageRegion))
+}
+
+// StorageRegionNotNil applies the NotNil predicate on the "storage_region" field.
+func StorageRegionNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldStorageRegion))
+}
+
+// StorageRegionEqualFold applies the EqualFold predicate on the "storage_region" field.
+func StorageRegionEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldStorageRegion, v))
+}
+
+// StorageRegionContainsFold applies the ContainsFold predicate on the "storage_region" field.
+func StorageRegionContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldStorageRegion, v))
+}
+
+// StorageProviderEQ applies the EQ predicate on the "storage_provider" field.
+func StorageProviderEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldStorageProvider, v))
+}
+
+// StorageProviderNEQ applies the NEQ predicate on the "storage_provider" field.
+func StorageProviderNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldStorageProvider, v))
+}
+
+// StorageProviderIn applies the In predicate on the "storage_provider" field.
+func StorageProviderIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldStorageProvider, vs...))
+}
+
+// StorageProviderNotIn applies the NotIn predicate on the "storage_provider" field.
+func StorageProviderNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldStorageProvider, vs...))
+}
+
+// StorageProviderGT applies the GT predicate on the "storage_provider" field.
+func StorageProviderGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldStorageProvider, v))
+}
+
+// StorageProviderGTE applies the GTE predicate on the "storage_provider" field.
+func StorageProviderGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldStorageProvider, v))
+}
+
+// StorageProviderLT applies the LT predicate on the "storage_provider" field.
+func StorageProviderLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldStorageProvider, v))
+}
+
+// StorageProviderLTE applies the LTE predicate on the "storage_provider" field.
+func StorageProviderLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldStorageProvider, v))
+}
+
+// StorageProviderContains applies the Contains predicate on the "storage_provider" field.
+func StorageProviderContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldStorageProvider, v))
+}
+
+// StorageProviderHasPrefix applies the HasPrefix predicate on the "storage_provider" field.
+func StorageProviderHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldStorageProvider, v))
+}
+
+// StorageProviderHasSuffix applies the HasSuffix predicate on the "storage_provider" field.
+func StorageProviderHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldStorageProvider, v))
+}
+
+// StorageProviderIsNil applies the IsNil predicate on the "storage_provider" field.
+func StorageProviderIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldStorageProvider))
+}
+
+// StorageProviderNotNil applies the NotNil predicate on the "storage_provider" field.
+func StorageProviderNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldStorageProvider))
+}
+
+// StorageProviderEqualFold applies the EqualFold predicate on the "storage_provider" field.
+func StorageProviderEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldStorageProvider, v))
+}
+
+// StorageProviderContainsFold applies the ContainsFold predicate on the "storage_provider" field.
+func StorageProviderContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldStorageProvider, v))
+}
+
+// LastAccessedAtEQ applies the EQ predicate on the "last_accessed_at" field.
+func LastAccessedAtEQ(v time.Time) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtNEQ applies the NEQ predicate on the "last_accessed_at" field.
+func LastAccessedAtNEQ(v time.Time) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtIn applies the In predicate on the "last_accessed_at" field.
+func LastAccessedAtIn(vs ...time.Time) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldLastAccessedAt, vs...))
+}
+
+// LastAccessedAtNotIn applies the NotIn predicate on the "last_accessed_at" field.
+func LastAccessedAtNotIn(vs ...time.Time) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldLastAccessedAt, vs...))
+}
+
+// LastAccessedAtGT applies the GT predicate on the "last_accessed_at" field.
+func LastAccessedAtGT(v time.Time) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtGTE applies the GTE predicate on the "last_accessed_at" field.
+func LastAccessedAtGTE(v time.Time) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtLT applies the LT predicate on the "last_accessed_at" field.
+func LastAccessedAtLT(v time.Time) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtLTE applies the LTE predicate on the "last_accessed_at" field.
+func LastAccessedAtLTE(v time.Time) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtIsNil applies the IsNil predicate on the "last_accessed_at" field.
+func LastAccessedAtIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldLastAccessedAt))
+}
+
+// LastAccessedAtNotNil applies the NotNil predicate on the "last_accessed_at" field.
+func LastAccessedAtNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldLastAccessedAt))
 }
 
 // And groups predicates with the AND operator between them.

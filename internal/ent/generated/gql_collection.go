@@ -12569,6 +12569,188 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			_q.WithNamedSubprocessor(alias, func(wq *SubprocessorQuery) {
 				*wq = *query
 			})
+
+		case "integrations":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&IntegrationClient{config: _q.config}).Query()
+			)
+			args := newIntegrationPaginateArgs(fieldArgs(ctx, new(IntegrationWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newIntegrationPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*File) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"file_integrations"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(file.IntegrationsColumn), ids...))
+						})
+						if err := query.GroupBy(file.IntegrationsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[14][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*File) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Integrations)
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[14][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, integrationImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(file.IntegrationsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
+				*wq = *query
+			})
+
+		case "secrets":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HushClient{config: _q.config}).Query()
+			)
+			args := newHushPaginateArgs(fieldArgs(ctx, new(HushWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newHushPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*File) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"file_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(file.SecretsTable)
+							s.Join(joinT).On(s.C(hush.FieldID), joinT.C(file.SecretsPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(file.SecretsPrimaryKey[0]), ids...))
+							s.Select(joinT.C(file.SecretsPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(file.SecretsPrimaryKey[0]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[15] == nil {
+								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[15][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*File) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Secrets)
+							if nodes[i].Edges.totalCount[15] == nil {
+								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[15][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, hushImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(file.SecretsPrimaryKey[0], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedSecrets(alias, func(wq *HushQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[file.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, file.FieldCreatedAt)
@@ -12658,6 +12840,26 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[file.FieldStoragePath]; !ok {
 				selectedFields = append(selectedFields, file.FieldStoragePath)
 				fieldSeen[file.FieldStoragePath] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[file.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, file.FieldMetadata)
+				fieldSeen[file.FieldMetadata] = struct{}{}
+			}
+		case "storageRegion":
+			if _, ok := fieldSeen[file.FieldStorageRegion]; !ok {
+				selectedFields = append(selectedFields, file.FieldStorageRegion)
+				fieldSeen[file.FieldStorageRegion] = struct{}{}
+			}
+		case "storageProvider":
+			if _, ok := fieldSeen[file.FieldStorageProvider]; !ok {
+				selectedFields = append(selectedFields, file.FieldStorageProvider)
+				fieldSeen[file.FieldStorageProvider] = struct{}{}
+			}
+		case "lastAccessedAt":
+			if _, ok := fieldSeen[file.FieldLastAccessedAt]; !ok {
+				selectedFields = append(selectedFields, file.FieldLastAccessedAt)
+				fieldSeen[file.FieldLastAccessedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -12853,6 +13055,26 @@ func (_q *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[filehistory.FieldStoragePath]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldStoragePath)
 				fieldSeen[filehistory.FieldStoragePath] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[filehistory.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldMetadata)
+				fieldSeen[filehistory.FieldMetadata] = struct{}{}
+			}
+		case "storageRegion":
+			if _, ok := fieldSeen[filehistory.FieldStorageRegion]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldStorageRegion)
+				fieldSeen[filehistory.FieldStorageRegion] = struct{}{}
+			}
+		case "storageProvider":
+			if _, ok := fieldSeen[filehistory.FieldStorageProvider]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldStorageProvider)
+				fieldSeen[filehistory.FieldStorageProvider] = struct{}{}
+			}
+		case "lastAccessedAt":
+			if _, ok := fieldSeen[filehistory.FieldLastAccessedAt]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldLastAccessedAt)
+				fieldSeen[filehistory.FieldLastAccessedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -17315,6 +17537,99 @@ func (_q *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				*wq = *query
 			})
 
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newFilePager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Hush) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"hush_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(hush.FilesTable)
+							s.Join(joinT).On(s.C(file.FieldID), joinT.C(hush.FilesPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(hush.FilesPrimaryKey[1]), ids...))
+							s.Select(joinT.C(hush.FilesPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(hush.FilesPrimaryKey[1]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Hush) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Files)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(hush.FilesPrimaryKey[1], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
+
 		case "events":
 			var (
 				alias = field.Alias
@@ -17362,10 +17677,10 @@ func (_q *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[3][alias] = n
 						}
 						return nil
 					})
@@ -17373,10 +17688,10 @@ func (_q *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Hush) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[3][alias] = n
 						}
 						return nil
 					})
@@ -17451,6 +17766,26 @@ func (_q *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[hush.FieldSecretName]; !ok {
 				selectedFields = append(selectedFields, hush.FieldSecretName)
 				fieldSeen[hush.FieldSecretName] = struct{}{}
+			}
+		case "credentialSet":
+			if _, ok := fieldSeen[hush.FieldCredentialSet]; !ok {
+				selectedFields = append(selectedFields, hush.FieldCredentialSet)
+				fieldSeen[hush.FieldCredentialSet] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[hush.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, hush.FieldMetadata)
+				fieldSeen[hush.FieldMetadata] = struct{}{}
+			}
+		case "lastUsedAt":
+			if _, ok := fieldSeen[hush.FieldLastUsedAt]; !ok {
+				selectedFields = append(selectedFields, hush.FieldLastUsedAt)
+				fieldSeen[hush.FieldLastUsedAt] = struct{}{}
+			}
+		case "expiresAt":
+			if _, ok := fieldSeen[hush.FieldExpiresAt]; !ok {
+				selectedFields = append(selectedFields, hush.FieldExpiresAt)
+				fieldSeen[hush.FieldExpiresAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -17601,6 +17936,26 @@ func (_q *HushHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[hushhistory.FieldSecretName]; !ok {
 				selectedFields = append(selectedFields, hushhistory.FieldSecretName)
 				fieldSeen[hushhistory.FieldSecretName] = struct{}{}
+			}
+		case "credentialSet":
+			if _, ok := fieldSeen[hushhistory.FieldCredentialSet]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldCredentialSet)
+				fieldSeen[hushhistory.FieldCredentialSet] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[hushhistory.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldMetadata)
+				fieldSeen[hushhistory.FieldMetadata] = struct{}{}
+			}
+		case "lastUsedAt":
+			if _, ok := fieldSeen[hushhistory.FieldLastUsedAt]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldLastUsedAt)
+				fieldSeen[hushhistory.FieldLastUsedAt] = struct{}{}
+			}
+		case "expiresAt":
+			if _, ok := fieldSeen[hushhistory.FieldExpiresAt]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldExpiresAt)
+				fieldSeen[hushhistory.FieldExpiresAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -17795,6 +18150,95 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newFilePager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"integration_files"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(integration.FilesColumn), ids...))
+						})
+						if err := query.GroupBy(integration.FilesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Files)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(integration.FilesColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
+
 		case "events":
 			var (
 				alias = field.Alias
@@ -17842,10 +18286,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[3][alias] = n
 						}
 						return nil
 					})
@@ -17853,10 +18297,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[3][alias] = n
 						}
 						return nil
 					})
@@ -17931,6 +18375,16 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[integration.FieldKind]; !ok {
 				selectedFields = append(selectedFields, integration.FieldKind)
 				fieldSeen[integration.FieldKind] = struct{}{}
+			}
+		case "integrationType":
+			if _, ok := fieldSeen[integration.FieldIntegrationType]; !ok {
+				selectedFields = append(selectedFields, integration.FieldIntegrationType)
+				fieldSeen[integration.FieldIntegrationType] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[integration.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, integration.FieldMetadata)
+				fieldSeen[integration.FieldMetadata] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -18081,6 +18535,16 @@ func (_q *IntegrationHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[integrationhistory.FieldKind]; !ok {
 				selectedFields = append(selectedFields, integrationhistory.FieldKind)
 				fieldSeen[integrationhistory.FieldKind] = struct{}{}
+			}
+		case "integrationType":
+			if _, ok := fieldSeen[integrationhistory.FieldIntegrationType]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldIntegrationType)
+				fieldSeen[integrationhistory.FieldIntegrationType] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[integrationhistory.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldMetadata)
+				fieldSeen[integrationhistory.FieldMetadata] = struct{}{}
 			}
 		case "id":
 		case "__typename":

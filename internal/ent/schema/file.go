@@ -82,6 +82,21 @@ func (File) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(), // Don't return file content in GraphQL queries
 			),
+		field.JSON("metadata", map[string]any{}).
+			Comment("additional metadata about the file").
+			Optional(),
+		field.String("storage_region").
+			Comment("the region the file is stored in, if applicable").
+			Optional(),
+		field.String("storage_provider").
+			Comment("the storage provider the file is stored in, if applicable").
+			Optional(),
+		field.Time("last_accessed_at").
+			Optional().
+			Annotations(
+				entgql.OrderField("last_accessed_at"),
+			).
+			Nillable(),
 	}
 }
 
@@ -102,6 +117,8 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(f, Event{}),
 		defaultEdgeFrom(f, TrustCenterSetting{}),
 		defaultEdgeFrom(f, Subprocessor{}),
+		defaultEdgeToWithPagination(f, Integration{}),
+		defaultEdgeToWithPagination(f, Hush{}),
 	}
 }
 

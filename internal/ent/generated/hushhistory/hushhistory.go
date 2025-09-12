@@ -47,6 +47,14 @@ const (
 	FieldSecretName = "secret_name"
 	// FieldSecretValue holds the string denoting the secret_value field in the database.
 	FieldSecretValue = "secret_value"
+	// FieldCredentialSet holds the string denoting the credential_set field in the database.
+	FieldCredentialSet = "credential_set"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
+	// FieldLastUsedAt holds the string denoting the last_used_at field in the database.
+	FieldLastUsedAt = "last_used_at"
+	// FieldExpiresAt holds the string denoting the expires_at field in the database.
+	FieldExpiresAt = "expires_at"
 	// Table holds the table name of the hushhistory in the database.
 	Table = "hush_history"
 )
@@ -69,6 +77,10 @@ var Columns = []string{
 	FieldKind,
 	FieldSecretName,
 	FieldSecretValue,
+	FieldCredentialSet,
+	FieldMetadata,
+	FieldLastUsedAt,
+	FieldExpiresAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -193,6 +205,16 @@ func BySecretName(opts ...sql.OrderTermOption) OrderOption {
 // BySecretValue orders the results by the secret_value field.
 func BySecretValue(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSecretValue, opts...).ToFunc()
+}
+
+// ByLastUsedAt orders the results by the last_used_at field.
+func ByLastUsedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastUsedAt, opts...).ToFunc()
+}
+
+// ByExpiresAt orders the results by the expires_at field.
+func ByExpiresAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExpiresAt, opts...).ToFunc()
 }
 
 var (

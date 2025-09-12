@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -215,6 +216,54 @@ func (_c *HushHistoryCreate) SetNillableSecretValue(v *string) *HushHistoryCreat
 	return _c
 }
 
+// SetCredentialSet sets the "credential_set" field.
+func (_c *HushHistoryCreate) SetCredentialSet(v models.CredentialSet) *HushHistoryCreate {
+	_c.mutation.SetCredentialSet(v)
+	return _c
+}
+
+// SetNillableCredentialSet sets the "credential_set" field if the given value is not nil.
+func (_c *HushHistoryCreate) SetNillableCredentialSet(v *models.CredentialSet) *HushHistoryCreate {
+	if v != nil {
+		_c.SetCredentialSet(*v)
+	}
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *HushHistoryCreate) SetMetadata(v map[string]interface{}) *HushHistoryCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetLastUsedAt sets the "last_used_at" field.
+func (_c *HushHistoryCreate) SetLastUsedAt(v time.Time) *HushHistoryCreate {
+	_c.mutation.SetLastUsedAt(v)
+	return _c
+}
+
+// SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
+func (_c *HushHistoryCreate) SetNillableLastUsedAt(v *time.Time) *HushHistoryCreate {
+	if v != nil {
+		_c.SetLastUsedAt(*v)
+	}
+	return _c
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (_c *HushHistoryCreate) SetExpiresAt(v time.Time) *HushHistoryCreate {
+	_c.mutation.SetExpiresAt(v)
+	return _c
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_c *HushHistoryCreate) SetNillableExpiresAt(v *time.Time) *HushHistoryCreate {
+	if v != nil {
+		_c.SetExpiresAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *HushHistoryCreate) SetID(v string) *HushHistoryCreate {
 	_c.mutation.SetID(v)
@@ -408,6 +457,22 @@ func (_c *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SecretValue(); ok {
 		_spec.SetField(hushhistory.FieldSecretValue, field.TypeString, value)
 		_node.SecretValue = value
+	}
+	if value, ok := _c.mutation.CredentialSet(); ok {
+		_spec.SetField(hushhistory.FieldCredentialSet, field.TypeJSON, value)
+		_node.CredentialSet = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(hushhistory.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.LastUsedAt(); ok {
+		_spec.SetField(hushhistory.FieldLastUsedAt, field.TypeTime, value)
+		_node.LastUsedAt = &value
+	}
+	if value, ok := _c.mutation.ExpiresAt(); ok {
+		_spec.SetField(hushhistory.FieldExpiresAt, field.TypeTime, value)
+		_node.ExpiresAt = &value
 	}
 	return _node, _spec
 }

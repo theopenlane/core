@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -177,6 +178,78 @@ func (_u *HushHistoryUpdate) ClearKind() *HushHistoryUpdate {
 	return _u
 }
 
+// SetCredentialSet sets the "credential_set" field.
+func (_u *HushHistoryUpdate) SetCredentialSet(v models.CredentialSet) *HushHistoryUpdate {
+	_u.mutation.SetCredentialSet(v)
+	return _u
+}
+
+// SetNillableCredentialSet sets the "credential_set" field if the given value is not nil.
+func (_u *HushHistoryUpdate) SetNillableCredentialSet(v *models.CredentialSet) *HushHistoryUpdate {
+	if v != nil {
+		_u.SetCredentialSet(*v)
+	}
+	return _u
+}
+
+// ClearCredentialSet clears the value of the "credential_set" field.
+func (_u *HushHistoryUpdate) ClearCredentialSet() *HushHistoryUpdate {
+	_u.mutation.ClearCredentialSet()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *HushHistoryUpdate) SetMetadata(v map[string]interface{}) *HushHistoryUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *HushHistoryUpdate) ClearMetadata() *HushHistoryUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetLastUsedAt sets the "last_used_at" field.
+func (_u *HushHistoryUpdate) SetLastUsedAt(v time.Time) *HushHistoryUpdate {
+	_u.mutation.SetLastUsedAt(v)
+	return _u
+}
+
+// SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
+func (_u *HushHistoryUpdate) SetNillableLastUsedAt(v *time.Time) *HushHistoryUpdate {
+	if v != nil {
+		_u.SetLastUsedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastUsedAt clears the value of the "last_used_at" field.
+func (_u *HushHistoryUpdate) ClearLastUsedAt() *HushHistoryUpdate {
+	_u.mutation.ClearLastUsedAt()
+	return _u
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (_u *HushHistoryUpdate) SetExpiresAt(v time.Time) *HushHistoryUpdate {
+	_u.mutation.SetExpiresAt(v)
+	return _u
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_u *HushHistoryUpdate) SetNillableExpiresAt(v *time.Time) *HushHistoryUpdate {
+	if v != nil {
+		_u.SetExpiresAt(*v)
+	}
+	return _u
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (_u *HushHistoryUpdate) ClearExpiresAt() *HushHistoryUpdate {
+	_u.mutation.ClearExpiresAt()
+	return _u
+}
+
 // Mutation returns the HushHistoryMutation object of the builder.
 func (_u *HushHistoryUpdate) Mutation() *HushHistoryMutation {
 	return _u.mutation
@@ -298,6 +371,30 @@ func (_u *HushHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.SecretValueCleared() {
 		_spec.ClearField(hushhistory.FieldSecretValue, field.TypeString)
+	}
+	if value, ok := _u.mutation.CredentialSet(); ok {
+		_spec.SetField(hushhistory.FieldCredentialSet, field.TypeJSON, value)
+	}
+	if _u.mutation.CredentialSetCleared() {
+		_spec.ClearField(hushhistory.FieldCredentialSet, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(hushhistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(hushhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LastUsedAt(); ok {
+		_spec.SetField(hushhistory.FieldLastUsedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastUsedAtCleared() {
+		_spec.ClearField(hushhistory.FieldLastUsedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ExpiresAt(); ok {
+		_spec.SetField(hushhistory.FieldExpiresAt, field.TypeTime, value)
+	}
+	if _u.mutation.ExpiresAtCleared() {
+		_spec.ClearField(hushhistory.FieldExpiresAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.HushHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -469,6 +566,78 @@ func (_u *HushHistoryUpdateOne) ClearKind() *HushHistoryUpdateOne {
 	return _u
 }
 
+// SetCredentialSet sets the "credential_set" field.
+func (_u *HushHistoryUpdateOne) SetCredentialSet(v models.CredentialSet) *HushHistoryUpdateOne {
+	_u.mutation.SetCredentialSet(v)
+	return _u
+}
+
+// SetNillableCredentialSet sets the "credential_set" field if the given value is not nil.
+func (_u *HushHistoryUpdateOne) SetNillableCredentialSet(v *models.CredentialSet) *HushHistoryUpdateOne {
+	if v != nil {
+		_u.SetCredentialSet(*v)
+	}
+	return _u
+}
+
+// ClearCredentialSet clears the value of the "credential_set" field.
+func (_u *HushHistoryUpdateOne) ClearCredentialSet() *HushHistoryUpdateOne {
+	_u.mutation.ClearCredentialSet()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *HushHistoryUpdateOne) SetMetadata(v map[string]interface{}) *HushHistoryUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *HushHistoryUpdateOne) ClearMetadata() *HushHistoryUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetLastUsedAt sets the "last_used_at" field.
+func (_u *HushHistoryUpdateOne) SetLastUsedAt(v time.Time) *HushHistoryUpdateOne {
+	_u.mutation.SetLastUsedAt(v)
+	return _u
+}
+
+// SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
+func (_u *HushHistoryUpdateOne) SetNillableLastUsedAt(v *time.Time) *HushHistoryUpdateOne {
+	if v != nil {
+		_u.SetLastUsedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastUsedAt clears the value of the "last_used_at" field.
+func (_u *HushHistoryUpdateOne) ClearLastUsedAt() *HushHistoryUpdateOne {
+	_u.mutation.ClearLastUsedAt()
+	return _u
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (_u *HushHistoryUpdateOne) SetExpiresAt(v time.Time) *HushHistoryUpdateOne {
+	_u.mutation.SetExpiresAt(v)
+	return _u
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_u *HushHistoryUpdateOne) SetNillableExpiresAt(v *time.Time) *HushHistoryUpdateOne {
+	if v != nil {
+		_u.SetExpiresAt(*v)
+	}
+	return _u
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (_u *HushHistoryUpdateOne) ClearExpiresAt() *HushHistoryUpdateOne {
+	_u.mutation.ClearExpiresAt()
+	return _u
+}
+
 // Mutation returns the HushHistoryMutation object of the builder.
 func (_u *HushHistoryUpdateOne) Mutation() *HushHistoryMutation {
 	return _u.mutation
@@ -620,6 +789,30 @@ func (_u *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHistory
 	}
 	if _u.mutation.SecretValueCleared() {
 		_spec.ClearField(hushhistory.FieldSecretValue, field.TypeString)
+	}
+	if value, ok := _u.mutation.CredentialSet(); ok {
+		_spec.SetField(hushhistory.FieldCredentialSet, field.TypeJSON, value)
+	}
+	if _u.mutation.CredentialSetCleared() {
+		_spec.ClearField(hushhistory.FieldCredentialSet, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(hushhistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(hushhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LastUsedAt(); ok {
+		_spec.SetField(hushhistory.FieldLastUsedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastUsedAtCleared() {
+		_spec.ClearField(hushhistory.FieldLastUsedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ExpiresAt(); ok {
+		_spec.SetField(hushhistory.FieldExpiresAt, field.TypeTime, value)
+	}
+	if _u.mutation.ExpiresAtCleared() {
+		_spec.ClearField(hushhistory.FieldExpiresAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.HushHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

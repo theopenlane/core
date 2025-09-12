@@ -60,12 +60,21 @@ type File struct {
 	StoragePath string `json:"storage_path,omitempty"`
 	// the contents of the file
 	FileContents []byte `json:"file_contents,omitempty"`
+	// additional metadata about the file
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the region the file is stored in, if applicable
+	StorageRegion string `json:"storage_region,omitempty"`
+	// the storage provider the file is stored in, if applicable
+	StorageProvider string `json:"storage_provider,omitempty"`
+	// LastAccessedAt holds the value of the "last_accessed_at" field.
+	LastAccessedAt *time.Time `json:"last_accessed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FileQuery when eager-loading is set.
-	Edges        FileEdges `json:"edges"`
-	export_files *string
-	note_files   *string
-	selectValues sql.SelectValues
+	Edges             FileEdges `json:"edges"`
+	export_files      *string
+	integration_files *string
+	note_files        *string
+	selectValues      sql.SelectValues
 
 	// PresignedURL is the presigned URL for the file when using s3 storage
 	PresignedURL string `json:"presignedURL,omitempty"`
@@ -101,11 +110,15 @@ type FileEdges struct {
 	TrustCenterSetting []*TrustCenterSetting `json:"trust_center_setting,omitempty"`
 	// Subprocessor holds the value of the subprocessor edge.
 	Subprocessor []*Subprocessor `json:"subprocessor,omitempty"`
+	// Integrations holds the value of the integrations edge.
+	Integrations []*Integration `json:"integrations,omitempty"`
+	// Secrets holds the value of the secrets edge.
+	Secrets []*Hush `json:"secrets,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [16]map[string]int
 
 	namedUser                map[string][]*User
 	namedOrganization        map[string][]*Organization
@@ -121,6 +134,8 @@ type FileEdges struct {
 	namedEvents              map[string][]*Event
 	namedTrustCenterSetting  map[string][]*TrustCenterSetting
 	namedSubprocessor        map[string][]*Subprocessor
+	namedIntegrations        map[string][]*Integration
+	namedSecrets             map[string][]*Hush
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -249,22 +264,42 @@ func (e FileEdges) SubprocessorOrErr() ([]*Subprocessor, error) {
 	return nil, &NotLoadedError{edge: "subprocessor"}
 }
 
+// IntegrationsOrErr returns the Integrations value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) IntegrationsOrErr() ([]*Integration, error) {
+	if e.loadedTypes[14] {
+		return e.Integrations, nil
+	}
+	return nil, &NotLoadedError{edge: "integrations"}
+}
+
+// SecretsOrErr returns the Secrets value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) SecretsOrErr() ([]*Hush, error) {
+	if e.loadedTypes[15] {
+		return e.Secrets, nil
+	}
+	return nil, &NotLoadedError{edge: "secrets"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*File) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case file.FieldTags, file.FieldFileContents:
+		case file.FieldTags, file.FieldFileContents, file.FieldMetadata:
 			values[i] = new([]byte)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath:
+		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
 			values[i] = new(sql.NullString)
-		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt:
+		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt, file.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
 		case file.ForeignKeys[0]: // export_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[1]: // note_files
+		case file.ForeignKeys[1]: // integration_files
+			values[i] = new(sql.NullString)
+		case file.ForeignKeys[2]: // note_files
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -415,6 +450,33 @@ func (_m *File) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				_m.FileContents = *value
 			}
+		case file.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
+		case file.FieldStorageRegion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field storage_region", values[i])
+			} else if value.Valid {
+				_m.StorageRegion = value.String
+			}
+		case file.FieldStorageProvider:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field storage_provider", values[i])
+			} else if value.Valid {
+				_m.StorageProvider = value.String
+			}
+		case file.FieldLastAccessedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_accessed_at", values[i])
+			} else if value.Valid {
+				_m.LastAccessedAt = new(time.Time)
+				*_m.LastAccessedAt = value.Time
+			}
 		case file.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field export_files", values[i])
@@ -423,6 +485,13 @@ func (_m *File) assignValues(columns []string, values []any) error {
 				*_m.export_files = value.String
 			}
 		case file.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_files", values[i])
+			} else if value.Valid {
+				_m.integration_files = new(string)
+				*_m.integration_files = value.String
+			}
+		case file.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field note_files", values[i])
 			} else if value.Valid {
@@ -512,6 +581,16 @@ func (_m *File) QuerySubprocessor() *SubprocessorQuery {
 	return NewFileClient(_m.config).QuerySubprocessor(_m)
 }
 
+// QueryIntegrations queries the "integrations" edge of the File entity.
+func (_m *File) QueryIntegrations() *IntegrationQuery {
+	return NewFileClient(_m.config).QueryIntegrations(_m)
+}
+
+// QuerySecrets queries the "secrets" edge of the File entity.
+func (_m *File) QuerySecrets() *HushQuery {
+	return NewFileClient(_m.config).QuerySecrets(_m)
+}
+
 // Update returns a builder for updating this File.
 // Note that you need to call File.Unwrap() before calling this method if this File
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -597,6 +676,20 @@ func (_m *File) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("file_contents=")
 	builder.WriteString(fmt.Sprintf("%v", _m.FileContents))
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("storage_region=")
+	builder.WriteString(_m.StorageRegion)
+	builder.WriteString(", ")
+	builder.WriteString("storage_provider=")
+	builder.WriteString(_m.StorageProvider)
+	builder.WriteString(", ")
+	if v := _m.LastAccessedAt; v != nil {
+		builder.WriteString("last_accessed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -934,6 +1027,54 @@ func (_m *File) appendNamedSubprocessor(name string, edges ...*Subprocessor) {
 		_m.Edges.namedSubprocessor[name] = []*Subprocessor{}
 	} else {
 		_m.Edges.namedSubprocessor[name] = append(_m.Edges.namedSubprocessor[name], edges...)
+	}
+}
+
+// NamedIntegrations returns the Integrations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedIntegrations(name string) ([]*Integration, error) {
+	if _m.Edges.namedIntegrations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedIntegrations(name string, edges ...*Integration) {
+	if _m.Edges.namedIntegrations == nil {
+		_m.Edges.namedIntegrations = make(map[string][]*Integration)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrations[name] = []*Integration{}
+	} else {
+		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
+	}
+}
+
+// NamedSecrets returns the Secrets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedSecrets(name string) ([]*Hush, error) {
+	if _m.Edges.namedSecrets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSecrets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedSecrets(name string, edges ...*Hush) {
+	if _m.Edges.namedSecrets == nil {
+		_m.Edges.namedSecrets = make(map[string][]*Hush)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSecrets[name] = []*Hush{}
+	} else {
+		_m.Edges.namedSecrets[name] = append(_m.Edges.namedSecrets[name], edges...)
 	}
 }
 

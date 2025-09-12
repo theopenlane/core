@@ -117,6 +117,11 @@ func Kind(v string) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldKind, v))
 }
 
+// IntegrationType applies equality check predicate on the "integration_type" field. It's identical to IntegrationTypeEQ.
+func IntegrationType(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldIntegrationType, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldCreatedAt, v))
@@ -792,6 +797,91 @@ func KindContainsFold(v string) predicate.Integration {
 	return predicate.Integration(sql.FieldContainsFold(FieldKind, v))
 }
 
+// IntegrationTypeEQ applies the EQ predicate on the "integration_type" field.
+func IntegrationTypeEQ(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldIntegrationType, v))
+}
+
+// IntegrationTypeNEQ applies the NEQ predicate on the "integration_type" field.
+func IntegrationTypeNEQ(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldNEQ(FieldIntegrationType, v))
+}
+
+// IntegrationTypeIn applies the In predicate on the "integration_type" field.
+func IntegrationTypeIn(vs ...string) predicate.Integration {
+	return predicate.Integration(sql.FieldIn(FieldIntegrationType, vs...))
+}
+
+// IntegrationTypeNotIn applies the NotIn predicate on the "integration_type" field.
+func IntegrationTypeNotIn(vs ...string) predicate.Integration {
+	return predicate.Integration(sql.FieldNotIn(FieldIntegrationType, vs...))
+}
+
+// IntegrationTypeGT applies the GT predicate on the "integration_type" field.
+func IntegrationTypeGT(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldGT(FieldIntegrationType, v))
+}
+
+// IntegrationTypeGTE applies the GTE predicate on the "integration_type" field.
+func IntegrationTypeGTE(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldGTE(FieldIntegrationType, v))
+}
+
+// IntegrationTypeLT applies the LT predicate on the "integration_type" field.
+func IntegrationTypeLT(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldLT(FieldIntegrationType, v))
+}
+
+// IntegrationTypeLTE applies the LTE predicate on the "integration_type" field.
+func IntegrationTypeLTE(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldLTE(FieldIntegrationType, v))
+}
+
+// IntegrationTypeContains applies the Contains predicate on the "integration_type" field.
+func IntegrationTypeContains(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldContains(FieldIntegrationType, v))
+}
+
+// IntegrationTypeHasPrefix applies the HasPrefix predicate on the "integration_type" field.
+func IntegrationTypeHasPrefix(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldHasPrefix(FieldIntegrationType, v))
+}
+
+// IntegrationTypeHasSuffix applies the HasSuffix predicate on the "integration_type" field.
+func IntegrationTypeHasSuffix(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldHasSuffix(FieldIntegrationType, v))
+}
+
+// IntegrationTypeIsNil applies the IsNil predicate on the "integration_type" field.
+func IntegrationTypeIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldIntegrationType))
+}
+
+// IntegrationTypeNotNil applies the NotNil predicate on the "integration_type" field.
+func IntegrationTypeNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldIntegrationType))
+}
+
+// IntegrationTypeEqualFold applies the EqualFold predicate on the "integration_type" field.
+func IntegrationTypeEqualFold(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldEqualFold(FieldIntegrationType, v))
+}
+
+// IntegrationTypeContainsFold applies the ContainsFold predicate on the "integration_type" field.
+func IntegrationTypeContainsFold(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldContainsFold(FieldIntegrationType, v))
+}
+
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldMetadata))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Integration {
 	return predicate.Integration(func(s *sql.Selector) {
@@ -842,6 +932,35 @@ func HasSecretsWith(preds ...predicate.Hush) predicate.Integration {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Hush
 		step.Edge.Schema = schemaConfig.IntegrationSecrets
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFiles applies the HasEdge predicate on the "files" edge.
+func HasFiles() predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, FilesTable, FilesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFilesWith applies the HasEdge predicate on the "files" edge with a given conditions (other predicates).
+func HasFilesWith(preds ...predicate.File) predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := newFilesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

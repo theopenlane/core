@@ -11,9 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // HushCreate is the builder for creating a Hush entity.
@@ -183,6 +185,54 @@ func (_c *HushCreate) SetNillableSecretValue(v *string) *HushCreate {
 	return _c
 }
 
+// SetCredentialSet sets the "credential_set" field.
+func (_c *HushCreate) SetCredentialSet(v models.CredentialSet) *HushCreate {
+	_c.mutation.SetCredentialSet(v)
+	return _c
+}
+
+// SetNillableCredentialSet sets the "credential_set" field if the given value is not nil.
+func (_c *HushCreate) SetNillableCredentialSet(v *models.CredentialSet) *HushCreate {
+	if v != nil {
+		_c.SetCredentialSet(*v)
+	}
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *HushCreate) SetMetadata(v map[string]interface{}) *HushCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetLastUsedAt sets the "last_used_at" field.
+func (_c *HushCreate) SetLastUsedAt(v time.Time) *HushCreate {
+	_c.mutation.SetLastUsedAt(v)
+	return _c
+}
+
+// SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
+func (_c *HushCreate) SetNillableLastUsedAt(v *time.Time) *HushCreate {
+	if v != nil {
+		_c.SetLastUsedAt(*v)
+	}
+	return _c
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (_c *HushCreate) SetExpiresAt(v time.Time) *HushCreate {
+	_c.mutation.SetExpiresAt(v)
+	return _c
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_c *HushCreate) SetNillableExpiresAt(v *time.Time) *HushCreate {
+	if v != nil {
+		_c.SetExpiresAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *HushCreate) SetID(v string) *HushCreate {
 	_c.mutation.SetID(v)
@@ -215,6 +265,21 @@ func (_c *HushCreate) AddIntegrations(v ...*Integration) *HushCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddIntegrationIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_c *HushCreate) AddFileIDs(ids ...string) *HushCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_c *HushCreate) AddFiles(v ...*File) *HushCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFileIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -388,6 +453,22 @@ func (_c *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 		_spec.SetField(hush.FieldSecretValue, field.TypeString, value)
 		_node.SecretValue = value
 	}
+	if value, ok := _c.mutation.CredentialSet(); ok {
+		_spec.SetField(hush.FieldCredentialSet, field.TypeJSON, value)
+		_node.CredentialSet = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(hush.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.LastUsedAt(); ok {
+		_spec.SetField(hush.FieldLastUsedAt, field.TypeTime, value)
+		_node.LastUsedAt = &value
+	}
+	if value, ok := _c.mutation.ExpiresAt(); ok {
+		_spec.SetField(hush.FieldExpiresAt, field.TypeTime, value)
+		_node.ExpiresAt = &value
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -418,6 +499,23 @@ func (_c *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.IntegrationSecrets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   hush.FilesTable,
+			Columns: hush.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FileSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

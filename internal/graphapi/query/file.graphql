@@ -27,6 +27,10 @@ query GetAllFiles {
         updatedAt
         updatedBy
         uri
+        storageRegion
+        storageProvider
+        metadata
+        lastAccessedAt
       }
     }
   }
@@ -53,6 +57,10 @@ query GetFileByID($fileId: ID!) {
     updatedAt
     updatedBy
     uri
+    storageRegion
+    storageProvider
+    metadata
+    lastAccessedAt
   }
 }
 
@@ -79,6 +87,10 @@ query GetFiles($where: FileWhereInput) {
         updatedAt
         updatedBy
         uri
+        storageRegion
+        storageProvider
+        metadata
+        lastAccessedAt
       }
     }
   }

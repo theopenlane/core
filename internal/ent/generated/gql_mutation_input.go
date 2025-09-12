@@ -3393,6 +3393,10 @@ type CreateFileInput struct {
 	StorageScheme          *string
 	StorageVolume          *string
 	StoragePath            *string
+	Metadata               map[string]interface{}
+	StorageRegion          *string
+	StorageProvider        *string
+	LastAccessedAt         *time.Time
 	UserIDs                []string
 	OrganizationIDs        []string
 	GroupIDs               []string
@@ -3407,6 +3411,8 @@ type CreateFileInput struct {
 	EventIDs               []string
 	TrustCenterSettingIDs  []string
 	SubprocessorIDs        []string
+	IntegrationIDs         []string
+	SecretIDs              []string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -3446,6 +3452,18 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.StoragePath; v != nil {
 		m.SetStoragePath(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.StorageRegion; v != nil {
+		m.SetStorageRegion(*v)
+	}
+	if v := i.StorageProvider; v != nil {
+		m.SetStorageProvider(*v)
+	}
+	if v := i.LastAccessedAt; v != nil {
+		m.SetLastAccessedAt(*v)
 	}
 	if v := i.UserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
@@ -3489,6 +3507,12 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.SubprocessorIDs; len(v) > 0 {
 		m.AddSubprocessorIDs(v...)
 	}
+	if v := i.IntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.SecretIDs; len(v) > 0 {
+		m.AddSecretIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateFileInput on the FileCreate builder.
@@ -3525,6 +3549,14 @@ type UpdateFileInput struct {
 	StorageVolume                *string
 	ClearStoragePath             bool
 	StoragePath                  *string
+	ClearMetadata                bool
+	Metadata                     map[string]interface{}
+	ClearStorageRegion           bool
+	StorageRegion                *string
+	ClearStorageProvider         bool
+	StorageProvider              *string
+	ClearLastAccessedAt          bool
+	LastAccessedAt               *time.Time
 	ClearUser                    bool
 	AddUserIDs                   []string
 	RemoveUserIDs                []string
@@ -3567,6 +3599,12 @@ type UpdateFileInput struct {
 	ClearSubprocessor            bool
 	AddSubprocessorIDs           []string
 	RemoveSubprocessorIDs        []string
+	ClearIntegrations            bool
+	AddIntegrationIDs            []string
+	RemoveIntegrationIDs         []string
+	ClearSecrets                 bool
+	AddSecretIDs                 []string
+	RemoveSecretIDs              []string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -3648,6 +3686,30 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.StoragePath; v != nil {
 		m.SetStoragePath(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearStorageRegion {
+		m.ClearStorageRegion()
+	}
+	if v := i.StorageRegion; v != nil {
+		m.SetStorageRegion(*v)
+	}
+	if i.ClearStorageProvider {
+		m.ClearStorageProvider()
+	}
+	if v := i.StorageProvider; v != nil {
+		m.SetStorageProvider(*v)
+	}
+	if i.ClearLastAccessedAt {
+		m.ClearLastAccessedAt()
+	}
+	if v := i.LastAccessedAt; v != nil {
+		m.SetLastAccessedAt(*v)
 	}
 	if i.ClearUser {
 		m.ClearUser()
@@ -3774,6 +3836,24 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveSubprocessorIDs; len(v) > 0 {
 		m.RemoveSubprocessorIDs(v...)
+	}
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
+	}
+	if v := i.AddIntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.RemoveIntegrationIDs; len(v) > 0 {
+		m.RemoveIntegrationIDs(v...)
+	}
+	if i.ClearSecrets {
+		m.ClearSecrets()
+	}
+	if v := i.AddSecretIDs; len(v) > 0 {
+		m.AddSecretIDs(v...)
+	}
+	if v := i.RemoveSecretIDs; len(v) > 0 {
+		m.RemoveSecretIDs(v...)
 	}
 }
 
@@ -4584,8 +4664,13 @@ type CreateHushInput struct {
 	Kind           *string
 	SecretName     *string
 	SecretValue    *string
+	CredentialSet  *models.CredentialSet
+	Metadata       map[string]interface{}
+	LastUsedAt     *time.Time
+	ExpiresAt      *time.Time
 	OwnerID        *string
 	IntegrationIDs []string
+	FileIDs        []string
 	EventIDs       []string
 }
 
@@ -4604,11 +4689,26 @@ func (i *CreateHushInput) Mutate(m *HushMutation) {
 	if v := i.SecretValue; v != nil {
 		m.SetSecretValue(*v)
 	}
+	if v := i.CredentialSet; v != nil {
+		m.SetCredentialSet(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.LastUsedAt; v != nil {
+		m.SetLastUsedAt(*v)
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
 	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
@@ -4628,11 +4728,22 @@ type UpdateHushInput struct {
 	Description          *string
 	ClearKind            bool
 	Kind                 *string
+	ClearCredentialSet   bool
+	CredentialSet        *models.CredentialSet
+	ClearMetadata        bool
+	Metadata             map[string]interface{}
+	ClearLastUsedAt      bool
+	LastUsedAt           *time.Time
+	ClearExpiresAt       bool
+	ExpiresAt            *time.Time
 	ClearOwner           bool
 	OwnerID              *string
 	ClearIntegrations    bool
 	AddIntegrationIDs    []string
 	RemoveIntegrationIDs []string
+	ClearFiles           bool
+	AddFileIDs           []string
+	RemoveFileIDs        []string
 	ClearEvents          bool
 	AddEventIDs          []string
 	RemoveEventIDs       []string
@@ -4655,6 +4766,30 @@ func (i *UpdateHushInput) Mutate(m *HushMutation) {
 	if v := i.Kind; v != nil {
 		m.SetKind(*v)
 	}
+	if i.ClearCredentialSet {
+		m.ClearCredentialSet()
+	}
+	if v := i.CredentialSet; v != nil {
+		m.SetCredentialSet(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearLastUsedAt {
+		m.ClearLastUsedAt()
+	}
+	if v := i.LastUsedAt; v != nil {
+		m.SetLastUsedAt(*v)
+	}
+	if i.ClearExpiresAt {
+		m.ClearExpiresAt()
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
+	}
 	if i.ClearOwner {
 		m.ClearOwner()
 	}
@@ -4669,6 +4804,15 @@ func (i *UpdateHushInput) Mutate(m *HushMutation) {
 	}
 	if v := i.RemoveIntegrationIDs; len(v) > 0 {
 		m.RemoveIntegrationIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()

@@ -20,6 +20,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -54,6 +56,8 @@ type FileQuery struct {
 	withEvents                   *EventQuery
 	withTrustCenterSetting       *TrustCenterSettingQuery
 	withSubprocessor             *SubprocessorQuery
+	withIntegrations             *IntegrationQuery
+	withSecrets                  *HushQuery
 	withFKs                      bool
 	loadTotal                    []func(context.Context, []*File) error
 	modifiers                    []func(*sql.Selector)
@@ -71,6 +75,8 @@ type FileQuery struct {
 	withNamedEvents              map[string]*EventQuery
 	withNamedTrustCenterSetting  map[string]*TrustCenterSettingQuery
 	withNamedSubprocessor        map[string]*SubprocessorQuery
+	withNamedIntegrations        map[string]*IntegrationQuery
+	withNamedSecrets             map[string]*HushQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -457,6 +463,56 @@ func (_q *FileQuery) QuerySubprocessor() *SubprocessorQuery {
 	return query
 }
 
+// QueryIntegrations chains the current query on the "integrations" edge.
+func (_q *FileQuery) QueryIntegrations() *IntegrationQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, file.IntegrationsTable, file.IntegrationsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Integration
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySecrets chains the current query on the "secrets" edge.
+func (_q *FileQuery) QuerySecrets() *HushQuery {
+	query := (&HushClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(hush.Table, hush.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, file.SecretsTable, file.SecretsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Hush
+		step.Edge.Schema = schemaConfig.FileSecrets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first File entity from the query.
 // Returns a *NotFoundError when no File was found.
 func (_q *FileQuery) First(ctx context.Context) (*File, error) {
@@ -663,6 +719,8 @@ func (_q *FileQuery) Clone() *FileQuery {
 		withEvents:              _q.withEvents.Clone(),
 		withTrustCenterSetting:  _q.withTrustCenterSetting.Clone(),
 		withSubprocessor:        _q.withSubprocessor.Clone(),
+		withIntegrations:        _q.withIntegrations.Clone(),
+		withSecrets:             _q.withSecrets.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -824,6 +882,28 @@ func (_q *FileQuery) WithSubprocessor(opts ...func(*SubprocessorQuery)) *FileQue
 	return _q
 }
 
+// WithIntegrations tells the query-builder to eager-load the nodes that are connected to
+// the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *FileQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrations = query
+	return _q
+}
+
+// WithSecrets tells the query-builder to eager-load the nodes that are connected to
+// the "secrets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithSecrets(opts ...func(*HushQuery)) *FileQuery {
+	query := (&HushClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSecrets = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -909,7 +989,7 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		nodes       = []*File{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [14]bool{
+		loadedTypes = [16]bool{
 			_q.withUser != nil,
 			_q.withOrganization != nil,
 			_q.withGroups != nil,
@@ -924,6 +1004,8 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			_q.withEvents != nil,
 			_q.withTrustCenterSetting != nil,
 			_q.withSubprocessor != nil,
+			_q.withIntegrations != nil,
+			_q.withSecrets != nil,
 		}
 	)
 	if withFKs {
@@ -1054,6 +1136,20 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
+	if query := _q.withIntegrations; query != nil {
+		if err := _q.loadIntegrations(ctx, query, nodes,
+			func(n *File) { n.Edges.Integrations = []*Integration{} },
+			func(n *File, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSecrets; query != nil {
+		if err := _q.loadSecrets(ctx, query, nodes,
+			func(n *File) { n.Edges.Secrets = []*Hush{} },
+			func(n *File, e *Hush) { n.Edges.Secrets = append(n.Edges.Secrets, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedUser {
 		if err := _q.loadUser(ctx, query, nodes,
 			func(n *File) { n.appendNamedUser(name) },
@@ -1149,6 +1245,20 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := _q.loadSubprocessor(ctx, query, nodes,
 			func(n *File) { n.appendNamedSubprocessor(name) },
 			func(n *File, e *Subprocessor) { n.appendNamedSubprocessor(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrations {
+		if err := _q.loadIntegrations(ctx, query, nodes,
+			func(n *File) { n.appendNamedIntegrations(name) },
+			func(n *File, e *Integration) { n.appendNamedIntegrations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSecrets {
+		if err := _q.loadSecrets(ctx, query, nodes,
+			func(n *File) { n.appendNamedSecrets(name) },
+			func(n *File, e *Hush) { n.appendNamedSecrets(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2028,6 +2138,99 @@ func (_q *FileQuery) loadSubprocessor(ctx context.Context, query *SubprocessorQu
 	}
 	return nil
 }
+func (_q *FileQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*File, init func(*File), assign func(*File, *Integration)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*File)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Integration(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(file.IntegrationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.file_integrations
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "file_integrations" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "file_integrations" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *FileQuery) loadSecrets(ctx context.Context, query *HushQuery, nodes []*File, init func(*File), assign func(*File, *Hush)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.SecretsTable)
+		joinT.Schema(_q.schemaConfig.FileSecrets)
+		s.Join(joinT).On(s.C(hush.FieldID), joinT.C(file.SecretsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(file.SecretsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.SecretsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Hush](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "secrets" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *FileQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -2320,6 +2523,34 @@ func (_q *FileQuery) WithNamedSubprocessor(name string, opts ...func(*Subprocess
 		_q.withNamedSubprocessor = make(map[string]*SubprocessorQuery)
 	}
 	_q.withNamedSubprocessor[name] = query
+	return _q
+}
+
+// WithNamedIntegrations tells the query-builder to eager-load the nodes that are connected to the "integrations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithNamedIntegrations(name string, opts ...func(*IntegrationQuery)) *FileQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrations == nil {
+		_q.withNamedIntegrations = make(map[string]*IntegrationQuery)
+	}
+	_q.withNamedIntegrations[name] = query
+	return _q
+}
+
+// WithNamedSecrets tells the query-builder to eager-load the nodes that are connected to the "secrets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithNamedSecrets(name string, opts ...func(*HushQuery)) *FileQuery {
+	query := (&HushClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSecrets == nil {
+		_q.withNamedSecrets = make(map[string]*HushQuery)
+	}
+	_q.withNamedSecrets[name] = query
 	return _q
 }
 
