@@ -51574,6 +51574,10 @@ type OrganizationSettingWhereInput struct {
 	IdentityProviderMetadataEndpointEqualFold    *string  `json:"identityProviderMetadataEndpointEqualFold,omitempty"`
 	IdentityProviderMetadataEndpointContainsFold *string  `json:"identityProviderMetadataEndpointContainsFold,omitempty"`
 
+	// "identity_provider_auth_tested" field predicates.
+	IdentityProviderAuthTested    *bool `json:"identityProviderAuthTested,omitempty"`
+	IdentityProviderAuthTestedNEQ *bool `json:"identityProviderAuthTestedNEQ,omitempty"`
+
 	// "identity_provider_entity_id" field predicates.
 	IdentityProviderEntityID             *string  `json:"identityProviderEntityID,omitempty"`
 	IdentityProviderEntityIDNEQ          *string  `json:"identityProviderEntityIDNEQ,omitempty"`
@@ -52291,6 +52295,12 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	if i.IdentityProviderMetadataEndpointContainsFold != nil {
 		predicates = append(predicates, organizationsetting.IdentityProviderMetadataEndpointContainsFold(*i.IdentityProviderMetadataEndpointContainsFold))
 	}
+	if i.IdentityProviderAuthTested != nil {
+		predicates = append(predicates, organizationsetting.IdentityProviderAuthTestedEQ(*i.IdentityProviderAuthTested))
+	}
+	if i.IdentityProviderAuthTestedNEQ != nil {
+		predicates = append(predicates, organizationsetting.IdentityProviderAuthTestedNEQ(*i.IdentityProviderAuthTestedNEQ))
+	}
 	if i.IdentityProviderEntityID != nil {
 		predicates = append(predicates, organizationsetting.IdentityProviderEntityIDEQ(*i.IdentityProviderEntityID))
 	}
@@ -52744,6 +52754,10 @@ type OrganizationSettingHistoryWhereInput struct {
 	IdentityProviderMetadataEndpointNotNil       bool     `json:"identityProviderMetadataEndpointNotNil,omitempty"`
 	IdentityProviderMetadataEndpointEqualFold    *string  `json:"identityProviderMetadataEndpointEqualFold,omitempty"`
 	IdentityProviderMetadataEndpointContainsFold *string  `json:"identityProviderMetadataEndpointContainsFold,omitempty"`
+
+	// "identity_provider_auth_tested" field predicates.
+	IdentityProviderAuthTested    *bool `json:"identityProviderAuthTested,omitempty"`
+	IdentityProviderAuthTestedNEQ *bool `json:"identityProviderAuthTestedNEQ,omitempty"`
 
 	// "identity_provider_entity_id" field predicates.
 	IdentityProviderEntityID             *string  `json:"identityProviderEntityID,omitempty"`
@@ -53534,6 +53548,12 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	}
 	if i.IdentityProviderMetadataEndpointContainsFold != nil {
 		predicates = append(predicates, organizationsettinghistory.IdentityProviderMetadataEndpointContainsFold(*i.IdentityProviderMetadataEndpointContainsFold))
+	}
+	if i.IdentityProviderAuthTested != nil {
+		predicates = append(predicates, organizationsettinghistory.IdentityProviderAuthTestedEQ(*i.IdentityProviderAuthTested))
+	}
+	if i.IdentityProviderAuthTestedNEQ != nil {
+		predicates = append(predicates, organizationsettinghistory.IdentityProviderAuthTestedNEQ(*i.IdentityProviderAuthTestedNEQ))
 	}
 	if i.IdentityProviderEntityID != nil {
 		predicates = append(predicates, organizationsettinghistory.IdentityProviderEntityIDEQ(*i.IdentityProviderEntityID))

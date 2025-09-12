@@ -8139,6 +8139,10 @@ input CreateOrganizationSettingInput {
   """
   identityProviderMetadataEndpoint: String
   """
+  has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
+  """
+  identityProviderAuthTested: Boolean
+  """
   SAML entity ID for the SSO provider
   """
   identityProviderEntityID: String
@@ -28960,6 +28964,10 @@ type OrganizationSetting implements Node {
   """
   identityProviderMetadataEndpoint: String
   """
+  has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
+  """
+  identityProviderAuthTested: Boolean!
+  """
   SAML entity ID for the SSO provider
   """
   identityProviderEntityID: String
@@ -29111,6 +29119,10 @@ type OrganizationSettingHistory implements Node {
   metadata URL for the SSO provider
   """
   identityProviderMetadataEndpoint: String
+  """
+  has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
+  """
+  identityProviderAuthTested: Boolean!
   """
   SAML entity ID for the SSO provider
   """
@@ -29497,6 +29509,11 @@ input OrganizationSettingHistoryWhereInput {
   identityProviderMetadataEndpointEqualFold: String
   identityProviderMetadataEndpointContainsFold: String
   """
+  identity_provider_auth_tested field predicates
+  """
+  identityProviderAuthTested: Boolean
+  identityProviderAuthTestedNEQ: Boolean
+  """
   identity_provider_entity_id field predicates
   """
   identityProviderEntityID: String
@@ -29845,6 +29862,11 @@ input OrganizationSettingWhereInput {
   identityProviderMetadataEndpointNotNil: Boolean
   identityProviderMetadataEndpointEqualFold: String
   identityProviderMetadataEndpointContainsFold: String
+  """
+  identity_provider_auth_tested field predicates
+  """
+  identityProviderAuthTested: Boolean
+  identityProviderAuthTestedNEQ: Boolean
   """
   identity_provider_entity_id field predicates
   """
@@ -50159,6 +50181,10 @@ input UpdateOrganizationSettingInput {
   """
   identityProviderMetadataEndpoint: String
   clearIdentityProviderMetadataEndpoint: Boolean
+  """
+  has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
+  """
+  identityProviderAuthTested: Boolean
   """
   SAML entity ID for the SSO provider
   """

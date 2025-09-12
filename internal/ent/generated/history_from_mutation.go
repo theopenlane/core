@@ -7007,6 +7007,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetIdentityProviderMetadataEndpoint(identityProviderMetadataEndpoint)
 	}
 
+	if identityProviderAuthTested, exists := m.IdentityProviderAuthTested(); exists {
+		create = create.SetIdentityProviderAuthTested(identityProviderAuthTested)
+	}
+
 	if identityProviderEntityID, exists := m.IdentityProviderEntityID(); exists {
 		create = create.SetIdentityProviderEntityID(identityProviderEntityID)
 	}
@@ -7184,6 +7188,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetIdentityProviderMetadataEndpoint(organizationsetting.IdentityProviderMetadataEndpoint)
 		}
 
+		if identityProviderAuthTested, exists := m.IdentityProviderAuthTested(); exists {
+			create = create.SetIdentityProviderAuthTested(identityProviderAuthTested)
+		} else {
+			create = create.SetIdentityProviderAuthTested(organizationsetting.IdentityProviderAuthTested)
+		}
+
 		if identityProviderEntityID, exists := m.IdentityProviderEntityID(); exists {
 			create = create.SetIdentityProviderEntityID(identityProviderEntityID)
 		} else {
@@ -7270,6 +7280,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetNillableIdentityProviderClientID(organizationsetting.IdentityProviderClientID).
 			SetNillableIdentityProviderClientSecret(organizationsetting.IdentityProviderClientSecret).
 			SetIdentityProviderMetadataEndpoint(organizationsetting.IdentityProviderMetadataEndpoint).
+			SetIdentityProviderAuthTested(organizationsetting.IdentityProviderAuthTested).
 			SetIdentityProviderEntityID(organizationsetting.IdentityProviderEntityID).
 			SetOidcDiscoveryEndpoint(organizationsetting.OidcDiscoveryEndpoint).
 			SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced).

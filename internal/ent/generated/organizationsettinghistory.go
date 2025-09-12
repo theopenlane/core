@@ -69,6 +69,8 @@ type OrganizationSettingHistory struct {
 	IdentityProviderClientSecret *string `json:"identity_provider_client_secret,omitempty"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint string `json:"identity_provider_metadata_endpoint,omitempty"`
+	// has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
+	IdentityProviderAuthTested bool `json:"identity_provider_auth_tested,omitempty"`
 	// SAML entity ID for the SSO provider
 	IdentityProviderEntityID string `json:"identity_provider_entity_id,omitempty"`
 	// OIDC discovery URL for the SSO provider
@@ -91,7 +93,7 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldIdentityProviderLoginEnforced, organizationsettinghistory.FieldPaymentMethodAdded:
+		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldIdentityProviderAuthTested, organizationsettinghistory.FieldIdentityProviderLoginEnforced, organizationsettinghistory.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
 		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldIdentityProvider, organizationsettinghistory.FieldIdentityProviderClientID, organizationsettinghistory.FieldIdentityProviderClientSecret, organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, organizationsettinghistory.FieldIdentityProviderEntityID, organizationsettinghistory.FieldOidcDiscoveryEndpoint, organizationsettinghistory.FieldComplianceWebhookToken:
 			values[i] = new(sql.NullString)
@@ -272,6 +274,12 @@ func (_m *OrganizationSettingHistory) assignValues(columns []string, values []an
 			} else if value.Valid {
 				_m.IdentityProviderMetadataEndpoint = value.String
 			}
+		case organizationsettinghistory.FieldIdentityProviderAuthTested:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_provider_auth_tested", values[i])
+			} else if value.Valid {
+				_m.IdentityProviderAuthTested = value.Bool
+			}
 		case organizationsettinghistory.FieldIdentityProviderEntityID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field identity_provider_entity_id", values[i])
@@ -413,6 +421,9 @@ func (_m *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider_metadata_endpoint=")
 	builder.WriteString(_m.IdentityProviderMetadataEndpoint)
+	builder.WriteString(", ")
+	builder.WriteString("identity_provider_auth_tested=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IdentityProviderAuthTested))
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider_entity_id=")
 	builder.WriteString(_m.IdentityProviderEntityID)

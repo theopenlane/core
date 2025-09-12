@@ -3031,6 +3031,7 @@ type ComplexityRoot struct {
 		GeoLocation                      func(childComplexity int) int
 		ID                               func(childComplexity int) int
 		IdentityProvider                 func(childComplexity int) int
+		IdentityProviderAuthTested       func(childComplexity int) int
 		IdentityProviderClientID         func(childComplexity int) int
 		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
@@ -3084,6 +3085,7 @@ type ComplexityRoot struct {
 		HistoryTime                      func(childComplexity int) int
 		ID                               func(childComplexity int) int
 		IdentityProvider                 func(childComplexity int) int
+		IdentityProviderAuthTested       func(childComplexity int) int
 		IdentityProviderClientID         func(childComplexity int) int
 		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
@@ -21371,6 +21373,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSetting.IdentityProvider(childComplexity), true
 
+	case "OrganizationSetting.identityProviderAuthTested":
+		if e.complexity.OrganizationSetting.IdentityProviderAuthTested == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.IdentityProviderAuthTested(childComplexity), true
+
 	case "OrganizationSetting.identityProviderClientID":
 		if e.complexity.OrganizationSetting.IdentityProviderClientID == nil {
 			break
@@ -21615,6 +21624,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingHistory.IdentityProvider(childComplexity), true
+
+	case "OrganizationSettingHistory.identityProviderAuthTested":
+		if e.complexity.OrganizationSettingHistory.IdentityProviderAuthTested == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.IdentityProviderAuthTested(childComplexity), true
 
 	case "OrganizationSettingHistory.identityProviderClientID":
 		if e.complexity.OrganizationSettingHistory.IdentityProviderClientID == nil {
@@ -44359,6 +44375,10 @@ input CreateOrganizationSettingInput {
   """
   identityProviderMetadataEndpoint: String
   """
+  has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
+  """
+  identityProviderAuthTested: Boolean
+  """
   SAML entity ID for the SSO provider
   """
   identityProviderEntityID: String
@@ -65180,6 +65200,10 @@ type OrganizationSetting implements Node {
   """
   identityProviderMetadataEndpoint: String
   """
+  has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
+  """
+  identityProviderAuthTested: Boolean!
+  """
   SAML entity ID for the SSO provider
   """
   identityProviderEntityID: String
@@ -65331,6 +65355,10 @@ type OrganizationSettingHistory implements Node {
   metadata URL for the SSO provider
   """
   identityProviderMetadataEndpoint: String
+  """
+  has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
+  """
+  identityProviderAuthTested: Boolean!
   """
   SAML entity ID for the SSO provider
   """
@@ -65717,6 +65745,11 @@ input OrganizationSettingHistoryWhereInput {
   identityProviderMetadataEndpointEqualFold: String
   identityProviderMetadataEndpointContainsFold: String
   """
+  identity_provider_auth_tested field predicates
+  """
+  identityProviderAuthTested: Boolean
+  identityProviderAuthTestedNEQ: Boolean
+  """
   identity_provider_entity_id field predicates
   """
   identityProviderEntityID: String
@@ -66065,6 +66098,11 @@ input OrganizationSettingWhereInput {
   identityProviderMetadataEndpointNotNil: Boolean
   identityProviderMetadataEndpointEqualFold: String
   identityProviderMetadataEndpointContainsFold: String
+  """
+  identity_provider_auth_tested field predicates
+  """
+  identityProviderAuthTested: Boolean
+  identityProviderAuthTestedNEQ: Boolean
   """
   identity_provider_entity_id field predicates
   """
@@ -86379,6 +86417,10 @@ input UpdateOrganizationSettingInput {
   """
   identityProviderMetadataEndpoint: String
   clearIdentityProviderMetadataEndpoint: Boolean
+  """
+  has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
+  """
+  identityProviderAuthTested: Boolean
   """
   SAML entity ID for the SSO provider
   """

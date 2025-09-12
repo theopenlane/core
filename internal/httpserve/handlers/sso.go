@@ -50,6 +50,11 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		sessions.SetCookie(ctx.Response().Writer, in.ReturnURL, "return", cfg)
 	}
 
+	if in.IsTest {
+		// use 1 to store true as a string is required
+		sessions.SetCookie(ctx.Response().Writer, "1", "is_test", cfg)
+	}
+
 	// always set the org ID as a cookie for the OIDC flow
 	sessions.SetCookie(ctx.Response().Writer, orgID, "organization_id", cfg)
 

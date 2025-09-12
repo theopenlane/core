@@ -2226,6 +2226,9 @@ func (_m *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) [
 	if !reflect.DeepEqual(_m.IdentityProviderMetadataEndpoint, new.IdentityProviderMetadataEndpoint) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, _m.IdentityProviderMetadataEndpoint, new.IdentityProviderMetadataEndpoint))
 	}
+	if !reflect.DeepEqual(_m.IdentityProviderAuthTested, new.IdentityProviderAuthTested) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderAuthTested, _m.IdentityProviderAuthTested, new.IdentityProviderAuthTested))
+	}
 	if !reflect.DeepEqual(_m.IdentityProviderEntityID, new.IdentityProviderEntityID) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderEntityID, _m.IdentityProviderEntityID, new.IdentityProviderEntityID))
 	}
