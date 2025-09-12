@@ -71,6 +71,29 @@ func (Hush) Fields() []ent.Field {
 			).
 			Optional().
 			Immutable(),
+		field.JSON("credential_set", models.CredentialSet{}).
+			Comment("a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+				hush.EncryptField(), // Automatically encrypt this field
+			),
+		field.JSON("metadata", map[string]any{}).
+			Comment("additional metadata about the credential").
+			Optional(),
+		field.Time("last_used_at").
+			Optional().
+			Annotations(
+				entgql.OrderField("last_used_at"),
+			).
+			Nillable(),
+		field.Time("expires_at").
+			Comment("when the token expires").
+			Annotations(
+				entgql.OrderField("expires_at"),
+			).
+			Optional().
+			Nillable(),
 	}
 }
 
@@ -81,6 +104,11 @@ func (h Hush) Edges() []ent.Edge {
 			fromSchema: h,
 			edgeSchema: Integration{},
 			comment:    "the integration associated with the secret",
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: h,
+			edgeSchema: File{},
+			comment:    "files associated with the integration",
 		}),
 		defaultEdgeToWithPagination(h, Event{}),
 	}

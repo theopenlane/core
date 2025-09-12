@@ -35,15 +35,20 @@ type Integration struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the name of the integration - must be unique within the organization
+	// the name of the integration
 	Name string `json:"name,omitempty"`
 	// a description of the integration
 	Description string `json:"description,omitempty"`
-	// Kind holds the value of the "kind" field.
+	// the kind of integration, such as github, slack, s3 etc.
 	Kind string `json:"kind,omitempty"`
+	// the type of integration, such as communicattion, storage, SCM, etc.
+	IntegrationType string `json:"integration_type,omitempty"`
+	// additional metadata about the integration
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the IntegrationQuery when eager-loading is set.
 	Edges              IntegrationEdges `json:"edges"`
+	file_integrations  *string
 	group_integrations *string
 	selectValues       sql.SelectValues
 }
@@ -54,15 +59,18 @@ type IntegrationEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// the secrets associated with the integration
 	Secrets []*Hush `json:"secrets,omitempty"`
+	// files associated with the integration
+	Files []*File `json:"files,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
 	namedSecrets map[string][]*Hush
+	namedFiles   map[string][]*File
 	namedEvents  map[string][]*Event
 }
 
@@ -86,10 +94,19 @@ func (e IntegrationEdges) SecretsOrErr() ([]*Hush, error) {
 	return nil, &NotLoadedError{edge: "secrets"}
 }
 
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[2] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
+}
+
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -100,13 +117,15 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integration.FieldTags:
+		case integration.FieldTags, integration.FieldMetadata:
 			values[i] = new([]byte)
-		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldName, integration.FieldDescription, integration.FieldKind:
+		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType:
 			values[i] = new(sql.NullString)
 		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case integration.ForeignKeys[0]: // group_integrations
+		case integration.ForeignKeys[0]: // file_integrations
+			values[i] = new(sql.NullString)
+		case integration.ForeignKeys[1]: // group_integrations
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -197,7 +216,28 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Kind = value.String
 			}
+		case integration.FieldIntegrationType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_type", values[i])
+			} else if value.Valid {
+				_m.IntegrationType = value.String
+			}
+		case integration.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
 		case integration.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_integrations", values[i])
+			} else if value.Valid {
+				_m.file_integrations = new(string)
+				*_m.file_integrations = value.String
+			}
+		case integration.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field group_integrations", values[i])
 			} else if value.Valid {
@@ -225,6 +265,11 @@ func (_m *Integration) QueryOwner() *OrganizationQuery {
 // QuerySecrets queries the "secrets" edge of the Integration entity.
 func (_m *Integration) QuerySecrets() *HushQuery {
 	return NewIntegrationClient(_m.config).QuerySecrets(_m)
+}
+
+// QueryFiles queries the "files" edge of the Integration entity.
+func (_m *Integration) QueryFiles() *FileQuery {
+	return NewIntegrationClient(_m.config).QueryFiles(_m)
 }
 
 // QueryEvents queries the "events" edge of the Integration entity.
@@ -287,6 +332,12 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("kind=")
 	builder.WriteString(_m.Kind)
+	builder.WriteString(", ")
+	builder.WriteString("integration_type=")
+	builder.WriteString(_m.IntegrationType)
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -312,6 +363,30 @@ func (_m *Integration) appendNamedSecrets(name string, edges ...*Hush) {
 		_m.Edges.namedSecrets[name] = []*Hush{}
 	} else {
 		_m.Edges.namedSecrets[name] = append(_m.Edges.namedSecrets[name], edges...)
+	}
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFiles[name] = []*File{}
+	} else {
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

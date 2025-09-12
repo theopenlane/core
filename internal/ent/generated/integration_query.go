@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -31,11 +32,13 @@ type IntegrationQuery struct {
 	predicates       []predicate.Integration
 	withOwner        *OrganizationQuery
 	withSecrets      *HushQuery
+	withFiles        *FileQuery
 	withEvents       *EventQuery
 	withFKs          bool
 	loadTotal        []func(context.Context, []*Integration) error
 	modifiers        []func(*sql.Selector)
 	withNamedSecrets map[string]*HushQuery
+	withNamedFiles   map[string]*FileQuery
 	withNamedEvents  map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -117,6 +120,31 @@ func (_q *IntegrationQuery) QuerySecrets() *HushQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Hush
 		step.Edge.Schema = schemaConfig.IntegrationSecrets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFiles chains the current query on the "files" edge.
+func (_q *IntegrationQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.FilesTable, integration.FilesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -342,6 +370,7 @@ func (_q *IntegrationQuery) Clone() *IntegrationQuery {
 		predicates:  append([]predicate.Integration{}, _q.predicates...),
 		withOwner:   _q.withOwner.Clone(),
 		withSecrets: _q.withSecrets.Clone(),
+		withFiles:   _q.withFiles.Clone(),
 		withEvents:  _q.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -369,6 +398,17 @@ func (_q *IntegrationQuery) WithSecrets(opts ...func(*HushQuery)) *IntegrationQu
 		opt(query)
 	}
 	_q.withSecrets = query
+	return _q
+}
+
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithFiles(opts ...func(*FileQuery)) *IntegrationQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFiles = query
 	return _q
 }
 
@@ -468,9 +508,10 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Integration{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			_q.withOwner != nil,
 			_q.withSecrets != nil,
+			_q.withFiles != nil,
 			_q.withEvents != nil,
 		}
 	)
@@ -513,6 +554,13 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *Integration) { n.Edges.Files = []*File{} },
+			func(n *Integration, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withEvents; query != nil {
 		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *Integration) { n.Edges.Events = []*Event{} },
@@ -524,6 +572,13 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadSecrets(ctx, query, nodes,
 			func(n *Integration) { n.appendNamedSecrets(name) },
 			func(n *Integration, e *Hush) { n.appendNamedSecrets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *Integration) { n.appendNamedFiles(name) },
+			func(n *Integration, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -630,6 +685,37 @@ func (_q *IntegrationQuery) loadSecrets(ctx context.Context, query *HushQuery, n
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *IntegrationQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *File)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Integration)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.File(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(integration.FilesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.integration_files
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "integration_files" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_files" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -808,6 +894,20 @@ func (_q *IntegrationQuery) WithNamedSecrets(name string, opts ...func(*HushQuer
 		_q.withNamedSecrets = make(map[string]*HushQuery)
 	}
 	_q.withNamedSecrets[name] = query
+	return _q
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *IntegrationQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
+	}
+	_q.withNamedFiles[name] = query
 	return _q
 }
 

@@ -3,6 +3,7 @@
 package generated
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -10,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -47,7 +49,15 @@ type HushHistory struct {
 	// the generic name of a secret associated with the organization
 	SecretName string `json:"secret_name,omitempty"`
 	// the secret value
-	SecretValue  string `json:"-"`
+	SecretValue string `json:"-"`
+	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+	CredentialSet models.CredentialSet `json:"credential_set,omitempty"`
+	// additional metadata about the credential
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// LastUsedAt holds the value of the "last_used_at" field.
+	LastUsedAt *time.Time `json:"last_used_at,omitempty"`
+	// when the token expires
+	ExpiresAt    *time.Time `json:"expires_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -56,11 +66,13 @@ func (*HushHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case hushhistory.FieldCredentialSet, hushhistory.FieldMetadata:
+			values[i] = new([]byte)
 		case hushhistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case hushhistory.FieldID, hushhistory.FieldRef, hushhistory.FieldCreatedBy, hushhistory.FieldUpdatedBy, hushhistory.FieldDeletedBy, hushhistory.FieldOwnerID, hushhistory.FieldName, hushhistory.FieldDescription, hushhistory.FieldKind, hushhistory.FieldSecretName, hushhistory.FieldSecretValue:
 			values[i] = new(sql.NullString)
-		case hushhistory.FieldHistoryTime, hushhistory.FieldCreatedAt, hushhistory.FieldUpdatedAt, hushhistory.FieldDeletedAt:
+		case hushhistory.FieldHistoryTime, hushhistory.FieldCreatedAt, hushhistory.FieldUpdatedAt, hushhistory.FieldDeletedAt, hushhistory.FieldLastUsedAt, hushhistory.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -173,6 +185,36 @@ func (_m *HushHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SecretValue = value.String
 			}
+		case hushhistory.FieldCredentialSet:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field credential_set", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.CredentialSet); err != nil {
+					return fmt.Errorf("unmarshal field credential_set: %w", err)
+				}
+			}
+		case hushhistory.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
+		case hushhistory.FieldLastUsedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_used_at", values[i])
+			} else if value.Valid {
+				_m.LastUsedAt = new(time.Time)
+				*_m.LastUsedAt = value.Time
+			}
+		case hushhistory.FieldExpiresAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
+			} else if value.Valid {
+				_m.ExpiresAt = new(time.Time)
+				*_m.ExpiresAt = value.Time
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -252,6 +294,22 @@ func (_m *HushHistory) String() string {
 	builder.WriteString(_m.SecretName)
 	builder.WriteString(", ")
 	builder.WriteString("secret_value=<sensitive>")
+	builder.WriteString(", ")
+	builder.WriteString("credential_set=")
+	builder.WriteString(fmt.Sprintf("%v", _m.CredentialSet))
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	if v := _m.LastUsedAt; v != nil {
+		builder.WriteString("last_used_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.ExpiresAt; v != nil {
+		builder.WriteString("expires_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

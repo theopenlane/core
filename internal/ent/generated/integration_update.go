@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -199,6 +200,38 @@ func (_u *IntegrationUpdate) ClearKind() *IntegrationUpdate {
 	return _u
 }
 
+// SetIntegrationType sets the "integration_type" field.
+func (_u *IntegrationUpdate) SetIntegrationType(v string) *IntegrationUpdate {
+	_u.mutation.SetIntegrationType(v)
+	return _u
+}
+
+// SetNillableIntegrationType sets the "integration_type" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableIntegrationType(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetIntegrationType(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationType clears the value of the "integration_type" field.
+func (_u *IntegrationUpdate) ClearIntegrationType() *IntegrationUpdate {
+	_u.mutation.ClearIntegrationType()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *IntegrationUpdate) SetMetadata(v map[string]interface{}) *IntegrationUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *IntegrationUpdate) ClearMetadata() *IntegrationUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdate) SetOwner(v *Organization) *IntegrationUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -217,6 +250,21 @@ func (_u *IntegrationUpdate) AddSecrets(v ...*Hush) *IntegrationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddSecretIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *IntegrationUpdate) AddFileIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *IntegrationUpdate) AddFiles(v ...*File) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -264,6 +312,27 @@ func (_u *IntegrationUpdate) RemoveSecrets(v ...*Hush) *IntegrationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSecretIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *IntegrationUpdate) ClearFiles() *IntegrationUpdate {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *IntegrationUpdate) RemoveFileIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *IntegrationUpdate) RemoveFiles(v ...*File) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -418,6 +487,18 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.KindCleared() {
 		_spec.ClearField(integration.FieldKind, field.TypeString)
 	}
+	if value, ok := _u.mutation.IntegrationType(); ok {
+		_spec.SetField(integration.FieldIntegrationType, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationTypeCleared() {
+		_spec.ClearField(integration.FieldIntegrationType, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(integration.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(integration.FieldMetadata, field.TypeJSON)
+	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -492,6 +573,54 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			},
 		}
 		edge.Schema = _u.schemaConfig.IntegrationSecrets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.FilesTable,
+			Columns: []string{integration.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.FilesTable,
+			Columns: []string{integration.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.FilesTable,
+			Columns: []string{integration.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -733,6 +862,38 @@ func (_u *IntegrationUpdateOne) ClearKind() *IntegrationUpdateOne {
 	return _u
 }
 
+// SetIntegrationType sets the "integration_type" field.
+func (_u *IntegrationUpdateOne) SetIntegrationType(v string) *IntegrationUpdateOne {
+	_u.mutation.SetIntegrationType(v)
+	return _u
+}
+
+// SetNillableIntegrationType sets the "integration_type" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableIntegrationType(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetIntegrationType(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationType clears the value of the "integration_type" field.
+func (_u *IntegrationUpdateOne) ClearIntegrationType() *IntegrationUpdateOne {
+	_u.mutation.ClearIntegrationType()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *IntegrationUpdateOne) SetMetadata(v map[string]interface{}) *IntegrationUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *IntegrationUpdateOne) ClearMetadata() *IntegrationUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdateOne) SetOwner(v *Organization) *IntegrationUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -751,6 +912,21 @@ func (_u *IntegrationUpdateOne) AddSecrets(v ...*Hush) *IntegrationUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddSecretIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *IntegrationUpdateOne) AddFileIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *IntegrationUpdateOne) AddFiles(v ...*File) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -798,6 +974,27 @@ func (_u *IntegrationUpdateOne) RemoveSecrets(v ...*Hush) *IntegrationUpdateOne 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSecretIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *IntegrationUpdateOne) ClearFiles() *IntegrationUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *IntegrationUpdateOne) RemoveFileIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *IntegrationUpdateOne) RemoveFiles(v ...*File) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -982,6 +1179,18 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	if _u.mutation.KindCleared() {
 		_spec.ClearField(integration.FieldKind, field.TypeString)
 	}
+	if value, ok := _u.mutation.IntegrationType(); ok {
+		_spec.SetField(integration.FieldIntegrationType, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationTypeCleared() {
+		_spec.ClearField(integration.FieldIntegrationType, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(integration.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(integration.FieldMetadata, field.TypeJSON)
+	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1056,6 +1265,54 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 			},
 		}
 		edge.Schema = _u.schemaConfig.IntegrationSecrets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.FilesTable,
+			Columns: []string{integration.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.FilesTable,
+			Columns: []string{integration.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.FilesTable,
+			Columns: []string{integration.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

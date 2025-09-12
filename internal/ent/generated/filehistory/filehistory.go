@@ -65,6 +65,14 @@ const (
 	FieldStoragePath = "storage_path"
 	// FieldFileContents holds the string denoting the file_contents field in the database.
 	FieldFileContents = "file_contents"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
+	// FieldStorageRegion holds the string denoting the storage_region field in the database.
+	FieldStorageRegion = "storage_region"
+	// FieldStorageProvider holds the string denoting the storage_provider field in the database.
+	FieldStorageProvider = "storage_provider"
+	// FieldLastAccessedAt holds the string denoting the last_accessed_at field in the database.
+	FieldLastAccessedAt = "last_accessed_at"
 	// Table holds the table name of the filehistory in the database.
 	Table = "file_history"
 )
@@ -96,6 +104,10 @@ var Columns = []string{
 	FieldStorageVolume,
 	FieldStoragePath,
 	FieldFileContents,
+	FieldMetadata,
+	FieldStorageRegion,
+	FieldStorageProvider,
+	FieldLastAccessedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -257,6 +269,21 @@ func ByStorageVolume(opts ...sql.OrderTermOption) OrderOption {
 // ByStoragePath orders the results by the storage_path field.
 func ByStoragePath(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStoragePath, opts...).ToFunc()
+}
+
+// ByStorageRegion orders the results by the storage_region field.
+func ByStorageRegion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStorageRegion, opts...).ToFunc()
+}
+
+// ByStorageProvider orders the results by the storage_provider field.
+func ByStorageProvider(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStorageProvider, opts...).ToFunc()
+}
+
+// ByLastAccessedAt orders the results by the last_accessed_at field.
+func ByLastAccessedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastAccessedAt, opts...).ToFunc()
 }
 
 var (

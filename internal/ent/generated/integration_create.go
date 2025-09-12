@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -161,6 +162,26 @@ func (_c *IntegrationCreate) SetNillableKind(v *string) *IntegrationCreate {
 	return _c
 }
 
+// SetIntegrationType sets the "integration_type" field.
+func (_c *IntegrationCreate) SetIntegrationType(v string) *IntegrationCreate {
+	_c.mutation.SetIntegrationType(v)
+	return _c
+}
+
+// SetNillableIntegrationType sets the "integration_type" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableIntegrationType(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetIntegrationType(*v)
+	}
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *IntegrationCreate) SetMetadata(v map[string]interface{}) *IntegrationCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *IntegrationCreate) SetID(v string) *IntegrationCreate {
 	_c.mutation.SetID(v)
@@ -193,6 +214,21 @@ func (_c *IntegrationCreate) AddSecrets(v ...*Hush) *IntegrationCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddSecretIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_c *IntegrationCreate) AddFileIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_c *IntegrationCreate) AddFiles(v ...*File) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFileIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -366,6 +402,14 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 		_spec.SetField(integration.FieldKind, field.TypeString, value)
 		_node.Kind = value
 	}
+	if value, ok := _c.mutation.IntegrationType(); ok {
+		_spec.SetField(integration.FieldIntegrationType, field.TypeString, value)
+		_node.IntegrationType = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(integration.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -396,6 +440,23 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.IntegrationSecrets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.FilesTable,
+			Columns: []string{integration.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

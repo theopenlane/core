@@ -390,6 +390,78 @@ func (_u *FileHistoryUpdate) ClearFileContents() *FileHistoryUpdate {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *FileHistoryUpdate) SetMetadata(v map[string]interface{}) *FileHistoryUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *FileHistoryUpdate) ClearMetadata() *FileHistoryUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetStorageRegion sets the "storage_region" field.
+func (_u *FileHistoryUpdate) SetStorageRegion(v string) *FileHistoryUpdate {
+	_u.mutation.SetStorageRegion(v)
+	return _u
+}
+
+// SetNillableStorageRegion sets the "storage_region" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableStorageRegion(v *string) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetStorageRegion(*v)
+	}
+	return _u
+}
+
+// ClearStorageRegion clears the value of the "storage_region" field.
+func (_u *FileHistoryUpdate) ClearStorageRegion() *FileHistoryUpdate {
+	_u.mutation.ClearStorageRegion()
+	return _u
+}
+
+// SetStorageProvider sets the "storage_provider" field.
+func (_u *FileHistoryUpdate) SetStorageProvider(v string) *FileHistoryUpdate {
+	_u.mutation.SetStorageProvider(v)
+	return _u
+}
+
+// SetNillableStorageProvider sets the "storage_provider" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableStorageProvider(v *string) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetStorageProvider(*v)
+	}
+	return _u
+}
+
+// ClearStorageProvider clears the value of the "storage_provider" field.
+func (_u *FileHistoryUpdate) ClearStorageProvider() *FileHistoryUpdate {
+	_u.mutation.ClearStorageProvider()
+	return _u
+}
+
+// SetLastAccessedAt sets the "last_accessed_at" field.
+func (_u *FileHistoryUpdate) SetLastAccessedAt(v time.Time) *FileHistoryUpdate {
+	_u.mutation.SetLastAccessedAt(v)
+	return _u
+}
+
+// SetNillableLastAccessedAt sets the "last_accessed_at" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableLastAccessedAt(v *time.Time) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetLastAccessedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastAccessedAt clears the value of the "last_accessed_at" field.
+func (_u *FileHistoryUpdate) ClearLastAccessedAt() *FileHistoryUpdate {
+	_u.mutation.ClearLastAccessedAt()
+	return _u
+}
+
 // Mutation returns the FileHistoryMutation object of the builder.
 func (_u *FileHistoryUpdate) Mutation() *FileHistoryMutation {
 	return _u.mutation
@@ -576,6 +648,30 @@ func (_u *FileHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.FileContentsCleared() {
 		_spec.ClearField(filehistory.FieldFileContents, field.TypeBytes)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(filehistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(filehistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.StorageRegion(); ok {
+		_spec.SetField(filehistory.FieldStorageRegion, field.TypeString, value)
+	}
+	if _u.mutation.StorageRegionCleared() {
+		_spec.ClearField(filehistory.FieldStorageRegion, field.TypeString)
+	}
+	if value, ok := _u.mutation.StorageProvider(); ok {
+		_spec.SetField(filehistory.FieldStorageProvider, field.TypeString, value)
+	}
+	if _u.mutation.StorageProviderCleared() {
+		_spec.ClearField(filehistory.FieldStorageProvider, field.TypeString)
+	}
+	if value, ok := _u.mutation.LastAccessedAt(); ok {
+		_spec.SetField(filehistory.FieldLastAccessedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastAccessedAtCleared() {
+		_spec.ClearField(filehistory.FieldLastAccessedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.FileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -959,6 +1055,78 @@ func (_u *FileHistoryUpdateOne) ClearFileContents() *FileHistoryUpdateOne {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *FileHistoryUpdateOne) SetMetadata(v map[string]interface{}) *FileHistoryUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *FileHistoryUpdateOne) ClearMetadata() *FileHistoryUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetStorageRegion sets the "storage_region" field.
+func (_u *FileHistoryUpdateOne) SetStorageRegion(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetStorageRegion(v)
+	return _u
+}
+
+// SetNillableStorageRegion sets the "storage_region" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableStorageRegion(v *string) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetStorageRegion(*v)
+	}
+	return _u
+}
+
+// ClearStorageRegion clears the value of the "storage_region" field.
+func (_u *FileHistoryUpdateOne) ClearStorageRegion() *FileHistoryUpdateOne {
+	_u.mutation.ClearStorageRegion()
+	return _u
+}
+
+// SetStorageProvider sets the "storage_provider" field.
+func (_u *FileHistoryUpdateOne) SetStorageProvider(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetStorageProvider(v)
+	return _u
+}
+
+// SetNillableStorageProvider sets the "storage_provider" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableStorageProvider(v *string) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetStorageProvider(*v)
+	}
+	return _u
+}
+
+// ClearStorageProvider clears the value of the "storage_provider" field.
+func (_u *FileHistoryUpdateOne) ClearStorageProvider() *FileHistoryUpdateOne {
+	_u.mutation.ClearStorageProvider()
+	return _u
+}
+
+// SetLastAccessedAt sets the "last_accessed_at" field.
+func (_u *FileHistoryUpdateOne) SetLastAccessedAt(v time.Time) *FileHistoryUpdateOne {
+	_u.mutation.SetLastAccessedAt(v)
+	return _u
+}
+
+// SetNillableLastAccessedAt sets the "last_accessed_at" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableLastAccessedAt(v *time.Time) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetLastAccessedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastAccessedAt clears the value of the "last_accessed_at" field.
+func (_u *FileHistoryUpdateOne) ClearLastAccessedAt() *FileHistoryUpdateOne {
+	_u.mutation.ClearLastAccessedAt()
+	return _u
+}
+
 // Mutation returns the FileHistoryMutation object of the builder.
 func (_u *FileHistoryUpdateOne) Mutation() *FileHistoryMutation {
 	return _u.mutation
@@ -1175,6 +1343,30 @@ func (_u *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory
 	}
 	if _u.mutation.FileContentsCleared() {
 		_spec.ClearField(filehistory.FieldFileContents, field.TypeBytes)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(filehistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(filehistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.StorageRegion(); ok {
+		_spec.SetField(filehistory.FieldStorageRegion, field.TypeString, value)
+	}
+	if _u.mutation.StorageRegionCleared() {
+		_spec.ClearField(filehistory.FieldStorageRegion, field.TypeString)
+	}
+	if value, ok := _u.mutation.StorageProvider(); ok {
+		_spec.SetField(filehistory.FieldStorageProvider, field.TypeString, value)
+	}
+	if _u.mutation.StorageProviderCleared() {
+		_spec.ClearField(filehistory.FieldStorageProvider, field.TypeString)
+	}
+	if value, ok := _u.mutation.LastAccessedAt(); ok {
+		_spec.SetField(filehistory.FieldLastAccessedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastAccessedAtCleared() {
+		_spec.ClearField(filehistory.FieldLastAccessedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.FileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

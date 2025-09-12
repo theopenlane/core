@@ -503,6 +503,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "subprocessor",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "integrations": {
+	ObjectType:      "integration",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "secrets": {
+	ObjectType:      "secret",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "group": {"owner": {
 	ObjectType:      "owner",
@@ -687,6 +695,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "files": {
+	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "events": {
 	ObjectType:      "event",
 	SkipEditCheck:   false,
@@ -698,6 +710,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "secrets": {
 	ObjectType:      "secret",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "files": {
+	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "events": {

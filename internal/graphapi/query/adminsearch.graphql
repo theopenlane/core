@@ -332,6 +332,9 @@ query AdminSearch($query: String!) {
           storageScheme
           storageVolume
           storagePath
+          metadata
+          storageRegion
+          storageProvider
         }
       }
     }
@@ -369,6 +372,8 @@ query AdminSearch($query: String!) {
           ownerID
           name
           kind
+          integrationType
+          metadata
         }
       }
     }

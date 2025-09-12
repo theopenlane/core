@@ -37,10 +37,16 @@ const (
 	FieldDescription = "description"
 	// FieldKind holds the string denoting the kind field in the database.
 	FieldKind = "kind"
+	// FieldIntegrationType holds the string denoting the integration_type field in the database.
+	FieldIntegrationType = "integration_type"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
 	EdgeSecrets = "secrets"
+	// EdgeFiles holds the string denoting the files edge name in mutations.
+	EdgeFiles = "files"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
 	// Table holds the table name of the integration in the database.
@@ -57,6 +63,13 @@ const (
 	// SecretsInverseTable is the table name for the Hush entity.
 	// It exists in this package in order to avoid circular dependency with the "hush" package.
 	SecretsInverseTable = "hushes"
+	// FilesTable is the table that holds the files relation/edge.
+	FilesTable = "files"
+	// FilesInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FilesInverseTable = "files"
+	// FilesColumn is the table column denoting the files relation/edge.
+	FilesColumn = "integration_files"
 	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
 	EventsTable = "integration_events"
 	// EventsInverseTable is the table name for the Event entity.
@@ -78,11 +91,14 @@ var Columns = []string{
 	FieldName,
 	FieldDescription,
 	FieldKind,
+	FieldIntegrationType,
+	FieldMetadata,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "integrations"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"file_integrations",
 	"group_integrations",
 }
 
@@ -193,6 +209,11 @@ func ByKind(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldKind, opts...).ToFunc()
 }
 
+// ByIntegrationType orders the results by the integration_type field.
+func ByIntegrationType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationType, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -211,6 +232,20 @@ func BySecretsCount(opts ...sql.OrderTermOption) OrderOption {
 func BySecrets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newSecretsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFilesCount orders the results by files count.
+func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
+	}
+}
+
+// ByFiles orders the results by files terms.
+func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -239,6 +274,13 @@ func newSecretsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SecretsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, SecretsTable, SecretsPrimaryKey...),
+	)
+}
+func newFilesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FilesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, FilesTable, FilesColumn),
 	)
 }
 func newEventsStep() *sqlgraph.Step {

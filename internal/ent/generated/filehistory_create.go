@@ -309,6 +309,54 @@ func (_c *FileHistoryCreate) SetFileContents(v []byte) *FileHistoryCreate {
 	return _c
 }
 
+// SetMetadata sets the "metadata" field.
+func (_c *FileHistoryCreate) SetMetadata(v map[string]interface{}) *FileHistoryCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetStorageRegion sets the "storage_region" field.
+func (_c *FileHistoryCreate) SetStorageRegion(v string) *FileHistoryCreate {
+	_c.mutation.SetStorageRegion(v)
+	return _c
+}
+
+// SetNillableStorageRegion sets the "storage_region" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableStorageRegion(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetStorageRegion(*v)
+	}
+	return _c
+}
+
+// SetStorageProvider sets the "storage_provider" field.
+func (_c *FileHistoryCreate) SetStorageProvider(v string) *FileHistoryCreate {
+	_c.mutation.SetStorageProvider(v)
+	return _c
+}
+
+// SetNillableStorageProvider sets the "storage_provider" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableStorageProvider(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetStorageProvider(*v)
+	}
+	return _c
+}
+
+// SetLastAccessedAt sets the "last_accessed_at" field.
+func (_c *FileHistoryCreate) SetLastAccessedAt(v time.Time) *FileHistoryCreate {
+	_c.mutation.SetLastAccessedAt(v)
+	return _c
+}
+
+// SetNillableLastAccessedAt sets the "last_accessed_at" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableLastAccessedAt(v *time.Time) *FileHistoryCreate {
+	if v != nil {
+		_c.SetLastAccessedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *FileHistoryCreate) SetID(v string) *FileHistoryCreate {
 	_c.mutation.SetID(v)
@@ -548,6 +596,22 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.FileContents(); ok {
 		_spec.SetField(filehistory.FieldFileContents, field.TypeBytes, value)
 		_node.FileContents = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(filehistory.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.StorageRegion(); ok {
+		_spec.SetField(filehistory.FieldStorageRegion, field.TypeString, value)
+		_node.StorageRegion = value
+	}
+	if value, ok := _c.mutation.StorageProvider(); ok {
+		_spec.SetField(filehistory.FieldStorageProvider, field.TypeString, value)
+		_node.StorageProvider = value
+	}
+	if value, ok := _c.mutation.LastAccessedAt(); ok {
+		_spec.SetField(filehistory.FieldLastAccessedAt, field.TypeTime, value)
+		_node.LastAccessedAt = &value
 	}
 	return _node, _spec
 }

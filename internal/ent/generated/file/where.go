@@ -167,6 +167,21 @@ func FileContents(v []byte) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldFileContents, v))
 }
 
+// StorageRegion applies equality check predicate on the "storage_region" field. It's identical to StorageRegionEQ.
+func StorageRegion(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldStorageRegion, v))
+}
+
+// StorageProvider applies equality check predicate on the "storage_provider" field. It's identical to StorageProviderEQ.
+func StorageProvider(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldStorageProvider, v))
+}
+
+// LastAccessedAt applies equality check predicate on the "last_accessed_at" field. It's identical to LastAccessedAtEQ.
+func LastAccessedAt(v time.Time) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldLastAccessedAt, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldCreatedAt, v))
@@ -1497,6 +1512,216 @@ func FileContentsNotNil() predicate.File {
 	return predicate.File(sql.FieldNotNull(FieldFileContents))
 }
 
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldMetadata))
+}
+
+// StorageRegionEQ applies the EQ predicate on the "storage_region" field.
+func StorageRegionEQ(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldStorageRegion, v))
+}
+
+// StorageRegionNEQ applies the NEQ predicate on the "storage_region" field.
+func StorageRegionNEQ(v string) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldStorageRegion, v))
+}
+
+// StorageRegionIn applies the In predicate on the "storage_region" field.
+func StorageRegionIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldIn(FieldStorageRegion, vs...))
+}
+
+// StorageRegionNotIn applies the NotIn predicate on the "storage_region" field.
+func StorageRegionNotIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldStorageRegion, vs...))
+}
+
+// StorageRegionGT applies the GT predicate on the "storage_region" field.
+func StorageRegionGT(v string) predicate.File {
+	return predicate.File(sql.FieldGT(FieldStorageRegion, v))
+}
+
+// StorageRegionGTE applies the GTE predicate on the "storage_region" field.
+func StorageRegionGTE(v string) predicate.File {
+	return predicate.File(sql.FieldGTE(FieldStorageRegion, v))
+}
+
+// StorageRegionLT applies the LT predicate on the "storage_region" field.
+func StorageRegionLT(v string) predicate.File {
+	return predicate.File(sql.FieldLT(FieldStorageRegion, v))
+}
+
+// StorageRegionLTE applies the LTE predicate on the "storage_region" field.
+func StorageRegionLTE(v string) predicate.File {
+	return predicate.File(sql.FieldLTE(FieldStorageRegion, v))
+}
+
+// StorageRegionContains applies the Contains predicate on the "storage_region" field.
+func StorageRegionContains(v string) predicate.File {
+	return predicate.File(sql.FieldContains(FieldStorageRegion, v))
+}
+
+// StorageRegionHasPrefix applies the HasPrefix predicate on the "storage_region" field.
+func StorageRegionHasPrefix(v string) predicate.File {
+	return predicate.File(sql.FieldHasPrefix(FieldStorageRegion, v))
+}
+
+// StorageRegionHasSuffix applies the HasSuffix predicate on the "storage_region" field.
+func StorageRegionHasSuffix(v string) predicate.File {
+	return predicate.File(sql.FieldHasSuffix(FieldStorageRegion, v))
+}
+
+// StorageRegionIsNil applies the IsNil predicate on the "storage_region" field.
+func StorageRegionIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldStorageRegion))
+}
+
+// StorageRegionNotNil applies the NotNil predicate on the "storage_region" field.
+func StorageRegionNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldStorageRegion))
+}
+
+// StorageRegionEqualFold applies the EqualFold predicate on the "storage_region" field.
+func StorageRegionEqualFold(v string) predicate.File {
+	return predicate.File(sql.FieldEqualFold(FieldStorageRegion, v))
+}
+
+// StorageRegionContainsFold applies the ContainsFold predicate on the "storage_region" field.
+func StorageRegionContainsFold(v string) predicate.File {
+	return predicate.File(sql.FieldContainsFold(FieldStorageRegion, v))
+}
+
+// StorageProviderEQ applies the EQ predicate on the "storage_provider" field.
+func StorageProviderEQ(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldStorageProvider, v))
+}
+
+// StorageProviderNEQ applies the NEQ predicate on the "storage_provider" field.
+func StorageProviderNEQ(v string) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldStorageProvider, v))
+}
+
+// StorageProviderIn applies the In predicate on the "storage_provider" field.
+func StorageProviderIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldIn(FieldStorageProvider, vs...))
+}
+
+// StorageProviderNotIn applies the NotIn predicate on the "storage_provider" field.
+func StorageProviderNotIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldStorageProvider, vs...))
+}
+
+// StorageProviderGT applies the GT predicate on the "storage_provider" field.
+func StorageProviderGT(v string) predicate.File {
+	return predicate.File(sql.FieldGT(FieldStorageProvider, v))
+}
+
+// StorageProviderGTE applies the GTE predicate on the "storage_provider" field.
+func StorageProviderGTE(v string) predicate.File {
+	return predicate.File(sql.FieldGTE(FieldStorageProvider, v))
+}
+
+// StorageProviderLT applies the LT predicate on the "storage_provider" field.
+func StorageProviderLT(v string) predicate.File {
+	return predicate.File(sql.FieldLT(FieldStorageProvider, v))
+}
+
+// StorageProviderLTE applies the LTE predicate on the "storage_provider" field.
+func StorageProviderLTE(v string) predicate.File {
+	return predicate.File(sql.FieldLTE(FieldStorageProvider, v))
+}
+
+// StorageProviderContains applies the Contains predicate on the "storage_provider" field.
+func StorageProviderContains(v string) predicate.File {
+	return predicate.File(sql.FieldContains(FieldStorageProvider, v))
+}
+
+// StorageProviderHasPrefix applies the HasPrefix predicate on the "storage_provider" field.
+func StorageProviderHasPrefix(v string) predicate.File {
+	return predicate.File(sql.FieldHasPrefix(FieldStorageProvider, v))
+}
+
+// StorageProviderHasSuffix applies the HasSuffix predicate on the "storage_provider" field.
+func StorageProviderHasSuffix(v string) predicate.File {
+	return predicate.File(sql.FieldHasSuffix(FieldStorageProvider, v))
+}
+
+// StorageProviderIsNil applies the IsNil predicate on the "storage_provider" field.
+func StorageProviderIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldStorageProvider))
+}
+
+// StorageProviderNotNil applies the NotNil predicate on the "storage_provider" field.
+func StorageProviderNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldStorageProvider))
+}
+
+// StorageProviderEqualFold applies the EqualFold predicate on the "storage_provider" field.
+func StorageProviderEqualFold(v string) predicate.File {
+	return predicate.File(sql.FieldEqualFold(FieldStorageProvider, v))
+}
+
+// StorageProviderContainsFold applies the ContainsFold predicate on the "storage_provider" field.
+func StorageProviderContainsFold(v string) predicate.File {
+	return predicate.File(sql.FieldContainsFold(FieldStorageProvider, v))
+}
+
+// LastAccessedAtEQ applies the EQ predicate on the "last_accessed_at" field.
+func LastAccessedAtEQ(v time.Time) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtNEQ applies the NEQ predicate on the "last_accessed_at" field.
+func LastAccessedAtNEQ(v time.Time) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtIn applies the In predicate on the "last_accessed_at" field.
+func LastAccessedAtIn(vs ...time.Time) predicate.File {
+	return predicate.File(sql.FieldIn(FieldLastAccessedAt, vs...))
+}
+
+// LastAccessedAtNotIn applies the NotIn predicate on the "last_accessed_at" field.
+func LastAccessedAtNotIn(vs ...time.Time) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldLastAccessedAt, vs...))
+}
+
+// LastAccessedAtGT applies the GT predicate on the "last_accessed_at" field.
+func LastAccessedAtGT(v time.Time) predicate.File {
+	return predicate.File(sql.FieldGT(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtGTE applies the GTE predicate on the "last_accessed_at" field.
+func LastAccessedAtGTE(v time.Time) predicate.File {
+	return predicate.File(sql.FieldGTE(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtLT applies the LT predicate on the "last_accessed_at" field.
+func LastAccessedAtLT(v time.Time) predicate.File {
+	return predicate.File(sql.FieldLT(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtLTE applies the LTE predicate on the "last_accessed_at" field.
+func LastAccessedAtLTE(v time.Time) predicate.File {
+	return predicate.File(sql.FieldLTE(FieldLastAccessedAt, v))
+}
+
+// LastAccessedAtIsNil applies the IsNil predicate on the "last_accessed_at" field.
+func LastAccessedAtIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldLastAccessedAt))
+}
+
+// LastAccessedAtNotNil applies the NotNil predicate on the "last_accessed_at" field.
+func LastAccessedAtNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldLastAccessedAt))
+}
+
 // HasUser applies the HasEdge predicate on the "user" edge.
 func HasUser() predicate.File {
 	return predicate.File(func(s *sql.Selector) {
@@ -1895,6 +2120,64 @@ func HasSubprocessorWith(preds ...predicate.Subprocessor) predicate.File {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subprocessor
 		step.Edge.Schema = schemaConfig.SubprocessorFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIntegrations applies the HasEdge predicate on the "integrations" edge.
+func HasIntegrations() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Integration
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIntegrationsWith applies the HasEdge predicate on the "integrations" edge with a given conditions (other predicates).
+func HasIntegrationsWith(preds ...predicate.Integration) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newIntegrationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Integration
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSecrets applies the HasEdge predicate on the "secrets" edge.
+func HasSecrets() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, SecretsTable, SecretsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Hush
+		step.Edge.Schema = schemaConfig.FileSecrets
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSecretsWith applies the HasEdge predicate on the "secrets" edge with a given conditions (other predicates).
+func HasSecretsWith(preds ...predicate.Hush) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newSecretsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Hush
+		step.Edge.Schema = schemaConfig.FileSecrets
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

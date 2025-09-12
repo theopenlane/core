@@ -304,6 +304,32 @@ func (ec *executionContext) marshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋco
 	return ret
 }
 
+func (ec *executionContext) unmarshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐCredentialSet(ctx context.Context, v any) (models.CredentialSet, error) {
+	var res models.CredentialSet
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐCredentialSet(ctx context.Context, sel ast.SelectionSet, v models.CredentialSet) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOCredentialSet2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐCredentialSet(ctx context.Context, v any) (*models.CredentialSet, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.CredentialSet)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCredentialSet2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐCredentialSet(ctx context.Context, sel ast.SelectionSet, v *models.CredentialSet) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTimeᚄ(ctx context.Context, v any) ([]models.DateTime, error) {
 	if v == nil {
 		return nil, nil

@@ -4657,21 +4657,30 @@ type CreateFileInput struct {
 	// the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
 	StorageVolume *string `json:"storageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
-	StoragePath            *string  `json:"storagePath,omitempty"`
-	UserIDs                []string `json:"userIDs,omitempty"`
-	OrganizationIDs        []string `json:"organizationIDs,omitempty"`
-	GroupIDs               []string `json:"groupIDs,omitempty"`
-	ContactIDs             []string `json:"contactIDs,omitempty"`
-	EntityIDs              []string `json:"entityIDs,omitempty"`
-	UserSettingIDs         []string `json:"userSettingIDs,omitempty"`
-	OrganizationSettingIDs []string `json:"organizationSettingIDs,omitempty"`
-	TemplateIDs            []string `json:"templateIDs,omitempty"`
-	DocumentIDs            []string `json:"documentIDs,omitempty"`
-	ProgramIDs             []string `json:"programIDs,omitempty"`
-	EvidenceIDs            []string `json:"evidenceIDs,omitempty"`
-	EventIDs               []string `json:"eventIDs,omitempty"`
-	TrustCenterSettingIDs  []string `json:"trustCenterSettingIDs,omitempty"`
-	SubprocessorIDs        []string `json:"subprocessorIDs,omitempty"`
+	StoragePath *string `json:"storagePath,omitempty"`
+	// additional metadata about the file
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// the region the file is stored in, if applicable
+	StorageRegion *string `json:"storageRegion,omitempty"`
+	// the storage provider the file is stored in, if applicable
+	StorageProvider        *string    `json:"storageProvider,omitempty"`
+	LastAccessedAt         *time.Time `json:"lastAccessedAt,omitempty"`
+	UserIDs                []string   `json:"userIDs,omitempty"`
+	OrganizationIDs        []string   `json:"organizationIDs,omitempty"`
+	GroupIDs               []string   `json:"groupIDs,omitempty"`
+	ContactIDs             []string   `json:"contactIDs,omitempty"`
+	EntityIDs              []string   `json:"entityIDs,omitempty"`
+	UserSettingIDs         []string   `json:"userSettingIDs,omitempty"`
+	OrganizationSettingIDs []string   `json:"organizationSettingIDs,omitempty"`
+	TemplateIDs            []string   `json:"templateIDs,omitempty"`
+	DocumentIDs            []string   `json:"documentIDs,omitempty"`
+	ProgramIDs             []string   `json:"programIDs,omitempty"`
+	EvidenceIDs            []string   `json:"evidenceIDs,omitempty"`
+	EventIDs               []string   `json:"eventIDs,omitempty"`
+	TrustCenterSettingIDs  []string   `json:"trustCenterSettingIDs,omitempty"`
+	SubprocessorIDs        []string   `json:"subprocessorIDs,omitempty"`
+	IntegrationIDs         []string   `json:"integrationIDs,omitempty"`
+	SecretIDs              []string   `json:"secretIDs,omitempty"`
 }
 
 type CreateFullProgramInput struct {
@@ -4770,10 +4779,18 @@ type CreateHushInput struct {
 	// the generic name of a secret associated with the organization
 	SecretName *string `json:"secretName,omitempty"`
 	// the secret value
-	SecretValue    *string  `json:"secretValue,omitempty"`
-	OwnerID        *string  `json:"ownerID,omitempty"`
-	IntegrationIDs []string `json:"integrationIDs,omitempty"`
-	EventIDs       []string `json:"eventIDs,omitempty"`
+	SecretValue *string `json:"secretValue,omitempty"`
+	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+	CredentialSet *models.CredentialSet `json:"credentialSet,omitempty"`
+	// additional metadata about the credential
+	Metadata   map[string]any `json:"metadata,omitempty"`
+	LastUsedAt *time.Time     `json:"lastUsedAt,omitempty"`
+	// when the token expires
+	ExpiresAt      *time.Time `json:"expiresAt,omitempty"`
+	OwnerID        *string    `json:"ownerID,omitempty"`
+	IntegrationIDs []string   `json:"integrationIDs,omitempty"`
+	FileIDs        []string   `json:"fileIDs,omitempty"`
+	EventIDs       []string   `json:"eventIDs,omitempty"`
 }
 
 // CreateInternalPolicyInput is used for create InternalPolicy object.
@@ -9103,7 +9120,14 @@ type File struct {
 	// the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
 	StorageVolume *string `json:"storageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
-	StoragePath         *string                `json:"storagePath,omitempty"`
+	StoragePath *string `json:"storagePath,omitempty"`
+	// additional metadata about the file
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// the region the file is stored in, if applicable
+	StorageRegion *string `json:"storageRegion,omitempty"`
+	// the storage provider the file is stored in, if applicable
+	StorageProvider     *string                `json:"storageProvider,omitempty"`
+	LastAccessedAt      *time.Time             `json:"lastAccessedAt,omitempty"`
 	User                []*User                `json:"user,omitempty"`
 	Organization        []*Organization        `json:"organization,omitempty"`
 	Groups              *GroupConnection       `json:"groups"`
@@ -9118,6 +9142,8 @@ type File struct {
 	Events              *EventConnection       `json:"events"`
 	TrustCenterSetting  []*TrustCenterSetting  `json:"trustCenterSetting,omitempty"`
 	Subprocessor        []*Subprocessor        `json:"subprocessor,omitempty"`
+	Integrations        *IntegrationConnection `json:"integrations"`
+	Secrets             *HushConnection        `json:"secrets"`
 	PresignedURL        *string                `json:"presignedURL,omitempty"`
 }
 
@@ -9183,6 +9209,13 @@ type FileHistory struct {
 	StorageVolume *string `json:"storageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
 	StoragePath *string `json:"storagePath,omitempty"`
+	// additional metadata about the file
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// the region the file is stored in, if applicable
+	StorageRegion *string `json:"storageRegion,omitempty"`
+	// the storage provider the file is stored in, if applicable
+	StorageProvider *string    `json:"storageProvider,omitempty"`
+	LastAccessedAt  *time.Time `json:"lastAccessedAt,omitempty"`
 }
 
 func (FileHistory) IsNode() {}
@@ -9506,6 +9539,49 @@ type FileHistoryWhereInput struct {
 	StoragePathNotNil       *bool    `json:"storagePathNotNil,omitempty"`
 	StoragePathEqualFold    *string  `json:"storagePathEqualFold,omitempty"`
 	StoragePathContainsFold *string  `json:"storagePathContainsFold,omitempty"`
+	// storage_region field predicates
+	StorageRegion             *string  `json:"storageRegion,omitempty"`
+	StorageRegionNeq          *string  `json:"storageRegionNEQ,omitempty"`
+	StorageRegionIn           []string `json:"storageRegionIn,omitempty"`
+	StorageRegionNotIn        []string `json:"storageRegionNotIn,omitempty"`
+	StorageRegionGt           *string  `json:"storageRegionGT,omitempty"`
+	StorageRegionGte          *string  `json:"storageRegionGTE,omitempty"`
+	StorageRegionLt           *string  `json:"storageRegionLT,omitempty"`
+	StorageRegionLte          *string  `json:"storageRegionLTE,omitempty"`
+	StorageRegionContains     *string  `json:"storageRegionContains,omitempty"`
+	StorageRegionHasPrefix    *string  `json:"storageRegionHasPrefix,omitempty"`
+	StorageRegionHasSuffix    *string  `json:"storageRegionHasSuffix,omitempty"`
+	StorageRegionIsNil        *bool    `json:"storageRegionIsNil,omitempty"`
+	StorageRegionNotNil       *bool    `json:"storageRegionNotNil,omitempty"`
+	StorageRegionEqualFold    *string  `json:"storageRegionEqualFold,omitempty"`
+	StorageRegionContainsFold *string  `json:"storageRegionContainsFold,omitempty"`
+	// storage_provider field predicates
+	StorageProvider             *string  `json:"storageProvider,omitempty"`
+	StorageProviderNeq          *string  `json:"storageProviderNEQ,omitempty"`
+	StorageProviderIn           []string `json:"storageProviderIn,omitempty"`
+	StorageProviderNotIn        []string `json:"storageProviderNotIn,omitempty"`
+	StorageProviderGt           *string  `json:"storageProviderGT,omitempty"`
+	StorageProviderGte          *string  `json:"storageProviderGTE,omitempty"`
+	StorageProviderLt           *string  `json:"storageProviderLT,omitempty"`
+	StorageProviderLte          *string  `json:"storageProviderLTE,omitempty"`
+	StorageProviderContains     *string  `json:"storageProviderContains,omitempty"`
+	StorageProviderHasPrefix    *string  `json:"storageProviderHasPrefix,omitempty"`
+	StorageProviderHasSuffix    *string  `json:"storageProviderHasSuffix,omitempty"`
+	StorageProviderIsNil        *bool    `json:"storageProviderIsNil,omitempty"`
+	StorageProviderNotNil       *bool    `json:"storageProviderNotNil,omitempty"`
+	StorageProviderEqualFold    *string  `json:"storageProviderEqualFold,omitempty"`
+	StorageProviderContainsFold *string  `json:"storageProviderContainsFold,omitempty"`
+	// last_accessed_at field predicates
+	LastAccessedAt       *time.Time   `json:"lastAccessedAt,omitempty"`
+	LastAccessedAtNeq    *time.Time   `json:"lastAccessedAtNEQ,omitempty"`
+	LastAccessedAtIn     []*time.Time `json:"lastAccessedAtIn,omitempty"`
+	LastAccessedAtNotIn  []*time.Time `json:"lastAccessedAtNotIn,omitempty"`
+	LastAccessedAtGt     *time.Time   `json:"lastAccessedAtGT,omitempty"`
+	LastAccessedAtGte    *time.Time   `json:"lastAccessedAtGTE,omitempty"`
+	LastAccessedAtLt     *time.Time   `json:"lastAccessedAtLT,omitempty"`
+	LastAccessedAtLte    *time.Time   `json:"lastAccessedAtLTE,omitempty"`
+	LastAccessedAtIsNil  *bool        `json:"lastAccessedAtIsNil,omitempty"`
+	LastAccessedAtNotNil *bool        `json:"lastAccessedAtNotNil,omitempty"`
 }
 
 // Ordering options for File connections
@@ -9779,6 +9855,49 @@ type FileWhereInput struct {
 	StoragePathNotNil       *bool    `json:"storagePathNotNil,omitempty"`
 	StoragePathEqualFold    *string  `json:"storagePathEqualFold,omitempty"`
 	StoragePathContainsFold *string  `json:"storagePathContainsFold,omitempty"`
+	// storage_region field predicates
+	StorageRegion             *string  `json:"storageRegion,omitempty"`
+	StorageRegionNeq          *string  `json:"storageRegionNEQ,omitempty"`
+	StorageRegionIn           []string `json:"storageRegionIn,omitempty"`
+	StorageRegionNotIn        []string `json:"storageRegionNotIn,omitempty"`
+	StorageRegionGt           *string  `json:"storageRegionGT,omitempty"`
+	StorageRegionGte          *string  `json:"storageRegionGTE,omitempty"`
+	StorageRegionLt           *string  `json:"storageRegionLT,omitempty"`
+	StorageRegionLte          *string  `json:"storageRegionLTE,omitempty"`
+	StorageRegionContains     *string  `json:"storageRegionContains,omitempty"`
+	StorageRegionHasPrefix    *string  `json:"storageRegionHasPrefix,omitempty"`
+	StorageRegionHasSuffix    *string  `json:"storageRegionHasSuffix,omitempty"`
+	StorageRegionIsNil        *bool    `json:"storageRegionIsNil,omitempty"`
+	StorageRegionNotNil       *bool    `json:"storageRegionNotNil,omitempty"`
+	StorageRegionEqualFold    *string  `json:"storageRegionEqualFold,omitempty"`
+	StorageRegionContainsFold *string  `json:"storageRegionContainsFold,omitempty"`
+	// storage_provider field predicates
+	StorageProvider             *string  `json:"storageProvider,omitempty"`
+	StorageProviderNeq          *string  `json:"storageProviderNEQ,omitempty"`
+	StorageProviderIn           []string `json:"storageProviderIn,omitempty"`
+	StorageProviderNotIn        []string `json:"storageProviderNotIn,omitempty"`
+	StorageProviderGt           *string  `json:"storageProviderGT,omitempty"`
+	StorageProviderGte          *string  `json:"storageProviderGTE,omitempty"`
+	StorageProviderLt           *string  `json:"storageProviderLT,omitempty"`
+	StorageProviderLte          *string  `json:"storageProviderLTE,omitempty"`
+	StorageProviderContains     *string  `json:"storageProviderContains,omitempty"`
+	StorageProviderHasPrefix    *string  `json:"storageProviderHasPrefix,omitempty"`
+	StorageProviderHasSuffix    *string  `json:"storageProviderHasSuffix,omitempty"`
+	StorageProviderIsNil        *bool    `json:"storageProviderIsNil,omitempty"`
+	StorageProviderNotNil       *bool    `json:"storageProviderNotNil,omitempty"`
+	StorageProviderEqualFold    *string  `json:"storageProviderEqualFold,omitempty"`
+	StorageProviderContainsFold *string  `json:"storageProviderContainsFold,omitempty"`
+	// last_accessed_at field predicates
+	LastAccessedAt       *time.Time   `json:"lastAccessedAt,omitempty"`
+	LastAccessedAtNeq    *time.Time   `json:"lastAccessedAtNEQ,omitempty"`
+	LastAccessedAtIn     []*time.Time `json:"lastAccessedAtIn,omitempty"`
+	LastAccessedAtNotIn  []*time.Time `json:"lastAccessedAtNotIn,omitempty"`
+	LastAccessedAtGt     *time.Time   `json:"lastAccessedAtGT,omitempty"`
+	LastAccessedAtGte    *time.Time   `json:"lastAccessedAtGTE,omitempty"`
+	LastAccessedAtLt     *time.Time   `json:"lastAccessedAtLT,omitempty"`
+	LastAccessedAtLte    *time.Time   `json:"lastAccessedAtLTE,omitempty"`
+	LastAccessedAtIsNil  *bool        `json:"lastAccessedAtIsNil,omitempty"`
+	LastAccessedAtNotNil *bool        `json:"lastAccessedAtNotNil,omitempty"`
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
@@ -9821,6 +9940,12 @@ type FileWhereInput struct {
 	// subprocessor edge predicates
 	HasSubprocessor     *bool                     `json:"hasSubprocessor,omitempty"`
 	HasSubprocessorWith []*SubprocessorWhereInput `json:"hasSubprocessorWith,omitempty"`
+	// integrations edge predicates
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+	// secrets edge predicates
+	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
+	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
 }
 
 type Group struct {
@@ -11224,9 +11349,17 @@ type Hush struct {
 	// the kind of secret, such as sshkey, certificate, api token, etc.
 	Kind *string `json:"kind,omitempty"`
 	// the generic name of a secret associated with the organization
-	SecretName   *string                `json:"secretName,omitempty"`
+	SecretName *string `json:"secretName,omitempty"`
+	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+	CredentialSet *models.CredentialSet `json:"credentialSet,omitempty"`
+	// additional metadata about the credential
+	Metadata   map[string]any `json:"metadata,omitempty"`
+	LastUsedAt *time.Time     `json:"lastUsedAt,omitempty"`
+	// when the token expires
+	ExpiresAt    *time.Time             `json:"expiresAt,omitempty"`
 	Owner        *Organization          `json:"owner,omitempty"`
 	Integrations *IntegrationConnection `json:"integrations"`
+	Files        *FileConnection        `json:"files"`
 	Events       *EventConnection       `json:"events"`
 }
 
@@ -11295,6 +11428,13 @@ type HushHistory struct {
 	Kind *string `json:"kind,omitempty"`
 	// the generic name of a secret associated with the organization
 	SecretName *string `json:"secretName,omitempty"`
+	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+	CredentialSet *models.CredentialSet `json:"credentialSet,omitempty"`
+	// additional metadata about the credential
+	Metadata   map[string]any `json:"metadata,omitempty"`
+	LastUsedAt *time.Time     `json:"lastUsedAt,omitempty"`
+	// when the token expires
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 }
 
 func (HushHistory) IsNode() {}
@@ -11488,6 +11628,28 @@ type HushHistoryWhereInput struct {
 	SecretNameNotNil       *bool    `json:"secretNameNotNil,omitempty"`
 	SecretNameEqualFold    *string  `json:"secretNameEqualFold,omitempty"`
 	SecretNameContainsFold *string  `json:"secretNameContainsFold,omitempty"`
+	// last_used_at field predicates
+	LastUsedAt       *time.Time   `json:"lastUsedAt,omitempty"`
+	LastUsedAtNeq    *time.Time   `json:"lastUsedAtNEQ,omitempty"`
+	LastUsedAtIn     []*time.Time `json:"lastUsedAtIn,omitempty"`
+	LastUsedAtNotIn  []*time.Time `json:"lastUsedAtNotIn,omitempty"`
+	LastUsedAtGt     *time.Time   `json:"lastUsedAtGT,omitempty"`
+	LastUsedAtGte    *time.Time   `json:"lastUsedAtGTE,omitempty"`
+	LastUsedAtLt     *time.Time   `json:"lastUsedAtLT,omitempty"`
+	LastUsedAtLte    *time.Time   `json:"lastUsedAtLTE,omitempty"`
+	LastUsedAtIsNil  *bool        `json:"lastUsedAtIsNil,omitempty"`
+	LastUsedAtNotNil *bool        `json:"lastUsedAtNotNil,omitempty"`
+	// expires_at field predicates
+	ExpiresAt       *time.Time   `json:"expiresAt,omitempty"`
+	ExpiresAtNeq    *time.Time   `json:"expiresAtNEQ,omitempty"`
+	ExpiresAtIn     []*time.Time `json:"expiresAtIn,omitempty"`
+	ExpiresAtNotIn  []*time.Time `json:"expiresAtNotIn,omitempty"`
+	ExpiresAtGt     *time.Time   `json:"expiresAtGT,omitempty"`
+	ExpiresAtGte    *time.Time   `json:"expiresAtGTE,omitempty"`
+	ExpiresAtLt     *time.Time   `json:"expiresAtLT,omitempty"`
+	ExpiresAtLte    *time.Time   `json:"expiresAtLTE,omitempty"`
+	ExpiresAtIsNil  *bool        `json:"expiresAtIsNil,omitempty"`
+	ExpiresAtNotNil *bool        `json:"expiresAtNotNil,omitempty"`
 }
 
 // Ordering options for Hush connections
@@ -11637,12 +11799,37 @@ type HushWhereInput struct {
 	SecretNameNotNil       *bool    `json:"secretNameNotNil,omitempty"`
 	SecretNameEqualFold    *string  `json:"secretNameEqualFold,omitempty"`
 	SecretNameContainsFold *string  `json:"secretNameContainsFold,omitempty"`
+	// last_used_at field predicates
+	LastUsedAt       *time.Time   `json:"lastUsedAt,omitempty"`
+	LastUsedAtNeq    *time.Time   `json:"lastUsedAtNEQ,omitempty"`
+	LastUsedAtIn     []*time.Time `json:"lastUsedAtIn,omitempty"`
+	LastUsedAtNotIn  []*time.Time `json:"lastUsedAtNotIn,omitempty"`
+	LastUsedAtGt     *time.Time   `json:"lastUsedAtGT,omitempty"`
+	LastUsedAtGte    *time.Time   `json:"lastUsedAtGTE,omitempty"`
+	LastUsedAtLt     *time.Time   `json:"lastUsedAtLT,omitempty"`
+	LastUsedAtLte    *time.Time   `json:"lastUsedAtLTE,omitempty"`
+	LastUsedAtIsNil  *bool        `json:"lastUsedAtIsNil,omitempty"`
+	LastUsedAtNotNil *bool        `json:"lastUsedAtNotNil,omitempty"`
+	// expires_at field predicates
+	ExpiresAt       *time.Time   `json:"expiresAt,omitempty"`
+	ExpiresAtNeq    *time.Time   `json:"expiresAtNEQ,omitempty"`
+	ExpiresAtIn     []*time.Time `json:"expiresAtIn,omitempty"`
+	ExpiresAtNotIn  []*time.Time `json:"expiresAtNotIn,omitempty"`
+	ExpiresAtGt     *time.Time   `json:"expiresAtGT,omitempty"`
+	ExpiresAtGte    *time.Time   `json:"expiresAtGTE,omitempty"`
+	ExpiresAtLt     *time.Time   `json:"expiresAtLT,omitempty"`
+	ExpiresAtLte    *time.Time   `json:"expiresAtLTE,omitempty"`
+	ExpiresAtIsNil  *bool        `json:"expiresAtIsNil,omitempty"`
+	ExpiresAtNotNil *bool        `json:"expiresAtNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// integrations edge predicates
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
@@ -11658,14 +11845,20 @@ type Integration struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
-	// the name of the integration - must be unique within the organization
+	// the name of the integration
 	Name string `json:"name"`
 	// a description of the integration
-	Description *string          `json:"description,omitempty"`
-	Kind        *string          `json:"kind,omitempty"`
-	Owner       *Organization    `json:"owner,omitempty"`
-	Secrets     *HushConnection  `json:"secrets"`
-	Events      *EventConnection `json:"events"`
+	Description *string `json:"description,omitempty"`
+	// the kind of integration, such as github, slack, s3 etc.
+	Kind *string `json:"kind,omitempty"`
+	// the type of integration, such as communicattion, storage, SCM, etc.
+	IntegrationType *string `json:"integrationType,omitempty"`
+	// additional metadata about the integration
+	Metadata map[string]any   `json:"metadata,omitempty"`
+	Owner    *Organization    `json:"owner,omitempty"`
+	Secrets  *HushConnection  `json:"secrets"`
+	Files    *FileConnection  `json:"files"`
+	Events   *EventConnection `json:"events"`
 }
 
 func (Integration) IsNode() {}
@@ -11707,11 +11900,16 @@ type IntegrationHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
-	// the name of the integration - must be unique within the organization
+	// the name of the integration
 	Name string `json:"name"`
 	// a description of the integration
 	Description *string `json:"description,omitempty"`
-	Kind        *string `json:"kind,omitempty"`
+	// the kind of integration, such as github, slack, s3 etc.
+	Kind *string `json:"kind,omitempty"`
+	// the type of integration, such as communicattion, storage, SCM, etc.
+	IntegrationType *string `json:"integrationType,omitempty"`
+	// additional metadata about the integration
+	Metadata map[string]any `json:"metadata,omitempty"`
 }
 
 func (IntegrationHistory) IsNode() {}
@@ -11889,6 +12087,22 @@ type IntegrationHistoryWhereInput struct {
 	KindNotNil       *bool    `json:"kindNotNil,omitempty"`
 	KindEqualFold    *string  `json:"kindEqualFold,omitempty"`
 	KindContainsFold *string  `json:"kindContainsFold,omitempty"`
+	// integration_type field predicates
+	IntegrationType             *string  `json:"integrationType,omitempty"`
+	IntegrationTypeNeq          *string  `json:"integrationTypeNEQ,omitempty"`
+	IntegrationTypeIn           []string `json:"integrationTypeIn,omitempty"`
+	IntegrationTypeNotIn        []string `json:"integrationTypeNotIn,omitempty"`
+	IntegrationTypeGt           *string  `json:"integrationTypeGT,omitempty"`
+	IntegrationTypeGte          *string  `json:"integrationTypeGTE,omitempty"`
+	IntegrationTypeLt           *string  `json:"integrationTypeLT,omitempty"`
+	IntegrationTypeLte          *string  `json:"integrationTypeLTE,omitempty"`
+	IntegrationTypeContains     *string  `json:"integrationTypeContains,omitempty"`
+	IntegrationTypeHasPrefix    *string  `json:"integrationTypeHasPrefix,omitempty"`
+	IntegrationTypeHasSuffix    *string  `json:"integrationTypeHasSuffix,omitempty"`
+	IntegrationTypeIsNil        *bool    `json:"integrationTypeIsNil,omitempty"`
+	IntegrationTypeNotNil       *bool    `json:"integrationTypeNotNil,omitempty"`
+	IntegrationTypeEqualFold    *string  `json:"integrationTypeEqualFold,omitempty"`
+	IntegrationTypeContainsFold *string  `json:"integrationTypeContainsFold,omitempty"`
 }
 
 // Ordering options for Integration connections
@@ -12016,12 +12230,31 @@ type IntegrationWhereInput struct {
 	KindNotNil       *bool    `json:"kindNotNil,omitempty"`
 	KindEqualFold    *string  `json:"kindEqualFold,omitempty"`
 	KindContainsFold *string  `json:"kindContainsFold,omitempty"`
+	// integration_type field predicates
+	IntegrationType             *string  `json:"integrationType,omitempty"`
+	IntegrationTypeNeq          *string  `json:"integrationTypeNEQ,omitempty"`
+	IntegrationTypeIn           []string `json:"integrationTypeIn,omitempty"`
+	IntegrationTypeNotIn        []string `json:"integrationTypeNotIn,omitempty"`
+	IntegrationTypeGt           *string  `json:"integrationTypeGT,omitempty"`
+	IntegrationTypeGte          *string  `json:"integrationTypeGTE,omitempty"`
+	IntegrationTypeLt           *string  `json:"integrationTypeLT,omitempty"`
+	IntegrationTypeLte          *string  `json:"integrationTypeLTE,omitempty"`
+	IntegrationTypeContains     *string  `json:"integrationTypeContains,omitempty"`
+	IntegrationTypeHasPrefix    *string  `json:"integrationTypeHasPrefix,omitempty"`
+	IntegrationTypeHasSuffix    *string  `json:"integrationTypeHasSuffix,omitempty"`
+	IntegrationTypeIsNil        *bool    `json:"integrationTypeIsNil,omitempty"`
+	IntegrationTypeNotNil       *bool    `json:"integrationTypeNotNil,omitempty"`
+	IntegrationTypeEqualFold    *string  `json:"integrationTypeEqualFold,omitempty"`
+	IntegrationTypeContainsFold *string  `json:"integrationTypeContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// secrets edge predicates
 	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
@@ -28707,50 +28940,67 @@ type UpdateFileInput struct {
 	StorageVolume      *string `json:"storageVolume,omitempty"`
 	ClearStorageVolume *bool   `json:"clearStorageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
-	StoragePath                  *string  `json:"storagePath,omitempty"`
-	ClearStoragePath             *bool    `json:"clearStoragePath,omitempty"`
-	AddUserIDs                   []string `json:"addUserIDs,omitempty"`
-	RemoveUserIDs                []string `json:"removeUserIDs,omitempty"`
-	ClearUser                    *bool    `json:"clearUser,omitempty"`
-	AddOrganizationIDs           []string `json:"addOrganizationIDs,omitempty"`
-	RemoveOrganizationIDs        []string `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganization            *bool    `json:"clearOrganization,omitempty"`
-	AddGroupIDs                  []string `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs               []string `json:"removeGroupIDs,omitempty"`
-	ClearGroups                  *bool    `json:"clearGroups,omitempty"`
-	AddContactIDs                []string `json:"addContactIDs,omitempty"`
-	RemoveContactIDs             []string `json:"removeContactIDs,omitempty"`
-	ClearContact                 *bool    `json:"clearContact,omitempty"`
-	AddEntityIDs                 []string `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs              []string `json:"removeEntityIDs,omitempty"`
-	ClearEntity                  *bool    `json:"clearEntity,omitempty"`
-	AddUserSettingIDs            []string `json:"addUserSettingIDs,omitempty"`
-	RemoveUserSettingIDs         []string `json:"removeUserSettingIDs,omitempty"`
-	ClearUserSetting             *bool    `json:"clearUserSetting,omitempty"`
-	AddOrganizationSettingIDs    []string `json:"addOrganizationSettingIDs,omitempty"`
-	RemoveOrganizationSettingIDs []string `json:"removeOrganizationSettingIDs,omitempty"`
-	ClearOrganizationSetting     *bool    `json:"clearOrganizationSetting,omitempty"`
-	AddTemplateIDs               []string `json:"addTemplateIDs,omitempty"`
-	RemoveTemplateIDs            []string `json:"removeTemplateIDs,omitempty"`
-	ClearTemplate                *bool    `json:"clearTemplate,omitempty"`
-	AddDocumentIDs               []string `json:"addDocumentIDs,omitempty"`
-	RemoveDocumentIDs            []string `json:"removeDocumentIDs,omitempty"`
-	ClearDocument                *bool    `json:"clearDocument,omitempty"`
-	AddProgramIDs                []string `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs             []string `json:"removeProgramIDs,omitempty"`
-	ClearProgram                 *bool    `json:"clearProgram,omitempty"`
-	AddEvidenceIDs               []string `json:"addEvidenceIDs,omitempty"`
-	RemoveEvidenceIDs            []string `json:"removeEvidenceIDs,omitempty"`
-	ClearEvidence                *bool    `json:"clearEvidence,omitempty"`
-	AddEventIDs                  []string `json:"addEventIDs,omitempty"`
-	RemoveEventIDs               []string `json:"removeEventIDs,omitempty"`
-	ClearEvents                  *bool    `json:"clearEvents,omitempty"`
-	AddTrustCenterSettingIDs     []string `json:"addTrustCenterSettingIDs,omitempty"`
-	RemoveTrustCenterSettingIDs  []string `json:"removeTrustCenterSettingIDs,omitempty"`
-	ClearTrustCenterSetting      *bool    `json:"clearTrustCenterSetting,omitempty"`
-	AddSubprocessorIDs           []string `json:"addSubprocessorIDs,omitempty"`
-	RemoveSubprocessorIDs        []string `json:"removeSubprocessorIDs,omitempty"`
-	ClearSubprocessor            *bool    `json:"clearSubprocessor,omitempty"`
+	StoragePath      *string `json:"storagePath,omitempty"`
+	ClearStoragePath *bool   `json:"clearStoragePath,omitempty"`
+	// additional metadata about the file
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
+	// the region the file is stored in, if applicable
+	StorageRegion      *string `json:"storageRegion,omitempty"`
+	ClearStorageRegion *bool   `json:"clearStorageRegion,omitempty"`
+	// the storage provider the file is stored in, if applicable
+	StorageProvider              *string    `json:"storageProvider,omitempty"`
+	ClearStorageProvider         *bool      `json:"clearStorageProvider,omitempty"`
+	LastAccessedAt               *time.Time `json:"lastAccessedAt,omitempty"`
+	ClearLastAccessedAt          *bool      `json:"clearLastAccessedAt,omitempty"`
+	AddUserIDs                   []string   `json:"addUserIDs,omitempty"`
+	RemoveUserIDs                []string   `json:"removeUserIDs,omitempty"`
+	ClearUser                    *bool      `json:"clearUser,omitempty"`
+	AddOrganizationIDs           []string   `json:"addOrganizationIDs,omitempty"`
+	RemoveOrganizationIDs        []string   `json:"removeOrganizationIDs,omitempty"`
+	ClearOrganization            *bool      `json:"clearOrganization,omitempty"`
+	AddGroupIDs                  []string   `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs               []string   `json:"removeGroupIDs,omitempty"`
+	ClearGroups                  *bool      `json:"clearGroups,omitempty"`
+	AddContactIDs                []string   `json:"addContactIDs,omitempty"`
+	RemoveContactIDs             []string   `json:"removeContactIDs,omitempty"`
+	ClearContact                 *bool      `json:"clearContact,omitempty"`
+	AddEntityIDs                 []string   `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs              []string   `json:"removeEntityIDs,omitempty"`
+	ClearEntity                  *bool      `json:"clearEntity,omitempty"`
+	AddUserSettingIDs            []string   `json:"addUserSettingIDs,omitempty"`
+	RemoveUserSettingIDs         []string   `json:"removeUserSettingIDs,omitempty"`
+	ClearUserSetting             *bool      `json:"clearUserSetting,omitempty"`
+	AddOrganizationSettingIDs    []string   `json:"addOrganizationSettingIDs,omitempty"`
+	RemoveOrganizationSettingIDs []string   `json:"removeOrganizationSettingIDs,omitempty"`
+	ClearOrganizationSetting     *bool      `json:"clearOrganizationSetting,omitempty"`
+	AddTemplateIDs               []string   `json:"addTemplateIDs,omitempty"`
+	RemoveTemplateIDs            []string   `json:"removeTemplateIDs,omitempty"`
+	ClearTemplate                *bool      `json:"clearTemplate,omitempty"`
+	AddDocumentIDs               []string   `json:"addDocumentIDs,omitempty"`
+	RemoveDocumentIDs            []string   `json:"removeDocumentIDs,omitempty"`
+	ClearDocument                *bool      `json:"clearDocument,omitempty"`
+	AddProgramIDs                []string   `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs             []string   `json:"removeProgramIDs,omitempty"`
+	ClearProgram                 *bool      `json:"clearProgram,omitempty"`
+	AddEvidenceIDs               []string   `json:"addEvidenceIDs,omitempty"`
+	RemoveEvidenceIDs            []string   `json:"removeEvidenceIDs,omitempty"`
+	ClearEvidence                *bool      `json:"clearEvidence,omitempty"`
+	AddEventIDs                  []string   `json:"addEventIDs,omitempty"`
+	RemoveEventIDs               []string   `json:"removeEventIDs,omitempty"`
+	ClearEvents                  *bool      `json:"clearEvents,omitempty"`
+	AddTrustCenterSettingIDs     []string   `json:"addTrustCenterSettingIDs,omitempty"`
+	RemoveTrustCenterSettingIDs  []string   `json:"removeTrustCenterSettingIDs,omitempty"`
+	ClearTrustCenterSetting      *bool      `json:"clearTrustCenterSetting,omitempty"`
+	AddSubprocessorIDs           []string   `json:"addSubprocessorIDs,omitempty"`
+	RemoveSubprocessorIDs        []string   `json:"removeSubprocessorIDs,omitempty"`
+	ClearSubprocessor            *bool      `json:"clearSubprocessor,omitempty"`
+	AddIntegrationIDs            []string   `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs         []string   `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations            *bool      `json:"clearIntegrations,omitempty"`
+	AddSecretIDs                 []string   `json:"addSecretIDs,omitempty"`
+	RemoveSecretIDs              []string   `json:"removeSecretIDs,omitempty"`
+	ClearSecrets                 *bool      `json:"clearSecrets,omitempty"`
 }
 
 // UpdateGroupInput is used for update Group object.
@@ -28916,16 +29166,30 @@ type UpdateHushInput struct {
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// the kind of secret, such as sshkey, certificate, api token, etc.
-	Kind                 *string  `json:"kind,omitempty"`
-	ClearKind            *bool    `json:"clearKind,omitempty"`
-	OwnerID              *string  `json:"ownerID,omitempty"`
-	ClearOwner           *bool    `json:"clearOwner,omitempty"`
-	AddIntegrationIDs    []string `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs []string `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations    *bool    `json:"clearIntegrations,omitempty"`
-	AddEventIDs          []string `json:"addEventIDs,omitempty"`
-	RemoveEventIDs       []string `json:"removeEventIDs,omitempty"`
-	ClearEvents          *bool    `json:"clearEvents,omitempty"`
+	Kind      *string `json:"kind,omitempty"`
+	ClearKind *bool   `json:"clearKind,omitempty"`
+	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+	CredentialSet      *models.CredentialSet `json:"credentialSet,omitempty"`
+	ClearCredentialSet *bool                 `json:"clearCredentialSet,omitempty"`
+	// additional metadata about the credential
+	Metadata        map[string]any `json:"metadata,omitempty"`
+	ClearMetadata   *bool          `json:"clearMetadata,omitempty"`
+	LastUsedAt      *time.Time     `json:"lastUsedAt,omitempty"`
+	ClearLastUsedAt *bool          `json:"clearLastUsedAt,omitempty"`
+	// when the token expires
+	ExpiresAt            *time.Time `json:"expiresAt,omitempty"`
+	ClearExpiresAt       *bool      `json:"clearExpiresAt,omitempty"`
+	OwnerID              *string    `json:"ownerID,omitempty"`
+	ClearOwner           *bool      `json:"clearOwner,omitempty"`
+	AddIntegrationIDs    []string   `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs []string   `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations    *bool      `json:"clearIntegrations,omitempty"`
+	AddFileIDs           []string   `json:"addFileIDs,omitempty"`
+	RemoveFileIDs        []string   `json:"removeFileIDs,omitempty"`
+	ClearFiles           *bool      `json:"clearFiles,omitempty"`
+	AddEventIDs          []string   `json:"addEventIDs,omitempty"`
+	RemoveEventIDs       []string   `json:"removeEventIDs,omitempty"`
+	ClearEvents          *bool      `json:"clearEvents,omitempty"`
 }
 
 // UpdateInternalPolicyInput is used for update InternalPolicy object.
@@ -33486,20 +33750,22 @@ func (e ExportOrderField) MarshalJSON() ([]byte, error) {
 type FileHistoryOrderField string
 
 const (
-	FileHistoryOrderFieldHistoryTime FileHistoryOrderField = "history_time"
-	FileHistoryOrderFieldCreatedAt   FileHistoryOrderField = "created_at"
-	FileHistoryOrderFieldUpdatedAt   FileHistoryOrderField = "updated_at"
+	FileHistoryOrderFieldHistoryTime    FileHistoryOrderField = "history_time"
+	FileHistoryOrderFieldCreatedAt      FileHistoryOrderField = "created_at"
+	FileHistoryOrderFieldUpdatedAt      FileHistoryOrderField = "updated_at"
+	FileHistoryOrderFieldLastAccessedAt FileHistoryOrderField = "last_accessed_at"
 )
 
 var AllFileHistoryOrderField = []FileHistoryOrderField{
 	FileHistoryOrderFieldHistoryTime,
 	FileHistoryOrderFieldCreatedAt,
 	FileHistoryOrderFieldUpdatedAt,
+	FileHistoryOrderFieldLastAccessedAt,
 }
 
 func (e FileHistoryOrderField) IsValid() bool {
 	switch e {
-	case FileHistoryOrderFieldHistoryTime, FileHistoryOrderFieldCreatedAt, FileHistoryOrderFieldUpdatedAt:
+	case FileHistoryOrderFieldHistoryTime, FileHistoryOrderFieldCreatedAt, FileHistoryOrderFieldUpdatedAt, FileHistoryOrderFieldLastAccessedAt:
 		return true
 	}
 	return false
@@ -33544,18 +33810,20 @@ func (e FileHistoryOrderField) MarshalJSON() ([]byte, error) {
 type FileOrderField string
 
 const (
-	FileOrderFieldCreatedAt FileOrderField = "created_at"
-	FileOrderFieldUpdatedAt FileOrderField = "updated_at"
+	FileOrderFieldCreatedAt      FileOrderField = "created_at"
+	FileOrderFieldUpdatedAt      FileOrderField = "updated_at"
+	FileOrderFieldLastAccessedAt FileOrderField = "last_accessed_at"
 )
 
 var AllFileOrderField = []FileOrderField{
 	FileOrderFieldCreatedAt,
 	FileOrderFieldUpdatedAt,
+	FileOrderFieldLastAccessedAt,
 }
 
 func (e FileOrderField) IsValid() bool {
 	switch e {
-	case FileOrderFieldCreatedAt, FileOrderFieldUpdatedAt:
+	case FileOrderFieldCreatedAt, FileOrderFieldUpdatedAt, FileOrderFieldLastAccessedAt:
 		return true
 	}
 	return false
@@ -34017,6 +34285,8 @@ const (
 	HushHistoryOrderFieldUpdatedAt   HushHistoryOrderField = "updated_at"
 	HushHistoryOrderFieldName        HushHistoryOrderField = "name"
 	HushHistoryOrderFieldKind        HushHistoryOrderField = "kind"
+	HushHistoryOrderFieldLastUsedAt  HushHistoryOrderField = "last_used_at"
+	HushHistoryOrderFieldExpiresAt   HushHistoryOrderField = "expires_at"
 )
 
 var AllHushHistoryOrderField = []HushHistoryOrderField{
@@ -34025,11 +34295,13 @@ var AllHushHistoryOrderField = []HushHistoryOrderField{
 	HushHistoryOrderFieldUpdatedAt,
 	HushHistoryOrderFieldName,
 	HushHistoryOrderFieldKind,
+	HushHistoryOrderFieldLastUsedAt,
+	HushHistoryOrderFieldExpiresAt,
 }
 
 func (e HushHistoryOrderField) IsValid() bool {
 	switch e {
-	case HushHistoryOrderFieldHistoryTime, HushHistoryOrderFieldCreatedAt, HushHistoryOrderFieldUpdatedAt, HushHistoryOrderFieldName, HushHistoryOrderFieldKind:
+	case HushHistoryOrderFieldHistoryTime, HushHistoryOrderFieldCreatedAt, HushHistoryOrderFieldUpdatedAt, HushHistoryOrderFieldName, HushHistoryOrderFieldKind, HushHistoryOrderFieldLastUsedAt, HushHistoryOrderFieldExpiresAt:
 		return true
 	}
 	return false
@@ -34074,10 +34346,12 @@ func (e HushHistoryOrderField) MarshalJSON() ([]byte, error) {
 type HushOrderField string
 
 const (
-	HushOrderFieldCreatedAt HushOrderField = "created_at"
-	HushOrderFieldUpdatedAt HushOrderField = "updated_at"
-	HushOrderFieldName      HushOrderField = "name"
-	HushOrderFieldKind      HushOrderField = "kind"
+	HushOrderFieldCreatedAt  HushOrderField = "created_at"
+	HushOrderFieldUpdatedAt  HushOrderField = "updated_at"
+	HushOrderFieldName       HushOrderField = "name"
+	HushOrderFieldKind       HushOrderField = "kind"
+	HushOrderFieldLastUsedAt HushOrderField = "last_used_at"
+	HushOrderFieldExpiresAt  HushOrderField = "expires_at"
 )
 
 var AllHushOrderField = []HushOrderField{
@@ -34085,11 +34359,13 @@ var AllHushOrderField = []HushOrderField{
 	HushOrderFieldUpdatedAt,
 	HushOrderFieldName,
 	HushOrderFieldKind,
+	HushOrderFieldLastUsedAt,
+	HushOrderFieldExpiresAt,
 }
 
 func (e HushOrderField) IsValid() bool {
 	switch e {
-	case HushOrderFieldCreatedAt, HushOrderFieldUpdatedAt, HushOrderFieldName, HushOrderFieldKind:
+	case HushOrderFieldCreatedAt, HushOrderFieldUpdatedAt, HushOrderFieldName, HushOrderFieldKind, HushOrderFieldLastUsedAt, HushOrderFieldExpiresAt:
 		return true
 	}
 	return false
@@ -34134,11 +34410,12 @@ func (e HushOrderField) MarshalJSON() ([]byte, error) {
 type IntegrationHistoryOrderField string
 
 const (
-	IntegrationHistoryOrderFieldHistoryTime IntegrationHistoryOrderField = "history_time"
-	IntegrationHistoryOrderFieldCreatedAt   IntegrationHistoryOrderField = "created_at"
-	IntegrationHistoryOrderFieldUpdatedAt   IntegrationHistoryOrderField = "updated_at"
-	IntegrationHistoryOrderFieldName        IntegrationHistoryOrderField = "name"
-	IntegrationHistoryOrderFieldKind        IntegrationHistoryOrderField = "kind"
+	IntegrationHistoryOrderFieldHistoryTime     IntegrationHistoryOrderField = "history_time"
+	IntegrationHistoryOrderFieldCreatedAt       IntegrationHistoryOrderField = "created_at"
+	IntegrationHistoryOrderFieldUpdatedAt       IntegrationHistoryOrderField = "updated_at"
+	IntegrationHistoryOrderFieldName            IntegrationHistoryOrderField = "name"
+	IntegrationHistoryOrderFieldKind            IntegrationHistoryOrderField = "kind"
+	IntegrationHistoryOrderFieldIntegrationType IntegrationHistoryOrderField = "integration_type"
 )
 
 var AllIntegrationHistoryOrderField = []IntegrationHistoryOrderField{
@@ -34147,11 +34424,12 @@ var AllIntegrationHistoryOrderField = []IntegrationHistoryOrderField{
 	IntegrationHistoryOrderFieldUpdatedAt,
 	IntegrationHistoryOrderFieldName,
 	IntegrationHistoryOrderFieldKind,
+	IntegrationHistoryOrderFieldIntegrationType,
 }
 
 func (e IntegrationHistoryOrderField) IsValid() bool {
 	switch e {
-	case IntegrationHistoryOrderFieldHistoryTime, IntegrationHistoryOrderFieldCreatedAt, IntegrationHistoryOrderFieldUpdatedAt, IntegrationHistoryOrderFieldName, IntegrationHistoryOrderFieldKind:
+	case IntegrationHistoryOrderFieldHistoryTime, IntegrationHistoryOrderFieldCreatedAt, IntegrationHistoryOrderFieldUpdatedAt, IntegrationHistoryOrderFieldName, IntegrationHistoryOrderFieldKind, IntegrationHistoryOrderFieldIntegrationType:
 		return true
 	}
 	return false
@@ -34196,10 +34474,11 @@ func (e IntegrationHistoryOrderField) MarshalJSON() ([]byte, error) {
 type IntegrationOrderField string
 
 const (
-	IntegrationOrderFieldCreatedAt IntegrationOrderField = "created_at"
-	IntegrationOrderFieldUpdatedAt IntegrationOrderField = "updated_at"
-	IntegrationOrderFieldName      IntegrationOrderField = "name"
-	IntegrationOrderFieldKind      IntegrationOrderField = "kind"
+	IntegrationOrderFieldCreatedAt       IntegrationOrderField = "created_at"
+	IntegrationOrderFieldUpdatedAt       IntegrationOrderField = "updated_at"
+	IntegrationOrderFieldName            IntegrationOrderField = "name"
+	IntegrationOrderFieldKind            IntegrationOrderField = "kind"
+	IntegrationOrderFieldIntegrationType IntegrationOrderField = "integration_type"
 )
 
 var AllIntegrationOrderField = []IntegrationOrderField{
@@ -34207,11 +34486,12 @@ var AllIntegrationOrderField = []IntegrationOrderField{
 	IntegrationOrderFieldUpdatedAt,
 	IntegrationOrderFieldName,
 	IntegrationOrderFieldKind,
+	IntegrationOrderFieldIntegrationType,
 }
 
 func (e IntegrationOrderField) IsValid() bool {
 	switch e {
-	case IntegrationOrderFieldCreatedAt, IntegrationOrderFieldUpdatedAt, IntegrationOrderFieldName, IntegrationOrderFieldKind:
+	case IntegrationOrderFieldCreatedAt, IntegrationOrderFieldUpdatedAt, IntegrationOrderFieldName, IntegrationOrderFieldKind, IntegrationOrderFieldIntegrationType:
 		return true
 	}
 	return false

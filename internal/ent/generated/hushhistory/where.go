@@ -135,6 +135,16 @@ func SecretValue(v string) predicate.HushHistory {
 	return predicate.HushHistory(sql.FieldEQ(FieldSecretValue, v))
 }
 
+// LastUsedAt applies equality check predicate on the "last_used_at" field. It's identical to LastUsedAtEQ.
+func LastUsedAt(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldEQ(FieldLastUsedAt, v))
+}
+
+// ExpiresAt applies equality check predicate on the "expires_at" field. It's identical to ExpiresAtEQ.
+func ExpiresAt(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldEQ(FieldExpiresAt, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.HushHistory {
 	return predicate.HushHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1083,6 +1093,126 @@ func SecretValueEqualFold(v string) predicate.HushHistory {
 // SecretValueContainsFold applies the ContainsFold predicate on the "secret_value" field.
 func SecretValueContainsFold(v string) predicate.HushHistory {
 	return predicate.HushHistory(sql.FieldContainsFold(FieldSecretValue, v))
+}
+
+// CredentialSetIsNil applies the IsNil predicate on the "credential_set" field.
+func CredentialSetIsNil() predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldIsNull(FieldCredentialSet))
+}
+
+// CredentialSetNotNil applies the NotNil predicate on the "credential_set" field.
+func CredentialSetNotNil() predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldNotNull(FieldCredentialSet))
+}
+
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldNotNull(FieldMetadata))
+}
+
+// LastUsedAtEQ applies the EQ predicate on the "last_used_at" field.
+func LastUsedAtEQ(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldEQ(FieldLastUsedAt, v))
+}
+
+// LastUsedAtNEQ applies the NEQ predicate on the "last_used_at" field.
+func LastUsedAtNEQ(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldNEQ(FieldLastUsedAt, v))
+}
+
+// LastUsedAtIn applies the In predicate on the "last_used_at" field.
+func LastUsedAtIn(vs ...time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldIn(FieldLastUsedAt, vs...))
+}
+
+// LastUsedAtNotIn applies the NotIn predicate on the "last_used_at" field.
+func LastUsedAtNotIn(vs ...time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldNotIn(FieldLastUsedAt, vs...))
+}
+
+// LastUsedAtGT applies the GT predicate on the "last_used_at" field.
+func LastUsedAtGT(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldGT(FieldLastUsedAt, v))
+}
+
+// LastUsedAtGTE applies the GTE predicate on the "last_used_at" field.
+func LastUsedAtGTE(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldGTE(FieldLastUsedAt, v))
+}
+
+// LastUsedAtLT applies the LT predicate on the "last_used_at" field.
+func LastUsedAtLT(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldLT(FieldLastUsedAt, v))
+}
+
+// LastUsedAtLTE applies the LTE predicate on the "last_used_at" field.
+func LastUsedAtLTE(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldLTE(FieldLastUsedAt, v))
+}
+
+// LastUsedAtIsNil applies the IsNil predicate on the "last_used_at" field.
+func LastUsedAtIsNil() predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldIsNull(FieldLastUsedAt))
+}
+
+// LastUsedAtNotNil applies the NotNil predicate on the "last_used_at" field.
+func LastUsedAtNotNil() predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldNotNull(FieldLastUsedAt))
+}
+
+// ExpiresAtEQ applies the EQ predicate on the "expires_at" field.
+func ExpiresAtEQ(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldEQ(FieldExpiresAt, v))
+}
+
+// ExpiresAtNEQ applies the NEQ predicate on the "expires_at" field.
+func ExpiresAtNEQ(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldNEQ(FieldExpiresAt, v))
+}
+
+// ExpiresAtIn applies the In predicate on the "expires_at" field.
+func ExpiresAtIn(vs ...time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldIn(FieldExpiresAt, vs...))
+}
+
+// ExpiresAtNotIn applies the NotIn predicate on the "expires_at" field.
+func ExpiresAtNotIn(vs ...time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldNotIn(FieldExpiresAt, vs...))
+}
+
+// ExpiresAtGT applies the GT predicate on the "expires_at" field.
+func ExpiresAtGT(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldGT(FieldExpiresAt, v))
+}
+
+// ExpiresAtGTE applies the GTE predicate on the "expires_at" field.
+func ExpiresAtGTE(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldGTE(FieldExpiresAt, v))
+}
+
+// ExpiresAtLT applies the LT predicate on the "expires_at" field.
+func ExpiresAtLT(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldLT(FieldExpiresAt, v))
+}
+
+// ExpiresAtLTE applies the LTE predicate on the "expires_at" field.
+func ExpiresAtLTE(v time.Time) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldLTE(FieldExpiresAt, v))
+}
+
+// ExpiresAtIsNil applies the IsNil predicate on the "expires_at" field.
+func ExpiresAtIsNil() predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldIsNull(FieldExpiresAt))
+}
+
+// ExpiresAtNotNil applies the NotNil predicate on the "expires_at" field.
+func ExpiresAtNotNil() predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldNotNull(FieldExpiresAt))
 }
 
 // And groups predicates with the AND operator between them.

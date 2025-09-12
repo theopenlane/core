@@ -50,6 +50,9 @@ models:
     model: github.com/theopenlane/core/pkg/models.Change
   AuditLogOrderField:
     model: github.com/theopenlane/core/pkg/models.AuditLogOrderField
+  CredentialSet:
+    model:
+      - github.com/theopenlane/core/pkg/models.CredentialSet
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/simple/*.graphql"]
 generate:

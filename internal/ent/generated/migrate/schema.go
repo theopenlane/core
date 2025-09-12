@@ -1372,7 +1372,12 @@ var (
 		{Name: "storage_volume", Type: field.TypeString, Nullable: true},
 		{Name: "storage_path", Type: field.TypeString, Nullable: true},
 		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "storage_region", Type: field.TypeString, Nullable: true},
+		{Name: "storage_provider", Type: field.TypeString, Nullable: true},
+		{Name: "last_accessed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "export_files", Type: field.TypeString, Nullable: true},
+		{Name: "integration_files", Type: field.TypeString, Nullable: true},
 		{Name: "note_files", Type: field.TypeString, Nullable: true},
 	}
 	// FilesTable holds the schema information for the "files" table.
@@ -1383,13 +1388,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "files_exports_files",
-				Columns:    []*schema.Column{FilesColumns[22]},
+				Columns:    []*schema.Column{FilesColumns[26]},
 				RefColumns: []*schema.Column{ExportsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "files_integrations_files",
+				Columns:    []*schema.Column{FilesColumns[27]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "files_notes_files",
-				Columns:    []*schema.Column{FilesColumns[23]},
+				Columns:    []*schema.Column{FilesColumns[28]},
 				RefColumns: []*schema.Column{NotesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1422,6 +1433,10 @@ var (
 		{Name: "storage_volume", Type: field.TypeString, Nullable: true},
 		{Name: "storage_path", Type: field.TypeString, Nullable: true},
 		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "storage_region", Type: field.TypeString, Nullable: true},
+		{Name: "storage_provider", Type: field.TypeString, Nullable: true},
+		{Name: "last_accessed_at", Type: field.TypeTime, Nullable: true},
 	}
 	// FileHistoryTable holds the schema information for the "file_history" table.
 	FileHistoryTable = &schema.Table{
@@ -1792,6 +1807,10 @@ var (
 		{Name: "kind", Type: field.TypeString, Nullable: true},
 		{Name: "secret_name", Type: field.TypeString, Nullable: true},
 		{Name: "secret_value", Type: field.TypeString, Nullable: true},
+		{Name: "credential_set", Type: field.TypeJSON, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// HushesTable holds the schema information for the "hushes" table.
@@ -1802,7 +1821,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "hushes_organizations_secrets",
-				Columns:    []*schema.Column{HushesColumns[12]},
+				Columns:    []*schema.Column{HushesColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1811,7 +1830,7 @@ var (
 			{
 				Name:    "hush_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{HushesColumns[12]},
+				Columns: []*schema.Column{HushesColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1836,6 +1855,10 @@ var (
 		{Name: "kind", Type: field.TypeString, Nullable: true},
 		{Name: "secret_name", Type: field.TypeString, Nullable: true},
 		{Name: "secret_value", Type: field.TypeString, Nullable: true},
+		{Name: "credential_set", Type: field.TypeJSON, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 	}
 	// HushHistoryTable holds the schema information for the "hush_history" table.
 	HushHistoryTable = &schema.Table{
@@ -1863,6 +1886,9 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "kind", Type: field.TypeString, Nullable: true},
+		{Name: "integration_type", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "file_integrations", Type: field.TypeString, Nullable: true},
 		{Name: "group_integrations", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
@@ -1873,14 +1899,20 @@ var (
 		PrimaryKey: []*schema.Column{IntegrationsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
+				Symbol:     "integrations_files_integrations",
+				Columns:    []*schema.Column{IntegrationsColumns[13]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "integrations_groups_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[11]},
+				Columns:    []*schema.Column{IntegrationsColumns[14]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_organizations_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[12]},
+				Columns:    []*schema.Column{IntegrationsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1889,7 +1921,7 @@ var (
 			{
 				Name:    "integration_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationsColumns[12]},
+				Columns: []*schema.Column{IntegrationsColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1913,6 +1945,8 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "kind", Type: field.TypeString, Nullable: true},
+		{Name: "integration_type", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 	}
 	// IntegrationHistoryTable holds the schema information for the "integration_history" table.
 	IntegrationHistoryTable = &schema.Table{
@@ -5898,6 +5932,31 @@ var (
 			},
 		},
 	}
+	// FileSecretsColumns holds the columns for the "file_secrets" table.
+	FileSecretsColumns = []*schema.Column{
+		{Name: "file_id", Type: field.TypeString},
+		{Name: "hush_id", Type: field.TypeString},
+	}
+	// FileSecretsTable holds the schema information for the "file_secrets" table.
+	FileSecretsTable = &schema.Table{
+		Name:       "file_secrets",
+		Columns:    FileSecretsColumns,
+		PrimaryKey: []*schema.Column{FileSecretsColumns[0], FileSecretsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "file_secrets_file_id",
+				Columns:    []*schema.Column{FileSecretsColumns[0]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "file_secrets_hush_id",
+				Columns:    []*schema.Column{FileSecretsColumns[1]},
+				RefColumns: []*schema.Column{HushesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// GroupEventsColumns holds the columns for the "group_events" table.
 	GroupEventsColumns = []*schema.Column{
 		{Name: "group_id", Type: field.TypeString},
@@ -8016,6 +8075,7 @@ var (
 		EvidenceControlObjectivesTable,
 		EvidenceFilesTable,
 		FileEventsTable,
+		FileSecretsTable,
 		GroupEventsTable,
 		GroupFilesTable,
 		GroupTasksTable,
@@ -8171,7 +8231,8 @@ func init() {
 	}
 	ExportsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	FilesTable.ForeignKeys[0].RefTable = ExportsTable
-	FilesTable.ForeignKeys[1].RefTable = NotesTable
+	FilesTable.ForeignKeys[1].RefTable = IntegrationsTable
+	FilesTable.ForeignKeys[2].RefTable = NotesTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
@@ -8210,8 +8271,9 @@ func init() {
 	HushHistoryTable.Annotation = &entsql.Annotation{
 		Table: "hush_history",
 	}
-	IntegrationsTable.ForeignKeys[0].RefTable = GroupsTable
-	IntegrationsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	IntegrationsTable.ForeignKeys[0].RefTable = FilesTable
+	IntegrationsTable.ForeignKeys[1].RefTable = GroupsTable
+	IntegrationsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	IntegrationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "integration_history",
 	}
@@ -8449,6 +8511,8 @@ func init() {
 	EvidenceFilesTable.ForeignKeys[1].RefTable = FilesTable
 	FileEventsTable.ForeignKeys[0].RefTable = FilesTable
 	FileEventsTable.ForeignKeys[1].RefTable = EventsTable
+	FileSecretsTable.ForeignKeys[0].RefTable = FilesTable
+	FileSecretsTable.ForeignKeys[1].RefTable = HushesTable
 	GroupEventsTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupEventsTable.ForeignKeys[1].RefTable = EventsTable
 	GroupFilesTable.ForeignKeys[0].RefTable = GroupsTable

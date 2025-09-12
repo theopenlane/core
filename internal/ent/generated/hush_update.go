@@ -12,10 +12,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -180,6 +182,78 @@ func (_u *HushUpdate) ClearKind() *HushUpdate {
 	return _u
 }
 
+// SetCredentialSet sets the "credential_set" field.
+func (_u *HushUpdate) SetCredentialSet(v models.CredentialSet) *HushUpdate {
+	_u.mutation.SetCredentialSet(v)
+	return _u
+}
+
+// SetNillableCredentialSet sets the "credential_set" field if the given value is not nil.
+func (_u *HushUpdate) SetNillableCredentialSet(v *models.CredentialSet) *HushUpdate {
+	if v != nil {
+		_u.SetCredentialSet(*v)
+	}
+	return _u
+}
+
+// ClearCredentialSet clears the value of the "credential_set" field.
+func (_u *HushUpdate) ClearCredentialSet() *HushUpdate {
+	_u.mutation.ClearCredentialSet()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *HushUpdate) SetMetadata(v map[string]interface{}) *HushUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *HushUpdate) ClearMetadata() *HushUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetLastUsedAt sets the "last_used_at" field.
+func (_u *HushUpdate) SetLastUsedAt(v time.Time) *HushUpdate {
+	_u.mutation.SetLastUsedAt(v)
+	return _u
+}
+
+// SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
+func (_u *HushUpdate) SetNillableLastUsedAt(v *time.Time) *HushUpdate {
+	if v != nil {
+		_u.SetLastUsedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastUsedAt clears the value of the "last_used_at" field.
+func (_u *HushUpdate) ClearLastUsedAt() *HushUpdate {
+	_u.mutation.ClearLastUsedAt()
+	return _u
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (_u *HushUpdate) SetExpiresAt(v time.Time) *HushUpdate {
+	_u.mutation.SetExpiresAt(v)
+	return _u
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_u *HushUpdate) SetNillableExpiresAt(v *time.Time) *HushUpdate {
+	if v != nil {
+		_u.SetExpiresAt(*v)
+	}
+	return _u
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (_u *HushUpdate) ClearExpiresAt() *HushUpdate {
+	_u.mutation.ClearExpiresAt()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *HushUpdate) SetOwner(v *Organization) *HushUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -198,6 +272,21 @@ func (_u *HushUpdate) AddIntegrations(v ...*Integration) *HushUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *HushUpdate) AddFileIDs(ids ...string) *HushUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *HushUpdate) AddFiles(v ...*File) *HushUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -245,6 +334,27 @@ func (_u *HushUpdate) RemoveIntegrations(v ...*Integration) *HushUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *HushUpdate) ClearFiles() *HushUpdate {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *HushUpdate) RemoveFileIDs(ids ...string) *HushUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *HushUpdate) RemoveFiles(v ...*File) *HushUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -394,6 +504,30 @@ func (_u *HushUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.SecretValueCleared() {
 		_spec.ClearField(hush.FieldSecretValue, field.TypeString)
 	}
+	if value, ok := _u.mutation.CredentialSet(); ok {
+		_spec.SetField(hush.FieldCredentialSet, field.TypeJSON, value)
+	}
+	if _u.mutation.CredentialSetCleared() {
+		_spec.ClearField(hush.FieldCredentialSet, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(hush.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(hush.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LastUsedAt(); ok {
+		_spec.SetField(hush.FieldLastUsedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastUsedAtCleared() {
+		_spec.ClearField(hush.FieldLastUsedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ExpiresAt(); ok {
+		_spec.SetField(hush.FieldExpiresAt, field.TypeTime, value)
+	}
+	if _u.mutation.ExpiresAtCleared() {
+		_spec.ClearField(hush.FieldExpiresAt, field.TypeTime)
+	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -468,6 +602,54 @@ func (_u *HushUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.IntegrationSecrets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   hush.FilesTable,
+			Columns: hush.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   hush.FilesTable,
+			Columns: hush.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   hush.FilesTable,
+			Columns: hush.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -691,6 +873,78 @@ func (_u *HushUpdateOne) ClearKind() *HushUpdateOne {
 	return _u
 }
 
+// SetCredentialSet sets the "credential_set" field.
+func (_u *HushUpdateOne) SetCredentialSet(v models.CredentialSet) *HushUpdateOne {
+	_u.mutation.SetCredentialSet(v)
+	return _u
+}
+
+// SetNillableCredentialSet sets the "credential_set" field if the given value is not nil.
+func (_u *HushUpdateOne) SetNillableCredentialSet(v *models.CredentialSet) *HushUpdateOne {
+	if v != nil {
+		_u.SetCredentialSet(*v)
+	}
+	return _u
+}
+
+// ClearCredentialSet clears the value of the "credential_set" field.
+func (_u *HushUpdateOne) ClearCredentialSet() *HushUpdateOne {
+	_u.mutation.ClearCredentialSet()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *HushUpdateOne) SetMetadata(v map[string]interface{}) *HushUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *HushUpdateOne) ClearMetadata() *HushUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetLastUsedAt sets the "last_used_at" field.
+func (_u *HushUpdateOne) SetLastUsedAt(v time.Time) *HushUpdateOne {
+	_u.mutation.SetLastUsedAt(v)
+	return _u
+}
+
+// SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
+func (_u *HushUpdateOne) SetNillableLastUsedAt(v *time.Time) *HushUpdateOne {
+	if v != nil {
+		_u.SetLastUsedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastUsedAt clears the value of the "last_used_at" field.
+func (_u *HushUpdateOne) ClearLastUsedAt() *HushUpdateOne {
+	_u.mutation.ClearLastUsedAt()
+	return _u
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (_u *HushUpdateOne) SetExpiresAt(v time.Time) *HushUpdateOne {
+	_u.mutation.SetExpiresAt(v)
+	return _u
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_u *HushUpdateOne) SetNillableExpiresAt(v *time.Time) *HushUpdateOne {
+	if v != nil {
+		_u.SetExpiresAt(*v)
+	}
+	return _u
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (_u *HushUpdateOne) ClearExpiresAt() *HushUpdateOne {
+	_u.mutation.ClearExpiresAt()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *HushUpdateOne) SetOwner(v *Organization) *HushUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -709,6 +963,21 @@ func (_u *HushUpdateOne) AddIntegrations(v ...*Integration) *HushUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *HushUpdateOne) AddFileIDs(ids ...string) *HushUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *HushUpdateOne) AddFiles(v ...*File) *HushUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -756,6 +1025,27 @@ func (_u *HushUpdateOne) RemoveIntegrations(v ...*Integration) *HushUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *HushUpdateOne) ClearFiles() *HushUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *HushUpdateOne) RemoveFileIDs(ids ...string) *HushUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *HushUpdateOne) RemoveFiles(v ...*File) *HushUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -935,6 +1225,30 @@ func (_u *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) {
 	if _u.mutation.SecretValueCleared() {
 		_spec.ClearField(hush.FieldSecretValue, field.TypeString)
 	}
+	if value, ok := _u.mutation.CredentialSet(); ok {
+		_spec.SetField(hush.FieldCredentialSet, field.TypeJSON, value)
+	}
+	if _u.mutation.CredentialSetCleared() {
+		_spec.ClearField(hush.FieldCredentialSet, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(hush.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(hush.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LastUsedAt(); ok {
+		_spec.SetField(hush.FieldLastUsedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastUsedAtCleared() {
+		_spec.ClearField(hush.FieldLastUsedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ExpiresAt(); ok {
+		_spec.SetField(hush.FieldExpiresAt, field.TypeTime, value)
+	}
+	if _u.mutation.ExpiresAtCleared() {
+		_spec.ClearField(hush.FieldExpiresAt, field.TypeTime)
+	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1009,6 +1323,54 @@ func (_u *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.IntegrationSecrets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   hush.FilesTable,
+			Columns: hush.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   hush.FilesTable,
+			Columns: hush.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   hush.FilesTable,
+			Columns: hush.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FileSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

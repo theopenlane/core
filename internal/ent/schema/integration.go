@@ -41,7 +41,7 @@ func (Integration) PluralName() string {
 func (Integration) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
-			Comment("the name of the integration - must be unique within the organization").
+			Comment("the name of the integration").
 			NotEmpty().
 			Annotations(
 				entgql.OrderField("name"),
@@ -53,10 +53,20 @@ func (Integration) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipWhereInput),
 			),
 		field.String("kind").
+			Comment("the kind of integration, such as github, slack, s3 etc.").
 			Optional().
 			Annotations(
 				entgql.OrderField("kind"),
 			),
+		field.String("integration_type").
+			Comment("the type of integration, such as communicattion, storage, SCM, etc.").
+			Optional().
+			Annotations(
+				entgql.OrderField("integration_type"),
+			),
+		field.JSON("metadata", map[string]any{}).
+			Comment("additional metadata about the integration").
+			Optional(),
 	}
 }
 
@@ -67,6 +77,11 @@ func (i Integration) Edges() []ent.Edge {
 			fromSchema: i,
 			edgeSchema: Hush{},
 			comment:    "the secrets associated with the integration",
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: File{},
+			comment:    "files associated with the integration",
 		}),
 		defaultEdgeToWithPagination(i, Event{}),
 	}
