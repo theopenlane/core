@@ -27,7 +27,7 @@ var DefaultSandboxCatalog = catalog.Catalog{
 			Description:          "Domain and Vulnerability Scanning",
 			DisplayName:          "Domain and Vulnerability Scanning",
 			LookupKey:            "domain_scanning_addon",
-			MarketingDescription: "",
+			MarketingDescription: "Proactive security scanning for domains and infrastructure. Detect vulnerabilities before they become threats.",
 			ProductID:            "prod_SzqDWb1fSmvyXC",
 		},
 		string(models.CatalogExtraEvidenceStorageAddon): catalog.Feature{
@@ -43,7 +43,7 @@ var DefaultSandboxCatalog = catalog.Catalog{
 			Description:          "Additional Evidence Storage for Compliance Evidence and Documents (100GB)",
 			DisplayName:          "Additional Evidence Storage (100GB)",
 			LookupKey:            "extra_evidence_storage_addon",
-			MarketingDescription: "",
+			MarketingDescription: "Expand your secure storage capacity for compliance evidence. Keep your documentation organized and accessible.",
 			ProductID:            "prod_SzqDCzuPVc6Lrn",
 		},
 		string(models.CatalogPolicyManagementAddon): catalog.Feature{
@@ -64,7 +64,7 @@ var DefaultSandboxCatalog = catalog.Catalog{
 			Description:          "Policy and Procedure Management",
 			DisplayName:          "Policy and Procedure Management",
 			LookupKey:            "policy_management_addon",
-			MarketingDescription: "",
+			MarketingDescription: "Create and maintain your security policies with version control. Keep your documentation audit-ready",
 			ProductID:            "prod_SzqDMmZeWJiUDm",
 		},
 		string(models.CatalogRiskManagementAddon): catalog.Feature{
@@ -85,7 +85,7 @@ var DefaultSandboxCatalog = catalog.Catalog{
 			Description:          "Risk Management",
 			DisplayName:          "Risk Management",
 			LookupKey:            "risk_management_addon",
-			MarketingDescription: "",
+			MarketingDescription: "Comprehensive risk assessment and monitoring solution. Make data-driven decisions about your security posture.",
 			ProductID:            "prod_SzqDvmryWdfvr7",
 		},
 	},

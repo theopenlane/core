@@ -15,8 +15,8 @@ func TestToSSOProvider(t *testing.T) {
 		expected enums.SSOProvider
 	}{
 		{"okta", enums.SSOProviderOkta},
-		{"ONELOGIN", enums.SSOProviderOneLogin},
-		{"GOOGLEWORKSPACE", enums.SSOProviderGoogleWorkspace},
+		{"ONE_LOGIN", enums.SSOProviderOneLogin},
+		{"GOOGLE_WORKSPACE", enums.SSOProviderGoogleWorkspace},
 		{"slack", enums.SSOProviderSlack},
 		{"GITHUB", enums.SSOProviderGithub},
 		{"unknown", enums.SSOProviderInvalid},
