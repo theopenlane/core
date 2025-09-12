@@ -10,8 +10,8 @@ type SSOProvider string
 
 var (
 	SSOProviderOkta            SSOProvider = "OKTA"
-	SSOProviderOneLogin        SSOProvider = "ONELOGIN"
-	SSOProviderGoogleWorkspace SSOProvider = "GOOGLEWORKSPACE"
+	SSOProviderOneLogin        SSOProvider = "ONE_LOGIN"
+	SSOProviderGoogleWorkspace SSOProvider = "GOOGLE_WORKSPACE"
 	SSOProviderSlack           SSOProvider = "SLACK"
 	SSOProviderGithub          SSOProvider = "GITHUB"
 	SSOProviderNone            SSOProvider = "NONE"

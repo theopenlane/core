@@ -66077,8 +66077,8 @@ OrganizationSettingHistorySSOProvider is enum for the field identity_provider
 """
 enum OrganizationSettingHistorySSOProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.SSOProvider") {
   OKTA
-  ONELOGIN
-  GOOGLEWORKSPACE
+  ONE_LOGIN
+  GOOGLE_WORKSPACE
   SLACK
   GITHUB
   NONE
@@ -66462,8 +66462,8 @@ OrganizationSettingSSOProvider is enum for the field identity_provider
 """
 enum OrganizationSettingSSOProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.SSOProvider") {
   OKTA
-  ONELOGIN
-  GOOGLEWORKSPACE
+  ONE_LOGIN
+  GOOGLE_WORKSPACE
   SLACK
   GITHUB
   NONE
