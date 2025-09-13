@@ -3181,6 +3181,7 @@ var (
 		{Name: "identity_provider_client_id", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_client_secret", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_metadata_endpoint", Type: field.TypeString, Nullable: true},
+		{Name: "identity_provider_auth_tested", Type: field.TypeBool, Default: false},
 		{Name: "identity_provider_entity_id", Type: field.TypeString, Nullable: true},
 		{Name: "oidc_discovery_endpoint", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
@@ -3196,7 +3197,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[26]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3229,6 +3230,7 @@ var (
 		{Name: "identity_provider_client_id", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_client_secret", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_metadata_endpoint", Type: field.TypeString, Nullable: true},
+		{Name: "identity_provider_auth_tested", Type: field.TypeBool, Default: false},
 		{Name: "identity_provider_entity_id", Type: field.TypeString, Nullable: true},
 		{Name: "oidc_discovery_endpoint", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},

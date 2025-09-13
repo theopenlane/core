@@ -394,6 +394,20 @@ func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProviderMetadataEndpoin
 	return _u
 }
 
+// SetIdentityProviderAuthTested sets the "identity_provider_auth_tested" field.
+func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderAuthTested(v bool) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetIdentityProviderAuthTested(v)
+	return _u
+}
+
+// SetNillableIdentityProviderAuthTested sets the "identity_provider_auth_tested" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderAuthTested(v *bool) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetIdentityProviderAuthTested(*v)
+	}
+	return _u
+}
+
 // SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
 func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderEntityID(v string) *OrganizationSettingHistoryUpdate {
 	_u.mutation.SetIdentityProviderEntityID(v)
@@ -696,6 +710,9 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.IdentityProviderMetadataEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString)
+	}
+	if value, ok := _u.mutation.IdentityProviderAuthTested(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderAuthTested, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.IdentityProviderEntityID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString, value)
@@ -1105,6 +1122,20 @@ func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderMetadataEndp
 	return _u
 }
 
+// SetIdentityProviderAuthTested sets the "identity_provider_auth_tested" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderAuthTested(v bool) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetIdentityProviderAuthTested(v)
+	return _u
+}
+
+// SetNillableIdentityProviderAuthTested sets the "identity_provider_auth_tested" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderAuthTested(v *bool) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderAuthTested(*v)
+	}
+	return _u
+}
+
 // SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
 func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderEntityID(v string) *OrganizationSettingHistoryUpdateOne {
 	_u.mutation.SetIdentityProviderEntityID(v)
@@ -1437,6 +1468,9 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.IdentityProviderMetadataEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString)
+	}
+	if value, ok := _u.mutation.IdentityProviderAuthTested(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderAuthTested, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.IdentityProviderEntityID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString, value)

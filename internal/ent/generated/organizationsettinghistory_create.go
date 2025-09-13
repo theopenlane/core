@@ -327,6 +327,20 @@ func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProviderMetadataE
 	return _c
 }
 
+// SetIdentityProviderAuthTested sets the "identity_provider_auth_tested" field.
+func (_c *OrganizationSettingHistoryCreate) SetIdentityProviderAuthTested(v bool) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetIdentityProviderAuthTested(v)
+	return _c
+}
+
+// SetNillableIdentityProviderAuthTested sets the "identity_provider_auth_tested" field if the given value is not nil.
+func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProviderAuthTested(v *bool) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetIdentityProviderAuthTested(*v)
+	}
+	return _c
+}
+
 // SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
 func (_c *OrganizationSettingHistoryCreate) SetIdentityProviderEntityID(v string) *OrganizationSettingHistoryCreate {
 	_c.mutation.SetIdentityProviderEntityID(v)
@@ -485,6 +499,10 @@ func (_c *OrganizationSettingHistoryCreate) defaults() error {
 		v := organizationsettinghistory.DefaultIdentityProvider
 		_c.mutation.SetIdentityProvider(v)
 	}
+	if _, ok := _c.mutation.IdentityProviderAuthTested(); !ok {
+		v := organizationsettinghistory.DefaultIdentityProviderAuthTested
+		_c.mutation.SetIdentityProviderAuthTested(v)
+	}
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		v := organizationsettinghistory.DefaultIdentityProviderLoginEnforced
 		_c.mutation.SetIdentityProviderLoginEnforced(v)
@@ -535,6 +553,9 @@ func (_c *OrganizationSettingHistoryCreate) check() error {
 		if err := organizationsettinghistory.IdentityProviderValidator(v); err != nil {
 			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.identity_provider": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.IdentityProviderAuthTested(); !ok {
+		return &ValidationError{Name: "identity_provider_auth_tested", err: errors.New(`generated: missing required field "OrganizationSettingHistory.identity_provider_auth_tested"`)}
 	}
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSettingHistory.identity_provider_login_enforced"`)}
@@ -673,6 +694,10 @@ func (_c *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSettingHi
 	if value, ok := _c.mutation.IdentityProviderMetadataEndpoint(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
 		_node.IdentityProviderMetadataEndpoint = value
+	}
+	if value, ok := _c.mutation.IdentityProviderAuthTested(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderAuthTested, field.TypeBool, value)
+		_node.IdentityProviderAuthTested = value
 	}
 	if value, ok := _c.mutation.IdentityProviderEntityID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString, value)

@@ -143,6 +143,11 @@ func IdentityProviderMetadataEndpoint(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldEQ(FieldIdentityProviderMetadataEndpoint, v))
 }
 
+// IdentityProviderAuthTested applies equality check predicate on the "identity_provider_auth_tested" field. It's identical to IdentityProviderAuthTestedEQ.
+func IdentityProviderAuthTested(v bool) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldEQ(FieldIdentityProviderAuthTested, v))
+}
+
 // IdentityProviderEntityID applies equality check predicate on the "identity_provider_entity_id" field. It's identical to IdentityProviderEntityIDEQ.
 func IdentityProviderEntityID(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldEQ(FieldIdentityProviderEntityID, v))
@@ -1271,6 +1276,16 @@ func IdentityProviderMetadataEndpointEqualFold(v string) predicate.OrganizationS
 // IdentityProviderMetadataEndpointContainsFold applies the ContainsFold predicate on the "identity_provider_metadata_endpoint" field.
 func IdentityProviderMetadataEndpointContainsFold(v string) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldContainsFold(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderAuthTestedEQ applies the EQ predicate on the "identity_provider_auth_tested" field.
+func IdentityProviderAuthTestedEQ(v bool) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldEQ(FieldIdentityProviderAuthTested, v))
+}
+
+// IdentityProviderAuthTestedNEQ applies the NEQ predicate on the "identity_provider_auth_tested" field.
+func IdentityProviderAuthTestedNEQ(v bool) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldNEQ(FieldIdentityProviderAuthTested, v))
 }
 
 // IdentityProviderEntityIDEQ applies the EQ predicate on the "identity_provider_entity_id" field.

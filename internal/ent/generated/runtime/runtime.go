@@ -4266,6 +4266,8 @@ func init() {
 	organizationsetting.Hooks[4] = organizationsettingHooks[0]
 
 	organizationsetting.Hooks[5] = organizationsettingHooks[1]
+
+	organizationsetting.Hooks[6] = organizationsettingHooks[2]
 	organizationsettingMixinInters1 := organizationsettingMixin[1].Interceptors()
 	organizationsettingMixinInters2 := organizationsettingMixin[2].Interceptors()
 	organizationsettingInters := schema.OrganizationSetting{}.Interceptors()
@@ -4314,16 +4316,20 @@ func init() {
 	organizationsettingDescAllowedEmailDomains := organizationsettingFields[9].Descriptor()
 	// organizationsetting.AllowedEmailDomainsValidator is a validator for the "allowed_email_domains" field. It is called by the builders before save.
 	organizationsetting.AllowedEmailDomainsValidator = organizationsettingDescAllowedEmailDomains.Validators[0].(func([]string) error)
+	// organizationsettingDescIdentityProviderAuthTested is the schema descriptor for identity_provider_auth_tested field.
+	organizationsettingDescIdentityProviderAuthTested := organizationsettingFields[14].Descriptor()
+	// organizationsetting.DefaultIdentityProviderAuthTested holds the default value on creation for the identity_provider_auth_tested field.
+	organizationsetting.DefaultIdentityProviderAuthTested = organizationsettingDescIdentityProviderAuthTested.Default.(bool)
 	// organizationsettingDescIdentityProviderLoginEnforced is the schema descriptor for identity_provider_login_enforced field.
-	organizationsettingDescIdentityProviderLoginEnforced := organizationsettingFields[16].Descriptor()
+	organizationsettingDescIdentityProviderLoginEnforced := organizationsettingFields[17].Descriptor()
 	// organizationsetting.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
 	organizationsetting.DefaultIdentityProviderLoginEnforced = organizationsettingDescIdentityProviderLoginEnforced.Default.(bool)
 	// organizationsettingDescComplianceWebhookToken is the schema descriptor for compliance_webhook_token field.
-	organizationsettingDescComplianceWebhookToken := organizationsettingFields[17].Descriptor()
+	organizationsettingDescComplianceWebhookToken := organizationsettingFields[18].Descriptor()
 	// organizationsetting.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
 	organizationsetting.DefaultComplianceWebhookToken = organizationsettingDescComplianceWebhookToken.Default.(func() string)
 	// organizationsettingDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
-	organizationsettingDescPaymentMethodAdded := organizationsettingFields[18].Descriptor()
+	organizationsettingDescPaymentMethodAdded := organizationsettingFields[19].Descriptor()
 	// organizationsetting.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
 	organizationsetting.DefaultPaymentMethodAdded = organizationsettingDescPaymentMethodAdded.Default.(bool)
 	// organizationsettingDescID is the schema descriptor for id field.
@@ -4365,16 +4371,20 @@ func init() {
 	organizationsettinghistoryDescBillingNotificationsEnabled := organizationsettinghistoryFields[19].Descriptor()
 	// organizationsettinghistory.DefaultBillingNotificationsEnabled holds the default value on creation for the billing_notifications_enabled field.
 	organizationsettinghistory.DefaultBillingNotificationsEnabled = organizationsettinghistoryDescBillingNotificationsEnabled.Default.(bool)
+	// organizationsettinghistoryDescIdentityProviderAuthTested is the schema descriptor for identity_provider_auth_tested field.
+	organizationsettinghistoryDescIdentityProviderAuthTested := organizationsettinghistoryFields[25].Descriptor()
+	// organizationsettinghistory.DefaultIdentityProviderAuthTested holds the default value on creation for the identity_provider_auth_tested field.
+	organizationsettinghistory.DefaultIdentityProviderAuthTested = organizationsettinghistoryDescIdentityProviderAuthTested.Default.(bool)
 	// organizationsettinghistoryDescIdentityProviderLoginEnforced is the schema descriptor for identity_provider_login_enforced field.
-	organizationsettinghistoryDescIdentityProviderLoginEnforced := organizationsettinghistoryFields[27].Descriptor()
+	organizationsettinghistoryDescIdentityProviderLoginEnforced := organizationsettinghistoryFields[28].Descriptor()
 	// organizationsettinghistory.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
 	organizationsettinghistory.DefaultIdentityProviderLoginEnforced = organizationsettinghistoryDescIdentityProviderLoginEnforced.Default.(bool)
 	// organizationsettinghistoryDescComplianceWebhookToken is the schema descriptor for compliance_webhook_token field.
-	organizationsettinghistoryDescComplianceWebhookToken := organizationsettinghistoryFields[28].Descriptor()
+	organizationsettinghistoryDescComplianceWebhookToken := organizationsettinghistoryFields[29].Descriptor()
 	// organizationsettinghistory.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
 	organizationsettinghistory.DefaultComplianceWebhookToken = organizationsettinghistoryDescComplianceWebhookToken.Default.(func() string)
 	// organizationsettinghistoryDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
-	organizationsettinghistoryDescPaymentMethodAdded := organizationsettinghistoryFields[29].Descriptor()
+	organizationsettinghistoryDescPaymentMethodAdded := organizationsettinghistoryFields[30].Descriptor()
 	// organizationsettinghistory.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
 	organizationsettinghistory.DefaultPaymentMethodAdded = organizationsettinghistoryDescPaymentMethodAdded.Default.(bool)
 	// organizationsettinghistoryDescID is the schema descriptor for id field.

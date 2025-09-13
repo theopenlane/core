@@ -7721,6 +7721,7 @@ type CreateOrganizationSettingInput struct {
 	IdentityProviderClientID         *string
 	IdentityProviderClientSecret     *string
 	IdentityProviderMetadataEndpoint *string
+	IdentityProviderAuthTested       *bool
 	IdentityProviderEntityID         *string
 	OidcDiscoveryEndpoint            *string
 	IdentityProviderLoginEnforced    *bool
@@ -7772,6 +7773,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.IdentityProviderMetadataEndpoint; v != nil {
 		m.SetIdentityProviderMetadataEndpoint(*v)
+	}
+	if v := i.IdentityProviderAuthTested; v != nil {
+		m.SetIdentityProviderAuthTested(*v)
 	}
 	if v := i.IdentityProviderEntityID; v != nil {
 		m.SetIdentityProviderEntityID(*v)
@@ -7831,6 +7835,7 @@ type UpdateOrganizationSettingInput struct {
 	IdentityProviderClientSecret          *string
 	ClearIdentityProviderMetadataEndpoint bool
 	IdentityProviderMetadataEndpoint      *string
+	IdentityProviderAuthTested            *bool
 	ClearIdentityProviderEntityID         bool
 	IdentityProviderEntityID              *string
 	ClearOidcDiscoveryEndpoint            bool
@@ -7936,6 +7941,9 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.IdentityProviderMetadataEndpoint; v != nil {
 		m.SetIdentityProviderMetadataEndpoint(*v)
+	}
+	if v := i.IdentityProviderAuthTested; v != nil {
+		m.SetIdentityProviderAuthTested(*v)
 	}
 	if i.ClearIdentityProviderEntityID {
 		m.ClearIdentityProviderEntityID()

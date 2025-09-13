@@ -66,6 +66,8 @@ const (
 	FieldIdentityProviderClientSecret = "identity_provider_client_secret"
 	// FieldIdentityProviderMetadataEndpoint holds the string denoting the identity_provider_metadata_endpoint field in the database.
 	FieldIdentityProviderMetadataEndpoint = "identity_provider_metadata_endpoint"
+	// FieldIdentityProviderAuthTested holds the string denoting the identity_provider_auth_tested field in the database.
+	FieldIdentityProviderAuthTested = "identity_provider_auth_tested"
 	// FieldIdentityProviderEntityID holds the string denoting the identity_provider_entity_id field in the database.
 	FieldIdentityProviderEntityID = "identity_provider_entity_id"
 	// FieldOidcDiscoveryEndpoint holds the string denoting the oidc_discovery_endpoint field in the database.
@@ -107,6 +109,7 @@ var Columns = []string{
 	FieldIdentityProviderClientID,
 	FieldIdentityProviderClientSecret,
 	FieldIdentityProviderMetadataEndpoint,
+	FieldIdentityProviderAuthTested,
 	FieldIdentityProviderEntityID,
 	FieldOidcDiscoveryEndpoint,
 	FieldIdentityProviderLoginEnforced,
@@ -145,6 +148,8 @@ var (
 	DefaultTags []string
 	// DefaultBillingNotificationsEnabled holds the default value on creation for the "billing_notifications_enabled" field.
 	DefaultBillingNotificationsEnabled bool
+	// DefaultIdentityProviderAuthTested holds the default value on creation for the "identity_provider_auth_tested" field.
+	DefaultIdentityProviderAuthTested bool
 	// DefaultIdentityProviderLoginEnforced holds the default value on creation for the "identity_provider_login_enforced" field.
 	DefaultIdentityProviderLoginEnforced bool
 	// DefaultComplianceWebhookToken holds the default value on creation for the "compliance_webhook_token" field.
@@ -295,6 +300,11 @@ func ByIdentityProviderClientSecret(opts ...sql.OrderTermOption) OrderOption {
 // ByIdentityProviderMetadataEndpoint orders the results by the identity_provider_metadata_endpoint field.
 func ByIdentityProviderMetadataEndpoint(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIdentityProviderMetadataEndpoint, opts...).ToFunc()
+}
+
+// ByIdentityProviderAuthTested orders the results by the identity_provider_auth_tested field.
+func ByIdentityProviderAuthTested(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityProviderAuthTested, opts...).ToFunc()
 }
 
 // ByIdentityProviderEntityID orders the results by the identity_provider_entity_id field.

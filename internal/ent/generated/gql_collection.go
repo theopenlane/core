@@ -31244,6 +31244,11 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderMetadataEndpoint)
 				fieldSeen[organizationsetting.FieldIdentityProviderMetadataEndpoint] = struct{}{}
 			}
+		case "identityProviderAuthTested":
+			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderAuthTested]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderAuthTested)
+				fieldSeen[organizationsetting.FieldIdentityProviderAuthTested] = struct{}{}
+			}
 		case "identityProviderEntityID":
 			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderEntityID]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderEntityID)
@@ -31468,6 +31473,11 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderMetadataEndpoint]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderMetadataEndpoint)
 				fieldSeen[organizationsettinghistory.FieldIdentityProviderMetadataEndpoint] = struct{}{}
+			}
+		case "identityProviderAuthTested":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderAuthTested]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderAuthTested)
+				fieldSeen[organizationsettinghistory.FieldIdentityProviderAuthTested] = struct{}{}
 			}
 		case "identityProviderEntityID":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderEntityID]; !ok {
