@@ -35,6 +35,13 @@ func ValidateIdentityProviderConfig(ctx context.Context, m *generated.Organizati
 		return nil
 	}
 
+	// sso connection must have been tested
+	// before it can be can be enforced
+	tested, _ := m.OldIdentityProviderAuthTested(ctx)
+	if !tested {
+		return ErrSSONotEnforceable
+	}
+
 	// identity provider
 	provider, providerOK := m.IdentityProvider()
 	if !providerOK && m.Op() != ent.OpCreate {

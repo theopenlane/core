@@ -44375,10 +44375,6 @@ input CreateOrganizationSettingInput {
   """
   identityProviderMetadataEndpoint: String
   """
-  has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
-  """
-  identityProviderAuthTested: Boolean
-  """
   SAML entity ID for the SSO provider
   """
   identityProviderEntityID: String
@@ -86417,10 +86413,6 @@ input UpdateOrganizationSettingInput {
   """
   identityProviderMetadataEndpoint: String
   clearIdentityProviderMetadataEndpoint: Boolean
-  """
-  has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
-  """
-  identityProviderAuthTested: Boolean
   """
   SAML entity ID for the SSO provider
   """

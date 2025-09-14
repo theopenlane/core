@@ -5143,8 +5143,6 @@ type CreateOrganizationSettingInput struct {
 	IdentityProviderClientSecret *string `json:"identityProviderClientSecret,omitempty"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint *string `json:"identityProviderMetadataEndpoint,omitempty"`
-	// has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
-	IdentityProviderAuthTested *bool `json:"identityProviderAuthTested,omitempty"`
 	// SAML entity ID for the SSO provider
 	IdentityProviderEntityID *string `json:"identityProviderEntityID,omitempty"`
 	// OIDC discovery URL for the SSO provider
@@ -29536,8 +29534,6 @@ type UpdateOrganizationSettingInput struct {
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint      *string `json:"identityProviderMetadataEndpoint,omitempty"`
 	ClearIdentityProviderMetadataEndpoint *bool   `json:"clearIdentityProviderMetadataEndpoint,omitempty"`
-	// has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
-	IdentityProviderAuthTested *bool `json:"identityProviderAuthTested,omitempty"`
 	// SAML entity ID for the SSO provider
 	IdentityProviderEntityID      *string `json:"identityProviderEntityID,omitempty"`
 	ClearIdentityProviderEntityID *bool   `json:"clearIdentityProviderEntityID,omitempty"`

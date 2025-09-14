@@ -26,6 +26,11 @@ import (
 	"github.com/theopenlane/utils/rout"
 )
 
+const (
+	ssoTestCookieName  = "is_test"
+	ssoTestCookieValue = "1"
+)
+
 // SSOLoginHandler redirects the user to the organization's configured IdP for authentication
 // It sets state and nonce cookies, builds the OIDC auth URL, and issues a redirect
 // see docs/SSO.md for more details on the SSO flow
@@ -51,8 +56,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 	}
 
 	if in.IsTest {
-		// use 1 to store true as a string is required
-		sessions.SetCookie(ctx.Response().Writer, "1", "is_test", cfg)
+		sessions.SetCookie(ctx.Response().Writer, ssoTestCookieValue, ssoTestCookieName, cfg)
 	}
 
 	// always set the org ID as a cookie for the OIDC flow
@@ -160,6 +164,12 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		sessions.RemoveCookie(ctx.Response().Writer, "token_type", sessions.CookieConfig{Path: "/"})
 	}
 
+	if ssoTestCookie, err := sessions.GetCookie(ctx.Request(), ssoTestCookieName); err == nil && ssoTestCookie.Value == ssoTestCookieValue {
+		if err := h.setIDPAuthTested(userCtx, in.OrganizationID); err != nil {
+			return err
+		}
+	}
+
 	out := apimodels.LoginReply{
 		Reply:      rout.Reply{Success: true},
 		TFAEnabled: entUser.Edges.Setting.IsTfaEnabled,
@@ -227,6 +237,18 @@ func newRelyingParty(ctx context.Context, issuer, clientID, clientSecret, cb str
 		[]string{oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail},
 		rpOpts...,
 	)
+}
+
+// setIDPAuthTested makes sure to mark the config as tested so it can be enforced
+func (h *Handler) setIDPAuthTested(ctx context.Context, orgID string) error {
+	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
+	if err != nil {
+		return err
+	}
+
+	return transaction.FromContext(ctx).OrganizationSetting.UpdateOne(setting).
+		SetIdentityProviderAuthTested(true).
+		Exec(ctx)
 }
 
 // oidcConfig builds an OIDC relying party config for the given org.
