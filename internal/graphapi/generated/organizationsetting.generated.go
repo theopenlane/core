@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _OrganizationSettingBulkCreatePayload_organizationSettings(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OrganizationSettingBulkCreatePayload_organizationSettings(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.OrganizationSettings, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.OrganizationSetting)
-	fc.Result = res
-	return ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSettingᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrganizationSettingBulkCreatePayload_organizationSettings,
+		func(ctx context.Context) (any, error) { return obj.OrganizationSettings, nil },
+		nil,
+		ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSettingᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_organizationSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -127,34 +112,17 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 }
 
 func (ec *executionContext) _OrganizationSettingCreatePayload_organizationSetting(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OrganizationSettingCreatePayload_organizationSetting(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.OrganizationSetting, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.OrganizationSetting)
-	fc.Result = res
-	return ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSetting(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrganizationSettingCreatePayload_organizationSetting,
+		func(ctx context.Context) (any, error) { return obj.OrganizationSetting, nil },
+		nil,
+		ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSetting,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organizationSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -227,34 +195,17 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 }
 
 func (ec *executionContext) _OrganizationSettingDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OrganizationSettingDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrganizationSettingDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_OrganizationSettingDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -271,34 +222,17 @@ func (ec *executionContext) fieldContext_OrganizationSettingDeletePayload_delete
 }
 
 func (ec *executionContext) _OrganizationSettingUpdatePayload_organizationSetting(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OrganizationSettingUpdatePayload_organizationSetting(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.OrganizationSetting, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.OrganizationSetting)
-	fc.Result = res
-	return ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSetting(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrganizationSettingUpdatePayload_organizationSetting,
+		func(ctx context.Context) (any, error) { return obj.OrganizationSetting, nil },
+		nil,
+		ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSetting,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organizationSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

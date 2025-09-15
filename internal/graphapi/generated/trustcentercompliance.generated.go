@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _TrustCenterComplianceBulkCreatePayload_trustCenterCompliances(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterComplianceBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TrustCenterComplianceBulkCreatePayload_trustCenterCompliances(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TrustCenterCompliances, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.TrustCenterCompliance)
-	fc.Result = res
-	return ec.marshalOTrustCenterCompliance2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterComplianceᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TrustCenterComplianceBulkCreatePayload_trustCenterCompliances,
+		func(ctx context.Context) (any, error) { return obj.TrustCenterCompliances, nil },
+		nil,
+		ec.marshalOTrustCenterCompliance2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterComplianceᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_TrustCenterComplianceBulkCreatePayload_trustCenterCompliances(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -93,34 +78,17 @@ func (ec *executionContext) fieldContext_TrustCenterComplianceBulkCreatePayload_
 }
 
 func (ec *executionContext) _TrustCenterComplianceCreatePayload_trustCenterCompliance(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterComplianceCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TrustCenterComplianceCreatePayload_trustCenterCompliance(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TrustCenterCompliance, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.TrustCenterCompliance)
-	fc.Result = res
-	return ec.marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TrustCenterComplianceCreatePayload_trustCenterCompliance,
+		func(ctx context.Context) (any, error) { return obj.TrustCenterCompliance, nil },
+		nil,
+		ec.marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_TrustCenterComplianceCreatePayload_trustCenterCompliance(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -159,34 +127,17 @@ func (ec *executionContext) fieldContext_TrustCenterComplianceCreatePayload_trus
 }
 
 func (ec *executionContext) _TrustCenterComplianceDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterComplianceDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TrustCenterComplianceDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TrustCenterComplianceDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_TrustCenterComplianceDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -203,34 +154,17 @@ func (ec *executionContext) fieldContext_TrustCenterComplianceDeletePayload_dele
 }
 
 func (ec *executionContext) _TrustCenterComplianceUpdatePayload_trustCenterCompliance(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterComplianceUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TrustCenterComplianceUpdatePayload_trustCenterCompliance(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TrustCenterCompliance, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.TrustCenterCompliance)
-	fc.Result = res
-	return ec.marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TrustCenterComplianceUpdatePayload_trustCenterCompliance,
+		func(ctx context.Context) (any, error) { return obj.TrustCenterCompliance, nil },
+		nil,
+		ec.marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_TrustCenterComplianceUpdatePayload_trustCenterCompliance(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _InviteBulkCreatePayload_invites(ctx context.Context, field graphql.CollectedField, obj *model.InviteBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_InviteBulkCreatePayload_invites(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Invites, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Invite)
-	fc.Result = res
-	return ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InviteBulkCreatePayload_invites,
+		func(ctx context.Context) (any, error) { return obj.Invites, nil },
+		nil,
+		ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -103,34 +88,17 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 }
 
 func (ec *executionContext) _InviteCreatePayload_invite(ctx context.Context, field graphql.CollectedField, obj *model.InviteCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_InviteCreatePayload_invite(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Invite, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Invite)
-	fc.Result = res
-	return ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InviteCreatePayload_invite,
+		func(ctx context.Context) (any, error) { return obj.Invite, nil },
+		nil,
+		ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -179,34 +147,17 @@ func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Co
 }
 
 func (ec *executionContext) _InviteDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.InviteDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_InviteDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InviteDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_InviteDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -223,34 +174,17 @@ func (ec *executionContext) fieldContext_InviteDeletePayload_deletedID(_ context
 }
 
 func (ec *executionContext) _InviteUpdatePayload_invite(ctx context.Context, field graphql.CollectedField, obj *model.InviteUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_InviteUpdatePayload_invite(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Invite, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Invite)
-	fc.Result = res
-	return ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InviteUpdatePayload_invite,
+		func(ctx context.Context) (any, error) { return obj.Invite, nil },
+		nil,
+		ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

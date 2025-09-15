@@ -11,11 +11,10 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	gc "github.com/theopenlane/core/pkg/catalog/gencatalog"
 )
 
-// InterceptorSubscriptionURL is an ent interceptor to fetch data from an external source (in this case stripe) and populate the URLs in the graph return response
-func InterceptorSubscriptionURL() ent.Interceptor {
+// InterceptorBillingPortalURLs is an ent interceptor to fetch data from an external source (in this case stripe) and populate the URLs in the graph return response
+func InterceptorBillingPortalURLs() ent.Interceptor {
 	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 		return intercept.OrgSubscriptionFunc(func(ctx context.Context, q *generated.OrgSubscriptionQuery) (generated.Value, error) {
 			v, err := next.Query(ctx, q)
@@ -25,7 +24,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 
 			hasField := false
 
-			urlFields := []string{"subscriptionURL", "managePaymentMethods", "cancellation"}
+			urlFields := []string{"managePaymentMethods", "cancellation"}
 			for _, field := range urlFields {
 				if graphutils.CheckForRequestedField(ctx, field) {
 					hasField = true
@@ -41,7 +40,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 			orgSubResult, ok := v.([]*generated.OrgSubscription)
 			if ok {
 				for _, orgSub := range orgSubResult {
-					if err := setSubscriptionURL(ctx, orgSub, q); err != nil {
+					if err := setPortalURLs(ctx, orgSub, q); err != nil {
 						zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set subscription URL")
 					}
 				}
@@ -52,7 +51,7 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 			// if its not a list, check the single entry
 			orgSub, ok := v.(*generated.OrgSubscription)
 			if ok {
-				if err := setSubscriptionURL(ctx, orgSub, q); err != nil {
+				if err := setPortalURLs(ctx, orgSub, q); err != nil {
 					zerolog.Ctx(ctx).Warn().Err(err).Msg("failed to set subscription URL")
 				}
 
@@ -64,8 +63,8 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 	})
 }
 
-// setSubscriptionURL sets the subscription URL for the org subscription response
-func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, q *generated.OrgSubscriptionQuery) error {
+// setPortalURLs sets the subscription URL for the org subscription response
+func setPortalURLs(ctx context.Context, orgSub *generated.OrgSubscription, q *generated.OrgSubscriptionQuery) error {
 	if orgSub == nil || !q.EntitlementManager.Config.IsEnabled() {
 		log.Debug().Ctx(ctx).Msg("organization does not have a subscription or entitlement manager is nil, skipping URL setting")
 
@@ -96,14 +95,6 @@ func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, 
 
 	customerID := *org.StripeCustomerID
 
-	// create a billing portal session
-	updateSubscription, err := q.EntitlementManager.CreateBillingPortalUpdateSession(ctx, orgSub.StripeSubscriptionID, customerID)
-	if err != nil {
-		zerolog.Ctx(ctx).Err(err).Msg("failed to create update subscription billing portal session type")
-
-		return err
-	}
-
 	cancelSubscription, err := q.EntitlementManager.CancellationBillingPortalSession(ctx, orgSub.StripeSubscriptionID, customerID)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msg("failed to create cancel subscription billing portal session type")
@@ -118,31 +109,8 @@ func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, 
 		return err
 	}
 
-	moduleURLs := map[string]string{}
-	visible := gc.GetCatalogByAudience(q.EntConfig.Modules.UseSandbox, "")
-	for name, feat := range visible.Modules {
-		if len(feat.Billing.Prices) == 0 {
-			continue
-		}
-
-		priceID := feat.Billing.Prices[0].PriceID
-		if priceID == "" {
-			continue
-		}
-
-		sess, err := q.EntitlementManager.CreateBillingPortalAddModuleSession(ctx, orgSub.StripeSubscriptionID, customerID, priceID)
-		if err != nil {
-			zerolog.Ctx(ctx).Warn().Err(err).Str("module", name).Msg("failed to create module billing portal session")
-			continue
-		}
-
-		moduleURLs[name] = sess.ManageSubscription
-	}
-
-	orgSub.SubscriptionURL = updateSubscription.ManageSubscription
 	orgSub.Cancellation = cancelSubscription.Cancellation
 	orgSub.ManagePaymentMethods = updatePaymentMethod.PaymentMethods
-	orgSub.ModuleBillingURLs = moduleURLs
 
 	return nil
 }

@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _OrgMembershipBulkCreatePayload_orgMemberships(ctx context.Context, field graphql.CollectedField, obj *model.OrgMembershipBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OrgMembershipBulkCreatePayload_orgMemberships(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.OrgMemberships, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.OrgMembership)
-	fc.Result = res
-	return ec.marshalOOrgMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembershipᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrgMembershipBulkCreatePayload_orgMemberships,
+		func(ctx context.Context) (any, error) { return obj.OrgMemberships, nil },
+		nil,
+		ec.marshalOOrgMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembershipᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_OrgMembershipBulkCreatePayload_orgMemberships(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -95,34 +80,17 @@ func (ec *executionContext) fieldContext_OrgMembershipBulkCreatePayload_orgMembe
 }
 
 func (ec *executionContext) _OrgMembershipCreatePayload_orgMembership(ctx context.Context, field graphql.CollectedField, obj *model.OrgMembershipCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OrgMembershipCreatePayload_orgMembership(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.OrgMembership, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.OrgMembership)
-	fc.Result = res
-	return ec.marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembership(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrgMembershipCreatePayload_orgMembership,
+		func(ctx context.Context) (any, error) { return obj.OrgMembership, nil },
+		nil,
+		ec.marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembership,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_OrgMembershipCreatePayload_orgMembership(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -163,34 +131,17 @@ func (ec *executionContext) fieldContext_OrgMembershipCreatePayload_orgMembershi
 }
 
 func (ec *executionContext) _OrgMembershipDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.OrgMembershipDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OrgMembershipDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrgMembershipDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_OrgMembershipDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -207,34 +158,17 @@ func (ec *executionContext) fieldContext_OrgMembershipDeletePayload_deletedID(_ 
 }
 
 func (ec *executionContext) _OrgMembershipUpdatePayload_orgMembership(ctx context.Context, field graphql.CollectedField, obj *model.OrgMembershipUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OrgMembershipUpdatePayload_orgMembership(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.OrgMembership, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.OrgMembership)
-	fc.Result = res
-	return ec.marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembership(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OrgMembershipUpdatePayload_orgMembership,
+		func(ctx context.Context) (any, error) { return obj.OrgMembership, nil },
+		nil,
+		ec.marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembership,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_OrgMembershipUpdatePayload_orgMembership(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _GroupMembershipBulkCreatePayload_groupMemberships(ctx context.Context, field graphql.CollectedField, obj *model.GroupMembershipBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupMembershipBulkCreatePayload_groupMemberships(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.GroupMemberships, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.GroupMembership)
-	fc.Result = res
-	return ec.marshalOGroupMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembershipᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupMembershipBulkCreatePayload_groupMemberships,
+		func(ctx context.Context) (any, error) { return obj.GroupMemberships, nil },
+		nil,
+		ec.marshalOGroupMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembershipᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupMembershipBulkCreatePayload_groupMemberships(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -95,34 +80,17 @@ func (ec *executionContext) fieldContext_GroupMembershipBulkCreatePayload_groupM
 }
 
 func (ec *executionContext) _GroupMembershipCreatePayload_groupMembership(ctx context.Context, field graphql.CollectedField, obj *model.GroupMembershipCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupMembershipCreatePayload_groupMembership(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.GroupMembership, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.GroupMembership)
-	fc.Result = res
-	return ec.marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembership(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupMembershipCreatePayload_groupMembership,
+		func(ctx context.Context) (any, error) { return obj.GroupMembership, nil },
+		nil,
+		ec.marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembership,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupMembershipCreatePayload_groupMembership(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -163,34 +131,17 @@ func (ec *executionContext) fieldContext_GroupMembershipCreatePayload_groupMembe
 }
 
 func (ec *executionContext) _GroupMembershipDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.GroupMembershipDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupMembershipDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupMembershipDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupMembershipDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -207,34 +158,17 @@ func (ec *executionContext) fieldContext_GroupMembershipDeletePayload_deletedID(
 }
 
 func (ec *executionContext) _GroupMembershipUpdatePayload_groupMembership(ctx context.Context, field graphql.CollectedField, obj *model.GroupMembershipUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupMembershipUpdatePayload_groupMembership(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.GroupMembership, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.GroupMembership)
-	fc.Result = res
-	return ec.marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembership(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupMembershipUpdatePayload_groupMembership,
+		func(ctx context.Context) (any, error) { return obj.GroupMembership, nil },
+		nil,
+		ec.marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembership,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupMembershipUpdatePayload_groupMembership(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

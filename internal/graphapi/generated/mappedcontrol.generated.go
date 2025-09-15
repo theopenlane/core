@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _MappedControlBulkCreatePayload_mappedControls(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MappedControlBulkCreatePayload_mappedControls(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MappedControls, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.MappedControl)
-	fc.Result = res
-	return ec.marshalOMappedControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControlᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappedControlBulkCreatePayload_mappedControls,
+		func(ctx context.Context) (any, error) { return obj.MappedControls, nil },
+		nil,
+		ec.marshalOMappedControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControlᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_MappedControlBulkCreatePayload_mappedControls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -109,34 +94,17 @@ func (ec *executionContext) fieldContext_MappedControlBulkCreatePayload_mappedCo
 }
 
 func (ec *executionContext) _MappedControlCreatePayload_mappedControl(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MappedControlCreatePayload_mappedControl(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MappedControl, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.MappedControl)
-	fc.Result = res
-	return ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappedControlCreatePayload_mappedControl,
+		func(ctx context.Context) (any, error) { return obj.MappedControl, nil },
+		nil,
+		ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_MappedControlCreatePayload_mappedControl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -191,34 +159,17 @@ func (ec *executionContext) fieldContext_MappedControlCreatePayload_mappedContro
 }
 
 func (ec *executionContext) _MappedControlDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MappedControlDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappedControlDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_MappedControlDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -235,34 +186,17 @@ func (ec *executionContext) fieldContext_MappedControlDeletePayload_deletedID(_ 
 }
 
 func (ec *executionContext) _MappedControlUpdatePayload_mappedControl(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MappedControlUpdatePayload_mappedControl(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MappedControl, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.MappedControl)
-	fc.Result = res
-	return ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappedControlUpdatePayload_mappedControl,
+		func(ctx context.Context) (any, error) { return obj.MappedControl, nil },
+		nil,
+		ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_MappedControlUpdatePayload_mappedControl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

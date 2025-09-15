@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ProgramMembershipBulkCreatePayload_programMemberships(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProgramMembershipBulkCreatePayload_programMemberships(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ProgramMemberships, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.ProgramMembership)
-	fc.Result = res
-	return ec.marshalOProgramMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembershipᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramMembershipBulkCreatePayload_programMemberships,
+		func(ctx context.Context) (any, error) { return obj.ProgramMemberships, nil },
+		nil,
+		ec.marshalOProgramMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembershipᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProgramMembershipBulkCreatePayload_programMemberships(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -93,34 +78,17 @@ func (ec *executionContext) fieldContext_ProgramMembershipBulkCreatePayload_prog
 }
 
 func (ec *executionContext) _ProgramMembershipCreatePayload_programMembership(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProgramMembershipCreatePayload_programMembership(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ProgramMembership, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ProgramMembership)
-	fc.Result = res
-	return ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramMembershipCreatePayload_programMembership,
+		func(ctx context.Context) (any, error) { return obj.ProgramMembership, nil },
+		nil,
+		ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProgramMembershipCreatePayload_programMembership(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -159,34 +127,17 @@ func (ec *executionContext) fieldContext_ProgramMembershipCreatePayload_programM
 }
 
 func (ec *executionContext) _ProgramMembershipDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProgramMembershipDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramMembershipDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProgramMembershipDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -203,34 +154,17 @@ func (ec *executionContext) fieldContext_ProgramMembershipDeletePayload_deletedI
 }
 
 func (ec *executionContext) _ProgramMembershipUpdatePayload_programMembership(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProgramMembershipUpdatePayload_programMembership(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ProgramMembership, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ProgramMembership)
-	fc.Result = res
-	return ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramMembershipUpdatePayload_programMembership,
+		func(ctx context.Context) (any, error) { return obj.ProgramMembership, nil },
+		nil,
+		ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProgramMembershipUpdatePayload_programMembership(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

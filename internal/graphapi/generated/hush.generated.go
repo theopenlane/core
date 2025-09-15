@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _HushBulkCreatePayload_hushes(ctx context.Context, field graphql.CollectedField, obj *model.HushBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_HushBulkCreatePayload_hushes(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Hushes, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Hush)
-	fc.Result = res
-	return ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_HushBulkCreatePayload_hushes,
+		func(ctx context.Context) (any, error) { return obj.Hushes, nil },
+		nil,
+		ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -109,31 +94,17 @@ func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.
 }
 
 func (ec *executionContext) _HushBulkUpdatePayload_hushes(ctx context.Context, field graphql.CollectedField, obj *model.HushBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_HushBulkUpdatePayload_hushes(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Hushes, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Hush)
-	fc.Result = res
-	return ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_HushBulkUpdatePayload_hushes,
+		func(ctx context.Context) (any, error) { return obj.Hushes, nil },
+		nil,
+		ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_HushBulkUpdatePayload_hushes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -188,31 +159,17 @@ func (ec *executionContext) fieldContext_HushBulkUpdatePayload_hushes(_ context.
 }
 
 func (ec *executionContext) _HushBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.HushBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_HushBulkUpdatePayload_updatedIDs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedIDs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]string)
-	fc.Result = res
-	return ec.marshalOID2ᚕstringᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_HushBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_HushBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -229,34 +186,17 @@ func (ec *executionContext) fieldContext_HushBulkUpdatePayload_updatedIDs(_ cont
 }
 
 func (ec *executionContext) _HushCreatePayload_hush(ctx context.Context, field graphql.CollectedField, obj *model.HushCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_HushCreatePayload_hush(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Hush, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Hush)
-	fc.Result = res
-	return ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_HushCreatePayload_hush,
+		func(ctx context.Context) (any, error) { return obj.Hush, nil },
+		nil,
+		ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -311,34 +251,17 @@ func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Contex
 }
 
 func (ec *executionContext) _HushDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.HushDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_HushDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_HushDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_HushDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -355,34 +278,17 @@ func (ec *executionContext) fieldContext_HushDeletePayload_deletedID(_ context.C
 }
 
 func (ec *executionContext) _HushUpdatePayload_hush(ctx context.Context, field graphql.CollectedField, obj *model.HushUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_HushUpdatePayload_hush(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Hush, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Hush)
-	fc.Result = res
-	return ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_HushUpdatePayload_hush,
+		func(ctx context.Context) (any, error) { return obj.Hush, nil },
+		nil,
+		ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

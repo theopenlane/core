@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _JobRunnerRegistrationTokenBulkCreatePayload_jobRunnerRegistrationTokens(ctx context.Context, field graphql.CollectedField, obj *model.JobRunnerRegistrationTokenBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_JobRunnerRegistrationTokenBulkCreatePayload_jobRunnerRegistrationTokens(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.JobRunnerRegistrationTokens, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.JobRunnerRegistrationToken)
-	fc.Result = res
-	return ec.marshalOJobRunnerRegistrationToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerRegistrationTokenᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_JobRunnerRegistrationTokenBulkCreatePayload_jobRunnerRegistrationTokens,
+		func(ctx context.Context) (any, error) { return obj.JobRunnerRegistrationTokens, nil },
+		nil,
+		ec.marshalOJobRunnerRegistrationToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerRegistrationTokenᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_JobRunnerRegistrationTokenBulkCreatePayload_jobRunnerRegistrationTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -99,34 +84,17 @@ func (ec *executionContext) fieldContext_JobRunnerRegistrationTokenBulkCreatePay
 }
 
 func (ec *executionContext) _JobRunnerRegistrationTokenCreatePayload_jobRunnerRegistrationToken(ctx context.Context, field graphql.CollectedField, obj *model.JobRunnerRegistrationTokenCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_JobRunnerRegistrationTokenCreatePayload_jobRunnerRegistrationToken(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.JobRunnerRegistrationToken, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.JobRunnerRegistrationToken)
-	fc.Result = res
-	return ec.marshalNJobRunnerRegistrationToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerRegistrationToken(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_JobRunnerRegistrationTokenCreatePayload_jobRunnerRegistrationToken,
+		func(ctx context.Context) (any, error) { return obj.JobRunnerRegistrationToken, nil },
+		nil,
+		ec.marshalNJobRunnerRegistrationToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerRegistrationToken,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_JobRunnerRegistrationTokenCreatePayload_jobRunnerRegistrationToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -171,34 +139,17 @@ func (ec *executionContext) fieldContext_JobRunnerRegistrationTokenCreatePayload
 }
 
 func (ec *executionContext) _JobRunnerRegistrationTokenDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.JobRunnerRegistrationTokenDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_JobRunnerRegistrationTokenDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_JobRunnerRegistrationTokenDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_JobRunnerRegistrationTokenDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
