@@ -164,7 +164,8 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		sessions.RemoveCookie(ctx.Response().Writer, "token_type", sessions.CookieConfig{Path: "/"})
 	}
 
-	if ssoTestCookie, err := sessions.GetCookie(ctx.Request(), ssoTestCookieName); err == nil && ssoTestCookie.Value == ssoTestCookieValue {
+	ssoTestCookie, err := sessions.GetCookie(ctx.Request(), ssoTestCookieName)
+	if err == nil && ssoTestCookie != nil && ssoTestCookie.Value == ssoTestCookieValue {
 		if err := h.setIDPAuthTested(userCtx, in.OrganizationID); err != nil {
 			return err
 		}

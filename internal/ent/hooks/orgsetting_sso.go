@@ -5,22 +5,32 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
 // HookValidateIdentityProviderConfig ensures identity provider configuration is present when SSO login is enforced
+// and resets enforced/tested status when SSO configuration fields change
 func HookValidateIdentityProviderConfig() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.OrganizationSettingFunc(func(ctx context.Context, m *generated.OrganizationSettingMutation) (generated.Value, error) {
+
+			if err := disableEnforcementIfConfigChanged(ctx, m); err != nil {
+				return nil, err
+			}
+
 			if err := ValidateIdentityProviderConfig(ctx, m); err != nil {
 				return nil, err
 			}
+
 			return next.Mutate(ctx, m)
 		})
 	}, hook.And(
-		hook.HasFields("identity_provider_login_enforced"),
+		hook.HasFields("identity_provider", "identity_provider_client_id",
+			"identity_provider_client_secret", "oidc_discovery_endpoint",
+			"identity_provider_login_enforced"),
 		hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne),
 	))
 }
@@ -62,7 +72,7 @@ func ValidateIdentityProviderConfig(ctx context.Context, m *generated.Organizati
 		m.Op() != ent.OpCreate,
 	)
 
-	if missingClientID(idOK, id) {
+	if isStringEmpty(idOK, id) {
 		return ErrInvalidInput
 	}
 
@@ -73,7 +83,7 @@ func ValidateIdentityProviderConfig(ctx context.Context, m *generated.Organizati
 		m.Op() != ent.OpCreate,
 	)
 
-	if missingClientSecret(secretOK, secret) {
+	if isStringEmpty(secretOK, secret) {
 		return ErrInvalidInput
 	}
 	// OIDC Discovery Endpoint
@@ -83,7 +93,7 @@ func ValidateIdentityProviderConfig(ctx context.Context, m *generated.Organizati
 		m.Op() != ent.OpCreate,
 	)
 
-	if missingDiscoveryEndpoint(endpointOK, endpoint) {
+	if isStringEmpty(endpointOK, endpoint) {
 		return ErrInvalidInput
 	}
 
@@ -99,7 +109,7 @@ func stringPtrFromOld(ctx context.Context, old func(ctx context.Context) (string
 		return nil, err
 	}
 
-	return &val, nil
+	return lo.ToPtr(val), nil
 }
 
 // missingProvider checks if the SSO provider is missing or set to None
@@ -107,19 +117,9 @@ func missingProvider(ok bool, provider enums.SSOProvider) bool {
 	return !ok || provider == enums.SSOProviderNone
 }
 
-// missingClientID checks if the OIDC client ID is missing or empty
-func missingClientID(ok bool, id string) bool {
-	return !ok || id == ""
-}
-
-// missingClientSecret checks if the OIDC client secret is missing or empty
-func missingClientSecret(ok bool, secret string) bool {
-	return !ok || secret == ""
-}
-
-// missingDiscoveryEndpoint checks if the OIDC discovery endpoint is missing or empty
-func missingDiscoveryEndpoint(ok bool, endpoint string) bool {
-	return !ok || endpoint == ""
+// isStringEmpty checks if a string value is missing or empty
+func isStringEmpty(ok bool, value string) bool {
+	return !ok || value == ""
 }
 
 // fallbackString attempts to get a value from the primary function, and if it fails, it tries the fallback function
@@ -139,4 +139,52 @@ func fallbackString(primary func() (string, bool), fallback func() (*string, err
 	}
 
 	return "", false
+}
+
+// disableEnforcementIfConfigChanged makes sure if any value changes in the idp config,
+// the enforcement is disabled. The "tested" value is turned off too so the user/org is forced
+// to test the connection before they can enable it again
+func disableEnforcementIfConfigChanged(ctx context.Context, m *generated.OrganizationSettingMutation) error {
+
+	if didSSOConfigChange(ctx, m) || m.Op() == ent.OpCreate {
+		m.SetIdentityProviderLoginEnforced(false)
+		m.SetIdentityProviderAuthTested(false)
+	}
+
+	return nil
+}
+
+func didSSOConfigChange(ctx context.Context, m *generated.OrganizationSettingMutation) bool {
+
+	if enforced, ok := m.IdentityProviderLoginEnforced(); ok {
+		if oldEnforcement, err := m.OldIdentityProviderLoginEnforced(ctx); err == nil && oldEnforcement && !enforced {
+			return false
+		}
+	}
+
+	if provider, ok := m.IdentityProvider(); ok {
+		if oldProvider, err := m.OldIdentityProvider(ctx); err == nil && provider != oldProvider {
+			return true
+		}
+	}
+
+	if clientID, ok := m.IdentityProviderClientID(); ok {
+		if oldClientID, err := m.OldIdentityProviderClientID(ctx); err == nil && oldClientID != nil && clientID != *oldClientID {
+			return true
+		}
+	}
+
+	if clientSecret, ok := m.IdentityProviderClientSecret(); ok {
+		if oldClientSecret, err := m.OldIdentityProviderClientSecret(ctx); err == nil && oldClientSecret != nil && clientSecret != *oldClientSecret {
+			return true
+		}
+	}
+
+	if endpoint, ok := m.OidcDiscoveryEndpoint(); ok {
+		if oldEndpoint, err := m.OldOidcDiscoveryEndpoint(ctx); err == nil && endpoint != oldEndpoint {
+			return true
+		}
+	}
+
+	return false
 }
