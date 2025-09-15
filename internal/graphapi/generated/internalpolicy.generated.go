@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _InternalPolicyBulkCreatePayload_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_InternalPolicyBulkCreatePayload_internalPolicies(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.InternalPolicies, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.InternalPolicy)
-	fc.Result = res
-	return ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InternalPolicyBulkCreatePayload_internalPolicies,
+		func(ctx context.Context) (any, error) { return obj.InternalPolicies, nil },
+		nil,
+		ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_internalPolicies(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -157,31 +142,17 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 }
 
 func (ec *executionContext) _InternalPolicyBulkUpdatePayload_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_InternalPolicyBulkUpdatePayload_internalPolicies(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.InternalPolicies, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.InternalPolicy)
-	fc.Result = res
-	return ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InternalPolicyBulkUpdatePayload_internalPolicies,
+		func(ctx context.Context) (any, error) { return obj.InternalPolicies, nil },
+		nil,
+		ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_internalPolicies(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -284,31 +255,17 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 }
 
 func (ec *executionContext) _InternalPolicyBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_InternalPolicyBulkUpdatePayload_updatedIDs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedIDs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]string)
-	fc.Result = res
-	return ec.marshalOID2ᚕstringᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InternalPolicyBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -325,34 +282,17 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_updated
 }
 
 func (ec *executionContext) _InternalPolicyCreatePayload_internalPolicy(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_InternalPolicyCreatePayload_internalPolicy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.InternalPolicy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.InternalPolicy)
-	fc.Result = res
-	return ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InternalPolicyCreatePayload_internalPolicy,
+		func(ctx context.Context) (any, error) { return obj.InternalPolicy, nil },
+		nil,
+		ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPolicy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -455,34 +395,17 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 }
 
 func (ec *executionContext) _InternalPolicyDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_InternalPolicyDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InternalPolicyDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_InternalPolicyDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -499,34 +422,17 @@ func (ec *executionContext) fieldContext_InternalPolicyDeletePayload_deletedID(_
 }
 
 func (ec *executionContext) _InternalPolicyUpdatePayload_internalPolicy(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_InternalPolicyUpdatePayload_internalPolicy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.InternalPolicy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.InternalPolicy)
-	fc.Result = res
-	return ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_InternalPolicyUpdatePayload_internalPolicy,
+		func(ctx context.Context) (any, error) { return obj.InternalPolicy, nil },
+		nil,
+		ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPolicy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

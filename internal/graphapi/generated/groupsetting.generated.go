@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _GroupSettingBulkCreatePayload_groupSettings(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupSettingBulkCreatePayload_groupSettings(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.GroupSettings, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.GroupSetting)
-	fc.Result = res
-	return ec.marshalOGroupSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSettingᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupSettingBulkCreatePayload_groupSettings,
+		func(ctx context.Context) (any, error) { return obj.GroupSettings, nil },
+		nil,
+		ec.marshalOGroupSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSettingᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupSettingBulkCreatePayload_groupSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -95,34 +80,17 @@ func (ec *executionContext) fieldContext_GroupSettingBulkCreatePayload_groupSett
 }
 
 func (ec *executionContext) _GroupSettingCreatePayload_groupSetting(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupSettingCreatePayload_groupSetting(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.GroupSetting, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.GroupSetting)
-	fc.Result = res
-	return ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupSettingCreatePayload_groupSetting,
+		func(ctx context.Context) (any, error) { return obj.GroupSetting, nil },
+		nil,
+		ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupSettingCreatePayload_groupSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -163,34 +131,17 @@ func (ec *executionContext) fieldContext_GroupSettingCreatePayload_groupSetting(
 }
 
 func (ec *executionContext) _GroupSettingDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupSettingDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupSettingDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupSettingDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -207,34 +158,17 @@ func (ec *executionContext) fieldContext_GroupSettingDeletePayload_deletedID(_ c
 }
 
 func (ec *executionContext) _GroupSettingUpdatePayload_groupSetting(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupSettingUpdatePayload_groupSetting(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.GroupSetting, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.GroupSetting)
-	fc.Result = res
-	return ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupSettingUpdatePayload_groupSetting,
+		func(ctx context.Context) (any, error) { return obj.GroupSetting, nil },
+		nil,
+		ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupSettingUpdatePayload_groupSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

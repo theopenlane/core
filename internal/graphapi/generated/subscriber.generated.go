@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _SubscriberBulkCreatePayload_subscribers(ctx context.Context, field graphql.CollectedField, obj *model.SubscriberBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SubscriberBulkCreatePayload_subscribers(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Subscribers, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Subscriber)
-	fc.Result = res
-	return ec.marshalOSubscriber2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubscriberBulkCreatePayload_subscribers,
+		func(ctx context.Context) (any, error) { return obj.Subscribers, nil },
+		nil,
+		ec.marshalOSubscriber2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SubscriberBulkCreatePayload_subscribers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -105,34 +90,17 @@ func (ec *executionContext) fieldContext_SubscriberBulkCreatePayload_subscribers
 }
 
 func (ec *executionContext) _SubscriberCreatePayload_subscriber(ctx context.Context, field graphql.CollectedField, obj *model.SubscriberCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SubscriberCreatePayload_subscriber(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Subscriber, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Subscriber)
-	fc.Result = res
-	return ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubscriberCreatePayload_subscriber,
+		func(ctx context.Context) (any, error) { return obj.Subscriber, nil },
+		nil,
+		ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_SubscriberCreatePayload_subscriber(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -183,34 +151,17 @@ func (ec *executionContext) fieldContext_SubscriberCreatePayload_subscriber(_ co
 }
 
 func (ec *executionContext) _SubscriberDeletePayload_email(ctx context.Context, field graphql.CollectedField, obj *model.SubscriberDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SubscriberDeletePayload_email(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Email, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubscriberDeletePayload_email,
+		func(ctx context.Context) (any, error) { return obj.Email, nil },
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_SubscriberDeletePayload_email(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -227,34 +178,17 @@ func (ec *executionContext) fieldContext_SubscriberDeletePayload_email(_ context
 }
 
 func (ec *executionContext) _SubscriberUpdatePayload_subscriber(ctx context.Context, field graphql.CollectedField, obj *model.SubscriberUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SubscriberUpdatePayload_subscriber(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Subscriber, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Subscriber)
-	fc.Result = res
-	return ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubscriberUpdatePayload_subscriber,
+		func(ctx context.Context) (any, error) { return obj.Subscriber, nil },
+		nil,
+		ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_SubscriberUpdatePayload_subscriber(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

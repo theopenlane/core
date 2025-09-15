@@ -9,7 +9,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -29,31 +28,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _UserSettingBulkCreatePayload_userSettings(ctx context.Context, field graphql.CollectedField, obj *model.UserSettingBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserSettingBulkCreatePayload_userSettings(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UserSettings, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.UserSetting)
-	fc.Result = res
-	return ec.marshalOUserSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSettingᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_UserSettingBulkCreatePayload_userSettings,
+		func(ctx context.Context) (any, error) { return obj.UserSettings, nil },
+		nil,
+		ec.marshalOUserSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSettingᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -106,34 +91,17 @@ func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettin
 }
 
 func (ec *executionContext) _UserSettingCreatePayload_userSetting(ctx context.Context, field graphql.CollectedField, obj *model.UserSettingCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserSettingCreatePayload_userSetting(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UserSetting, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.UserSetting)
-	fc.Result = res
-	return ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_UserSettingCreatePayload_userSetting,
+		func(ctx context.Context) (any, error) { return obj.UserSetting, nil },
+		nil,
+		ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSetting,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_UserSettingCreatePayload_userSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -186,34 +154,17 @@ func (ec *executionContext) fieldContext_UserSettingCreatePayload_userSetting(_ 
 }
 
 func (ec *executionContext) _UserSettingUpdatePayload_userSetting(ctx context.Context, field graphql.CollectedField, obj *model.UserSettingUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserSettingUpdatePayload_userSetting(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UserSetting, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.UserSetting)
-	fc.Result = res
-	return ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_UserSettingUpdatePayload_userSetting,
+		func(ctx context.Context) (any, error) { return obj.UserSetting, nil },
+		nil,
+		ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSetting,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

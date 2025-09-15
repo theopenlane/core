@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _SubcontrolBulkCreatePayload_subcontrols(ctx context.Context, field graphql.CollectedField, obj *model.SubcontrolBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SubcontrolBulkCreatePayload_subcontrols(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Subcontrols, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Subcontrol)
-	fc.Result = res
-	return ec.marshalOSubcontrol2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrolᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubcontrolBulkCreatePayload_subcontrols,
+		func(ctx context.Context) (any, error) { return obj.Subcontrols, nil },
+		nil,
+		ec.marshalOSubcontrol2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrolᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -159,34 +144,17 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 }
 
 func (ec *executionContext) _SubcontrolCreatePayload_subcontrol(ctx context.Context, field graphql.CollectedField, obj *model.SubcontrolCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SubcontrolCreatePayload_subcontrol(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Subcontrol, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Subcontrol)
-	fc.Result = res
-	return ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrol(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubcontrolCreatePayload_subcontrol,
+		func(ctx context.Context) (any, error) { return obj.Subcontrol, nil },
+		nil,
+		ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrol,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -291,34 +259,17 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 }
 
 func (ec *executionContext) _SubcontrolDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.SubcontrolDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SubcontrolDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubcontrolDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_SubcontrolDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -335,34 +286,17 @@ func (ec *executionContext) fieldContext_SubcontrolDeletePayload_deletedID(_ con
 }
 
 func (ec *executionContext) _SubcontrolUpdatePayload_subcontrol(ctx context.Context, field graphql.CollectedField, obj *model.SubcontrolUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SubcontrolUpdatePayload_subcontrol(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Subcontrol, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Subcontrol)
-	fc.Result = res
-	return ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrol(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SubcontrolUpdatePayload_subcontrol,
+		func(ctx context.Context) (any, error) { return obj.Subcontrol, nil },
+		nil,
+		ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrol,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

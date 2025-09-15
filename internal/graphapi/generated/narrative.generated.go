@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _NarrativeBulkCreatePayload_narratives(ctx context.Context, field graphql.CollectedField, obj *model.NarrativeBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NarrativeBulkCreatePayload_narratives(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Narratives, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Narrative)
-	fc.Result = res
-	return ec.marshalONarrative2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrativeᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_NarrativeBulkCreatePayload_narratives,
+		func(ctx context.Context) (any, error) { return obj.Narratives, nil },
+		nil,
+		ec.marshalONarrative2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrativeᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_NarrativeBulkCreatePayload_narratives(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -111,34 +96,17 @@ func (ec *executionContext) fieldContext_NarrativeBulkCreatePayload_narratives(_
 }
 
 func (ec *executionContext) _NarrativeCreatePayload_narrative(ctx context.Context, field graphql.CollectedField, obj *model.NarrativeCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NarrativeCreatePayload_narrative(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Narrative, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Narrative)
-	fc.Result = res
-	return ec.marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrative(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_NarrativeCreatePayload_narrative,
+		func(ctx context.Context) (any, error) { return obj.Narrative, nil },
+		nil,
+		ec.marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrative,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_NarrativeCreatePayload_narrative(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -195,34 +163,17 @@ func (ec *executionContext) fieldContext_NarrativeCreatePayload_narrative(_ cont
 }
 
 func (ec *executionContext) _NarrativeDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.NarrativeDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NarrativeDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_NarrativeDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_NarrativeDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -239,34 +190,17 @@ func (ec *executionContext) fieldContext_NarrativeDeletePayload_deletedID(_ cont
 }
 
 func (ec *executionContext) _NarrativeUpdatePayload_narrative(ctx context.Context, field graphql.CollectedField, obj *model.NarrativeUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NarrativeUpdatePayload_narrative(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Narrative, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Narrative)
-	fc.Result = res
-	return ec.marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrative(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_NarrativeUpdatePayload_narrative,
+		func(ctx context.Context) (any, error) { return obj.Narrative, nil },
+		nil,
+		ec.marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrative,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_NarrativeUpdatePayload_narrative(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

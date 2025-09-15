@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _DNSVerificationBulkCreatePayload_dnsVerifications(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DNSVerificationBulkCreatePayload_dnsVerifications(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DNSVerifications, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.DNSVerification)
-	fc.Result = res
-	return ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DNSVerificationBulkCreatePayload_dnsVerifications,
+		func(ctx context.Context) (any, error) { return obj.DNSVerifications, nil },
+		nil,
+		ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_DNSVerificationBulkCreatePayload_dnsVerifications(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -109,34 +94,17 @@ func (ec *executionContext) fieldContext_DNSVerificationBulkCreatePayload_dnsVer
 }
 
 func (ec *executionContext) _DNSVerificationCreatePayload_dnsVerification(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DNSVerificationCreatePayload_dnsVerification(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DNSVerification, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.DNSVerification)
-	fc.Result = res
-	return ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DNSVerificationCreatePayload_dnsVerification,
+		func(ctx context.Context) (any, error) { return obj.DNSVerification, nil },
+		nil,
+		ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_DNSVerificationCreatePayload_dnsVerification(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -191,34 +159,17 @@ func (ec *executionContext) fieldContext_DNSVerificationCreatePayload_dnsVerific
 }
 
 func (ec *executionContext) _DNSVerificationDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DNSVerificationDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DNSVerificationDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_DNSVerificationDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -235,34 +186,17 @@ func (ec *executionContext) fieldContext_DNSVerificationDeletePayload_deletedID(
 }
 
 func (ec *executionContext) _DNSVerificationUpdatePayload_dnsVerification(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DNSVerificationUpdatePayload_dnsVerification(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DNSVerification, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.DNSVerification)
-	fc.Result = res
-	return ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DNSVerificationUpdatePayload_dnsVerification,
+		func(ctx context.Context) (any, error) { return obj.DNSVerification, nil },
+		nil,
+		ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_DNSVerificationUpdatePayload_dnsVerification(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

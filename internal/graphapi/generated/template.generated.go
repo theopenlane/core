@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _TemplateBulkCreatePayload_templates(ctx context.Context, field graphql.CollectedField, obj *model.TemplateBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TemplateBulkCreatePayload_templates(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Templates, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Template)
-	fc.Result = res
-	return ec.marshalOTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TemplateBulkCreatePayload_templates,
+		func(ctx context.Context) (any, error) { return obj.Templates, nil },
+		nil,
+		ec.marshalOTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -105,34 +90,17 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 }
 
 func (ec *executionContext) _TemplateCreatePayload_template(ctx context.Context, field graphql.CollectedField, obj *model.TemplateCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TemplateCreatePayload_template(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Template, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Template)
-	fc.Result = res
-	return ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TemplateCreatePayload_template,
+		func(ctx context.Context) (any, error) { return obj.Template, nil },
+		nil,
+		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -183,34 +151,17 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 }
 
 func (ec *executionContext) _TemplateDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.TemplateDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TemplateDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TemplateDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_TemplateDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -227,34 +178,17 @@ func (ec *executionContext) fieldContext_TemplateDeletePayload_deletedID(_ conte
 }
 
 func (ec *executionContext) _TemplateUpdatePayload_template(ctx context.Context, field graphql.CollectedField, obj *model.TemplateUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TemplateUpdatePayload_template(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Template, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Template)
-	fc.Result = res
-	return ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TemplateUpdatePayload_template,
+		func(ctx context.Context) (any, error) { return obj.Template, nil },
+		nil,
+		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
