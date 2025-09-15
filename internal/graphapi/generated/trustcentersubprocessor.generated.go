@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _TrustCenterSubprocessorBulkCreatePayload_trustCenterSubprocessors(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TrustCenterSubprocessorBulkCreatePayload_trustCenterSubprocessors(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TrustCenterSubprocessors, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.TrustCenterSubprocessor)
-	fc.Result = res
-	return ec.marshalOTrustCenterSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TrustCenterSubprocessorBulkCreatePayload_trustCenterSubprocessors,
+		func(ctx context.Context) (any, error) { return obj.TrustCenterSubprocessors, nil },
+		nil,
+		ec.marshalOTrustCenterSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkCreatePayload_trustCenterSubprocessors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -95,34 +80,17 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkCreatePayloa
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorCreatePayload_trustCenterSubprocessor(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TrustCenterSubprocessorCreatePayload_trustCenterSubprocessor(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TrustCenterSubprocessor, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.TrustCenterSubprocessor)
-	fc.Result = res
-	return ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TrustCenterSubprocessorCreatePayload_trustCenterSubprocessor,
+		func(ctx context.Context) (any, error) { return obj.TrustCenterSubprocessor, nil },
+		nil,
+		ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorCreatePayload_trustCenterSubprocessor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -163,34 +131,17 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorCreatePayload_tr
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TrustCenterSubprocessorDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TrustCenterSubprocessorDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -207,34 +158,17 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorDeletePayload_de
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorUpdatePayload_trustCenterSubprocessor(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TrustCenterSubprocessorUpdatePayload_trustCenterSubprocessor(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TrustCenterSubprocessor, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.TrustCenterSubprocessor)
-	fc.Result = res
-	return ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TrustCenterSubprocessorUpdatePayload_trustCenterSubprocessor,
+		func(ctx context.Context) (any, error) { return obj.TrustCenterSubprocessor, nil },
+		nil,
+		ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorUpdatePayload_trustCenterSubprocessor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

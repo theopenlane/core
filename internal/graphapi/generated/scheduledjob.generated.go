@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ScheduledJobBulkCreatePayload_scheduledJobs(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ScheduledJobBulkCreatePayload_scheduledJobs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ScheduledJobs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.ScheduledJob)
-	fc.Result = res
-	return ec.marshalOScheduledJob2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJobᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ScheduledJobBulkCreatePayload_scheduledJobs,
+		func(ctx context.Context) (any, error) { return obj.ScheduledJobs, nil },
+		nil,
+		ec.marshalOScheduledJob2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJobᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduledJobs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -107,34 +92,17 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduled
 }
 
 func (ec *executionContext) _ScheduledJobCreatePayload_scheduledJob(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ScheduledJobCreatePayload_scheduledJob(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ScheduledJob, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ScheduledJob)
-	fc.Result = res
-	return ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ScheduledJobCreatePayload_scheduledJob,
+		func(ctx context.Context) (any, error) { return obj.ScheduledJob, nil },
+		nil,
+		ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -187,34 +155,17 @@ func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(
 }
 
 func (ec *executionContext) _ScheduledJobDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ScheduledJobDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ScheduledJobDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ScheduledJobDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -231,34 +182,17 @@ func (ec *executionContext) fieldContext_ScheduledJobDeletePayload_deletedID(_ c
 }
 
 func (ec *executionContext) _ScheduledJobUpdatePayload_scheduledJob(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ScheduledJobUpdatePayload_scheduledJob(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ScheduledJob, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ScheduledJob)
-	fc.Result = res
-	return ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ScheduledJobUpdatePayload_scheduledJob,
+		func(ctx context.Context) (any, error) { return obj.ScheduledJob, nil },
+		nil,
+		ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ScheduledJobUpdatePayload_scheduledJob(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

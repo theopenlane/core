@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ProcedureBulkCreatePayload_procedures(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProcedureBulkCreatePayload_procedures(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Procedures, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Procedure)
-	fc.Result = res
-	return ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProcedureBulkCreatePayload_procedures,
+		func(ctx context.Context) (any, error) { return obj.Procedures, nil },
+		nil,
+		ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -153,31 +138,17 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 }
 
 func (ec *executionContext) _ProcedureBulkUpdatePayload_procedures(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProcedureBulkUpdatePayload_procedures(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Procedures, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Procedure)
-	fc.Result = res
-	return ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProcedureBulkUpdatePayload_procedures,
+		func(ctx context.Context) (any, error) { return obj.Procedures, nil },
+		nil,
+		ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -276,31 +247,17 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 }
 
 func (ec *executionContext) _ProcedureBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProcedureBulkUpdatePayload_updatedIDs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedIDs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]string)
-	fc.Result = res
-	return ec.marshalOID2ᚕstringᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProcedureBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -317,34 +274,17 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_updatedIDs(_
 }
 
 func (ec *executionContext) _ProcedureCreatePayload_procedure(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProcedureCreatePayload_procedure(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Procedure, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Procedure)
-	fc.Result = res
-	return ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProcedureCreatePayload_procedure,
+		func(ctx context.Context) (any, error) { return obj.Procedure, nil },
+		nil,
+		ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -443,34 +383,17 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 }
 
 func (ec *executionContext) _ProcedureDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProcedureDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProcedureDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProcedureDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -487,34 +410,17 @@ func (ec *executionContext) fieldContext_ProcedureDeletePayload_deletedID(_ cont
 }
 
 func (ec *executionContext) _ProcedureUpdatePayload_procedure(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProcedureUpdatePayload_procedure(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Procedure, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Procedure)
-	fc.Result = res
-	return ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProcedureUpdatePayload_procedure,
+		func(ctx context.Context) (any, error) { return obj.Procedure, nil },
+		nil,
+		ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

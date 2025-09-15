@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _APITokenBulkCreatePayload_apiTokens(ctx context.Context, field graphql.CollectedField, obj *model.APITokenBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_APITokenBulkCreatePayload_apiTokens(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.APITokens, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.APIToken)
-	fc.Result = res
-	return ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_APITokenBulkCreatePayload_apiTokens,
+		func(ctx context.Context) (any, error) { return obj.APITokens, nil },
+		nil,
+		ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -111,34 +96,17 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 }
 
 func (ec *executionContext) _APITokenCreatePayload_apiToken(ctx context.Context, field graphql.CollectedField, obj *model.APITokenCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_APITokenCreatePayload_apiToken(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.APIToken, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.APIToken)
-	fc.Result = res
-	return ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_APITokenCreatePayload_apiToken,
+		func(ctx context.Context) (any, error) { return obj.APIToken, nil },
+		nil,
+		ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -195,34 +163,17 @@ func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ contex
 }
 
 func (ec *executionContext) _APITokenDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.APITokenDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_APITokenDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_APITokenDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_APITokenDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -239,34 +190,17 @@ func (ec *executionContext) fieldContext_APITokenDeletePayload_deletedID(_ conte
 }
 
 func (ec *executionContext) _APITokenUpdatePayload_apiToken(ctx context.Context, field graphql.CollectedField, obj *model.APITokenUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_APITokenUpdatePayload_apiToken(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.APIToken, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.APIToken)
-	fc.Result = res
-	return ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_APITokenUpdatePayload_apiToken,
+		func(ctx context.Context) (any, error) { return obj.APIToken, nil },
+		nil,
+		ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

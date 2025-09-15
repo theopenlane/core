@@ -10,9 +10,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -32,34 +30,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ControlCategory_name(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategory) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ControlCategory_name(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Name, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlCategory_name,
+		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ControlCategory_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -76,31 +57,17 @@ func (ec *executionContext) fieldContext_ControlCategory_name(_ context.Context,
 }
 
 func (ec *executionContext) _ControlCategory_referenceFramework(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategory) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ControlCategory_referenceFramework(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ReferenceFramework, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlCategory_referenceFramework,
+		func(ctx context.Context) (any, error) { return obj.ReferenceFramework, nil },
+		nil,
+		ec.marshalOString2ᚖstring,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_ControlCategory_referenceFramework(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -117,31 +84,17 @@ func (ec *executionContext) fieldContext_ControlCategory_referenceFramework(_ co
 }
 
 func (ec *executionContext) _ControlCategoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ControlCategoryConnection_edges(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Edges, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.ControlCategoryEdge)
-	fc.Result = res
-	return ec.marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlCategoryConnection_edges,
+		func(ctx context.Context) (any, error) { return obj.Edges, nil },
+		nil,
+		ec.marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_ControlCategoryConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -162,34 +115,17 @@ func (ec *executionContext) fieldContext_ControlCategoryConnection_edges(_ conte
 }
 
 func (ec *executionContext) _ControlCategoryConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ControlCategoryConnection_pageInfo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PageInfo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*entgql.PageInfo[string])
-	fc.Result = res
-	return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlCategoryConnection_pageInfo,
+		func(ctx context.Context) (any, error) { return obj.PageInfo, nil },
+		nil,
+		ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ControlCategoryConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -216,34 +152,17 @@ func (ec *executionContext) fieldContext_ControlCategoryConnection_pageInfo(_ co
 }
 
 func (ec *executionContext) _ControlCategoryConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ControlCategoryConnection_totalCount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TotalCount, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlCategoryConnection_totalCount,
+		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		nil,
+		ec.marshalNInt2int,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ControlCategoryConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -260,34 +179,17 @@ func (ec *executionContext) fieldContext_ControlCategoryConnection_totalCount(_ 
 }
 
 func (ec *executionContext) _ControlCategoryEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ControlCategoryEdge_node(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Node, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.ControlCategory)
-	fc.Result = res
-	return ec.marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategory(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlCategoryEdge_node,
+		func(ctx context.Context) (any, error) { return obj.Node, nil },
+		nil,
+		ec.marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategory,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ControlCategoryEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -310,34 +212,17 @@ func (ec *executionContext) fieldContext_ControlCategoryEdge_node(_ context.Cont
 }
 
 func (ec *executionContext) _ControlGroup_category(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroup) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ControlGroup_category(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Category, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlGroup_category,
+		func(ctx context.Context) (any, error) { return obj.Category, nil },
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ControlGroup_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -354,34 +239,17 @@ func (ec *executionContext) fieldContext_ControlGroup_category(_ context.Context
 }
 
 func (ec *executionContext) _ControlGroup_controls(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroup) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ControlGroup_controls(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Controls, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ControlConnection)
-	fc.Result = res
-	return ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlGroup_controls,
+		func(ctx context.Context) (any, error) { return obj.Controls, nil },
+		nil,
+		ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ControlGroup_controls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -406,34 +274,17 @@ func (ec *executionContext) fieldContext_ControlGroup_controls(_ context.Context
 }
 
 func (ec *executionContext) _ControlGroupConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroupConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ControlGroupConnection_edges(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Edges, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*model.ControlGroupEdge)
-	fc.Result = res
-	return ec.marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdgeᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlGroupConnection_edges,
+		func(ctx context.Context) (any, error) { return obj.Edges, nil },
+		nil,
+		ec.marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdgeᚄ,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ControlGroupConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -456,34 +307,17 @@ func (ec *executionContext) fieldContext_ControlGroupConnection_edges(_ context.
 }
 
 func (ec *executionContext) _ControlGroupEdge_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroupEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ControlGroupEdge_pageInfo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PageInfo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*entgql.PageInfo[string])
-	fc.Result = res
-	return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlGroupEdge_pageInfo,
+		func(ctx context.Context) (any, error) { return obj.PageInfo, nil },
+		nil,
+		ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ControlGroupEdge_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -510,34 +344,17 @@ func (ec *executionContext) fieldContext_ControlGroupEdge_pageInfo(_ context.Con
 }
 
 func (ec *executionContext) _ControlGroupEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroupEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ControlGroupEdge_node(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Node, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.ControlGroup)
-	fc.Result = res
-	return ec.marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroup(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ControlGroupEdge_node,
+		func(ctx context.Context) (any, error) { return obj.Node, nil },
+		nil,
+		ec.marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroup,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ControlGroupEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

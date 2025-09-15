@@ -9,9 +9,7 @@ import (
 	"strconv"
 	"sync/atomic"
 
-	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -31,34 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _SearchResults_page(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_page(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Page, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*entgql.PageInfo[string])
-	fc.Result = res
-	return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_page,
+		func(ctx context.Context) (any, error) { return obj.Page, nil },
+		nil,
+		ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_page(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -85,34 +66,17 @@ func (ec *executionContext) fieldContext_SearchResults_page(_ context.Context, f
 }
 
 func (ec *executionContext) _SearchResults_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_totalCount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TotalCount, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_totalCount,
+		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		nil,
+		ec.marshalNInt2int,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -129,31 +93,17 @@ func (ec *executionContext) fieldContext_SearchResults_totalCount(_ context.Cont
 }
 
 func (ec *executionContext) _SearchResults_apiTokens(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_apiTokens(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.APITokens, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.APITokenConnection)
-	fc.Result = res
-	return ec.marshalOAPITokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_apiTokens,
+		func(ctx context.Context) (any, error) { return obj.APITokens, nil },
+		nil,
+		ec.marshalOAPITokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_apiTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -178,31 +128,17 @@ func (ec *executionContext) fieldContext_SearchResults_apiTokens(_ context.Conte
 }
 
 func (ec *executionContext) _SearchResults_actionPlans(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_actionPlans(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ActionPlans, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ActionPlanConnection)
-	fc.Result = res
-	return ec.marshalOActionPlanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlanConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_actionPlans,
+		func(ctx context.Context) (any, error) { return obj.ActionPlans, nil },
+		nil,
+		ec.marshalOActionPlanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlanConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_actionPlans(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -227,31 +163,17 @@ func (ec *executionContext) fieldContext_SearchResults_actionPlans(_ context.Con
 }
 
 func (ec *executionContext) _SearchResults_assets(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_assets(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Assets, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.AssetConnection)
-	fc.Result = res
-	return ec.marshalOAssetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssetConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_assets,
+		func(ctx context.Context) (any, error) { return obj.Assets, nil },
+		nil,
+		ec.marshalOAssetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssetConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_assets(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -276,31 +198,17 @@ func (ec *executionContext) fieldContext_SearchResults_assets(_ context.Context,
 }
 
 func (ec *executionContext) _SearchResults_contacts(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_contacts(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Contacts, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ContactConnection)
-	fc.Result = res
-	return ec.marshalOContactConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_contacts,
+		func(ctx context.Context) (any, error) { return obj.Contacts, nil },
+		nil,
+		ec.marshalOContactConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_contacts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -325,31 +233,17 @@ func (ec *executionContext) fieldContext_SearchResults_contacts(_ context.Contex
 }
 
 func (ec *executionContext) _SearchResults_controls(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_controls(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Controls, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ControlConnection)
-	fc.Result = res
-	return ec.marshalOControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_controls,
+		func(ctx context.Context) (any, error) { return obj.Controls, nil },
+		nil,
+		ec.marshalOControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_controls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -374,31 +268,17 @@ func (ec *executionContext) fieldContext_SearchResults_controls(_ context.Contex
 }
 
 func (ec *executionContext) _SearchResults_controlImplementations(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_controlImplementations(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ControlImplementations, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ControlImplementationConnection)
-	fc.Result = res
-	return ec.marshalOControlImplementationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlImplementationConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_controlImplementations,
+		func(ctx context.Context) (any, error) { return obj.ControlImplementations, nil },
+		nil,
+		ec.marshalOControlImplementationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlImplementationConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_controlImplementations(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -423,31 +303,17 @@ func (ec *executionContext) fieldContext_SearchResults_controlImplementations(_ 
 }
 
 func (ec *executionContext) _SearchResults_controlObjectives(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_controlObjectives(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ControlObjectives, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ControlObjectiveConnection)
-	fc.Result = res
-	return ec.marshalOControlObjectiveConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_controlObjectives,
+		func(ctx context.Context) (any, error) { return obj.ControlObjectives, nil },
+		nil,
+		ec.marshalOControlObjectiveConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_controlObjectives(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -472,31 +338,17 @@ func (ec *executionContext) fieldContext_SearchResults_controlObjectives(_ conte
 }
 
 func (ec *executionContext) _SearchResults_customDomains(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_customDomains(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CustomDomains, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.CustomDomainConnection)
-	fc.Result = res
-	return ec.marshalOCustomDomainConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomainConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_customDomains,
+		func(ctx context.Context) (any, error) { return obj.CustomDomains, nil },
+		nil,
+		ec.marshalOCustomDomainConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomainConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_customDomains(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -521,31 +373,17 @@ func (ec *executionContext) fieldContext_SearchResults_customDomains(_ context.C
 }
 
 func (ec *executionContext) _SearchResults_dnsVerifications(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_dnsVerifications(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DNSVerifications, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.DNSVerificationConnection)
-	fc.Result = res
-	return ec.marshalODNSVerificationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_dnsVerifications,
+		func(ctx context.Context) (any, error) { return obj.DNSVerifications, nil },
+		nil,
+		ec.marshalODNSVerificationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_dnsVerifications(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -570,31 +408,17 @@ func (ec *executionContext) fieldContext_SearchResults_dnsVerifications(_ contex
 }
 
 func (ec *executionContext) _SearchResults_documentData(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_documentData(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DocumentData, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.DocumentDataConnection)
-	fc.Result = res
-	return ec.marshalODocumentDataConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentDataConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_documentData,
+		func(ctx context.Context) (any, error) { return obj.DocumentData, nil },
+		nil,
+		ec.marshalODocumentDataConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentDataConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_documentData(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -619,31 +443,17 @@ func (ec *executionContext) fieldContext_SearchResults_documentData(_ context.Co
 }
 
 func (ec *executionContext) _SearchResults_entities(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_entities(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Entities, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.EntityConnection)
-	fc.Result = res
-	return ec.marshalOEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_entities,
+		func(ctx context.Context) (any, error) { return obj.Entities, nil },
+		nil,
+		ec.marshalOEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_entities(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -668,31 +478,17 @@ func (ec *executionContext) fieldContext_SearchResults_entities(_ context.Contex
 }
 
 func (ec *executionContext) _SearchResults_entityTypes(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_entityTypes(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.EntityTypes, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.EntityTypeConnection)
-	fc.Result = res
-	return ec.marshalOEntityTypeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityTypeConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_entityTypes,
+		func(ctx context.Context) (any, error) { return obj.EntityTypes, nil },
+		nil,
+		ec.marshalOEntityTypeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityTypeConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_entityTypes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -717,31 +513,17 @@ func (ec *executionContext) fieldContext_SearchResults_entityTypes(_ context.Con
 }
 
 func (ec *executionContext) _SearchResults_events(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_events(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Events, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.EventConnection)
-	fc.Result = res
-	return ec.marshalOEventConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEventConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_events,
+		func(ctx context.Context) (any, error) { return obj.Events, nil },
+		nil,
+		ec.marshalOEventConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEventConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_events(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -766,31 +548,17 @@ func (ec *executionContext) fieldContext_SearchResults_events(_ context.Context,
 }
 
 func (ec *executionContext) _SearchResults_evidences(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_evidences(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Evidences, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.EvidenceConnection)
-	fc.Result = res
-	return ec.marshalOEvidenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_evidences,
+		func(ctx context.Context) (any, error) { return obj.Evidences, nil },
+		nil,
+		ec.marshalOEvidenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_evidences(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -815,31 +583,17 @@ func (ec *executionContext) fieldContext_SearchResults_evidences(_ context.Conte
 }
 
 func (ec *executionContext) _SearchResults_files(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_files(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Files, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.FileConnection)
-	fc.Result = res
-	return ec.marshalOFileConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFileConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_files,
+		func(ctx context.Context) (any, error) { return obj.Files, nil },
+		nil,
+		ec.marshalOFileConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFileConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_files(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -864,31 +618,17 @@ func (ec *executionContext) fieldContext_SearchResults_files(_ context.Context, 
 }
 
 func (ec *executionContext) _SearchResults_groups(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_groups(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Groups, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.GroupConnection)
-	fc.Result = res
-	return ec.marshalOGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_groups,
+		func(ctx context.Context) (any, error) { return obj.Groups, nil },
+		nil,
+		ec.marshalOGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_groups(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -913,31 +653,17 @@ func (ec *executionContext) fieldContext_SearchResults_groups(_ context.Context,
 }
 
 func (ec *executionContext) _SearchResults_integrations(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_integrations(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Integrations, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.IntegrationConnection)
-	fc.Result = res
-	return ec.marshalOIntegrationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIntegrationConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_integrations,
+		func(ctx context.Context) (any, error) { return obj.Integrations, nil },
+		nil,
+		ec.marshalOIntegrationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIntegrationConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_integrations(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -962,31 +688,17 @@ func (ec *executionContext) fieldContext_SearchResults_integrations(_ context.Co
 }
 
 func (ec *executionContext) _SearchResults_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_internalPolicies(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.InternalPolicies, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.InternalPolicyConnection)
-	fc.Result = res
-	return ec.marshalOInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_internalPolicies,
+		func(ctx context.Context) (any, error) { return obj.InternalPolicies, nil },
+		nil,
+		ec.marshalOInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_internalPolicies(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1011,31 +723,17 @@ func (ec *executionContext) fieldContext_SearchResults_internalPolicies(_ contex
 }
 
 func (ec *executionContext) _SearchResults_invites(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_invites(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Invites, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.InviteConnection)
-	fc.Result = res
-	return ec.marshalOInviteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_invites,
+		func(ctx context.Context) (any, error) { return obj.Invites, nil },
+		nil,
+		ec.marshalOInviteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_invites(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1060,31 +758,17 @@ func (ec *executionContext) fieldContext_SearchResults_invites(_ context.Context
 }
 
 func (ec *executionContext) _SearchResults_jobRunners(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_jobRunners(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.JobRunners, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.JobRunnerConnection)
-	fc.Result = res
-	return ec.marshalOJobRunnerConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_jobRunners,
+		func(ctx context.Context) (any, error) { return obj.JobRunners, nil },
+		nil,
+		ec.marshalOJobRunnerConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_jobRunners(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1109,31 +793,17 @@ func (ec *executionContext) fieldContext_SearchResults_jobRunners(_ context.Cont
 }
 
 func (ec *executionContext) _SearchResults_jobRunnerRegistrationTokens(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_jobRunnerRegistrationTokens(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.JobRunnerRegistrationTokens, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.JobRunnerRegistrationTokenConnection)
-	fc.Result = res
-	return ec.marshalOJobRunnerRegistrationTokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerRegistrationTokenConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_jobRunnerRegistrationTokens,
+		func(ctx context.Context) (any, error) { return obj.JobRunnerRegistrationTokens, nil },
+		nil,
+		ec.marshalOJobRunnerRegistrationTokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerRegistrationTokenConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_jobRunnerRegistrationTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1158,31 +828,17 @@ func (ec *executionContext) fieldContext_SearchResults_jobRunnerRegistrationToke
 }
 
 func (ec *executionContext) _SearchResults_jobRunnerTokens(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_jobRunnerTokens(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.JobRunnerTokens, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.JobRunnerTokenConnection)
-	fc.Result = res
-	return ec.marshalOJobRunnerTokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerTokenConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_jobRunnerTokens,
+		func(ctx context.Context) (any, error) { return obj.JobRunnerTokens, nil },
+		nil,
+		ec.marshalOJobRunnerTokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerTokenConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_jobRunnerTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1207,31 +863,17 @@ func (ec *executionContext) fieldContext_SearchResults_jobRunnerTokens(_ context
 }
 
 func (ec *executionContext) _SearchResults_jobTemplates(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_jobTemplates(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.JobTemplates, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.JobTemplateConnection)
-	fc.Result = res
-	return ec.marshalOJobTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplateConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_jobTemplates,
+		func(ctx context.Context) (any, error) { return obj.JobTemplates, nil },
+		nil,
+		ec.marshalOJobTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplateConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_jobTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1256,31 +898,17 @@ func (ec *executionContext) fieldContext_SearchResults_jobTemplates(_ context.Co
 }
 
 func (ec *executionContext) _SearchResults_mappableDomains(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_mappableDomains(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MappableDomains, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.MappableDomainConnection)
-	fc.Result = res
-	return ec.marshalOMappableDomainConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_mappableDomains,
+		func(ctx context.Context) (any, error) { return obj.MappableDomains, nil },
+		nil,
+		ec.marshalOMappableDomainConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_mappableDomains(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1305,31 +933,17 @@ func (ec *executionContext) fieldContext_SearchResults_mappableDomains(_ context
 }
 
 func (ec *executionContext) _SearchResults_mappedControls(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_mappedControls(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MappedControls, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.MappedControlConnection)
-	fc.Result = res
-	return ec.marshalOMappedControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControlConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_mappedControls,
+		func(ctx context.Context) (any, error) { return obj.MappedControls, nil },
+		nil,
+		ec.marshalOMappedControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControlConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_mappedControls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1354,31 +968,17 @@ func (ec *executionContext) fieldContext_SearchResults_mappedControls(_ context.
 }
 
 func (ec *executionContext) _SearchResults_narratives(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_narratives(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Narratives, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.NarrativeConnection)
-	fc.Result = res
-	return ec.marshalONarrativeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrativeConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_narratives,
+		func(ctx context.Context) (any, error) { return obj.Narratives, nil },
+		nil,
+		ec.marshalONarrativeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrativeConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_narratives(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1403,31 +1003,17 @@ func (ec *executionContext) fieldContext_SearchResults_narratives(_ context.Cont
 }
 
 func (ec *executionContext) _SearchResults_orgSubscriptions(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_orgSubscriptions(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.OrgSubscriptions, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.OrgSubscriptionConnection)
-	fc.Result = res
-	return ec.marshalOOrgSubscriptionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgSubscriptionConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_orgSubscriptions,
+		func(ctx context.Context) (any, error) { return obj.OrgSubscriptions, nil },
+		nil,
+		ec.marshalOOrgSubscriptionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgSubscriptionConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_orgSubscriptions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1452,31 +1038,17 @@ func (ec *executionContext) fieldContext_SearchResults_orgSubscriptions(_ contex
 }
 
 func (ec *executionContext) _SearchResults_organizations(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_organizations(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Organizations, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.OrganizationConnection)
-	fc.Result = res
-	return ec.marshalOOrganizationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_organizations,
+		func(ctx context.Context) (any, error) { return obj.Organizations, nil },
+		nil,
+		ec.marshalOOrganizationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_organizations(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1501,31 +1073,17 @@ func (ec *executionContext) fieldContext_SearchResults_organizations(_ context.C
 }
 
 func (ec *executionContext) _SearchResults_organizationSettings(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_organizationSettings(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.OrganizationSettings, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.OrganizationSettingConnection)
-	fc.Result = res
-	return ec.marshalOOrganizationSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSettingConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_organizationSettings,
+		func(ctx context.Context) (any, error) { return obj.OrganizationSettings, nil },
+		nil,
+		ec.marshalOOrganizationSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSettingConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_organizationSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1550,31 +1108,17 @@ func (ec *executionContext) fieldContext_SearchResults_organizationSettings(_ co
 }
 
 func (ec *executionContext) _SearchResults_personalAccessTokens(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_personalAccessTokens(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PersonalAccessTokens, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.PersonalAccessTokenConnection)
-	fc.Result = res
-	return ec.marshalOPersonalAccessTokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessTokenConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_personalAccessTokens,
+		func(ctx context.Context) (any, error) { return obj.PersonalAccessTokens, nil },
+		nil,
+		ec.marshalOPersonalAccessTokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessTokenConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_personalAccessTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1599,31 +1143,17 @@ func (ec *executionContext) fieldContext_SearchResults_personalAccessTokens(_ co
 }
 
 func (ec *executionContext) _SearchResults_procedures(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_procedures(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Procedures, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ProcedureConnection)
-	fc.Result = res
-	return ec.marshalOProcedureConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_procedures,
+		func(ctx context.Context) (any, error) { return obj.Procedures, nil },
+		nil,
+		ec.marshalOProcedureConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_procedures(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1648,31 +1178,17 @@ func (ec *executionContext) fieldContext_SearchResults_procedures(_ context.Cont
 }
 
 func (ec *executionContext) _SearchResults_programs(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_programs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Programs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ProgramConnection)
-	fc.Result = res
-	return ec.marshalOProgramConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_programs,
+		func(ctx context.Context) (any, error) { return obj.Programs, nil },
+		nil,
+		ec.marshalOProgramConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_programs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1697,31 +1213,17 @@ func (ec *executionContext) fieldContext_SearchResults_programs(_ context.Contex
 }
 
 func (ec *executionContext) _SearchResults_risks(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_risks(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Risks, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.RiskConnection)
-	fc.Result = res
-	return ec.marshalORiskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_risks,
+		func(ctx context.Context) (any, error) { return obj.Risks, nil },
+		nil,
+		ec.marshalORiskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_risks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1746,31 +1248,17 @@ func (ec *executionContext) fieldContext_SearchResults_risks(_ context.Context, 
 }
 
 func (ec *executionContext) _SearchResults_scans(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_scans(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Scans, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.ScanConnection)
-	fc.Result = res
-	return ec.marshalOScanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_scans,
+		func(ctx context.Context) (any, error) { return obj.Scans, nil },
+		nil,
+		ec.marshalOScanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_scans(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1795,31 +1283,17 @@ func (ec *executionContext) fieldContext_SearchResults_scans(_ context.Context, 
 }
 
 func (ec *executionContext) _SearchResults_standards(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_standards(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Standards, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.StandardConnection)
-	fc.Result = res
-	return ec.marshalOStandardConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandardConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_standards,
+		func(ctx context.Context) (any, error) { return obj.Standards, nil },
+		nil,
+		ec.marshalOStandardConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandardConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_standards(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1844,31 +1318,17 @@ func (ec *executionContext) fieldContext_SearchResults_standards(_ context.Conte
 }
 
 func (ec *executionContext) _SearchResults_subcontrols(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_subcontrols(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Subcontrols, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.SubcontrolConnection)
-	fc.Result = res
-	return ec.marshalOSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_subcontrols,
+		func(ctx context.Context) (any, error) { return obj.Subcontrols, nil },
+		nil,
+		ec.marshalOSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_subcontrols(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1893,31 +1353,17 @@ func (ec *executionContext) fieldContext_SearchResults_subcontrols(_ context.Con
 }
 
 func (ec *executionContext) _SearchResults_subprocessors(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_subprocessors(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Subprocessors, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.SubprocessorConnection)
-	fc.Result = res
-	return ec.marshalOSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_subprocessors,
+		func(ctx context.Context) (any, error) { return obj.Subprocessors, nil },
+		nil,
+		ec.marshalOSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_subprocessors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1942,31 +1388,17 @@ func (ec *executionContext) fieldContext_SearchResults_subprocessors(_ context.C
 }
 
 func (ec *executionContext) _SearchResults_subscribers(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_subscribers(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Subscribers, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.SubscriberConnection)
-	fc.Result = res
-	return ec.marshalOSubscriberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_subscribers,
+		func(ctx context.Context) (any, error) { return obj.Subscribers, nil },
+		nil,
+		ec.marshalOSubscriberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_subscribers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1991,31 +1423,17 @@ func (ec *executionContext) fieldContext_SearchResults_subscribers(_ context.Con
 }
 
 func (ec *executionContext) _SearchResults_tasks(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_tasks(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Tasks, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.TaskConnection)
-	fc.Result = res
-	return ec.marshalOTaskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_tasks,
+		func(ctx context.Context) (any, error) { return obj.Tasks, nil },
+		nil,
+		ec.marshalOTaskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_tasks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2040,31 +1458,17 @@ func (ec *executionContext) fieldContext_SearchResults_tasks(_ context.Context, 
 }
 
 func (ec *executionContext) _SearchResults_templates(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_templates(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Templates, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.TemplateConnection)
-	fc.Result = res
-	return ec.marshalOTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_templates,
+		func(ctx context.Context) (any, error) { return obj.Templates, nil },
+		nil,
+		ec.marshalOTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_templates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2089,31 +1493,17 @@ func (ec *executionContext) fieldContext_SearchResults_templates(_ context.Conte
 }
 
 func (ec *executionContext) _SearchResults_trustCenters(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_trustCenters(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TrustCenters, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.TrustCenterConnection)
-	fc.Result = res
-	return ec.marshalOTrustCenterConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_trustCenters,
+		func(ctx context.Context) (any, error) { return obj.TrustCenters, nil },
+		nil,
+		ec.marshalOTrustCenterConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_trustCenters(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2138,31 +1528,17 @@ func (ec *executionContext) fieldContext_SearchResults_trustCenters(_ context.Co
 }
 
 func (ec *executionContext) _SearchResults_trustCenterCompliances(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_trustCenterCompliances(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TrustCenterCompliances, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.TrustCenterComplianceConnection)
-	fc.Result = res
-	return ec.marshalOTrustCenterComplianceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterComplianceConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_trustCenterCompliances,
+		func(ctx context.Context) (any, error) { return obj.TrustCenterCompliances, nil },
+		nil,
+		ec.marshalOTrustCenterComplianceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterComplianceConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_trustCenterCompliances(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2187,31 +1563,17 @@ func (ec *executionContext) fieldContext_SearchResults_trustCenterCompliances(_ 
 }
 
 func (ec *executionContext) _SearchResults_users(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_users(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Users, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.UserConnection)
-	fc.Result = res
-	return ec.marshalOUserConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_users,
+		func(ctx context.Context) (any, error) { return obj.Users, nil },
+		nil,
+		ec.marshalOUserConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_users(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2236,31 +1598,17 @@ func (ec *executionContext) fieldContext_SearchResults_users(_ context.Context, 
 }
 
 func (ec *executionContext) _SearchResults_userSettings(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_userSettings(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UserSettings, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.UserSettingConnection)
-	fc.Result = res
-	return ec.marshalOUserSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSettingConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_userSettings,
+		func(ctx context.Context) (any, error) { return obj.UserSettings, nil },
+		nil,
+		ec.marshalOUserSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSettingConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_userSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2285,31 +1633,17 @@ func (ec *executionContext) fieldContext_SearchResults_userSettings(_ context.Co
 }
 
 func (ec *executionContext) _SearchResults_webauthns(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_webauthns(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Webauthns, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.WebauthnConnection)
-	fc.Result = res
-	return ec.marshalOWebauthnConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWebauthnConnection(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_webauthns,
+		func(ctx context.Context) (any, error) { return obj.Webauthns, nil },
+		nil,
+		ec.marshalOWebauthnConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWebauthnConnection,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_SearchResults_webauthns(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _RiskBulkCreatePayload_risks(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RiskBulkCreatePayload_risks(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Risks, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Risk)
-	fc.Result = res
-	return ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_RiskBulkCreatePayload_risks,
+		func(ctx context.Context) (any, error) { return obj.Risks, nil },
+		nil,
+		ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -145,31 +130,17 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 }
 
 func (ec *executionContext) _RiskBulkUpdatePayload_risks(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RiskBulkUpdatePayload_risks(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Risks, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Risk)
-	fc.Result = res
-	return ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_RiskBulkUpdatePayload_risks,
+		func(ctx context.Context) (any, error) { return obj.Risks, nil },
+		nil,
+		ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -260,31 +231,17 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 }
 
 func (ec *executionContext) _RiskBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RiskBulkUpdatePayload_updatedIDs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedIDs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]string)
-	fc.Result = res
-	return ec.marshalOID2ᚕstringᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_RiskBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -301,34 +258,17 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_updatedIDs(_ cont
 }
 
 func (ec *executionContext) _RiskCreatePayload_risk(ctx context.Context, field graphql.CollectedField, obj *model.RiskCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RiskCreatePayload_risk(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Risk, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Risk)
-	fc.Result = res
-	return ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_RiskCreatePayload_risk,
+		func(ctx context.Context) (any, error) { return obj.Risk, nil },
+		nil,
+		ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -419,34 +359,17 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 }
 
 func (ec *executionContext) _RiskDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.RiskDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RiskDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_RiskDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_RiskDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -463,34 +386,17 @@ func (ec *executionContext) fieldContext_RiskDeletePayload_deletedID(_ context.C
 }
 
 func (ec *executionContext) _RiskUpdatePayload_risk(ctx context.Context, field graphql.CollectedField, obj *model.RiskUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RiskUpdatePayload_risk(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Risk, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Risk)
-	fc.Result = res
-	return ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_RiskUpdatePayload_risk,
+		func(ctx context.Context) (any, error) { return obj.Risk, nil },
+		nil,
+		ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

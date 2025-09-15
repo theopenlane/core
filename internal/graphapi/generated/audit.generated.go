@@ -9,13 +9,10 @@ import (
 	"strconv"
 	"sync"
 	"sync/atomic"
-	"time"
 
-	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx/history"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,31 +35,17 @@ type AuditLogResolver interface {
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _AuditLog_table(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLog_table(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Table, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AuditLog_table,
+		func(ctx context.Context) (any, error) { return obj.Table, nil },
+		nil,
+		ec.marshalOString2string,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_table(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -79,31 +62,17 @@ func (ec *executionContext) fieldContext_AuditLog_table(_ context.Context, field
 }
 
 func (ec *executionContext) _AuditLog_time(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLog_time(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.HistoryTime, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(time.Time)
-	fc.Result = res
-	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AuditLog_time,
+		func(ctx context.Context) (any, error) { return obj.HistoryTime, nil },
+		nil,
+		ec.marshalOTime2timeᚐTime,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_time(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -120,34 +89,17 @@ func (ec *executionContext) fieldContext_AuditLog_time(_ context.Context, field 
 }
 
 func (ec *executionContext) _AuditLog_id(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLog_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.RefID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AuditLog_id,
+		func(ctx context.Context) (any, error) { return obj.RefID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -164,31 +116,17 @@ func (ec *executionContext) fieldContext_AuditLog_id(_ context.Context, field gr
 }
 
 func (ec *executionContext) _AuditLog_operation(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLog_operation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Operation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(history.OpType)
-	fc.Result = res
-	return ec.marshalOString2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AuditLog_operation,
+		func(ctx context.Context) (any, error) { return obj.Operation, nil },
+		nil,
+		ec.marshalOString2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_operation(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -205,31 +143,19 @@ func (ec *executionContext) fieldContext_AuditLog_operation(_ context.Context, f
 }
 
 func (ec *executionContext) _AuditLog_changes(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLog_changes(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.AuditLog().Changes(rctx, obj)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*models.Change)
-	fc.Result = res
-	return ec.marshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChangeᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AuditLog_changes,
+		func(ctx context.Context) (any, error) {
+			return ec.resolvers.AuditLog().Changes(ctx, obj)
+		},
+		nil,
+		ec.marshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChangeᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_changes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -246,31 +172,17 @@ func (ec *executionContext) fieldContext_AuditLog_changes(_ context.Context, fie
 }
 
 func (ec *executionContext) _AuditLog_updatedBy(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLog_updatedBy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedBy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AuditLog_updatedBy,
+		func(ctx context.Context) (any, error) { return obj.UpdatedBy, nil },
+		nil,
+		ec.marshalOID2string,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -287,31 +199,17 @@ func (ec *executionContext) fieldContext_AuditLog_updatedBy(_ context.Context, f
 }
 
 func (ec *executionContext) _AuditLogConnection_edges(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLogConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLogConnection_edges(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Edges, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.AuditLogEdge)
-	fc.Result = res
-	return ec.marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogEdge(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AuditLogConnection_edges,
+		func(ctx context.Context) (any, error) { return obj.Edges, nil },
+		nil,
+		ec.marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogEdge,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_AuditLogConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -334,34 +232,17 @@ func (ec *executionContext) fieldContext_AuditLogConnection_edges(_ context.Cont
 }
 
 func (ec *executionContext) _AuditLogConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLogConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLogConnection_pageInfo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PageInfo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(entgql.PageInfo[string])
-	fc.Result = res
-	return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AuditLogConnection_pageInfo,
+		func(ctx context.Context) (any, error) { return obj.PageInfo, nil },
+		nil,
+		ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_AuditLogConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -388,34 +269,17 @@ func (ec *executionContext) fieldContext_AuditLogConnection_pageInfo(_ context.C
 }
 
 func (ec *executionContext) _AuditLogConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLogConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLogConnection_totalCount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TotalCount, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AuditLogConnection_totalCount,
+		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		nil,
+		ec.marshalNInt2int,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_AuditLogConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -432,31 +296,17 @@ func (ec *executionContext) fieldContext_AuditLogConnection_totalCount(_ context
 }
 
 func (ec *executionContext) _AuditLogEdge_node(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLogEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLogEdge_node(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Node, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*generated.AuditLog)
-	fc.Result = res
-	return ec.marshalOAuditLog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLog(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AuditLogEdge_node,
+		func(ctx context.Context) (any, error) { return obj.Node, nil },
+		nil,
+		ec.marshalOAuditLog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLog,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_AuditLogEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -487,34 +337,17 @@ func (ec *executionContext) fieldContext_AuditLogEdge_node(_ context.Context, fi
 }
 
 func (ec *executionContext) _AuditLogEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLogEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AuditLogEdge_cursor(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Cursor, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(entgql.Cursor[string])
-	fc.Result = res
-	return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AuditLogEdge_cursor,
+		func(ctx context.Context) (any, error) { return obj.Cursor, nil },
+		nil,
+		ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_AuditLogEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

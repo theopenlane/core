@@ -10,7 +10,6 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
@@ -32,34 +31,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _GroupPermission_objectType(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermission_objectType(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ObjectType, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupPermission_objectType,
+		func(ctx context.Context) (any, error) { return obj.ObjectType, nil },
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupPermission_objectType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -76,34 +58,17 @@ func (ec *executionContext) fieldContext_GroupPermission_objectType(_ context.Co
 }
 
 func (ec *executionContext) _GroupPermission_permissions(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermission_permissions(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Permissions, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(enums.Permission)
-	fc.Result = res
-	return ec.marshalNPermission2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐPermission(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupPermission_permissions,
+		func(ctx context.Context) (any, error) { return obj.Permissions, nil },
+		nil,
+		ec.marshalNPermission2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐPermission,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupPermission_permissions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -120,34 +85,17 @@ func (ec *executionContext) fieldContext_GroupPermission_permissions(_ context.C
 }
 
 func (ec *executionContext) _GroupPermission_id(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermission_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupPermission_id,
+		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupPermission_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -164,31 +112,17 @@ func (ec *executionContext) fieldContext_GroupPermission_id(_ context.Context, f
 }
 
 func (ec *executionContext) _GroupPermission_displayID(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermission_displayID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DisplayID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupPermission_displayID,
+		func(ctx context.Context) (any, error) { return obj.DisplayID, nil },
+		nil,
+		ec.marshalOString2ᚖstring,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupPermission_displayID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -205,31 +139,17 @@ func (ec *executionContext) fieldContext_GroupPermission_displayID(_ context.Con
 }
 
 func (ec *executionContext) _GroupPermission_name(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermission_name(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Name, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupPermission_name,
+		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		nil,
+		ec.marshalOString2ᚖstring,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupPermission_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -246,31 +166,17 @@ func (ec *executionContext) fieldContext_GroupPermission_name(_ context.Context,
 }
 
 func (ec *executionContext) _GroupPermissionConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermissionConnection_edges(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Edges, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.GroupPermissionEdge)
-	fc.Result = res
-	return ec.marshalOGroupPermissionEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupPermissionConnection_edges,
+		func(ctx context.Context) (any, error) { return obj.Edges, nil },
+		nil,
+		ec.marshalOGroupPermissionEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupPermissionConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -293,34 +199,17 @@ func (ec *executionContext) fieldContext_GroupPermissionConnection_edges(_ conte
 }
 
 func (ec *executionContext) _GroupPermissionConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermissionConnection_pageInfo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PageInfo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*entgql.PageInfo[string])
-	fc.Result = res
-	return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupPermissionConnection_pageInfo,
+		func(ctx context.Context) (any, error) { return obj.PageInfo, nil },
+		nil,
+		ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupPermissionConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -347,34 +236,17 @@ func (ec *executionContext) fieldContext_GroupPermissionConnection_pageInfo(_ co
 }
 
 func (ec *executionContext) _GroupPermissionConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermissionConnection_totalCount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TotalCount, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupPermissionConnection_totalCount,
+		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		nil,
+		ec.marshalNInt2int,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupPermissionConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -391,31 +263,17 @@ func (ec *executionContext) fieldContext_GroupPermissionConnection_totalCount(_ 
 }
 
 func (ec *executionContext) _GroupPermissionEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermissionEdge_node(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Node, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.GroupPermission)
-	fc.Result = res
-	return ec.marshalOGroupPermission2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermission(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupPermissionEdge_node,
+		func(ctx context.Context) (any, error) { return obj.Node, nil },
+		nil,
+		ec.marshalOGroupPermission2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermission,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupPermissionEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -444,34 +302,17 @@ func (ec *executionContext) fieldContext_GroupPermissionEdge_node(_ context.Cont
 }
 
 func (ec *executionContext) _GroupPermissionEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermissionEdge_cursor(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Cursor, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(entgql.Cursor[string])
-	fc.Result = res
-	return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_GroupPermissionEdge_cursor,
+		func(ctx context.Context) (any, error) { return obj.Cursor, nil },
+		nil,
+		ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_GroupPermissionEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

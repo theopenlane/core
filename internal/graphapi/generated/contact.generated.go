@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ContactBulkCreatePayload_contacts(ctx context.Context, field graphql.CollectedField, obj *model.ContactBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ContactBulkCreatePayload_contacts(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Contacts, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Contact)
-	fc.Result = res
-	return ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ContactBulkCreatePayload_contacts,
+		func(ctx context.Context) (any, error) { return obj.Contacts, nil },
+		nil,
+		ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -107,31 +92,17 @@ func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ con
 }
 
 func (ec *executionContext) _ContactBulkUpdatePayload_contacts(ctx context.Context, field graphql.CollectedField, obj *model.ContactBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ContactBulkUpdatePayload_contacts(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Contacts, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Contact)
-	fc.Result = res
-	return ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ContactBulkUpdatePayload_contacts,
+		func(ctx context.Context) (any, error) { return obj.Contacts, nil },
+		nil,
+		ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_ContactBulkUpdatePayload_contacts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -184,31 +155,17 @@ func (ec *executionContext) fieldContext_ContactBulkUpdatePayload_contacts(_ con
 }
 
 func (ec *executionContext) _ContactBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ContactBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ContactBulkUpdatePayload_updatedIDs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedIDs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]string)
-	fc.Result = res
-	return ec.marshalOID2ᚕstringᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ContactBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) { return obj.UpdatedIDs, nil },
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_ContactBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -225,34 +182,17 @@ func (ec *executionContext) fieldContext_ContactBulkUpdatePayload_updatedIDs(_ c
 }
 
 func (ec *executionContext) _ContactCreatePayload_contact(ctx context.Context, field graphql.CollectedField, obj *model.ContactCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ContactCreatePayload_contact(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Contact, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Contact)
-	fc.Result = res
-	return ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ContactCreatePayload_contact,
+		func(ctx context.Context) (any, error) { return obj.Contact, nil },
+		nil,
+		ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ContactCreatePayload_contact(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -305,34 +245,17 @@ func (ec *executionContext) fieldContext_ContactCreatePayload_contact(_ context.
 }
 
 func (ec *executionContext) _ContactDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.ContactDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ContactDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ContactDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ContactDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -349,34 +272,17 @@ func (ec *executionContext) fieldContext_ContactDeletePayload_deletedID(_ contex
 }
 
 func (ec *executionContext) _ContactUpdatePayload_contact(ctx context.Context, field graphql.CollectedField, obj *model.ContactUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ContactUpdatePayload_contact(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Contact, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Contact)
-	fc.Result = res
-	return ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ContactUpdatePayload_contact,
+		func(ctx context.Context) (any, error) { return obj.Contact, nil },
+		nil,
+		ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _DocumentDataBulkCreatePayload_documentData(ctx context.Context, field graphql.CollectedField, obj *model.DocumentDataBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DocumentDataBulkCreatePayload_documentData(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DocumentData, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.DocumentData)
-	fc.Result = res
-	return ec.marshalODocumentData2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentDataᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DocumentDataBulkCreatePayload_documentData,
+		func(ctx context.Context) (any, error) { return obj.DocumentData, nil },
+		nil,
+		ec.marshalODocumentData2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentDataᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_DocumentDataBulkCreatePayload_documentData(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -99,34 +84,17 @@ func (ec *executionContext) fieldContext_DocumentDataBulkCreatePayload_documentD
 }
 
 func (ec *executionContext) _DocumentDataCreatePayload_documentData(ctx context.Context, field graphql.CollectedField, obj *model.DocumentDataCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DocumentDataCreatePayload_documentData(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DocumentData, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.DocumentData)
-	fc.Result = res
-	return ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DocumentDataCreatePayload_documentData,
+		func(ctx context.Context) (any, error) { return obj.DocumentData, nil },
+		nil,
+		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_DocumentDataCreatePayload_documentData(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -171,34 +139,17 @@ func (ec *executionContext) fieldContext_DocumentDataCreatePayload_documentData(
 }
 
 func (ec *executionContext) _DocumentDataDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.DocumentDataDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DocumentDataDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DocumentDataDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_DocumentDataDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -215,34 +166,17 @@ func (ec *executionContext) fieldContext_DocumentDataDeletePayload_deletedID(_ c
 }
 
 func (ec *executionContext) _DocumentDataUpdatePayload_documentData(ctx context.Context, field graphql.CollectedField, obj *model.DocumentDataUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DocumentDataUpdatePayload_documentData(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DocumentData, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.DocumentData)
-	fc.Result = res
-	return ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DocumentDataUpdatePayload_documentData,
+		func(ctx context.Context) (any, error) { return obj.DocumentData, nil },
+		nil,
+		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_DocumentDataUpdatePayload_documentData(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

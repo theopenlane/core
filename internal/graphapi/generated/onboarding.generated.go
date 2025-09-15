@@ -9,7 +9,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -29,34 +28,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _OnboardingCreatePayload_onboarding(ctx context.Context, field graphql.CollectedField, obj *model.OnboardingCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OnboardingCreatePayload_onboarding(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Onboarding, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Onboarding)
-	fc.Result = res
-	return ec.marshalNOnboarding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOnboarding(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_OnboardingCreatePayload_onboarding,
+		func(ctx context.Context) (any, error) { return obj.Onboarding, nil },
+		nil,
+		ec.marshalNOnboarding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOnboarding,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_OnboardingCreatePayload_onboarding(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

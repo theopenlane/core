@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _MappableDomainBulkCreatePayload_mappableDomains(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MappableDomainBulkCreatePayload_mappableDomains(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MappableDomains, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.MappableDomain)
-	fc.Result = res
-	return ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappableDomainBulkCreatePayload_mappableDomains,
+		func(ctx context.Context) (any, error) { return obj.MappableDomains, nil },
+		nil,
+		ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_MappableDomainBulkCreatePayload_mappableDomains(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -91,34 +76,17 @@ func (ec *executionContext) fieldContext_MappableDomainBulkCreatePayload_mappabl
 }
 
 func (ec *executionContext) _MappableDomainCreatePayload_mappableDomain(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MappableDomainCreatePayload_mappableDomain(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MappableDomain, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.MappableDomain)
-	fc.Result = res
-	return ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappableDomainCreatePayload_mappableDomain,
+		func(ctx context.Context) (any, error) { return obj.MappableDomain, nil },
+		nil,
+		ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_MappableDomainCreatePayload_mappableDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -155,34 +123,17 @@ func (ec *executionContext) fieldContext_MappableDomainCreatePayload_mappableDom
 }
 
 func (ec *executionContext) _MappableDomainDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MappableDomainDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappableDomainDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_MappableDomainDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -199,34 +150,17 @@ func (ec *executionContext) fieldContext_MappableDomainDeletePayload_deletedID(_
 }
 
 func (ec *executionContext) _MappableDomainUpdatePayload_mappableDomain(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MappableDomainUpdatePayload_mappableDomain(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MappableDomain, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.MappableDomain)
-	fc.Result = res
-	return ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_MappableDomainUpdatePayload_mappableDomain,
+		func(ctx context.Context) (any, error) { return obj.MappableDomain, nil },
+		nil,
+		ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_MappableDomainUpdatePayload_mappableDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

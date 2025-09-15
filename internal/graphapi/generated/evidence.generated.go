@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _EvidenceBulkCreatePayload_evidences(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_EvidenceBulkCreatePayload_evidences(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Evidences, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Evidence)
-	fc.Result = res
-	return ec.marshalOEvidence2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_EvidenceBulkCreatePayload_evidences,
+		func(ctx context.Context) (any, error) { return obj.Evidences, nil },
+		nil,
+		ec.marshalOEvidence2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -123,34 +108,17 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 }
 
 func (ec *executionContext) _EvidenceCreatePayload_evidence(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_EvidenceCreatePayload_evidence(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Evidence, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Evidence)
-	fc.Result = res
-	return ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidence(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_EvidenceCreatePayload_evidence,
+		func(ctx context.Context) (any, error) { return obj.Evidence, nil },
+		nil,
+		ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidence,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -219,34 +187,17 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 }
 
 func (ec *executionContext) _EvidenceDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_EvidenceDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_EvidenceDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_EvidenceDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -263,34 +214,17 @@ func (ec *executionContext) fieldContext_EvidenceDeletePayload_deletedID(_ conte
 }
 
 func (ec *executionContext) _EvidenceUpdatePayload_evidence(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_EvidenceUpdatePayload_evidence(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Evidence, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Evidence)
-	fc.Result = res
-	return ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidence(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_EvidenceUpdatePayload_evidence,
+		func(ctx context.Context) (any, error) { return obj.Evidence, nil },
+		nil,
+		ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidence,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

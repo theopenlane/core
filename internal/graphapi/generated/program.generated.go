@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -30,31 +29,17 @@ import (
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ProgramBulkCreatePayload_programs(ctx context.Context, field graphql.CollectedField, obj *model.ProgramBulkCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProgramBulkCreatePayload_programs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Programs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.Program)
-	fc.Result = res
-	return ec.marshalOProgram2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramᚄ(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramBulkCreatePayload_programs,
+		func(ctx context.Context) (any, error) { return obj.Programs, nil },
+		nil,
+		ec.marshalOProgram2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramᚄ,
+		true,
+		false,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -151,34 +136,17 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 }
 
 func (ec *executionContext) _ProgramCreatePayload_program(ctx context.Context, field graphql.CollectedField, obj *model.ProgramCreatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProgramCreatePayload_program(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Program, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Program)
-	fc.Result = res
-	return ec.marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgram(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramCreatePayload_program,
+		func(ctx context.Context) (any, error) { return obj.Program, nil },
+		nil,
+		ec.marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgram,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -275,34 +243,17 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 }
 
 func (ec *executionContext) _ProgramDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.ProgramDeletePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProgramDeletePayload_deletedID(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramDeletePayload_deletedID,
+		func(ctx context.Context) (any, error) { return obj.DeletedID, nil },
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProgramDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -319,34 +270,17 @@ func (ec *executionContext) fieldContext_ProgramDeletePayload_deletedID(_ contex
 }
 
 func (ec *executionContext) _ProgramUpdatePayload_program(ctx context.Context, field graphql.CollectedField, obj *model.ProgramUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProgramUpdatePayload_program(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Program, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*generated.Program)
-	fc.Result = res
-	return ec.marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgram(ctx, field.Selections, res)
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramUpdatePayload_program,
+		func(ctx context.Context) (any, error) { return obj.Program, nil },
+		nil,
+		ec.marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgram,
+		true,
+		true,
+	)
 }
 
 func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
