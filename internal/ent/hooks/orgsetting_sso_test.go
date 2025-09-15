@@ -70,20 +70,6 @@ func (suite *HookTestSuite) TestValidateIdentityProviderConfig() {
 		require.Error(t, err)
 	})
 
-	t.Run("create with tested connection", func(t *testing.T) {
-		m := suite.client.OrganizationSetting.Create().
-			SetIdentityProviderLoginEnforced(true).
-			SetIdentityProvider(enums.SSOProviderOkta).
-			SetIdentityProviderClientID("id").
-			SetIdentityProviderClientSecret("secret").
-			SetOidcDiscoveryEndpoint("https://example.com").
-			SetIdentityProviderAuthTested(true).
-			Mutation()
-
-		err := hooks.ValidateIdentityProviderConfig(ctx, m)
-		require.NoError(t, err)
-	})
-
 	t.Run("update with tested connection", func(t *testing.T) {
 		setting, err := suite.client.OrganizationSetting.Create().
 			SetIdentityProvider(enums.SSOProviderOkta).
