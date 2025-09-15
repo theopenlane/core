@@ -284,8 +284,8 @@ subscription:
     enabled: false
     privateStripeKey: ""
     publicStripeKey: ""
-    stripeBillingPortalSuccessURL: https://console.openlane.com/billing
-    stripeCancellationReturnURL: https://console.theopenlane.io/organization-settings/billing/subscription_canceled
+    stripeBillingPortalSuccessURL: https://console.openlane.com/organization-settings/billing
+    stripeCancellationReturnURL: https://console.theopenlane.io/organization-settings/billing
     stripeWebhookEvents: null
     stripeWebhookSecret: ""
     stripeWebhookURL: https://api.openlane.com/v1/stripe/webhook

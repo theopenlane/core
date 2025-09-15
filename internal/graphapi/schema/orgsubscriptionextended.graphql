@@ -1,11 +1,4 @@
 extend type OrgSubscription {
-    subscriptionURL: String
     managePaymentMethods: String
     cancellation: String
-    moduleBillingURLs: [ModuleBillingURL!]
-}
-
-type ModuleBillingURL {
-    module: String!
-    url: String!
 }

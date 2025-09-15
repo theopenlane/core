@@ -2,6 +2,7 @@ package entitlements
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/stripe/stripe-go/v82"
 )
@@ -31,11 +32,18 @@ func (sc *StripeClient) CreateBillingPortalUpdateSession(ctx context.Context, su
 
 // CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods
 func (sc *StripeClient) CreateBillingPortalPaymentMethods(ctx context.Context, custID string) (*BillingPortalSession, error) {
+	returnURL := fmt.Sprintf("%s?%s", sc.Config.StripeBillingPortalSuccessURL, "paymentupdate=complete")
 	params := &stripe.BillingPortalSessionCreateParams{
 		Customer:  &custID,
 		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
 		FlowData: &stripe.BillingPortalSessionCreateFlowDataParams{
 			Type: stripe.String("payment_method_update"),
+			AfterCompletion: &stripe.BillingPortalSessionCreateFlowDataAfterCompletionParams{
+				Redirect: &stripe.BillingPortalSessionCreateFlowDataAfterCompletionRedirectParams{
+					ReturnURL: &returnURL,
+				},
+				Type: stripe.String("redirect"),
+			},
 		},
 	}
 
@@ -51,6 +59,7 @@ func (sc *StripeClient) CreateBillingPortalPaymentMethods(ctx context.Context, c
 
 // CancellationBillingPortalSession generates a session in stripe's billing portal which allows the customer to cancel their subscription
 func (sc *StripeClient) CancellationBillingPortalSession(ctx context.Context, subsID, custID string) (*BillingPortalSession, error) {
+	returnURL := fmt.Sprintf("%s?%s", sc.Config.StripeCancellationReturnURL, "cancelled=true")
 	params := &stripe.BillingPortalSessionCreateParams{
 		Customer:  &custID,
 		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL, // this is the "return back to website" URL, not a cancellation / update specific one
@@ -62,7 +71,7 @@ func (sc *StripeClient) CancellationBillingPortalSession(ctx context.Context, su
 			AfterCompletion: &stripe.BillingPortalSessionCreateFlowDataAfterCompletionParams{
 				Type: stripe.String("redirect"),
 				Redirect: &stripe.BillingPortalSessionCreateFlowDataAfterCompletionRedirectParams{
-					ReturnURL: &sc.Config.StripeCancellationReturnURL,
+					ReturnURL: &returnURL,
 				},
 			},
 		},

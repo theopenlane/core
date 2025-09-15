@@ -393,9 +393,9 @@ coreConfiguration:
     # -- StripeWebhookURL is the URL for the stripe webhook
     stripeWebhookURL: "https://api.openlane.com/v1/stripe/webhook"  # @schema type:string; default:https://api.openlane.com/v1/stripe/webhook
     # -- StripeBillingPortalSuccessURL
-    stripeBillingPortalSuccessURL: "https://console.openlane.com/billing"  # @schema type:string; default:https://console.openlane.com/billing
+    stripeBillingPortalSuccessURL: "https://console.openlane.com/organization-settings/billing"  # @schema type:string; default:https://console.openlane.com/organization-settings/billing
     # -- StripeCancellationReturnURL is the URL for the stripe cancellation return
-    stripeCancellationReturnURL: "https://console.theopenlane.io/organization-settings/billing/subscription_canceled"  # @schema type:string; default:https://console.theopenlane.io/organization-settings/billing/subscription_canceled
+    stripeCancellationReturnURL: "https://console.theopenlane.io/organization-settings/billing"  # @schema type:string; default:https://console.theopenlane.io/organization-settings/billing
     # -- StripeWebhookEvents is the list of events to register when creating a webhook endpoint
     stripeWebhookEvents: []
   # -- Keywatcher contains the configuration for the key watcher that manages JWT signing keys

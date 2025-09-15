@@ -919,11 +919,6 @@ type MappedControlUpdatePayload struct {
 	MappedControl *generated.MappedControl `json:"mappedControl"`
 }
 
-type ModuleBillingURL struct {
-	Module string `json:"module"`
-	URL    string `json:"url"`
-}
-
 // Return response for createBulkNarrative mutation
 type NarrativeBulkCreatePayload struct {
 	// Created narratives
