@@ -17,6 +17,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -288,6 +290,54 @@ func (_c *FileCreate) SetFileContents(v []byte) *FileCreate {
 	return _c
 }
 
+// SetMetadata sets the "metadata" field.
+func (_c *FileCreate) SetMetadata(v map[string]interface{}) *FileCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetStorageRegion sets the "storage_region" field.
+func (_c *FileCreate) SetStorageRegion(v string) *FileCreate {
+	_c.mutation.SetStorageRegion(v)
+	return _c
+}
+
+// SetNillableStorageRegion sets the "storage_region" field if the given value is not nil.
+func (_c *FileCreate) SetNillableStorageRegion(v *string) *FileCreate {
+	if v != nil {
+		_c.SetStorageRegion(*v)
+	}
+	return _c
+}
+
+// SetStorageProvider sets the "storage_provider" field.
+func (_c *FileCreate) SetStorageProvider(v string) *FileCreate {
+	_c.mutation.SetStorageProvider(v)
+	return _c
+}
+
+// SetNillableStorageProvider sets the "storage_provider" field if the given value is not nil.
+func (_c *FileCreate) SetNillableStorageProvider(v *string) *FileCreate {
+	if v != nil {
+		_c.SetStorageProvider(*v)
+	}
+	return _c
+}
+
+// SetLastAccessedAt sets the "last_accessed_at" field.
+func (_c *FileCreate) SetLastAccessedAt(v time.Time) *FileCreate {
+	_c.mutation.SetLastAccessedAt(v)
+	return _c
+}
+
+// SetNillableLastAccessedAt sets the "last_accessed_at" field if the given value is not nil.
+func (_c *FileCreate) SetNillableLastAccessedAt(v *time.Time) *FileCreate {
+	if v != nil {
+		_c.SetLastAccessedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *FileCreate) SetID(v string) *FileCreate {
 	_c.mutation.SetID(v)
@@ -512,6 +562,36 @@ func (_c *FileCreate) AddSubprocessor(v ...*Subprocessor) *FileCreate {
 	return _c.AddSubprocessorIDs(ids...)
 }
 
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_c *FileCreate) AddIntegrationIDs(ids ...string) *FileCreate {
+	_c.mutation.AddIntegrationIDs(ids...)
+	return _c
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_c *FileCreate) AddIntegrations(v ...*Integration) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationIDs(ids...)
+}
+
+// AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
+func (_c *FileCreate) AddSecretIDs(ids ...string) *FileCreate {
+	_c.mutation.AddSecretIDs(ids...)
+	return _c
+}
+
+// AddSecrets adds the "secrets" edges to the Hush entity.
+func (_c *FileCreate) AddSecrets(v ...*Hush) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSecretIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (_c *FileCreate) Mutation() *FileMutation {
 	return _c.mutation
@@ -717,6 +797,22 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.FileContents(); ok {
 		_spec.SetField(file.FieldFileContents, field.TypeBytes, value)
 		_node.FileContents = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(file.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.StorageRegion(); ok {
+		_spec.SetField(file.FieldStorageRegion, field.TypeString, value)
+		_node.StorageRegion = value
+	}
+	if value, ok := _c.mutation.StorageProvider(); ok {
+		_spec.SetField(file.FieldStorageProvider, field.TypeString, value)
+		_node.StorageProvider = value
+	}
+	if value, ok := _c.mutation.LastAccessedAt(); ok {
+		_spec.SetField(file.FieldLastAccessedAt, field.TypeTime, value)
+		_node.LastAccessedAt = &value
 	}
 	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -951,6 +1047,40 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   file.IntegrationsTable,
+			Columns: []string{file.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SecretsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.SecretsTable,
+			Columns: file.SecretsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FileSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

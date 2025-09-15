@@ -3387,6 +3387,22 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetFileContents(fileContents)
 	}
 
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
+	if storageRegion, exists := m.StorageRegion(); exists {
+		create = create.SetStorageRegion(storageRegion)
+	}
+
+	if storageProvider, exists := m.StorageProvider(); exists {
+		create = create.SetStorageProvider(storageProvider)
+	}
+
+	if lastAccessedAt, exists := m.LastAccessedAt(); exists {
+		create = create.SetNillableLastAccessedAt(&lastAccessedAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -3544,6 +3560,30 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetFileContents(file.FileContents)
 		}
 
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(file.Metadata)
+		}
+
+		if storageRegion, exists := m.StorageRegion(); exists {
+			create = create.SetStorageRegion(storageRegion)
+		} else {
+			create = create.SetStorageRegion(file.StorageRegion)
+		}
+
+		if storageProvider, exists := m.StorageProvider(); exists {
+			create = create.SetStorageProvider(storageProvider)
+		} else {
+			create = create.SetStorageProvider(file.StorageProvider)
+		}
+
+		if lastAccessedAt, exists := m.LastAccessedAt(); exists {
+			create = create.SetNillableLastAccessedAt(&lastAccessedAt)
+		} else {
+			create = create.SetNillableLastAccessedAt(file.LastAccessedAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -3600,6 +3640,10 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetStorageVolume(file.StorageVolume).
 			SetStoragePath(file.StoragePath).
 			SetFileContents(file.FileContents).
+			SetMetadata(file.Metadata).
+			SetStorageRegion(file.StorageRegion).
+			SetStorageProvider(file.StorageProvider).
+			SetNillableLastAccessedAt(file.LastAccessedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -4309,6 +4353,22 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetSecretValue(secretValue)
 	}
 
+	if credentialSet, exists := m.CredentialSet(); exists {
+		create = create.SetCredentialSet(credentialSet)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
+	if lastUsedAt, exists := m.LastUsedAt(); exists {
+		create = create.SetNillableLastUsedAt(&lastUsedAt)
+	}
+
+	if expiresAt, exists := m.ExpiresAt(); exists {
+		create = create.SetNillableExpiresAt(&expiresAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -4412,6 +4472,30 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetSecretValue(hush.SecretValue)
 		}
 
+		if credentialSet, exists := m.CredentialSet(); exists {
+			create = create.SetCredentialSet(credentialSet)
+		} else {
+			create = create.SetCredentialSet(hush.CredentialSet)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(hush.Metadata)
+		}
+
+		if lastUsedAt, exists := m.LastUsedAt(); exists {
+			create = create.SetNillableLastUsedAt(&lastUsedAt)
+		} else {
+			create = create.SetNillableLastUsedAt(hush.LastUsedAt)
+		}
+
+		if expiresAt, exists := m.ExpiresAt(); exists {
+			create = create.SetNillableExpiresAt(&expiresAt)
+		} else {
+			create = create.SetNillableExpiresAt(hush.ExpiresAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4459,6 +4543,10 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetKind(hush.Kind).
 			SetSecretName(hush.SecretName).
 			SetSecretValue(hush.SecretValue).
+			SetCredentialSet(hush.CredentialSet).
+			SetMetadata(hush.Metadata).
+			SetNillableLastUsedAt(hush.LastUsedAt).
+			SetNillableExpiresAt(hush.ExpiresAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -4526,6 +4614,14 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if kind, exists := m.Kind(); exists {
 		create = create.SetKind(kind)
+	}
+
+	if integrationType, exists := m.IntegrationType(); exists {
+		create = create.SetIntegrationType(integrationType)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
 	}
 
 	_, err := create.Save(ctx)
@@ -4625,6 +4721,18 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetKind(integration.Kind)
 		}
 
+		if integrationType, exists := m.IntegrationType(); exists {
+			create = create.SetIntegrationType(integrationType)
+		} else {
+			create = create.SetIntegrationType(integration.IntegrationType)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(integration.Metadata)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4671,6 +4779,8 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetName(integration.Name).
 			SetDescription(integration.Description).
 			SetKind(integration.Kind).
+			SetIntegrationType(integration.IntegrationType).
+			SetMetadata(integration.Metadata).
 			Save(ctx)
 		if err != nil {
 			return err

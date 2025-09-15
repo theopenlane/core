@@ -7451,6 +7451,19 @@ input CreateFileInput {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
+  """
+  additional metadata about the file
+  """
+  metadata: Map
+  """
+  the region the file is stored in, if applicable
+  """
+  storageRegion: String
+  """
+  the storage provider the file is stored in, if applicable
+  """
+  storageProvider: String
+  lastAccessedAt: Time
   userIDs: [ID!]
   organizationIDs: [ID!]
   groupIDs: [ID!]
@@ -7465,6 +7478,8 @@ input CreateFileInput {
   eventIDs: [ID!]
   trustCenterSettingIDs: [ID!]
   subprocessorIDs: [ID!]
+  integrationIDs: [ID!]
+  secretIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -7585,8 +7600,22 @@ input CreateHushInput {
   the secret value
   """
   secretValue: String
+  """
+  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+  """
+  credentialSet: CredentialSet
+  """
+  additional metadata about the credential
+  """
+  metadata: Map
+  lastUsedAt: Time
+  """
+  when the token expires
+  """
+  expiresAt: Time
   ownerID: ID
   integrationIDs: [ID!]
+  fileIDs: [ID!]
   eventIDs: [ID!]
 }
 """
@@ -14395,6 +14424,19 @@ type File implements Node {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
+  """
+  additional metadata about the file
+  """
+  metadata: Map
+  """
+  the region the file is stored in, if applicable
+  """
+  storageRegion: String
+  """
+  the storage provider the file is stored in, if applicable
+  """
+  storageProvider: String
+  lastAccessedAt: Time
   user: [User!]
   organization: [Organization!]
   groups(
@@ -14469,6 +14511,68 @@ type File implements Node {
   ): EventConnection!
   trustCenterSetting: [TrustCenterSetting!]
   subprocessor: [Subprocessor!]
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  secrets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Hushes returned from the connection.
+    """
+    orderBy: [HushOrder!]
+
+    """
+    Filtering options for Hushes returned from the connection.
+    """
+    where: HushWhereInput
+  ): HushConnection!
 }
 """
 A connection to a list of items.
@@ -14562,6 +14666,19 @@ type FileHistory implements Node {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
+  """
+  additional metadata about the file
+  """
+  metadata: Map
+  """
+  the region the file is stored in, if applicable
+  """
+  storageRegion: String
+  """
+  the storage provider the file is stored in, if applicable
+  """
+  storageProvider: String
+  lastAccessedAt: Time
 }
 """
 A connection to a list of items.
@@ -14621,6 +14738,7 @@ enum FileHistoryOrderField {
   history_time
   created_at
   updated_at
+  last_accessed_at
 }
 """
 FileHistoryWhereInput is used for filtering FileHistory objects.
@@ -14959,6 +15077,55 @@ input FileHistoryWhereInput {
   storagePathNotNil: Boolean
   storagePathEqualFold: String
   storagePathContainsFold: String
+  """
+  storage_region field predicates
+  """
+  storageRegion: String
+  storageRegionNEQ: String
+  storageRegionIn: [String!]
+  storageRegionNotIn: [String!]
+  storageRegionGT: String
+  storageRegionGTE: String
+  storageRegionLT: String
+  storageRegionLTE: String
+  storageRegionContains: String
+  storageRegionHasPrefix: String
+  storageRegionHasSuffix: String
+  storageRegionIsNil: Boolean
+  storageRegionNotNil: Boolean
+  storageRegionEqualFold: String
+  storageRegionContainsFold: String
+  """
+  storage_provider field predicates
+  """
+  storageProvider: String
+  storageProviderNEQ: String
+  storageProviderIn: [String!]
+  storageProviderNotIn: [String!]
+  storageProviderGT: String
+  storageProviderGTE: String
+  storageProviderLT: String
+  storageProviderLTE: String
+  storageProviderContains: String
+  storageProviderHasPrefix: String
+  storageProviderHasSuffix: String
+  storageProviderIsNil: Boolean
+  storageProviderNotNil: Boolean
+  storageProviderEqualFold: String
+  storageProviderContainsFold: String
+  """
+  last_accessed_at field predicates
+  """
+  lastAccessedAt: Time
+  lastAccessedAtNEQ: Time
+  lastAccessedAtIn: [Time!]
+  lastAccessedAtNotIn: [Time!]
+  lastAccessedAtGT: Time
+  lastAccessedAtGTE: Time
+  lastAccessedAtLT: Time
+  lastAccessedAtLTE: Time
+  lastAccessedAtIsNil: Boolean
+  lastAccessedAtNotNil: Boolean
 }
 """
 Ordering options for File connections
@@ -14979,6 +15146,7 @@ Properties by which File connections can be ordered.
 enum FileOrderField {
   created_at
   updated_at
+  last_accessed_at
 }
 """
 FileWhereInput is used for filtering File objects.
@@ -15282,6 +15450,55 @@ input FileWhereInput {
   storagePathEqualFold: String
   storagePathContainsFold: String
   """
+  storage_region field predicates
+  """
+  storageRegion: String
+  storageRegionNEQ: String
+  storageRegionIn: [String!]
+  storageRegionNotIn: [String!]
+  storageRegionGT: String
+  storageRegionGTE: String
+  storageRegionLT: String
+  storageRegionLTE: String
+  storageRegionContains: String
+  storageRegionHasPrefix: String
+  storageRegionHasSuffix: String
+  storageRegionIsNil: Boolean
+  storageRegionNotNil: Boolean
+  storageRegionEqualFold: String
+  storageRegionContainsFold: String
+  """
+  storage_provider field predicates
+  """
+  storageProvider: String
+  storageProviderNEQ: String
+  storageProviderIn: [String!]
+  storageProviderNotIn: [String!]
+  storageProviderGT: String
+  storageProviderGTE: String
+  storageProviderLT: String
+  storageProviderLTE: String
+  storageProviderContains: String
+  storageProviderHasPrefix: String
+  storageProviderHasSuffix: String
+  storageProviderIsNil: Boolean
+  storageProviderNotNil: Boolean
+  storageProviderEqualFold: String
+  storageProviderContainsFold: String
+  """
+  last_accessed_at field predicates
+  """
+  lastAccessedAt: Time
+  lastAccessedAtNEQ: Time
+  lastAccessedAtIn: [Time!]
+  lastAccessedAtNotIn: [Time!]
+  lastAccessedAtGT: Time
+  lastAccessedAtGTE: Time
+  lastAccessedAtLT: Time
+  lastAccessedAtLTE: Time
+  lastAccessedAtIsNil: Boolean
+  lastAccessedAtNotNil: Boolean
+  """
   user edge predicates
   """
   hasUser: Boolean
@@ -15351,6 +15568,16 @@ input FileWhereInput {
   """
   hasSubprocessor: Boolean
   hasSubprocessorWith: [SubprocessorWhereInput!]
+  """
+  integrations edge predicates
+  """
+  hasIntegrations: Boolean
+  hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  secrets edge predicates
+  """
+  hasSecrets: Boolean
+  hasSecretsWith: [HushWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -18133,6 +18360,19 @@ type Hush implements Node {
   the generic name of a secret associated with the organization
   """
   secretName: String
+  """
+  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+  """
+  credentialSet: CredentialSet
+  """
+  additional metadata about the credential
+  """
+  metadata: Map
+  lastUsedAt: Time
+  """
+  when the token expires
+  """
+  expiresAt: Time
   owner: Organization
   integrations(
     """
@@ -18165,6 +18405,37 @@ type Hush implements Node {
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   events(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -18256,6 +18527,19 @@ type HushHistory implements Node {
   the generic name of a secret associated with the organization
   """
   secretName: String
+  """
+  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+  """
+  credentialSet: CredentialSet
+  """
+  additional metadata about the credential
+  """
+  metadata: Map
+  lastUsedAt: Time
+  """
+  when the token expires
+  """
+  expiresAt: Time
 }
 """
 A connection to a list of items.
@@ -18317,6 +18601,8 @@ enum HushHistoryOrderField {
   updated_at
   name
   kind
+  last_used_at
+  expires_at
 }
 """
 HushHistoryWhereInput is used for filtering HushHistory objects.
@@ -18507,6 +18793,32 @@ input HushHistoryWhereInput {
   secretNameNotNil: Boolean
   secretNameEqualFold: String
   secretNameContainsFold: String
+  """
+  last_used_at field predicates
+  """
+  lastUsedAt: Time
+  lastUsedAtNEQ: Time
+  lastUsedAtIn: [Time!]
+  lastUsedAtNotIn: [Time!]
+  lastUsedAtGT: Time
+  lastUsedAtGTE: Time
+  lastUsedAtLT: Time
+  lastUsedAtLTE: Time
+  lastUsedAtIsNil: Boolean
+  lastUsedAtNotNil: Boolean
+  """
+  expires_at field predicates
+  """
+  expiresAt: Time
+  expiresAtNEQ: Time
+  expiresAtIn: [Time!]
+  expiresAtNotIn: [Time!]
+  expiresAtGT: Time
+  expiresAtGTE: Time
+  expiresAtLT: Time
+  expiresAtLTE: Time
+  expiresAtIsNil: Boolean
+  expiresAtNotNil: Boolean
 }
 """
 Ordering options for Hush connections
@@ -18529,6 +18841,8 @@ enum HushOrderField {
   updated_at
   name
   kind
+  last_used_at
+  expires_at
 }
 """
 HushWhereInput is used for filtering Hush objects.
@@ -18684,6 +18998,32 @@ input HushWhereInput {
   secretNameEqualFold: String
   secretNameContainsFold: String
   """
+  last_used_at field predicates
+  """
+  lastUsedAt: Time
+  lastUsedAtNEQ: Time
+  lastUsedAtIn: [Time!]
+  lastUsedAtNotIn: [Time!]
+  lastUsedAtGT: Time
+  lastUsedAtGTE: Time
+  lastUsedAtLT: Time
+  lastUsedAtLTE: Time
+  lastUsedAtIsNil: Boolean
+  lastUsedAtNotNil: Boolean
+  """
+  expires_at field predicates
+  """
+  expiresAt: Time
+  expiresAtNEQ: Time
+  expiresAtIn: [Time!]
+  expiresAtNotIn: [Time!]
+  expiresAtGT: Time
+  expiresAtGTE: Time
+  expiresAtLT: Time
+  expiresAtLTE: Time
+  expiresAtIsNil: Boolean
+  expiresAtNotNil: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -18693,6 +19033,11 @@ input HushWhereInput {
   """
   hasIntegrations: Boolean
   hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
   """
   events edge predicates
   """
@@ -18714,14 +19059,25 @@ type Integration implements Node {
   """
   ownerID: ID
   """
-  the name of the integration - must be unique within the organization
+  the name of the integration
   """
   name: String!
   """
   a description of the integration
   """
   description: String
+  """
+  the kind of integration, such as github, slack, s3 etc.
+  """
   kind: String
+  """
+  the type of integration, such as communicattion, storage, SCM, etc.
+  """
+  integrationType: String
+  """
+  additional metadata about the integration
+  """
+  metadata: Map
   owner: Organization
   secrets(
     """
@@ -18754,6 +19110,37 @@ type Integration implements Node {
     """
     where: HushWhereInput
   ): HushConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   events(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -18834,14 +19221,25 @@ type IntegrationHistory implements Node {
   """
   ownerID: String
   """
-  the name of the integration - must be unique within the organization
+  the name of the integration
   """
   name: String!
   """
   a description of the integration
   """
   description: String
+  """
+  the kind of integration, such as github, slack, s3 etc.
+  """
   kind: String
+  """
+  the type of integration, such as communicattion, storage, SCM, etc.
+  """
+  integrationType: String
+  """
+  additional metadata about the integration
+  """
+  metadata: Map
 }
 """
 A connection to a list of items.
@@ -18903,6 +19301,7 @@ enum IntegrationHistoryOrderField {
   updated_at
   name
   kind
+  integration_type
 }
 """
 IntegrationHistoryWhereInput is used for filtering IntegrationHistory objects.
@@ -19075,6 +19474,24 @@ input IntegrationHistoryWhereInput {
   kindNotNil: Boolean
   kindEqualFold: String
   kindContainsFold: String
+  """
+  integration_type field predicates
+  """
+  integrationType: String
+  integrationTypeNEQ: String
+  integrationTypeIn: [String!]
+  integrationTypeNotIn: [String!]
+  integrationTypeGT: String
+  integrationTypeGTE: String
+  integrationTypeLT: String
+  integrationTypeLTE: String
+  integrationTypeContains: String
+  integrationTypeHasPrefix: String
+  integrationTypeHasSuffix: String
+  integrationTypeIsNil: Boolean
+  integrationTypeNotNil: Boolean
+  integrationTypeEqualFold: String
+  integrationTypeContainsFold: String
 }
 """
 Ordering options for Integration connections
@@ -19097,6 +19514,7 @@ enum IntegrationOrderField {
   updated_at
   name
   kind
+  integration_type
 }
 """
 IntegrationWhereInput is used for filtering Integration objects.
@@ -19234,6 +19652,24 @@ input IntegrationWhereInput {
   kindEqualFold: String
   kindContainsFold: String
   """
+  integration_type field predicates
+  """
+  integrationType: String
+  integrationTypeNEQ: String
+  integrationTypeIn: [String!]
+  integrationTypeNotIn: [String!]
+  integrationTypeGT: String
+  integrationTypeGTE: String
+  integrationTypeLT: String
+  integrationTypeLTE: String
+  integrationTypeContains: String
+  integrationTypeHasPrefix: String
+  integrationTypeHasSuffix: String
+  integrationTypeIsNil: Boolean
+  integrationTypeNotNil: Boolean
+  integrationTypeEqualFold: String
+  integrationTypeContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -19243,6 +19679,11 @@ input IntegrationWhereInput {
   """
   hasSecrets: Boolean
   hasSecretsWith: [HushWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
   """
   events edge predicates
   """
@@ -49190,6 +49631,23 @@ input UpdateFileInput {
   """
   storagePath: String
   clearStoragePath: Boolean
+  """
+  additional metadata about the file
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  the region the file is stored in, if applicable
+  """
+  storageRegion: String
+  clearStorageRegion: Boolean
+  """
+  the storage provider the file is stored in, if applicable
+  """
+  storageProvider: String
+  clearStorageProvider: Boolean
+  lastAccessedAt: Time
+  clearLastAccessedAt: Boolean
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUser: Boolean
@@ -49232,6 +49690,12 @@ input UpdateFileInput {
   addSubprocessorIDs: [ID!]
   removeSubprocessorIDs: [ID!]
   clearSubprocessor: Boolean
+  addIntegrationIDs: [ID!]
+  removeIntegrationIDs: [ID!]
+  clearIntegrations: Boolean
+  addSecretIDs: [ID!]
+  removeSecretIDs: [ID!]
+  clearSecrets: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -49421,11 +49885,31 @@ input UpdateHushInput {
   """
   kind: String
   clearKind: Boolean
+  """
+  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+  """
+  credentialSet: CredentialSet
+  clearCredentialSet: Boolean
+  """
+  additional metadata about the credential
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  lastUsedAt: Time
+  clearLastUsedAt: Boolean
+  """
+  when the token expires
+  """
+  expiresAt: Time
+  clearExpiresAt: Boolean
   ownerID: ID
   clearOwner: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean

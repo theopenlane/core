@@ -41,12 +41,16 @@ type IntegrationHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the name of the integration - must be unique within the organization
+	// the name of the integration
 	Name string `json:"name,omitempty"`
 	// a description of the integration
 	Description string `json:"description,omitempty"`
-	// Kind holds the value of the "kind" field.
-	Kind         string `json:"kind,omitempty"`
+	// the kind of integration, such as github, slack, s3 etc.
+	Kind string `json:"kind,omitempty"`
+	// the type of integration, such as communicattion, storage, SCM, etc.
+	IntegrationType string `json:"integration_type,omitempty"`
+	// additional metadata about the integration
+	Metadata     map[string]interface{} `json:"metadata,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -55,11 +59,11 @@ func (*IntegrationHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integrationhistory.FieldTags:
+		case integrationhistory.FieldTags, integrationhistory.FieldMetadata:
 			values[i] = new([]byte)
 		case integrationhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldCreatedBy, integrationhistory.FieldUpdatedBy, integrationhistory.FieldDeletedBy, integrationhistory.FieldOwnerID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind:
+		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldCreatedBy, integrationhistory.FieldUpdatedBy, integrationhistory.FieldDeletedBy, integrationhistory.FieldOwnerID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind, integrationhistory.FieldIntegrationType:
 			values[i] = new(sql.NullString)
 		case integrationhistory.FieldHistoryTime, integrationhistory.FieldCreatedAt, integrationhistory.FieldUpdatedAt, integrationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -170,6 +174,20 @@ func (_m *IntegrationHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.Kind = value.String
 			}
+		case integrationhistory.FieldIntegrationType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_type", values[i])
+			} else if value.Valid {
+				_m.IntegrationType = value.String
+			}
+		case integrationhistory.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -247,6 +265,12 @@ func (_m *IntegrationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("kind=")
 	builder.WriteString(_m.Kind)
+	builder.WriteString(", ")
+	builder.WriteString("integration_type=")
+	builder.WriteString(_m.IntegrationType)
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -193,6 +193,26 @@ func (_c *IntegrationHistoryCreate) SetNillableKind(v *string) *IntegrationHisto
 	return _c
 }
 
+// SetIntegrationType sets the "integration_type" field.
+func (_c *IntegrationHistoryCreate) SetIntegrationType(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetIntegrationType(v)
+	return _c
+}
+
+// SetNillableIntegrationType sets the "integration_type" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableIntegrationType(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationType(*v)
+	}
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *IntegrationHistoryCreate) SetMetadata(v map[string]interface{}) *IntegrationHistoryCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *IntegrationHistoryCreate) SetID(v string) *IntegrationHistoryCreate {
 	_c.mutation.SetID(v)
@@ -386,6 +406,14 @@ func (_c *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgraph
 	if value, ok := _c.mutation.Kind(); ok {
 		_spec.SetField(integrationhistory.FieldKind, field.TypeString, value)
 		_node.Kind = value
+	}
+	if value, ok := _c.mutation.IntegrationType(); ok {
+		_spec.SetField(integrationhistory.FieldIntegrationType, field.TypeString, value)
+		_node.IntegrationType = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(integrationhistory.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
 	}
 	return _node, _spec
 }

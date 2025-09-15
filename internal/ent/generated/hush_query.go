@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -31,10 +32,12 @@ type HushQuery struct {
 	predicates            []predicate.Hush
 	withOwner             *OrganizationQuery
 	withIntegrations      *IntegrationQuery
+	withFiles             *FileQuery
 	withEvents            *EventQuery
 	loadTotal             []func(context.Context, []*Hush) error
 	modifiers             []func(*sql.Selector)
 	withNamedIntegrations map[string]*IntegrationQuery
+	withNamedFiles        map[string]*FileQuery
 	withNamedEvents       map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -116,6 +119,31 @@ func (_q *HushQuery) QueryIntegrations() *IntegrationQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Integration
 		step.Edge.Schema = schemaConfig.IntegrationSecrets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFiles chains the current query on the "files" edge.
+func (_q *HushQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(hush.Table, hush.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, hush.FilesTable, hush.FilesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.FileSecrets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -341,6 +369,7 @@ func (_q *HushQuery) Clone() *HushQuery {
 		predicates:       append([]predicate.Hush{}, _q.predicates...),
 		withOwner:        _q.withOwner.Clone(),
 		withIntegrations: _q.withIntegrations.Clone(),
+		withFiles:        _q.withFiles.Clone(),
 		withEvents:       _q.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -368,6 +397,17 @@ func (_q *HushQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *HushQuer
 		opt(query)
 	}
 	_q.withIntegrations = query
+	return _q
+}
+
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *HushQuery) WithFiles(opts ...func(*FileQuery)) *HushQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFiles = query
 	return _q
 }
 
@@ -466,9 +506,10 @@ func (_q *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, e
 	var (
 		nodes       = []*Hush{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			_q.withOwner != nil,
 			_q.withIntegrations != nil,
+			_q.withFiles != nil,
 			_q.withEvents != nil,
 		}
 	)
@@ -508,6 +549,13 @@ func (_q *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, e
 			return nil, err
 		}
 	}
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *Hush) { n.Edges.Files = []*File{} },
+			func(n *Hush, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withEvents; query != nil {
 		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *Hush) { n.Edges.Events = []*Event{} },
@@ -519,6 +567,13 @@ func (_q *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, e
 		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Hush) { n.appendNamedIntegrations(name) },
 			func(n *Hush, e *Integration) { n.appendNamedIntegrations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *Hush) { n.appendNamedFiles(name) },
+			func(n *Hush, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -621,6 +676,68 @@ func (_q *HushQuery) loadIntegrations(ctx context.Context, query *IntegrationQue
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "integrations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *HushQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Hush, init func(*Hush), assign func(*Hush, *File)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Hush)
+	nids := make(map[string]map[*Hush]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(hush.FilesTable)
+		joinT.Schema(_q.schemaConfig.FileSecrets)
+		s.Join(joinT).On(s.C(file.FieldID), joinT.C(hush.FilesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(hush.FilesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(hush.FilesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Hush]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "files" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -803,6 +920,20 @@ func (_q *HushQuery) WithNamedIntegrations(name string, opts ...func(*Integratio
 		_q.withNamedIntegrations = make(map[string]*IntegrationQuery)
 	}
 	_q.withNamedIntegrations[name] = query
+	return _q
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *HushQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *HushQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
+	}
+	_q.withNamedFiles[name] = query
 	return _q
 }
 

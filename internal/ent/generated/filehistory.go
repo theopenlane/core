@@ -67,7 +67,15 @@ type FileHistory struct {
 	StoragePath string `json:"storage_path,omitempty"`
 	// the contents of the file
 	FileContents []byte `json:"file_contents,omitempty"`
-	selectValues sql.SelectValues
+	// additional metadata about the file
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the region the file is stored in, if applicable
+	StorageRegion string `json:"storage_region,omitempty"`
+	// the storage provider the file is stored in, if applicable
+	StorageProvider string `json:"storage_provider,omitempty"`
+	// LastAccessedAt holds the value of the "last_accessed_at" field.
+	LastAccessedAt *time.Time `json:"last_accessed_at,omitempty"`
+	selectValues   sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -75,15 +83,15 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case filehistory.FieldTags, filehistory.FieldFileContents:
+		case filehistory.FieldTags, filehistory.FieldFileContents, filehistory.FieldMetadata:
 			values[i] = new([]byte)
 		case filehistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case filehistory.FieldProvidedFileSize, filehistory.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath:
+		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldStorageRegion, filehistory.FieldStorageProvider:
 			values[i] = new(sql.NullString)
-		case filehistory.FieldHistoryTime, filehistory.FieldCreatedAt, filehistory.FieldUpdatedAt, filehistory.FieldDeletedAt:
+		case filehistory.FieldHistoryTime, filehistory.FieldCreatedAt, filehistory.FieldUpdatedAt, filehistory.FieldDeletedAt, filehistory.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -252,6 +260,33 @@ func (_m *FileHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				_m.FileContents = *value
 			}
+		case filehistory.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
+		case filehistory.FieldStorageRegion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field storage_region", values[i])
+			} else if value.Valid {
+				_m.StorageRegion = value.String
+			}
+		case filehistory.FieldStorageProvider:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field storage_provider", values[i])
+			} else if value.Valid {
+				_m.StorageProvider = value.String
+			}
+		case filehistory.FieldLastAccessedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_accessed_at", values[i])
+			} else if value.Valid {
+				_m.LastAccessedAt = new(time.Time)
+				*_m.LastAccessedAt = value.Time
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -359,6 +394,20 @@ func (_m *FileHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("file_contents=")
 	builder.WriteString(fmt.Sprintf("%v", _m.FileContents))
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("storage_region=")
+	builder.WriteString(_m.StorageRegion)
+	builder.WriteString(", ")
+	builder.WriteString("storage_provider=")
+	builder.WriteString(_m.StorageProvider)
+	builder.WriteString(", ")
+	if v := _m.LastAccessedAt; v != nil {
+		builder.WriteString("last_accessed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

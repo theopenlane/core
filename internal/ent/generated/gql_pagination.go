@@ -11510,6 +11510,33 @@ var (
 			}
 		},
 	}
+	// FileOrderFieldLastAccessedAt orders File by last_accessed_at.
+	FileOrderFieldLastAccessedAt = &FileOrderField{
+		Value: func(_m *File) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastAccessedAt == nil {
+				return nil, nil
+			}
+			return _m.LastAccessedAt, nil
+		},
+		column: file.FieldLastAccessedAt,
+		toTerm: func(opts ...sql.OrderTermOption) file.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return file.ByLastAccessedAt(opts...)
+		},
+		toCursor: func(_m *File) Cursor {
+			if _m.LastAccessedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastAccessedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -11520,6 +11547,8 @@ func (f FileOrderField) String() string {
 		str = "created_at"
 	case FileOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case FileOrderFieldLastAccessedAt.column:
+		str = "last_accessed_at"
 	}
 	return str
 }
@@ -11540,6 +11569,8 @@ func (f *FileOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FileOrderFieldCreatedAt
 	case "updated_at":
 		*f = *FileOrderFieldUpdatedAt
+	case "last_accessed_at":
+		*f = *FileOrderFieldLastAccessedAt
 	default:
 		return fmt.Errorf("%s is not a valid FileOrderField", str)
 	}
@@ -11838,6 +11869,33 @@ var (
 			}
 		},
 	}
+	// FileHistoryOrderFieldLastAccessedAt orders FileHistory by last_accessed_at.
+	FileHistoryOrderFieldLastAccessedAt = &FileHistoryOrderField{
+		Value: func(_m *FileHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastAccessedAt == nil {
+				return nil, nil
+			}
+			return _m.LastAccessedAt, nil
+		},
+		column: filehistory.FieldLastAccessedAt,
+		toTerm: func(opts ...sql.OrderTermOption) filehistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return filehistory.ByLastAccessedAt(opts...)
+		},
+		toCursor: func(_m *FileHistory) Cursor {
+			if _m.LastAccessedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastAccessedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -11850,6 +11908,8 @@ func (f FileHistoryOrderField) String() string {
 		str = "created_at"
 	case FileHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case FileHistoryOrderFieldLastAccessedAt.column:
+		str = "last_accessed_at"
 	}
 	return str
 }
@@ -11872,6 +11932,8 @@ func (f *FileHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FileHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *FileHistoryOrderFieldUpdatedAt
+	case "last_accessed_at":
+		*f = *FileHistoryOrderFieldLastAccessedAt
 	default:
 		return fmt.Errorf("%s is not a valid FileHistoryOrderField", str)
 	}
@@ -14386,6 +14448,60 @@ var (
 			}
 		},
 	}
+	// HushOrderFieldLastUsedAt orders Hush by last_used_at.
+	HushOrderFieldLastUsedAt = &HushOrderField{
+		Value: func(_m *Hush) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastUsedAt == nil {
+				return nil, nil
+			}
+			return _m.LastUsedAt, nil
+		},
+		column: hush.FieldLastUsedAt,
+		toTerm: func(opts ...sql.OrderTermOption) hush.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return hush.ByLastUsedAt(opts...)
+		},
+		toCursor: func(_m *Hush) Cursor {
+			if _m.LastUsedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastUsedAt,
+			}
+		},
+	}
+	// HushOrderFieldExpiresAt orders Hush by expires_at.
+	HushOrderFieldExpiresAt = &HushOrderField{
+		Value: func(_m *Hush) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ExpiresAt == nil {
+				return nil, nil
+			}
+			return _m.ExpiresAt, nil
+		},
+		column: hush.FieldExpiresAt,
+		toTerm: func(opts ...sql.OrderTermOption) hush.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return hush.ByExpiresAt(opts...)
+		},
+		toCursor: func(_m *Hush) Cursor {
+			if _m.ExpiresAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExpiresAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -14400,6 +14516,10 @@ func (f HushOrderField) String() string {
 		str = "name"
 	case HushOrderFieldKind.column:
 		str = "kind"
+	case HushOrderFieldLastUsedAt.column:
+		str = "last_used_at"
+	case HushOrderFieldExpiresAt.column:
+		str = "expires_at"
 	}
 	return str
 }
@@ -14424,6 +14544,10 @@ func (f *HushOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *HushOrderFieldName
 	case "kind":
 		*f = *HushOrderFieldKind
+	case "last_used_at":
+		*f = *HushOrderFieldLastUsedAt
+	case "expires_at":
+		*f = *HushOrderFieldExpiresAt
 	default:
 		return fmt.Errorf("%s is not a valid HushOrderField", str)
 	}
@@ -14750,6 +14874,60 @@ var (
 			}
 		},
 	}
+	// HushHistoryOrderFieldLastUsedAt orders HushHistory by last_used_at.
+	HushHistoryOrderFieldLastUsedAt = &HushHistoryOrderField{
+		Value: func(_m *HushHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastUsedAt == nil {
+				return nil, nil
+			}
+			return _m.LastUsedAt, nil
+		},
+		column: hushhistory.FieldLastUsedAt,
+		toTerm: func(opts ...sql.OrderTermOption) hushhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return hushhistory.ByLastUsedAt(opts...)
+		},
+		toCursor: func(_m *HushHistory) Cursor {
+			if _m.LastUsedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastUsedAt,
+			}
+		},
+	}
+	// HushHistoryOrderFieldExpiresAt orders HushHistory by expires_at.
+	HushHistoryOrderFieldExpiresAt = &HushHistoryOrderField{
+		Value: func(_m *HushHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ExpiresAt == nil {
+				return nil, nil
+			}
+			return _m.ExpiresAt, nil
+		},
+		column: hushhistory.FieldExpiresAt,
+		toTerm: func(opts ...sql.OrderTermOption) hushhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return hushhistory.ByExpiresAt(opts...)
+		},
+		toCursor: func(_m *HushHistory) Cursor {
+			if _m.ExpiresAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExpiresAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -14766,6 +14944,10 @@ func (f HushHistoryOrderField) String() string {
 		str = "name"
 	case HushHistoryOrderFieldKind.column:
 		str = "kind"
+	case HushHistoryOrderFieldLastUsedAt.column:
+		str = "last_used_at"
+	case HushHistoryOrderFieldExpiresAt.column:
+		str = "expires_at"
 	}
 	return str
 }
@@ -14792,6 +14974,10 @@ func (f *HushHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *HushHistoryOrderFieldName
 	case "kind":
 		*f = *HushHistoryOrderFieldKind
+	case "last_used_at":
+		*f = *HushHistoryOrderFieldLastUsedAt
+	case "expires_at":
+		*f = *HushHistoryOrderFieldExpiresAt
 	default:
 		return fmt.Errorf("%s is not a valid HushHistoryOrderField", str)
 	}
@@ -15143,6 +15329,20 @@ var (
 			}
 		},
 	}
+	// IntegrationOrderFieldIntegrationType orders Integration by integration_type.
+	IntegrationOrderFieldIntegrationType = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			return _m.IntegrationType, nil
+		},
+		column: integration.FieldIntegrationType,
+		toTerm: integration.ByIntegrationType,
+		toCursor: func(_m *Integration) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IntegrationType,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -15157,6 +15357,8 @@ func (f IntegrationOrderField) String() string {
 		str = "name"
 	case IntegrationOrderFieldKind.column:
 		str = "kind"
+	case IntegrationOrderFieldIntegrationType.column:
+		str = "integration_type"
 	}
 	return str
 }
@@ -15181,6 +15383,8 @@ func (f *IntegrationOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *IntegrationOrderFieldName
 	case "kind":
 		*f = *IntegrationOrderFieldKind
+	case "integration_type":
+		*f = *IntegrationOrderFieldIntegrationType
 	default:
 		return fmt.Errorf("%s is not a valid IntegrationOrderField", str)
 	}
@@ -15507,6 +15711,20 @@ var (
 			}
 		},
 	}
+	// IntegrationHistoryOrderFieldIntegrationType orders IntegrationHistory by integration_type.
+	IntegrationHistoryOrderFieldIntegrationType = &IntegrationHistoryOrderField{
+		Value: func(_m *IntegrationHistory) (ent.Value, error) {
+			return _m.IntegrationType, nil
+		},
+		column: integrationhistory.FieldIntegrationType,
+		toTerm: integrationhistory.ByIntegrationType,
+		toCursor: func(_m *IntegrationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IntegrationType,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -15523,6 +15741,8 @@ func (f IntegrationHistoryOrderField) String() string {
 		str = "name"
 	case IntegrationHistoryOrderFieldKind.column:
 		str = "kind"
+	case IntegrationHistoryOrderFieldIntegrationType.column:
+		str = "integration_type"
 	}
 	return str
 }
@@ -15549,6 +15769,8 @@ func (f *IntegrationHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *IntegrationHistoryOrderFieldName
 	case "kind":
 		*f = *IntegrationHistoryOrderFieldKind
+	case "integration_type":
+		*f = *IntegrationHistoryOrderFieldIntegrationType
 	default:
 		return fmt.Errorf("%s is not a valid IntegrationHistoryOrderField", str)
 	}

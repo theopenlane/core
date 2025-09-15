@@ -120,3 +120,6 @@ models:
     model: github.com/theopenlane/core/pkg/models.Change
   AuditLogOrderField:
     model: github.com/theopenlane/core/pkg/models.AuditLogOrderField
+  CredentialSet:
+    model:
+      - github.com/theopenlane/core/pkg/models.CredentialSet

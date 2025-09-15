@@ -1311,7 +1311,10 @@ type ComplexityRoot struct {
 		Evidence              func(childComplexity int) int
 		Groups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                    func(childComplexity int) int
+		Integrations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		LastAccessedAt        func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
+		Metadata              func(childComplexity int) int
 		Organization          func(childComplexity int) int
 		OrganizationSetting   func(childComplexity int) int
 		PersistedFileSize     func(childComplexity int) int
@@ -1320,7 +1323,10 @@ type ComplexityRoot struct {
 		ProvidedFileExtension func(childComplexity int) int
 		ProvidedFileName      func(childComplexity int) int
 		ProvidedFileSize      func(childComplexity int) int
+		Secrets               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		StoragePath           func(childComplexity int) int
+		StorageProvider       func(childComplexity int) int
+		StorageRegion         func(childComplexity int) int
 		StorageScheme         func(childComplexity int) int
 		StorageVolume         func(childComplexity int) int
 		StoreKey              func(childComplexity int) int
@@ -1358,7 +1364,9 @@ type ComplexityRoot struct {
 		DetectedMimeType      func(childComplexity int) int
 		HistoryTime           func(childComplexity int) int
 		ID                    func(childComplexity int) int
+		LastAccessedAt        func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
+		Metadata              func(childComplexity int) int
 		Operation             func(childComplexity int) int
 		PersistedFileSize     func(childComplexity int) int
 		ProvidedFileExtension func(childComplexity int) int
@@ -1366,6 +1374,8 @@ type ComplexityRoot struct {
 		ProvidedFileSize      func(childComplexity int) int
 		Ref                   func(childComplexity int) int
 		StoragePath           func(childComplexity int) int
+		StorageProvider       func(childComplexity int) int
+		StorageRegion         func(childComplexity int) int
 		StorageScheme         func(childComplexity int) int
 		StorageVolume         func(childComplexity int) int
 		StoreKey              func(childComplexity int) int
@@ -1653,19 +1663,24 @@ type ComplexityRoot struct {
 	}
 
 	Hush struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		Description  func(childComplexity int) int
-		Events       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		ID           func(childComplexity int) int
-		Integrations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		Kind         func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Owner        func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		SecretName   func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		CredentialSet func(childComplexity int) int
+		Description   func(childComplexity int) int
+		Events        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		ExpiresAt     func(childComplexity int) int
+		Files         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID            func(childComplexity int) int
+		Integrations  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		Kind          func(childComplexity int) int
+		LastUsedAt    func(childComplexity int) int
+		Metadata      func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		SecretName    func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	HushBulkCreatePayload struct {
@@ -1697,19 +1712,23 @@ type ComplexityRoot struct {
 	}
 
 	HushHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Description func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Kind        func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		SecretName  func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		CredentialSet func(childComplexity int) int
+		Description   func(childComplexity int) int
+		ExpiresAt     func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Kind          func(childComplexity int) int
+		LastUsedAt    func(childComplexity int) int
+		Metadata      func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		SecretName    func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	HushHistoryConnection struct {
@@ -1728,19 +1747,22 @@ type ComplexityRoot struct {
 	}
 
 	Integration struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Description func(childComplexity int) int
-		Events      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		ID          func(childComplexity int) int
-		Kind        func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Secrets     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Description     func(childComplexity int) int
+		Events          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID              func(childComplexity int) int
+		IntegrationType func(childComplexity int) int
+		Kind            func(childComplexity int) int
+		Metadata        func(childComplexity int) int
+		Name            func(childComplexity int) int
+		Owner           func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Secrets         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		Tags            func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
 	}
 
 	IntegrationConnection struct {
@@ -1759,19 +1781,21 @@ type ComplexityRoot struct {
 	}
 
 	IntegrationHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Description func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Kind        func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Description     func(childComplexity int) int
+		HistoryTime     func(childComplexity int) int
+		ID              func(childComplexity int) int
+		IntegrationType func(childComplexity int) int
+		Kind            func(childComplexity int) int
+		Metadata        func(childComplexity int) int
+		Name            func(childComplexity int) int
+		Operation       func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Ref             func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
 	}
 
 	IntegrationHistoryConnection struct {
@@ -11043,12 +11067,38 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.ID(childComplexity), true
 
+	case "File.integrations":
+		if e.complexity.File.Integrations == nil {
+			break
+		}
+
+		args, err := ec.field_File_integrations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
+
+	case "File.lastAccessedAt":
+		if e.complexity.File.LastAccessedAt == nil {
+			break
+		}
+
+		return e.complexity.File.LastAccessedAt(childComplexity), true
+
 	case "File.md5Hash":
 		if e.complexity.File.Md5Hash == nil {
 			break
 		}
 
 		return e.complexity.File.Md5Hash(childComplexity), true
+
+	case "File.metadata":
+		if e.complexity.File.Metadata == nil {
+			break
+		}
+
+		return e.complexity.File.Metadata(childComplexity), true
 
 	case "File.organization":
 		if e.complexity.File.Organization == nil {
@@ -11106,12 +11156,38 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.ProvidedFileSize(childComplexity), true
 
+	case "File.secrets":
+		if e.complexity.File.Secrets == nil {
+			break
+		}
+
+		args, err := ec.field_File_secrets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.Secrets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
+
 	case "File.storagePath":
 		if e.complexity.File.StoragePath == nil {
 			break
 		}
 
 		return e.complexity.File.StoragePath(childComplexity), true
+
+	case "File.storageProvider":
+		if e.complexity.File.StorageProvider == nil {
+			break
+		}
+
+		return e.complexity.File.StorageProvider(childComplexity), true
+
+	case "File.storageRegion":
+		if e.complexity.File.StorageRegion == nil {
+			break
+		}
+
+		return e.complexity.File.StorageRegion(childComplexity), true
 
 	case "File.storageScheme":
 		if e.complexity.File.StorageScheme == nil {
@@ -11288,12 +11364,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.FileHistory.ID(childComplexity), true
 
+	case "FileHistory.lastAccessedAt":
+		if e.complexity.FileHistory.LastAccessedAt == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.LastAccessedAt(childComplexity), true
+
 	case "FileHistory.md5Hash":
 		if e.complexity.FileHistory.Md5Hash == nil {
 			break
 		}
 
 		return e.complexity.FileHistory.Md5Hash(childComplexity), true
+
+	case "FileHistory.metadata":
+		if e.complexity.FileHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.Metadata(childComplexity), true
 
 	case "FileHistory.operation":
 		if e.complexity.FileHistory.Operation == nil {
@@ -11343,6 +11433,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.FileHistory.StoragePath(childComplexity), true
+
+	case "FileHistory.storageProvider":
+		if e.complexity.FileHistory.StorageProvider == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.StorageProvider(childComplexity), true
+
+	case "FileHistory.storageRegion":
+		if e.complexity.FileHistory.StorageRegion == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.StorageRegion(childComplexity), true
 
 	case "FileHistory.storageScheme":
 		if e.complexity.FileHistory.StorageScheme == nil {
@@ -12796,6 +12900,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Hush.CreatedBy(childComplexity), true
 
+	case "Hush.credentialSet":
+		if e.complexity.Hush.CredentialSet == nil {
+			break
+		}
+
+		return e.complexity.Hush.CredentialSet(childComplexity), true
+
 	case "Hush.description":
 		if e.complexity.Hush.Description == nil {
 			break
@@ -12814,6 +12925,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Hush.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
+
+	case "Hush.expiresAt":
+		if e.complexity.Hush.ExpiresAt == nil {
+			break
+		}
+
+		return e.complexity.Hush.ExpiresAt(childComplexity), true
+
+	case "Hush.files":
+		if e.complexity.Hush.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Hush_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Hush.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
 	case "Hush.id":
 		if e.complexity.Hush.ID == nil {
@@ -12840,6 +12970,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Hush.Kind(childComplexity), true
+
+	case "Hush.lastUsedAt":
+		if e.complexity.Hush.LastUsedAt == nil {
+			break
+		}
+
+		return e.complexity.Hush.LastUsedAt(childComplexity), true
+
+	case "Hush.metadata":
+		if e.complexity.Hush.Metadata == nil {
+			break
+		}
+
+		return e.complexity.Hush.Metadata(childComplexity), true
 
 	case "Hush.name":
 		if e.complexity.Hush.Name == nil {
@@ -12967,12 +13111,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.HushHistory.CreatedBy(childComplexity), true
 
+	case "HushHistory.credentialSet":
+		if e.complexity.HushHistory.CredentialSet == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.CredentialSet(childComplexity), true
+
 	case "HushHistory.description":
 		if e.complexity.HushHistory.Description == nil {
 			break
 		}
 
 		return e.complexity.HushHistory.Description(childComplexity), true
+
+	case "HushHistory.expiresAt":
+		if e.complexity.HushHistory.ExpiresAt == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.ExpiresAt(childComplexity), true
 
 	case "HushHistory.historyTime":
 		if e.complexity.HushHistory.HistoryTime == nil {
@@ -12994,6 +13152,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.HushHistory.Kind(childComplexity), true
+
+	case "HushHistory.lastUsedAt":
+		if e.complexity.HushHistory.LastUsedAt == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.LastUsedAt(childComplexity), true
+
+	case "HushHistory.metadata":
+		if e.complexity.HushHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.Metadata(childComplexity), true
 
 	case "HushHistory.name":
 		if e.complexity.HushHistory.Name == nil {
@@ -13119,6 +13291,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Integration.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
 
+	case "Integration.files":
+		if e.complexity.Integration.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
 	case "Integration.id":
 		if e.complexity.Integration.ID == nil {
 			break
@@ -13126,12 +13310,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Integration.ID(childComplexity), true
 
+	case "Integration.integrationType":
+		if e.complexity.Integration.IntegrationType == nil {
+			break
+		}
+
+		return e.complexity.Integration.IntegrationType(childComplexity), true
+
 	case "Integration.kind":
 		if e.complexity.Integration.Kind == nil {
 			break
 		}
 
 		return e.complexity.Integration.Kind(childComplexity), true
+
+	case "Integration.metadata":
+		if e.complexity.Integration.Metadata == nil {
+			break
+		}
+
+		return e.complexity.Integration.Metadata(childComplexity), true
 
 	case "Integration.name":
 		if e.complexity.Integration.Name == nil {
@@ -13264,12 +13462,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.IntegrationHistory.ID(childComplexity), true
 
+	case "IntegrationHistory.integrationType":
+		if e.complexity.IntegrationHistory.IntegrationType == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.IntegrationType(childComplexity), true
+
 	case "IntegrationHistory.kind":
 		if e.complexity.IntegrationHistory.Kind == nil {
 			break
 		}
 
 		return e.complexity.IntegrationHistory.Kind(childComplexity), true
+
+	case "IntegrationHistory.metadata":
+		if e.complexity.IntegrationHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.Metadata(childComplexity), true
 
 	case "IntegrationHistory.name":
 		if e.complexity.IntegrationHistory.Name == nil {
@@ -43687,6 +43899,19 @@ input CreateFileInput {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
+  """
+  additional metadata about the file
+  """
+  metadata: Map
+  """
+  the region the file is stored in, if applicable
+  """
+  storageRegion: String
+  """
+  the storage provider the file is stored in, if applicable
+  """
+  storageProvider: String
+  lastAccessedAt: Time
   userIDs: [ID!]
   organizationIDs: [ID!]
   groupIDs: [ID!]
@@ -43701,6 +43926,8 @@ input CreateFileInput {
   eventIDs: [ID!]
   trustCenterSettingIDs: [ID!]
   subprocessorIDs: [ID!]
+  integrationIDs: [ID!]
+  secretIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -43821,8 +44048,22 @@ input CreateHushInput {
   the secret value
   """
   secretValue: String
+  """
+  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+  """
+  credentialSet: CredentialSet
+  """
+  additional metadata about the credential
+  """
+  metadata: Map
+  lastUsedAt: Time
+  """
+  when the token expires
+  """
+  expiresAt: Time
   ownerID: ID
   integrationIDs: [ID!]
+  fileIDs: [ID!]
   eventIDs: [ID!]
 }
 """
@@ -50631,6 +50872,19 @@ type File implements Node {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
+  """
+  additional metadata about the file
+  """
+  metadata: Map
+  """
+  the region the file is stored in, if applicable
+  """
+  storageRegion: String
+  """
+  the storage provider the file is stored in, if applicable
+  """
+  storageProvider: String
+  lastAccessedAt: Time
   user: [User!]
   organization: [Organization!]
   groups(
@@ -50705,6 +50959,68 @@ type File implements Node {
   ): EventConnection!
   trustCenterSetting: [TrustCenterSetting!]
   subprocessor: [Subprocessor!]
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  secrets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Hushes returned from the connection.
+    """
+    orderBy: [HushOrder!]
+
+    """
+    Filtering options for Hushes returned from the connection.
+    """
+    where: HushWhereInput
+  ): HushConnection!
 }
 """
 A connection to a list of items.
@@ -50798,6 +51114,19 @@ type FileHistory implements Node {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
+  """
+  additional metadata about the file
+  """
+  metadata: Map
+  """
+  the region the file is stored in, if applicable
+  """
+  storageRegion: String
+  """
+  the storage provider the file is stored in, if applicable
+  """
+  storageProvider: String
+  lastAccessedAt: Time
 }
 """
 A connection to a list of items.
@@ -50857,6 +51186,7 @@ enum FileHistoryOrderField {
   history_time
   created_at
   updated_at
+  last_accessed_at
 }
 """
 FileHistoryWhereInput is used for filtering FileHistory objects.
@@ -51195,6 +51525,55 @@ input FileHistoryWhereInput {
   storagePathNotNil: Boolean
   storagePathEqualFold: String
   storagePathContainsFold: String
+  """
+  storage_region field predicates
+  """
+  storageRegion: String
+  storageRegionNEQ: String
+  storageRegionIn: [String!]
+  storageRegionNotIn: [String!]
+  storageRegionGT: String
+  storageRegionGTE: String
+  storageRegionLT: String
+  storageRegionLTE: String
+  storageRegionContains: String
+  storageRegionHasPrefix: String
+  storageRegionHasSuffix: String
+  storageRegionIsNil: Boolean
+  storageRegionNotNil: Boolean
+  storageRegionEqualFold: String
+  storageRegionContainsFold: String
+  """
+  storage_provider field predicates
+  """
+  storageProvider: String
+  storageProviderNEQ: String
+  storageProviderIn: [String!]
+  storageProviderNotIn: [String!]
+  storageProviderGT: String
+  storageProviderGTE: String
+  storageProviderLT: String
+  storageProviderLTE: String
+  storageProviderContains: String
+  storageProviderHasPrefix: String
+  storageProviderHasSuffix: String
+  storageProviderIsNil: Boolean
+  storageProviderNotNil: Boolean
+  storageProviderEqualFold: String
+  storageProviderContainsFold: String
+  """
+  last_accessed_at field predicates
+  """
+  lastAccessedAt: Time
+  lastAccessedAtNEQ: Time
+  lastAccessedAtIn: [Time!]
+  lastAccessedAtNotIn: [Time!]
+  lastAccessedAtGT: Time
+  lastAccessedAtGTE: Time
+  lastAccessedAtLT: Time
+  lastAccessedAtLTE: Time
+  lastAccessedAtIsNil: Boolean
+  lastAccessedAtNotNil: Boolean
 }
 """
 Ordering options for File connections
@@ -51215,6 +51594,7 @@ Properties by which File connections can be ordered.
 enum FileOrderField {
   created_at
   updated_at
+  last_accessed_at
 }
 """
 FileWhereInput is used for filtering File objects.
@@ -51518,6 +51898,55 @@ input FileWhereInput {
   storagePathEqualFold: String
   storagePathContainsFold: String
   """
+  storage_region field predicates
+  """
+  storageRegion: String
+  storageRegionNEQ: String
+  storageRegionIn: [String!]
+  storageRegionNotIn: [String!]
+  storageRegionGT: String
+  storageRegionGTE: String
+  storageRegionLT: String
+  storageRegionLTE: String
+  storageRegionContains: String
+  storageRegionHasPrefix: String
+  storageRegionHasSuffix: String
+  storageRegionIsNil: Boolean
+  storageRegionNotNil: Boolean
+  storageRegionEqualFold: String
+  storageRegionContainsFold: String
+  """
+  storage_provider field predicates
+  """
+  storageProvider: String
+  storageProviderNEQ: String
+  storageProviderIn: [String!]
+  storageProviderNotIn: [String!]
+  storageProviderGT: String
+  storageProviderGTE: String
+  storageProviderLT: String
+  storageProviderLTE: String
+  storageProviderContains: String
+  storageProviderHasPrefix: String
+  storageProviderHasSuffix: String
+  storageProviderIsNil: Boolean
+  storageProviderNotNil: Boolean
+  storageProviderEqualFold: String
+  storageProviderContainsFold: String
+  """
+  last_accessed_at field predicates
+  """
+  lastAccessedAt: Time
+  lastAccessedAtNEQ: Time
+  lastAccessedAtIn: [Time!]
+  lastAccessedAtNotIn: [Time!]
+  lastAccessedAtGT: Time
+  lastAccessedAtGTE: Time
+  lastAccessedAtLT: Time
+  lastAccessedAtLTE: Time
+  lastAccessedAtIsNil: Boolean
+  lastAccessedAtNotNil: Boolean
+  """
   user edge predicates
   """
   hasUser: Boolean
@@ -51587,6 +52016,16 @@ input FileWhereInput {
   """
   hasSubprocessor: Boolean
   hasSubprocessorWith: [SubprocessorWhereInput!]
+  """
+  integrations edge predicates
+  """
+  hasIntegrations: Boolean
+  hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  secrets edge predicates
+  """
+  hasSecrets: Boolean
+  hasSecretsWith: [HushWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -54369,6 +54808,19 @@ type Hush implements Node {
   the generic name of a secret associated with the organization
   """
   secretName: String
+  """
+  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+  """
+  credentialSet: CredentialSet
+  """
+  additional metadata about the credential
+  """
+  metadata: Map
+  lastUsedAt: Time
+  """
+  when the token expires
+  """
+  expiresAt: Time
   owner: Organization
   integrations(
     """
@@ -54401,6 +54853,37 @@ type Hush implements Node {
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   events(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -54492,6 +54975,19 @@ type HushHistory implements Node {
   the generic name of a secret associated with the organization
   """
   secretName: String
+  """
+  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+  """
+  credentialSet: CredentialSet
+  """
+  additional metadata about the credential
+  """
+  metadata: Map
+  lastUsedAt: Time
+  """
+  when the token expires
+  """
+  expiresAt: Time
 }
 """
 A connection to a list of items.
@@ -54553,6 +55049,8 @@ enum HushHistoryOrderField {
   updated_at
   name
   kind
+  last_used_at
+  expires_at
 }
 """
 HushHistoryWhereInput is used for filtering HushHistory objects.
@@ -54743,6 +55241,32 @@ input HushHistoryWhereInput {
   secretNameNotNil: Boolean
   secretNameEqualFold: String
   secretNameContainsFold: String
+  """
+  last_used_at field predicates
+  """
+  lastUsedAt: Time
+  lastUsedAtNEQ: Time
+  lastUsedAtIn: [Time!]
+  lastUsedAtNotIn: [Time!]
+  lastUsedAtGT: Time
+  lastUsedAtGTE: Time
+  lastUsedAtLT: Time
+  lastUsedAtLTE: Time
+  lastUsedAtIsNil: Boolean
+  lastUsedAtNotNil: Boolean
+  """
+  expires_at field predicates
+  """
+  expiresAt: Time
+  expiresAtNEQ: Time
+  expiresAtIn: [Time!]
+  expiresAtNotIn: [Time!]
+  expiresAtGT: Time
+  expiresAtGTE: Time
+  expiresAtLT: Time
+  expiresAtLTE: Time
+  expiresAtIsNil: Boolean
+  expiresAtNotNil: Boolean
 }
 """
 Ordering options for Hush connections
@@ -54765,6 +55289,8 @@ enum HushOrderField {
   updated_at
   name
   kind
+  last_used_at
+  expires_at
 }
 """
 HushWhereInput is used for filtering Hush objects.
@@ -54920,6 +55446,32 @@ input HushWhereInput {
   secretNameEqualFold: String
   secretNameContainsFold: String
   """
+  last_used_at field predicates
+  """
+  lastUsedAt: Time
+  lastUsedAtNEQ: Time
+  lastUsedAtIn: [Time!]
+  lastUsedAtNotIn: [Time!]
+  lastUsedAtGT: Time
+  lastUsedAtGTE: Time
+  lastUsedAtLT: Time
+  lastUsedAtLTE: Time
+  lastUsedAtIsNil: Boolean
+  lastUsedAtNotNil: Boolean
+  """
+  expires_at field predicates
+  """
+  expiresAt: Time
+  expiresAtNEQ: Time
+  expiresAtIn: [Time!]
+  expiresAtNotIn: [Time!]
+  expiresAtGT: Time
+  expiresAtGTE: Time
+  expiresAtLT: Time
+  expiresAtLTE: Time
+  expiresAtIsNil: Boolean
+  expiresAtNotNil: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -54929,6 +55481,11 @@ input HushWhereInput {
   """
   hasIntegrations: Boolean
   hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
   """
   events edge predicates
   """
@@ -54950,14 +55507,25 @@ type Integration implements Node {
   """
   ownerID: ID
   """
-  the name of the integration - must be unique within the organization
+  the name of the integration
   """
   name: String!
   """
   a description of the integration
   """
   description: String
+  """
+  the kind of integration, such as github, slack, s3 etc.
+  """
   kind: String
+  """
+  the type of integration, such as communicattion, storage, SCM, etc.
+  """
+  integrationType: String
+  """
+  additional metadata about the integration
+  """
+  metadata: Map
   owner: Organization
   secrets(
     """
@@ -54990,6 +55558,37 @@ type Integration implements Node {
     """
     where: HushWhereInput
   ): HushConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   events(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -55070,14 +55669,25 @@ type IntegrationHistory implements Node {
   """
   ownerID: String
   """
-  the name of the integration - must be unique within the organization
+  the name of the integration
   """
   name: String!
   """
   a description of the integration
   """
   description: String
+  """
+  the kind of integration, such as github, slack, s3 etc.
+  """
   kind: String
+  """
+  the type of integration, such as communicattion, storage, SCM, etc.
+  """
+  integrationType: String
+  """
+  additional metadata about the integration
+  """
+  metadata: Map
 }
 """
 A connection to a list of items.
@@ -55139,6 +55749,7 @@ enum IntegrationHistoryOrderField {
   updated_at
   name
   kind
+  integration_type
 }
 """
 IntegrationHistoryWhereInput is used for filtering IntegrationHistory objects.
@@ -55311,6 +55922,24 @@ input IntegrationHistoryWhereInput {
   kindNotNil: Boolean
   kindEqualFold: String
   kindContainsFold: String
+  """
+  integration_type field predicates
+  """
+  integrationType: String
+  integrationTypeNEQ: String
+  integrationTypeIn: [String!]
+  integrationTypeNotIn: [String!]
+  integrationTypeGT: String
+  integrationTypeGTE: String
+  integrationTypeLT: String
+  integrationTypeLTE: String
+  integrationTypeContains: String
+  integrationTypeHasPrefix: String
+  integrationTypeHasSuffix: String
+  integrationTypeIsNil: Boolean
+  integrationTypeNotNil: Boolean
+  integrationTypeEqualFold: String
+  integrationTypeContainsFold: String
 }
 """
 Ordering options for Integration connections
@@ -55333,6 +55962,7 @@ enum IntegrationOrderField {
   updated_at
   name
   kind
+  integration_type
 }
 """
 IntegrationWhereInput is used for filtering Integration objects.
@@ -55470,6 +56100,24 @@ input IntegrationWhereInput {
   kindEqualFold: String
   kindContainsFold: String
   """
+  integration_type field predicates
+  """
+  integrationType: String
+  integrationTypeNEQ: String
+  integrationTypeIn: [String!]
+  integrationTypeNotIn: [String!]
+  integrationTypeGT: String
+  integrationTypeGTE: String
+  integrationTypeLT: String
+  integrationTypeLTE: String
+  integrationTypeContains: String
+  integrationTypeHasPrefix: String
+  integrationTypeHasSuffix: String
+  integrationTypeIsNil: Boolean
+  integrationTypeNotNil: Boolean
+  integrationTypeEqualFold: String
+  integrationTypeContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -55479,6 +56127,11 @@ input IntegrationWhereInput {
   """
   hasSecrets: Boolean
   hasSecretsWith: [HushWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
   """
   events edge predicates
   """
@@ -85426,6 +86079,23 @@ input UpdateFileInput {
   """
   storagePath: String
   clearStoragePath: Boolean
+  """
+  additional metadata about the file
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  the region the file is stored in, if applicable
+  """
+  storageRegion: String
+  clearStorageRegion: Boolean
+  """
+  the storage provider the file is stored in, if applicable
+  """
+  storageProvider: String
+  clearStorageProvider: Boolean
+  lastAccessedAt: Time
+  clearLastAccessedAt: Boolean
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUser: Boolean
@@ -85468,6 +86138,12 @@ input UpdateFileInput {
   addSubprocessorIDs: [ID!]
   removeSubprocessorIDs: [ID!]
   clearSubprocessor: Boolean
+  addIntegrationIDs: [ID!]
+  removeIntegrationIDs: [ID!]
+  clearIntegrations: Boolean
+  addSecretIDs: [ID!]
+  removeSecretIDs: [ID!]
+  clearSecrets: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -85657,11 +86333,31 @@ input UpdateHushInput {
   """
   kind: String
   clearKind: Boolean
+  """
+  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
+  """
+  credentialSet: CredentialSet
+  clearCredentialSet: Boolean
+  """
+  additional metadata about the credential
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  lastUsedAt: Time
+  clearLastUsedAt: Boolean
+  """
+  when the token expires
+  """
+  expiresAt: Time
+  clearExpiresAt: Boolean
   ownerID: ID
   clearOwner: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -93166,6 +93862,10 @@ SSOAuthorizationMap is a map of organization IDs to SSO verification timestamps.
 This scalar is used to track SSO verification times for organizations in the context of token authorization.
 """
 scalar SSOAuthorizationMap
+"""
+CredentialSet is a json of of credential keys that are used to authenticate to a third party
+"""
+scalar CredentialSet
 `, BuiltIn: false},
 	{Name: "../schema/scan.graphql", Input: `extend type Query {
     """

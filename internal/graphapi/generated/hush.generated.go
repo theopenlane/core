@@ -85,10 +85,20 @@ func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
+			case "credentialSet":
+				return ec.fieldContext_Hush_credentialSet(ctx, field)
+			case "metadata":
+				return ec.fieldContext_Hush_metadata(ctx, field)
+			case "lastUsedAt":
+				return ec.fieldContext_Hush_lastUsedAt(ctx, field)
+			case "expiresAt":
+				return ec.fieldContext_Hush_expiresAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Hush_owner(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
+			case "files":
+				return ec.fieldContext_Hush_files(ctx, field)
 			case "events":
 				return ec.fieldContext_Hush_events(ctx, field)
 			}
@@ -154,10 +164,20 @@ func (ec *executionContext) fieldContext_HushBulkUpdatePayload_hushes(_ context.
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
+			case "credentialSet":
+				return ec.fieldContext_Hush_credentialSet(ctx, field)
+			case "metadata":
+				return ec.fieldContext_Hush_metadata(ctx, field)
+			case "lastUsedAt":
+				return ec.fieldContext_Hush_lastUsedAt(ctx, field)
+			case "expiresAt":
+				return ec.fieldContext_Hush_expiresAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Hush_owner(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
+			case "files":
+				return ec.fieldContext_Hush_files(ctx, field)
 			case "events":
 				return ec.fieldContext_Hush_events(ctx, field)
 			}
@@ -267,10 +287,20 @@ func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
+			case "credentialSet":
+				return ec.fieldContext_Hush_credentialSet(ctx, field)
+			case "metadata":
+				return ec.fieldContext_Hush_metadata(ctx, field)
+			case "lastUsedAt":
+				return ec.fieldContext_Hush_lastUsedAt(ctx, field)
+			case "expiresAt":
+				return ec.fieldContext_Hush_expiresAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Hush_owner(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
+			case "files":
+				return ec.fieldContext_Hush_files(ctx, field)
 			case "events":
 				return ec.fieldContext_Hush_events(ctx, field)
 			}
@@ -383,10 +413,20 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_kind(ctx, field)
 			case "secretName":
 				return ec.fieldContext_Hush_secretName(ctx, field)
+			case "credentialSet":
+				return ec.fieldContext_Hush_credentialSet(ctx, field)
+			case "metadata":
+				return ec.fieldContext_Hush_metadata(ctx, field)
+			case "lastUsedAt":
+				return ec.fieldContext_Hush_lastUsedAt(ctx, field)
+			case "expiresAt":
+				return ec.fieldContext_Hush_expiresAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Hush_owner(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Hush_integrations(ctx, field)
+			case "files":
+				return ec.fieldContext_Hush_files(ctx, field)
 			case "events":
 				return ec.fieldContext_Hush_events(ctx, field)
 			}

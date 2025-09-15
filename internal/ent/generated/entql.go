@@ -1002,6 +1002,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldStorageVolume:         {Type: field.TypeString, Column: file.FieldStorageVolume},
 			file.FieldStoragePath:           {Type: field.TypeString, Column: file.FieldStoragePath},
 			file.FieldFileContents:          {Type: field.TypeBytes, Column: file.FieldFileContents},
+			file.FieldMetadata:              {Type: field.TypeJSON, Column: file.FieldMetadata},
+			file.FieldStorageRegion:         {Type: field.TypeString, Column: file.FieldStorageRegion},
+			file.FieldStorageProvider:       {Type: field.TypeString, Column: file.FieldStorageProvider},
+			file.FieldLastAccessedAt:        {Type: field.TypeTime, Column: file.FieldLastAccessedAt},
 		},
 	}
 	graph.Nodes[29] = &sqlgraph.Node{
@@ -1039,6 +1043,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldStorageVolume:         {Type: field.TypeString, Column: filehistory.FieldStorageVolume},
 			filehistory.FieldStoragePath:           {Type: field.TypeString, Column: filehistory.FieldStoragePath},
 			filehistory.FieldFileContents:          {Type: field.TypeBytes, Column: filehistory.FieldFileContents},
+			filehistory.FieldMetadata:              {Type: field.TypeJSON, Column: filehistory.FieldMetadata},
+			filehistory.FieldStorageRegion:         {Type: field.TypeString, Column: filehistory.FieldStorageRegion},
+			filehistory.FieldStorageProvider:       {Type: field.TypeString, Column: filehistory.FieldStorageProvider},
+			filehistory.FieldLastAccessedAt:        {Type: field.TypeTime, Column: filehistory.FieldLastAccessedAt},
 		},
 	}
 	graph.Nodes[30] = &sqlgraph.Node{
@@ -1205,18 +1213,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Hush",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			hush.FieldCreatedAt:   {Type: field.TypeTime, Column: hush.FieldCreatedAt},
-			hush.FieldUpdatedAt:   {Type: field.TypeTime, Column: hush.FieldUpdatedAt},
-			hush.FieldCreatedBy:   {Type: field.TypeString, Column: hush.FieldCreatedBy},
-			hush.FieldUpdatedBy:   {Type: field.TypeString, Column: hush.FieldUpdatedBy},
-			hush.FieldDeletedAt:   {Type: field.TypeTime, Column: hush.FieldDeletedAt},
-			hush.FieldDeletedBy:   {Type: field.TypeString, Column: hush.FieldDeletedBy},
-			hush.FieldOwnerID:     {Type: field.TypeString, Column: hush.FieldOwnerID},
-			hush.FieldName:        {Type: field.TypeString, Column: hush.FieldName},
-			hush.FieldDescription: {Type: field.TypeString, Column: hush.FieldDescription},
-			hush.FieldKind:        {Type: field.TypeString, Column: hush.FieldKind},
-			hush.FieldSecretName:  {Type: field.TypeString, Column: hush.FieldSecretName},
-			hush.FieldSecretValue: {Type: field.TypeString, Column: hush.FieldSecretValue},
+			hush.FieldCreatedAt:     {Type: field.TypeTime, Column: hush.FieldCreatedAt},
+			hush.FieldUpdatedAt:     {Type: field.TypeTime, Column: hush.FieldUpdatedAt},
+			hush.FieldCreatedBy:     {Type: field.TypeString, Column: hush.FieldCreatedBy},
+			hush.FieldUpdatedBy:     {Type: field.TypeString, Column: hush.FieldUpdatedBy},
+			hush.FieldDeletedAt:     {Type: field.TypeTime, Column: hush.FieldDeletedAt},
+			hush.FieldDeletedBy:     {Type: field.TypeString, Column: hush.FieldDeletedBy},
+			hush.FieldOwnerID:       {Type: field.TypeString, Column: hush.FieldOwnerID},
+			hush.FieldName:          {Type: field.TypeString, Column: hush.FieldName},
+			hush.FieldDescription:   {Type: field.TypeString, Column: hush.FieldDescription},
+			hush.FieldKind:          {Type: field.TypeString, Column: hush.FieldKind},
+			hush.FieldSecretName:    {Type: field.TypeString, Column: hush.FieldSecretName},
+			hush.FieldSecretValue:   {Type: field.TypeString, Column: hush.FieldSecretValue},
+			hush.FieldCredentialSet: {Type: field.TypeJSON, Column: hush.FieldCredentialSet},
+			hush.FieldMetadata:      {Type: field.TypeJSON, Column: hush.FieldMetadata},
+			hush.FieldLastUsedAt:    {Type: field.TypeTime, Column: hush.FieldLastUsedAt},
+			hush.FieldExpiresAt:     {Type: field.TypeTime, Column: hush.FieldExpiresAt},
 		},
 	}
 	graph.Nodes[37] = &sqlgraph.Node{
@@ -1230,21 +1242,25 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "HushHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			hushhistory.FieldHistoryTime: {Type: field.TypeTime, Column: hushhistory.FieldHistoryTime},
-			hushhistory.FieldRef:         {Type: field.TypeString, Column: hushhistory.FieldRef},
-			hushhistory.FieldOperation:   {Type: field.TypeEnum, Column: hushhistory.FieldOperation},
-			hushhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: hushhistory.FieldCreatedAt},
-			hushhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: hushhistory.FieldUpdatedAt},
-			hushhistory.FieldCreatedBy:   {Type: field.TypeString, Column: hushhistory.FieldCreatedBy},
-			hushhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: hushhistory.FieldUpdatedBy},
-			hushhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: hushhistory.FieldDeletedAt},
-			hushhistory.FieldDeletedBy:   {Type: field.TypeString, Column: hushhistory.FieldDeletedBy},
-			hushhistory.FieldOwnerID:     {Type: field.TypeString, Column: hushhistory.FieldOwnerID},
-			hushhistory.FieldName:        {Type: field.TypeString, Column: hushhistory.FieldName},
-			hushhistory.FieldDescription: {Type: field.TypeString, Column: hushhistory.FieldDescription},
-			hushhistory.FieldKind:        {Type: field.TypeString, Column: hushhistory.FieldKind},
-			hushhistory.FieldSecretName:  {Type: field.TypeString, Column: hushhistory.FieldSecretName},
-			hushhistory.FieldSecretValue: {Type: field.TypeString, Column: hushhistory.FieldSecretValue},
+			hushhistory.FieldHistoryTime:   {Type: field.TypeTime, Column: hushhistory.FieldHistoryTime},
+			hushhistory.FieldRef:           {Type: field.TypeString, Column: hushhistory.FieldRef},
+			hushhistory.FieldOperation:     {Type: field.TypeEnum, Column: hushhistory.FieldOperation},
+			hushhistory.FieldCreatedAt:     {Type: field.TypeTime, Column: hushhistory.FieldCreatedAt},
+			hushhistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: hushhistory.FieldUpdatedAt},
+			hushhistory.FieldCreatedBy:     {Type: field.TypeString, Column: hushhistory.FieldCreatedBy},
+			hushhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: hushhistory.FieldUpdatedBy},
+			hushhistory.FieldDeletedAt:     {Type: field.TypeTime, Column: hushhistory.FieldDeletedAt},
+			hushhistory.FieldDeletedBy:     {Type: field.TypeString, Column: hushhistory.FieldDeletedBy},
+			hushhistory.FieldOwnerID:       {Type: field.TypeString, Column: hushhistory.FieldOwnerID},
+			hushhistory.FieldName:          {Type: field.TypeString, Column: hushhistory.FieldName},
+			hushhistory.FieldDescription:   {Type: field.TypeString, Column: hushhistory.FieldDescription},
+			hushhistory.FieldKind:          {Type: field.TypeString, Column: hushhistory.FieldKind},
+			hushhistory.FieldSecretName:    {Type: field.TypeString, Column: hushhistory.FieldSecretName},
+			hushhistory.FieldSecretValue:   {Type: field.TypeString, Column: hushhistory.FieldSecretValue},
+			hushhistory.FieldCredentialSet: {Type: field.TypeJSON, Column: hushhistory.FieldCredentialSet},
+			hushhistory.FieldMetadata:      {Type: field.TypeJSON, Column: hushhistory.FieldMetadata},
+			hushhistory.FieldLastUsedAt:    {Type: field.TypeTime, Column: hushhistory.FieldLastUsedAt},
+			hushhistory.FieldExpiresAt:     {Type: field.TypeTime, Column: hushhistory.FieldExpiresAt},
 		},
 	}
 	graph.Nodes[38] = &sqlgraph.Node{
@@ -1258,17 +1274,19 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Integration",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			integration.FieldCreatedAt:   {Type: field.TypeTime, Column: integration.FieldCreatedAt},
-			integration.FieldUpdatedAt:   {Type: field.TypeTime, Column: integration.FieldUpdatedAt},
-			integration.FieldCreatedBy:   {Type: field.TypeString, Column: integration.FieldCreatedBy},
-			integration.FieldUpdatedBy:   {Type: field.TypeString, Column: integration.FieldUpdatedBy},
-			integration.FieldDeletedAt:   {Type: field.TypeTime, Column: integration.FieldDeletedAt},
-			integration.FieldDeletedBy:   {Type: field.TypeString, Column: integration.FieldDeletedBy},
-			integration.FieldTags:        {Type: field.TypeJSON, Column: integration.FieldTags},
-			integration.FieldOwnerID:     {Type: field.TypeString, Column: integration.FieldOwnerID},
-			integration.FieldName:        {Type: field.TypeString, Column: integration.FieldName},
-			integration.FieldDescription: {Type: field.TypeString, Column: integration.FieldDescription},
-			integration.FieldKind:        {Type: field.TypeString, Column: integration.FieldKind},
+			integration.FieldCreatedAt:       {Type: field.TypeTime, Column: integration.FieldCreatedAt},
+			integration.FieldUpdatedAt:       {Type: field.TypeTime, Column: integration.FieldUpdatedAt},
+			integration.FieldCreatedBy:       {Type: field.TypeString, Column: integration.FieldCreatedBy},
+			integration.FieldUpdatedBy:       {Type: field.TypeString, Column: integration.FieldUpdatedBy},
+			integration.FieldDeletedAt:       {Type: field.TypeTime, Column: integration.FieldDeletedAt},
+			integration.FieldDeletedBy:       {Type: field.TypeString, Column: integration.FieldDeletedBy},
+			integration.FieldTags:            {Type: field.TypeJSON, Column: integration.FieldTags},
+			integration.FieldOwnerID:         {Type: field.TypeString, Column: integration.FieldOwnerID},
+			integration.FieldName:            {Type: field.TypeString, Column: integration.FieldName},
+			integration.FieldDescription:     {Type: field.TypeString, Column: integration.FieldDescription},
+			integration.FieldKind:            {Type: field.TypeString, Column: integration.FieldKind},
+			integration.FieldIntegrationType: {Type: field.TypeString, Column: integration.FieldIntegrationType},
+			integration.FieldMetadata:        {Type: field.TypeJSON, Column: integration.FieldMetadata},
 		},
 	}
 	graph.Nodes[39] = &sqlgraph.Node{
@@ -1282,20 +1300,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "IntegrationHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			integrationhistory.FieldHistoryTime: {Type: field.TypeTime, Column: integrationhistory.FieldHistoryTime},
-			integrationhistory.FieldRef:         {Type: field.TypeString, Column: integrationhistory.FieldRef},
-			integrationhistory.FieldOperation:   {Type: field.TypeEnum, Column: integrationhistory.FieldOperation},
-			integrationhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: integrationhistory.FieldCreatedAt},
-			integrationhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: integrationhistory.FieldUpdatedAt},
-			integrationhistory.FieldCreatedBy:   {Type: field.TypeString, Column: integrationhistory.FieldCreatedBy},
-			integrationhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: integrationhistory.FieldUpdatedBy},
-			integrationhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: integrationhistory.FieldDeletedAt},
-			integrationhistory.FieldDeletedBy:   {Type: field.TypeString, Column: integrationhistory.FieldDeletedBy},
-			integrationhistory.FieldTags:        {Type: field.TypeJSON, Column: integrationhistory.FieldTags},
-			integrationhistory.FieldOwnerID:     {Type: field.TypeString, Column: integrationhistory.FieldOwnerID},
-			integrationhistory.FieldName:        {Type: field.TypeString, Column: integrationhistory.FieldName},
-			integrationhistory.FieldDescription: {Type: field.TypeString, Column: integrationhistory.FieldDescription},
-			integrationhistory.FieldKind:        {Type: field.TypeString, Column: integrationhistory.FieldKind},
+			integrationhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: integrationhistory.FieldHistoryTime},
+			integrationhistory.FieldRef:             {Type: field.TypeString, Column: integrationhistory.FieldRef},
+			integrationhistory.FieldOperation:       {Type: field.TypeEnum, Column: integrationhistory.FieldOperation},
+			integrationhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: integrationhistory.FieldCreatedAt},
+			integrationhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: integrationhistory.FieldUpdatedAt},
+			integrationhistory.FieldCreatedBy:       {Type: field.TypeString, Column: integrationhistory.FieldCreatedBy},
+			integrationhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: integrationhistory.FieldUpdatedBy},
+			integrationhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: integrationhistory.FieldDeletedAt},
+			integrationhistory.FieldDeletedBy:       {Type: field.TypeString, Column: integrationhistory.FieldDeletedBy},
+			integrationhistory.FieldTags:            {Type: field.TypeJSON, Column: integrationhistory.FieldTags},
+			integrationhistory.FieldOwnerID:         {Type: field.TypeString, Column: integrationhistory.FieldOwnerID},
+			integrationhistory.FieldName:            {Type: field.TypeString, Column: integrationhistory.FieldName},
+			integrationhistory.FieldDescription:     {Type: field.TypeString, Column: integrationhistory.FieldDescription},
+			integrationhistory.FieldKind:            {Type: field.TypeString, Column: integrationhistory.FieldKind},
+			integrationhistory.FieldIntegrationType: {Type: field.TypeString, Column: integrationhistory.FieldIntegrationType},
+			integrationhistory.FieldMetadata:        {Type: field.TypeJSON, Column: integrationhistory.FieldMetadata},
 		},
 	}
 	graph.Nodes[40] = &sqlgraph.Node{
@@ -4799,6 +4819,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Subprocessor",
 	)
 	graph.MustAddE(
+		"integrations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   file.IntegrationsTable,
+			Columns: []string{file.IntegrationsColumn},
+			Bidi:    false,
+		},
+		"File",
+		"Integration",
+	)
+	graph.MustAddE(
+		"secrets",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.SecretsTable,
+			Columns: file.SecretsPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"Hush",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -5339,6 +5383,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Integration",
 	)
 	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   hush.FilesTable,
+			Columns: hush.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"Hush",
+		"File",
+	)
+	graph.MustAddE(
 		"events",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5373,6 +5429,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Integration",
 		"Hush",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.FilesTable,
+			Columns: []string{integration.FilesColumn},
+			Bidi:    false,
+		},
+		"Integration",
+		"File",
 	)
 	graph.MustAddE(
 		"events",
@@ -13965,6 +14033,26 @@ func (f *FileFilter) WhereFileContents(p entql.BytesP) {
 	f.Where(p.Field(file.FieldFileContents))
 }
 
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *FileFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(file.FieldMetadata))
+}
+
+// WhereStorageRegion applies the entql string predicate on the storage_region field.
+func (f *FileFilter) WhereStorageRegion(p entql.StringP) {
+	f.Where(p.Field(file.FieldStorageRegion))
+}
+
+// WhereStorageProvider applies the entql string predicate on the storage_provider field.
+func (f *FileFilter) WhereStorageProvider(p entql.StringP) {
+	f.Where(p.Field(file.FieldStorageProvider))
+}
+
+// WhereLastAccessedAt applies the entql time.Time predicate on the last_accessed_at field.
+func (f *FileFilter) WhereLastAccessedAt(p entql.TimeP) {
+	f.Where(p.Field(file.FieldLastAccessedAt))
+}
+
 // WhereHasUser applies a predicate to check if query has an edge user.
 func (f *FileFilter) WhereHasUser() {
 	f.Where(entql.HasEdge("user"))
@@ -14161,6 +14249,34 @@ func (f *FileFilter) WhereHasSubprocessorWith(preds ...predicate.Subprocessor) {
 	})))
 }
 
+// WhereHasIntegrations applies a predicate to check if query has an edge integrations.
+func (f *FileFilter) WhereHasIntegrations() {
+	f.Where(entql.HasEdge("integrations"))
+}
+
+// WhereHasIntegrationsWith applies a predicate to check if query has an edge integrations with a given conditions (other predicates).
+func (f *FileFilter) WhereHasIntegrationsWith(preds ...predicate.Integration) {
+	f.Where(entql.HasEdgeWith("integrations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSecrets applies a predicate to check if query has an edge secrets.
+func (f *FileFilter) WhereHasSecrets() {
+	f.Where(entql.HasEdge("secrets"))
+}
+
+// WhereHasSecretsWith applies a predicate to check if query has an edge secrets with a given conditions (other predicates).
+func (f *FileFilter) WhereHasSecretsWith(preds ...predicate.Hush) {
+	f.Where(entql.HasEdgeWith("secrets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *FileHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -14319,6 +14435,26 @@ func (f *FileHistoryFilter) WhereStoragePath(p entql.StringP) {
 // WhereFileContents applies the entql []byte predicate on the file_contents field.
 func (f *FileHistoryFilter) WhereFileContents(p entql.BytesP) {
 	f.Where(p.Field(filehistory.FieldFileContents))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *FileHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(filehistory.FieldMetadata))
+}
+
+// WhereStorageRegion applies the entql string predicate on the storage_region field.
+func (f *FileHistoryFilter) WhereStorageRegion(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldStorageRegion))
+}
+
+// WhereStorageProvider applies the entql string predicate on the storage_provider field.
+func (f *FileHistoryFilter) WhereStorageProvider(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldStorageProvider))
+}
+
+// WhereLastAccessedAt applies the entql time.Time predicate on the last_accessed_at field.
+func (f *FileHistoryFilter) WhereLastAccessedAt(p entql.TimeP) {
+	f.Where(p.Field(filehistory.FieldLastAccessedAt))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -15638,6 +15774,26 @@ func (f *HushFilter) WhereSecretValue(p entql.StringP) {
 	f.Where(p.Field(hush.FieldSecretValue))
 }
 
+// WhereCredentialSet applies the entql json.RawMessage predicate on the credential_set field.
+func (f *HushFilter) WhereCredentialSet(p entql.BytesP) {
+	f.Where(p.Field(hush.FieldCredentialSet))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *HushFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(hush.FieldMetadata))
+}
+
+// WhereLastUsedAt applies the entql time.Time predicate on the last_used_at field.
+func (f *HushFilter) WhereLastUsedAt(p entql.TimeP) {
+	f.Where(p.Field(hush.FieldLastUsedAt))
+}
+
+// WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
+func (f *HushFilter) WhereExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(hush.FieldExpiresAt))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *HushFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -15660,6 +15816,20 @@ func (f *HushFilter) WhereHasIntegrations() {
 // WhereHasIntegrationsWith applies a predicate to check if query has an edge integrations with a given conditions (other predicates).
 func (f *HushFilter) WhereHasIntegrationsWith(preds ...predicate.Integration) {
 	f.Where(entql.HasEdgeWith("integrations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *HushFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *HushFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -15795,6 +15965,26 @@ func (f *HushHistoryFilter) WhereSecretValue(p entql.StringP) {
 	f.Where(p.Field(hushhistory.FieldSecretValue))
 }
 
+// WhereCredentialSet applies the entql json.RawMessage predicate on the credential_set field.
+func (f *HushHistoryFilter) WhereCredentialSet(p entql.BytesP) {
+	f.Where(p.Field(hushhistory.FieldCredentialSet))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *HushHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(hushhistory.FieldMetadata))
+}
+
+// WhereLastUsedAt applies the entql time.Time predicate on the last_used_at field.
+func (f *HushHistoryFilter) WhereLastUsedAt(p entql.TimeP) {
+	f.Where(p.Field(hushhistory.FieldLastUsedAt))
+}
+
+// WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
+func (f *HushHistoryFilter) WhereExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(hushhistory.FieldExpiresAt))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *IntegrationQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -15890,6 +16080,16 @@ func (f *IntegrationFilter) WhereKind(p entql.StringP) {
 	f.Where(p.Field(integration.FieldKind))
 }
 
+// WhereIntegrationType applies the entql string predicate on the integration_type field.
+func (f *IntegrationFilter) WhereIntegrationType(p entql.StringP) {
+	f.Where(p.Field(integration.FieldIntegrationType))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *IntegrationFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(integration.FieldMetadata))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *IntegrationFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -15912,6 +16112,20 @@ func (f *IntegrationFilter) WhereHasSecrets() {
 // WhereHasSecretsWith applies a predicate to check if query has an edge secrets with a given conditions (other predicates).
 func (f *IntegrationFilter) WhereHasSecretsWith(preds ...predicate.Hush) {
 	f.Where(entql.HasEdgeWith("secrets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *IntegrationFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -16040,6 +16254,16 @@ func (f *IntegrationHistoryFilter) WhereDescription(p entql.StringP) {
 // WhereKind applies the entql string predicate on the kind field.
 func (f *IntegrationHistoryFilter) WhereKind(p entql.StringP) {
 	f.Where(p.Field(integrationhistory.FieldKind))
+}
+
+// WhereIntegrationType applies the entql string predicate on the integration_type field.
+func (f *IntegrationHistoryFilter) WhereIntegrationType(p entql.StringP) {
+	f.Where(p.Field(integrationhistory.FieldIntegrationType))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *IntegrationHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(integrationhistory.FieldMetadata))
 }
 
 // addPredicate implements the predicateAdder interface.

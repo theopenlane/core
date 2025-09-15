@@ -196,6 +196,38 @@ func (_u *IntegrationHistoryUpdate) ClearKind() *IntegrationHistoryUpdate {
 	return _u
 }
 
+// SetIntegrationType sets the "integration_type" field.
+func (_u *IntegrationHistoryUpdate) SetIntegrationType(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetIntegrationType(v)
+	return _u
+}
+
+// SetNillableIntegrationType sets the "integration_type" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillableIntegrationType(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetIntegrationType(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationType clears the value of the "integration_type" field.
+func (_u *IntegrationHistoryUpdate) ClearIntegrationType() *IntegrationHistoryUpdate {
+	_u.mutation.ClearIntegrationType()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *IntegrationHistoryUpdate) SetMetadata(v map[string]interface{}) *IntegrationHistoryUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *IntegrationHistoryUpdate) ClearMetadata() *IntegrationHistoryUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // Mutation returns the IntegrationHistoryMutation object of the builder.
 func (_u *IntegrationHistoryUpdate) Mutation() *IntegrationHistoryMutation {
 	return _u.mutation
@@ -322,6 +354,18 @@ func (_u *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.KindCleared() {
 		_spec.ClearField(integrationhistory.FieldKind, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationType(); ok {
+		_spec.SetField(integrationhistory.FieldIntegrationType, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationTypeCleared() {
+		_spec.ClearField(integrationhistory.FieldIntegrationType, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(integrationhistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(integrationhistory.FieldMetadata, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.IntegrationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -511,6 +555,38 @@ func (_u *IntegrationHistoryUpdateOne) ClearKind() *IntegrationHistoryUpdateOne 
 	return _u
 }
 
+// SetIntegrationType sets the "integration_type" field.
+func (_u *IntegrationHistoryUpdateOne) SetIntegrationType(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetIntegrationType(v)
+	return _u
+}
+
+// SetNillableIntegrationType sets the "integration_type" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillableIntegrationType(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetIntegrationType(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationType clears the value of the "integration_type" field.
+func (_u *IntegrationHistoryUpdateOne) ClearIntegrationType() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearIntegrationType()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *IntegrationHistoryUpdateOne) SetMetadata(v map[string]interface{}) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *IntegrationHistoryUpdateOne) ClearMetadata() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // Mutation returns the IntegrationHistoryMutation object of the builder.
 func (_u *IntegrationHistoryUpdateOne) Mutation() *IntegrationHistoryMutation {
 	return _u.mutation
@@ -667,6 +743,18 @@ func (_u *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	}
 	if _u.mutation.KindCleared() {
 		_spec.ClearField(integrationhistory.FieldKind, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationType(); ok {
+		_spec.SetField(integrationhistory.FieldIntegrationType, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationTypeCleared() {
+		_spec.ClearField(integrationhistory.FieldIntegrationType, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(integrationhistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(integrationhistory.FieldMetadata, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.IntegrationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

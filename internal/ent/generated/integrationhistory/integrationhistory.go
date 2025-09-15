@@ -45,6 +45,10 @@ const (
 	FieldDescription = "description"
 	// FieldKind holds the string denoting the kind field in the database.
 	FieldKind = "kind"
+	// FieldIntegrationType holds the string denoting the integration_type field in the database.
+	FieldIntegrationType = "integration_type"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// Table holds the table name of the integrationhistory in the database.
 	Table = "integration_history"
 )
@@ -66,6 +70,8 @@ var Columns = []string{
 	FieldName,
 	FieldDescription,
 	FieldKind,
+	FieldIntegrationType,
+	FieldMetadata,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -182,6 +188,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByKind orders the results by the kind field.
 func ByKind(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldKind, opts...).ToFunc()
+}
+
+// ByIntegrationType orders the results by the integration_type field.
+func ByIntegrationType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationType, opts...).ToFunc()
 }
 
 var (

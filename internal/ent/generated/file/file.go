@@ -57,6 +57,14 @@ const (
 	FieldStoragePath = "storage_path"
 	// FieldFileContents holds the string denoting the file_contents field in the database.
 	FieldFileContents = "file_contents"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
+	// FieldStorageRegion holds the string denoting the storage_region field in the database.
+	FieldStorageRegion = "storage_region"
+	// FieldStorageProvider holds the string denoting the storage_provider field in the database.
+	FieldStorageProvider = "storage_provider"
+	// FieldLastAccessedAt holds the string denoting the last_accessed_at field in the database.
+	FieldLastAccessedAt = "last_accessed_at"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
@@ -85,6 +93,10 @@ const (
 	EdgeTrustCenterSetting = "trust_center_setting"
 	// EdgeSubprocessor holds the string denoting the subprocessor edge name in mutations.
 	EdgeSubprocessor = "subprocessor"
+	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
+	EdgeIntegrations = "integrations"
+	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
+	EdgeSecrets = "secrets"
 	// Table holds the table name of the file in the database.
 	Table = "files"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.
@@ -157,6 +169,18 @@ const (
 	// SubprocessorInverseTable is the table name for the Subprocessor entity.
 	// It exists in this package in order to avoid circular dependency with the "subprocessor" package.
 	SubprocessorInverseTable = "subprocessors"
+	// IntegrationsTable is the table that holds the integrations relation/edge.
+	IntegrationsTable = "integrations"
+	// IntegrationsInverseTable is the table name for the Integration entity.
+	// It exists in this package in order to avoid circular dependency with the "integration" package.
+	IntegrationsInverseTable = "integrations"
+	// IntegrationsColumn is the table column denoting the integrations relation/edge.
+	IntegrationsColumn = "file_integrations"
+	// SecretsTable is the table that holds the secrets relation/edge. The primary key declared below.
+	SecretsTable = "file_secrets"
+	// SecretsInverseTable is the table name for the Hush entity.
+	// It exists in this package in order to avoid circular dependency with the "hush" package.
+	SecretsInverseTable = "hushes"
 )
 
 // Columns holds all SQL columns for file fields.
@@ -183,12 +207,17 @@ var Columns = []string{
 	FieldStorageVolume,
 	FieldStoragePath,
 	FieldFileContents,
+	FieldMetadata,
+	FieldStorageRegion,
+	FieldStorageProvider,
+	FieldLastAccessedAt,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "files"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"export_files",
+	"integration_files",
 	"note_files",
 }
 
@@ -235,6 +264,9 @@ var (
 	// SubprocessorPrimaryKey and SubprocessorColumn2 are the table columns denoting the
 	// primary key for the subprocessor relation (M2M).
 	SubprocessorPrimaryKey = []string{"subprocessor_id", "file_id"}
+	// SecretsPrimaryKey and SecretsColumn2 are the table columns denoting the
+	// primary key for the secrets relation (M2M).
+	SecretsPrimaryKey = []string{"file_id", "hush_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -378,6 +410,21 @@ func ByStorageVolume(opts ...sql.OrderTermOption) OrderOption {
 // ByStoragePath orders the results by the storage_path field.
 func ByStoragePath(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStoragePath, opts...).ToFunc()
+}
+
+// ByStorageRegion orders the results by the storage_region field.
+func ByStorageRegion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStorageRegion, opts...).ToFunc()
+}
+
+// ByStorageProvider orders the results by the storage_provider field.
+func ByStorageProvider(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStorageProvider, opts...).ToFunc()
+}
+
+// ByLastAccessedAt orders the results by the last_accessed_at field.
+func ByLastAccessedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastAccessedAt, opts...).ToFunc()
 }
 
 // ByUserCount orders the results by user count.
@@ -575,6 +622,34 @@ func BySubprocessor(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSubprocessorStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByIntegrationsCount orders the results by integrations count.
+func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationsStep(), opts...)
+	}
+}
+
+// ByIntegrations orders the results by integrations terms.
+func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySecretsCount orders the results by secrets count.
+func BySecretsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSecretsStep(), opts...)
+	}
+}
+
+// BySecrets orders the results by secrets terms.
+func BySecrets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSecretsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -671,5 +746,19 @@ func newSubprocessorStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubprocessorInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, SubprocessorTable, SubprocessorPrimaryKey...),
+	)
+}
+func newIntegrationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
+	)
+}
+func newSecretsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SecretsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, SecretsTable, SecretsPrimaryKey...),
 	)
 }

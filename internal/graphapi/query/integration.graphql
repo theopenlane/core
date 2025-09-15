@@ -17,6 +17,8 @@ query GetAllIntegrations {
         createdBy
         updatedAt
         updatedBy
+        integrationType
+        metadata
       }
     }
   }
@@ -33,6 +35,8 @@ query GetIntegrationByID($integrationId: ID!) {
     createdBy
     updatedAt
     updatedBy
+    integrationType
+    metadata
   }
 }
 
@@ -47,6 +51,8 @@ query GetIntegrationByIDWithSecrets($integrationId: ID!) {
       edges {
         node {
           id
+          name
+          kind
         }
       }
     }
@@ -54,6 +60,8 @@ query GetIntegrationByIDWithSecrets($integrationId: ID!) {
     createdBy
     updatedAt
     updatedBy
+    integrationType
+    metadata
   }
 }
 
@@ -73,6 +81,8 @@ query GetIntegrations($where: IntegrationWhereInput) {
           edges {
             node {
               id
+              name
+              kind
             }
           }
         }
@@ -80,6 +90,8 @@ query GetIntegrations($where: IntegrationWhereInput) {
         createdBy
         updatedAt
         updatedBy
+        integrationType
+        metadata
       }
     }
   }

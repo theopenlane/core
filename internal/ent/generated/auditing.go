@@ -1206,6 +1206,18 @@ func (_m *FileHistory) changes(new *FileHistory) []Change {
 	if !reflect.DeepEqual(_m.FileContents, new.FileContents) {
 		changes = append(changes, NewChange(filehistory.FieldFileContents, _m.FileContents, new.FileContents))
 	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(filehistory.FieldMetadata, _m.Metadata, new.Metadata))
+	}
+	if !reflect.DeepEqual(_m.StorageRegion, new.StorageRegion) {
+		changes = append(changes, NewChange(filehistory.FieldStorageRegion, _m.StorageRegion, new.StorageRegion))
+	}
+	if !reflect.DeepEqual(_m.StorageProvider, new.StorageProvider) {
+		changes = append(changes, NewChange(filehistory.FieldStorageProvider, _m.StorageProvider, new.StorageProvider))
+	}
+	if !reflect.DeepEqual(_m.LastAccessedAt, new.LastAccessedAt) {
+		changes = append(changes, NewChange(filehistory.FieldLastAccessedAt, _m.LastAccessedAt, new.LastAccessedAt))
+	}
 	return changes
 }
 
@@ -1449,6 +1461,18 @@ func (_m *HushHistory) changes(new *HushHistory) []Change {
 	if !reflect.DeepEqual(_m.SecretValue, new.SecretValue) {
 		changes = append(changes, NewChange(hushhistory.FieldSecretValue, _m.SecretValue, new.SecretValue))
 	}
+	if !reflect.DeepEqual(_m.CredentialSet, new.CredentialSet) {
+		changes = append(changes, NewChange(hushhistory.FieldCredentialSet, _m.CredentialSet, new.CredentialSet))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(hushhistory.FieldMetadata, _m.Metadata, new.Metadata))
+	}
+	if !reflect.DeepEqual(_m.LastUsedAt, new.LastUsedAt) {
+		changes = append(changes, NewChange(hushhistory.FieldLastUsedAt, _m.LastUsedAt, new.LastUsedAt))
+	}
+	if !reflect.DeepEqual(_m.ExpiresAt, new.ExpiresAt) {
+		changes = append(changes, NewChange(hushhistory.FieldExpiresAt, _m.ExpiresAt, new.ExpiresAt))
+	}
 	return changes
 }
 
@@ -1508,6 +1532,12 @@ func (_m *IntegrationHistory) changes(new *IntegrationHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.Kind, new.Kind) {
 		changes = append(changes, NewChange(integrationhistory.FieldKind, _m.Kind, new.Kind))
+	}
+	if !reflect.DeepEqual(_m.IntegrationType, new.IntegrationType) {
+		changes = append(changes, NewChange(integrationhistory.FieldIntegrationType, _m.IntegrationType, new.IntegrationType))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(integrationhistory.FieldMetadata, _m.Metadata, new.Metadata))
 	}
 	return changes
 }
