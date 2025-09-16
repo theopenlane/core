@@ -31,7 +31,7 @@ func HookValidateIdentityProviderConfig() ent.Hook {
 		hook.HasFields("identity_provider", "identity_provider_client_id",
 			"identity_provider_client_secret", "oidc_discovery_endpoint",
 			"identity_provider_login_enforced"),
-		hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne),
+		hook.HasOp(ent.OpCreate|ent.OpUpdateOne),
 	))
 }
 
