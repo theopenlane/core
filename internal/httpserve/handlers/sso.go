@@ -29,6 +29,9 @@ import (
 const (
 	ssoTestCookieName  = "is_test"
 	ssoTestCookieValue = "1"
+
+	ssoSwitchOrgCookieName  = "switch_org"
+	ssoSwitchOrgCookieValue = "1"
 )
 
 // SSOLoginHandler redirects the user to the organization's configured IdP for authentication
@@ -59,25 +62,10 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		sessions.SetCookie(ctx.Response().Writer, ssoTestCookieValue, ssoTestCookieName, cfg)
 	}
 
-	// always set the org ID as a cookie for the OIDC flow
-	sessions.SetCookie(ctx.Response().Writer, orgID, "organization_id", cfg)
-
-	// build the OIDC config for the org
-	rpCfg, err := h.oidcConfig(ctx.Request().Context(), orgID)
+	authURL, err := h.generateSSOAuthURL(ctx, orgID)
 	if err != nil {
 		return h.BadRequest(ctx, err, openapi)
 	}
-
-	state := ulids.New().String()
-	nonce := ulids.New().String()
-
-	// The state cookie is used to protect against (CSRF) attacks. When the authentication flow is initiated, a unique state value is generated and stored in a cookie. Later, when the user returns from the identity provider (IdP), the application checks that the state value in the callback matches the one stored in the cookie
-	sessions.SetCookie(ctx.Response().Writer, state, "state", cfg)
-	// The nonce cookie is used to prevent replay attacks and to bind the authentication request to the issued ID token. The nonce value is sent to the IdP as part of the authentication request, and the IdP includes it in the ID token. When the application receives the ID token, it verifies that the nonce matches the one stored in the cookie, ensuring the token was issued in response to this specific authentication flow
-	sessions.SetCookie(ctx.Response().Writer, nonce, "nonce", cfg)
-
-	// build the OIDC auth URL with state and nonce
-	authURL := rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonce))
 
 	out := apimodels.SSOLoginReply{
 		Reply:       rout.Reply{Success: true},
@@ -364,4 +352,36 @@ func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, org
 	}
 
 	return errInvalidTokenType
+}
+
+// generateSSOAuthURL creates an OIDC authentication URL with proper state and nonce cookies
+// Returns the authentication URL and any error encountered
+//
+// The state cookie is used to protect against (CSRF) attacks.
+// when the authentication flow is initiated, a unique state value is generated and stored in a cookie.
+// later, when the user returns from the identity provider (IdP),
+// the application checks that the state value in the callback matches the one stored in the cookie
+//
+// The nonce cookie is used to prevent replay attacks and to bind the authentication request to the issued ID token.
+// the nonce value is sent to the IdP as part of the authentication request, and the IdP includes it in the ID token.
+// when the application receives the ID token, it verifies that the nonce matches the one stored in the cookie,
+// ensuring the token was issued in response to this specific authentication flow
+func (h *Handler) generateSSOAuthURL(ctx echo.Context, orgID string) (string, error) {
+	rpCfg, err := h.oidcConfig(ctx.Request().Context(), orgID)
+	if err != nil {
+		return "", err
+	}
+
+	cfg := *h.SessionConfig.CookieConfig
+
+	// set the org ID as a cookie for the OIDC flow
+	sessions.SetCookie(ctx.Response().Writer, orgID, "organization_id", cfg)
+
+	state := ulids.New().String()
+	nonce := ulids.New().String()
+
+	sessions.SetCookie(ctx.Response().Writer, state, "state", cfg)
+	sessions.SetCookie(ctx.Response().Writer, nonce, "nonce", cfg)
+
+	return rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonce)), nil
 }

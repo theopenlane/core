@@ -345,6 +345,8 @@ type SwitchOrganizationRequest struct {
 type SwitchOrganizationReply struct {
 	rout.Reply
 	AuthData
+	NeedsSSO    bool   `json:"needs_sso,omitempty"`
+	RedirectURI string `json:"redirect_uri,omitempty"`
 }
 
 // ExampleResponse returns an example SwitchOrganizationReply for OpenAPI documentation
