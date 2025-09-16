@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVCustomDomain($input: Upload!) {
   createBulkCSVCustomDomain(input: $input) {
     customDomains {
@@ -82,6 +81,17 @@ query GetAllCustomDomains {
           dnsTxtRecord
           dnsTxtValue
           dnsVerificationStatus
+          dnsVerificationStatusReason
+          acmeChallengePath
+          expectedAcmeChallengeValue
+          acmeChallengeStatus
+          acmeChallengeStatusReason
+          cloudflareHostnameID
+        }
+        mappableDomain {
+          id
+          name
+          zoneID
         }
         id
         mappableDomainID
@@ -93,6 +103,7 @@ query GetAllCustomDomains {
     }
   }
 }
+
 query GetCustomDomainByID($customDomainId: ID!) {
   customDomain(id: $customDomainId) {
     cnameRecord
@@ -104,9 +115,20 @@ query GetCustomDomainByID($customDomainId: ID!) {
       dnsTxtRecord
       dnsTxtValue
       dnsVerificationStatus
+      dnsVerificationStatusReason
+      acmeChallengePath
+      expectedAcmeChallengeValue
+      acmeChallengeStatus
+      acmeChallengeStatusReason
+      cloudflareHostnameID
     }
     id
     mappableDomainID
+    mappableDomain {
+      id
+      name
+      zoneID
+    }
     ownerID
     tags
     updatedAt
@@ -145,6 +167,7 @@ query GetCustomDomains($first: Int, $last: Int, $where: CustomDomainWhereInput) 
     }
   }
 }
+
 mutation UpdateCustomDomain($updateCustomDomainId: ID!, $input: UpdateCustomDomainInput!) {
   updateCustomDomain(id: $updateCustomDomainId, input: $input) {
     customDomain {
