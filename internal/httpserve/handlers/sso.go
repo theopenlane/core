@@ -7,6 +7,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
@@ -139,12 +140,34 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	}
 
 	if tokenID, tErr := sessions.GetCookie(ctx.Request(), "token_id"); tErr == nil {
-		tokenType, _ := sessions.GetCookie(ctx.Request(), "token_type")
-		orgCookie, _ := sessions.GetCookie(ctx.Request(), "organization_id")
-		aErr := h.authorizeTokenSSO(privacy.DecisionContext(reqCtx, privacy.Allow), tokenType.Value, tokenID.Value, orgCookie.Value)
+		tokenType, err := sessions.GetCookie(ctx.Request(), "token_type")
+		if err != nil {
+			return h.BadRequest(ctx, err)
+		}
+
+		orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
+		if err != nil {
+			return h.BadRequest(ctx, err)
+		}
+
+		// we set it on top so will always be here
+		user, _ := auth.AuthenticatedUserFromContext(userCtx)
+
+		// make sure every value is set correctly
+		user.OrganizationIDs = []string{orgCookie.Value}
+		user.OrganizationID = orgCookie.Value
+
+		userCtx = auth.WithAuthenticatedUser(userCtx, user)
+
+		if err := auth.SetOrganizationIDInAuthContext(userCtx, orgCookie.Value); err != nil {
+			return h.BadRequest(ctx, err)
+		}
+
+		aErr := h.authorizeTokenSSO(privacy.DecisionContext(userCtx, privacy.Allow), tokenType.Value, tokenID.Value, orgCookie.Value)
 		if aErr != nil {
 			log.Error().Err(aErr).Msg("unable to authorize token for SSO")
 		}
+
 		sessions.RemoveCookie(ctx.Response().Writer, "token_id", sessions.CookieConfig{Path: "/"})
 		sessions.RemoveCookie(ctx.Response().Writer, "token_type", sessions.CookieConfig{Path: "/"})
 	}
@@ -318,7 +341,8 @@ func (h *Handler) ssoOrgForUser(ctx context.Context, email string) (string, bool
 func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, orgID string) error {
 	switch tokenType {
 	case "api":
-		apiToken, err := h.DBClient.APIToken.Get(ctx, tokenID)
+
+		apiToken, err := transaction.FromContext(ctx).APIToken.Get(ctx, tokenID)
 		if err != nil {
 			return err
 		}
@@ -330,11 +354,13 @@ func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, org
 
 		auths[orgID] = time.Now()
 
-		return h.DBClient.APIToken.UpdateOneID(tokenID).
+		return transaction.FromContext(ctx).APIToken.
+			UpdateOne(apiToken).
 			SetSSOAuthorizations(auths).
 			Exec(ctx)
+
 	case "personal":
-		pat, err := h.DBClient.PersonalAccessToken.Get(ctx, tokenID)
+		pat, err := transaction.FromContext(ctx).PersonalAccessToken.Get(ctx, tokenID)
 		if err != nil {
 			return err
 		}
@@ -346,7 +372,8 @@ func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, org
 
 		auths[orgID] = time.Now()
 
-		return h.DBClient.PersonalAccessToken.UpdateOneID(tokenID).
+		return transaction.FromContext(ctx).PersonalAccessToken.
+			UpdateOne(pat).
 			SetSSOAuthorizations(auths).
 			Exec(ctx)
 
