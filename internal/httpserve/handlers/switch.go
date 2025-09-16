@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
@@ -59,8 +60,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 			orgmembership.UserID(user.ID),
 			orgmembership.OrganizationID(in.TargetOrganizationID),
 		).Only(allowCtx)
-		_ = member
-		if mErr == nil {
+		if mErr == nil && member.Role != enums.RoleOwner {
 			authURL, err := h.generateSSOAuthURL(ctx, in.TargetOrganizationID)
 			if err != nil {
 				log.Error().Err(err).Msg("unable to generate SSO auth URL")
