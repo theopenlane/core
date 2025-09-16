@@ -67,7 +67,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 				return h.BadRequest(ctx, err, openapi)
 			}
 
-			sessions.SetCookie(ctx.Response().Writer, ssoSwitchOrgCookieValue, ssoSwitchOrgCookieName, *h.SessionConfig.CookieConfig)
+			sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, *h.SessionConfig.CookieConfig)
 
 			out := &models.SwitchOrganizationReply{
 				Reply:       rout.Reply{Success: true},

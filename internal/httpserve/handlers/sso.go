@@ -27,11 +27,8 @@ import (
 )
 
 const (
-	ssoTestCookieName  = "is_test"
-	ssoTestCookieValue = "1"
-
-	ssoSwitchOrgCookieName  = "switch_org"
-	ssoSwitchOrgCookieValue = "1"
+	authenticatedUserSSOCookieName  = "user_sso"
+	authenticatedUserSSOCookieValue = "1"
 )
 
 // SSOLoginHandler redirects the user to the organization's configured IdP for authentication
@@ -59,7 +56,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 	}
 
 	if in.IsTest {
-		sessions.SetCookie(ctx.Response().Writer, ssoTestCookieValue, ssoTestCookieName, cfg)
+		sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, cfg)
 	}
 
 	authURL, err := h.generateSSOAuthURL(ctx, orgID)
@@ -152,8 +149,8 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		sessions.RemoveCookie(ctx.Response().Writer, "token_type", sessions.CookieConfig{Path: "/"})
 	}
 
-	ssoTestCookie, err := sessions.GetCookie(ctx.Request(), ssoTestCookieName)
-	if err == nil && ssoTestCookie != nil && ssoTestCookie.Value == ssoTestCookieValue {
+	ssoTestCookie, err := sessions.GetCookie(ctx.Request(), authenticatedUserSSOCookieName)
+	if err == nil && ssoTestCookie != nil && ssoTestCookie.Value == authenticatedUserSSOCookieValue {
 		if err := h.setIDPAuthTested(userCtx, in.OrganizationID); err != nil {
 			return err
 		}
@@ -233,6 +230,10 @@ func (h *Handler) setIDPAuthTested(ctx context.Context, orgID string) error {
 	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
 	if err != nil {
 		return err
+	}
+
+	if setting.IdentityProviderAuthTested {
+		return nil
 	}
 
 	return transaction.FromContext(ctx).OrganizationSetting.UpdateOne(setting).
