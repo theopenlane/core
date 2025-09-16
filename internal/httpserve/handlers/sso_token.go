@@ -2,24 +2,18 @@ package handlers
 
 import (
 	"errors"
-	"net/http"
 	"time"
 
-	echo "github.com/theopenlane/echox"
-	"github.com/zitadel/oidc/v3/pkg/client/rp"
-	"github.com/zitadel/oidc/v3/pkg/oidc"
-
 	"github.com/rs/zerolog/log"
-
-	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/utils/contextx"
-	"github.com/theopenlane/utils/rout"
-	"github.com/theopenlane/utils/ulids"
-	"golang.org/x/oauth2"
-
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/models"
 	apimodels "github.com/theopenlane/core/pkg/openapi"
+	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/rout"
+	"github.com/zitadel/oidc/v3/pkg/client/rp"
+	"github.com/zitadel/oidc/v3/pkg/oidc"
 )
 
 // SSOTokenAuthorizeHandler marks a token as authorized for SSO for an organization
@@ -53,30 +47,23 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPICon
 		return h.BadRequest(ctx, errInvalidTokenType, openapi)
 	}
 
-	rpCfg, err := h.oidcConfig(reqCtx, in.OrganizationID)
+	authURL, err := h.generateSSOAuthURL(ctx, in.OrganizationID)
 	if err != nil {
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	state := ulids.New().String()
-	nonce := ulids.New().String()
-	writer := ctx.Response().Writer
-	cc := sessions.CookieConfig{
-		Path:     "/",
-		HTTPOnly: true,
-		SameSite: http.SameSiteLaxMode,
-		Secure:   true,
+	// set token-specific cookies for the token SSO flow
+	cfg := *h.SessionConfig.CookieConfig
+
+	sessions.SetCookie(ctx.Response().Writer, in.TokenID, "token_id", cfg)
+	sessions.SetCookie(ctx.Response().Writer, in.TokenType, "token_type", cfg)
+
+	out := apimodels.SSOLoginReply{
+		Reply:       rout.Reply{Success: true},
+		RedirectURI: authURL,
 	}
 
-	sessions.SetCookie(writer, in.TokenID, "token_id", cc)
-	sessions.SetCookie(writer, in.TokenType, "token_type", cc)
-	sessions.SetCookie(writer, in.OrganizationID, "organization_id", cc)
-	sessions.SetCookie(writer, state, "state", cc)
-	sessions.SetCookie(writer, nonce, "nonce", cc)
-
-	authURL := rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonce))
-
-	return ctx.Redirect(http.StatusFound, authURL)
+	return h.Success(ctx, out, openapi)
 }
 
 // SSOTokenCallbackHandler completes the SSO authorization flow for a token.
