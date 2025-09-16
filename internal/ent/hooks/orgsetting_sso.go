@@ -146,7 +146,7 @@ func fallbackString(primary func() (string, bool), fallback func() (*string, err
 // to test the connection before they can enable it again
 func disableEnforcementIfConfigChanged(ctx context.Context, m *generated.OrganizationSettingMutation) error {
 
-	if  m.Op() == ent.OpCreate || didSSOConfigChange(ctx, m){
+	if m.Op() == ent.OpCreate || didSSOConfigChange(ctx, m) {
 		m.SetIdentityProviderLoginEnforced(false)
 		m.SetIdentityProviderAuthTested(false)
 	}
