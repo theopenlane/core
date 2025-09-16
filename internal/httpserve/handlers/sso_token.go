@@ -16,6 +16,8 @@ import (
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 )
 
+var errInvalidTokenType = errors.New("invalid token type")
+
 // SSOTokenAuthorizeHandler marks a token as authorized for SSO for an organization
 func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPIContext) error {
 	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSSOTokenAuthorizeRequest, apimodels.SSOTokenAuthorizeReply{}, openapi.Registry)
@@ -57,6 +59,7 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPICon
 
 	sessions.SetCookie(ctx.Response().Writer, in.TokenID, "token_id", cfg)
 	sessions.SetCookie(ctx.Response().Writer, in.TokenType, "token_type", cfg)
+	sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, cfg)
 
 	out := apimodels.SSOLoginReply{
 		Reply:       rout.Reply{Success: true},
@@ -168,5 +171,3 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 
 	return h.Success(ctx, out, openapi)
 }
-
-var errInvalidTokenType = errors.New("invalid token type")
