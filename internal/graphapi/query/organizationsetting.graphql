@@ -16,6 +16,7 @@ query GetAllOrganizationSettings {
         taxIdentifier
         updatedAt
         updatedBy
+        identityProviderAuthTested
         identityProvider
         identityProviderEntityID
         identityProviderLoginEnforced
@@ -54,6 +55,7 @@ query GetOrganizationSettingByID($organizationSettingId: ID!) {
     oidcDiscoveryEndpoint
     identityProviderClientSecret
     identityProviderMetadataEndpoint
+    identityProviderAuthTested
     complianceWebhookToken
     organization {
       id
@@ -86,6 +88,7 @@ query GetOrganizationSettings($where: OrganizationSettingWhereInput!) {
         oidcDiscoveryEndpoint
         identityProviderClientSecret
         identityProviderMetadataEndpoint
+        identityProviderAuthTested
         complianceWebhookToken
         organization {
           id
@@ -120,6 +123,7 @@ mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: Up
       identityProviderClientSecret
       identityProviderMetadataEndpoint
       complianceWebhookToken
+      identityProviderAuthTested
       organization {
         id
         displayName

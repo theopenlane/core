@@ -79,6 +79,8 @@ var (
 	// ErrNotSingularUpload is returned when a user is importing content to create a schema
 	// and they upload more than one file
 	ErrNotSingularUpload = errors.New("multiple uploads not supported")
+	// ErrSSONotEnforceable makes sure the connection has been tested before it can be enforced for an org
+	ErrSSONotEnforceable = errors.New("you cannot enforce sso without testing the connection works correctly")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

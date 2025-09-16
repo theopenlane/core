@@ -20,6 +20,7 @@ mutation CreateBulkCSVOrganizationSetting($input: Upload!) {
       identityProviderEntityID
       identityProviderLoginEnforced
       identityProviderMetadataEndpoint
+      identityProviderAuthTested
       oidcDiscoveryEndpoint
       organizationID
       tags
@@ -51,6 +52,7 @@ mutation CreateBulkOrganizationSetting($input: [CreateOrganizationSettingInput!]
       identityProviderEntityID
       identityProviderLoginEnforced
       identityProviderMetadataEndpoint
+      identityProviderAuthTested
       oidcDiscoveryEndpoint
       organizationID
       tags
@@ -82,6 +84,7 @@ mutation CreateOrganizationSetting($input: CreateOrganizationSettingInput!) {
       identityProviderEntityID
       identityProviderLoginEnforced
       identityProviderMetadataEndpoint
+      identityProviderAuthTested
       oidcDiscoveryEndpoint
       organizationID
       tags
@@ -127,6 +130,7 @@ query GetAllOrganizationSettings {
         identityProviderEntityID
         identityProviderLoginEnforced
         identityProviderMetadataEndpoint
+        identityProviderAuthTested
         oidcDiscoveryEndpoint
         organizationID
         tags
@@ -152,6 +156,7 @@ query GetOrganizationSettingByID($organizationSettingId: ID!) {
     geoLocation
     id
     identityProvider
+    identityProviderAuthTested
     identityProviderClientID
     identityProviderClientSecret
     identityProviderEntityID
@@ -190,6 +195,7 @@ query GetOrganizationSettings($first: Int, $last: Int, $where: OrganizationSetti
         geoLocation
         id
         identityProvider
+        identityProviderAuthTested
         identityProviderClientID
         identityProviderClientSecret
         identityProviderEntityID
@@ -226,6 +232,7 @@ mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: Up
       identityProviderEntityID
       identityProviderLoginEnforced
       identityProviderMetadataEndpoint
+      identityProviderAuthTested
       oidcDiscoveryEndpoint
       organizationID
       tags

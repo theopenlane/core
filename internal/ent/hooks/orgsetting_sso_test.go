@@ -38,7 +38,8 @@ func (suite *HookTestSuite) TestValidateIdentityProviderConfig() {
 			Mutation()
 
 		err := hooks.ValidateIdentityProviderConfig(ctx, m)
-		require.NoError(t, err)
+		require.Error(t, err)
+		require.Equal(t, err, hooks.ErrSSONotEnforceable)
 	})
 
 	t.Run("update with existing fields", func(t *testing.T) {
@@ -54,7 +55,8 @@ func (suite *HookTestSuite) TestValidateIdentityProviderConfig() {
 			SetIdentityProviderLoginEnforced(true).Mutation()
 
 		err = hooks.ValidateIdentityProviderConfig(ctx, m)
-		require.NoError(t, err)
+		require.Error(t, err)
+		require.Equal(t, err, hooks.ErrSSONotEnforceable)
 	})
 
 	t.Run("update with missing fields", func(t *testing.T) {
@@ -66,5 +68,32 @@ func (suite *HookTestSuite) TestValidateIdentityProviderConfig() {
 
 		err = hooks.ValidateIdentityProviderConfig(ctx, m)
 		require.Error(t, err)
+	})
+
+	t.Run("update with tested connection", func(t *testing.T) {
+		setting, err := suite.client.OrganizationSetting.Create().
+			SetIdentityProvider(enums.SSOProviderOkta).
+			SetIdentityProviderClientID("id").
+			SetIdentityProviderClientSecret("secret").
+			SetOidcDiscoveryEndpoint("https://example.com").
+			Save(ctx)
+		require.NoError(t, err)
+
+		// verify the hook makes sure auth tested is false on idp update of any value
+		require.False(t, setting.IdentityProviderAuthTested)
+
+		testedSetting, err := suite.client.OrganizationSetting.UpdateOneID(setting.ID).
+			SetIdentityProviderAuthTested(true).
+			Save(ctx)
+		require.NoError(t, err)
+		require.True(t, testedSetting.IdentityProviderAuthTested)
+
+		// enforce sso login for all users now that we have
+		// enforced it earlier
+		m := suite.client.OrganizationSetting.UpdateOneID(setting.ID).
+			SetIdentityProviderLoginEnforced(true).Mutation()
+
+		err = hooks.ValidateIdentityProviderConfig(ctx, m)
+		require.NoError(t, err)
 	})
 }

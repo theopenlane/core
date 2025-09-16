@@ -51505,6 +51505,7 @@ type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	GeoLocation                      *enums.Region                                                            "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID                               string                                                                   "json:\"id\" graphql:\"id\""
 	IdentityProvider                 *enums.SSOProvider                                                       "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderAuthTested       bool                                                                     "json:\"identityProviderAuthTested\" graphql:\"identityProviderAuthTested\""
 	IdentityProviderClientSecret     *string                                                                  "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
 	IdentityProviderEntityID         *string                                                                  "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
 	IdentityProviderLoginEnforced    bool                                                                     "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
@@ -51588,6 +51589,12 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentity
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
 	return t.IdentityProvider
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderAuthTested() bool {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderAuthTested
 }
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderClientSecret() *string {
 	if t == nil {
@@ -51703,6 +51710,7 @@ type GetOrganizationSettingByID_OrganizationSetting struct {
 	GeoLocation                      *enums.Region                                                "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID                               string                                                       "json:\"id\" graphql:\"id\""
 	IdentityProvider                 *enums.SSOProvider                                           "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderAuthTested       bool                                                         "json:\"identityProviderAuthTested\" graphql:\"identityProviderAuthTested\""
 	IdentityProviderClientSecret     *string                                                      "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
 	IdentityProviderEntityID         *string                                                      "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
 	IdentityProviderLoginEnforced    bool                                                         "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
@@ -51786,6 +51794,12 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProvider() *
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
 	}
 	return t.IdentityProvider
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderAuthTested() bool {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.IdentityProviderAuthTested
 }
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderClientSecret() *string {
 	if t == nil {
@@ -51879,6 +51893,7 @@ type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	GeoLocation                      *enums.Region                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID                               string                                                                "json:\"id\" graphql:\"id\""
 	IdentityProvider                 *enums.SSOProvider                                                    "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderAuthTested       bool                                                                  "json:\"identityProviderAuthTested\" graphql:\"identityProviderAuthTested\""
 	IdentityProviderClientSecret     *string                                                               "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
 	IdentityProviderEntityID         *string                                                               "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
 	IdentityProviderLoginEnforced    bool                                                                  "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
@@ -51962,6 +51977,12 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityPro
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
 	return t.IdentityProvider
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderAuthTested() bool {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderAuthTested
 }
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderClientSecret() *string {
 	if t == nil {
@@ -52077,6 +52098,7 @@ type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting str
 	GeoLocation                      *enums.Region                                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID                               string                                                                                "json:\"id\" graphql:\"id\""
 	IdentityProvider                 *enums.SSOProvider                                                                    "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderAuthTested       bool                                                                                  "json:\"identityProviderAuthTested\" graphql:\"identityProviderAuthTested\""
 	IdentityProviderClientSecret     *string                                                                               "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
 	IdentityProviderEntityID         *string                                                                               "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
 	IdentityProviderLoginEnforced    bool                                                                                  "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
@@ -52160,6 +52182,12 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
 	}
 	return t.IdentityProvider
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderAuthTested() bool {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.IdentityProviderAuthTested
 }
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderClientSecret() *string {
 	if t == nil {
@@ -111443,6 +111471,7 @@ const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 				taxIdentifier
 				updatedAt
 				updatedBy
+				identityProviderAuthTested
 				identityProvider
 				identityProviderEntityID
 				identityProviderLoginEnforced
@@ -111497,6 +111526,7 @@ const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($o
 		oidcDiscoveryEndpoint
 		identityProviderClientSecret
 		identityProviderMetadataEndpoint
+		identityProviderAuthTested
 		complianceWebhookToken
 		organization {
 			id
@@ -111547,6 +111577,7 @@ const GetOrganizationSettingsDocument = `query GetOrganizationSettings ($where: 
 				oidcDiscoveryEndpoint
 				identityProviderClientSecret
 				identityProviderMetadataEndpoint
+				identityProviderAuthTested
 				complianceWebhookToken
 				organization {
 					id
@@ -111599,6 +111630,7 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 			identityProviderClientSecret
 			identityProviderMetadataEndpoint
 			complianceWebhookToken
+			identityProviderAuthTested
 			organization {
 				id
 				displayName

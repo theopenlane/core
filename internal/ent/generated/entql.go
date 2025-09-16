@@ -2109,6 +2109,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldIdentityProviderClientID:         {Type: field.TypeString, Column: organizationsetting.FieldIdentityProviderClientID},
 			organizationsetting.FieldIdentityProviderClientSecret:     {Type: field.TypeString, Column: organizationsetting.FieldIdentityProviderClientSecret},
 			organizationsetting.FieldIdentityProviderMetadataEndpoint: {Type: field.TypeString, Column: organizationsetting.FieldIdentityProviderMetadataEndpoint},
+			organizationsetting.FieldIdentityProviderAuthTested:       {Type: field.TypeBool, Column: organizationsetting.FieldIdentityProviderAuthTested},
 			organizationsetting.FieldIdentityProviderEntityID:         {Type: field.TypeString, Column: organizationsetting.FieldIdentityProviderEntityID},
 			organizationsetting.FieldOidcDiscoveryEndpoint:            {Type: field.TypeString, Column: organizationsetting.FieldOidcDiscoveryEndpoint},
 			organizationsetting.FieldIdentityProviderLoginEnforced:    {Type: field.TypeBool, Column: organizationsetting.FieldIdentityProviderLoginEnforced},
@@ -2151,6 +2152,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldIdentityProviderClientID:         {Type: field.TypeString, Column: organizationsettinghistory.FieldIdentityProviderClientID},
 			organizationsettinghistory.FieldIdentityProviderClientSecret:     {Type: field.TypeString, Column: organizationsettinghistory.FieldIdentityProviderClientSecret},
 			organizationsettinghistory.FieldIdentityProviderMetadataEndpoint: {Type: field.TypeString, Column: organizationsettinghistory.FieldIdentityProviderMetadataEndpoint},
+			organizationsettinghistory.FieldIdentityProviderAuthTested:       {Type: field.TypeBool, Column: organizationsettinghistory.FieldIdentityProviderAuthTested},
 			organizationsettinghistory.FieldIdentityProviderEntityID:         {Type: field.TypeString, Column: organizationsettinghistory.FieldIdentityProviderEntityID},
 			organizationsettinghistory.FieldOidcDiscoveryEndpoint:            {Type: field.TypeString, Column: organizationsettinghistory.FieldOidcDiscoveryEndpoint},
 			organizationsettinghistory.FieldIdentityProviderLoginEnforced:    {Type: field.TypeBool, Column: organizationsettinghistory.FieldIdentityProviderLoginEnforced},
@@ -21433,6 +21435,11 @@ func (f *OrganizationSettingFilter) WhereIdentityProviderMetadataEndpoint(p entq
 	f.Where(p.Field(organizationsetting.FieldIdentityProviderMetadataEndpoint))
 }
 
+// WhereIdentityProviderAuthTested applies the entql bool predicate on the identity_provider_auth_tested field.
+func (f *OrganizationSettingFilter) WhereIdentityProviderAuthTested(p entql.BoolP) {
+	f.Where(p.Field(organizationsetting.FieldIdentityProviderAuthTested))
+}
+
 // WhereIdentityProviderEntityID applies the entql string predicate on the identity_provider_entity_id field.
 func (f *OrganizationSettingFilter) WhereIdentityProviderEntityID(p entql.StringP) {
 	f.Where(p.Field(organizationsetting.FieldIdentityProviderEntityID))
@@ -21644,6 +21651,11 @@ func (f *OrganizationSettingHistoryFilter) WhereIdentityProviderClientSecret(p e
 // WhereIdentityProviderMetadataEndpoint applies the entql string predicate on the identity_provider_metadata_endpoint field.
 func (f *OrganizationSettingHistoryFilter) WhereIdentityProviderMetadataEndpoint(p entql.StringP) {
 	f.Where(p.Field(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint))
+}
+
+// WhereIdentityProviderAuthTested applies the entql bool predicate on the identity_provider_auth_tested field.
+func (f *OrganizationSettingHistoryFilter) WhereIdentityProviderAuthTested(p entql.BoolP) {
+	f.Where(p.Field(organizationsettinghistory.FieldIdentityProviderAuthTested))
 }
 
 // WhereIdentityProviderEntityID applies the entql string predicate on the identity_provider_entity_id field.

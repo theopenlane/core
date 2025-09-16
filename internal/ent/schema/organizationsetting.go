@@ -107,6 +107,12 @@ func (OrganizationSetting) Fields() []ent.Field {
 		field.String("identity_provider_metadata_endpoint").
 			Comment("metadata URL for the SSO provider").
 			Optional(),
+		field.Bool("identity_provider_auth_tested").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
+			).
+			Default(false).
+			Comment("has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done"),
 		field.String("identity_provider_entity_id").
 			Comment("SAML entity ID for the SSO provider").
 			Optional(),
@@ -158,6 +164,7 @@ func (o OrganizationSetting) Annotations() []schema.Annotation {
 // Hooks of the OrganizationSetting
 func (OrganizationSetting) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookValidateIdentityProviderConfig(),
 		hooks.HookOrganizationCreatePolicy(),
 		hooks.HookOrganizationUpdatePolicy(),
 	}

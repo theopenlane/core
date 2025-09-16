@@ -17637,6 +17637,8 @@ type OrganizationSetting struct {
 	IdentityProviderClientSecret *string `json:"identityProviderClientSecret,omitempty"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint *string `json:"identityProviderMetadataEndpoint,omitempty"`
+	// has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
+	IdentityProviderAuthTested bool `json:"identityProviderAuthTested"`
 	// SAML entity ID for the SSO provider
 	IdentityProviderEntityID *string `json:"identityProviderEntityID,omitempty"`
 	// OIDC discovery URL for the SSO provider
@@ -17728,6 +17730,8 @@ type OrganizationSettingHistory struct {
 	IdentityProviderClientSecret *string `json:"identityProviderClientSecret,omitempty"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint *string `json:"identityProviderMetadataEndpoint,omitempty"`
+	// has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
+	IdentityProviderAuthTested bool `json:"identityProviderAuthTested"`
 	// SAML entity ID for the SSO provider
 	IdentityProviderEntityID *string `json:"identityProviderEntityID,omitempty"`
 	// OIDC discovery URL for the SSO provider
@@ -18014,6 +18018,9 @@ type OrganizationSettingHistoryWhereInput struct {
 	IdentityProviderMetadataEndpointNotNil       *bool    `json:"identityProviderMetadataEndpointNotNil,omitempty"`
 	IdentityProviderMetadataEndpointEqualFold    *string  `json:"identityProviderMetadataEndpointEqualFold,omitempty"`
 	IdentityProviderMetadataEndpointContainsFold *string  `json:"identityProviderMetadataEndpointContainsFold,omitempty"`
+	// identity_provider_auth_tested field predicates
+	IdentityProviderAuthTested    *bool `json:"identityProviderAuthTested,omitempty"`
+	IdentityProviderAuthTestedNeq *bool `json:"identityProviderAuthTestedNEQ,omitempty"`
 	// identity_provider_entity_id field predicates
 	IdentityProviderEntityID             *string  `json:"identityProviderEntityID,omitempty"`
 	IdentityProviderEntityIdneq          *string  `json:"identityProviderEntityIDNEQ,omitempty"`
@@ -18297,6 +18304,9 @@ type OrganizationSettingWhereInput struct {
 	IdentityProviderMetadataEndpointNotNil       *bool    `json:"identityProviderMetadataEndpointNotNil,omitempty"`
 	IdentityProviderMetadataEndpointEqualFold    *string  `json:"identityProviderMetadataEndpointEqualFold,omitempty"`
 	IdentityProviderMetadataEndpointContainsFold *string  `json:"identityProviderMetadataEndpointContainsFold,omitempty"`
+	// identity_provider_auth_tested field predicates
+	IdentityProviderAuthTested    *bool `json:"identityProviderAuthTested,omitempty"`
+	IdentityProviderAuthTestedNeq *bool `json:"identityProviderAuthTestedNEQ,omitempty"`
 	// identity_provider_entity_id field predicates
 	IdentityProviderEntityID             *string  `json:"identityProviderEntityID,omitempty"`
 	IdentityProviderEntityIdneq          *string  `json:"identityProviderEntityIDNEQ,omitempty"`

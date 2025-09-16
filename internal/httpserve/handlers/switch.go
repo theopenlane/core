@@ -1,21 +1,19 @@
 package handlers
 
 import (
-	"net/http"
-
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/sessions"
 
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	models "github.com/theopenlane/core/pkg/openapi"
-	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 // SwitchHandler is responsible for handling requests to the `/switch` endpoint, and changing the user's logged in organization context
@@ -52,7 +50,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	// Check if SSO is enforced for the target organization. If so, redirect
+	// check if SSO is enforced for the target organization. If so, redirect
 	// the user through the SSO login flow unless they are an owner.
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 	status, err := h.fetchSSOStatus(allowCtx, in.TargetOrganizationID)
@@ -63,8 +61,21 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 			orgmembership.OrganizationID(in.TargetOrganizationID),
 		).Only(allowCtx)
 		if mErr == nil && member.Role != enums.RoleOwner {
-			loginURL := sso.SSOLogin(ctx.Echo(), in.TargetOrganizationID)
-			return ctx.Redirect(http.StatusFound, loginURL)
+			authURL, err := h.generateSSOAuthURL(ctx, in.TargetOrganizationID)
+			if err != nil {
+				log.Error().Err(err).Msg("unable to generate SSO auth URL")
+				return h.BadRequest(ctx, err, openapi)
+			}
+
+			sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, *h.SessionConfig.CookieConfig)
+
+			out := &models.SwitchOrganizationReply{
+				Reply:       rout.Reply{Success: true},
+				NeedsSSO:    true,
+				RedirectURI: authURL,
+			}
+
+			return h.Success(ctx, out, openapi)
 		}
 	}
 

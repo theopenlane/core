@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
-	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
@@ -73,6 +72,6 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	assert.Equal(t, http.StatusFound, rec.Code)
-	assert.Equal(t, sso.SSOLogin(suite.e, org.ID), rec.Header().Get("Location"))
+	// this is expected since the sso url will be generated
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }

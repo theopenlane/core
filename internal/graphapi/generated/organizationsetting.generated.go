@@ -90,6 +90,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_identityProviderClientSecret(ctx, field)
 			case "identityProviderMetadataEndpoint":
 				return ec.fieldContext_OrganizationSetting_identityProviderMetadataEndpoint(ctx, field)
+			case "identityProviderAuthTested":
+				return ec.fieldContext_OrganizationSetting_identityProviderAuthTested(ctx, field)
 			case "identityProviderEntityID":
 				return ec.fieldContext_OrganizationSetting_identityProviderEntityID(ctx, field)
 			case "oidcDiscoveryEndpoint":
@@ -173,6 +175,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_identityProviderClientSecret(ctx, field)
 			case "identityProviderMetadataEndpoint":
 				return ec.fieldContext_OrganizationSetting_identityProviderMetadataEndpoint(ctx, field)
+			case "identityProviderAuthTested":
+				return ec.fieldContext_OrganizationSetting_identityProviderAuthTested(ctx, field)
 			case "identityProviderEntityID":
 				return ec.fieldContext_OrganizationSetting_identityProviderEntityID(ctx, field)
 			case "oidcDiscoveryEndpoint":
@@ -283,6 +287,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_identityProviderClientSecret(ctx, field)
 			case "identityProviderMetadataEndpoint":
 				return ec.fieldContext_OrganizationSetting_identityProviderMetadataEndpoint(ctx, field)
+			case "identityProviderAuthTested":
+				return ec.fieldContext_OrganizationSetting_identityProviderAuthTested(ctx, field)
 			case "identityProviderEntityID":
 				return ec.fieldContext_OrganizationSetting_identityProviderEntityID(ctx, field)
 			case "oidcDiscoveryEndpoint":

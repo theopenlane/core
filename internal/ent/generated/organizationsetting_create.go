@@ -294,6 +294,20 @@ func (_c *OrganizationSettingCreate) SetNillableIdentityProviderMetadataEndpoint
 	return _c
 }
 
+// SetIdentityProviderAuthTested sets the "identity_provider_auth_tested" field.
+func (_c *OrganizationSettingCreate) SetIdentityProviderAuthTested(v bool) *OrganizationSettingCreate {
+	_c.mutation.SetIdentityProviderAuthTested(v)
+	return _c
+}
+
+// SetNillableIdentityProviderAuthTested sets the "identity_provider_auth_tested" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableIdentityProviderAuthTested(v *bool) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetIdentityProviderAuthTested(*v)
+	}
+	return _c
+}
+
 // SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
 func (_c *OrganizationSettingCreate) SetIdentityProviderEntityID(v string) *OrganizationSettingCreate {
 	_c.mutation.SetIdentityProviderEntityID(v)
@@ -465,6 +479,10 @@ func (_c *OrganizationSettingCreate) defaults() error {
 		v := organizationsetting.DefaultIdentityProvider
 		_c.mutation.SetIdentityProvider(v)
 	}
+	if _, ok := _c.mutation.IdentityProviderAuthTested(); !ok {
+		v := organizationsetting.DefaultIdentityProviderAuthTested
+		_c.mutation.SetIdentityProviderAuthTested(v)
+	}
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		v := organizationsetting.DefaultIdentityProviderLoginEnforced
 		_c.mutation.SetIdentityProviderLoginEnforced(v)
@@ -524,6 +542,9 @@ func (_c *OrganizationSettingCreate) check() error {
 		if err := organizationsetting.IdentityProviderValidator(v); err != nil {
 			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.identity_provider": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.IdentityProviderAuthTested(); !ok {
+		return &ValidationError{Name: "identity_provider_auth_tested", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_auth_tested"`)}
 	}
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_login_enforced"`)}
@@ -646,6 +667,10 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 	if value, ok := _c.mutation.IdentityProviderMetadataEndpoint(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
 		_node.IdentityProviderMetadataEndpoint = value
+	}
+	if value, ok := _c.mutation.IdentityProviderAuthTested(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderAuthTested, field.TypeBool, value)
+		_node.IdentityProviderAuthTested = value
 	}
 	if value, ok := _c.mutation.IdentityProviderEntityID(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderEntityID, field.TypeString, value)
