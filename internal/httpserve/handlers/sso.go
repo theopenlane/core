@@ -159,10 +159,6 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 
 		userCtx = auth.WithAuthenticatedUser(userCtx, user)
 
-		if err := auth.SetOrganizationIDInAuthContext(userCtx, orgCookie.Value); err != nil {
-			return h.BadRequest(ctx, err)
-		}
-
 		aErr := h.authorizeTokenSSO(privacy.DecisionContext(userCtx, privacy.Allow), tokenType.Value, tokenID.Value, orgCookie.Value)
 		if aErr != nil {
 			log.Error().Err(aErr).Msg("unable to authorize token for SSO")
