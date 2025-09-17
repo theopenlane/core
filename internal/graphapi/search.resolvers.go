@@ -64,6 +64,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		templateResults                   *generated.TemplateConnection
 		trustcenterResults                *generated.TrustCenterConnection
 		trustcentercomplianceResults      *generated.TrustCenterComplianceConnection
+		trustcenterdocResults             *generated.TrustCenterDocConnection
 		userResults                       *generated.UserConnection
 		usersettingResults                *generated.UserSettingConnection
 		webauthnResults                   *generated.WebauthnConnection
@@ -366,6 +367,13 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			trustcenterdocResults, err = searchTrustCenterDocs(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			userResults, err = searchUsers(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
@@ -605,6 +613,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.TrustCenterCompliances = trustcentercomplianceResults
 
 		res.TotalCount += trustcentercomplianceResults.TotalCount
+	}
+	if trustcenterdocResults != nil && len(trustcenterdocResults.Edges) > 0 {
+		res.TrustCenterDocs = trustcenterdocResults
+
+		res.TotalCount += trustcenterdocResults.TotalCount
 	}
 	if userResults != nil && len(userResults.Edges) > 0 {
 		res.Users = userResults
@@ -1043,6 +1056,16 @@ func (r *queryResolver) TrustCenterComplianceSearch(ctx context.Context, query s
 
 	// return the results
 	return trustcentercomplianceResults, nil
+}
+func (r *queryResolver) TrustCenterDocSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterDocConnection, error) {
+	trustcenterdocResults, err := searchTrustCenterDocs(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return trustcenterdocResults, nil
 }
 func (r *queryResolver) UserSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserConnection, error) {
 	userResults, err := searchUsers(ctx, query, after, first, before, last)

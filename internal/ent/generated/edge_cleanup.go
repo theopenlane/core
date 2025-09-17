@@ -1079,6 +1079,18 @@ func TrustCenterComplianceHistoryEdgeCleanup(ctx context.Context, id string) err
 	return nil
 }
 
+func TrustCenterDocEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterdoc edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TrustCenterDocHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterdochistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func TrustCenterHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterhistory edge")), entfga.DeleteTuplesFirstKey{})
 

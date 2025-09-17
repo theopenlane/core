@@ -1562,6 +1562,41 @@ func (ec *executionContext) fieldContext_SearchResults_trustCenterCompliances(_ 
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_trustCenterDocs(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_trustCenterDocs,
+		func(ctx context.Context) (any, error) { return obj.TrustCenterDocs, nil },
+		nil,
+		ec.marshalOTrustCenterDocConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDocConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_trustCenterDocs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_TrustCenterDocConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_TrustCenterDocConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_TrustCenterDocConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDocConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_users(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1784,6 +1819,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_trustCenters(ctx, field, obj)
 		case "trustCenterCompliances":
 			out.Values[i] = ec._SearchResults_trustCenterCompliances(ctx, field, obj)
+		case "trustCenterDocs":
+			out.Values[i] = ec._SearchResults_trustCenterDocs(ctx, field, obj)
 		case "users":
 			out.Values[i] = ec._SearchResults_users(ctx, field, obj)
 		case "userSettings":

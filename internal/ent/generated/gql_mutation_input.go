@@ -11505,6 +11505,56 @@ func (c *TrustCenterComplianceUpdateOne) SetInput(i UpdateTrustCenterComplianceI
 	return c
 }
 
+// CreateTrustCenterDocInput represents a mutation input for creating trustcenterdocs.
+type CreateTrustCenterDocInput struct {
+	Tags []string
+}
+
+// Mutate applies the CreateTrustCenterDocInput on the TrustCenterDocMutation builder.
+func (i *CreateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateTrustCenterDocInput on the TrustCenterDocCreate builder.
+func (c *TrustCenterDocCreate) SetInput(i CreateTrustCenterDocInput) *TrustCenterDocCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterDocInput represents a mutation input for updating trustcenterdocs.
+type UpdateTrustCenterDocInput struct {
+	ClearTags  bool
+	Tags       []string
+	AppendTags []string
+}
+
+// Mutate applies the UpdateTrustCenterDocInput on the TrustCenterDocMutation builder.
+func (i *UpdateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterDocInput on the TrustCenterDocUpdate builder.
+func (c *TrustCenterDocUpdate) SetInput(i UpdateTrustCenterDocInput) *TrustCenterDocUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterDocInput on the TrustCenterDocUpdateOne builder.
+func (c *TrustCenterDocUpdateOne) SetInput(i UpdateTrustCenterDocInput) *TrustCenterDocUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
 	Title            *string

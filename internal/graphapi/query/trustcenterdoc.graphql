@@ -1,0 +1,111 @@
+
+mutation CreateBulkCSVTrustCenterDoc($input: Upload!) {
+  createBulkCSVTrustCenterDoc(input: $input) {
+    trustCenterDocs {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkTrustCenterDoc($input: [CreateTrustCenterDocInput!]) {
+  createBulkTrustCenterDoc(input: $input) {
+    trustCenterDocs {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateTrustCenterDoc($input: CreateTrustCenterDocInput!) {
+  createTrustCenterDoc(input: $input) {
+    trustCenterDoc {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteTrustCenterDoc($deleteTrustCenterDocId: ID!) {
+  deleteTrustCenterDoc(id: $deleteTrustCenterDocId) {
+    deletedID
+  }
+}
+
+query GetAllTrustCenterDocs {
+  trustCenterDocs {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetTrustCenterDocByID($trustCenterDocId: ID!) {
+  trustCenterDoc(id: $trustCenterDocId) {
+    createdAt
+    createdBy
+    id
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetTrustCenterDocs($first: Int, $last: Int, $where: TrustCenterDocWhereInput) {
+  trustCenterDocs(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateTrustCenterDoc($updateTrustCenterDocId: ID!, $input: UpdateTrustCenterDocInput!) {
+  updateTrustCenterDoc(id: $updateTrustCenterDocId, input: $input) {
+    trustCenterDoc {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
