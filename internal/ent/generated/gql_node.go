@@ -103,6 +103,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
@@ -589,6 +591,16 @@ var trustcentercompliancehistoryImplementors = []string{"TrustCenterComplianceHi
 
 // IsNode implements the Node interface check for GQLGen.
 func (*TrustCenterComplianceHistory) IsNode() {}
+
+var trustcenterdocImplementors = []string{"TrustCenterDoc", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TrustCenterDoc) IsNode() {}
+
+var trustcenterdochistoryImplementors = []string{"TrustCenterDocHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TrustCenterDocHistory) IsNode() {}
 
 var trustcenterhistoryImplementors = []string{"TrustCenterHistory", "Node"}
 
@@ -1540,6 +1552,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(trustcentercompliancehistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcentercompliancehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case trustcenterdoc.Table:
+		query := c.TrustCenterDoc.Query().
+			Where(trustcenterdoc.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterdocImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case trustcenterdochistory.Table:
+		query := c.TrustCenterDocHistory.Query().
+			Where(trustcenterdochistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterdochistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -3199,6 +3229,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.TrustCenterComplianceHistory.Query().
 			Where(trustcentercompliancehistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, trustcentercompliancehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case trustcenterdoc.Table:
+		query := c.TrustCenterDoc.Query().
+			Where(trustcenterdoc.IDIn(ids...))
+		query, err := query.CollectFields(ctx, trustcenterdocImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case trustcenterdochistory.Table:
+		query := c.TrustCenterDocHistory.Query().
+			Where(trustcenterdochistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, trustcenterdochistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

@@ -10997,6 +10997,174 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromDelete(ctx context.Cont
 	return nil
 }
 
+func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.TrustCenterDocHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenterdoc, err := client.TrustCenterDoc.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.TrustCenterDocHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(trustcenterdoc.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(trustcenterdoc.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(trustcenterdoc.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(trustcenterdoc.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(trustcenterdoc.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(trustcenterdoc.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(trustcenterdoc.Tags)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenterdoc, err := client.TrustCenterDoc.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.TrustCenterDocHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(trustcenterdoc.CreatedAt).
+			SetUpdatedAt(trustcenterdoc.UpdatedAt).
+			SetCreatedBy(trustcenterdoc.CreatedBy).
+			SetUpdatedBy(trustcenterdoc.UpdatedBy).
+			SetDeletedAt(trustcenterdoc.DeletedAt).
+			SetDeletedBy(trustcenterdoc.DeletedBy).
+			SetTags(trustcenterdoc.Tags).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()

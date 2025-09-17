@@ -118,6 +118,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
@@ -350,6 +352,10 @@ type Client struct {
 	TrustCenterCompliance *TrustCenterComplianceClient
 	// TrustCenterComplianceHistory is the client for interacting with the TrustCenterComplianceHistory builders.
 	TrustCenterComplianceHistory *TrustCenterComplianceHistoryClient
+	// TrustCenterDoc is the client for interacting with the TrustCenterDoc builders.
+	TrustCenterDoc *TrustCenterDocClient
+	// TrustCenterDocHistory is the client for interacting with the TrustCenterDocHistory builders.
+	TrustCenterDocHistory *TrustCenterDocHistoryClient
 	// TrustCenterHistory is the client for interacting with the TrustCenterHistory builders.
 	TrustCenterHistory *TrustCenterHistoryClient
 	// TrustCenterSetting is the client for interacting with the TrustCenterSetting builders.
@@ -489,6 +495,8 @@ func (c *Client) init() {
 	c.TrustCenter = NewTrustCenterClient(c.config)
 	c.TrustCenterCompliance = NewTrustCenterComplianceClient(c.config)
 	c.TrustCenterComplianceHistory = NewTrustCenterComplianceHistoryClient(c.config)
+	c.TrustCenterDoc = NewTrustCenterDocClient(c.config)
+	c.TrustCenterDocHistory = NewTrustCenterDocHistoryClient(c.config)
 	c.TrustCenterHistory = NewTrustCenterHistoryClient(c.config)
 	c.TrustCenterSetting = NewTrustCenterSettingClient(c.config)
 	c.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(c.config)
@@ -791,6 +799,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		TrustCenter:                    NewTrustCenterClient(cfg),
 		TrustCenterCompliance:          NewTrustCenterComplianceClient(cfg),
 		TrustCenterComplianceHistory:   NewTrustCenterComplianceHistoryClient(cfg),
+		TrustCenterDoc:                 NewTrustCenterDocClient(cfg),
+		TrustCenterDocHistory:          NewTrustCenterDocHistoryClient(cfg),
 		TrustCenterHistory:             NewTrustCenterHistoryClient(cfg),
 		TrustCenterSetting:             NewTrustCenterSettingClient(cfg),
 		TrustCenterSettingHistory:      NewTrustCenterSettingHistoryClient(cfg),
@@ -919,6 +929,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		TrustCenter:                    NewTrustCenterClient(cfg),
 		TrustCenterCompliance:          NewTrustCenterComplianceClient(cfg),
 		TrustCenterComplianceHistory:   NewTrustCenterComplianceHistoryClient(cfg),
+		TrustCenterDoc:                 NewTrustCenterDocClient(cfg),
+		TrustCenterDocHistory:          NewTrustCenterDocHistoryClient(cfg),
 		TrustCenterHistory:             NewTrustCenterHistoryClient(cfg),
 		TrustCenterSetting:             NewTrustCenterSettingClient(cfg),
 		TrustCenterSettingHistory:      NewTrustCenterSettingHistoryClient(cfg),
@@ -983,9 +995,10 @@ func (c *Client) Use(hooks ...Hook) {
 		c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory, c.Subscriber,
 		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory,
 		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterComplianceHistory,
-		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
-		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.TrustCenterDoc, c.TrustCenterDocHistory, c.TrustCenterHistory,
+		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
+		c.TrustCenterSubprocessorHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -1020,9 +1033,10 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory, c.Subscriber,
 		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory,
 		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterComplianceHistory,
-		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
-		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.TrustCenterDoc, c.TrustCenterDocHistory, c.TrustCenterHistory,
+		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
+		c.TrustCenterSubprocessorHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1301,6 +1315,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TrustCenterCompliance.mutate(ctx, m)
 	case *TrustCenterComplianceHistoryMutation:
 		return c.TrustCenterComplianceHistory.mutate(ctx, m)
+	case *TrustCenterDocMutation:
+		return c.TrustCenterDoc.mutate(ctx, m)
+	case *TrustCenterDocHistoryMutation:
+		return c.TrustCenterDocHistory.mutate(ctx, m)
 	case *TrustCenterHistoryMutation:
 		return c.TrustCenterHistory.mutate(ctx, m)
 	case *TrustCenterSettingMutation:
@@ -22820,6 +22838,276 @@ func (c *TrustCenterComplianceHistoryClient) mutate(ctx context.Context, m *Trus
 	}
 }
 
+// TrustCenterDocClient is a client for the TrustCenterDoc schema.
+type TrustCenterDocClient struct {
+	config
+}
+
+// NewTrustCenterDocClient returns a client for the TrustCenterDoc from the given config.
+func NewTrustCenterDocClient(c config) *TrustCenterDocClient {
+	return &TrustCenterDocClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcenterdoc.Hooks(f(g(h())))`.
+func (c *TrustCenterDocClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterDoc = append(c.hooks.TrustCenterDoc, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcenterdoc.Intercept(f(g(h())))`.
+func (c *TrustCenterDocClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterDoc = append(c.inters.TrustCenterDoc, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterDoc entity.
+func (c *TrustCenterDocClient) Create() *TrustCenterDocCreate {
+	mutation := newTrustCenterDocMutation(c.config, OpCreate)
+	return &TrustCenterDocCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterDoc entities.
+func (c *TrustCenterDocClient) CreateBulk(builders ...*TrustCenterDocCreate) *TrustCenterDocCreateBulk {
+	return &TrustCenterDocCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterDocClient) MapCreateBulk(slice any, setFunc func(*TrustCenterDocCreate, int)) *TrustCenterDocCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterDocCreateBulk{err: fmt.Errorf("calling to TrustCenterDocClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterDocCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterDocCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterDoc.
+func (c *TrustCenterDocClient) Update() *TrustCenterDocUpdate {
+	mutation := newTrustCenterDocMutation(c.config, OpUpdate)
+	return &TrustCenterDocUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterDocClient) UpdateOne(_m *TrustCenterDoc) *TrustCenterDocUpdateOne {
+	mutation := newTrustCenterDocMutation(c.config, OpUpdateOne, withTrustCenterDoc(_m))
+	return &TrustCenterDocUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterDocClient) UpdateOneID(id string) *TrustCenterDocUpdateOne {
+	mutation := newTrustCenterDocMutation(c.config, OpUpdateOne, withTrustCenterDocID(id))
+	return &TrustCenterDocUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterDoc.
+func (c *TrustCenterDocClient) Delete() *TrustCenterDocDelete {
+	mutation := newTrustCenterDocMutation(c.config, OpDelete)
+	return &TrustCenterDocDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterDocClient) DeleteOne(_m *TrustCenterDoc) *TrustCenterDocDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterDocClient) DeleteOneID(id string) *TrustCenterDocDeleteOne {
+	builder := c.Delete().Where(trustcenterdoc.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterDocDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterDoc.
+func (c *TrustCenterDocClient) Query() *TrustCenterDocQuery {
+	return &TrustCenterDocQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterDoc},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterDoc entity by its id.
+func (c *TrustCenterDocClient) Get(ctx context.Context, id string) (*TrustCenterDoc, error) {
+	return c.Query().Where(trustcenterdoc.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterDocClient) GetX(ctx context.Context, id string) *TrustCenterDoc {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterDocClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterDoc
+	return append(hooks[:len(hooks):len(hooks)], trustcenterdoc.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterDocClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterDoc
+	return append(inters[:len(inters):len(inters)], trustcenterdoc.Interceptors[:]...)
+}
+
+func (c *TrustCenterDocClient) mutate(ctx context.Context, m *TrustCenterDocMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterDocCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterDocUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterDocUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterDocDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenterDoc mutation op: %q", m.Op())
+	}
+}
+
+// TrustCenterDocHistoryClient is a client for the TrustCenterDocHistory schema.
+type TrustCenterDocHistoryClient struct {
+	config
+}
+
+// NewTrustCenterDocHistoryClient returns a client for the TrustCenterDocHistory from the given config.
+func NewTrustCenterDocHistoryClient(c config) *TrustCenterDocHistoryClient {
+	return &TrustCenterDocHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcenterdochistory.Hooks(f(g(h())))`.
+func (c *TrustCenterDocHistoryClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterDocHistory = append(c.hooks.TrustCenterDocHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcenterdochistory.Intercept(f(g(h())))`.
+func (c *TrustCenterDocHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterDocHistory = append(c.inters.TrustCenterDocHistory, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterDocHistory entity.
+func (c *TrustCenterDocHistoryClient) Create() *TrustCenterDocHistoryCreate {
+	mutation := newTrustCenterDocHistoryMutation(c.config, OpCreate)
+	return &TrustCenterDocHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterDocHistory entities.
+func (c *TrustCenterDocHistoryClient) CreateBulk(builders ...*TrustCenterDocHistoryCreate) *TrustCenterDocHistoryCreateBulk {
+	return &TrustCenterDocHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterDocHistoryClient) MapCreateBulk(slice any, setFunc func(*TrustCenterDocHistoryCreate, int)) *TrustCenterDocHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterDocHistoryCreateBulk{err: fmt.Errorf("calling to TrustCenterDocHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterDocHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterDocHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterDocHistory.
+func (c *TrustCenterDocHistoryClient) Update() *TrustCenterDocHistoryUpdate {
+	mutation := newTrustCenterDocHistoryMutation(c.config, OpUpdate)
+	return &TrustCenterDocHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterDocHistoryClient) UpdateOne(_m *TrustCenterDocHistory) *TrustCenterDocHistoryUpdateOne {
+	mutation := newTrustCenterDocHistoryMutation(c.config, OpUpdateOne, withTrustCenterDocHistory(_m))
+	return &TrustCenterDocHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterDocHistoryClient) UpdateOneID(id string) *TrustCenterDocHistoryUpdateOne {
+	mutation := newTrustCenterDocHistoryMutation(c.config, OpUpdateOne, withTrustCenterDocHistoryID(id))
+	return &TrustCenterDocHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterDocHistory.
+func (c *TrustCenterDocHistoryClient) Delete() *TrustCenterDocHistoryDelete {
+	mutation := newTrustCenterDocHistoryMutation(c.config, OpDelete)
+	return &TrustCenterDocHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterDocHistoryClient) DeleteOne(_m *TrustCenterDocHistory) *TrustCenterDocHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterDocHistoryClient) DeleteOneID(id string) *TrustCenterDocHistoryDeleteOne {
+	builder := c.Delete().Where(trustcenterdochistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterDocHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterDocHistory.
+func (c *TrustCenterDocHistoryClient) Query() *TrustCenterDocHistoryQuery {
+	return &TrustCenterDocHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterDocHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterDocHistory entity by its id.
+func (c *TrustCenterDocHistoryClient) Get(ctx context.Context, id string) (*TrustCenterDocHistory, error) {
+	return c.Query().Where(trustcenterdochistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterDocHistoryClient) GetX(ctx context.Context, id string) *TrustCenterDocHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterDocHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterDocHistory
+	return append(hooks[:len(hooks):len(hooks)], trustcenterdochistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterDocHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterDocHistory
+	return append(inters[:len(inters):len(inters)], trustcenterdochistory.Interceptors[:]...)
+}
+
+func (c *TrustCenterDocHistoryClient) mutate(ctx context.Context, m *TrustCenterDocHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterDocHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterDocHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterDocHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterDocHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenterDocHistory mutation op: %q", m.Op())
+	}
+}
+
 // TrustCenterHistoryClient is a client for the TrustCenterHistory schema.
 type TrustCenterHistoryClient struct {
 	config
@@ -24745,10 +25033,10 @@ type (
 		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
 		SubprocessorHistory, Subscriber, TFASetting, Task, TaskHistory, Template,
 		TemplateHistory, TrustCenter, TrustCenterCompliance,
-		TrustCenterComplianceHistory, TrustCenterHistory, TrustCenterSetting,
-		TrustCenterSettingHistory, TrustCenterSubprocessor,
-		TrustCenterSubprocessorHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Webauthn []ent.Hook
+		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
+		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
+		TrustCenterSubprocessor, TrustCenterSubprocessorHistory, User, UserHistory,
+		UserSetting, UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Asset, AssetHistory, Contact,
@@ -24772,10 +25060,10 @@ type (
 		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
 		SubprocessorHistory, Subscriber, TFASetting, Task, TaskHistory, Template,
 		TemplateHistory, TrustCenter, TrustCenterCompliance,
-		TrustCenterComplianceHistory, TrustCenterHistory, TrustCenterSetting,
-		TrustCenterSettingHistory, TrustCenterSubprocessor,
-		TrustCenterSubprocessorHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Webauthn []ent.Interceptor
+		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
+		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
+		TrustCenterSubprocessor, TrustCenterSubprocessorHistory, User, UserHistory,
+		UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 
