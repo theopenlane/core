@@ -10,7 +10,7 @@ import (
 func registerSSOTokenAuthorizeHandler(router *Router) error {
 	config := Config{
 		Path:        "/sso/token/authorize",
-		Method:      http.MethodGet,
+		Method:      http.MethodPost,
 		Name:        "SSOTokenAuthorize",
 		Description: "Authorize SSO token request",
 		Tags:        []string{"sso"},
