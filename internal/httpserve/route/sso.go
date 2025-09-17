@@ -34,7 +34,7 @@ func registerSSOLoginHandler(router *Router) error {
 		Tags:        []string{"sso"},
 		OperationID: "SSOLogin",
 		Security:    &openapi3.SecurityRequirements{},
-		Middlewares: *publicEndpoint,
+		Middlewares: *unauthenticatedEndpoint,
 		Handler:     router.Handler.SSOLoginHandler,
 	}
 
@@ -51,7 +51,7 @@ func registerSSOCallbackHandler(router *Router) error {
 		Tags:        []string{"sso"},
 		OperationID: "SSOCallback",
 		Security:    &openapi3.SecurityRequirements{},
-		Middlewares: *publicEndpoint,
+		Middlewares: *unauthenticatedEndpoint,
 		Handler:     router.Handler.SSOCallbackHandler,
 	}
 
