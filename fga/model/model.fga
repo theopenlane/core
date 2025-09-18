@@ -162,7 +162,7 @@ type file
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
 
-    define parent: [user, program, organization, control, procedure, template, document_data, contact, internal_policy, narrative, evidence, note, trust_center_setting, subprocessor, export]
+    define parent: [user, program, organization, control, procedure, template, document_data, contact, internal_policy, narrative, evidence, note, trust_center_setting, subprocessor, export, trust_center_doc]
 # programs are associated with an organization but do not inherit access from the organization with
 # the exception of the owner of the organization who will have access to all programs
 # the program creator will be made the admin of the program and all other access with be assigned directly
@@ -505,6 +505,16 @@ type trust_center
     define parent: [organization]
 
 type trust_center_setting
+  relations
+    define can_view: [user, service] or parent_viewer
+    define can_edit: [user, service] or parent_editor
+    define can_delete: [user, service] or parent_deleter
+    define parent_viewer: can_delete or can_edit or can_view from parent
+    define parent_editor: can_delete or can_edit from parent
+    define parent_deleter:  can_delete from parent
+    define parent: [trust_center]
+
+type trust_center_doc
   relations
     define can_view: [user, service] or parent_viewer
     define can_edit: [user, service] or parent_editor

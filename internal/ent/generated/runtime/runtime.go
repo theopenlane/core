@@ -6348,16 +6348,23 @@ func init() {
 	trustcenterdocMixinHooks0 := trustcenterdocMixin[0].Hooks()
 	trustcenterdocMixinHooks1 := trustcenterdocMixin[1].Hooks()
 	trustcenterdocMixinHooks2 := trustcenterdocMixin[2].Hooks()
+	trustcenterdocHooks := schema.TrustCenterDoc{}.Hooks()
 
 	trustcenterdoc.Hooks[1] = trustcenterdocMixinHooks0[0]
 
 	trustcenterdoc.Hooks[2] = trustcenterdocMixinHooks1[0]
 
 	trustcenterdoc.Hooks[3] = trustcenterdocMixinHooks2[0]
+
+	trustcenterdoc.Hooks[4] = trustcenterdocHooks[0]
+
+	trustcenterdoc.Hooks[5] = trustcenterdocHooks[1]
 	trustcenterdocMixinInters1 := trustcenterdocMixin[1].Interceptors()
 	trustcenterdocMixinInters2 := trustcenterdocMixin[2].Interceptors()
+	trustcenterdocInters := schema.TrustCenterDoc{}.Interceptors()
 	trustcenterdoc.Interceptors[0] = trustcenterdocMixinInters1[0]
 	trustcenterdoc.Interceptors[1] = trustcenterdocMixinInters2[0]
+	trustcenterdoc.Interceptors[2] = trustcenterdocInters[0]
 	trustcenterdocMixinFields0 := trustcenterdocMixin[0].Fields()
 	_ = trustcenterdocMixinFields0
 	trustcenterdocMixinFields3 := trustcenterdocMixin[3].Fields()

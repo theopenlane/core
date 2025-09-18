@@ -477,7 +477,7 @@ type OpenlaneGraphClient interface {
 	UpdateTrustCenterCompliance(ctx context.Context, updateTrustCenterComplianceID string, input UpdateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterCompliance, error)
 	GetAllTrustCenterComplianceHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterComplianceHistories, error)
 	GetTrustCenterComplianceHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterComplianceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterComplianceHistories, error)
-	CreateTrustCenterDoc(ctx context.Context, input CreateTrustCenterDocInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDoc, error)
+	CreateTrustCenterDoc(ctx context.Context, input CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDoc, error)
 	DeleteTrustCenterDoc(ctx context.Context, deleteTrustCenterDocID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterDoc, error)
 	GetAllTrustCenterDocs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterDocs, error)
 	GetTrustCenterDocByID(ctx context.Context, trustCenterDocID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterDocByID, error)
@@ -103037,8 +103037,8 @@ func (c *Client) GetTrustCenterComplianceHistories(ctx context.Context, first *i
 	return &res, nil
 }
 
-const CreateTrustCenterDocDocument = `mutation CreateTrustCenterDoc ($input: CreateTrustCenterDocInput!) {
-	createTrustCenterDoc(input: $input) {
+const CreateTrustCenterDocDocument = `mutation CreateTrustCenterDoc ($input: CreateTrustCenterDocInput!, $trustCenterDocFile: Upload!) {
+	createTrustCenterDoc(input: $input, trustCenterDocFile: $trustCenterDocFile) {
 		trustCenterDoc {
 			id
 			createdAt
@@ -103061,9 +103061,10 @@ const CreateTrustCenterDocDocument = `mutation CreateTrustCenterDoc ($input: Cre
 }
 `
 
-func (c *Client) CreateTrustCenterDoc(ctx context.Context, input CreateTrustCenterDocInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDoc, error) {
+func (c *Client) CreateTrustCenterDoc(ctx context.Context, input CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDoc, error) {
 	vars := map[string]any{
-		"input": input,
+		"input":              input,
+		"trustCenterDocFile": trustCenterDocFile,
 	}
 
 	var res CreateTrustCenterDoc

@@ -28562,7 +28562,7 @@ type Mutation {
 		values of the trustCenterDoc
 		"""
 		input: CreateTrustCenterDocInput!
-	): TrustCenterDocCreatePayload!
+	trustCenterDocFile: Upload!): TrustCenterDocCreatePayload!
 	"""
 	Create multiple new trustCenterDocs
 	"""

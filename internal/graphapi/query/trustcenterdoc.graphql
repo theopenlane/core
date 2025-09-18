@@ -1,6 +1,5 @@
-
-mutation CreateTrustCenterDoc($input: CreateTrustCenterDocInput!) {
-  createTrustCenterDoc(input: $input) {
+mutation CreateTrustCenterDoc($input: CreateTrustCenterDocInput!, $trustCenterDocFile: Upload!) {
+  createTrustCenterDoc(input: $input, trustCenterDocFile: $trustCenterDocFile) {
     trustCenterDoc {
       id
       createdAt

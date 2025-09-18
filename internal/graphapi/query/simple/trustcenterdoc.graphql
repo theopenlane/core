@@ -1,5 +1,5 @@
-mutation CreateTrustCenterDoc($input: CreateTrustCenterDocInput!) {
-  createTrustCenterDoc(input: $input) {
+mutation CreateTrustCenterDoc($input: CreateTrustCenterDocInput!, $trustCenterDocFile: Upload!) {
+  createTrustCenterDoc(input: $input, trustCenterDocFile: $trustCenterDocFile) {
     trustCenterDoc {
       id
       createdAt
@@ -58,6 +58,7 @@ query GetAllTrustCenterDocs {
     }
   }
 }
+
 query GetTrustCenterDocByID($trustCenterDocId: ID!) {
   trustCenterDoc(id: $trustCenterDocId) {
     id
@@ -110,6 +111,7 @@ query GetTrustCenterDocs($first: Int, $last: Int, $where: TrustCenterDocWhereInp
     }
   }
 }
+
 mutation UpdateTrustCenterDoc($updateTrustCenterDocId: ID!, $input: UpdateTrustCenterDocInput!) {
   updateTrustCenterDoc(id: $updateTrustCenterDocId, input: $input) {
     trustCenterDoc {

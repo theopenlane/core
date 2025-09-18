@@ -2497,7 +2497,7 @@ type ComplexityRoot struct {
 		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput) int
 		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
-		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput) int
+		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
 		CreateTrustCenterDomain              func(childComplexity int, input model.CreateTrustCenterDomainInput) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
@@ -17756,7 +17756,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTrustCenterDoc(childComplexity, args["input"].(generated.CreateTrustCenterDocInput)), true
+		return e.complexity.Mutation.CreateTrustCenterDoc(childComplexity, args["input"].(generated.CreateTrustCenterDocInput), args["trustCenterDocFile"].(graphql.Upload)), true
 
 	case "Mutation.createTrustCenterDomain":
 		if e.complexity.Mutation.CreateTrustCenterDomain == nil {
@@ -97561,6 +97561,7 @@ extend type Mutation{
         values of the trustCenterDoc
         """
         input: CreateTrustCenterDocInput!
+        trustCenterDocFile: Upload!
     ): TrustCenterDocCreatePayload!
     """
     Create multiple new trustCenterDocs

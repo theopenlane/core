@@ -7,6 +7,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -91,14 +93,17 @@ func (t TrustCenterDoc) Edges() []ent.Edge {
 
 // Hooks of the TrustCenterDoc
 func (TrustCenterDoc) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookTrustCenterDoc(),
+		hooks.HookTrustCenterDocAuthz(),
+	}
 }
 
 // Policy of the TrustCenterDoc
 func (TrustCenterDoc) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			entfga.CheckEditAccess[*generated.TrustCenterComplianceMutation](),
+			entfga.CheckEditAccess[*generated.TrustCenterDocMutation](),
 		),
 	)
 }
@@ -118,10 +123,13 @@ func (TrustCenterDoc) Indexes() []ent.Index {
 func (TrustCenterDoc) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
+		entfga.SelfAccessChecks(),
 	}
 }
 
 // Interceptors of the TrustCenterDoc
 func (TrustCenterDoc) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
+	return []ent.Interceptor{
+		interceptors.InterceptorTrustCenterChild(),
+	}
 }
