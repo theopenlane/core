@@ -507,6 +507,46 @@ func (_u *ControlUpdate) ClearDelegateID() *ControlUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ControlUpdate) SetInternalNotes(v string) *ControlUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableInternalNotes(v *string) *ControlUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ControlUpdate) ClearInternalNotes() *ControlUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ControlUpdate) SetSystemInternalID(v string) *ControlUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableSystemInternalID(v *string) *ControlUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ControlUpdate) ClearSystemInternalID() *ControlUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *ControlUpdate) SetRefCode(v string) *ControlUpdate {
 	_u.mutation.SetRefCode(v)
@@ -1489,6 +1529,21 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ReferencesCleared() {
 		_spec.ClearField(control.FieldReferences, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(control.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(control.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(control.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(control.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(control.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)
@@ -2930,6 +2985,46 @@ func (_u *ControlUpdateOne) ClearDelegateID() *ControlUpdateOne {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ControlUpdateOne) SetInternalNotes(v string) *ControlUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableInternalNotes(v *string) *ControlUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ControlUpdateOne) ClearInternalNotes() *ControlUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ControlUpdateOne) SetSystemInternalID(v string) *ControlUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableSystemInternalID(v *string) *ControlUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ControlUpdateOne) ClearSystemInternalID() *ControlUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *ControlUpdateOne) SetRefCode(v string) *ControlUpdateOne {
 	_u.mutation.SetRefCode(v)
@@ -3942,6 +4037,21 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	}
 	if _u.mutation.ReferencesCleared() {
 		_spec.ClearField(control.FieldReferences, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(control.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(control.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(control.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(control.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(control.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)

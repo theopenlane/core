@@ -117,7 +117,7 @@ func (m MappedControl) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			mixin.NewSystemOwnedMixin(),
-			newOrgOwnedMixin(m, withSkipForSystemAdmin(true)),
+			newOrgOwnedMixin(m),
 			// add group edit permissions to the mapped control
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},

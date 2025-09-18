@@ -157,6 +157,48 @@ func (_c *InternalPolicyCreate) SetNillableOwnerID(v *string) *InternalPolicyCre
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *InternalPolicyCreate) SetSystemOwned(v bool) *InternalPolicyCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableSystemOwned(v *bool) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *InternalPolicyCreate) SetInternalNotes(v string) *InternalPolicyCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableInternalNotes(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *InternalPolicyCreate) SetSystemInternalID(v string) *InternalPolicyCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableSystemInternalID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *InternalPolicyCreate) SetName(v string) *InternalPolicyCreate {
 	_c.mutation.SetName(v)
@@ -611,6 +653,10 @@ func (_c *InternalPolicyCreate) defaults() error {
 		v := internalpolicy.DefaultRevision
 		_c.mutation.SetRevision(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := internalpolicy.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := internalpolicy.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -765,6 +811,18 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Revision(); ok {
 		_spec.SetField(internalpolicy.FieldRevision, field.TypeString, value)
 		_node.Revision = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(internalpolicy.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(internalpolicy.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(internalpolicy.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(internalpolicy.FieldName, field.TypeString, value)

@@ -64,6 +64,12 @@ func (ec *executionContext) fieldContext_EntityTypeBulkCreatePayload_entityTypes
 				return ec.fieldContext_EntityType_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_EntityType_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_EntityType_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_EntityType_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_EntityType_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_EntityType_name(ctx, field)
 			case "owner":
@@ -113,6 +119,12 @@ func (ec *executionContext) fieldContext_EntityTypeCreatePayload_entityType(_ co
 				return ec.fieldContext_EntityType_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_EntityType_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_EntityType_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_EntityType_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_EntityType_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_EntityType_name(ctx, field)
 			case "owner":
@@ -189,6 +201,12 @@ func (ec *executionContext) fieldContext_EntityTypeUpdatePayload_entityType(_ co
 				return ec.fieldContext_EntityType_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_EntityType_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_EntityType_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_EntityType_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_EntityType_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_EntityType_name(ctx, field)
 			case "owner":

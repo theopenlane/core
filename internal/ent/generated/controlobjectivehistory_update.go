@@ -143,6 +143,46 @@ func (_u *ControlObjectiveHistoryUpdate) ClearRevision() *ControlObjectiveHistor
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ControlObjectiveHistoryUpdate) SetInternalNotes(v string) *ControlObjectiveHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ControlObjectiveHistoryUpdate) SetNillableInternalNotes(v *string) *ControlObjectiveHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ControlObjectiveHistoryUpdate) ClearInternalNotes() *ControlObjectiveHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ControlObjectiveHistoryUpdate) SetSystemInternalID(v string) *ControlObjectiveHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ControlObjectiveHistoryUpdate) SetNillableSystemInternalID(v *string) *ControlObjectiveHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ControlObjectiveHistoryUpdate) ClearSystemInternalID() *ControlObjectiveHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *ControlObjectiveHistoryUpdate) SetName(v string) *ControlObjectiveHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -410,6 +450,21 @@ func (_u *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldOwnerID, field.TypeString)
 	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(controlobjectivehistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(controlobjectivehistory.FieldName, field.TypeString, value)
 	}
@@ -580,6 +635,46 @@ func (_u *ControlObjectiveHistoryUpdateOne) SetNillableRevision(v *string) *Cont
 // ClearRevision clears the value of the "revision" field.
 func (_u *ControlObjectiveHistoryUpdateOne) ClearRevision() *ControlObjectiveHistoryUpdateOne {
 	_u.mutation.ClearRevision()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ControlObjectiveHistoryUpdateOne) SetInternalNotes(v string) *ControlObjectiveHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ControlObjectiveHistoryUpdateOne) SetNillableInternalNotes(v *string) *ControlObjectiveHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ControlObjectiveHistoryUpdateOne) ClearInternalNotes() *ControlObjectiveHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ControlObjectiveHistoryUpdateOne) SetSystemInternalID(v string) *ControlObjectiveHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ControlObjectiveHistoryUpdateOne) SetNillableSystemInternalID(v *string) *ControlObjectiveHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ControlObjectiveHistoryUpdateOne) ClearSystemInternalID() *ControlObjectiveHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -879,6 +974,21 @@ func (_u *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(controlobjectivehistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(controlobjectivehistory.FieldName, field.TypeString, value)

@@ -46,6 +46,12 @@ type ControlObjectiveHistory struct {
 	Revision string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// the name of the control objective
 	Name string `json:"name,omitempty"`
 	// the desired outcome or target of the control objective
@@ -72,7 +78,9 @@ func (*ControlObjectiveHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlobjectivehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldRevision, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDesiredOutcome, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldCategory, controlobjectivehistory.FieldSubcategory:
+		case controlobjectivehistory.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
+		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldRevision, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldInternalNotes, controlobjectivehistory.FieldSystemInternalID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDesiredOutcome, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldCategory, controlobjectivehistory.FieldSubcategory:
 			values[i] = new(sql.NullString)
 		case controlobjectivehistory.FieldHistoryTime, controlobjectivehistory.FieldCreatedAt, controlobjectivehistory.FieldUpdatedAt, controlobjectivehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -176,6 +184,26 @@ func (_m *ControlObjectiveHistory) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case controlobjectivehistory.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case controlobjectivehistory.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case controlobjectivehistory.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case controlobjectivehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -293,6 +321,19 @@ func (_m *ControlObjectiveHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

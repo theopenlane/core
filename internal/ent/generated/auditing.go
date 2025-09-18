@@ -303,6 +303,15 @@ func (_m *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(actionplanhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(actionplanhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(actionplanhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
 	if !reflect.DeepEqual(_m.DueDate, new.DueDate) {
 		changes = append(changes, NewChange(actionplanhistory.FieldDueDate, _m.DueDate, new.DueDate))
 	}
@@ -362,6 +371,15 @@ func (_m *AssetHistory) changes(new *AssetHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(assethistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(assethistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(assethistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(assethistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.AssetType, new.AssetType) {
 		changes = append(changes, NewChange(assethistory.FieldAssetType, _m.AssetType, new.AssetType))
@@ -567,6 +585,15 @@ func (_m *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(controlhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(controlhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(controlhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(controlhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
 	if !reflect.DeepEqual(_m.RefCode, new.RefCode) {
 		changes = append(changes, NewChange(controlhistory.FieldRefCode, _m.RefCode, new.RefCode))
 	}
@@ -623,6 +650,15 @@ func (_m *ControlImplementationHistory) changes(new *ControlImplementationHistor
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(controlimplementationhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.Status, new.Status) {
 		changes = append(changes, NewChange(controlimplementationhistory.FieldStatus, _m.Status, new.Status))
@@ -696,6 +732,15 @@ func (_m *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Chang
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldName, _m.Name, new.Name))
 	}
@@ -767,6 +812,15 @@ func (_m *CustomDomainHistory) changes(new *CustomDomainHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(customdomainhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(customdomainhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(customdomainhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(customdomainhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.CnameRecord, new.CnameRecord) {
 		changes = append(changes, NewChange(customdomainhistory.FieldCnameRecord, _m.CnameRecord, new.CnameRecord))
@@ -963,6 +1017,15 @@ func (_m *EntityHistory) changes(new *EntityHistory) []Change {
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(entityhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(entityhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(entityhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(entityhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(entityhistory.FieldName, _m.Name, new.Name))
 	}
@@ -1031,6 +1094,15 @@ func (_m *EntityTypeHistory) changes(new *EntityTypeHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(entitytypehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(entitytypehistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(entitytypehistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(entitytypehistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(entitytypehistory.FieldName, _m.Name, new.Name))
@@ -1163,6 +1235,15 @@ func (_m *FileHistory) changes(new *FileHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.Tags, new.Tags) {
 		changes = append(changes, NewChange(filehistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(filehistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(filehistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(filehistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.ProvidedFileName, new.ProvidedFileName) {
 		changes = append(changes, NewChange(filehistory.FieldProvidedFileName, _m.ProvidedFileName, new.ProvidedFileName))
@@ -1446,6 +1527,15 @@ func (_m *HushHistory) changes(new *HushHistory) []Change {
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(hushhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(hushhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(hushhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(hushhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(hushhistory.FieldName, _m.Name, new.Name))
 	}
@@ -1524,6 +1614,15 @@ func (_m *IntegrationHistory) changes(new *IntegrationHistory) []Change {
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(integrationhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(integrationhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(integrationhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(integrationhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(integrationhistory.FieldName, _m.Name, new.Name))
 	}
@@ -1595,6 +1694,15 @@ func (_m *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldName, _m.Name, new.Name))
@@ -1913,6 +2021,15 @@ func (_m *NarrativeHistory) changes(new *NarrativeHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(narrativehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(narrativehistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(narrativehistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(narrativehistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(narrativehistory.FieldName, _m.Name, new.Name))
@@ -2393,6 +2510,15 @@ func (_m *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
 		changes = append(changes, NewChange(procedurehistory.FieldDismissedImprovementSuggestions, _m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(procedurehistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(procedurehistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(procedurehistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.FileID, new.FileID) {
 		changes = append(changes, NewChange(procedurehistory.FieldFileID, _m.FileID, new.FileID))
@@ -2973,6 +3099,15 @@ func (_m *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
 	if !reflect.DeepEqual(_m.RefCode, new.RefCode) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldRefCode, _m.RefCode, new.RefCode))
 	}
@@ -3179,6 +3314,15 @@ func (_m *TemplateHistory) changes(new *TemplateHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(templatehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(templatehistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(templatehistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(templatehistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(templatehistory.FieldName, _m.Name, new.Name))

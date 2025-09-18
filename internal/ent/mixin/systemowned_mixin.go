@@ -74,11 +74,11 @@ func (SystemOwnedMixin) Interceptors() []ent.Interceptor {
 }
 
 // Policy of the SystemOwnedMixin
-func (s SystemOwnedMixin) Policy() ent.Policy {
+func (d SystemOwnedMixin) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.AllowMutationIfSystemAdmin(),
-			SystemOwnedSchema(s.AdditionalAdminOnlyFields...),
+			SystemOwnedSchema(d.AdditionalAdminOnlyFields...),
 		},
 	}
 }

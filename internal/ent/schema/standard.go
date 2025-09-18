@@ -135,19 +135,24 @@ func (s Standard) Edges() []ent.Edge {
 	}
 }
 
+var (
+	// additional fields to be treated as system owned fields
+	// in additional to the defaults in the system owned mixin
+	systemOwnedFields = []string{
+		"is_public",
+		"free_to_use",
+	}
+)
+
 // Mixin of the Standard
 func (s Standard) Mixin() []ent.Mixin {
 	return mixinConfig{
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s,
-				withSkipForSystemAdmin(true), // allow empty owner_id for system admin
 				withAllowAnonymousTrustCenterAccess(true),
 			),
-			mixin.NewSystemOwnedMixin([]string{
-				"is_public",
-				"free_to_use",
-			}...),
+			mixin.NewSystemOwnedMixin(systemOwnedFields...),
 		},
 	}.getMixins(s)
 }

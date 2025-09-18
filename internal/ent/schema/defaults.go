@@ -86,6 +86,18 @@ func (m mixinConfig) getMixins(schema ent.Interface) []ent.Mixin {
 		idMixin = emixin.NewIDMixinWithPrefixedID(m.prefix)
 	}
 
+	if autoSetSkipForSystemAdmin(&m) {
+		// if both SystemOwnedMixin and ObjectOwnedMixin are present, set skip for system admin to true
+		for i, mixin := range m.additionalMixins {
+			if o, ok := mixin.(ObjectOwnedMixin); ok {
+				o.AllowEmptyForSystemAdmin = true
+				m.additionalMixins[i] = o
+
+				break
+			}
+		}
+	}
+
 	mixins = append(mixins, idMixin)
 
 	// exclude tags if specified
@@ -352,4 +364,26 @@ func validateEdgeDefinition(e *edgeDefinition) {
 	if e.name == "" || e.t == nil {
 		log.Fatal().Str("schema", getName(e.fromSchema)).Msg("edge_definition: name and type must be set")
 	}
+}
+
+func autoSetSkipForSystemAdmin(mixinConfig *mixinConfig) bool {
+	hasSystemOwnedMixin := false
+	for _, m := range mixinConfig.additionalMixins {
+		if _, ok := m.(mixin.SystemOwnedMixin); ok {
+			hasSystemOwnedMixin = true
+
+			break
+		}
+	}
+
+	hasObjectOwnedMixin := false
+	for _, m := range mixinConfig.additionalMixins {
+		if _, ok := m.(ObjectOwnedMixin); ok {
+			hasObjectOwnedMixin = true
+
+			break
+		}
+	}
+
+	return hasSystemOwnedMixin && hasObjectOwnedMixin
 }

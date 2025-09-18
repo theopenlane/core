@@ -3623,6 +3623,12 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_dismissedImprovementSuggestions(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ActionPlan_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_ActionPlan_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_ActionPlan_systemInternalID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":
@@ -3718,6 +3724,12 @@ func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_dismissedImprovementSuggestions(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ActionPlan_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_ActionPlan_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_ActionPlan_systemInternalID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":
@@ -3840,6 +3852,12 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_dismissedImprovementSuggestions(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ActionPlan_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_ActionPlan_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_ActionPlan_systemInternalID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":
@@ -3962,6 +3980,12 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_dismissedImprovementSuggestions(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ActionPlan_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ActionPlan_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_ActionPlan_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_ActionPlan_systemInternalID(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_ActionPlan_dueDate(ctx, field)
 			case "priority":

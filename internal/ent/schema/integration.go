@@ -8,6 +8,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -92,6 +93,7 @@ func (i Integration) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(i),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(i)
 }

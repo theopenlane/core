@@ -78,10 +78,9 @@ func (t Subprocessor) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(t,
-				withSkipForSystemAdmin(true), // allow empty owner_id for system admin
 				withAllowAnonymousTrustCenterAccess(true),
 			),
-			mixin.SystemOwnedMixin{},
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(t)
 }
