@@ -930,6 +930,10 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
+          trustCenterID
+          title
+          category
+          fileID
         }
       }
     }

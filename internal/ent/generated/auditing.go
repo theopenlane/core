@@ -3331,6 +3331,21 @@ func (_m *TrustCenterDocHistory) changes(new *TrustCenterDocHistory) []Change {
 	if !reflect.DeepEqual(_m.Tags, new.Tags) {
 		changes = append(changes, NewChange(trustcenterdochistory.FieldTags, _m.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(_m.TrustCenterID, new.TrustCenterID) {
+		changes = append(changes, NewChange(trustcenterdochistory.FieldTrustCenterID, _m.TrustCenterID, new.TrustCenterID))
+	}
+	if !reflect.DeepEqual(_m.Title, new.Title) {
+		changes = append(changes, NewChange(trustcenterdochistory.FieldTitle, _m.Title, new.Title))
+	}
+	if !reflect.DeepEqual(_m.Category, new.Category) {
+		changes = append(changes, NewChange(trustcenterdochistory.FieldCategory, _m.Category, new.Category))
+	}
+	if !reflect.DeepEqual(_m.FileID, new.FileID) {
+		changes = append(changes, NewChange(trustcenterdochistory.FieldFileID, _m.FileID, new.FileID))
+	}
+	if !reflect.DeepEqual(_m.Visibility, new.Visibility) {
+		changes = append(changes, NewChange(trustcenterdochistory.FieldVisibility, _m.Visibility, new.Visibility))
+	}
 	return changes
 }
 

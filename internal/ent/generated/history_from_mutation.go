@@ -11041,6 +11041,26 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetTags(tags)
 	}
 
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
+	if title, exists := m.Title(); exists {
+		create = create.SetTitle(title)
+	}
+
+	if category, exists := m.Category(); exists {
+		create = create.SetCategory(category)
+	}
+
+	if fileID, exists := m.FileID(); exists {
+		create = create.SetNillableFileID(&fileID)
+	}
+
+	if visibility, exists := m.Visibility(); exists {
+		create = create.SetVisibility(visibility)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -11114,6 +11134,36 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetTags(trustcenterdoc.Tags)
 		}
 
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(trustcenterdoc.TrustCenterID)
+		}
+
+		if title, exists := m.Title(); exists {
+			create = create.SetTitle(title)
+		} else {
+			create = create.SetTitle(trustcenterdoc.Title)
+		}
+
+		if category, exists := m.Category(); exists {
+			create = create.SetCategory(category)
+		} else {
+			create = create.SetCategory(trustcenterdoc.Category)
+		}
+
+		if fileID, exists := m.FileID(); exists {
+			create = create.SetNillableFileID(&fileID)
+		} else {
+			create = create.SetNillableFileID(trustcenterdoc.FileID)
+		}
+
+		if visibility, exists := m.Visibility(); exists {
+			create = create.SetVisibility(visibility)
+		} else {
+			create = create.SetVisibility(trustcenterdoc.Visibility)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -11156,6 +11206,11 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDeletedAt(trustcenterdoc.DeletedAt).
 			SetDeletedBy(trustcenterdoc.DeletedBy).
 			SetTags(trustcenterdoc.Tags).
+			SetTrustCenterID(trustcenterdoc.TrustCenterID).
+			SetTitle(trustcenterdoc.Title).
+			SetCategory(trustcenterdoc.Category).
+			SetNillableFileID(trustcenterdoc.FileID).
+			SetVisibility(trustcenterdoc.Visibility).
 			Save(ctx)
 		if err != nil {
 			return err

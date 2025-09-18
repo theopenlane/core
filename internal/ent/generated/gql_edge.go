@@ -7092,6 +7092,27 @@ func (_m *TrustCenter) TrustCenterSubprocessors(
 	return _m.QueryTrustCenterSubprocessors().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *TrustCenter) TrustCenterDocs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterDocOrder, where *TrustCenterDocWhereInput,
+) (*TrustCenterDocConnection, error) {
+	opts := []TrustCenterDocPaginateOption{
+		WithTrustCenterDocOrder(orderBy),
+		WithTrustCenterDocFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	if nodes, err := _m.NamedTrustCenterDocs(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterDocPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterDocConnection{Edges: []*TrustCenterDocEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTrustCenterDocs().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *TrustCenter) TrustCenterCompliances(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterComplianceOrder, where *TrustCenterComplianceWhereInput,
 ) (*TrustCenterComplianceConnection, error) {
@@ -7100,7 +7121,7 @@ func (_m *TrustCenter) TrustCenterCompliances(
 		WithTrustCenterComplianceFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[5][alias]
 	if nodes, err := _m.NamedTrustCenterCompliances(alias); err == nil || hasTotalCount {
 		pager, err := newTrustCenterCompliancePager(opts, last != nil)
 		if err != nil {
@@ -7127,6 +7148,22 @@ func (_m *TrustCenterCompliance) Standard(ctx context.Context) (*Standard, error
 		result, err = _m.QueryStandard().Only(ctx)
 	}
 	return result, err
+}
+
+func (_m *TrustCenterDoc) TrustCenter(ctx context.Context) (*TrustCenter, error) {
+	result, err := _m.Edges.TrustCenterOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryTrustCenter().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *TrustCenterDoc) File(ctx context.Context) (*File, error) {
+	result, err := _m.Edges.FileOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (_m *TrustCenterSetting) TrustCenter(ctx context.Context) (*TrustCenter, error) {

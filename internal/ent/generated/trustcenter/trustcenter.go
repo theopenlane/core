@@ -43,6 +43,8 @@ const (
 	EdgeSetting = "setting"
 	// EdgeTrustCenterSubprocessors holds the string denoting the trust_center_subprocessors edge name in mutations.
 	EdgeTrustCenterSubprocessors = "trust_center_subprocessors"
+	// EdgeTrustCenterDocs holds the string denoting the trust_center_docs edge name in mutations.
+	EdgeTrustCenterDocs = "trust_center_docs"
 	// EdgeTrustCenterCompliances holds the string denoting the trust_center_compliances edge name in mutations.
 	EdgeTrustCenterCompliances = "trust_center_compliances"
 	// Table holds the table name of the trustcenter in the database.
@@ -75,6 +77,13 @@ const (
 	TrustCenterSubprocessorsInverseTable = "trust_center_subprocessors"
 	// TrustCenterSubprocessorsColumn is the table column denoting the trust_center_subprocessors relation/edge.
 	TrustCenterSubprocessorsColumn = "trust_center_id"
+	// TrustCenterDocsTable is the table that holds the trust_center_docs relation/edge.
+	TrustCenterDocsTable = "trust_center_docs"
+	// TrustCenterDocsInverseTable is the table name for the TrustCenterDoc entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterdoc" package.
+	TrustCenterDocsInverseTable = "trust_center_docs"
+	// TrustCenterDocsColumn is the table column denoting the trust_center_docs relation/edge.
+	TrustCenterDocsColumn = "trust_center_id"
 	// TrustCenterCompliancesTable is the table that holds the trust_center_compliances relation/edge.
 	TrustCenterCompliancesTable = "trust_center_compliances"
 	// TrustCenterCompliancesInverseTable is the table name for the TrustCenterCompliance entity.
@@ -222,6 +231,20 @@ func ByTrustCenterSubprocessors(term sql.OrderTerm, terms ...sql.OrderTerm) Orde
 	}
 }
 
+// ByTrustCenterDocsCount orders the results by trust_center_docs count.
+func ByTrustCenterDocsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterDocsStep(), opts...)
+	}
+}
+
+// ByTrustCenterDocs orders the results by trust_center_docs terms.
+func ByTrustCenterDocs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterDocsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByTrustCenterCompliancesCount orders the results by trust_center_compliances count.
 func ByTrustCenterCompliancesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -261,6 +284,13 @@ func newTrustCenterSubprocessorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterSubprocessorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterSubprocessorsTable, TrustCenterSubprocessorsColumn),
+	)
+}
+func newTrustCenterDocsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterDocsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterDocsTable, TrustCenterDocsColumn),
 	)
 }
 func newTrustCenterCompliancesStep() *sqlgraph.Step {

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -122,6 +123,94 @@ func (_u *TrustCenterDocHistoryUpdate) ClearTags() *TrustCenterDocHistoryUpdate 
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TrustCenterDocHistoryUpdate) SetTrustCenterID(v string) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableTrustCenterID(v *string) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TrustCenterDocHistoryUpdate) ClearTrustCenterID() *TrustCenterDocHistoryUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
+// SetTitle sets the "title" field.
+func (_u *TrustCenterDocHistoryUpdate) SetTitle(v string) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableTitle(v *string) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// SetCategory sets the "category" field.
+func (_u *TrustCenterDocHistoryUpdate) SetCategory(v string) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetCategory(v)
+	return _u
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableCategory(v *string) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetCategory(*v)
+	}
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *TrustCenterDocHistoryUpdate) SetFileID(v string) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableFileID(v *string) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *TrustCenterDocHistoryUpdate) ClearFileID() *TrustCenterDocHistoryUpdate {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
+// SetVisibility sets the "visibility" field.
+func (_u *TrustCenterDocHistoryUpdate) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetVisibility(v)
+	return _u
+}
+
+// SetNillableVisibility sets the "visibility" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableVisibility(v *enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetVisibility(*v)
+	}
+	return _u
+}
+
+// ClearVisibility clears the value of the "visibility" field.
+func (_u *TrustCenterDocHistoryUpdate) ClearVisibility() *TrustCenterDocHistoryUpdate {
+	_u.mutation.ClearVisibility()
+	return _u
+}
+
 // Mutation returns the TrustCenterDocHistoryMutation object of the builder.
 func (_u *TrustCenterDocHistoryUpdate) Mutation() *TrustCenterDocHistoryMutation {
 	return _u.mutation
@@ -169,6 +258,16 @@ func (_u *TrustCenterDocHistoryUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *TrustCenterDocHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Visibility(); ok {
+		if err := trustcenterdochistory.VisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDocHistory.visibility": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *TrustCenterDocHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterDocHistoryUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -176,6 +275,9 @@ func (_u *TrustCenterDocHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBui
 }
 
 func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterdochistory.Table, trustcenterdochistory.Columns, sqlgraph.NewFieldSpec(trustcenterdochistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -227,6 +329,30 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldTrustCenterID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Category(); ok {
+		_spec.SetField(trustcenterdochistory.FieldCategory, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.FileID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldFileID, field.TypeString, value)
+	}
+	if _u.mutation.FileIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Visibility(); ok {
+		_spec.SetField(trustcenterdochistory.FieldVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.VisibilityCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldVisibility, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterDocHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -342,6 +468,94 @@ func (_u *TrustCenterDocHistoryUpdateOne) ClearTags() *TrustCenterDocHistoryUpda
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetTrustCenterID(v string) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) ClearTrustCenterID() *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
+// SetTitle sets the "title" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetTitle(v string) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTitle(v *string) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// SetCategory sets the "category" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetCategory(v string) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetCategory(v)
+	return _u
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableCategory(v *string) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetCategory(*v)
+	}
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetFileID(v string) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableFileID(v *string) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) ClearFileID() *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
+// SetVisibility sets the "visibility" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetVisibility(v)
+	return _u
+}
+
+// SetNillableVisibility sets the "visibility" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableVisibility(v *enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetVisibility(*v)
+	}
+	return _u
+}
+
+// ClearVisibility clears the value of the "visibility" field.
+func (_u *TrustCenterDocHistoryUpdateOne) ClearVisibility() *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.ClearVisibility()
+	return _u
+}
+
 // Mutation returns the TrustCenterDocHistoryMutation object of the builder.
 func (_u *TrustCenterDocHistoryUpdateOne) Mutation() *TrustCenterDocHistoryMutation {
 	return _u.mutation
@@ -402,6 +616,16 @@ func (_u *TrustCenterDocHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *TrustCenterDocHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Visibility(); ok {
+		if err := trustcenterdochistory.VisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDocHistory.visibility": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *TrustCenterDocHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterDocHistoryUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -409,6 +633,9 @@ func (_u *TrustCenterDocHistoryUpdateOne) Modify(modifiers ...func(u *sql.Update
 }
 
 func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterDocHistory, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterdochistory.Table, trustcenterdochistory.Columns, sqlgraph.NewFieldSpec(trustcenterdochistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -477,6 +704,30 @@ func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldTrustCenterID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Category(); ok {
+		_spec.SetField(trustcenterdochistory.FieldCategory, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.FileID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldFileID, field.TypeString, value)
+	}
+	if _u.mutation.FileIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Visibility(); ok {
+		_spec.SetField(trustcenterdochistory.FieldVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.VisibilityCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldVisibility, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterDocHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

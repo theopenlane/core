@@ -59,5 +59,6 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"TrustCenter":                {models.CatalogTrustCenterModule},
 	"TrustCenterSetting":         {models.CatalogTrustCenterModule},
 	"TrustCenterSubprocessor":    {models.CatalogTrustCenterModule},
+	"TrustCenterDoc":             {models.CatalogTrustCenterModule},
 	"Webauthn":                   {models.CatalogBaseModule},
 }
