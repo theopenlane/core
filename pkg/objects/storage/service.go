@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/theopenlane/utils/ulids"
+	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 // ObjectService provides pure object management functionality without provider resolution
@@ -41,11 +41,6 @@ func NewObjectService() *ObjectService {
 
 // Upload uploads a file using a specific storage provider client
 func (s *ObjectService) Upload(ctx context.Context, provider Provider, reader io.Reader, opts *UploadOptions) (*File, error) {
-	// Apply validation
-	if err := s.validationFunc(ctx, opts); err != nil {
-		return nil, err
-	}
-
 	// Generate file name
 	fileName := s.nameFuncGenerator(opts.FileName)
 
@@ -59,18 +54,10 @@ func (s *ObjectService) Upload(ctx context.Context, provider Provider, reader io
 		}
 	}
 
-	var providerHints *ProviderHints
-	if opts.ProviderHints != nil {
-		if hints, ok := opts.ProviderHints.(*ProviderHints); ok {
-			providerHints = hints
-		}
-	}
-
-	storageOpts := &UploadFileOptions{
-		FileName:      fileName,
-		ContentType:   contentType,
-		Metadata:      opts.Metadata,
-		ProviderHints: providerHints,
+	storageOpts := &UploadOptions{
+		FileName:    fileName,
+		ContentType: contentType,
+		Bucket:      opts.Bucket,
 	}
 
 	// Upload using provided storage provider
@@ -81,56 +68,39 @@ func (s *ObjectService) Upload(ctx context.Context, provider Provider, reader io
 
 	// Create file object with complete metadata
 	file := &File{
-		ID:                  ulids.New().String(),
-		Name:                fileName,
-		OriginalName:        fileName,
-		FileStorageMetadata: metadata.FileStorageMetadata, // Use the full metadata from provider
-		FolderDestination:   metadata.FolderDestination,
-		Metadata:            opts.Metadata,
-		CreatedAt:           time.Now(),
-		UpdatedAt:           time.Now(),
-	}
-
-	// Set FieldName from metadata if available
-	if opts.Metadata != nil {
-		if fieldName, ok := opts.Metadata["key"]; ok {
-			file.FieldName = fieldName
-		}
+		OriginalName: fileName,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
+		ProviderType: provider.ProviderType(),
+		FileMetadata: FileMetadata{
+			Key:         metadata.Key,
+			Size:        metadata.Size,
+			ContentType: contentType,
+			Folder:      storageOpts.Bucket,
+		},
 	}
 
 	return file, nil
 }
 
-
 // Download downloads a file using a specific storage provider client
-func (s *ObjectService) Download(ctx context.Context, provider Provider, file *File) (*DownloadResult, error) {
-	storageOpts := &DownloadFileOptions{
-		FileName:       file.Key,
-		Metadata:       file.Metadata,
-		IntegrationID:  file.IntegrationID,
-		HushID:         file.HushID,
-		OrganizationID: file.OrganizationID,
-	}
-
-	metadata, err := provider.Download(ctx, storageOpts)
+func (s *ObjectService) Download(ctx context.Context, provider Provider, file *storagetypes.File, opts *DownloadOptions) (*DownloadedMetadata, error) {
+	metadata, err := provider.Download(ctx, file, opts)
 	if err != nil {
 		return nil, err
 	}
 
-	return &DownloadResult{
-		File: metadata.File,
-		Size: metadata.Size,
-	}, nil
+	return metadata, nil
 }
 
 // GetPresignedURL gets a presigned URL for a file using a specific storage provider client
-func (s *ObjectService) GetPresignedURL(_ context.Context, provider Provider, file *File, duration time.Duration) (string, error) {
-	return provider.GetPresignedURL(file.Key, duration)
+func (s *ObjectService) GetPresignedURL(ctx context.Context, provider Provider, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
+	return provider.GetPresignedURL(ctx, file, opts)
 }
 
 // Delete deletes a file using a specific storage provider client
-func (s *ObjectService) Delete(ctx context.Context, provider Provider, file *File) error {
-	return provider.Delete(ctx, file.Key)
+func (s *ObjectService) Delete(ctx context.Context, provider Provider, file *storagetypes.File, opts *storagetypes.DeleteFileOptions) error {
+	return provider.Delete(ctx, file, opts)
 }
 
 // Skipper returns the configured skipper function
@@ -178,6 +148,6 @@ func (s *ObjectService) WithValidation(validationFunc ValidationFunc) *ObjectSer
 }
 
 // defaultUploader is the default file upload implementation that requires external provider resolution
-func (s *ObjectService) defaultUploader(_ context.Context, _ *ObjectService, _ []FileUpload) ([]File, error) {
+func (s *ObjectService) defaultUploader(_ context.Context, _ *ObjectService, _ []File) ([]File, error) {
 	return nil, ErrProviderResolutionRequired
 }

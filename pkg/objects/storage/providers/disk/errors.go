@@ -29,4 +29,8 @@ var (
 	ErrDiskCheckExists = errors.New("failed to check if file exists")
 	// ErrDiskReadDirectory is returned when directory reading fails
 	ErrDiskReadDirectory = errors.New("failed to read base directory")
+	// ErrInvalidFolderPath is returned when an invalid folder path is provided
+	ErrInvalidFolderPath = errors.New("invalid folder path provided")
+	// ErrMissingLocalURL = errors.New("missing local URL in disk storage options"
+	ErrMissingLocalURL = errors.New("missing local URL in disk storage options")
 )

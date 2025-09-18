@@ -43,7 +43,7 @@ func AddFilePermissions(ctx context.Context) error {
 
 			// if the file is an avatar, explicitly add view permissions for org members
 			const avatarFileKey = "avatarFile"
-			if f.FieldName == avatarFileKey {
+			if f.Key == avatarFileKey {
 				orgID, err := auth.GetOrganizationIDFromContext(ctx)
 				if err != nil {
 					return err

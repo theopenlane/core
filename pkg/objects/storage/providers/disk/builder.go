@@ -34,22 +34,22 @@ func (b *Builder) WithConfig(config map[string]any) cp.ClientBuilder[storagetype
 
 // Build implements cp.ClientBuilder
 func (b *Builder) Build(context.Context) (storagetypes.Provider, error) {
-	basePath := b.credentials["base_path"]
+	bucket := b.credentials["bucket"]
 
-	// Check config options if credentials don't have base_path
-	if basePath == "" && b.options != nil {
-		if configBasePath, ok := b.options["base_path"].(string); ok {
-			basePath = configBasePath
+	// Check config options if credentials don't have bucket
+	if bucket == "" && b.options != nil {
+		if configBucket, ok := b.options["bucket"].(string); ok {
+			bucket = configBucket
 		}
 	}
 
-	if basePath == "" {
+	if bucket == "" {
 		// Use current working directory as default
-		basePath = "./storage"
+		bucket = "./storage"
 	}
 
 	config := &Config{
-		BasePath: basePath,
+		Bucket:   bucket,
 		LocalURL: b.credentials["local_url"],
 	}
 

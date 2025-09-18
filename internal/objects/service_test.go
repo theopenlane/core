@@ -23,28 +23,34 @@ type mockProvider struct {
 	name string
 }
 
+// ProviderType implements storagetypes.Provider.
+func (m *mockProvider) ProviderType() storagetypes.ProviderType {
+	panic("unimplemented")
+}
+
 func (m *mockProvider) Upload(ctx context.Context, reader io.Reader, opts *storagetypes.UploadFileOptions) (*storagetypes.UploadedFileMetadata, error) {
 	return &storagetypes.UploadedFileMetadata{
-		FileStorageMetadata: storagetypes.FileStorageMetadata{
-			Key:            "test-file-key",
-			Size:           100,
-			ContentType:    opts.ContentType,
-			IntegrationID:  "test-integration",
-			HushID:         "test-hush",
-			OrganizationID: "test-org",
-			ProviderType:   storagetypes.ProviderType(m.name),
+		FileMetadata: storagetypes.FileMetadata{
+			Key:          "test-file-key",
+			Size:         100,
+			ContentType:  opts.ContentType,
+			ProviderType: storagetypes.ProviderType(m.name),
 		},
-		FolderDestination: "test-folder",
+		ProviderHints: &storagetypes.ProviderHints{
+			IntegrationID:  "hint-integration",
+			HushID:         "hint-hush",
+			OrganizationID: "hint-org",
+		},
 	}, nil
 }
 
-func (m *mockProvider) Download(ctx context.Context, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadFileMetadata, error) {
+func (m *mockProvider) Download(ctx context.Context, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
 	// Return a fixed size download to match test expectations
 	content := make([]byte, 100) // 100 bytes to match test
 	for i := range content {
 		content[i] = byte('A' + (i % 26)) // Fill with letters
 	}
-	return &storagetypes.DownloadFileMetadata{
+	return &storagetypes.DownloadedFileMetadata{
 		File: content,
 		Size: 100,
 	}, nil
@@ -65,6 +71,11 @@ func (m *mockProvider) Exists(ctx context.Context, key string) (bool, error) {
 func (m *mockProvider) GetScheme() *string {
 	scheme := fmt.Sprintf("%s://", m.name)
 	return &scheme
+}
+
+func (m *mockProvider) ListBuckets() ([]string, error) {
+	// Return a mock list of buckets for testing
+	return []string{"bucket1", "bucket2"}, nil
 }
 
 func (m *mockProvider) Close() error {
@@ -226,15 +237,12 @@ func TestService_Download_TypedContextResolution(t *testing.T) {
 
 	// Create a test file with metadata
 	testFile := &storage.File{
-		ID:   "test-file-id",
-		Name: "test-file.txt",
-		FileStorageMetadata: storagetypes.FileStorageMetadata{
-			Key:            "test-file-id", // Use same value as ID for testing
-			Size:           100,
-			ContentType:    "text/plain",
-			IntegrationID:  "test-integration",
-			HushID:         "test-hush",
-			OrganizationID: "test-org",
+		ID:           "test-file-id",
+		OriginalName: "test-file.txt",
+		FileMetadata: storagetypes.FileMetadata{
+			Key:         "test-file-id", // Use same value as ID for testing
+			Size:        100,
+			ContentType: "text/plain",
 		},
 	}
 
@@ -253,9 +261,9 @@ func TestService_GetPresignedURL_TypedContextResolution(t *testing.T) {
 	service := createTestService()
 
 	testFile := &storage.File{
-		ID:   "test-file-id",
-		Name: "test-file.txt",
-		FileStorageMetadata: storagetypes.FileStorageMetadata{
+		ID:           "test-file-id",
+		OriginalName: "test-file.txt",
+		FileMetadata: storagetypes.FileMetadata{
 			Key:            "test-file-id", // Use same value as ID for testing
 			Size:           100,
 			ContentType:    "text/plain",
@@ -279,7 +287,7 @@ func TestService_Delete_TypedContextResolution(t *testing.T) {
 	testFile := &storage.File{
 		ID:   "test-file-id",
 		Name: "test-file.txt",
-		FileStorageMetadata: storagetypes.FileStorageMetadata{
+		FileMetadata: storagetypes.FileMetadata{
 			Key:            "test-file-id", // Use same value as ID for testing
 			Size:           100,
 			ContentType:    "text/plain",
@@ -330,7 +338,7 @@ func TestService_BuildResolutionContextForFile(t *testing.T) {
 	file := &storage.File{
 		ID:   "test-file-id",
 		Name: "test-file.txt",
-		FileStorageMetadata: storagetypes.FileStorageMetadata{
+		FileMetadata: storagetypes.FileMetadata{
 			IntegrationID:  "file-integration",
 			HushID:         "file-hush",
 			OrganizationID: "file-org",
@@ -377,7 +385,7 @@ func TestService_ResolveProviderForFile_ErrorHandling(t *testing.T) {
 
 	testFile := &storage.File{
 		ID: "test-file-id",
-		FileStorageMetadata: storagetypes.FileStorageMetadata{
+		FileMetadata: storagetypes.FileMetadata{
 			Key:            "test-file-id", // Use same value as ID for testing
 			IntegrationID:  "test-integration",
 			HushID:         "test-hush",

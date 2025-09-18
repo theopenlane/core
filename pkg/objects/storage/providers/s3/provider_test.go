@@ -50,7 +50,7 @@ func TestNewS3Provider(t *testing.T) {
 				SecretAccessKey: "test-secret-key",
 			},
 			expectError:   true,
-			errorContains: "bucket is required",
+			errorContains: "S3 bucket is required",
 		},
 		{
 			name: "empty bucket",
@@ -61,7 +61,7 @@ func TestNewS3Provider(t *testing.T) {
 				SecretAccessKey: "test-secret-key",
 			},
 			expectError:   true,
-			errorContains: "bucket is required",
+			errorContains: "S3 bucket is required",
 		},
 		{
 			name: "configuration without credentials (should try environment)",
@@ -196,6 +196,15 @@ func TestS3ProviderMethods(t *testing.T) {
 		assert.Equal(t, "s3://", *scheme)
 	})
 
+	t.Run("ProviderType", func(t *testing.T) {
+		provider := createMockS3Provider()
+		if provider == nil {
+			t.Skip("Skipping test due to missing AWS credentials")
+		}
+
+		assert.Equal(t, storagetypes.S3Provider, provider.ProviderType())
+	})
+
 	t.Run("Close", func(t *testing.T) {
 		provider := createMockS3Provider()
 		if provider == nil {
@@ -224,9 +233,6 @@ func TestS3ProviderUploadDownloadFlow(t *testing.T) {
 	uploadOpts := &storagetypes.UploadFileOptions{
 		FileName:    fileName,
 		ContentType: "text/plain",
-		Metadata: map[string]string{
-			"test": "true",
-		},
 	}
 
 	metadata, err := provider.Upload(ctx, strings.NewReader(testContent), uploadOpts)
@@ -236,7 +242,12 @@ func TestS3ProviderUploadDownloadFlow(t *testing.T) {
 	assert.Equal(t, int64(len(testContent)), metadata.Size)
 
 	// Test Exists
-	exists, err := provider.Exists(ctx, fileName)
+	file := &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key: fileName,
+		},
+	}
+	exists, err := provider.Exists(ctx, file)
 	require.NoError(t, err)
 	assert.True(t, exists)
 
@@ -245,24 +256,28 @@ func TestS3ProviderUploadDownloadFlow(t *testing.T) {
 		FileName: fileName,
 	}
 
-	downloadResult, err := provider.Download(ctx, downloadOpts)
+	downloadResult, err := provider.Download(ctx, file, downloadOpts)
 	require.NoError(t, err)
 	assert.NotNil(t, downloadResult)
 	assert.Equal(t, testContent, string(downloadResult.File))
 	assert.Equal(t, int64(len(testContent)), downloadResult.Size)
 
 	// Test GetPresignedURL
-	presignedURL, err := provider.GetPresignedURL(fileName, 1*time.Hour)
+	opts := &storagetypes.PresignedURLOptions{
+		Duration: 1 * time.Hour,
+	}
+	presignedURL, err := provider.GetPresignedURL(ctx, file, opts)
 	require.NoError(t, err)
 	assert.NotEmpty(t, presignedURL)
 	assert.Contains(t, presignedURL, "https://")
 
 	// Test Delete
-	err = provider.Delete(ctx, fileName)
+	deleteOpts := &storagetypes.DeleteFileOptions{}
+	err = provider.Delete(ctx, file, deleteOpts)
 	require.NoError(t, err)
 
 	// Verify deletion
-	exists, err = provider.Exists(ctx, fileName)
+	exists, err = provider.Exists(ctx, file)
 	require.NoError(t, err)
 	assert.False(t, exists)
 }
@@ -276,7 +291,15 @@ func TestS3ProviderGetPresignedURLWithDefaults(t *testing.T) {
 	}
 
 	// Test with zero duration (should use default)
-	url, err := provider.GetPresignedURL("test-file.txt", 0)
+	file := &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key: "test-file.txt",
+		},
+	}
+	opts := &storagetypes.PresignedURLOptions{
+		Duration: 0,
+	}
+	url, err := provider.GetPresignedURL(context.Background(), file, opts)
 	if err != nil {
 		t.Skip("Skipping test due to AWS connection issues")
 	}
@@ -284,7 +307,8 @@ func TestS3ProviderGetPresignedURLWithDefaults(t *testing.T) {
 	assert.Contains(t, url, "https://")
 
 	// Test with custom duration
-	url, err = provider.GetPresignedURL("test-file.txt", 30*time.Minute)
+	opts.Duration = 30 * time.Minute
+	url, err = provider.GetPresignedURL(context.Background(), file, opts)
 	if err != nil {
 		t.Skip("Skipping test due to AWS connection issues")
 	}
@@ -301,7 +325,12 @@ func TestS3ProviderExistsNonExistentFile(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	exists, err := provider.Exists(ctx, "non-existent-file.txt")
+	file := &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key: "non-existent-file.txt",
+		},
+	}
+	exists, err := provider.Exists(ctx, file)
 	assert.NoError(t, err)
 	assert.False(t, exists)
 }

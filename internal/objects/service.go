@@ -3,14 +3,11 @@ package objects
 import (
 	"context"
 	"io"
-	"maps"
-	"time"
 
 	"github.com/rs/zerolog"
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/pkg/cp"
-	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -26,7 +23,7 @@ func NewService(resolver *cp.Resolver[storage.Provider], clientService *cp.Clien
 	return &Service{
 		resolver:      resolver,
 		clientService: clientService,
-		objectService: storage.NewObjectService().WithValidation(objects.ApplicationMimeTypeValidator),
+		objectService: storage.NewObjectService(),
 	}
 }
 
@@ -37,12 +34,7 @@ func (s *Service) SetObjectService(objectService *storage.ObjectService) {
 
 // Upload uploads a file using provider resolution
 func (s *Service) Upload(ctx context.Context, reader io.Reader, opts *storage.UploadOptions) (*storage.File, error) {
-	// Ensure we have ProviderHints to capture resolution metadata
-	if opts.ProviderHints == nil {
-		opts.ProviderHints = &storage.ProviderHints{}
-	}
-
-	provider, err := s.resolveProvider(ctx, opts)
+	provider, err := s.resolveUploadProvider(ctx, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -53,52 +45,40 @@ func (s *Service) Upload(ctx context.Context, reader io.Reader, opts *storage.Up
 		return nil, err
 	}
 
-	// The resolveProvider method should have populated the ProviderHints with resolution metadata
-	// Extract that information and add it to the returned file
-	if hints, ok := opts.ProviderHints.(*storage.ProviderHints); ok {
-		file.IntegrationID = hints.IntegrationID
-		file.HushID = hints.HushID
-		file.OrganizationID = hints.OrganizationID
-		if hints.Metadata != nil {
-			if file.Metadata == nil {
-				file.Metadata = make(map[string]string)
-			}
-
-			maps.Copy(file.Metadata, hints.Metadata)
-		}
-	}
-
 	return file, nil
 }
 
 // Download downloads a file using provider resolution
-func (s *Service) Download(ctx context.Context, file *storage.File) (*storage.DownloadResult, error) {
-	provider, err := s.resolveProviderForFile(ctx, file)
-	if err != nil {
-		return nil, err
+func (s *Service) Download(ctx context.Context, provider storage.Provider, file *storagetypes.File, opts *storage.DownloadOptions) (*storage.DownloadedMetadata, error) {
+	if provider == nil {
+		resolvedprovider, err := s.resolveDownloadProvider(ctx, file)
+		if err != nil {
+			return nil, err
+		}
+		provider = resolvedprovider
 	}
 
-	return s.objectService.Download(ctx, provider, file)
+	return s.objectService.Download(ctx, provider, file, opts)
 }
 
 // GetPresignedURL gets a presigned URL for a file using provider resolution
-func (s *Service) GetPresignedURL(ctx context.Context, file *storage.File, duration time.Duration) (string, error) {
-	provider, err := s.resolveProviderForFile(ctx, file)
-	if err != nil {
-		return "", err
-	}
-
-	return s.objectService.GetPresignedURL(ctx, provider, file, duration)
-}
+//func (s *Service) GetPresignedURL(ctx context.Context, file *storage.File, duration time.Duration) (string, error) {
+//	provider, err := s.resolveUploadProvider(ctx, file)
+//	if err != nil {
+//		return "", err
+//	}
+//
+//	return s.objectService.GetPresignedURL(ctx, provider, file, duration)
+//}
 
 // Delete deletes a file using provider resolution
-func (s *Service) Delete(ctx context.Context, file *storage.File) error {
-	provider, err := s.resolveProviderForFile(ctx, file)
+func (s *Service) Delete(ctx context.Context, file *storagetypes.File, opts *storagetypes.DeleteFileOptions) error {
+	provider, err := s.resolveDownloadProvider(ctx, file)
 	if err != nil {
 		return err
 	}
 
-	return s.objectService.Delete(ctx, provider, file)
+	return s.objectService.Delete(ctx, provider, file, opts)
 }
 
 // Skipper returns the configured skipper function
@@ -127,7 +107,7 @@ func (s *Service) IgnoreNonExistentKeys() bool {
 }
 
 // resolveProvider resolves a storage provider for upload operations
-func (s *Service) resolveProvider(ctx context.Context, opts *storage.UploadOptions) (storage.Provider, error) {
+func (s *Service) resolveUploadProvider(ctx context.Context, opts *storage.UploadOptions) (storage.Provider, error) {
 	enrichedCtx := s.buildResolutionContext(ctx, opts)
 	resolution := s.resolver.Resolve(enrichedCtx)
 
@@ -143,28 +123,11 @@ func (s *Service) resolveProvider(ctx context.Context, opts *storage.UploadOptio
 		return nil, ErrNoOrganizationID
 	}
 
-	// Extract integration IDs from provider hints or credentials
-	integrationID := lo.ValueOr(res.Credentials, "integration_id", "")
-	hushID := lo.ValueOr(res.Credentials, "hush_id", "")
-
-	// Provider hints take precedence over credentials
-	if hints, ok := opts.ProviderHints.(*storage.ProviderHints); ok {
-		integrationID = lo.Ternary(hints.IntegrationID != "", hints.IntegrationID, integrationID)
-		hushID = lo.Ternary(hints.HushID != "", hints.HushID, hushID)
-	}
-
-	// For system integrations, use system organization ID from credentials
-	orgID = lo.ValueOr(res.Credentials, "system_org_id", orgID)
-
-	if integrationID == "" || hushID == "" {
-		return nil, ErrNoIntegrationOrCredentials
-	}
-
 	cacheKey := cp.ClientCacheKey{
 		TenantID:        orgID,
 		IntegrationType: string(res.ClientType),
-		IntegrationID:   integrationID,
-		HushID:          hushID,
+		//		IntegrationID:   integrationID,
+		//		HushID:          hushID,
 	}
 
 	client := s.clientService.GetClient(ctx, cacheKey, res.ClientType, res.Credentials, res.Config)
@@ -177,7 +140,7 @@ func (s *Service) resolveProvider(ctx context.Context, opts *storage.UploadOptio
 }
 
 // resolveProviderForFile resolves a storage provider for file operations (download, delete, presigned URL)
-func (s *Service) resolveProviderForFile(ctx context.Context, file *storage.File) (storage.Provider, error) {
+func (s *Service) resolveDownloadProvider(ctx context.Context, file *storagetypes.File) (storage.Provider, error) {
 	enrichedCtx := s.buildResolutionContextForFile(ctx, file)
 	resolution := s.resolver.Resolve(enrichedCtx)
 
@@ -189,23 +152,12 @@ func (s *Service) resolveProviderForFile(ctx context.Context, file *storage.File
 
 	// Build ClientCacheKey using file metadata with auth context as backup
 	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
-	tenantID := lo.Ternary(file.OrganizationID != "", file.OrganizationID, orgID)
-
-	if tenantID == "" {
-		return nil, ErrNoOrganizationID
-	}
-	if file.IntegrationID == "" {
-		return nil, ErrMissingIntegrationID
-	}
-	if file.HushID == "" {
-		return nil, ErrMissingHushID
-	}
 
 	cacheKey := cp.ClientCacheKey{
-		TenantID:        tenantID,
+		TenantID:        orgID,
 		IntegrationType: string(providerType.ClientType),
-		IntegrationID:   file.IntegrationID,
-		HushID:          file.HushID,
+		//		IntegrationID:   file.IntegrationID,
+		//		HushID:          file.HushID,
 	}
 
 	return s.clientService.GetClient(ctx, cacheKey, providerType.ClientType, providerType.Credentials, providerType.Config).
@@ -225,15 +177,15 @@ func (s *Service) buildResolutionContext(ctx context.Context, opts *storage.Uplo
 	ctx = cp.WithValue(ctx, opts)
 
 	// Add provider hints if present
-	if hints, ok := opts.ProviderHints.(*storage.ProviderHints); ok {
-		ctx = cp.WithValue(ctx, hints)
+	if opts.ProviderHints != nil {
+		ctx = cp.WithValue(ctx, opts.ProviderHints)
 	}
 
 	return ctx
 }
 
 // buildResolutionContextForFile builds context for provider resolution from file metadata
-func (s *Service) buildResolutionContextForFile(ctx context.Context, file *storage.File) context.Context {
+func (s *Service) buildResolutionContextForFile(ctx context.Context, file *storagetypes.File) context.Context {
 	// Add organization and user information from auth context
 	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
 	ctx = cp.WithValue(ctx, orgID)

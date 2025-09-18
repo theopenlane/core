@@ -69,7 +69,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 		fieldName   string
 		key         string
 		arguments   ast.ArgumentList
-		expected    *storage.FileUpload
+		expected    *storage.File
 		expectedErr error
 	}{
 		{
@@ -86,7 +86,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 					},
 				},
 			},
-			expected: &storage.FileUpload{
+			expected: &storage.File{
 				CorrelatedObjectType: "User",
 				Key:                  "file",
 			},
@@ -106,7 +106,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 					},
 				},
 			},
-			expected:    &storage.FileUpload{},
+			expected:    &storage.File{},
 			expectedErr: ErrUnableToDetermineObjectType,
 		},
 		{
@@ -114,7 +114,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 			fieldName:   "createUser",
 			key:         "file",
 			arguments:   ast.ArgumentList{},
-			expected:    &storage.FileUpload{},
+			expected:    &storage.File{},
 			expectedErr: ErrUnableToDetermineObjectType,
 		},
 		{
@@ -131,7 +131,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 					},
 				},
 			},
-			expected:    &storage.FileUpload{},
+			expected:    &storage.File{},
 			expectedErr: ErrUnableToDetermineObjectType,
 		},
 	}
@@ -147,7 +147,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 				},
 			}
 
-			upload := &storage.FileUpload{
+			upload := &storage.File{
 				Filename: "meow.txt",
 			}
 

@@ -23,7 +23,7 @@ const (
 )
 
 // CreateFileRecord creates a file in the database and returns the file object
-func CreateFileRecord(ctx context.Context, f storage.FileUpload) (*ent.File, error) {
+func CreateFileRecord(ctx context.Context, f storage.File) (*ent.File, error) {
 	return createFile(ctx, f)
 }
 
@@ -36,27 +36,8 @@ func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileD
 	update := txFileClientFromContext(ctx).
 		UpdateOne(entFile).
 		SetPersistedFileSize(fileData.Size).
-		SetURI(fileData.URI).
+		SetURI(fileData.FileMetadata.FullURI).
 		SetStoragePath(fileData.Key)
-
-	// Set provider metadata if available
-	if fileData.ProviderType != "" {
-		update = update.SetStorageProvider(string(fileData.ProviderType))
-	}
-	if fileData.Bucket != "" {
-		update = update.SetStorageVolume(fileData.Bucket)
-	}
-	if fileData.OrganizationID != "" {
-		update = update.SetStorageVolume(fileData.OrganizationID)
-	}
-
-	// Store integration and hush relationships
-	if fileData.IntegrationID != "" {
-		update = update.AddIntegrationIDs(fileData.IntegrationID)
-	}
-	if fileData.HushID != "" {
-		update = update.AddSecretIDs(fileData.HushID)
-	}
 
 	// Store additional metadata
 	if len(fileData.Metadata) > 0 {
@@ -79,11 +60,11 @@ func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileD
 }
 
 // createFile creates a file in the database and returns the file object
-func createFile(ctx context.Context, f storage.FileUpload) (*ent.File, error) {
+func createFile(ctx context.Context, f storage.File) (*ent.File, error) {
 	// Detect content type if not already provided
 	contentType := f.ContentType
 	if contentType == "" {
-		if detectedType, err := storage.DetectContentType(f.File); err == nil {
+		if detectedType, err := storage.DetectContentType(f.RawFile); err == nil {
 			contentType = detectedType
 		}
 	}
@@ -94,8 +75,8 @@ func createFile(ctx context.Context, f storage.FileUpload) (*ent.File, error) {
 	}
 
 	set := ent.CreateFileInput{
-		ProvidedFileName:      f.Filename,
-		ProvidedFileExtension: filepath.Ext(f.Filename),
+		ProvidedFileName:      f.OriginalName,
+		ProvidedFileExtension: filepath.Ext(f.ProvidedExtension),
 		ProvidedFileSize:      &f.Size,
 		DetectedMimeType:      &f.ContentType,
 		DetectedContentType:   contentType,
@@ -121,7 +102,7 @@ func createFile(ctx context.Context, f storage.FileUpload) (*ent.File, error) {
 }
 
 // getOrgOwnerID retrieves the organization ID from the context or input
-func getOrgOwnerID(ctx context.Context, f storage.FileUpload) (string, error) {
+func getOrgOwnerID(ctx context.Context, f storage.File) (string, error) {
 	// skip if the file is a user file, they will not have an organization ID
 	// as the owner and can be used across organizations
 	if strings.EqualFold(f.CorrelatedObjectType, "user") {

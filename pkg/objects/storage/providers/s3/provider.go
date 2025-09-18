@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"time"
 
@@ -17,7 +16,10 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/samber/mo"
 
+	"github.com/theopenlane/core/pkg/objects"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
+
+	"github.com/samber/lo"
 )
 
 const (
@@ -42,13 +44,17 @@ type Provider struct {
 
 // Config contains configuration for S3 provider
 type Config struct {
-	Bucket          string
-	Region          string
-	AccessKeyID     string
-	SecretAccessKey string
-	Endpoint        string
-	UsePathStyle    bool
-	DebugMode       bool
+	Bucket              string
+	Region              string
+	AccessKeyID         string
+	SecretAccessKey     string
+	Endpoint            string
+	UsePathStyle        bool
+	DebugMode           bool
+	ACL                 types.ObjectCannedACL
+	UseSSL              bool
+	PresignedURLTimeout int
+	AWSConfig           aws.Config
 }
 
 // NewS3Provider creates a new S3 provider instance
@@ -62,6 +68,7 @@ func NewS3ProviderResult(cfg *Config) mo.Result[*Provider] {
 	if configResult.IsError() {
 		return mo.Err[*Provider](configResult.Error())
 	}
+
 	return createS3Provider(configResult.MustGet())
 }
 
@@ -69,34 +76,42 @@ func validateS3Config(cfg *Config) mo.Result[*Config] {
 	if cfg.Bucket == "" {
 		return mo.Err[*Config](ErrS3BucketRequired)
 	}
+
 	return mo.Ok(cfg)
 }
 
 func createS3Provider(cfg *Config) mo.Result[*Provider] {
-	// Set up AWS credentials
-	var creds aws.CredentialsProvider
-	if cfg.AccessKeyID != "" && cfg.SecretAccessKey != "" {
-		creds = credentials.NewStaticCredentialsProvider(cfg.AccessKeyID, cfg.SecretAccessKey, "")
-	} else {
-		// Try environment variables
-		awsConfig, err := config.LoadDefaultConfig(context.Background())
+	// Check credentials similar to original implementation
+	if lo.IsEmpty(cfg.AccessKeyID) || lo.IsEmpty(cfg.SecretAccessKey) {
+		log.Info().Msg("AWS credentials not provided, attempting to use environment variables")
+
+		awsEnvConfig, err := config.NewEnvConfig()
 		if err != nil {
-			return mo.Err[*Provider](fmt.Errorf("%w: %w", ErrS3LoadCredentials, err))
+			return mo.Err[*Provider](err)
 		}
-		creds = awsConfig.Credentials
+
+		if lo.IsEmpty(awsEnvConfig.Credentials.AccessKeyID) || lo.IsEmpty(awsEnvConfig.Credentials.SecretAccessKey) {
+			log.Error().Err(err).Msg("AWS credentials not found in environment variables")
+			return mo.Err[*Provider](ErrS3LoadCredentials)
+		}
 	}
 
-	// Create AWS config
-	awsConfig := aws.Config{
-		Region:      cfg.Region,
-		Credentials: creds,
+	// Create credentials with cache as in original
+	creds := aws.NewCredentialsCache(credentials.NewStaticCredentialsProvider(cfg.AccessKeyID, cfg.SecretAccessKey, ""))
+
+	// Use provided AWSConfig as base if available, otherwise create new
+	awsConfig := cfg.AWSConfig
+	if awsConfig.Region == "" {
+		awsConfig.Region = cfg.Region
 	}
+
+	awsConfig.Credentials = creds
 
 	if cfg.Endpoint != "" {
 		awsConfig.BaseEndpoint = aws.String(cfg.Endpoint)
 	}
 
-	// Create S3 client
+	// Create S3 client with same configuration as original
 	client := s3.NewFromConfig(awsConfig, func(o *s3.Options) {
 		o.UsePathStyle = cfg.UsePathStyle
 		o.Region = cfg.Region
@@ -120,6 +135,10 @@ func createS3Provider(cfg *Config) mo.Result[*Provider] {
 	return mo.Ok(provider)
 }
 
+func (p *Provider) ProviderType() storagetypes.ProviderType {
+	return storagetypes.S3Provider
+}
+
 // Upload implements storagetypes.Provider
 func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagetypes.UploadFileOptions) (*storagetypes.UploadedFileMetadata, error) {
 	b := new(bytes.Buffer)
@@ -130,34 +149,35 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 		return nil, err
 	}
 
-	seeker := bytes.NewReader(b.Bytes())
+	// Use objects.ReaderToSeeker as in original
+	seeker, err := objects.ReaderToSeeker(b)
+	if err != nil {
+		return nil, err
+	}
 
 	_, err = p.client.PutObject(ctx, &s3.PutObjectInput{
 		Bucket:      aws.String(p.config.Bucket),
 		Key:         aws.String(opts.FileName),
 		Body:        seeker,
 		ContentType: aws.String(opts.ContentType),
-		Metadata:    opts.Metadata,
+		ACL:         p.config.ACL,
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	return &storagetypes.UploadedFileMetadata{
-		FileStorageMetadata: storagetypes.FileStorageMetadata{
-			Key:  opts.FileName,
-			Size: n,
+		FileMetadata: storagetypes.FileMetadata{
+			Key:    opts.FileName,
+			Size:   n,
+			Folder: opts.FolderDestination,
 		},
-		FolderDestination: p.config.Bucket,
 	}, nil
 }
 
 // Download implements storagetypes.Provider
-func (p *Provider) Download(ctx context.Context, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadFileMetadata, error) {
-	head, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{
-		Bucket: aws.String(p.config.Bucket),
-		Key:    aws.String(opts.FileName),
-	})
+func (p *Provider) Download(ctx context.Context, file *storagetypes.File, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
+	head, err := p.HeadObj(ctx, file.Key)
 	if err != nil {
 		return nil, err
 	}
@@ -165,45 +185,50 @@ func (p *Provider) Download(ctx context.Context, opts *storagetypes.DownloadFile
 	buf := make([]byte, int(*head.ContentLength))
 	w := manager.NewWriteAtBuffer(buf)
 
+	// Use bucket from options if provided, otherwise use default
+	bucket := p.config.Bucket
+	if opts.Bucket != "" {
+		bucket = opts.Bucket
+	}
+
 	_, err = p.downloader.Download(ctx, w, &s3.GetObjectInput{
-		Bucket: aws.String(p.config.Bucket),
-		Key:    aws.String(opts.FileName),
+		Bucket: aws.String(bucket),
+		Key:    aws.String(file.Key),
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return &storagetypes.DownloadFileMetadata{
-		File:   w.Bytes(),
-		Size:   int64(len(w.Bytes())),
-		Writer: w,
+	return &storagetypes.DownloadedFileMetadata{
+		File: w.Bytes(),
+		Size: int64(len(w.Bytes())),
 	}, nil
 }
 
 // Delete implements storagetypes.Provider
-func (p *Provider) Delete(ctx context.Context, key string) error {
+func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, opts *storagetypes.DeleteFileOptions) error {
 	_, err := p.client.DeleteObject(ctx, &s3.DeleteObjectInput{
 		Bucket: aws.String(p.config.Bucket),
-		Key:    aws.String(key),
+		Key:    aws.String(file.Key),
 	})
 
 	return err
 }
 
 // GetPresignedURL implements storagetypes.Provider
-func (p *Provider) GetPresignedURL(key string, expires time.Duration) (string, error) {
-	if expires == 0 {
-		expires = DefaultPresignedURLExpiry
+func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
+	if opts.Duration == 0 {
+		opts.Duration = DefaultPresignedURLExpiry
 	}
 
 	presignURL, err := p.presignClient.PresignGetObject(context.Background(), &s3.GetObjectInput{
 		Bucket:                     aws.String(p.config.Bucket),
-		Key:                        aws.String(key),
-		ResponseContentType:        aws.String("application/octet-stream"),
-		ResponseContentDisposition: aws.String("attachment"),
-	}, func(opts *s3.PresignOptions) {
-		opts.Expires = expires
-		opts.ClientOptions = []func(*s3.Options){
+		Key:                        aws.String(file.Key),
+		ResponseContentType:        lo.ToPtr("application/octet-stream"),
+		ResponseContentDisposition: lo.ToPtr("attachment"),
+	}, func(s3opts *s3.PresignOptions) {
+		s3opts.Expires = opts.Duration
+		s3opts.ClientOptions = []func(*s3.Options){
 			func(o *s3.Options) {
 				o.Region = p.config.Region
 			},
@@ -219,10 +244,10 @@ func (p *Provider) GetPresignedURL(key string, expires time.Duration) (string, e
 }
 
 // Exists checks if an object exists in S3
-func (p *Provider) Exists(ctx context.Context, key string) (bool, error) {
+func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, error) {
 	_, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{
 		Bucket: aws.String(p.config.Bucket),
-		Key:    aws.String(key),
+		Key:    aws.String(file.Key),
 	})
 	if err != nil {
 		var notFound *types.NotFound
@@ -244,4 +269,85 @@ func (p *Provider) GetScheme() *string {
 // Close cleans up resources
 func (p *Provider) Close() error {
 	return nil
+}
+
+// ListBuckets lists the buckets in the current account.
+func (p *Provider) ListBuckets() ([]string, error) {
+	var buckets []string
+
+	result, err := p.client.ListBuckets(context.TODO(), &s3.ListBucketsInput{})
+	if err != nil {
+		return nil, err
+	}
+
+	for _, bucket := range result.Buckets {
+		buckets = append(buckets, *bucket.Name)
+	}
+
+	return buckets, err
+}
+
+// HeadObj checks if an object exists in S3 and returns its metadata
+func (p *Provider) HeadObj(ctx context.Context, key string) (*s3.HeadObjectOutput, error) {
+	obj, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{
+		Bucket: aws.String(p.config.Bucket),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return obj, nil
+}
+
+// Tag updates an existing object in a bucket with specific tags
+func (p *Provider) Tag(ctx context.Context, key string, tags map[string]string) error {
+	_, err := p.client.PutObjectTagging(ctx, &s3.PutObjectTaggingInput{
+		Bucket: aws.String(p.config.Bucket),
+		Key:    aws.String(key),
+		Tagging: &types.Tagging{
+			TagSet: makeTagSet(tags),
+		},
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// GetTags returns the tags for an object in a bucket
+func (p *Provider) GetTags(ctx context.Context, key string) (map[string]string, error) {
+	output, err := p.client.GetObjectTagging(ctx, &s3.GetObjectTaggingInput{
+		Bucket: aws.String(p.config.Bucket),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return makeTagMap(output.TagSet), nil
+}
+
+func makeTagSet(tags map[string]string) []types.Tag {
+	var tagSet []types.Tag
+
+	for k, v := range tags {
+		tagSet = append(tagSet, types.Tag{
+			Key:   aws.String(k),
+			Value: aws.String(v),
+		})
+	}
+
+	return tagSet
+}
+
+func makeTagMap(tags []types.Tag) map[string]string {
+	tagMap := make(map[string]string, len(tags))
+
+	for _, tag := range tags {
+		tagMap[*tag.Key] = *tag.Value
+	}
+
+	return tagMap
 }

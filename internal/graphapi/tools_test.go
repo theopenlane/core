@@ -234,7 +234,7 @@ func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expected
 	for _, upload := range expectedUploads {
 		mockProvider.On("GetScheme").Return(&mockScheme).Once()
 		mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedFileMetadata{
-			FileStorageMetadata: storage.FileStorageMetadata{
+			FileMetadata: storage.FileMetadata{
 				Key:  "test-key",
 				Size: upload.Size,
 			},
@@ -252,7 +252,7 @@ func expectUploadNillable(t *testing.T, mockProvider *mock_shared.MockProvider, 
 		if upload != nil {
 			mockProvider.On("GetScheme").Return(&mockScheme).Once()
 			mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedFileMetadata{
-				FileStorageMetadata: storage.FileStorageMetadata{
+				FileMetadata: storage.FileMetadata{
 					Key:  "test-key",
 					Size: upload.Size,
 				},

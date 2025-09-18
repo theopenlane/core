@@ -75,13 +75,13 @@ func HookFileDelete() ent.Hook {
 					if f.StoragePath != "" && m.ObjectManager != nil {
 						// Convert ent File to storage.File
 						storageFile := &storage.File{
-							ID:   f.ID,
-							Name: f.ProvidedFileName,
-							FileStorageMetadata: storage.FileStorageMetadata{
-								Key:            f.StoragePath,
-								OrganizationID: f.StorageVolume, // Using StorageVolume as organization ID
-								ContentType:    f.DetectedContentType,
-								Size:           f.PersistedFileSize,
+							ID:           f.ID,
+							OriginalName: f.ProvidedFileName,
+							FileMetadata: storage.FileMetadata{
+								Key: f.StoragePath,
+								//OrganizationID: f.StorageVolume, // Using StorageVolume as organization ID
+								ContentType: f.DetectedContentType,
+								Size:        f.PersistedFileSize,
 							},
 						}
 

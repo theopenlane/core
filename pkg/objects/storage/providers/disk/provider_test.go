@@ -26,14 +26,14 @@ func TestNewDiskProvider(t *testing.T) {
 		{
 			name: "valid configuration with explicit base path",
 			config: &diskprovider.Config{
-				BasePath: "/tmp/test-storage",
+				Bucket: "/tmp/test-storage",
 			},
 			expectError: false,
 		},
 		{
 			name: "valid configuration with custom URL",
 			config: &diskprovider.Config{
-				BasePath: "/tmp/test-storage",
+				Bucket:   "/tmp/test-storage",
 				LocalURL: "file://localhost",
 			},
 			expectError: false,
@@ -42,15 +42,15 @@ func TestNewDiskProvider(t *testing.T) {
 			name:          "nil configuration",
 			config:        nil,
 			expectError:   true, // Nil config will cause panic or error
-			errorContains: "path",
+			errorContains: "invalid folder path",
 		},
 		{
 			name: "empty base path",
 			config: &diskprovider.Config{
-				BasePath: "", // Empty path should cause error
+				Bucket: "", // Empty path should cause error
 			},
 			expectError:   true,
-			errorContains: "path",
+			errorContains: "invalid folder path",
 		},
 	}
 
@@ -83,7 +83,7 @@ func TestDiskProviderUploadDownloadFlow(t *testing.T) {
 	defer os.RemoveAll(tempDir)
 
 	config := &diskprovider.Config{
-		BasePath: tempDir,
+		Bucket: tempDir,
 	}
 
 	provider, err := diskprovider.NewDiskProvider(config)
@@ -97,9 +97,6 @@ func TestDiskProviderUploadDownloadFlow(t *testing.T) {
 	uploadOpts := &storagetypes.UploadFileOptions{
 		FileName:    "test-file.txt",
 		ContentType: "text/plain",
-		Metadata: map[string]string{
-			"test_key": "test_value",
-		},
 	}
 
 	reader := strings.NewReader(testContent)
@@ -109,7 +106,8 @@ func TestDiskProviderUploadDownloadFlow(t *testing.T) {
 
 	assert.NotEmpty(t, uploadResult.Key)
 	assert.Equal(t, int64(len(testContent)), uploadResult.Size)
-	assert.NotEmpty(t, uploadResult.FolderDestination)
+	// Folder might be empty since uploadOpts.FolderDestination wasn't set
+	assert.Equal(t, uploadOpts.FolderDestination, uploadResult.Folder)
 
 	// Verify file exists on disk
 	fullPath := filepath.Join(tempDir, uploadResult.Key)
@@ -117,11 +115,16 @@ func TestDiskProviderUploadDownloadFlow(t *testing.T) {
 	assert.NoError(t, err, "Uploaded file should exist on disk")
 
 	// Test Download
+	file := &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key: uploadResult.Key,
+		},
+	}
 	downloadOpts := &storagetypes.DownloadFileOptions{
 		FileName: uploadResult.Key,
 	}
 
-	downloadResult, err := provider.Download(ctx, downloadOpts)
+	downloadResult, err := provider.Download(ctx, file, downloadOpts)
 	require.NoError(t, err)
 	require.NotNil(t, downloadResult)
 
@@ -129,17 +132,32 @@ func TestDiskProviderUploadDownloadFlow(t *testing.T) {
 	assert.Equal(t, int64(len(testContent)), downloadResult.Size)
 
 	// Test Exists
-	exists, err := provider.Exists(ctx, uploadResult.Key)
+	fileExists := &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key: uploadResult.Key,
+		},
+	}
+	exists, err := provider.Exists(ctx, fileExists)
 	assert.NoError(t, err)
 	assert.True(t, exists)
 
 	// Test non-existent file
-	exists, err = provider.Exists(ctx, "non-existent-file.txt")
+	nonExistentFile := &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key: "non-existent-file.txt",
+		},
+	}
+	exists, err = provider.Exists(ctx, nonExistentFile)
 	assert.NoError(t, err)
 	assert.False(t, exists)
 
 	// Test Delete
-	err = provider.Delete(ctx, uploadResult.Key)
+	fileToDelete := &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key: uploadResult.Key,
+		},
+	}
+	err = provider.Delete(ctx, fileToDelete, &storagetypes.DeleteFileOptions{})
 	assert.NoError(t, err)
 
 	// Verify file is deleted
@@ -147,7 +165,7 @@ func TestDiskProviderUploadDownloadFlow(t *testing.T) {
 	assert.True(t, os.IsNotExist(err), "File should be deleted from disk")
 
 	// Test exists after delete
-	exists, err = provider.Exists(ctx, uploadResult.Key)
+	exists, err = provider.Exists(ctx, fileExists)
 	assert.NoError(t, err)
 	assert.False(t, exists)
 }
@@ -158,7 +176,7 @@ func TestDiskProviderGetPresignedURL(t *testing.T) {
 	defer os.RemoveAll(tempDir)
 
 	config := &diskprovider.Config{
-		BasePath: tempDir,
+		Bucket: tempDir,
 	}
 
 	provider, err := diskprovider.NewDiskProvider(config)
@@ -167,11 +185,19 @@ func TestDiskProviderGetPresignedURL(t *testing.T) {
 
 	// Disk provider typically doesn't support presigned URLs in the traditional sense
 	// This test verifies the behavior (might return local file path or error)
-	url, err := provider.GetPresignedURL("test-file.txt", 1*time.Hour)
+	file := &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key: "test-file.txt",
+		},
+	}
+	opts := &storagetypes.PresignedURLOptions{
+		Duration: 1 * time.Hour,
+	}
+	url, err := provider.GetPresignedURL(context.Background(), file, opts)
 
 	// Depending on implementation, this might return an error or a local file path
 	if err != nil {
-		assert.Contains(t, err.Error(), "presigned")
+		assert.Contains(t, err.Error(), "local")
 	} else {
 		assert.NotEmpty(t, url)
 	}
@@ -183,7 +209,7 @@ func TestDiskProviderGetScheme(t *testing.T) {
 	defer os.RemoveAll(tempDir)
 
 	provider, err := diskprovider.NewDiskProvider(&diskprovider.Config{
-		BasePath: tempDir,
+		Bucket: tempDir,
 	})
 	require.NoError(t, err)
 	defer provider.Close()
@@ -193,6 +219,20 @@ func TestDiskProviderGetScheme(t *testing.T) {
 	assert.Equal(t, "file://", *scheme)
 }
 
+func TestDiskProviderType(t *testing.T) {
+	tempDir, err := os.MkdirTemp("", "disk-provider-type-test-*")
+	require.NoError(t, err)
+	defer os.RemoveAll(tempDir)
+
+	provider, err := diskprovider.NewDiskProvider(&diskprovider.Config{
+		Bucket: tempDir,
+	})
+	require.NoError(t, err)
+	defer provider.Close()
+
+	assert.Equal(t, storagetypes.DiskProvider, provider.ProviderType())
+}
+
 func TestDiskProviderErrorCases(t *testing.T) {
 	// Create temporary directory for testing
 	tempDir, err := os.MkdirTemp("", "disk-provider-error-test-*")
@@ -200,7 +240,7 @@ func TestDiskProviderErrorCases(t *testing.T) {
 	defer os.RemoveAll(tempDir)
 
 	config := &diskprovider.Config{
-		BasePath: tempDir,
+		Bucket: tempDir,
 	}
 
 	provider, err := diskprovider.NewDiskProvider(config)
@@ -217,7 +257,12 @@ func TestDiskProviderErrorCases(t *testing.T) {
 		{
 			name: "download non-existent file",
 			operation: func() error {
-				_, err := provider.Download(ctx, &storagetypes.DownloadFileOptions{
+				file := &storagetypes.File{
+					FileMetadata: storagetypes.FileMetadata{
+						Key: "non-existent-file.txt",
+					},
+				}
+				_, err := provider.Download(ctx, file, &storagetypes.DownloadFileOptions{
 					FileName: "non-existent-file.txt",
 				})
 				return err
@@ -227,7 +272,12 @@ func TestDiskProviderErrorCases(t *testing.T) {
 		{
 			name: "delete non-existent file",
 			operation: func() error {
-				return provider.Delete(ctx, "non-existent-file.txt")
+				file := &storagetypes.File{
+					FileMetadata: storagetypes.FileMetadata{
+						Key: "non-existent-file.txt",
+					},
+				}
+				return provider.Delete(ctx, file, &storagetypes.DeleteFileOptions{})
 			},
 			expectError: false, // Disk provider doesn't error on deleting non-existent files
 		},
@@ -265,7 +315,7 @@ func TestDiskConfig(t *testing.T) {
 		{
 			name: "explicit directory",
 			config: &diskprovider.Config{
-				BasePath: "/tmp/custom-storage",
+				Bucket: "/tmp/custom-storage",
 			},
 			expected:    "/tmp/custom-storage",
 			expectError: false,
@@ -304,7 +354,7 @@ func TestDiskProviderConcurrentOperations(t *testing.T) {
 	defer os.RemoveAll(tempDir)
 
 	config := &diskprovider.Config{
-		BasePath: tempDir,
+		Bucket: tempDir,
 	}
 
 	provider, err := diskprovider.NewDiskProvider(config)

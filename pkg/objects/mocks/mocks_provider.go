@@ -7,7 +7,6 @@ package mocks
 import (
 	"context"
 	"io"
-	"time"
 
 	mock "github.com/stretchr/testify/mock"
 	"github.com/theopenlane/core/pkg/objects/storage/types"
@@ -85,16 +84,16 @@ func (_c *MockProvider_Close_Call) RunAndReturn(run func() error) *MockProvider_
 }
 
 // Delete provides a mock function for the type MockProvider
-func (_mock *MockProvider) Delete(ctx context.Context, key string) error {
-	ret := _mock.Called(ctx, key)
+func (_mock *MockProvider) Delete(ctx context.Context, file *storagetypes.File, opts *storagetypes.DeleteFileOptions) error {
+	ret := _mock.Called(ctx, file, opts)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string) error); ok {
-		r0 = returnFunc(ctx, key)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *storagetypes.File, *storagetypes.DeleteFileOptions) error); ok {
+		r0 = returnFunc(ctx, file, opts)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -108,24 +107,30 @@ type MockProvider_Delete_Call struct {
 
 // Delete is a helper method to define mock.On call
 //   - ctx context.Context
-//   - key string
-func (_e *MockProvider_Expecter) Delete(ctx interface{}, key interface{}) *MockProvider_Delete_Call {
-	return &MockProvider_Delete_Call{Call: _e.mock.On("Delete", ctx, key)}
+//   - file *storagetypes.File
+//   - opts *storagetypes.DeleteFileOptions
+func (_e *MockProvider_Expecter) Delete(ctx interface{}, file interface{}, opts interface{}) *MockProvider_Delete_Call {
+	return &MockProvider_Delete_Call{Call: _e.mock.On("Delete", ctx, file, opts)}
 }
 
-func (_c *MockProvider_Delete_Call) Run(run func(ctx context.Context, key string)) *MockProvider_Delete_Call {
+func (_c *MockProvider_Delete_Call) Run(run func(ctx context.Context, file *storagetypes.File, opts *storagetypes.DeleteFileOptions)) *MockProvider_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 string
+		var arg1 *storagetypes.File
 		if args[1] != nil {
-			arg1 = args[1].(string)
+			arg1 = args[1].(*storagetypes.File)
+		}
+		var arg2 *storagetypes.DeleteFileOptions
+		if args[2] != nil {
+			arg2 = args[2].(*storagetypes.DeleteFileOptions)
 		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
@@ -136,33 +141,33 @@ func (_c *MockProvider_Delete_Call) Return(err error) *MockProvider_Delete_Call 
 	return _c
 }
 
-func (_c *MockProvider_Delete_Call) RunAndReturn(run func(ctx context.Context, key string) error) *MockProvider_Delete_Call {
+func (_c *MockProvider_Delete_Call) RunAndReturn(run func(ctx context.Context, file *storagetypes.File, opts *storagetypes.DeleteFileOptions) error) *MockProvider_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Download provides a mock function for the type MockProvider
-func (_mock *MockProvider) Download(ctx context.Context, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadFileMetadata, error) {
-	ret := _mock.Called(ctx, opts)
+func (_mock *MockProvider) Download(ctx context.Context, file *storagetypes.File, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
+	ret := _mock.Called(ctx, file, opts)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Download")
 	}
 
-	var r0 *storagetypes.DownloadFileMetadata
+	var r0 *storagetypes.DownloadedFileMetadata
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *storagetypes.DownloadFileOptions) (*storagetypes.DownloadFileMetadata, error)); ok {
-		return returnFunc(ctx, opts)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *storagetypes.File, *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error)); ok {
+		return returnFunc(ctx, file, opts)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *storagetypes.DownloadFileOptions) *storagetypes.DownloadFileMetadata); ok {
-		r0 = returnFunc(ctx, opts)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *storagetypes.File, *storagetypes.DownloadFileOptions) *storagetypes.DownloadedFileMetadata); ok {
+		r0 = returnFunc(ctx, file, opts)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*storagetypes.DownloadFileMetadata)
+			r0 = ret.Get(0).(*storagetypes.DownloadedFileMetadata)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *storagetypes.DownloadFileOptions) error); ok {
-		r1 = returnFunc(ctx, opts)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *storagetypes.File, *storagetypes.DownloadFileOptions) error); ok {
+		r1 = returnFunc(ctx, file, opts)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -176,42 +181,48 @@ type MockProvider_Download_Call struct {
 
 // Download is a helper method to define mock.On call
 //   - ctx context.Context
+//   - file *storagetypes.File
 //   - opts *storagetypes.DownloadFileOptions
-func (_e *MockProvider_Expecter) Download(ctx interface{}, opts interface{}) *MockProvider_Download_Call {
-	return &MockProvider_Download_Call{Call: _e.mock.On("Download", ctx, opts)}
+func (_e *MockProvider_Expecter) Download(ctx interface{}, file interface{}, opts interface{}) *MockProvider_Download_Call {
+	return &MockProvider_Download_Call{Call: _e.mock.On("Download", ctx, file, opts)}
 }
 
-func (_c *MockProvider_Download_Call) Run(run func(ctx context.Context, opts *storagetypes.DownloadFileOptions)) *MockProvider_Download_Call {
+func (_c *MockProvider_Download_Call) Run(run func(ctx context.Context, file *storagetypes.File, opts *storagetypes.DownloadFileOptions)) *MockProvider_Download_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 *storagetypes.DownloadFileOptions
+		var arg1 *storagetypes.File
 		if args[1] != nil {
-			arg1 = args[1].(*storagetypes.DownloadFileOptions)
+			arg1 = args[1].(*storagetypes.File)
+		}
+		var arg2 *storagetypes.DownloadFileOptions
+		if args[2] != nil {
+			arg2 = args[2].(*storagetypes.DownloadFileOptions)
 		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
 }
 
-func (_c *MockProvider_Download_Call) Return(downloadFileMetadata *storagetypes.DownloadFileMetadata, err error) *MockProvider_Download_Call {
-	_c.Call.Return(downloadFileMetadata, err)
+func (_c *MockProvider_Download_Call) Return(downloadedFileMetadata *storagetypes.DownloadedFileMetadata, err error) *MockProvider_Download_Call {
+	_c.Call.Return(downloadedFileMetadata, err)
 	return _c
 }
 
-func (_c *MockProvider_Download_Call) RunAndReturn(run func(ctx context.Context, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadFileMetadata, error)) *MockProvider_Download_Call {
+func (_c *MockProvider_Download_Call) RunAndReturn(run func(ctx context.Context, file *storagetypes.File, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error)) *MockProvider_Download_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Exists provides a mock function for the type MockProvider
-func (_mock *MockProvider) Exists(ctx context.Context, key string) (bool, error) {
-	ret := _mock.Called(ctx, key)
+func (_mock *MockProvider) Exists(ctx context.Context, file *storagetypes.File) (bool, error) {
+	ret := _mock.Called(ctx, file)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Exists")
@@ -219,16 +230,16 @@ func (_mock *MockProvider) Exists(ctx context.Context, key string) (bool, error)
 
 	var r0 bool
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string) (bool, error)); ok {
-		return returnFunc(ctx, key)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *storagetypes.File) (bool, error)); ok {
+		return returnFunc(ctx, file)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string) bool); ok {
-		r0 = returnFunc(ctx, key)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *storagetypes.File) bool); ok {
+		r0 = returnFunc(ctx, file)
 	} else {
 		r0 = ret.Get(0).(bool)
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string) error); ok {
-		r1 = returnFunc(ctx, key)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *storagetypes.File) error); ok {
+		r1 = returnFunc(ctx, file)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -242,20 +253,20 @@ type MockProvider_Exists_Call struct {
 
 // Exists is a helper method to define mock.On call
 //   - ctx context.Context
-//   - key string
-func (_e *MockProvider_Expecter) Exists(ctx interface{}, key interface{}) *MockProvider_Exists_Call {
-	return &MockProvider_Exists_Call{Call: _e.mock.On("Exists", ctx, key)}
+//   - file *storagetypes.File
+func (_e *MockProvider_Expecter) Exists(ctx interface{}, file interface{}) *MockProvider_Exists_Call {
+	return &MockProvider_Exists_Call{Call: _e.mock.On("Exists", ctx, file)}
 }
 
-func (_c *MockProvider_Exists_Call) Run(run func(ctx context.Context, key string)) *MockProvider_Exists_Call {
+func (_c *MockProvider_Exists_Call) Run(run func(ctx context.Context, file *storagetypes.File)) *MockProvider_Exists_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 string
+		var arg1 *storagetypes.File
 		if args[1] != nil {
-			arg1 = args[1].(string)
+			arg1 = args[1].(*storagetypes.File)
 		}
 		run(
 			arg0,
@@ -270,14 +281,14 @@ func (_c *MockProvider_Exists_Call) Return(b bool, err error) *MockProvider_Exis
 	return _c
 }
 
-func (_c *MockProvider_Exists_Call) RunAndReturn(run func(ctx context.Context, key string) (bool, error)) *MockProvider_Exists_Call {
+func (_c *MockProvider_Exists_Call) RunAndReturn(run func(ctx context.Context, file *storagetypes.File) (bool, error)) *MockProvider_Exists_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetPresignedURL provides a mock function for the type MockProvider
-func (_mock *MockProvider) GetPresignedURL(key string, expires time.Duration) (string, error) {
-	ret := _mock.Called(key, expires)
+func (_mock *MockProvider) GetPresignedURL(ctx context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
+	ret := _mock.Called(ctx, file, opts)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetPresignedURL")
@@ -285,16 +296,16 @@ func (_mock *MockProvider) GetPresignedURL(key string, expires time.Duration) (s
 
 	var r0 string
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string, time.Duration) (string, error)); ok {
-		return returnFunc(key, expires)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *storagetypes.File, *storagetypes.PresignedURLOptions) (string, error)); ok {
+		return returnFunc(ctx, file, opts)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string, time.Duration) string); ok {
-		r0 = returnFunc(key, expires)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *storagetypes.File, *storagetypes.PresignedURLOptions) string); ok {
+		r0 = returnFunc(ctx, file, opts)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string, time.Duration) error); ok {
-		r1 = returnFunc(key, expires)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *storagetypes.File, *storagetypes.PresignedURLOptions) error); ok {
+		r1 = returnFunc(ctx, file, opts)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -307,25 +318,31 @@ type MockProvider_GetPresignedURL_Call struct {
 }
 
 // GetPresignedURL is a helper method to define mock.On call
-//   - key string
-//   - expires time.Duration
-func (_e *MockProvider_Expecter) GetPresignedURL(key interface{}, expires interface{}) *MockProvider_GetPresignedURL_Call {
-	return &MockProvider_GetPresignedURL_Call{Call: _e.mock.On("GetPresignedURL", key, expires)}
+//   - ctx context.Context
+//   - file *storagetypes.File
+//   - opts *storagetypes.PresignedURLOptions
+func (_e *MockProvider_Expecter) GetPresignedURL(ctx interface{}, file interface{}, opts interface{}) *MockProvider_GetPresignedURL_Call {
+	return &MockProvider_GetPresignedURL_Call{Call: _e.mock.On("GetPresignedURL", ctx, file, opts)}
 }
 
-func (_c *MockProvider_GetPresignedURL_Call) Run(run func(key string, expires time.Duration)) *MockProvider_GetPresignedURL_Call {
+func (_c *MockProvider_GetPresignedURL_Call) Run(run func(ctx context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions)) *MockProvider_GetPresignedURL_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
 		}
-		var arg1 time.Duration
+		var arg1 *storagetypes.File
 		if args[1] != nil {
-			arg1 = args[1].(time.Duration)
+			arg1 = args[1].(*storagetypes.File)
+		}
+		var arg2 *storagetypes.PresignedURLOptions
+		if args[2] != nil {
+			arg2 = args[2].(*storagetypes.PresignedURLOptions)
 		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
@@ -336,7 +353,7 @@ func (_c *MockProvider_GetPresignedURL_Call) Return(s string, err error) *MockPr
 	return _c
 }
 
-func (_c *MockProvider_GetPresignedURL_Call) RunAndReturn(run func(key string, expires time.Duration) (string, error)) *MockProvider_GetPresignedURL_Call {
+func (_c *MockProvider_GetPresignedURL_Call) RunAndReturn(run func(ctx context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error)) *MockProvider_GetPresignedURL_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -383,6 +400,105 @@ func (_c *MockProvider_GetScheme_Call) Return(s *string) *MockProvider_GetScheme
 }
 
 func (_c *MockProvider_GetScheme_Call) RunAndReturn(run func() *string) *MockProvider_GetScheme_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// ListBuckets provides a mock function for the type MockProvider
+func (_mock *MockProvider) ListBuckets() ([]string, error) {
+	ret := _mock.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for ListBuckets")
+	}
+
+	var r0 []string
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func() ([]string, error)); ok {
+		return returnFunc()
+	}
+	if returnFunc, ok := ret.Get(0).(func() []string); ok {
+		r0 = returnFunc()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]string)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func() error); ok {
+		r1 = returnFunc()
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockProvider_ListBuckets_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ListBuckets'
+type MockProvider_ListBuckets_Call struct {
+	*mock.Call
+}
+
+// ListBuckets is a helper method to define mock.On call
+func (_e *MockProvider_Expecter) ListBuckets() *MockProvider_ListBuckets_Call {
+	return &MockProvider_ListBuckets_Call{Call: _e.mock.On("ListBuckets")}
+}
+
+func (_c *MockProvider_ListBuckets_Call) Run(run func()) *MockProvider_ListBuckets_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *MockProvider_ListBuckets_Call) Return(strings []string, err error) *MockProvider_ListBuckets_Call {
+	_c.Call.Return(strings, err)
+	return _c
+}
+
+func (_c *MockProvider_ListBuckets_Call) RunAndReturn(run func() ([]string, error)) *MockProvider_ListBuckets_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// ProviderType provides a mock function for the type MockProvider
+func (_mock *MockProvider) ProviderType() storagetypes.ProviderType {
+	ret := _mock.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for ProviderType")
+	}
+
+	var r0 storagetypes.ProviderType
+	if returnFunc, ok := ret.Get(0).(func() storagetypes.ProviderType); ok {
+		r0 = returnFunc()
+	} else {
+		r0 = ret.Get(0).(storagetypes.ProviderType)
+	}
+	return r0
+}
+
+// MockProvider_ProviderType_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ProviderType'
+type MockProvider_ProviderType_Call struct {
+	*mock.Call
+}
+
+// ProviderType is a helper method to define mock.On call
+func (_e *MockProvider_Expecter) ProviderType() *MockProvider_ProviderType_Call {
+	return &MockProvider_ProviderType_Call{Call: _e.mock.On("ProviderType")}
+}
+
+func (_c *MockProvider_ProviderType_Call) Run(run func()) *MockProvider_ProviderType_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *MockProvider_ProviderType_Call) Return(providerType storagetypes.ProviderType) *MockProvider_ProviderType_Call {
+	_c.Call.Return(providerType)
+	return _c
+}
+
+func (_c *MockProvider_ProviderType_Call) RunAndReturn(run func() storagetypes.ProviderType) *MockProvider_ProviderType_Call {
 	_c.Call.Return(run)
 	return _c
 }

@@ -14,17 +14,19 @@ type Provider interface {
 	// Upload uploads a file to the storage provider
 	Upload(ctx context.Context, reader io.Reader, opts *UploadFileOptions) (*UploadedFileMetadata, error)
 	// Download downloads a file from the storage provider
-	Download(ctx context.Context, opts *DownloadFileOptions) (*DownloadFileMetadata, error)
+	Download(ctx context.Context, file *File, opts *DownloadFileOptions) (*DownloadedFileMetadata, error)
 	// Delete deletes a file from the storage provider
-	Delete(ctx context.Context, key string) error
+	Delete(ctx context.Context, file *File, opts *DeleteFileOptions) error
 	// GetPresignedURL generates a presigned URL for file access
-	GetPresignedURL(key string, expires time.Duration) (string, error)
+	GetPresignedURL(ctx context.Context, file *File, opts *PresignedURLOptions) (string, error)
 	// Exists checks if a file exists in the storage provider
-	Exists(ctx context.Context, key string) (bool, error)
+	Exists(ctx context.Context, file *File) (bool, error)
 	// GetScheme returns the URL scheme for this provider
 	GetScheme() *string
-	// Close closes any resources used by the provider
-	Close() error
+	// ListBuckets is used to list the buckets in the storage backend
+	ListBuckets() ([]string, error)
+	ProviderType() ProviderType
+	io.Closer
 }
 
 // ProviderType represents the type of storage provider
@@ -37,71 +39,119 @@ const (
 	DiskProvider ProviderType = "disk"
 )
 
+// File represents a consolidated file object in the system that combines upload, storage, and metadata information
+// This is the objects package representation of the file schema we use in ent
+type File struct {
+	// File is the file to be uploaded
+	RawFile io.ReadSeeker
+	// ID is the unique identifier for the file
+	ID string `json:"id"`
+	// OriginalName is the original filename that was provided by the client on submission
+	OriginalName string `json:"original_name,omitempty"`
+	// MD5 hash of the file for integrity checking
+	MD5 []byte `json:"md5,omitempty"`
+	// ProvidedExtension is the extension provided by the client
+	ProvidedExtension string `json:"provided_extension,omitempty"`
+	// CreatedAt is the time the file was created
+	CreatedAt time.Time `json:"created_at"`
+	// UpdatedAt is the time the file was last updated
+	UpdatedAt time.Time `json:"updated_at"`
+	// Parent is the parent object of the file, if any
+	Parent ParentObject `json:"parent"`
+	// Metadata contains additional file metadata
+	Metadata map[string]string `json:"metadata,omitempty"`
+	// CorrelatedObjectID is the ID of the object this file belongs to
+	CorrelatedObjectID string
+	// CorrelatedObjectType is the type of object this file belongs to
+	CorrelatedObjectType string
+	ProviderType         ProviderType `json:"provider_type,omitempty"`
+	FileMetadata
+}
+
+// ParentObject represents the parent object of a file
+type ParentObject struct {
+	// ID is the unique identifier of the parent object
+	ID string `json:"id"`
+	// Type is the type of the parent object
+	Type string `json:"type"`
+}
+
 // UploadFileOptions contains options for uploading files
 type UploadFileOptions struct {
 	// FileName is the name/key for the uploaded file
 	FileName string `json:"file_name"`
 	// ContentType is the MIME type of the file
 	ContentType string `json:"content_type"`
-	// Metadata contains additional metadata for the file
-	Metadata map[string]string `json:"metadata,omitempty"`
-	// ProviderHints contains hints for provider selection
-	ProviderHints *ProviderHints `json:"provider_hints,omitempty"`
-}
-
-// FileStorageMetadata contains common metadata about file storage operations
-type FileStorageMetadata struct {
-	// Key is the storage key/path for the file
-	Key string `json:"key"`
-	// Size is the size of the file in bytes
-	Size int64 `json:"size"`
-	// ContentType is the MIME type of the file
-	ContentType string `json:"content_type,omitempty"`
-	// IntegrationID references the integration used for storage
-	IntegrationID string `json:"integration_id,omitempty"`
-	// HushID references the credentials used for storage
-	HushID string `json:"hush_id,omitempty"`
-	// OrganizationID identifies the owning organization
-	OrganizationID string `json:"organization_id,omitempty"`
-	// ProviderType indicates which storage provider was used
-	ProviderType ProviderType `json:"provider_type,omitempty"`
 	// Bucket is the storage bucket name
 	Bucket string `json:"bucket,omitempty"`
+	// FolderDestination is the folder/path within the bucket
+	FolderDestination string `json:"folder_destination,omitempty"`
+	FileMetadata
 }
 
 // UploadedFileMetadata contains metadata about an uploaded file
 type UploadedFileMetadata struct {
-	FileStorageMetadata
-	// FolderDestination is the folder that holds the uploaded file
-	FolderDestination string `json:"folder_destination,omitempty"`
+	// TimeUploaded is the time the file was uploaded
+	TimeUploaded time.Time `json:"time_uploaded"`
+	// ElapsedTime is the duration taken to upload the file
+	ElapsedTime time.Duration `json:"elapsed_time"`
+	FileMetadata
+}
+
+// FileMetadata contains common metadata about file storage operations
+type FileMetadata struct {
+	// Key is the key that was used when originally parsing out the file (its source, so to speak)
+	Key string `json:"key"`
+	// Bucket is the bucket where the file is stored
+	Bucket string `json:"bucket,omitempty"`
+	// Folder is the folder/path within the bucket the file is stored
+	Folder string `json:"folder,omitempty"`
+	// FullURI is the full URI to access the file which would include the storage scheme, e.g. s3://bucket/folder/file
+	FullURI string `json:"full_uri,omitempty"`
+	// Size is the size of the file in bytes
+	Size int64 `json:"size"`
+	// ContentType is the MIME type of the file
+	ContentType string `json:"content_type,omitempty"`
+	// ProviderType indicates which storage provider was used
+	ProviderType ProviderType `json:"provider_type,omitempty"`
+	// PresignedURL is the URL that can be used to download the file
+	PresignedURL string `json:"presigned_url,omitempty"`
+	// Name is the display name of the file
+	Name string `json:"name,omitempty"`
+	// ProviderHints contains hints for provider selection
+	ProviderHints *ProviderHints `json:"provider_hints,omitempty"`
 }
 
 // DownloadFileOptions contains options for downloading files
 type DownloadFileOptions struct {
-	// FileName is the storage key/path for the file to download
+	// FileName is the name you'd like the file to be saved as when downloading
 	FileName string `json:"file_name"`
-	// Metadata contains additional metadata for the download
-	Metadata map[string]string `json:"metadata,omitempty"`
-	// IntegrationID references the integration used for storage
-	IntegrationID string `json:"integration_id,omitempty"`
-	// HushID references the credentials used for storage
-	HushID string `json:"hush_id,omitempty"`
-	// OrganizationID identifies the owning organization
-	OrganizationID string `json:"organization_id,omitempty"`
+	// ContentType is the MIME type of the file to be set for the download
+	ContentType string `json:"content_type"`
+	// DownloadFileLocation is the local path to save the downloaded file which does not include the name
+	DownloadFileLocation string `json:"download_file_location,omitempty"`
+	// Writer can be passed in if you want to provide a specific io.Writer or similar
+	Writer any `json:"-"`
+	FileMetadata
 }
 
-// DownloadFileMetadata contains metadata about a downloaded file
-type DownloadFileMetadata struct {
+// DownloadedFileMetadata contains metadata about a downloaded file
+type DownloadedFileMetadata struct {
 	// File contains the file data
 	File []byte `json:"file"`
 	// Size is the size of the downloaded file
 	Size int64 `json:"size"`
-	// Writer is the writer used for streaming downloads
-	Writer any `json:"-"`
+	// TimeDownloaded is the time the file was downloaded
+	TimeDownloaded time.Time `json:"time_downloaded"`
+	// ElapsedTime is the duration taken to download the file
+	ElapsedTime time.Duration `json:"elapsed_time"`
+	FileMetadata
 }
 
 // ProviderHints contains hints for provider selection and configuration
 type ProviderHints struct {
+	// KnownProvider indicates a known provider type
+	KnownProvider ProviderType `json:"known_provider,omitempty"`
 	// PreferredProvider indicates the preferred provider type
 	PreferredProvider ProviderType `json:"preferred_provider,omitempty"`
 	// OrganizationID is the organization ID for provider selection
@@ -110,14 +160,18 @@ type ProviderHints struct {
 	IntegrationID string `json:"integration_id,omitempty"`
 	// HushID is the specific credential set to use
 	HushID string `json:"hush_id,omitempty"`
-	// ContentType helps with provider selection based on file type
-	ContentType string `json:"content_type,omitempty"`
-	// Size helps with provider selection based on file size
-	Size int64 `json:"size,omitempty"`
-	// Feature indicates a more granual feature than we could specify with a type like OrgModule
-	Feature string `json:"feature,omitempty"`
 	// Module indicates the specific module within a feature
-	Module string `json:"module,omitempty"`
+	Module any `json:"module,omitempty"`
 	// Metadata contains additional hints for provider selection
 	Metadata map[string]string `json:"metadata,omitempty"`
+}
+
+type PresignedURLOptions struct {
+	// Duration is the duration the presigned URL should be valid for
+	Duration time.Duration `json:"duration"`
+}
+
+type DeleteFileOptions struct {
+	// Reason is the reason for deleting the file
+	Reason string `json:"reason,omitempty"`
 }

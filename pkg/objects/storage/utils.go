@@ -1,15 +1,14 @@
 package storage
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/gabriel-vasile/mimetype"
-	"github.com/samber/lo"
 	"gopkg.in/yaml.v3"
 )
 
@@ -69,8 +68,8 @@ func ParseDocument(reader io.Reader, mimeType string) (any, error) {
 	}
 }
 
-// NewUploadFile creates a new FileUpload from a file path
-func NewUploadFile(path string) (*FileUpload, error) {
+// NewUploadFile creates a new File from a file path
+func NewUploadFile(path string) (*File, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -95,21 +94,14 @@ func NewUploadFile(path string) (*FileUpload, error) {
 		return nil, err
 	}
 
-	return &FileUpload{
-		File:        file,
-		Filename:    stat.Name(),
-		Size:        stat.Size(),
-		ContentType: mimeType,
-		Key:         "file_upload",
+	return &File{
+		RawFile:      file,
+		CreatedAt:    time.Now(),
+		OriginalName: stat.Name(),
+		FileMetadata: FileMetadata{
+			Size:        stat.Size(),
+			ContentType: mimeType,
+			Key:         "file_upload",
+		},
 	}, nil
-}
-
-// MimeTypeValidator returns a validation function that checks MIME types
-func MimeTypeValidator(allowedTypes ...string) ValidationFunc {
-	return func(_ context.Context, opts *UploadOptions) error {
-		if !lo.Contains(allowedTypes, opts.ContentType) {
-			return fmt.Errorf("%w: %s", ErrUnsupportedMimeType, opts.ContentType)
-		}
-		return nil
-	}
 }

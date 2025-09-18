@@ -5,6 +5,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"os"
 	"reflect"
 	"slices"
 
@@ -23,8 +24,8 @@ type FileSource interface {
 }
 
 // ParseFilesFromSource extracts files from any source using generics
-func ParseFilesFromSource[T FileSource](source T, keys ...string) (map[string][]storage.FileUpload, error) {
-	result := make(map[string][]storage.FileUpload)
+func ParseFilesFromSource[T FileSource](source T, keys ...string) (map[string][]storage.File, error) {
+	result := make(map[string][]storage.File)
 	// Type switch on any(source) is required because Go does not allow type switches directly on generic type parameters
 	switch s := any(source).(type) {
 	case map[string]any:
@@ -43,8 +44,8 @@ func ParseFilesFromSource[T FileSource](source T, keys ...string) (map[string][]
 }
 
 // parseVariablesMap extracts files from a variables map (e.g., GraphQL variables)
-func parseVariablesMap(variables map[string]any, keys ...string) (map[string][]storage.FileUpload, error) {
-	result := make(map[string][]storage.FileUpload)
+func parseVariablesMap(variables map[string]any, keys ...string) (map[string][]storage.File, error) {
+	result := make(map[string][]storage.File)
 
 	for key, value := range variables {
 		// Skip if this key isn't in our filter list (if provided)
@@ -57,17 +58,19 @@ func parseVariablesMap(variables map[string]any, keys ...string) (map[string][]s
 
 		uploads := extractUploads(value)
 		if len(uploads) > 0 {
-			var fileUploads []storage.FileUpload
+			var files []storage.File
 			for _, upload := range uploads {
-				fileUploads = append(fileUploads, storage.FileUpload{
-					File:        upload.File,
-					Filename:    upload.Filename,
-					Size:        upload.Size,
-					ContentType: upload.ContentType,
-					Key:         key,
+				files = append(files, storage.File{
+					RawFile:      upload.File,
+					OriginalName: upload.Filename,
+					FileMetadata: storage.FileMetadata{
+						Size:        upload.Size,
+						ContentType: upload.ContentType,
+						Key:         key,
+					},
 				})
 			}
-			result[key] = fileUploads
+			result[key] = files
 		}
 	}
 
@@ -100,54 +103,6 @@ func extractUploads(v any) []graphql.Upload {
 	}
 }
 
-// BuildStandardUploadOptions creates UploadOptions with consistent patterns
-func BuildStandardUploadOptions(file storage.FileUpload, hints *storage.ProviderHints) *storage.UploadOptions {
-	if hints == nil {
-		hints = &storage.ProviderHints{}
-	}
-
-	return &storage.UploadOptions{
-		FileName:    file.Filename,
-		ContentType: file.ContentType,
-		Metadata: map[string]string{
-			"key":                    file.Key,
-			"correlated_object_type": file.CorrelatedObjectType,
-			"correlated_object_id":   file.CorrelatedObjectID,
-		},
-		ProviderHints: hints,
-	}
-}
-
-// GetFilesForKey retrieves files from context using string key
-func GetFilesForKey(ctx context.Context, key string) ([]storage.File, error) {
-	return FilesFromContextWithKey(ctx, key)
-}
-
-// FileUploader defines the interface for uploading files
-type FileUploader interface {
-	Upload(ctx context.Context, reader io.Reader, opts *storage.UploadOptions) (*storage.File, error)
-}
-
-// UploadFiles provides a unified upload interface for any consumer
-func UploadFiles(ctx context.Context, service FileUploader, files []storage.FileUpload, hints *storage.ProviderHints) ([]storage.File, error) {
-	var uploadedFiles []storage.File
-
-	for _, file := range files {
-		opts := BuildStandardUploadOptions(file, hints)
-
-		uploadedFile, err := service.Upload(ctx, file.File, opts)
-		if err != nil {
-			log.Error().Err(err).Str("file", file.Filename).Msg("failed to upload file")
-
-			return nil, err
-		}
-
-		uploadedFiles = append(uploadedFiles, *uploadedFile)
-	}
-
-	return uploadedFiles, nil
-}
-
 // ProcessFilesForMutation is a generic helper for ent hooks that:
 // 1. Gets files from context using the provided key
 // 2. Updates files with parent information from mutation
@@ -155,7 +110,7 @@ func UploadFiles(ctx context.Context, service FileUploader, files []storage.File
 // This replaces the pattern of individual checkXXXFile functions
 func ProcessFilesForMutation[T Mutation](ctx context.Context, mutation T, key string, parentType ...string) (context.Context, error) {
 	// Get files from context using the provided key
-	files, err := GetFilesForKey(ctx, key)
+	files, err := FilesFromContextWithKey(ctx, key)
 	if err != nil {
 		return ctx, err
 	}
@@ -189,8 +144,8 @@ func ProcessFilesForMutation[T Mutation](ctx context.Context, mutation T, key st
 }
 
 // parseMultipartForm extracts files from multipart.Form
-func parseMultipartForm(form *multipart.Form, keys ...string) (map[string][]storage.FileUpload, error) {
-	result := make(map[string][]storage.FileUpload)
+func parseMultipartForm(form *multipart.Form, keys ...string) (map[string][]storage.File, error) {
+	result := make(map[string][]storage.File)
 
 	// If no keys specified, use all available keys
 	if len(keys) == 0 {
@@ -205,7 +160,7 @@ func parseMultipartForm(form *multipart.Form, keys ...string) (map[string][]stor
 			continue
 		}
 
-		var fileUploads []storage.FileUpload
+		var files []storage.File
 		for _, header := range fileHeaders {
 			file, err := header.Open()
 			if err != nil {
@@ -214,17 +169,19 @@ func parseMultipartForm(form *multipart.Form, keys ...string) (map[string][]stor
 				continue
 			}
 
-			fileUploads = append(fileUploads, storage.FileUpload{
-				File:        file,
-				Filename:    header.Filename,
-				Size:        header.Size,
-				ContentType: header.Header.Get("Content-Type"),
-				Key:         key,
+			files = append(files, storage.File{
+				RawFile:      file,
+				OriginalName: header.Filename,
+				FileMetadata: storage.FileMetadata{
+					Size:        header.Size,
+					ContentType: header.Header.Get("Content-Type"),
+					Key:         key,
+				},
 			})
 		}
 
-		if len(fileUploads) > 0 {
-			result[key] = fileUploads
+		if len(files) > 0 {
+			result[key] = files
 		}
 	}
 
@@ -241,7 +198,7 @@ func WriteFilesToContext(ctx context.Context, f storage.Files) context.Context {
 
 	for _, v := range f {
 		for _, fileObj := range v {
-			files[fileObj.FieldName] = append(files[fileObj.FieldName], fileObj)
+			files[fileObj.Key] = append(files[fileObj.Key], fileObj)
 		}
 	}
 
@@ -320,4 +277,33 @@ func GetFileIDsFromContext(ctx context.Context) []string {
 			return file.ID
 		})
 	})
+}
+
+// ReaderToSeeker function takes an io.Reader as input and returns an io.ReadSeeker which can be used to upload files to the object storage
+func ReaderToSeeker(r io.Reader) (io.ReadSeeker, error) {
+	if r == nil {
+		return nil, nil
+	}
+
+	tmpfile, err := os.CreateTemp("", "upload-")
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err = io.Copy(tmpfile, r); err != nil {
+		_ = tmpfile.Close()
+		_ = os.Remove(tmpfile.Name())
+
+		return nil, err
+	}
+
+	if _, err = tmpfile.Seek(0, 0); err != nil {
+		_ = tmpfile.Close()
+		_ = os.Remove(tmpfile.Name())
+
+		return nil, err
+	}
+
+	// Return the file, which implements io.ReadSeeker which you can now pass to the objects uploader
+	return tmpfile, nil
 }

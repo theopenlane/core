@@ -114,26 +114,25 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 		Key:         aws.String(opts.FileName),
 		Body:        seeker,
 		ContentType: aws.String(opts.ContentType),
-		Metadata:    opts.Metadata,
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	return &storagetypes.UploadedFileMetadata{
-		FileStorageMetadata: storagetypes.FileStorageMetadata{
-			Key:  opts.FileName,
-			Size: n,
+		FileMetadata: storagetypes.FileMetadata{
+			Key:    opts.FileName,
+			Size:   n,
+			Folder: opts.FolderDestination,
 		},
-		FolderDestination: p.config.Bucket,
 	}, nil
 }
 
 // Download implements storagetypes.Provider
-func (p *Provider) Download(ctx context.Context, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadFileMetadata, error) {
+func (p *Provider) Download(ctx context.Context, file *storagetypes.File, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
 	head, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{
 		Bucket: aws.String(p.config.Bucket),
-		Key:    aws.String(opts.FileName),
+		Key:    aws.String(file.Key),
 	})
 	if err != nil {
 		return nil, err
@@ -144,43 +143,43 @@ func (p *Provider) Download(ctx context.Context, opts *storagetypes.DownloadFile
 
 	_, err = p.downloader.Download(ctx, w, &s3.GetObjectInput{
 		Bucket: aws.String(p.config.Bucket),
-		Key:    aws.String(opts.FileName),
+		Key:    aws.String(file.Key),
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return &storagetypes.DownloadFileMetadata{
-		File:   w.Bytes(),
-		Size:   int64(len(w.Bytes())),
-		Writer: w,
+	return &storagetypes.DownloadedFileMetadata{
+		File: w.Bytes(),
+		Size: int64(len(w.Bytes())),
 	}, nil
 }
 
 // Delete implements storagetypes.Provider
-func (p *Provider) Delete(ctx context.Context, key string) error {
+func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, opts *storagetypes.DeleteFileOptions) error {
 	_, err := p.client.DeleteObject(ctx, &s3.DeleteObjectInput{
 		Bucket: aws.String(p.config.Bucket),
-		Key:    aws.String(key),
+		Key:    aws.String(file.Key),
 	})
 
 	return err
 }
 
 // GetPresignedURL implements storagetypes.Provider
-func (p *Provider) GetPresignedURL(key string, expires time.Duration) (string, error) {
+func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
+	expires := opts.Duration
 	if expires == 0 {
 		expires = DefaultPresignedURLExpiry
 	}
 
 	presignURL, err := p.presignClient.PresignGetObject(context.Background(), &s3.GetObjectInput{
 		Bucket:                     aws.String(p.config.Bucket),
-		Key:                        aws.String(key),
+		Key:                        aws.String(file.Key),
 		ResponseContentType:        aws.String("application/octet-stream"),
 		ResponseContentDisposition: aws.String("attachment"),
-	}, func(opts *s3.PresignOptions) {
-		opts.Expires = expires
-		opts.ClientOptions = []func(*s3.Options){
+	}, func(s3opts *s3.PresignOptions) {
+		s3opts.Expires = expires
+		s3opts.ClientOptions = []func(*s3.Options){
 			func(o *s3.Options) {
 				o.Region = "auto"
 			},
@@ -196,10 +195,10 @@ func (p *Provider) GetPresignedURL(key string, expires time.Duration) (string, e
 }
 
 // Exists checks if an object exists in R2
-func (p *Provider) Exists(ctx context.Context, key string) (bool, error) {
+func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, error) {
 	_, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{
 		Bucket: aws.String(p.config.Bucket),
-		Key:    aws.String(key),
+		Key:    aws.String(file.Key),
 	})
 	if err != nil {
 		var notFound *types.NotFound
@@ -219,7 +218,27 @@ func (p *Provider) GetScheme() *string {
 	return &scheme
 }
 
+func (p *Provider) ProviderType() storagetypes.ProviderType {
+	return storagetypes.R2Provider
+}
+
 // Close cleans up resources
 func (p *Provider) Close() error {
 	return nil
+}
+
+// ListBuckets lists the buckets in the current account.
+func (p *Provider) ListBuckets() ([]string, error) {
+	var buckets []string
+
+	result, err := p.client.ListBuckets(context.TODO(), &s3.ListBucketsInput{})
+	if err != nil {
+		return nil, err
+	}
+
+	for _, bucket := range result.Buckets {
+		buckets = append(buckets, *bucket.Name)
+	}
+
+	return buckets, err
 }

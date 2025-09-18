@@ -6,9 +6,12 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"time"
+	"strings"
 
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
+
+	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 )
 
 const (
@@ -20,119 +23,99 @@ const (
 
 // Provider implements the storagetypes.Provider interface for local filesystem storage
 type Provider struct {
-	config *Config
+	config            *Config
+	Scheme            string
+	destinationFolder string
 }
 
 // Config contains configuration for disk provider
 type Config struct {
 	BasePath string
+	Bucket   string
+	Key      string
+	// LocalURL is the URL to use for the "presigned" URL for the file
+	// e.g for local development, this can be http://localhost:17608/files/
 	LocalURL string
 }
 
 // NewDiskProvider creates a new disk provider instance
 func NewDiskProvider(cfg *Config) (*Provider, error) {
-	if cfg == nil {
-		return nil, ErrDiskBasePathRequired
-	}
-	if cfg.BasePath == "" {
-		return nil, ErrDiskBasePathRequired
+	if lo.IsEmpty(cfg.Bucket) {
+		return nil, ErrInvalidFolderPath
 	}
 
-	// Ensure base path exists
-	if err := os.MkdirAll(cfg.BasePath, DefaultDirPermissions); err != nil {
-		return nil, fmt.Errorf("%w %s: %w", ErrDiskCreateBasePath, cfg.BasePath, err)
-	}
-
-	return &Provider{
+	disk := &Provider{
 		config: cfg,
-	}, nil
+		Scheme: "file://",
+	}
+
+	// create directory if it does not exist
+	if _, err := disk.ListBuckets(); os.IsNotExist(err) {
+		log.Info().Str("folder", cfg.Bucket).Msg("directory does not exist, creating directory")
+
+		if err := os.MkdirAll(cfg.Bucket, os.ModePerm); err != nil {
+			return nil, fmt.Errorf("%w: failed to create directory", ErrInvalidFolderPath)
+		}
+	}
+
+	disk.destinationFolder = cfg.Bucket
+
+	return disk, nil
 }
 
 // Upload implements storagetypes.Provider
 func (p *Provider) Upload(_ context.Context, reader io.Reader, opts *storagetypes.UploadFileOptions) (*storagetypes.UploadedFileMetadata, error) {
-	fullPath := filepath.Join(p.config.BasePath, opts.FileName)
-
-	// Ensure directory exists
-	dir := filepath.Dir(fullPath)
-	if err := os.MkdirAll(dir, DefaultDirPermissions); err != nil {
-		return nil, fmt.Errorf("%w %s: %w", ErrDiskCreateDirectory, dir, err)
-	}
-
-	// Create/truncate file
-	file, err := os.Create(fullPath)
+	f, err := os.Create(filepath.Join(p.config.Bucket, opts.FileName))
 	if err != nil {
-		return nil, fmt.Errorf("%w %s: %w", ErrDiskCreateFile, fullPath, err)
+		return nil, err
 	}
-	defer file.Close()
 
-	// Copy data
-	n, err := io.Copy(file, reader)
-	if err != nil {
-		return nil, fmt.Errorf("%w %s: %w", ErrDiskWriteFile, fullPath, err)
-	}
+	defer f.Close()
+
+	n, err := io.Copy(f, reader)
 
 	return &storagetypes.UploadedFileMetadata{
-		FileStorageMetadata: storagetypes.FileStorageMetadata{
-			Key:  opts.FileName,
-			Size: n,
+		FileMetadata: storagetypes.FileMetadata{
+			Key:    opts.FileName,
+			Size:   n,
+			Folder: opts.FolderDestination,
 		},
-		FolderDestination: p.config.BasePath,
-	}, nil
+	}, err
 }
 
 // Download implements storagetypes.Provider
-func (p *Provider) Download(_ context.Context, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadFileMetadata, error) {
-	fullPath := filepath.Join(p.config.BasePath, opts.FileName)
-
-	// Check if file exists
-	stat, err := os.Stat(fullPath)
+func (p *Provider) Download(_ context.Context, file *storagetypes.File, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
+	filePath := filepath.Join(p.config.Bucket, file.Key)
+	fileData, err := os.ReadFile(filePath)
 	if err != nil {
-		if os.IsNotExist(err) {
-			return nil, fmt.Errorf("%w: %s", ErrDiskFileNotFound, opts.FileName)
-		}
-		return nil, fmt.Errorf("%w %s: %w", ErrDiskStatFile, fullPath, err)
+		return nil, err
 	}
 
-	// Read file
-	data, err := os.ReadFile(fullPath)
-	if err != nil {
-		return nil, fmt.Errorf("%w %s: %w", ErrDiskReadFile, fullPath, err)
-	}
-
-	return &storagetypes.DownloadFileMetadata{
-		File: data,
-		Size: stat.Size(),
+	return &storagetypes.DownloadedFileMetadata{
+		File: fileData,
+		Size: int64(len(fileData)),
 	}, nil
 }
 
 // Delete implements storagetypes.Provider
-func (p *Provider) Delete(_ context.Context, key string) error {
-	fullPath := filepath.Join(p.config.BasePath, key)
-
-	err := os.Remove(fullPath)
-	if err != nil && !os.IsNotExist(err) {
-		return fmt.Errorf("%w %s: %w", ErrDiskDeleteFile, fullPath, err)
-	}
-
-	return nil
+func (p *Provider) Delete(_ context.Context, file *storagetypes.File, opts *storagetypes.DeleteFileOptions) error {
+	return os.Remove(filepath.Join(p.config.Bucket, file.Key))
 }
 
 // GetPresignedURL implements storagetypes.Provider
-func (p *Provider) GetPresignedURL(key string, _ time.Duration) (string, error) {
-	// For disk storage, we can return a local URL if configured
-	if p.config.LocalURL != "" {
-		return fmt.Sprintf("%s/%s", p.config.LocalURL, key), nil
+func (p *Provider) GetPresignedURL(_ context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
+	if p.config.LocalURL == "" {
+		return "", ErrMissingLocalURL
 	}
 
-	// Otherwise, return a file:// URL
-	fullPath := filepath.Join(p.config.BasePath, key)
+	base := strings.TrimRight(p.config.LocalURL, "/")
 
-	return fmt.Sprintf("file://%s", fullPath), nil
+	return fmt.Sprintf("%s/%s", base, file.Key), nil
 }
 
 // Exists checks if a file exists on disk
-func (p *Provider) Exists(_ context.Context, key string) (bool, error) {
-	fullPath := filepath.Join(p.config.BasePath, key)
+func (p *Provider) Exists(_ context.Context, file *storagetypes.File) (bool, error) {
+	fullPath := filepath.Join(p.config.Bucket, file.Key)
 
 	_, err := os.Stat(fullPath)
 	if err != nil {
@@ -154,4 +137,17 @@ func (p *Provider) GetScheme() *string {
 // Close cleans up resources
 func (p *Provider) Close() error {
 	return nil
+}
+
+// ListBuckets lists the local bucket if it exists
+func (p *Provider) ListBuckets() ([]string, error) {
+	if _, err := os.Stat(p.config.Bucket); err != nil {
+		return nil, err
+	}
+
+	return []string{p.config.Bucket}, nil
+}
+
+func (p *Provider) ProviderType() storagetypes.ProviderType {
+	return storagetypes.DiskProvider
 }

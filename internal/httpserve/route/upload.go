@@ -11,10 +11,10 @@ func registerFileUploadRoute(router *Router) (err error) { // nolint:unused
 	config := Config{
 		Path:        "/upload",
 		Method:      http.MethodPost,
-		Name:        "FileUpload",
+		Name:        "File",
 		Description: "Upload files to the server storage",
 		Tags:        []string{"files"},
-		OperationID: "FileUpload",
+		OperationID: "File",
 		Security:    handlers.AuthenticatedSecurity,
 		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.FileUploadHandler,

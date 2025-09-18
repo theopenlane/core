@@ -41,7 +41,7 @@ func TestNewR2Provider(t *testing.T) {
 				Region:    "auto",
 			},
 			expectError:   true, // R2 provider currently requires access key/secret key
-			errorContains: "access key",
+			errorContains: "R2 access key ID",
 		},
 		{
 			name: "valid configuration with endpoint",
@@ -64,7 +64,7 @@ func TestNewR2Provider(t *testing.T) {
 				Region:          "auto",
 			},
 			expectError:   true,
-			errorContains: "bucket",
+			errorContains: "R2 bucket",
 		},
 		{
 			name: "empty bucket",
@@ -76,7 +76,7 @@ func TestNewR2Provider(t *testing.T) {
 				Region:          "auto",
 			},
 			expectError:   true,
-			errorContains: "bucket",
+			errorContains: "R2 bucket",
 		},
 		{
 			name: "missing account ID",
@@ -87,7 +87,7 @@ func TestNewR2Provider(t *testing.T) {
 				Region:          "auto",
 			},
 			expectError:   true,
-			errorContains: "account",
+			errorContains: "R2 account ID",
 		},
 		{
 			name: "missing credentials",
@@ -97,13 +97,13 @@ func TestNewR2Provider(t *testing.T) {
 				Region:    "auto",
 			},
 			expectError:   true,
-			errorContains: "access key", // Error message says "R2 access key ID and secret access key are required"
+			errorContains: "R2 access key ID", // Error message says "R2 access key ID and secret access key are required"
 		},
 		{
 			name:          "nil configuration",
 			config:        nil,
 			expectError:   true,
-			errorContains: "bucket", // Should panic and be caught
+			errorContains: "R2 bucket", // Should panic and be caught
 		},
 	}
 
@@ -173,6 +173,10 @@ func TestR2ProviderMethods(t *testing.T) {
 		assert.Equal(t, "r2://", *scheme)
 	})
 
+	t.Run("ProviderType", func(t *testing.T) {
+		assert.Equal(t, storagetypes.R2Provider, provider.ProviderType())
+	})
+
 	t.Run("Close", func(t *testing.T) {
 		// Create a new provider for this test since we'll close it
 		testProvider, err := r2provider.NewR2Provider(config)
@@ -209,9 +213,6 @@ func TestR2ProviderUploadDownloadFlow(t *testing.T) {
 	uploadOpts := &storagetypes.UploadFileOptions{
 		FileName:    "test-file.txt",
 		ContentType: "text/plain",
-		Metadata: map[string]string{
-			"test_key": "test_value",
-		},
 	}
 
 	reader := strings.NewReader(testContent)
@@ -223,11 +224,16 @@ func TestR2ProviderUploadDownloadFlow(t *testing.T) {
 	assert.Equal(t, int64(len(testContent)), uploadResult.Size)
 
 	// Test Download
+	file := &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key: uploadResult.Key,
+		},
+	}
 	downloadOpts := &storagetypes.DownloadFileOptions{
 		FileName: uploadResult.Key,
 	}
 
-	downloadResult, err := provider.Download(ctx, downloadOpts)
+	downloadResult, err := provider.Download(ctx, file, downloadOpts)
 	require.NoError(t, err)
 	require.NotNil(t, downloadResult)
 
@@ -235,22 +241,26 @@ func TestR2ProviderUploadDownloadFlow(t *testing.T) {
 	assert.Equal(t, int64(len(testContent)), downloadResult.Size)
 
 	// Test Exists
-	exists, err := provider.Exists(ctx, uploadResult.Key)
+	exists, err := provider.Exists(ctx, file)
 	assert.NoError(t, err)
 	assert.True(t, exists)
 
 	// Test GetPresignedURL
-	presignedURL, err := provider.GetPresignedURL(uploadResult.Key, 1*time.Hour)
+	opts := &storagetypes.PresignedURLOptions{
+		Duration: 1 * time.Hour,
+	}
+	presignedURL, err := provider.GetPresignedURL(ctx, file, opts)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, presignedURL)
 	assert.Contains(t, presignedURL, "https://")
 
 	// Test Delete
-	err = provider.Delete(ctx, uploadResult.Key)
+	deleteOpts := &storagetypes.DeleteFileOptions{}
+	err = provider.Delete(ctx, file, deleteOpts)
 	assert.NoError(t, err)
 
 	// Test exists after delete
-	exists, err = provider.Exists(ctx, uploadResult.Key)
+	exists, err = provider.Exists(ctx, file)
 	assert.NoError(t, err)
 	assert.False(t, exists)
 }
@@ -273,7 +283,15 @@ func TestR2ProviderGetPresignedURLWithDefaults(t *testing.T) {
 	defer provider.Close()
 
 	// Test with default duration (should not error)
-	url, err := provider.GetPresignedURL("test-key.txt", 0)
+	file := &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key: "test-key.txt",
+		},
+	}
+	opts := &storagetypes.PresignedURLOptions{
+		Duration: 0,
+	}
+	url, err := provider.GetPresignedURL(context.Background(), file, opts)
 	if err != nil {
 		// Some implementations might not support default duration
 		assert.Contains(t, err.Error(), "duration")
@@ -301,7 +319,12 @@ func TestR2ProviderExistsNonExistentFile(t *testing.T) {
 
 	ctx := context.Background()
 
-	exists, err := provider.Exists(ctx, "non-existent-file-12345.txt")
+	file := &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key: "non-existent-file-12345.txt",
+		},
+	}
+	exists, err := provider.Exists(ctx, file)
 	assert.NoError(t, err)
 	assert.False(t, exists)
 }

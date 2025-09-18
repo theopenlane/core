@@ -77,7 +77,7 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 		}
 
 		// Convert to flat list, filtering out input key and adding object details
-		uploads := []storage.FileUpload{}
+		uploads := []storage.File{}
 		for k, files := range filesMap {
 			// skip the input key
 			if k == inputKey {
@@ -383,7 +383,7 @@ func checkAllowedAuthType(ctx context.Context) error {
 }
 
 // retrieveObjectDetails retrieves the object details from the field context
-func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *storage.FileUpload) (*storage.FileUpload, error) {
+func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *storage.File) (*storage.File, error) {
 	// loop through the arguments in the request
 	for _, arg := range rctx.Field.Arguments {
 		// check if the argument is an upload
