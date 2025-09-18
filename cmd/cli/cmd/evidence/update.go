@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -102,7 +102,7 @@ func updateValidation() (id string, input openlaneclient.UpdateEvidenceInput, up
 
 	// parse the files to upload
 	for _, file := range files {
-		u, err := objects.NewUploadFile(file)
+		u, err := storage.NewUploadFile(file)
 		if err != nil {
 			return id, input, uploads, err
 		}

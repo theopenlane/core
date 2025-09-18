@@ -13,95 +13,79 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
 )
 
-// Upload handles the file Upload process per key in the multipart form and returns the uploaded files
-// in addition to uploading the files to the storage, it also creates the file in the database
-func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload) ([]objects.File, error) {
-	uploadedFiles := make([]objects.File, 0, len(files))
+const (
+	// MIMEDetectionBufferSize defines the buffer size for MIME type detection
+	MIMEDetectionBufferSize = 512
+)
 
-	for _, f := range files {
-		// create the file in the database
-		entFile, err := createFile(ctx, u, f)
-		if err != nil {
-			log.Error().Err(err).Str("file", f.Filename).Msg("failed to create file")
+// CreateFileRecord creates a file in the database and returns the file object
+func CreateFileRecord(ctx context.Context, f storage.FileUpload) (*ent.File, error) {
+	return createFile(ctx, f)
+}
 
-			return nil, err
-		}
+// UpdateFileWithStorageMetadata updates a file entity with storage metadata
+func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileData storage.File) error {
+	// allow the update, permissions are not yet set to allow the update
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-		// generate the uploaded file name
-		uploadedFileName := u.NameFuncGenerator(entFile.ID + "_" + f.Filename)
-		fileData := objects.File{
-			ID:               entFile.ID,
-			FieldName:        f.Key,
-			OriginalName:     f.Filename,
-			UploadedFileName: uploadedFileName,
-			MimeType:         entFile.DetectedMimeType,
-			ContentType:      entFile.DetectedContentType,
-		}
+	// update the file with the complete storage metadata
+	update := txFileClientFromContext(ctx).
+		UpdateOne(entFile).
+		SetPersistedFileSize(fileData.Size).
+		SetURI(fileData.URI).
+		SetStoragePath(fileData.Key)
 
-		// validate the file
-		if err := u.ValidationFunc(fileData); err != nil {
-			log.Error().Err(err).Str("file", f.Filename).Msg("failed to validate file")
-
-			return nil, err
-		}
-
-		// Upload the file to the storage and get the metadata
-		metadata, err := u.Storage.Upload(ctx, f.File, &objects.UploadFileOptions{
-			FileName:    uploadedFileName,
-			ContentType: entFile.DetectedContentType,
-			Metadata: map[string]string{
-				"file_id": entFile.ID,
-			},
-		})
-		if err != nil {
-			log.Error().Err(err).Str("file", f.Filename).Msg("failed to upload file")
-
-			return nil, err
-		}
-
-		// add metadata to file information
-		fileData.Size = metadata.Size
-		fileData.FolderDestination = metadata.FolderDestination
-		fileData.StorageKey = metadata.Key
-
-		// allow the update, permissions are not yet set to allow the update
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-		// update the file with the size
-		if _, err := txFileClientFromContext(ctx).
-			UpdateOne(entFile).
-			SetPersistedFileSize(metadata.Size).
-			SetURI(objects.CreateURI(entFile.StorageScheme, metadata.FolderDestination, metadata.Key)).
-			SetStorageVolume(metadata.FolderDestination).
-			SetStoragePath(metadata.Key).
-			Save(allowCtx); err != nil {
-			log.Error().Err(err).Msg("failed to update file with size")
-			return nil, err
-		}
-
-		log.Debug().Str("file", fileData.UploadedFileName).
-			Str("id", fileData.FolderDestination).
-			Str("mime_type", fileData.MimeType).
-			Str("size", objects.FormatFileSize(fileData.Size)).
-			Msg("file uploaded")
-
-		uploadedFiles = append(uploadedFiles, fileData)
+	// Set provider metadata if available
+	if fileData.ProviderType != "" {
+		update = update.SetStorageProvider(string(fileData.ProviderType))
+	}
+	if fileData.Bucket != "" {
+		update = update.SetStorageVolume(fileData.Bucket)
+	}
+	if fileData.OrganizationID != "" {
+		update = update.SetStorageVolume(fileData.OrganizationID)
 	}
 
-	return uploadedFiles, nil
+	// Store integration and hush relationships
+	if fileData.IntegrationID != "" {
+		update = update.AddIntegrationIDs(fileData.IntegrationID)
+	}
+	if fileData.HushID != "" {
+		update = update.AddSecretIDs(fileData.HushID)
+	}
+
+	// Store additional metadata
+	if len(fileData.Metadata) > 0 {
+		// Convert to map[string]any for ent
+		metadata := make(map[string]any)
+		for k, v := range fileData.Metadata {
+			metadata[k] = v
+		}
+		update = update.SetMetadata(metadata)
+	}
+
+	if _, err := update.Save(allowCtx); err != nil {
+		log.Error().Err(err).Msg("failed to update file with storage metadata")
+		return err
+	}
+
+	log.Debug().Str("file", fileData.Name).Str("id", fileData.ID).Str("key", fileData.Key).Int64("size", fileData.Size).Msg("file uploaded")
+
+	return nil
 }
 
 // createFile creates a file in the database and returns the file object
-func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (*ent.File, error) {
-	contentType, err := objects.DetectContentType(f.File)
-	if err != nil {
-		log.Error().Err(err).Str("file", f.Filename).Msg("failed to fetch content type")
-
-		return nil, err
+func createFile(ctx context.Context, f storage.FileUpload) (*ent.File, error) {
+	// Detect content type if not already provided
+	contentType := f.ContentType
+	if contentType == "" {
+		if detectedType, err := storage.DetectContentType(f.File); err == nil {
+			contentType = detectedType
+		}
 	}
 
 	orgID, err := getOrgOwnerID(ctx, f)
@@ -116,25 +100,15 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 		DetectedMimeType:      &f.ContentType,
 		DetectedContentType:   contentType,
 		StoreKey:              &f.Key,
-		StorageScheme:         u.Storage.GetScheme(),
 	}
 
 	if orgID != "" {
 		set.OrganizationIDs = []string{orgID}
 	}
 
-	// get file contents to store in the database
-	contents, err := objects.StreamToByte(f.File)
-	if err != nil {
-		log.Error().Err(err).Str("file", f.Filename).Msg("failed to read file contents")
-
-		return nil, err
-	}
-
 	// bypass further permissions checks and allow the file to be created
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	entFile, err := txFileClientFromContext(ctx).Create().
-		SetFileContents(contents).
 		SetInput(set).
 		Save(allowCtx)
 	if err != nil {
@@ -147,7 +121,7 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 }
 
 // getOrgOwnerID retrieves the organization ID from the context or input
-func getOrgOwnerID(ctx context.Context, f objects.FileUpload) (string, error) {
+func getOrgOwnerID(ctx context.Context, f storage.FileUpload) (string, error) {
 	// skip if the file is a user file, they will not have an organization ID
 	// as the owner and can be used across organizations
 	if strings.EqualFold(f.CorrelatedObjectType, "user") {

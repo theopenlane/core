@@ -6,14 +6,14 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 func HookSubprocessor() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.SubprocessorFunc(func(ctx context.Context, m *generated.SubprocessorMutation) (generated.Value, error) {
 			// check for uploaded files (e.g. logo image)
-			fileIDs := objects.GetFileIDsFromContext(ctx)
+			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
 				var err error
 
@@ -33,7 +33,7 @@ func checkSubprocessorLogoFile(ctx context.Context, m *generated.SubprocessorMut
 	logoKey := "logoFile"
 
 	// get the file from the context, if it exists
-	logoFile, _ := objects.FilesFromContextWithKey(ctx, logoKey)
+	logoFile, _ := pkgobjects.FilesFromContextWithKey(ctx, logoKey)
 	if logoFile == nil {
 		return ctx, nil
 	}
@@ -49,7 +49,7 @@ func checkSubprocessorLogoFile(ctx context.Context, m *generated.SubprocessorMut
 		logoFile[0].Parent.ID, _ = m.ID()
 		logoFile[0].Parent.Type = "trust_center_setting"
 
-		ctx = objects.UpdateFileInContextByKey(ctx, logoKey, logoFile[0])
+		ctx = pkgobjects.UpdateFileInContextByKey(ctx, logoKey, logoFile[0])
 	}
 
 	return ctx, nil

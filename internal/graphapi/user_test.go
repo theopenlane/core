@@ -15,7 +15,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryUser(t *testing.T) {
@@ -178,10 +178,10 @@ func TestMutationUpdateUser(t *testing.T) {
 
 	weakPassword := "notsecure"
 
-	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+	avatarFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
 	assert.NilError(t, err)
 
-	invalidAvatarFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
+	invalidAvatarFile, err := storage.NewUploadFile("testdata/uploads/hello.txt")
 	assert.NilError(t, err)
 
 	testCases := []struct {
@@ -289,9 +289,9 @@ func TestMutationUpdateUser(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			if tc.avatarFile != nil {
 				if tc.errorMsg == "" {
-					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.avatarFile})
+					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.avatarFile})
 				} else {
-					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+					expectUploadCheckOnly(t, suite.client.mockProvider)
 				}
 			}
 

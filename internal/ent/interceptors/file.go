@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 // InterceptorFile is an ent interceptor that filters the file query on the organization id
@@ -65,6 +66,15 @@ func InterceptorPresignedURL() ent.Interceptor {
 	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 		return intercept.FileFunc(func(ctx context.Context, q *generated.FileQuery) (generated.Value, error) {
 			zerolog.Ctx(ctx).Debug().Msg("InterceptorPresignedURL")
+
+			// get the fields that were queried and check for the presignedURL field
+			fields := graphutils.CheckForRequestedField(ctx, "presignedURL")
+
+			// if the presignedURL field is queried, we need to load integration and secret edges
+			if fields {
+				q.WithIntegrations().WithSecrets()
+			}
+
 			v, err := next.Query(ctx, q)
 			if err != nil {
 				return nil, err
@@ -75,9 +85,6 @@ func InterceptorPresignedURL() ent.Interceptor {
 
 				return v, nil
 			}
-
-			// get the fields that were queried and check for the presignedURL field
-			fields := graphutils.CheckForRequestedField(ctx, "presignedURL")
 
 			// if the presignedURL field wasn't queried, return the result as is
 			if !fields {
@@ -121,7 +128,45 @@ func setPresignedURL(ctx context.Context, file *generated.File, q *generated.Fil
 		return nil
 	}
 
-	url, err := q.ObjectManager.Storage.GetPresignedURL(file.StoragePath, presignedURLDuration)
+	// Convert ent File to storage.File
+	storageFile := &storage.File{
+		ID:   file.ID,
+		Name: file.ProvidedFileName,
+		FileStorageMetadata: storage.FileStorageMetadata{
+			Key:            file.StoragePath,
+			OrganizationID: file.StorageVolume,
+			ContentType:    file.DetectedContentType,
+			Size:           file.PersistedFileSize,
+		},
+	}
+
+	// Check if integration and hush IDs are stored in metadata
+	if file.Metadata != nil {
+		if integrationID, ok := file.Metadata["integration_id"].(string); ok {
+			storageFile.IntegrationID = integrationID
+		}
+		if hushID, ok := file.Metadata["hush_id"].(string); ok {
+			storageFile.HushID = hushID
+		}
+	}
+
+	// Convert metadata from map[string]interface{} to map[string]string
+	if file.Metadata != nil {
+		metadata := make(map[string]string)
+		for k, v := range file.Metadata {
+			if str, ok := v.(string); ok {
+				metadata[k] = str
+			}
+		}
+		storageFile.Metadata = metadata
+	}
+
+	// Set provider-specific fields if available
+	if file.StorageProvider != "" {
+		storageFile.ProviderType = storage.ProviderType(file.StorageProvider)
+	}
+
+	url, err := q.ObjectManager.GetPresignedURL(ctx, storageFile, presignedURLDuration)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msg("failed to get presigned URL")
 

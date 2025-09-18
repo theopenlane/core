@@ -7,7 +7,6 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
@@ -18,7 +17,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -61,7 +59,7 @@ func (a *Client) GetSessionConfig() *sessions.SessionConfig {
 // GenerateUserAuthSessionWithOrg creates a new auth session for the user and the new target organization id
 // this is used when the user is switching organizations, or when the user deletes their authorized organization
 // and is automatically switched into another organization
-// Before the sessions is issues, we check that the user still has access to the target organization
+// Before the sessions is issued, we check that the user still has access to the target organization
 // if not, the user's default org (or personal org) is used
 func (a *Client) GenerateUserAuthSessionWithOrg(ctx context.Context, w http.ResponseWriter, user *generated.User, targetOrgID string) (*models.AuthData, error) {
 	auth, err := a.createTokenPair(ctx, user, targetOrgID)
@@ -135,37 +133,6 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 	auth.TokenType = bearerScheme
 
 	return auth, nil
-}
-
-// checkActiveSubscription checks if the organization has an active subscription
-func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) { //nolint:unused
-	// if the entitlement manager is disabled, we can skip the check
-	if !a.GetDBClient().EntitlementManager.Config.IsEnabled() {
-		return true, nil
-	}
-
-	if orgID == "" {
-		log.Warn().Msg("organization ID is required to check for active subscription")
-
-		return false, nil
-	}
-
-	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
-		return true, nil
-	}
-
-	// allow to skip the org interceptor middleware before a user could potentially be authenticated
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
-
-	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
-	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Str("organization_id", orgID).Msg("failed to find org subscription for organization")
-
-		return false, err
-	}
-
-	return subscription != nil && subscription.Active, nil
 }
 
 // createClaims creates the claims for the JWT token using the id for the user and organization

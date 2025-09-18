@@ -307,13 +307,50 @@ data:
   CORE_RATELIMIT_BURST: {{ .Values.openlane.coreConfiguration.ratelimit.burst | quote | default "30" }}
   CORE_RATELIMIT_EXPIRES: {{ .Values.openlane.coreConfiguration.ratelimit.expires | quote | default "10m" }}
   CORE_OBJECTSTORAGE_ENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.enabled | quote | default "true" }}
-  CORE_OBJECTSTORAGE_PROVIDER: {{ .Values.openlane.coreConfiguration.objectStorage.provider | quote }}
-  CORE_OBJECTSTORAGE_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.region | quote }}
-  CORE_OBJECTSTORAGE_DEFAULTBUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.defaultBucket | quote | default "file_uploads" }}
-  CORE_OBJECTSTORAGE_LOCALURL: {{ .Values.openlane.coreConfiguration.objectStorage.localURL | quote | default "http://localhost:17608/files/" }}
-  CORE_OBJECTSTORAGE_KEYS: {{ join "," .Values.openlane.coreConfiguration.objectStorage.keys | quote | default "uploadFile" }}
+  CORE_OBJECTSTORAGE_KEYS: {{ join "," .Values.openlane.coreConfiguration.objectStorage.keys | quote | default ""uploadFile"" }}
   CORE_OBJECTSTORAGE_MAXSIZEMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxSizeMB | quote }}
   CORE_OBJECTSTORAGE_MAXMEMORYMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxMemoryMB | quote }}
+  CORE_OBJECTSTORAGE_DEVMODE: {{ .Values.openlane.coreConfiguration.objectStorage.devMode | quote | default "false" }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_ENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.enabled | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.accessKeyID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.secretAccessKey | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.region | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.bucket | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.endpoint | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_PROJECTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.projectID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALSJSON: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.credentialsJSON | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_ACCOUNTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.accountID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_S3_APITOKEN: {{ .Values.openlane.coreConfiguration.objectStorage.providers.s3.apiToken | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_ENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.enabled | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.accessKeyID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.secretAccessKey | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.region | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.bucket | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.endpoint | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_PROJECTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.projectID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALSJSON: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.credentialsJSON | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_ACCOUNTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.accountID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_APITOKEN: {{ .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.apiToken | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_ENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.enabled | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.accessKeyID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.secretAccessKey | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.region | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.bucket | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.endpoint | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_PROJECTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.projectID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALSJSON: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.credentialsJSON | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_ACCOUNTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.accountID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_GCS_APITOKEN: {{ .Values.openlane.coreConfiguration.objectStorage.providers.gcs.apiToken | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_ENABLED: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.enabled | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_ACCESSKEYID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.accessKeyID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_SECRETACCESSKEY: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.secretAccessKey | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_REGION: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.region | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_BUCKET: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.bucket | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_ENDPOINT: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.endpoint | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_PROJECTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.projectID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALSJSON: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.credentialsJSON | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_ACCOUNTID: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.accountID | quote }}
+  CORE_OBJECTSTORAGE_PROVIDERS_DISK_APITOKEN: {{ .Values.openlane.coreConfiguration.objectStorage.providers.disk.apiToken | quote }}
   CORE_SUBSCRIPTION_ENABLED: {{ .Values.openlane.coreConfiguration.subscription.enabled | quote | default "false" }}
   CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: {{ .Values.openlane.coreConfiguration.subscription.publicStripeKey | quote }}
 {{- if .Values.openlane.coreConfiguration.subscription.stripeWebhookURL }}

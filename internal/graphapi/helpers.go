@@ -22,8 +22,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 const (
@@ -48,7 +50,7 @@ func injectClient(db *ent.Client) graphql.OperationMiddleware {
 // injectFileUploader adds the file uploader as middleware to the graphql operation
 // this is used to handle file uploads to a storage backend, add the file to the file schema
 // and add the uploaded files to the echo context
-func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
+func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 	return func(ctx context.Context, next graphql.Resolver) (any, error) {
 		rctx := graphql.GetFieldContext(ctx)
 
@@ -65,39 +67,31 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 			return next(ctx)
 		}
 
-		// get the uploads from the variables
-		// gqlgen will parse the variables and convert the graphql.Upload to a struct with the file data
-		uploads := []objects.FileUpload{}
-
-		// check for the input key in the request, this is used for uploads and shouldn't be processed
+		// Use consolidated parsing logic for GraphQL variables
 		inputKey := graphutils.GetInputFieldVariableName(ctx)
 
-		for k, v := range op.Variables {
-			ups := getUploadsFromRequest(v)
+		// Parse files from GraphQL variables using the consolidated parser
+		filesMap, err := pkgobjects.ParseFilesFromSource(op.Variables)
+		if err != nil {
+			return nil, err
+		}
 
-			for _, up := range ups {
-				fileUpload := &objects.FileUpload{
-					File:        up.File,
-					Filename:    up.Filename,
-					Size:        up.Size,
-					ContentType: up.ContentType,
-				}
+		// Convert to flat list, filtering out input key and adding object details
+		uploads := []storage.FileUpload{}
+		for k, files := range filesMap {
+			// skip the input key
+			if k == inputKey {
+				log.Debug().Str("key", k).Msg("skipping input key, this is for bulk upload")
+				continue
+			}
 
-				var err error
-
-				// skip the input key
-				if k == inputKey {
-					log.Debug().Str("file", up.Filename).Msg("skipping input key, this is for bulk upload")
-
-					continue
-				}
-
-				fileUpload, err = retrieveObjectDetails(rctx, k, fileUpload)
+			for _, fileUpload := range files {
+				// Add object details using existing logic
+				enhanced, err := retrieveObjectDetails(rctx, k, &fileUpload)
 				if err != nil {
 					return nil, err
 				}
-
-				uploads = append(uploads, *fileUpload)
+				uploads = append(uploads, *enhanced)
 			}
 		}
 
@@ -106,11 +100,66 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 			return next(ctx)
 		}
 
-		// handle the file uploads
-		ctx, err := u.FileUpload(ctx, uploads)
-		if err != nil {
-			return nil, err
+		// Process uploads using consolidated functions
+		// First, create database records for all uploads
+		var uploadedFiles []storage.File
+		for _, f := range uploads {
+			// Get organization ID from context for provider hints
+			orgID, _ := auth.GetOrganizationIDFromContext(ctx)
+			if orgID != "" {
+				// Update file upload with organization context for provider resolution
+				f.CorrelatedObjectID = orgID
+				f.CorrelatedObjectType = "organization"
+			}
+
+			// Create the file in the database using the existing helper
+			entFile, err := objmw.CreateFileRecord(ctx, f)
+			if err != nil {
+				log.Error().Err(err).Str("file", f.Filename).Msg("failed to create file")
+				return nil, err
+			}
+
+			// Build upload options using consolidated helper
+			hints := &storage.ProviderHints{
+				OrganizationID: orgID,
+				Metadata: map[string]string{
+					"key":         f.Key,
+					"object_type": f.CorrelatedObjectType,
+				},
+			}
+			uploadOpts := pkgobjects.BuildStandardUploadOptions(f, hints)
+
+			// Upload to storage using consolidated function
+			uploadedFile, err := u.Upload(ctx, f.File, uploadOpts)
+			if err != nil {
+				log.Error().Err(err).Str("file", f.Filename).Msg("failed to upload file")
+				return nil, err
+			}
+
+			// Use database entity ID and update with storage metadata
+			uploadedFile.ID = entFile.ID
+			// Update database with storage metadata using existing helper
+			if err := objmw.UpdateFileWithStorageMetadata(ctx, entFile, *uploadedFile); err != nil {
+				log.Error().Err(err).Msg("failed to update file with storage metadata")
+				return nil, err
+			}
+
+			uploadedFiles = append(uploadedFiles, *uploadedFile)
 		}
+
+		// Store files in context using consolidated helper, grouped by field name
+		contextFilesMap := make(storage.Files)
+		for _, file := range uploadedFiles {
+			// Use the field name from the file metadata, or "uploads" as default
+			fieldName := file.FieldName
+			if fieldName == "" {
+				fieldName = "uploads"
+			}
+			contextFilesMap[fieldName] = append(contextFilesMap[fieldName], file)
+		}
+
+		// Add files to context using consolidated helper
+		ctx = pkgobjects.WriteFilesToContext(ctx, contextFilesMap)
 
 		// add the uploaded files to the echo context if there are any
 		// this is useful for using other middleware that depends on the echo context
@@ -133,29 +182,6 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 
 		return field, nil
 	}
-}
-
-// getUploadsFromRequest returns the uploads from the request
-// this is used to get the uploads from the variables in the request
-func getUploadsFromRequest(v any) []graphql.Upload {
-	switch v := v.(type) {
-	case []graphql.Upload:
-		return v
-	case graphql.Upload:
-		return []graphql.Upload{v}
-	case []interface{}:
-		uploads := []graphql.Upload{}
-
-		for _, i := range v {
-			if u, ok := i.(graphql.Upload); ok {
-				uploads = append(uploads, u)
-			}
-		}
-
-		return uploads
-	}
-
-	return nil
 }
 
 // withPool returns the existing pool or creates a new one if it does not exist to be used in queries
@@ -357,7 +383,7 @@ func checkAllowedAuthType(ctx context.Context) error {
 }
 
 // retrieveObjectDetails retrieves the object details from the field context
-func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *objects.FileUpload) (*objects.FileUpload, error) {
+func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *storage.FileUpload) (*storage.FileUpload, error) {
 	// loop through the arguments in the request
 	for _, arg := range rctx.Field.Arguments {
 		// check if the argument is an upload

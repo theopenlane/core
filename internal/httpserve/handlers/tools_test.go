@@ -32,12 +32,11 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/core/pkg/objects"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 
 	// import generated runtime which is required to prevent cyclical dependencies
@@ -93,7 +92,7 @@ type HandlerTestSuite struct {
 	tf                   *testutils.TestFixture
 	ofgaTF               *fgatest.OpenFGATestFixture
 	stripeMockBackend    *mocks.MockStripeBackend
-	objectStore          *objects.Objects
+	objectStore          *objects.Service
 	sharedTokenManager   *tokens.TokenManager
 	sharedRedisClient    *redis.Client
 	sharedSessionManager sessions.Store[map[string]any]
@@ -208,7 +207,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
 	require.NoError(t, err, "failed opening connection to database")
 
-	suite.objectStore, err = coreutils.MockObjectManager(t, objmw.Upload)
+	suite.objectStore, _, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, nil)
 	require.NoError(t, err)
 
 	// truncate river tables
@@ -219,7 +218,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.db = db
 
 	// add the client
-	suite.api, err = coreutils.TestClient(suite.db, suite.objectStore)
+	suite.api, err = coreutils.TestClient(suite.db)
 	require.NoError(t, err)
 
 	// setup router with schema registry

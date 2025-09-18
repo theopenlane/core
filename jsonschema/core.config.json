@@ -966,57 +966,6 @@
       "type": "object",
       "description": "Config defines the config for Mime middleware"
     },
-    "objects.Config": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates if the store is enabled"
-        },
-        "provider": {
-          "type": "string",
-          "description": "Provider is the name of the provider, eg. disk, s3, will default to disk if nothing is set"
-        },
-        "accessKey": {
-          "type": "string",
-          "description": "AccessKey is the access key for the storage provider"
-        },
-        "region": {
-          "type": "string",
-          "description": "Region is the region for the storage provider"
-        },
-        "secretKey": {
-          "type": "string",
-          "description": "SecretKey is the secret key for the storage provider"
-        },
-        "credentialsJSON": {
-          "type": "string",
-          "description": "CredentialsJSON is the credentials JSON for the storage provider"
-        },
-        "defaultBucket": {
-          "type": "string",
-          "description": "DefaultBucket is the default bucket name for the storage provider, if not set, it will use the default\nthis is the local path for disk storage or the bucket name for S3"
-        },
-        "localURL": {
-          "type": "string",
-          "description": "LocalURL is the URL to use for the \"presigned\" URL for the file when using local storage\ne.g for local development, this can be http://localhost:17608/files/"
-        },
-        "keys": {
-          "$ref": "#/$defs/[]string",
-          "description": "Keys is a list of keys to look for in the multipart form on the REST request\nif the keys are not found, the request upload will be skipped\nthis is not used when uploading files with gqlgen and the graphql handler"
-        },
-        "maxSizeMB": {
-          "type": "integer",
-          "description": "MaxUploadSizeMB is the maximum size of file uploads to accept in megabytes"
-        },
-        "maxMemoryMB": {
-          "type": "integer",
-          "description": "MaxUploadMemoryMB is the maximum memory in megabytes to use when parsing a multipart form"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "Config is the configuration for the object store"
-    },
     "otelx.Config": {
       "properties": {
         "enabled": {
@@ -1324,6 +1273,107 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "storage.ProviderConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates if object storage is enabled"
+        },
+        "keys": {
+          "$ref": "#/$defs/[]string",
+          "description": "Keys are the form field keys that will be processed for uploads"
+        },
+        "maxSizeMB": {
+          "type": "integer",
+          "description": "MaxSizeMB is the maximum file size allowed in MB"
+        },
+        "maxMemoryMB": {
+          "type": "integer",
+          "description": "MaxMemoryMB is the maximum memory to use for file uploads in MB"
+        },
+        "devMode": {
+          "type": "boolean",
+          "description": "DevMode enables simple file upload handling for local development and testing"
+        },
+        "providers": {
+          "$ref": "#/$defs/storage.ProviderConfigs",
+          "description": "Providers contains configuration for each storage provider"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "ProviderConfig contains configuration for object storage providers"
+    },
+    "storage.ProviderConfigs": {
+      "properties": {
+        "s3": {
+          "$ref": "#/$defs/storage.ProviderCredentials",
+          "description": "S3 provider configuration"
+        },
+        "cloudflareR2": {
+          "$ref": "#/$defs/storage.ProviderCredentials",
+          "description": "CloudflareR2 provider configuration"
+        },
+        "gcs": {
+          "$ref": "#/$defs/storage.ProviderCredentials",
+          "description": "GCS provider configuration"
+        },
+        "disk": {
+          "$ref": "#/$defs/storage.ProviderCredentials",
+          "description": "Disk provider configuration"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future"
+    },
+    "storage.ProviderCredentials": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates if this provider is enabled"
+        },
+        "accessKeyID": {
+          "type": "string",
+          "description": "AccessKeyID for cloud providers"
+        },
+        "secretAccessKey": {
+          "type": "string",
+          "description": "SecretAccessKey for cloud providers"
+        },
+        "region": {
+          "type": "string",
+          "description": "Region for cloud providers"
+        },
+        "bucket": {
+          "type": "string",
+          "description": "Bucket name for cloud providers"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Endpoint for custom endpoints"
+        },
+        "projectID": {
+          "type": "string",
+          "description": "ProjectID for GCS"
+        },
+        "credentialsJSON": {
+          "type": "string",
+          "description": "CredentialsJSON for GCS"
+        },
+        "accountID": {
+          "type": "string",
+          "description": "AccountID for Cloudflare R2"
+        },
+        "apiToken": {
+          "type": "string",
+          "description": "APIToken for Cloudflare R2"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "ProviderCredentials contains credentials and configuration for a storage provider Given most provides had a smiliar set of credentials and only some minor exceptions we consolidated into a single struct to make it easier to manage and extend"
+    },
     "tokens.Config": {
       "properties": {
         "kid": {
@@ -1487,7 +1537,7 @@
       "description": "Ratelimit contains the configuration for the rate limiter"
     },
     "objectStorage": {
-      "$ref": "#/$defs/objects.Config",
+      "$ref": "#/$defs/storage.ProviderConfig",
       "description": "ObjectStorage contains the configuration for the object storage backend"
     },
     "subscription": {

@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/corejobs"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -74,7 +74,7 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 }
 
 func handleExportUpdate(ctx context.Context, m *generated.ExportMutation, next ent.Mutator) (generated.Value, error) {
-	fileIDs := objects.GetFileIDsFromContext(ctx)
+	fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
 	if len(fileIDs) > 0 {
 		var err error
 
@@ -94,7 +94,7 @@ func checkExportFiles(ctx context.Context, m *generated.ExportMutation) (context
 	key := "exportFiles"
 
 	// get the file from the context, if it exists
-	file, err := objects.FilesFromContextWithKey(ctx, key)
+	file, err := pkgobjects.FilesFromContextWithKey(ctx, key)
 	if err != nil {
 		return ctx, err
 	}
@@ -108,7 +108,7 @@ func checkExportFiles(ctx context.Context, m *generated.ExportMutation) (context
 			file[i].Parent.ID, _ = m.ID()
 			file[i].Parent.Type = m.Type()
 
-			ctx = objects.UpdateFileInContextByKey(ctx, key, file[i])
+			ctx = pkgobjects.UpdateFileInContextByKey(ctx, key, file[i])
 		}
 	}
 

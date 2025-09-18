@@ -31,9 +31,9 @@ func (h *Handler) FileUploadHandler(ctx echo.Context, openapi *OpenAPIContext) e
 		for _, f := range file {
 			outFile := models.File{
 				ID:           f.ID,
-				Name:         f.UploadedFileName,
+				Name:         f.Name,
 				PresignedURL: f.PresignedURL,
-				MimeType:     f.MimeType,
+				MimeType:     f.ContentType,
 				ContentType:  f.ContentType,
 				MD5:          f.MD5,
 				Size:         f.Size,

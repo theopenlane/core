@@ -1,0 +1,2 @@
+// Package cp (short for "client pool") provides basic pooling mechanisms for stongly typed clients, offering ability to manage multiple instances of the same client type with different configurations and credentials (e.g., multiple S3 clients for different accounts). It's initial design / usage was focused towards storage providers, but it was built to be generic enough to support any client type that we may want to use and pass around as a part of a multi-tenant system
+package cp

@@ -25,8 +25,8 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/objects"
 )
 
 // This file will not be regenerated automatically.
@@ -38,6 +38,9 @@ const (
 	ActionUpdate = "update"
 	ActionDelete = "delete"
 	ActionCreate = "create"
+
+	// DefaultMaxMemoryMB is the default max memory for multipart forms (32MB)
+	DefaultMaxMemoryMB = 32
 )
 
 var (
@@ -54,7 +57,7 @@ type Resolver struct {
 	db                *ent.Client
 	pool              *soiree.PondPool
 	extensionsEnabled bool
-	uploader          *objects.Objects
+	uploader          *objects.Service
 	isDevelopment     bool
 	complexityLimit   int
 	maxResultLimit    *int
@@ -63,7 +66,7 @@ type Resolver struct {
 }
 
 // NewResolver returns a resolver configured with the given ent client
-func NewResolver(db *ent.Client, u *objects.Objects) *Resolver {
+func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 	return &Resolver{
 		db:       db,
 		uploader: u,
@@ -132,8 +135,8 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
 	srv.AddTransport(transport.MultipartForm{
-		MaxUploadSize: r.uploader.MaxSize,
-		MaxMemory:     r.uploader.MaxMemory,
+		MaxUploadSize: r.uploader.MaxSize(),
+		MaxMemory:     DefaultMaxMemoryMB << 20, //nolint:mnd
 	})
 
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000)) //nolint:mnd
@@ -225,7 +228,7 @@ func WithTransactions(h *handler.Server, d *ent.Client) {
 
 // WithFileUploader adds the file uploader to the graphql handler
 // this will handle the file upload process for the multipart form
-func WithFileUploader(h *handler.Server, u *objects.Objects) {
+func WithFileUploader(h *handler.Server, u *objects.Service) {
 	h.AroundFields(injectFileUploader(u))
 }
 

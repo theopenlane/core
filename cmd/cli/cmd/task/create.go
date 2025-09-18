@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -89,7 +89,7 @@ func create(ctx context.Context) error {
 	}
 
 	if cmd.InputFile != "" {
-		u, err := objects.NewUploadFile(cmd.InputFile)
+		u, err := storage.NewUploadFile(cmd.InputFile)
 		cobra.CheckErr(err)
 
 		o, err := client.CreateBulkCSVTask(ctx, graphql.Upload{

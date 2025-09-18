@@ -388,7 +388,7 @@ func TestLastUsedPersonalAccessToken(t *testing.T) {
 		BearerToken: token.Token,
 	}
 
-	graphClient, err := testutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeader))
+	graphClient, err := testutils.TestClientWithAuth(suite.client.db, openlaneclient.WithCredentials(authHeader))
 	assert.NilError(t, err)
 
 	// get the token to make sure the last used is updated using the token

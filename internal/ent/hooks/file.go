@@ -5,9 +5,11 @@ import (
 	"errors"
 
 	"entgo.io/ent"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 var (
@@ -51,16 +53,68 @@ func HookFileDelete() ent.Hook {
 				}
 
 				files, err := m.Client().File.Query().Where(file.IDIn(ids...)).
-					Select(file.FieldStoragePath).
+					Select(
+						file.FieldID,
+						file.FieldStoragePath,
+						file.FieldStorageProvider,
+						file.FieldDetectedContentType,
+						file.FieldPersistedFileSize,
+						file.FieldMetadata,
+						file.FieldStorageVolume,
+					).
+					WithIntegrations().
+					WithSecrets().
 					All(ctx)
 				if err != nil {
 					return nil, err
 				}
 
-				for _, file := range files {
-					if file.StoragePath != "" {
-						if err := m.ObjectManager.Storage.Delete(ctx, file.StoragePath); err != nil {
-							return nil, err
+				log.Debug().Interface("files", files).Msg("deleting files from object storage")
+
+				for _, f := range files {
+					if f.StoragePath != "" && m.ObjectManager != nil {
+						// Convert ent File to storage.File
+						storageFile := &storage.File{
+							ID:   f.ID,
+							Name: f.ProvidedFileName,
+							FileStorageMetadata: storage.FileStorageMetadata{
+								Key:            f.StoragePath,
+								OrganizationID: f.StorageVolume, // Using StorageVolume as organization ID
+								ContentType:    f.DetectedContentType,
+								Size:           f.PersistedFileSize,
+							},
+						}
+
+						// Convert metadata from map[string]interface{} to map[string]string
+						if f.Metadata != nil {
+							metadata := make(map[string]string)
+							for k, v := range f.Metadata {
+								if str, ok := v.(string); ok {
+									metadata[k] = str
+								}
+							}
+							storageFile.Metadata = metadata
+						}
+
+						// Set provider-specific fields if available
+						if f.StorageProvider != "" {
+							storageFile.ProviderType = storage.ProviderType(f.StorageProvider)
+						}
+
+						// Use the integration and hush that were used to store this file
+						// These relationships should exist if the file was stored via integration
+						for _, integration := range f.Edges.Integrations {
+							storageFile.IntegrationID = integration.ID
+							break // Use the first (and should be only) integration
+						}
+						for _, secret := range f.Edges.Secrets {
+							storageFile.HushID = secret.ID
+							break // Use the first (and should be only) secret
+						}
+
+						if err := m.ObjectManager.Delete(ctx, storageFile); err != nil {
+							log.Error().Err(err).Str("file_id", f.ID).Msg("failed to delete file from storage")
+							// Continue with other files rather than failing the entire operation
 						}
 					}
 				}

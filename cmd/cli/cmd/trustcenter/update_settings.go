@@ -14,7 +14,7 @@ import (
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -106,7 +106,7 @@ func updateSettingsValidation() (id string, input openlaneclient.UpdateTrustCent
 
 	logoFileLoc := cmd.Config.String("logo-file")
 	if logoFileLoc != "" {
-		file, err := objects.NewUploadFile(logoFileLoc)
+		file, err := storage.NewUploadFile(logoFileLoc)
 		if err != nil {
 			return id, input, nil, nil, err
 		}
@@ -120,7 +120,7 @@ func updateSettingsValidation() (id string, input openlaneclient.UpdateTrustCent
 	}
 	faviconFileLoc := cmd.Config.String("favicon-file")
 	if faviconFileLoc != "" {
-		file, err := objects.NewUploadFile(faviconFileLoc)
+		file, err := storage.NewUploadFile(faviconFileLoc)
 		if err != nil {
 			return id, input, nil, nil, err
 		}

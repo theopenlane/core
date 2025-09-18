@@ -29,12 +29,9 @@ func HookPolicy() ent.Hook {
 
 			default:
 
-				ctx, err := checkPolicyFile(ctx, m)
+				var err error
+				ctx, err = checkPolicyFile(ctx, m)
 				if err != nil {
-					return nil, err
-				}
-
-				if err := importFileToSchema(ctx, m, m.ObjectManager, "policyFile"); err != nil {
 					return nil, err
 				}
 
@@ -48,27 +45,29 @@ func HookPolicy() ent.Hook {
 func checkPolicyFile[T utils.GenericMutation](ctx context.Context, m T) (context.Context, error) {
 	key := "policyFile"
 
-	// get the file from the context, if it exists
-	file, _ := objects.FilesFromContextWithKey(ctx, key)
+	// Get files using the new helper
+	files, err := objects.GetFilesForKey(ctx, key)
+	if err != nil {
+		return ctx, err
+	}
 
-	// return early if no file is provided
-	if file == nil {
+	// Return early if no files
+	if len(files) == 0 {
 		return ctx, nil
 	}
 
 	// we should only have one file
-	if len(file) > 1 {
+	if len(files) > 1 {
 		return ctx, ErrNotSingularUpload
 	}
 
-	// this should always be true, but check just in case
-	if file[0].FieldName == key {
+	// Create adapter for the existing mutation interface
+	adapter := objects.NewGenericMutationAdapter(m,
+		func(mut T) (string, bool) { return mut.ID() },
+		func(mut T) string { return mut.Type() },
+	)
 
-		file[0].Parent.ID, _ = m.ID()
-		file[0].Parent.Type = strcase.SnakeCase(m.Type())
-
-		ctx = objects.UpdateFileInContextByKey(ctx, key, file[0])
-	}
-
-	return ctx, nil
+	// Use the generic helper to process the file with snake_case parent type
+	parentType := strcase.SnakeCase(m.Type())
+	return objects.ProcessFilesForMutation(ctx, adapter, key, parentType)
 }

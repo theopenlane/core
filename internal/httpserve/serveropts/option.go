@@ -1,16 +1,18 @@
 package serveropts
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"maps"
 	"net/http"
 	"os"
-	"slices"
 	"strings"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 
@@ -31,11 +33,13 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/hush/crypto"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/pkg/cp"
 	"github.com/theopenlane/core/pkg/entitlements"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
@@ -45,7 +49,7 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/core/pkg/windmill"
@@ -225,7 +229,7 @@ func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client, j
 func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Setup Graph API Handlers
-		r := graphapi.NewResolver(c, s.Config.ObjectManager).
+		r := graphapi.NewResolver(c, s.Config.StorageService).
 			WithExtensions(s.Config.Settings.Server.EnableGraphExtensions).
 			WithDevelopment(s.Config.Settings.Server.Dev).
 			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).
@@ -437,132 +441,29 @@ func WithCORS() ServerOption {
 // WithObjectStorage sets up the object storage for the server
 func WithObjectStorage() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		settings := s.Config.Settings.ObjectStorage
-		if settings.Enabled {
-			var (
-				store objects.Storage
-				err   error
-			)
+		// Create StorageService with resolver and cp using real config
+		storageService := createStorageServiceFromConfig(s.Config.Settings.ObjectStorage, s.Config.Handler.DBClient)
 
-			switch settings.Provider {
-			case storage.ProviderS3:
-				opts := storage.NewS3Options(
-					storage.WithRegion(s.Config.Settings.ObjectStorage.Region),
-					storage.WithBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
-					storage.WithAccessKeyID(s.Config.Settings.ObjectStorage.AccessKey),
-					storage.WithSecretAccessKey(s.Config.Settings.ObjectStorage.SecretKey),
-				)
+		// Store in config for access
+		s.Config.StorageService = storageService
 
-				store, err = storage.NewS3FromConfig(opts)
-				if err != nil {
-					log.Panic().Err(err).Msg("error creating S3 store")
-				}
-
-				bucks, err := store.ListBuckets()
-				if err != nil {
-					log.Panic().Err(err).Msg("error listing buckets")
-				}
-
-				if ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket); !ok {
-					log.Panic().Msg("default bucket not found")
-				}
-			// case storage.ProviderGCS:
-			// 	gcsOpts := []storage.GCSOption{
-			// 		storage.WithGCSBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
-			// 	}
-
-			// 	if s.Config.Settings.ObjectStorage.CredentialsJSON != "" {
-			// 		gcsOpts = append(gcsOpts, storage.WithGCSClientOptions(option.WithCredentialsJSON([]byte(s.Config.Settings.ObjectStorage.CredentialsJSON))))
-			// 	}
-
-			// 	// reuse region field to hold project ID for now
-			// 	if s.Config.Settings.ObjectStorage.Region != "" {
-			// 		gcsOpts = append(gcsOpts, storage.WithGCSProjectID(s.Config.Settings.ObjectStorage.Region))
-			// 	}
-
-			// 	store, err = storage.NewGCSFromConfig(context.Background(), storage.NewGCSOptions(gcsOpts...))
-			// 	if err != nil {
-			// 		log.Panic().Err(err).Msg("error creating GCS store")
-			// 	}
-
-			// 	bucks, err := store.ListBuckets()
-			// 	if err != nil {
-			// 		log.Panic().Err(err).Msg("error listing buckets")
-			// 	}
-
-			// 	if ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket); !ok {
-			// 		log.Panic().Msg("default bucket not found")
-			// 	}
-			default:
-				s.Config.Settings.ObjectStorage.Provider = storage.ProviderDisk
-
-				opts := storage.NewDiskOptions(
-					storage.WithLocalBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
-					storage.WithLocalURL(s.Config.Settings.ObjectStorage.LocalURL),
-				)
-
-				store, err = storage.NewDiskStorage(opts)
-				if err != nil {
-					log.Panic().Err(err).Msg("error creating disk store")
-				}
-			}
-
-			opts := []objects.Option{objects.WithMaxFileSize(10 << 20), // nolint:mnd
-				objects.WithStorage(store),
-				objects.WithNameFuncGenerator(objects.OrganizationNameFunc),
-				objects.WithKeys(s.Config.Settings.ObjectStorage.Keys),
-				objects.WithUploaderFunc(objmw.Upload),
-				objects.WithValidationFunc(objmw.MimeTypeValidator),
-			}
-
-			if s.Config.Settings.ObjectStorage.MaxUploadMemoryMB != 0 {
-				opts = append(opts,
-					objects.WithMaxMemory(s.Config.Settings.ObjectStorage.MaxUploadMemoryMB*1024*1024), //nolint:mnd
-				)
-			}
-
-			if s.Config.Settings.ObjectStorage.MaxUploadSizeMB != 0 {
-				opts = append(opts,
-					objects.WithMaxFileSize(s.Config.Settings.ObjectStorage.MaxUploadSizeMB*1024*1024), //nolint:mnd
-				)
-			}
-
-			s.Config.ObjectManager, err = objects.New(opts...)
-			if err != nil {
-				log.Panic().Err(err).Msg("Error creating object storage")
-			}
-
-			// add upload middleware to authMW, non-authenticated endpoints will not have this middleware
-			uploadMw := echo.WrapMiddleware(objects.FileUploadMiddleware(s.Config.ObjectManager))
-
-			s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, uploadMw)
-
-			log.Info().Msg("Object storage initialized")
-		}
+		log.Info().Msg("Object storage initialized")
 	})
 }
 
 // WithEntitlements sets up the entitlements client for the server which currently only supports stripe
 func WithEntitlements() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		// ensure we have a struct to be able to check the enabled flag
-		// on the config
-		client := &entitlements.StripeClient{
-			Config: &s.Config.Settings.Entitlements,
-		}
-
 		if s.Config.Settings.Entitlements.Enabled {
-			var err error
-			client, err = entitlements.NewStripeClient(
+			client, err := entitlements.NewStripeClient(
 				entitlements.WithAPIKey(s.Config.Settings.Entitlements.PrivateStripeKey),
 				entitlements.WithConfig(s.Config.Settings.Entitlements))
 			if err != nil {
 				log.Panic().Err(err).Msg("Error creating entitlements client")
 			}
 
+			s.Config.Handler.Entitlements = client
 		}
-
-		s.Config.Handler.Entitlements = client
 	})
 }
 
@@ -638,4 +539,138 @@ func WithCrypto() ServerOption {
 
 		log.Info().Bool("enabled", s.Config.Settings.Server.FieldLevelEncryption.Enabled).Msg("Crypto initialized")
 	})
+}
+
+const (
+	// DefaultClientPoolTTL is the default TTL for client pool entries
+	DefaultClientPoolTTL = 15 * time.Minute
+)
+
+// createStorageServiceFromConfig creates a storage service configured from the provided settings
+func createStorageServiceFromConfig(config storage.ProviderConfig, entClient *ent.Client) *objects.Service {
+	// Create cp components with configurable TTL
+	pool := cp.NewClientPool[storage.Provider](DefaultClientPoolTTL)
+	clientService := cp.NewClientService(pool)
+
+	// Initialize credential sync service and sync config credentials to database
+	if !config.DevMode {
+		credentialSync := NewCredentialSyncService(entClient, clientService, &config.Providers)
+		if err := credentialSync.SyncConfigCredentials(context.Background()); err != nil {
+			log.Error().Err(err).Msg("failed to sync storage credentials to database")
+			// Continue with service creation even if sync fails - we can fall back to config-based providers
+		}
+	}
+
+	// Register storage provider builders
+	clientService.RegisterBuilder(cp.ProviderType(storage.S3Provider), &objects.S3Builder{})
+	clientService.RegisterBuilder(cp.ProviderType(storage.R2Provider), &objects.R2Builder{})
+	clientService.RegisterBuilder(cp.ProviderType(storage.GCSProvider), &objects.GCSBuilder{})
+	clientService.RegisterBuilder(cp.ProviderType(storage.DiskProvider), &objects.DiskBuilder{})
+
+	// Create resolver with key generator - cache keys are built from ClientCacheKey struct
+	resolver := cp.NewResolver[storage.Provider]()
+
+	// Add resolution rules for storage providers - "what storage provider should be used for this request?"
+	addProviderRules(resolver, config, entClient)
+
+	// Create and return the storage service
+	service := objects.NewService(resolver, clientService)
+
+	// Log dev mode if enabled (no special configuration needed - handled by rules)
+	if config.DevMode {
+		log.Info().Msg("Object storage running in development mode")
+	}
+
+	return service
+}
+
+// addProviderRules adds resolution rules for storage providers starting with dev mode and then business specific rules
+func addProviderRules(resolver *cp.Resolver[storage.Provider], config storage.ProviderConfig, entClient *ent.Client) {
+	// If in dev mode, add a rule that always resolves to disk storage
+	if config.DevMode {
+		devRule := cp.NewRule[storage.Provider]().
+			Resolve(func(_ context.Context) (*cp.ResolvedProvider, error) {
+				return &cp.ResolvedProvider{
+					Type: cp.ProviderType(storage.DiskProvider),
+					Config: map[string]any{
+						"base_path": "/tmp/dev-storage",
+						"dev_mode":  true,
+					},
+				}, nil
+			})
+		resolver.AddRule(devRule)
+
+		return
+	}
+
+	// Trust Center Module → Cloudflare R2 (system integration)
+	if config.Providers.CloudflareR2.Enabled {
+		trustCenterRule := cp.NewRule[storage.Provider]().
+			WhenFunc(func(ctx context.Context) bool {
+				return cp.GetValueEquals(ctx, models.CatalogTrustCenterModule)
+			}).
+			Resolve(func(_ context.Context) (*cp.ResolvedProvider, error) {
+				return querySystemProvider(entClient, storage.R2Provider)
+			})
+		resolver.AddRule(trustCenterRule)
+	}
+
+	// Compliance Module → AWS S3 (system integration)
+	if config.Providers.S3.Enabled {
+		complianceRule := cp.NewRule[storage.Provider]().
+			WhenFunc(func(ctx context.Context) bool {
+				return cp.GetValueEquals(ctx, models.CatalogComplianceModule)
+			}).
+			Resolve(func(_ context.Context) (*cp.ResolvedProvider, error) {
+				return querySystemProvider(entClient, storage.S3Provider)
+			})
+		resolver.AddRule(complianceRule)
+	}
+
+}
+
+// querySystemProvider queries for active system integration created by CredentialSync
+func querySystemProvider(entClient *ent.Client, providerType storage.ProviderType) (*cp.ResolvedProvider, error) {
+	ctx := context.Background()
+
+	// Query for system integrations (using the SystemOrganizationID from CredentialSync)
+	integrations, err := entClient.Integration.Query().
+		Where(
+			integration.OwnerIDEQ(SystemOrganizationID),
+			integration.KindEQ(string(providerType)),
+		).
+		WithSecrets().
+		All(ctx)
+	if err != nil || len(integrations) == 0 {
+		return nil, fmt.Errorf("no system integration found for provider %s", providerType)
+	}
+
+	// Find the most recent integration (CredentialSync keeps the newest active)
+	var activeInteg *ent.Integration
+	for _, integ := range integrations {
+		if len(integ.Edges.Secrets) > 0 {
+			activeInteg = integ
+			break // Use first integration with secrets
+		}
+	}
+
+	if activeInteg == nil {
+		return nil, fmt.Errorf("no active integration with secrets found for provider %s", providerType)
+	}
+
+	// Extract credentials from the hush record using StructToCredentials
+	hush := activeInteg.Edges.Secrets[0]
+	credentials := cp.StructToCredentials(hush.CredentialSet)
+
+	// Extract config from integration metadata
+	config := make(map[string]any)
+	if activeInteg.Metadata != nil {
+		maps.Copy(config, activeInteg.Metadata)
+	}
+
+	return &cp.ResolvedProvider{
+		Type:        cp.ProviderType(providerType),
+		Credentials: credentials,
+		Config:      config,
+	}, nil
 }

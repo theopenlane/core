@@ -29,7 +29,7 @@ import (
 	cataloggen "github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 // HookOrganization runs on org mutations to set default values that are not provided
@@ -67,7 +67,7 @@ func HookOrganization() ent.Hook {
 			setDefaultsOnMutations(m)
 
 			// check for uploaded files (e.g. avatar image)
-			fileIDs := objects.GetFileIDsFromContext(ctx)
+			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
 				var err error
 

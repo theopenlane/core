@@ -8,14 +8,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 // HookNoteFiles runs on note mutations to check for uploaded files
 func HookNoteFiles() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.NoteFunc(func(ctx context.Context, m *generated.NoteMutation) (generated.Value, error) {
-			fileIDs := objects.GetFileIDsFromContext(ctx)
+			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
 				var err error
 
@@ -37,7 +37,7 @@ func checkNoteFiles[T utils.GenericMutation](ctx context.Context, m T) (context.
 	key := "noteFiles"
 
 	// get the file from the context, if it exists
-	file, err := objects.FilesFromContextWithKey(ctx, key)
+	file, err := pkgobjects.FilesFromContextWithKey(ctx, key)
 	if err != nil {
 		return ctx, err
 	}
@@ -51,7 +51,7 @@ func checkNoteFiles[T utils.GenericMutation](ctx context.Context, m T) (context.
 			file[i].Parent.ID, _ = m.ID()
 			file[i].Parent.Type = m.Type()
 
-			ctx = objects.UpdateFileInContextByKey(ctx, key, file[i])
+			ctx = pkgobjects.UpdateFileInContextByKey(ctx, key, file[i])
 		}
 	}
 

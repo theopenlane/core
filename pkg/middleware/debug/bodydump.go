@@ -34,7 +34,7 @@ func BodyDump() echo.MiddlewareFunc {
 		}
 
 		if (c.Request().Method == http.MethodPost || c.Request().Method == http.MethodPatch) && len(resBody) > 0 {
-			var bodymap map[string]interface{}
+			var bodymap map[string]any
 			if err := json.Unmarshal(resBody, &bodymap); err == nil {
 				bodymap = redactSecretFields(bodymap)
 
@@ -61,7 +61,7 @@ func shouldLogBody(ctx context.Context, logger zerolog.Logger, reqBody []byte) b
 	}
 
 	// if we can json unmarshal the request body, it is not a file upload
-	var bodymap map[string]interface{}
+	var bodymap map[string]any
 	if err := json.Unmarshal(reqBody, &bodymap); err == nil {
 		return true
 	}
@@ -74,7 +74,7 @@ func shouldLogBody(ctx context.Context, logger zerolog.Logger, reqBody []byte) b
 
 // logRequestBody logs the request body to the logger
 func logRequestBody(logger zerolog.Logger, reqBody []byte) {
-	var bodymap map[string]interface{}
+	var bodymap map[string]any
 	if err := json.Unmarshal(reqBody, &bodymap); err == nil {
 		bodymap = redactSecretFields(bodymap)
 
@@ -85,10 +85,10 @@ func logRequestBody(logger zerolog.Logger, reqBody []byte) {
 }
 
 // redactSecretFields redacts sensitive fields from the request body
-func redactSecretFields(bodymap map[string]interface{}) map[string]interface{} {
+func redactSecretFields(bodymap map[string]any) map[string]any {
 	secretFields := []string{"new_password", "old_password", "password", "access_token", "refresh_token"}
 
-	for i := 0; i < len(secretFields); i++ {
+	for i := range secretFields {
 		if _, ok := bodymap[secretFields[i]]; ok {
 			bodymap[secretFields[i]] = "********"
 		}

@@ -19,10 +19,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/entitlements/genfeatures"
 	"github.com/theopenlane/core/internal/genhelpers"
+	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/enums/exportenums"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/emailtemplates"
@@ -141,7 +141,7 @@ func main() {
 		),
 		entc.Dependency(
 			entc.DependencyName("ObjectManager"),
-			entc.DependencyType(&objects.Objects{}),
+			entc.DependencyType(&objects.Service{}),
 		),
 		entc.Dependency(
 			entc.DependencyName("Summarizer"),

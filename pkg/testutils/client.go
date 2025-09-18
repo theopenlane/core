@@ -1,9 +1,11 @@
 package testutils
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
@@ -13,9 +15,11 @@ import (
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/pkg/cp"
 	"github.com/theopenlane/core/pkg/middleware/auth"
-	"github.com/theopenlane/core/pkg/objects"
-	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
+	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -44,8 +48,12 @@ func (l localRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) 
 }
 
 // TestClient creates a new OpenlaneClient for testing
-func TestClient(c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*testclient.TestClient, error) {
-	e := testEchoServer(c, u, false)
+func TestClient(c *ent.Client, opts ...openlaneclient.ClientOption) (*testclient.TestClient, error) {
+	service, err := MockStorageService(nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	e := testEchoServer(c, service, false)
 
 	// setup interceptors
 	if opts == nil {
@@ -59,9 +67,13 @@ func TestClient(c *ent.Client, u *objects.Objects, opts ...openlaneclient.Client
 	return testclient.New(config, opts...)
 }
 
-// TestClient creates a new OpenlaneClient for testing
-func TestRestClient(c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
-	e := testEchoServer(c, u, false)
+// TestRestClient creates a new OpenlaneClient for testing
+func TestRestClient(c *ent.Client, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+	service, err := MockStorageService(nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	e := testEchoServer(c, service, false)
 
 	// setup interceptors
 	if opts == nil {
@@ -76,8 +88,12 @@ func TestRestClient(c *ent.Client, u *objects.Objects, opts ...openlaneclient.Cl
 }
 
 // TestClientWithAuth creates a new OpenlaneClient for testing that includes the auth middleware
-func TestClientWithAuth(c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*testclient.TestClient, error) {
-	e := testEchoServer(c, u, true)
+func TestClientWithAuth(c *ent.Client, opts ...openlaneclient.ClientOption) (*testclient.TestClient, error) {
+	service, err := MockStorageService(nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	e := testEchoServer(c, service, true)
 
 	// setup interceptors
 	if opts == nil {
@@ -93,7 +109,7 @@ func TestClientWithAuth(c *ent.Client, u *objects.Objects, opts ...openlaneclien
 
 // testEchoServer creates a new echo server for testing the graph api
 // and optionally includes the middleware for authentication testing
-func testEchoServer(c *ent.Client, u *objects.Objects, includeMiddleware bool) *echo.Echo {
+func testEchoServer(c *ent.Client, u *objects.Service, includeMiddleware bool) *echo.Echo {
 	srv := testGraphServer(c, u)
 
 	e := echo.New()
@@ -130,7 +146,7 @@ func createAuthConfig(c *ent.Client) *auth.Options {
 }
 
 // testGraphServer creates a new graphql server for testing the graph api
-func testGraphServer(c *ent.Client, u *objects.Objects) *handler.Server {
+func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 	r := graphapi.NewResolver(c, u).
 		WithMaxResultLimit(MaxResultLimit).
 		WithTrustCenterCnameTarget(TrustCenterCnameTarget)
@@ -180,10 +196,74 @@ func testGraphServer(c *ent.Client, u *objects.Objects) *handler.Server {
 	return srv
 }
 
-// MockObjectManager creates a new objects manager for testing with a mock storage backend
-func MockObjectManager(t *testing.T, uploader objects.UploaderFunc) (*objects.Objects, error) {
-	return objects.New(
-		objects.WithStorage(mock_objects.NewMockStorage(t)),
-		objects.WithUploaderFunc(uploader),
-	)
+// MockStorageService creates a new storage service for testing with a mock storage backend
+func MockStorageService(t *testing.T, uploader storage.UploaderFunc) (*objects.Service, error) {
+	return MockStorageServiceWithValidation(t, uploader, nil)
+}
+
+// MockStorageServiceWithValidation creates a new storage service for testing with custom validation
+func MockStorageServiceWithValidation(t *testing.T, uploader storage.UploaderFunc, validationFunc storage.ValidationFunc) (*objects.Service, error) {
+	storageService, _, err := MockStorageServiceWithValidationAndProvider(t, uploader, validationFunc)
+	return storageService, err
+}
+
+// MockStorageServiceWithValidationAndProvider creates a new storage service for testing with custom validation
+// and returns both the StorageService and the mock provider for setting up expectations
+func MockStorageServiceWithValidationAndProvider(t *testing.T, uploader storage.UploaderFunc, validationFunc storage.ValidationFunc) (*objects.Service, *mock_shared.MockProvider, error) {
+	// Create mock provider - handle nil testing.T gracefully
+	var mockProvider *mock_shared.MockProvider
+	if t != nil {
+		mockProvider = mock_shared.NewMockProvider(t)
+	} else {
+		// Create a basic mock without test cleanup for non-test contexts
+		mockProvider = &mock_shared.MockProvider{}
+	}
+
+	// Create cp components
+	pool := cp.NewClientPool[storage.Provider](time.Minute)
+	clientService := cp.NewClientService(pool)
+
+	// Register mock provider builder
+	mockBuilder := &testProviderBuilder{
+		provider: mockProvider,
+	}
+	clientService.RegisterBuilder(cp.ProviderType("mock"), mockBuilder)
+
+	// Create resolver with default rule that selects mock provider
+	resolver := cp.NewResolver[storage.Provider]()
+
+	// Add default rule that always returns mock provider
+	defaultRule := cp.DefaultRule[storage.Provider](cp.Resolution{
+		ClientType:  cp.ProviderType("mock"),
+		Credentials: map[string]string{"type": "mock"},
+		Config:      map[string]any{"validation": validationFunc != nil},
+	})
+	resolver.SetDefaultRule(defaultRule)
+
+	// Create objects.Service - simplified for tests
+	service := objects.NewService(resolver, clientService)
+
+	// Return service and provider for test setup
+	return service, mockProvider, nil
+}
+
+// testProviderBuilder implements ClientBuilder for mock providers
+type testProviderBuilder struct {
+	provider *mock_shared.MockProvider
+}
+
+func (b *testProviderBuilder) WithCredentials(credentials map[string]string) cp.ClientBuilder[storage.Provider] {
+	return b
+}
+
+func (b *testProviderBuilder) WithConfig(config map[string]any) cp.ClientBuilder[storage.Provider] {
+	return b
+}
+
+func (b *testProviderBuilder) Build(ctx context.Context) (storage.Provider, error) {
+	return b.provider, nil
+}
+
+func (b *testProviderBuilder) ClientType() cp.ProviderType {
+	return cp.ProviderType("mock")
 }

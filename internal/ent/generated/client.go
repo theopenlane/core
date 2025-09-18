@@ -128,9 +128,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/emailtemplates"
@@ -522,7 +522,7 @@ type (
 		Emailer            *emailtemplates.Config
 		TOTP               *totp.Client
 		EntitlementManager *entitlements.StripeClient
-		ObjectManager      *objects.Objects
+		ObjectManager      *objects.Service
 		Summarizer         *summarizer.Client
 		Windmill           *windmill.Client
 		PondPool           *soiree.PondPool
@@ -631,7 +631,7 @@ func EntitlementManager(v *entitlements.StripeClient) Option {
 }
 
 // ObjectManager configures the ObjectManager.
-func ObjectManager(v *objects.Objects) Option {
+func ObjectManager(v *objects.Service) Option {
 	return func(c *config) {
 		c.ObjectManager = v
 	}

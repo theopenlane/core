@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 // HookJobResultFiles runs on jobresult mutations to check for uploaded files
@@ -16,7 +16,7 @@ func HookJobResultFiles() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.JobResultFunc(func(ctx context.Context, m *generated.JobResultMutation) (generated.Value, error) {
 			// check for uploaded files
-			fileIDs := objects.GetFileIDsFromContext(ctx)
+			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
 				var err error
 
@@ -41,7 +41,7 @@ func checkJobResultFiles[T utils.GenericMutation](ctx context.Context, m T) (con
 	key := "jobResultFiles"
 
 	// get the file from the context, if it exists
-	file, _ := objects.FilesFromContextWithKey(ctx, key)
+	file, _ := pkgobjects.FilesFromContextWithKey(ctx, key)
 
 	// return early if no file is provided
 	if file == nil {
@@ -55,7 +55,7 @@ func checkJobResultFiles[T utils.GenericMutation](ctx context.Context, m T) (con
 			file[i].Parent.ID, _ = m.ID()
 			file[i].Parent.Type = m.Type()
 
-			ctx = objects.UpdateFileInContextByKey(ctx, key, file[i])
+			ctx = pkgobjects.UpdateFileInContextByKey(ctx, key, file[i])
 		}
 	}
 

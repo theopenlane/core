@@ -2,7 +2,7 @@ package objects
 
 import (
 	"context"
-	"fmt"
+	"errors"
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -11,15 +11,15 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 // ErrMissingParent is returned when the parent id or type is missing for file uploads
-var ErrMissingParent = fmt.Errorf("parent id or type is missing")
+var ErrMissingParent = errors.New("parent id or type is missing")
 
 // AddFilePermissions adds file permissions to the object store
 func AddFilePermissions(ctx context.Context) error {
-	filesUpload, err := objects.FilesFromContext(ctx)
+	filesUpload, err := pkgobjects.FilesFromContext(ctx)
 	if err != nil {
 		// this is not an error, just means we are not uploading files
 		return nil
@@ -69,7 +69,7 @@ func AddFilePermissions(ctx context.Context) error {
 			log.Debug().Interface("req", req).Msg("added file permissions")
 
 			// remove file from context, we are done with it
-			ctx = objects.RemoveFileFromContext(ctx, f)
+			ctx = pkgobjects.RemoveFileFromContext(ctx, f)
 
 			ec, err := echocontext.EchoContextFromContext(ctx)
 			if err == nil {

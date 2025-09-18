@@ -10,7 +10,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/fgax"
 )
 
@@ -23,7 +23,7 @@ func HookTrustCenterSetting() ent.Hook {
 			zerolog.Ctx(ctx).Debug().Msg("trust center setting hook")
 
 			// check for uploaded files (e.g. logo image)
-			fileIDs := objects.GetFileIDsFromContext(ctx)
+			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
 				var err error
 
@@ -44,8 +44,8 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 	faviconKey := "faviconFile"
 
 	// get the file from the context, if it exists
-	logoFile, _ := objects.FilesFromContextWithKey(ctx, logoKey)
-	faviconFile, _ := objects.FilesFromContextWithKey(ctx, faviconKey)
+	logoFile, _ := pkgobjects.FilesFromContextWithKey(ctx, logoKey)
+	faviconFile, _ := pkgobjects.FilesFromContextWithKey(ctx, faviconKey)
 
 	var fileTuples []fgax.TupleKey
 
@@ -55,12 +55,13 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 		if len(logoFile) > 1 {
 			return ctx, ErrTooManyLogoFiles
 		}
+
 		m.SetLogoLocalFileID(logoFile[0].ID)
 
 		logoFile[0].Parent.ID, _ = m.ID()
 		logoFile[0].Parent.Type = "trust_center_setting"
 
-		ctx = objects.UpdateFileInContextByKey(ctx, logoKey, logoFile[0])
+		ctx = pkgobjects.UpdateFileInContextByKey(ctx, logoKey, logoFile[0])
 
 		// add wildcard viewer tuples to allow any user to access the logo file
 		wildcardTuples := fgax.CreateWildcardViewerTuple(logoFile[0].ID, generated.TypeFile)
@@ -77,7 +78,7 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 		faviconFile[0].Parent.ID, _ = m.ID()
 		faviconFile[0].Parent.Type = "trust_center_setting"
 
-		ctx = objects.UpdateFileInContextByKey(ctx, faviconKey, faviconFile[0])
+		ctx = pkgobjects.UpdateFileInContextByKey(ctx, faviconKey, faviconFile[0])
 
 		// add wildcard viewer tuples to allow any user to access the favicon file
 		wildcardTuples := fgax.CreateWildcardViewerTuple(faviconFile[0].ID, generated.TypeFile)

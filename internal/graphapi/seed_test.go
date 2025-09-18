@@ -129,7 +129,7 @@ func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) 
 		BearerToken: pat.Token,
 	}
 
-	apiClientPat, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore,
+	apiClientPat, err := coreutils.TestClientWithAuth(suite.client.db,
 		openlaneclient.WithCredentials(authHeaderPAT),
 		openlaneclient.WithInterceptors(
 			openlaneclient.WithOrganizationHeader(user.OrganizationID),
@@ -147,7 +147,7 @@ func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing
 		BearerToken: apiToken.Token,
 	}
 
-	apiClientToken, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
+	apiClientToken, err := coreutils.TestClientWithAuth(suite.client.db, openlaneclient.WithCredentials(authHeaderAPIToken))
 	requireNoError(err)
 
 	return apiClientToken

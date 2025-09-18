@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/pkg/logx/consolelog"
 	"github.com/theopenlane/core/pkg/metrics"
 	echodebug "github.com/theopenlane/core/pkg/middleware/debug"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 // Server is a struct that holds the configuration for the server
@@ -158,9 +157,9 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 
 	// Set the local file path if the object storage provider is disk
 	// this allows us to serve up the files during testing
-	if s.config.Settings.ObjectStorage.Provider == storage.ProviderDisk {
-		s.Router.LocalFilePath = s.config.Settings.ObjectStorage.DefaultBucket
-	}
+	//	if s.config.Settings.ObjectStorage.Provider == storagetypes.DiskProvider {
+	//		s.Router.LocalFilePath = s.config.Settings.ObjectStorage.DefaultBucket
+	//	}
 
 	// Add base routes to the server
 	if err := route.RegisterRoutes(s.Router); err != nil {

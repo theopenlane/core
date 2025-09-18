@@ -23,7 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryOrganization(t *testing.T) {
@@ -176,10 +176,10 @@ func TestMutationCreateOrganization(t *testing.T) {
 	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgToDelete.ID}).MustDelete(orgUser.UserCtx, t)
 
 	// avatar file setup
-	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+	avatarFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
 	assert.NilError(t, err)
 
-	invalidAvatarFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
+	invalidAvatarFile, err := storage.NewUploadFile("testdata/uploads/hello.txt")
 	assert.NilError(t, err)
 
 	testCases := []struct {
@@ -409,9 +409,9 @@ func TestMutationCreateOrganization(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.avatarFile != nil {
 				if tc.errorMsg == "" {
-					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.avatarFile})
+					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.avatarFile})
 				} else {
-					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+					expectUploadCheckOnly(t, suite.client.mockProvider)
 				}
 			}
 
@@ -498,6 +498,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			assert.Assert(t, is.Len(et.EntityTypes.Edges, 1))
 
 			// ensure managed groups are created
+			// groups and programs require the compliance module which is not added by default
 			managedGroups, err := suite.client.api.GetGroups(newCtx, &testclient.GroupWhereInput{
 				IsManaged: lo.ToPtr(true),
 			})
@@ -554,10 +555,10 @@ func TestMutationUpdateOrganization(t *testing.T) {
 	memberUserCtx := auth.NewTestContextWithOrgID(om.UserID, org.ID)
 
 	// avatar file setup
-	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+	avatarFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
 	assert.NilError(t, err)
 
-	invalidAvatarFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
+	invalidAvatarFile, err := storage.NewUploadFile("testdata/uploads/hello.txt")
 	assert.NilError(t, err)
 
 	testCases := []struct {
@@ -803,9 +804,9 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			if tc.avatarFile != nil {
 				if tc.errorMsg == "" {
-					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.avatarFile})
+					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.avatarFile})
 				} else {
-					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+					expectUploadCheckOnly(t, suite.client.mockProvider)
 				}
 			}
 

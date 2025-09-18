@@ -36,7 +36,7 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 // Config contains the configuration for the core server
@@ -70,7 +70,7 @@ type Config struct {
 	// Ratelimit contains the configuration for the rate limiter
 	Ratelimit ratelimit.Config `json:"ratelimit" koanf:"ratelimit"`
 	// ObjectStorage contains the configuration for the object storage backend
-	ObjectStorage objects.Config `json:"objectStorage" koanf:"objectStorage"`
+	ObjectStorage storage.ProviderConfig `json:"objectStorage" koanf:"objectStorage"`
 	// Entitlements contains the configuration for the entitlements service
 	Entitlements entitlements.Config `json:"subscription" koanf:"subscription"`
 	// Keywatcher contains the configuration for the key watcher that manages JWT signing keys
