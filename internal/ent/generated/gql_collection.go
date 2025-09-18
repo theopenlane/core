@@ -20847,6 +20847,16 @@ func (_q *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, jobrunner.FieldSystemOwned)
 				fieldSeen[jobrunner.FieldSystemOwned] = struct{}{}
 			}
+		case "internalNotes":
+			if _, ok := fieldSeen[jobrunner.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldInternalNotes)
+				fieldSeen[jobrunner.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[jobrunner.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldSystemInternalID)
+				fieldSeen[jobrunner.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[jobrunner.FieldName]; !ok {
 				selectedFields = append(selectedFields, jobrunner.FieldName)
@@ -21544,6 +21554,16 @@ func (_q *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, jobtemplate.FieldSystemOwned)
 				fieldSeen[jobtemplate.FieldSystemOwned] = struct{}{}
 			}
+		case "internalNotes":
+			if _, ok := fieldSeen[jobtemplate.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldInternalNotes)
+				fieldSeen[jobtemplate.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[jobtemplate.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldSystemInternalID)
+				fieldSeen[jobtemplate.FieldSystemInternalID] = struct{}{}
+			}
 		case "title":
 			if _, ok := fieldSeen[jobtemplate.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, jobtemplate.FieldTitle)
@@ -21718,6 +21738,16 @@ func (_q *JobTemplateHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[jobtemplatehistory.FieldSystemOwned]; !ok {
 				selectedFields = append(selectedFields, jobtemplatehistory.FieldSystemOwned)
 				fieldSeen[jobtemplatehistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldInternalNotes)
+				fieldSeen[jobtemplatehistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldSystemInternalID)
+				fieldSeen[jobtemplatehistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "title":
 			if _, ok := fieldSeen[jobtemplatehistory.FieldTitle]; !ok {
@@ -22779,6 +22809,21 @@ func (_q *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, mappedcontrol.FieldTags)
 				fieldSeen[mappedcontrol.FieldTags] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[mappedcontrol.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldSystemOwned)
+				fieldSeen[mappedcontrol.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[mappedcontrol.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldInternalNotes)
+				fieldSeen[mappedcontrol.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[mappedcontrol.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldSystemInternalID)
+				fieldSeen[mappedcontrol.FieldSystemInternalID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[mappedcontrol.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, mappedcontrol.FieldOwnerID)
@@ -22933,6 +22978,21 @@ func (_q *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, mappedcontrolhistory.FieldTags)
 				fieldSeen[mappedcontrolhistory.FieldTags] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldSystemOwned)
+				fieldSeen[mappedcontrolhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldInternalNotes)
+				fieldSeen[mappedcontrolhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldSystemInternalID)
+				fieldSeen[mappedcontrolhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldOwnerID]; !ok {
@@ -38901,6 +38961,16 @@ func (_q *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, standard.FieldSystemOwned)
 				fieldSeen[standard.FieldSystemOwned] = struct{}{}
 			}
+		case "internalNotes":
+			if _, ok := fieldSeen[standard.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, standard.FieldInternalNotes)
+				fieldSeen[standard.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[standard.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldSystemInternalID)
+				fieldSeen[standard.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[standard.FieldName]; !ok {
 				selectedFields = append(selectedFields, standard.FieldName)
@@ -39110,6 +39180,16 @@ func (_q *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[standardhistory.FieldSystemOwned]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldSystemOwned)
 				fieldSeen[standardhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[standardhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldInternalNotes)
+				fieldSeen[standardhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[standardhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldSystemInternalID)
+				fieldSeen[standardhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[standardhistory.FieldName]; !ok {
@@ -40958,6 +41038,16 @@ func (_q *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, subprocessor.FieldSystemOwned)
 				fieldSeen[subprocessor.FieldSystemOwned] = struct{}{}
 			}
+		case "internalNotes":
+			if _, ok := fieldSeen[subprocessor.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, subprocessor.FieldInternalNotes)
+				fieldSeen[subprocessor.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[subprocessor.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, subprocessor.FieldSystemInternalID)
+				fieldSeen[subprocessor.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[subprocessor.FieldName]; !ok {
 				selectedFields = append(selectedFields, subprocessor.FieldName)
@@ -41117,6 +41207,16 @@ func (_q *SubprocessorHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[subprocessorhistory.FieldSystemOwned]; !ok {
 				selectedFields = append(selectedFields, subprocessorhistory.FieldSystemOwned)
 				fieldSeen[subprocessorhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[subprocessorhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldInternalNotes)
+				fieldSeen[subprocessorhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[subprocessorhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldSystemInternalID)
+				fieldSeen[subprocessorhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[subprocessorhistory.FieldName]; !ok {

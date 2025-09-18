@@ -37848,6 +37848,40 @@ type JobRunnerWhereInput struct {
 	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
 
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -38287,6 +38321,96 @@ func (i *JobRunnerWhereInput) P() (predicate.JobRunner, error) {
 	}
 	if i.SystemOwnedNotNil {
 		predicates = append(predicates, jobrunner.SystemOwnedNotNil())
+	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, jobrunner.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, jobrunner.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, jobrunner.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, jobrunner.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, jobrunner.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, jobrunner.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, jobrunner.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, jobrunner.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, jobrunner.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, jobrunner.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, jobrunner.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, jobrunner.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, jobrunner.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, jobrunner.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, jobrunner.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, jobrunner.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, jobrunner.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, jobrunner.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, jobrunner.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, jobrunner.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, jobrunner.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, jobrunner.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, jobrunner.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, jobrunner.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, jobrunner.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, jobrunner.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, jobrunner.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, jobrunner.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, jobrunner.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, jobrunner.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
 	}
 	if i.Name != nil {
 		predicates = append(predicates, jobrunner.NameEQ(*i.Name))
@@ -39930,6 +40054,40 @@ type JobTemplateWhereInput struct {
 	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
 
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
 	// "title" field predicates.
 	Title             *string  `json:"title,omitempty"`
 	TitleNEQ          *string  `json:"titleNEQ,omitempty"`
@@ -40324,6 +40482,96 @@ func (i *JobTemplateWhereInput) P() (predicate.JobTemplate, error) {
 	if i.SystemOwnedNotNil {
 		predicates = append(predicates, jobtemplate.SystemOwnedNotNil())
 	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, jobtemplate.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, jobtemplate.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, jobtemplate.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, jobtemplate.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, jobtemplate.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, jobtemplate.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, jobtemplate.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, jobtemplate.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, jobtemplate.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, jobtemplate.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, jobtemplate.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, jobtemplate.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, jobtemplate.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, jobtemplate.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, jobtemplate.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, jobtemplate.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, jobtemplate.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, jobtemplate.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
+	}
 	if i.Title != nil {
 		predicates = append(predicates, jobtemplate.TitleEQ(*i.Title))
 	}
@@ -40614,6 +40862,40 @@ type JobTemplateHistoryWhereInput struct {
 	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
 	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 
 	// "title" field predicates.
 	Title             *string  `json:"title,omitempty"`
@@ -41081,6 +41363,96 @@ func (i *JobTemplateHistoryWhereInput) P() (predicate.JobTemplateHistory, error)
 	}
 	if i.SystemOwnedNotNil {
 		predicates = append(predicates, jobtemplatehistory.SystemOwnedNotNil())
+	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, jobtemplatehistory.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, jobtemplatehistory.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
 	}
 	if i.Title != nil {
 		predicates = append(predicates, jobtemplatehistory.TitleEQ(*i.Title))
@@ -42298,6 +42670,46 @@ type MappedControlWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -42637,6 +43049,108 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, mappedcontrol.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, mappedcontrol.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, mappedcontrol.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, mappedcontrol.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, mappedcontrol.SystemOwnedNotNil())
+	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, mappedcontrol.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, mappedcontrol.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, mappedcontrol.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, mappedcontrol.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, mappedcontrol.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, mappedcontrol.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, mappedcontrol.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, mappedcontrol.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, mappedcontrol.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, mappedcontrol.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, mappedcontrol.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, mappedcontrol.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, mappedcontrol.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, mappedcontrol.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, mappedcontrol.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, mappedcontrol.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, mappedcontrol.OwnerIDEQ(*i.OwnerID))
@@ -43035,6 +43549,46 @@ type MappedControlHistoryWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -43427,6 +43981,108 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, mappedcontrolhistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, mappedcontrolhistory.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, mappedcontrolhistory.SystemOwnedNotNil())
+	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
 	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, mappedcontrolhistory.OwnerIDEQ(*i.OwnerID))
@@ -67210,6 +67866,40 @@ type StandardWhereInput struct {
 	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
 
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -67746,6 +68436,96 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 	}
 	if i.SystemOwnedNotNil {
 		predicates = append(predicates, standard.SystemOwnedNotNil())
+	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, standard.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, standard.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, standard.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, standard.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, standard.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, standard.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, standard.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, standard.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, standard.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, standard.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, standard.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, standard.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, standard.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, standard.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, standard.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, standard.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, standard.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, standard.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, standard.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, standard.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, standard.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, standard.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, standard.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, standard.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, standard.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, standard.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, standard.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, standard.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, standard.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, standard.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
 	}
 	if i.Name != nil {
 		predicates = append(predicates, standard.NameEQ(*i.Name))
@@ -68403,6 +69183,40 @@ type StandardHistoryWhereInput struct {
 	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
 
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -69008,6 +69822,96 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 	}
 	if i.SystemOwnedNotNil {
 		predicates = append(predicates, standardhistory.SystemOwnedNotNil())
+	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, standardhistory.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, standardhistory.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, standardhistory.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, standardhistory.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, standardhistory.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, standardhistory.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, standardhistory.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, standardhistory.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, standardhistory.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, standardhistory.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, standardhistory.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, standardhistory.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, standardhistory.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, standardhistory.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, standardhistory.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, standardhistory.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, standardhistory.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, standardhistory.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, standardhistory.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, standardhistory.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, standardhistory.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, standardhistory.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, standardhistory.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, standardhistory.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, standardhistory.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, standardhistory.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, standardhistory.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, standardhistory.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, standardhistory.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, standardhistory.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
 	}
 	if i.Name != nil {
 		predicates = append(predicates, standardhistory.NameEQ(*i.Name))
@@ -72383,6 +73287,40 @@ type SubprocessorWhereInput struct {
 	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
 
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -72774,6 +73712,96 @@ func (i *SubprocessorWhereInput) P() (predicate.Subprocessor, error) {
 	if i.SystemOwnedNotNil {
 		predicates = append(predicates, subprocessor.SystemOwnedNotNil())
 	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, subprocessor.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, subprocessor.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, subprocessor.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, subprocessor.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, subprocessor.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, subprocessor.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, subprocessor.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, subprocessor.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, subprocessor.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, subprocessor.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, subprocessor.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, subprocessor.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, subprocessor.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, subprocessor.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, subprocessor.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, subprocessor.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, subprocessor.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, subprocessor.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, subprocessor.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, subprocessor.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, subprocessor.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, subprocessor.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, subprocessor.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, subprocessor.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, subprocessor.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, subprocessor.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, subprocessor.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, subprocessor.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, subprocessor.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, subprocessor.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
+	}
 	if i.Name != nil {
 		predicates = append(predicates, subprocessor.NameEQ(*i.Name))
 	}
@@ -73163,6 +74191,40 @@ type SubprocessorHistoryWhereInput struct {
 	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
 	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
@@ -73619,6 +74681,96 @@ func (i *SubprocessorHistoryWhereInput) P() (predicate.SubprocessorHistory, erro
 	}
 	if i.SystemOwnedNotNil {
 		predicates = append(predicates, subprocessorhistory.SystemOwnedNotNil())
+	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, subprocessorhistory.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, subprocessorhistory.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
 	}
 	if i.Name != nil {
 		predicates = append(predicates, subprocessorhistory.NameEQ(*i.Name))

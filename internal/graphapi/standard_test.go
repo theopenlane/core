@@ -526,8 +526,12 @@ func TestMutationCreateStandard(t *testing.T) {
 
 			// cleanup the created standard
 			ctx := tc.ctx
-			if tc.client != suite.client.api {
+			if tc.ctx != systemAdminUser.UserCtx && tc.client != suite.client.api {
 				ctx = testUser1.UserCtx
+			}
+
+			if tc.client == patClientSystemAdmin {
+				ctx = systemAdminUser.UserCtx
 			}
 
 			(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: resp.CreateStandard.Standard.ID}).MustDelete(ctx, t)
@@ -734,7 +738,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 	}
 
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOrgOwned.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardSystemOwned.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardSystemOwned.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestMutationDeleteStandard(t *testing.T) {

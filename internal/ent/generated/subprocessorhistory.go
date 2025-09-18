@@ -43,6 +43,10 @@ type SubprocessorHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// name of the standard body
 	Name string `json:"name,omitempty"`
 	// description of the subprocessor
@@ -65,7 +69,7 @@ func (*SubprocessorHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case subprocessorhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case subprocessorhistory.FieldID, subprocessorhistory.FieldRef, subprocessorhistory.FieldCreatedBy, subprocessorhistory.FieldUpdatedBy, subprocessorhistory.FieldDeletedBy, subprocessorhistory.FieldOwnerID, subprocessorhistory.FieldName, subprocessorhistory.FieldDescription, subprocessorhistory.FieldLogoRemoteURL, subprocessorhistory.FieldLogoLocalFileID:
+		case subprocessorhistory.FieldID, subprocessorhistory.FieldRef, subprocessorhistory.FieldCreatedBy, subprocessorhistory.FieldUpdatedBy, subprocessorhistory.FieldDeletedBy, subprocessorhistory.FieldOwnerID, subprocessorhistory.FieldInternalNotes, subprocessorhistory.FieldSystemInternalID, subprocessorhistory.FieldName, subprocessorhistory.FieldDescription, subprocessorhistory.FieldLogoRemoteURL, subprocessorhistory.FieldLogoLocalFileID:
 			values[i] = new(sql.NullString)
 		case subprocessorhistory.FieldHistoryTime, subprocessorhistory.FieldCreatedAt, subprocessorhistory.FieldUpdatedAt, subprocessorhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -164,6 +168,20 @@ func (_m *SubprocessorHistory) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.SystemOwned = value.Bool
 			}
+		case subprocessorhistory.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case subprocessorhistory.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
+			}
 		case subprocessorhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -261,6 +279,16 @@ func (_m *SubprocessorHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

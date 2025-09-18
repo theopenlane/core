@@ -2017,23 +2017,25 @@ type ComplexityRoot struct {
 	}
 
 	JobRunner struct {
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		DisplayID       func(childComplexity int) int
-		ID              func(childComplexity int) int
-		IPAddress       func(childComplexity int) int
-		JobRunnerTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
-		LastSeen        func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Os              func(childComplexity int) int
-		Owner           func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Status          func(childComplexity int) int
-		SystemOwned     func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		Version         func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		ID               func(childComplexity int) int
+		IPAddress        func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		JobRunnerTokens  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
+		LastSeen         func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Os               func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Status           func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Version          func(childComplexity int) int
 	}
 
 	JobRunnerConnection struct {
@@ -2141,23 +2143,25 @@ type ComplexityRoot struct {
 	}
 
 	JobTemplate struct {
-		Configuration func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Cron          func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayID     func(childComplexity int) int
-		DownloadURL   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Platform      func(childComplexity int) int
-		ScheduledJobs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
-		SystemOwned   func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Title         func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Configuration    func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Cron             func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DownloadURL      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Platform         func(childComplexity int) int
+		ScheduledJobs    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	JobTemplateBulkCreatePayload struct {
@@ -2184,24 +2188,26 @@ type ComplexityRoot struct {
 	}
 
 	JobTemplateHistory struct {
-		Configuration func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Cron          func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayID     func(childComplexity int) int
-		DownloadURL   func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Platform      func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		SystemOwned   func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Title         func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Configuration    func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Cron             func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DownloadURL      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Platform         func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	JobTemplateHistoryConnection struct {
@@ -2284,24 +2290,27 @@ type ComplexityRoot struct {
 	}
 
 	MappedControl struct {
-		BlockedGroups   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Confidence      func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Editors         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		FromControls    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		FromSubcontrols func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		ID              func(childComplexity int) int
-		MappingType     func(childComplexity int) int
-		Owner           func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Relation        func(childComplexity int) int
-		Source          func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		ToControls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		ToSubcontrols   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Confidence       func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		FromControls     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		FromSubcontrols  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		MappingType      func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Relation         func(childComplexity int) int
+		Source           func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		ToControls       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ToSubcontrols    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	MappedControlBulkCreatePayload struct {
@@ -2328,20 +2337,23 @@ type ComplexityRoot struct {
 	}
 
 	MappedControlHistory struct {
-		Confidence  func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		MappingType func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Relation    func(childComplexity int) int
-		Source      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		Confidence       func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		MappingType      func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		Relation         func(childComplexity int) int
+		Source           func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	MappedControlHistoryConnection struct {
@@ -4114,6 +4126,7 @@ type ComplexityRoot struct {
 		GoverningBody          func(childComplexity int) int
 		GoverningBodyLogoURL   func(childComplexity int) int
 		ID                     func(childComplexity int) int
+		InternalNotes          func(childComplexity int) int
 		IsPublic               func(childComplexity int) int
 		Link                   func(childComplexity int) int
 		Name                   func(childComplexity int) int
@@ -4123,6 +4136,7 @@ type ComplexityRoot struct {
 		ShortName              func(childComplexity int) int
 		StandardType           func(childComplexity int) int
 		Status                 func(childComplexity int) int
+		SystemInternalID       func(childComplexity int) int
 		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		TrustCenterCompliances func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
@@ -4165,6 +4179,7 @@ type ComplexityRoot struct {
 		GoverningBodyLogoURL func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
+		InternalNotes        func(childComplexity int) int
 		IsPublic             func(childComplexity int) int
 		Link                 func(childComplexity int) int
 		Name                 func(childComplexity int) int
@@ -4175,6 +4190,7 @@ type ComplexityRoot struct {
 		ShortName            func(childComplexity int) int
 		StandardType         func(childComplexity int) int
 		Status               func(childComplexity int) int
+		SystemInternalID     func(childComplexity int) int
 		SystemOwned          func(childComplexity int) int
 		Tags                 func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
@@ -4322,12 +4338,14 @@ type ComplexityRoot struct {
 		Description              func(childComplexity int) int
 		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID                       func(childComplexity int) int
+		InternalNotes            func(childComplexity int) int
 		LogoFile                 func(childComplexity int) int
 		LogoLocalFileID          func(childComplexity int) int
 		LogoRemoteURL            func(childComplexity int) int
 		Name                     func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		SystemInternalID         func(childComplexity int) int
 		SystemOwned              func(childComplexity int) int
 		Tags                     func(childComplexity int) int
 		TrustCenterSubprocessors func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
@@ -4359,21 +4377,23 @@ type ComplexityRoot struct {
 	}
 
 	SubprocessorHistory struct {
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Description     func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		LogoLocalFileID func(childComplexity int) int
-		LogoRemoteURL   func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		SystemOwned     func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		LogoLocalFileID  func(childComplexity int) int
+		LogoRemoteURL    func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	SubprocessorHistoryConnection struct {
@@ -14611,6 +14631,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunner.IPAddress(childComplexity), true
 
+	case "JobRunner.internalNotes":
+		if e.complexity.JobRunner.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.InternalNotes(childComplexity), true
+
 	case "JobRunner.jobRunnerTokens":
 		if e.complexity.JobRunner.JobRunnerTokens == nil {
 			break
@@ -14664,6 +14691,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobRunner.Status(childComplexity), true
+
+	case "JobRunner.systemInternalID":
+		if e.complexity.JobRunner.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.SystemInternalID(childComplexity), true
 
 	case "JobRunner.systemOwned":
 		if e.complexity.JobRunner.SystemOwned == nil {
@@ -15132,6 +15166,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobTemplate.ID(childComplexity), true
 
+	case "JobTemplate.internalNotes":
+		if e.complexity.JobTemplate.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.InternalNotes(childComplexity), true
+
 	case "JobTemplate.owner":
 		if e.complexity.JobTemplate.Owner == nil {
 			break
@@ -15164,6 +15205,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobTemplate.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
+
+	case "JobTemplate.systemInternalID":
+		if e.complexity.JobTemplate.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.SystemInternalID(childComplexity), true
 
 	case "JobTemplate.systemOwned":
 		if e.complexity.JobTemplate.SystemOwned == nil {
@@ -15319,6 +15367,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobTemplateHistory.ID(childComplexity), true
 
+	case "JobTemplateHistory.internalNotes":
+		if e.complexity.JobTemplateHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.InternalNotes(childComplexity), true
+
 	case "JobTemplateHistory.operation":
 		if e.complexity.JobTemplateHistory.Operation == nil {
 			break
@@ -15346,6 +15401,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobTemplateHistory.Ref(childComplexity), true
+
+	case "JobTemplateHistory.systemInternalID":
+		if e.complexity.JobTemplateHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.SystemInternalID(childComplexity), true
 
 	case "JobTemplateHistory.systemOwned":
 		if e.complexity.JobTemplateHistory.SystemOwned == nil {
@@ -15743,6 +15805,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControl.ID(childComplexity), true
 
+	case "MappedControl.internalNotes":
+		if e.complexity.MappedControl.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.InternalNotes(childComplexity), true
+
 	case "MappedControl.mappingType":
 		if e.complexity.MappedControl.MappingType == nil {
 			break
@@ -15777,6 +15846,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControl.Source(childComplexity), true
+
+	case "MappedControl.systemInternalID":
+		if e.complexity.MappedControl.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.SystemInternalID(childComplexity), true
+
+	case "MappedControl.systemOwned":
+		if e.complexity.MappedControl.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.SystemOwned(childComplexity), true
 
 	case "MappedControl.tags":
 		if e.complexity.MappedControl.Tags == nil {
@@ -15914,6 +15997,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControlHistory.ID(childComplexity), true
 
+	case "MappedControlHistory.internalNotes":
+		if e.complexity.MappedControlHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.InternalNotes(childComplexity), true
+
 	case "MappedControlHistory.mappingType":
 		if e.complexity.MappedControlHistory.MappingType == nil {
 			break
@@ -15955,6 +16045,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControlHistory.Source(childComplexity), true
+
+	case "MappedControlHistory.systemInternalID":
+		if e.complexity.MappedControlHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.SystemInternalID(childComplexity), true
+
+	case "MappedControlHistory.systemOwned":
+		if e.complexity.MappedControlHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.SystemOwned(childComplexity), true
 
 	case "MappedControlHistory.tags":
 		if e.complexity.MappedControlHistory.Tags == nil {
@@ -28663,6 +28767,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Standard.ID(childComplexity), true
 
+	case "Standard.internalNotes":
+		if e.complexity.Standard.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Standard.InternalNotes(childComplexity), true
+
 	case "Standard.isPublic":
 		if e.complexity.Standard.IsPublic == nil {
 			break
@@ -28725,6 +28836,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Standard.Status(childComplexity), true
+
+	case "Standard.systemInternalID":
+		if e.complexity.Standard.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Standard.SystemInternalID(childComplexity), true
 
 	case "Standard.systemOwned":
 		if e.complexity.Standard.SystemOwned == nil {
@@ -28899,6 +29017,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.StandardHistory.ID(childComplexity), true
 
+	case "StandardHistory.internalNotes":
+		if e.complexity.StandardHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.InternalNotes(childComplexity), true
+
 	case "StandardHistory.isPublic":
 		if e.complexity.StandardHistory.IsPublic == nil {
 			break
@@ -28968,6 +29093,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.StandardHistory.Status(childComplexity), true
+
+	case "StandardHistory.systemInternalID":
+		if e.complexity.StandardHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.SystemInternalID(childComplexity), true
 
 	case "StandardHistory.systemOwned":
 		if e.complexity.StandardHistory.SystemOwned == nil {
@@ -29759,6 +29891,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subprocessor.ID(childComplexity), true
 
+	case "Subprocessor.internalNotes":
+		if e.complexity.Subprocessor.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.InternalNotes(childComplexity), true
+
 	case "Subprocessor.logoFile":
 		if e.complexity.Subprocessor.LogoFile == nil {
 			break
@@ -29800,6 +29939,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subprocessor.OwnerID(childComplexity), true
+
+	case "Subprocessor.systemInternalID":
+		if e.complexity.Subprocessor.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.SystemInternalID(childComplexity), true
 
 	case "Subprocessor.systemOwned":
 		if e.complexity.Subprocessor.SystemOwned == nil {
@@ -29932,6 +30078,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubprocessorHistory.ID(childComplexity), true
 
+	case "SubprocessorHistory.internalNotes":
+		if e.complexity.SubprocessorHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.InternalNotes(childComplexity), true
+
 	case "SubprocessorHistory.logoLocalFileID":
 		if e.complexity.SubprocessorHistory.LogoLocalFileID == nil {
 			break
@@ -29973,6 +30126,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubprocessorHistory.Ref(childComplexity), true
+
+	case "SubprocessorHistory.systemInternalID":
+		if e.complexity.SubprocessorHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.SystemInternalID(childComplexity), true
 
 	case "SubprocessorHistory.systemOwned":
 		if e.complexity.SubprocessorHistory.SystemOwned == nil {
@@ -44184,6 +44344,14 @@ input CreateJobRunnerInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  """
   the name of the runner
   """
   name: String!
@@ -44262,6 +44430,14 @@ input CreateJobTemplateInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  """
   the title of the job
   """
   title: String!
@@ -44315,6 +44491,14 @@ input CreateMappedControlInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
   """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
@@ -44960,6 +45144,14 @@ input CreateStandardInput {
   """
   revision: String
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  """
   the long name of the standard body
   """
   name: String!
@@ -45120,6 +45312,14 @@ input CreateSubprocessorInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
   """
   name of the standard body
   """
@@ -58193,6 +58393,14 @@ type JobRunner implements Node {
   """
   systemOwned: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  """
   the name of the runner
   """
   name: String!
@@ -58968,6 +59176,42 @@ input JobRunnerWhereInput {
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
   """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -59091,6 +59335,14 @@ type JobTemplate implements Node {
   """
   systemOwned: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  """
   the title of the job
   """
   title: String!
@@ -59202,6 +59454,14 @@ type JobTemplateHistory implements Node {
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
   """
   the title of the job
   """
@@ -59456,6 +59716,42 @@ input JobTemplateHistoryWhereInput {
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
   """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   title field predicates
   """
   title: String
@@ -59650,6 +59946,42 @@ input JobTemplateWhereInput {
   systemOwnedNEQ: Boolean
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   title field predicates
   """
@@ -60173,6 +60505,18 @@ type MappedControl implements Node {
   """
   tags: [String!]
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -60424,6 +60768,18 @@ type MappedControlHistory implements Node {
   """
   tags: [String!]
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  """
   the organization id that owns the object
   """
   ownerID: String
@@ -60643,6 +60999,49 @@ input MappedControlHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -60831,6 +61230,49 @@ input MappedControlWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -77188,6 +77630,14 @@ type Standard implements Node {
   """
   systemOwned: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  """
   the long name of the standard body
   """
   name: String!
@@ -77358,6 +77808,14 @@ type StandardHistory implements Node {
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
   """
   the long name of the standard body
   """
@@ -77647,6 +78105,42 @@ input StandardHistoryWhereInput {
   systemOwnedNEQ: Boolean
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -77992,6 +78486,42 @@ input StandardWhereInput {
   systemOwnedNEQ: Boolean
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -79706,6 +80236,14 @@ type Subprocessor implements Node {
   """
   systemOwned: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  """
   name of the standard body
   """
   name: String!
@@ -79837,6 +80375,14 @@ type SubprocessorHistory implements Node {
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
   """
   name of the standard body
   """
@@ -80059,6 +80605,42 @@ input SubprocessorHistoryWhereInput {
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
   """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -80258,6 +80840,42 @@ input SubprocessorWhereInput {
   systemOwnedNEQ: Boolean
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -86518,6 +87136,16 @@ input UpdateJobRunnerInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  clearInternalNotes: Boolean
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  clearSystemInternalID: Boolean
+  """
   the name of the runner
   """
   name: String
@@ -86616,6 +87244,16 @@ input UpdateJobTemplateInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  clearInternalNotes: Boolean
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  clearSystemInternalID: Boolean
+  """
   the title of the job
   """
   title: String
@@ -86671,6 +87309,16 @@ input UpdateMappedControlInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  clearInternalNotes: Boolean
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  clearSystemInternalID: Boolean
   """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
@@ -87604,6 +88252,16 @@ input UpdateStandardInput {
   revision: String
   clearRevision: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  clearInternalNotes: Boolean
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  clearSystemInternalID: Boolean
+  """
   the long name of the standard body
   """
   name: String
@@ -87826,6 +88484,16 @@ input UpdateSubprocessorInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String
+  clearInternalNotes: Boolean
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String
+  clearSystemInternalID: Boolean
   """
   name of the standard body
   """

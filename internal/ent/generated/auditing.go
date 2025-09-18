@@ -1707,6 +1707,12 @@ func (_m *JobTemplateHistory) changes(new *JobTemplateHistory) []Change {
 	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
 		changes = append(changes, NewChange(jobtemplatehistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
 	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
 	if !reflect.DeepEqual(_m.Title, new.Title) {
 		changes = append(changes, NewChange(jobtemplatehistory.FieldTitle, _m.Title, new.Title))
 	}
@@ -1829,6 +1835,15 @@ func (_m *MappedControlHistory) changes(new *MappedControlHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.Tags, new.Tags) {
 		changes = append(changes, NewChange(mappedcontrolhistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(mappedcontrolhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
@@ -2802,6 +2817,12 @@ func (_m *StandardHistory) changes(new *StandardHistory) []Change {
 	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
 		changes = append(changes, NewChange(standardhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
 	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(standardhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(standardhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(standardhistory.FieldName, _m.Name, new.Name))
 	}
@@ -3011,6 +3032,12 @@ func (_m *SubprocessorHistory) changes(new *SubprocessorHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
 		changes = append(changes, NewChange(subprocessorhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
 	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(subprocessorhistory.FieldName, _m.Name, new.Name))

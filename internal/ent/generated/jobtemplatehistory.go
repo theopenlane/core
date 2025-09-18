@@ -47,6 +47,10 @@ type JobTemplateHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// the title of the job
 	Title string `json:"title,omitempty"`
 	// the short description of the job and what it does
@@ -77,7 +81,7 @@ func (*JobTemplateHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case jobtemplatehistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case jobtemplatehistory.FieldID, jobtemplatehistory.FieldRef, jobtemplatehistory.FieldCreatedBy, jobtemplatehistory.FieldUpdatedBy, jobtemplatehistory.FieldDeletedBy, jobtemplatehistory.FieldDisplayID, jobtemplatehistory.FieldOwnerID, jobtemplatehistory.FieldTitle, jobtemplatehistory.FieldDescription, jobtemplatehistory.FieldPlatform, jobtemplatehistory.FieldWindmillPath, jobtemplatehistory.FieldDownloadURL:
+		case jobtemplatehistory.FieldID, jobtemplatehistory.FieldRef, jobtemplatehistory.FieldCreatedBy, jobtemplatehistory.FieldUpdatedBy, jobtemplatehistory.FieldDeletedBy, jobtemplatehistory.FieldDisplayID, jobtemplatehistory.FieldOwnerID, jobtemplatehistory.FieldInternalNotes, jobtemplatehistory.FieldSystemInternalID, jobtemplatehistory.FieldTitle, jobtemplatehistory.FieldDescription, jobtemplatehistory.FieldPlatform, jobtemplatehistory.FieldWindmillPath, jobtemplatehistory.FieldDownloadURL:
 			values[i] = new(sql.NullString)
 		case jobtemplatehistory.FieldHistoryTime, jobtemplatehistory.FieldCreatedAt, jobtemplatehistory.FieldUpdatedAt, jobtemplatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -181,6 +185,20 @@ func (_m *JobTemplateHistory) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
 			} else if value.Valid {
 				_m.SystemOwned = value.Bool
+			}
+		case jobtemplatehistory.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case jobtemplatehistory.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case jobtemplatehistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -301,6 +319,16 @@ func (_m *JobTemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)

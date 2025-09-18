@@ -439,6 +439,8 @@ query AdminSearch($query: String!) {
           displayID
           tags
           ownerID
+          internalNotes
+          systemInternalID
           name
           ipAddress
           version
@@ -495,6 +497,8 @@ query AdminSearch($query: String!) {
           displayID
           tags
           ownerID
+          internalNotes
+          systemInternalID
           title
           description
         }
@@ -529,6 +533,8 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
+          internalNotes
+          systemInternalID
           ownerID
           relation
         }
@@ -755,6 +761,8 @@ query AdminSearch($query: String!) {
           tags
           revision
           ownerID
+          internalNotes
+          systemInternalID
           name
           shortName
           framework
@@ -816,6 +824,8 @@ query AdminSearch($query: String!) {
           id
           tags
           ownerID
+          internalNotes
+          systemInternalID
           name
           description
           logoRemoteURL

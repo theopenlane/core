@@ -49,6 +49,12 @@ func TestQueryMappedControl(t *testing.T) {
 			ctx:     testUser1.UserCtx,
 		},
 		{
+			name:    "happy path system admin",
+			queryID: systemMappedControl.ID,
+			client:  suite.client.api,
+			ctx:     systemAdminUser.UserCtx,
+		},
+		{
 			name:    "happy path, read only user, should have read access",
 			queryID: mappedControl.ID,
 			client:  suite.client.api,
@@ -101,6 +107,15 @@ func TestQueryMappedControl(t *testing.T) {
 			assert.Check(t, is.Len(fromControls, 1), "expected exactly one from control")
 			toControls := resp.MappedControl.ToControls.Edges
 			assert.Check(t, is.Len(toControls, 1), "expected exactly one to control")
+
+			// // ensure internal only fields are not returned
+			// if tc.ctx == systemAdminUser.UserCtx {
+			// 	assert.Check(t, resp.MappedControl.SystemInternalID != nil)
+			// 	assert.Check(t, resp.MappedControl.InternalNotes != nil)
+			// } else {
+			// 	assert.Check(t, resp.MappedControl.SystemInternalID == nil)
+			// 	assert.Check(t, resp.MappedControl.InternalNotes == nil)
+			// }
 		})
 	}
 
@@ -260,12 +275,40 @@ func TestMutationCreateMappedControl(t *testing.T) {
 			expectedErr: invalidInputErrorMsg,
 		},
 		{
-			name: "system admin can create suggested mapping",
+			name: "user not allowed to set internal only fields, must be system admin",
 			request: testclient.CreateMappedControlInput{
 				MappingType:    &enums.MappingTypeEqual,
-				ToControlIDs:   []string{systemToControl.ID},
-				FromControlIDs: []string{systemFromControl.ID},
-				Source:         lo.ToPtr(enums.MappingSourceSuggested),
+				ToControlIDs:   []string{toControl.ID},
+				FromControlIDs: []string{fromControl.ID},
+				Source:         lo.ToPtr(enums.MappingSourceManual),
+				InternalNotes:  lo.ToPtr("these are internal notes"),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: invalidInputErrorMsg,
+		},
+		{
+			name: "user not allowed to set internal only fields, must be system admin",
+			request: testclient.CreateMappedControlInput{
+				MappingType:      &enums.MappingTypeEqual,
+				ToControlIDs:     []string{toControl.ID},
+				FromControlIDs:   []string{fromControl.ID},
+				Source:           lo.ToPtr(enums.MappingSourceManual),
+				SystemInternalID: lo.ToPtr(ulids.New().String()),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: invalidInputErrorMsg,
+		},
+		{
+			name: "system admin can create suggested mapping",
+			request: testclient.CreateMappedControlInput{
+				MappingType:      &enums.MappingTypeEqual,
+				ToControlIDs:     []string{systemToControl.ID},
+				FromControlIDs:   []string{systemFromControl.ID},
+				Source:           lo.ToPtr(enums.MappingSourceSuggested),
+				SystemInternalID: lo.ToPtr("internal-" + ulids.New().String()),
+				InternalNotes:    lo.ToPtr("these are internal notes"),
 			},
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
@@ -370,10 +413,22 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, 0), "expected no fromSubcontrols in the response")
 			}
 
+			if tc.request.SystemInternalID != nil {
+				assert.Check(t, resp.CreateMappedControl.MappedControl.SystemInternalID != nil)
+			}
+
+			if tc.request.InternalNotes != nil {
+				assert.Check(t, resp.CreateMappedControl.MappedControl.InternalNotes != nil)
+			}
+
 			assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.Tags, len(tc.request.Tags)), "expected %d tags in the response", len(tc.request.Tags))
 
 			// cleanup each object created
-			(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: resp.CreateMappedControl.MappedControl.ID}).MustDelete(testUser1.UserCtx, t)
+			deleteCtx := testUser1.UserCtx
+			if tc.ctx == systemAdminUser.UserCtx {
+				deleteCtx = systemAdminUser.UserCtx
+			}
+			(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: resp.CreateMappedControl.MappedControl.ID}).MustDelete(deleteCtx, t)
 		})
 	}
 

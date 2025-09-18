@@ -315,7 +315,7 @@ func assertErrorMessage(t *testing.T, err *gqlerror.Error, msg string) {
 
 func requireNoError(err error) {
 	if err != nil {
-		log.Error().Err(err).Send()
+		log.Error().Err(err).Msg("fatal error during test setup or teardown")
 
 		os.Exit(1)
 	}
@@ -449,6 +449,34 @@ func (suite *GraphTestSuite) orgSubscriptionMocks() {
 
 		*mockSubscriptionRetrieveResult = *mockSubscription
 
+	}).Return(nil)
+
+	// setup mocks for org subscription schedule
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionScheduleCreateParams"), mock.AnythingOfType("*stripe.SubscriptionSchedule")).Run(func(args mock.Arguments) {
+		mockSubscriptionScheduleResult := args.Get(4).(*stripe.SubscriptionSchedule)
+
+		*mockSubscriptionScheduleResult = stripe.SubscriptionSchedule{
+			ID: "sub_sched_test_schedule",
+			Phases: []*stripe.SubscriptionSchedulePhase{
+				{
+					Items: []*stripe.SubscriptionSchedulePhaseItem{
+						{
+							Price:    mockProduct.DefaultPrice,
+							Quantity: 1,
+						},
+					},
+				},
+			},
+			Object: "subscription_schedule",
+		}
+
+	}).Return(nil)
+
+	// setup mock for customer update
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerUpdateParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
+		mockCustomerUpdateResult := args.Get(4).(*stripe.Customer)
+
+		*mockCustomerUpdateResult = *mockCustomer
 	}).Return(nil)
 
 	// setup mocks for getting entitlements

@@ -46,6 +46,10 @@ type StandardHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// the long name of the standard body
 	Name string `json:"name,omitempty"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
@@ -86,7 +90,7 @@ func (*StandardHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case standardhistory.FieldSystemOwned, standardhistory.FieldIsPublic, standardhistory.FieldFreeToUse:
 			values[i] = new(sql.NullBool)
-		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldRevision, standardhistory.FieldOwnerID, standardhistory.FieldName, standardhistory.FieldShortName, standardhistory.FieldFramework, standardhistory.FieldDescription, standardhistory.FieldGoverningBodyLogoURL, standardhistory.FieldGoverningBody, standardhistory.FieldLink, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion:
+		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldRevision, standardhistory.FieldOwnerID, standardhistory.FieldInternalNotes, standardhistory.FieldSystemInternalID, standardhistory.FieldName, standardhistory.FieldShortName, standardhistory.FieldFramework, standardhistory.FieldDescription, standardhistory.FieldGoverningBodyLogoURL, standardhistory.FieldGoverningBody, standardhistory.FieldLink, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion:
 			values[i] = new(sql.NullString)
 		case standardhistory.FieldHistoryTime, standardhistory.FieldCreatedAt, standardhistory.FieldUpdatedAt, standardhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -190,6 +194,20 @@ func (_m *StandardHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
 			} else if value.Valid {
 				_m.SystemOwned = value.Bool
+			}
+		case standardhistory.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case standardhistory.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case standardhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -345,6 +363,16 @@ func (_m *StandardHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

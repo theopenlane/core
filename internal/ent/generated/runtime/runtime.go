@@ -2914,7 +2914,7 @@ func init() {
 	// jobresult.DefaultID holds the default value on creation for the id field.
 	jobresult.DefaultID = jobresultDescID.Default.(func() string)
 	jobrunnerMixin := schema.JobRunner{}.Mixin()
-	jobrunner.Policy = privacy.NewPolicies(schema.JobRunner{})
+	jobrunner.Policy = privacy.NewPolicies(jobrunnerMixin[7], schema.JobRunner{})
 	jobrunner.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := jobrunner.Policy.EvalMutation(ctx, m); err != nil {
@@ -3132,7 +3132,7 @@ func init() {
 	// jobrunnertoken.DefaultID holds the default value on creation for the id field.
 	jobrunnertoken.DefaultID = jobrunnertokenDescID.Default.(func() string)
 	jobtemplateMixin := schema.JobTemplate{}.Mixin()
-	jobtemplate.Policy = privacy.NewPolicies(schema.JobTemplate{})
+	jobtemplate.Policy = privacy.NewPolicies(jobtemplateMixin[7], schema.JobTemplate{})
 	jobtemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := jobtemplate.Policy.EvalMutation(ctx, m); err != nil {
@@ -3361,7 +3361,7 @@ func init() {
 	// mappabledomainhistory.DefaultID holds the default value on creation for the id field.
 	mappabledomainhistory.DefaultID = mappabledomainhistoryDescID.Default.(func() string)
 	mappedcontrolMixin := schema.MappedControl{}.Mixin()
-	mappedcontrol.Policy = privacy.NewPolicies(schema.MappedControl{})
+	mappedcontrol.Policy = privacy.NewPolicies(mappedcontrolMixin[6], schema.MappedControl{})
 	mappedcontrol.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := mappedcontrol.Policy.EvalMutation(ctx, m); err != nil {
@@ -3375,6 +3375,7 @@ func init() {
 	mappedcontrolMixinHooks2 := mappedcontrolMixin[2].Hooks()
 	mappedcontrolMixinHooks6 := mappedcontrolMixin[6].Hooks()
 	mappedcontrolMixinHooks7 := mappedcontrolMixin[7].Hooks()
+	mappedcontrolMixinHooks8 := mappedcontrolMixin[8].Hooks()
 	mappedcontrolHooks := schema.MappedControl{}.Hooks()
 
 	mappedcontrol.Hooks[1] = mappedcontrolMixinHooks0[0]
@@ -3387,23 +3388,29 @@ func init() {
 
 	mappedcontrol.Hooks[5] = mappedcontrolMixinHooks7[0]
 
-	mappedcontrol.Hooks[6] = mappedcontrolMixinHooks7[1]
+	mappedcontrol.Hooks[6] = mappedcontrolMixinHooks8[0]
 
-	mappedcontrol.Hooks[7] = mappedcontrolHooks[0]
+	mappedcontrol.Hooks[7] = mappedcontrolMixinHooks8[1]
 
-	mappedcontrol.Hooks[8] = mappedcontrolHooks[1]
+	mappedcontrol.Hooks[8] = mappedcontrolHooks[0]
+
+	mappedcontrol.Hooks[9] = mappedcontrolHooks[1]
 	mappedcontrolMixinInters1 := mappedcontrolMixin[1].Interceptors()
 	mappedcontrolMixinInters2 := mappedcontrolMixin[2].Interceptors()
-	mappedcontrolMixinInters6 := mappedcontrolMixin[6].Interceptors()
+	mappedcontrolMixinInters7 := mappedcontrolMixin[7].Interceptors()
+	mappedcontrolInters := schema.MappedControl{}.Interceptors()
 	mappedcontrol.Interceptors[0] = mappedcontrolMixinInters1[0]
 	mappedcontrol.Interceptors[1] = mappedcontrolMixinInters2[0]
-	mappedcontrol.Interceptors[2] = mappedcontrolMixinInters6[0]
+	mappedcontrol.Interceptors[2] = mappedcontrolMixinInters7[0]
+	mappedcontrol.Interceptors[3] = mappedcontrolInters[0]
 	mappedcontrolMixinFields0 := mappedcontrolMixin[0].Fields()
 	_ = mappedcontrolMixinFields0
 	mappedcontrolMixinFields3 := mappedcontrolMixin[3].Fields()
 	_ = mappedcontrolMixinFields3
 	mappedcontrolMixinFields4 := mappedcontrolMixin[4].Fields()
 	_ = mappedcontrolMixinFields4
+	mappedcontrolMixinFields6 := mappedcontrolMixin[6].Fields()
+	_ = mappedcontrolMixinFields6
 	mappedcontrolFields := schema.MappedControl{}.Fields()
 	_ = mappedcontrolFields
 	// mappedcontrolDescCreatedAt is the schema descriptor for created_at field.
@@ -3420,6 +3427,10 @@ func init() {
 	mappedcontrolDescTags := mappedcontrolMixinFields4[0].Descriptor()
 	// mappedcontrol.DefaultTags holds the default value on creation for the tags field.
 	mappedcontrol.DefaultTags = mappedcontrolDescTags.Default.([]string)
+	// mappedcontrolDescSystemOwned is the schema descriptor for system_owned field.
+	mappedcontrolDescSystemOwned := mappedcontrolMixinFields6[0].Descriptor()
+	// mappedcontrol.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	mappedcontrol.DefaultSystemOwned = mappedcontrolDescSystemOwned.Default.(bool)
 	// mappedcontrolDescConfidence is the schema descriptor for confidence field.
 	mappedcontrolDescConfidence := mappedcontrolFields[2].Descriptor()
 	// mappedcontrol.ConfidenceValidator is a validator for the "confidence" field. It is called by the builders before save.
@@ -3473,6 +3484,10 @@ func init() {
 	mappedcontrolhistoryDescTags := mappedcontrolhistoryFields[10].Descriptor()
 	// mappedcontrolhistory.DefaultTags holds the default value on creation for the tags field.
 	mappedcontrolhistory.DefaultTags = mappedcontrolhistoryDescTags.Default.([]string)
+	// mappedcontrolhistoryDescSystemOwned is the schema descriptor for system_owned field.
+	mappedcontrolhistoryDescSystemOwned := mappedcontrolhistoryFields[11].Descriptor()
+	// mappedcontrolhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	mappedcontrolhistory.DefaultSystemOwned = mappedcontrolhistoryDescSystemOwned.Default.(bool)
 	// mappedcontrolhistoryDescID is the schema descriptor for id field.
 	mappedcontrolhistoryDescID := mappedcontrolhistoryFields[9].Descriptor()
 	// mappedcontrolhistory.DefaultID holds the default value on creation for the id field.
@@ -5356,7 +5371,7 @@ func init() {
 	// scheduledjobrun.DefaultID holds the default value on creation for the id field.
 	scheduledjobrun.DefaultID = scheduledjobrunDescID.Default.(func() string)
 	standardMixin := schema.Standard{}.Mixin()
-	standard.Policy = privacy.NewPolicies(schema.Standard{})
+	standard.Policy = privacy.NewPolicies(standardMixin[8], schema.Standard{})
 	standard.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := standard.Policy.EvalMutation(ctx, m); err != nil {
@@ -5528,11 +5543,11 @@ func init() {
 	// standardhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	standardhistory.DefaultSystemOwned = standardhistoryDescSystemOwned.Default.(bool)
 	// standardhistoryDescIsPublic is the schema descriptor for is_public field.
-	standardhistoryDescIsPublic := standardhistoryFields[23].Descriptor()
+	standardhistoryDescIsPublic := standardhistoryFields[25].Descriptor()
 	// standardhistory.DefaultIsPublic holds the default value on creation for the is_public field.
 	standardhistory.DefaultIsPublic = standardhistoryDescIsPublic.Default.(bool)
 	// standardhistoryDescFreeToUse is the schema descriptor for free_to_use field.
-	standardhistoryDescFreeToUse := standardhistoryFields[24].Descriptor()
+	standardhistoryDescFreeToUse := standardhistoryFields[26].Descriptor()
 	// standardhistory.DefaultFreeToUse holds the default value on creation for the free_to_use field.
 	standardhistory.DefaultFreeToUse = standardhistoryDescFreeToUse.Default.(bool)
 	// standardhistoryDescID is the schema descriptor for id field.
@@ -5665,7 +5680,7 @@ func init() {
 	// subcontrolhistory.DefaultID holds the default value on creation for the id field.
 	subcontrolhistory.DefaultID = subcontrolhistoryDescID.Default.(func() string)
 	subprocessorMixin := schema.Subprocessor{}.Mixin()
-	subprocessor.Policy = privacy.NewPolicies(schema.Subprocessor{})
+	subprocessor.Policy = privacy.NewPolicies(subprocessorMixin[7], schema.Subprocessor{})
 	subprocessor.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := subprocessor.Policy.EvalMutation(ctx, m); err != nil {

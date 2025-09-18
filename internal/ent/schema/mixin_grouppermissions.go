@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/mixin"
 
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -195,7 +195,7 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 			),
 		).IDs(ctx)
 		if err != nil {
-			log.Error().Err(err).Msg("failed to get group IDs for user")
+			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get group IDs for user")
 
 			return err
 		}
@@ -254,7 +254,6 @@ func addBlockedGroupPredicate(q intercept.Query, groupIDs []string) {
 // results that have a viewer group that the user is a member of
 // or results with no viewer group at all
 func addViewGroupPredicate(q intercept.Query, groupIDs []string) {
-	log.Error().Str("query_type", q.Type()).Msg("adding view group predicate")
 	objectSnakeCase := strcase.SnakeCase(q.Type())
 	tableName := fmt.Sprintf("%s_viewers", objectSnakeCase)
 	q.WhereP(func(s *sql.Selector) {

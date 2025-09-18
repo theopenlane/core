@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/objects"
@@ -167,7 +166,7 @@ func trustCenterSettingDeleteHook(ctx context.Context, m *generated.TrustCenterS
 	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
 
 	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
-		log.Error().Err(err).Msg("failed to delete relationship tuples")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete relationship tuples")
 
 		return ErrInternalServerError
 	}

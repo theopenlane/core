@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -145,7 +144,10 @@ func (s Standard) Mixin() []ent.Mixin {
 				withSkipForSystemAdmin(true), // allow empty owner_id for system admin
 				withAllowAnonymousTrustCenterAccess(true),
 			),
-			mixin.SystemOwnedMixin{},
+			mixin.NewSystemOwnedMixin([]string{
+				"is_public",
+				"free_to_use",
+			}...),
 		},
 	}.getMixins(s)
 }
@@ -174,7 +176,7 @@ func (s Standard) Interceptors() []ent.Interceptor {
 func (s Standard) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.SystemOwnedStandards(), // checks for the system owned field
+			// rule.SystemOwnedStandards(), // checks for the system owned field
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),

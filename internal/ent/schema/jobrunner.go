@@ -137,7 +137,6 @@ func (j JobRunner) Policy() ent.Policy {
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
-			rule.SystemOwnedJobRunner(),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),

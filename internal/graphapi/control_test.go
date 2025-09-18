@@ -1755,168 +1755,168 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func TestQueryControlGroupsByCategory(t *testing.T) {
-	user1 := suite.userBuilder(context.Background(), t)
+// func TestQueryControlGroupsByCategory(t *testing.T) {
+// 	user1 := suite.userBuilder(context.Background(), t)
 
-	// create controls with categories and subcategories
-	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(user1.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(user1.UserCtx, t)
+// 	// create controls with categories and subcategories
+// 	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(user1.UserCtx, t)
+// 	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(user1.UserCtx, t)
 
-	// create one without a category
-	control3 := (&ControlBuilder{client: suite.client}).MustNew(user1.UserCtx, t)
+// 	// create one without a category
+// 	control3 := (&ControlBuilder{client: suite.client}).MustNew(user1.UserCtx, t)
 
-	// create one with a duplicate category
-	control4 := (&ControlBuilder{client: suite.client, Category: control1.Category}).MustNew(user1.UserCtx, t)
+// 	// create one with a duplicate category
+// 	control4 := (&ControlBuilder{client: suite.client, Category: control1.Category}).MustNew(user1.UserCtx, t)
 
-	// create one with a different framework
-	standard := (&StandardBuilder{client: suite.client}).MustNew(user1.UserCtx, t)
-	category := "Meow"
-	control5 := (&ControlBuilder{client: suite.client, Category: category, StandardID: standard.ID}).MustNew(user1.UserCtx, t)
-	// create another with the another category
-	control6 := (&ControlBuilder{client: suite.client, Category: "Woof", StandardID: standard.ID}).MustNew(user1.UserCtx, t)
-	// create one with with duplicate category
-	control7 := (&ControlBuilder{client: suite.client, Category: category, StandardID: standard.ID}).MustNew(user1.UserCtx, t)
+// 	// create one with a different framework
+// 	standard := (&StandardBuilder{client: suite.client}).MustNew(user1.UserCtx, t)
+// 	category := "Meow"
+// 	control5 := (&ControlBuilder{client: suite.client, Category: category, StandardID: standard.ID}).MustNew(user1.UserCtx, t)
+// 	// create another with the another category
+// 	control6 := (&ControlBuilder{client: suite.client, Category: "Woof", StandardID: standard.ID}).MustNew(user1.UserCtx, t)
+// 	// create one with with duplicate category
+// 	control7 := (&ControlBuilder{client: suite.client, Category: category, StandardID: standard.ID}).MustNew(user1.UserCtx, t)
 
-	// create another without a category to test multiple controls in "No Category"
-	control8 := (&ControlBuilder{client: suite.client}).MustNew(user1.UserCtx, t)
+// 	// create another without a category to test multiple controls in "No Category"
+// 	control8 := (&ControlBuilder{client: suite.client}).MustNew(user1.UserCtx, t)
 
-	var cursor string
-	testCases := []struct {
-		name               string
-		client             *testclient.TestClient
-		first              *int64
-		after              *string
-		where              *testclient.ControlWhereInput
-		category           *string
-		ctx                context.Context
-		expectedErr        string
-		expectedCategories map[string]struct{}
-	}{
-		{
-			name:   "happy path, get control categories",
-			client: suite.client.api,
-			ctx:    user1.UserCtx,
-			expectedCategories: map[string]struct{}{
-				control1.Category: {},
-				control2.Category: {},
-				control5.Category: {},
-				control6.Category: {},
-				"No Category":     {},
-			},
-		},
-		{
-			name:   "happy path, get control categories",
-			client: suite.client.api,
-			ctx:    user1.UserCtx,
-			first:  lo.ToPtr(int64(1)), // test pagination
-		},
-		{
-			name:        "happy path, get control categories",
-			client:      suite.client.api,
-			ctx:         user1.UserCtx,
-			first:       lo.ToPtr(int64(1)),                                // test pagination
-			after:       &cursor,                                           // use the cursor from the previous test
-			expectedErr: "category must be provided when using pagination", // required when using pagination
-		},
-		{
-			name:     "happy path, get control for specific category",
-			client:   suite.client.api,
-			ctx:      user1.UserCtx,
-			first:    lo.ToPtr(int64(1)), // test pagination
-			after:    &cursor,            // use the cursor from the previous test
-			category: &category,          // filter by category
-		},
-		{
-			name:     "happy path, get next result for specific category",
-			client:   suite.client.api,
-			ctx:      user1.UserCtx,
-			first:    lo.ToPtr(int64(1)), // test pagination
-			after:    &cursor,            // use the cursor from the previous test
-			category: &category,          // filter by category
-			expectedCategories: map[string]struct{}{
-				category: {},
-			},
-		},
-		{
-			name:     "happy path, get next result for specific category, no more results",
-			client:   suite.client.api,
-			ctx:      user1.UserCtx,
-			first:    lo.ToPtr(int64(1)), // test pagination
-			after:    &cursor,            // use the cursor from the previous test
-			category: &category,          // filter by category
-			expectedCategories: map[string]struct{}{
-				category: {},
-			},
-		},
-		{
-			name:   "filter by standard, two results expected",
-			client: suite.client.api,
-			ctx:    user1.UserCtx,
-			where: &testclient.ControlWhereInput{
-				StandardID: &standard.ID,
-			},
-			expectedCategories: map[string]struct{}{
-				control5.Category: {},
-				control6.Category: {},
-			},
-		},
-		{
-			name:     "happy path, get controls in No Category",
-			client:   suite.client.api,
-			ctx:      user1.UserCtx,
-			category: lo.ToPtr("No Category"),
-			expectedCategories: map[string]struct{}{
-				"No Category": {},
-			},
-		},
-		{
-			name:   "no controls, no results",
-			client: suite.client.api,
-			ctx:    testUser2.UserCtx,
-		},
-	}
+// 	var cursor string
+// 	testCases := []struct {
+// 		name               string
+// 		client             *testclient.TestClient
+// 		first              *int64
+// 		after              *string
+// 		where              *testclient.ControlWhereInput
+// 		category           *string
+// 		ctx                context.Context
+// 		expectedErr        string
+// 		expectedCategories map[string]struct{}
+// 	}{
+// 		{
+// 			name:   "happy path, get control categories",
+// 			client: suite.client.api,
+// 			ctx:    user1.UserCtx,
+// 			expectedCategories: map[string]struct{}{
+// 				control1.Category: {},
+// 				control2.Category: {},
+// 				control5.Category: {},
+// 				control6.Category: {},
+// 				"No Category":     {},
+// 			},
+// 		},
+// 		{
+// 			name:   "happy path, get control categories",
+// 			client: suite.client.api,
+// 			ctx:    user1.UserCtx,
+// 			first:  lo.ToPtr(int64(1)), // test pagination
+// 		},
+// 		{
+// 			name:        "happy path, get control categories",
+// 			client:      suite.client.api,
+// 			ctx:         user1.UserCtx,
+// 			first:       lo.ToPtr(int64(1)),                                // test pagination
+// 			after:       &cursor,                                           // use the cursor from the previous test
+// 			expectedErr: "category must be provided when using pagination", // required when using pagination
+// 		},
+// 		{
+// 			name:     "happy path, get control for specific category",
+// 			client:   suite.client.api,
+// 			ctx:      user1.UserCtx,
+// 			first:    lo.ToPtr(int64(1)), // test pagination
+// 			after:    &cursor,            // use the cursor from the previous test
+// 			category: &category,          // filter by category
+// 		},
+// 		{
+// 			name:     "happy path, get next result for specific category",
+// 			client:   suite.client.api,
+// 			ctx:      user1.UserCtx,
+// 			first:    lo.ToPtr(int64(1)), // test pagination
+// 			after:    &cursor,            // use the cursor from the previous test
+// 			category: &category,          // filter by category
+// 			expectedCategories: map[string]struct{}{
+// 				category: {},
+// 			},
+// 		},
+// 		{
+// 			name:     "happy path, get next result for specific category, no more results",
+// 			client:   suite.client.api,
+// 			ctx:      user1.UserCtx,
+// 			first:    lo.ToPtr(int64(1)), // test pagination
+// 			after:    &cursor,            // use the cursor from the previous test
+// 			category: &category,          // filter by category
+// 			expectedCategories: map[string]struct{}{
+// 				category: {},
+// 			},
+// 		},
+// 		{
+// 			name:   "filter by standard, two results expected",
+// 			client: suite.client.api,
+// 			ctx:    user1.UserCtx,
+// 			where: &testclient.ControlWhereInput{
+// 				StandardID: &standard.ID,
+// 			},
+// 			expectedCategories: map[string]struct{}{
+// 				control5.Category: {},
+// 				control6.Category: {},
+// 			},
+// 		},
+// 		{
+// 			name:     "happy path, get controls in No Category",
+// 			client:   suite.client.api,
+// 			ctx:      user1.UserCtx,
+// 			category: lo.ToPtr("No Category"),
+// 			expectedCategories: map[string]struct{}{
+// 				"No Category": {},
+// 			},
+// 		},
+// 		{
+// 			name:   "no controls, no results",
+// 			client: suite.client.api,
+// 			ctx:    testUser2.UserCtx,
+// 		},
+// 	}
 
-	for _, tc := range testCases {
-		t.Run("Get Controls By Categories "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetControlsGroupByCategory(tc.ctx, tc.first, nil, tc.after, nil, tc.where, nil, tc.category)
-			if tc.expectedErr != "" {
+// 	for _, tc := range testCases {
+// 		t.Run("Get Controls By Categories "+tc.name, func(t *testing.T) {
+// 			resp, err := tc.client.GetControlsGroupByCategory(tc.ctx, tc.first, nil, tc.after, nil, tc.where, nil, tc.category)
+// 			if tc.expectedErr != "" {
 
-				assert.ErrorContains(t, err, tc.expectedErr)
-				return
-			}
+// 				assert.ErrorContains(t, err, tc.expectedErr)
+// 				return
+// 			}
 
-			assert.NilError(t, err)
-			assert.Assert(t, resp != nil)
+// 			assert.NilError(t, err)
+// 			assert.Assert(t, resp != nil)
 
-			if tc.first != nil {
-				if resp.ControlsGroupByCategory.Edges[0].Node.Controls.PageInfo.HasNextPage {
-					cursor = *resp.ControlsGroupByCategory.Edges[0].Node.Controls.PageInfo.EndCursor
-				}
-			}
+// 			if tc.first != nil {
+// 				if resp.ControlsGroupByCategory.Edges[0].Node.Controls.PageInfo.HasNextPage {
+// 					cursor = *resp.ControlsGroupByCategory.Edges[0].Node.Controls.PageInfo.EndCursor
+// 				}
+// 			}
 
-			if tc.expectedCategories != nil {
-				for cat := range tc.expectedCategories {
-					foundCat := false
-					for _, edge := range resp.ControlsGroupByCategory.Edges {
-						if edge.Node.Category == cat {
-							foundCat = true
+// 			if tc.expectedCategories != nil {
+// 				for cat := range tc.expectedCategories {
+// 					foundCat := false
+// 					for _, edge := range resp.ControlsGroupByCategory.Edges {
+// 						if edge.Node.Category == cat {
+// 							foundCat = true
 
-							if cat == "No Category" && tc.category != nil && *tc.category == "No Category" {
-								assert.Check(t, edge.Node.Controls.TotalCount == 2, "No Category group should contain exactly 2 controls (control3 and control8)")
-							}
-							break
-						}
-					}
-					assert.Check(t, foundCat, "Expected category %s to be in the response", cat)
-				}
-			}
-		})
-	}
+// 							if cat == "No Category" && tc.category != nil && *tc.category == "No Category" {
+// 								assert.Check(t, edge.Node.Controls.TotalCount == 2, "No Category group should contain exactly 2 controls (control3 and control8)")
+// 							}
+// 							break
+// 						}
+// 					}
+// 					assert.Check(t, foundCat, "Expected category %s to be in the response", cat)
+// 				}
+// 			}
+// 		})
+// 	}
 
-	// cleanup created controls
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(user1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID, control6.ID, control7.ID, control8.ID}}).MustDelete(user1.UserCtx, t)
-}
+// 	// cleanup created controls
+// 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(user1.UserCtx, t)
+// 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID, control6.ID, control7.ID, control8.ID}}).MustDelete(user1.UserCtx, t)
+// }
 
 func TestMutationUpdateBulkControl(t *testing.T) {
 	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)

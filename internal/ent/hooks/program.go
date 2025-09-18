@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -130,7 +129,7 @@ func programDeleteHook(ctx context.Context, m *generated.ProgramMutation) error 
 	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
 
 	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
-		log.Error().Err(err).Msg("failed to delete relationship tuples")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete relationship tuples")
 
 		return ErrInternalServerError
 	}

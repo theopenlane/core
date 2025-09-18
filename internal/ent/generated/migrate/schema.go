@@ -2205,6 +2205,8 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"ONLINE", "OFFLINE"}, Default: "OFFLINE"},
 		{Name: "ip_address", Type: field.TypeString, Nullable: true},
@@ -2221,7 +2223,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "job_runners_organizations_job_runners",
-				Columns:    []*schema.Column{JobRunnersColumns[16]},
+				Columns:    []*schema.Column{JobRunnersColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2230,12 +2232,12 @@ var (
 			{
 				Name:    "jobrunner_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{JobRunnersColumns[7], JobRunnersColumns[16]},
+				Columns: []*schema.Column{JobRunnersColumns[7], JobRunnersColumns[18]},
 			},
 			{
 				Name:    "jobrunner_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{JobRunnersColumns[16]},
+				Columns: []*schema.Column{JobRunnersColumns[18]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2348,6 +2350,8 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
@@ -2365,7 +2369,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "job_templates_organizations_job_templates",
-				Columns:    []*schema.Column{JobTemplatesColumns[17]},
+				Columns:    []*schema.Column{JobTemplatesColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2374,12 +2378,12 @@ var (
 			{
 				Name:    "jobtemplate_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{JobTemplatesColumns[7], JobTemplatesColumns[17]},
+				Columns: []*schema.Column{JobTemplatesColumns[7], JobTemplatesColumns[19]},
 			},
 			{
 				Name:    "jobtemplate_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{JobTemplatesColumns[17]},
+				Columns: []*schema.Column{JobTemplatesColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2402,6 +2406,8 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
@@ -2491,6 +2497,9 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_type", Type: field.TypeEnum, Enums: []string{"EQUAL", "SUPERSET", "SUBSET", "INTERSECT", "PARTIAL"}, Default: "EQUAL"},
 		{Name: "relation", Type: field.TypeString, Nullable: true},
 		{Name: "confidence", Type: field.TypeInt, Nullable: true},
@@ -2505,7 +2514,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "mapped_controls_organizations_mapped_controls",
-				Columns:    []*schema.Column{MappedControlsColumns[12]},
+				Columns:    []*schema.Column{MappedControlsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2514,7 +2523,7 @@ var (
 			{
 				Name:    "mappedcontrol_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{MappedControlsColumns[12]},
+				Columns: []*schema.Column{MappedControlsColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2534,6 +2543,9 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_type", Type: field.TypeEnum, Enums: []string{"EQUAL", "SUPERSET", "SUBSET", "INTERSECT", "PARTIAL"}, Default: "EQUAL"},
 		{Name: "relation", Type: field.TypeString, Nullable: true},
@@ -3998,6 +4010,8 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "short_name", Type: field.TypeString, Nullable: true},
 		{Name: "framework", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -4021,7 +4035,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "standards_organizations_standards",
-				Columns:    []*schema.Column{StandardsColumns[23]},
+				Columns:    []*schema.Column{StandardsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4030,7 +4044,7 @@ var (
 			{
 				Name:    "standard_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{StandardsColumns[23]},
+				Columns: []*schema.Column{StandardsColumns[25]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4053,6 +4067,8 @@ var (
 		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "short_name", Type: field.TypeString, Nullable: true},
 		{Name: "framework", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -4252,6 +4268,8 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
@@ -4266,13 +4284,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subprocessors_organizations_subprocessors",
-				Columns:    []*schema.Column{SubprocessorsColumns[12]},
+				Columns:    []*schema.Column{SubprocessorsColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subprocessors_files_logo_file",
-				Columns:    []*schema.Column{SubprocessorsColumns[13]},
+				Columns:    []*schema.Column{SubprocessorsColumns[15]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4281,7 +4299,7 @@ var (
 			{
 				Name:    "subprocessor_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{SubprocessorsColumns[12]},
+				Columns: []*schema.Column{SubprocessorsColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4289,7 +4307,7 @@ var (
 			{
 				Name:    "subprocessor_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubprocessorsColumns[9], SubprocessorsColumns[12]},
+				Columns: []*schema.Column{SubprocessorsColumns[11], SubprocessorsColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4311,6 +4329,8 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},

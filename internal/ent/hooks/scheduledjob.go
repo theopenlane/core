@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 
@@ -78,7 +78,7 @@ func HookJobTemplate() ent.Hook {
 			case ent.OpCreate:
 				flowPath, err := createWindmillFlow(ctx, mutation)
 				if err != nil {
-					log.Error().Err(err).Msg("failed to create windmill flow")
+					zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create windmill flow")
 
 					return nil, fmt.Errorf("failed to create job template: %w", err)
 				}
@@ -86,7 +86,7 @@ func HookJobTemplate() ent.Hook {
 				// set the flow on the job template
 				jobTemplate, ok := retVal.(*generated.JobTemplate)
 				if !ok {
-					log.Error().Msg("failed to get job template from return value")
+					zerolog.Ctx(ctx).Error().Msg("failed to get job template from return value")
 
 					return retVal, nil
 				}
@@ -94,14 +94,14 @@ func HookJobTemplate() ent.Hook {
 				if err := mutation.Client().JobTemplate.UpdateOneID(jobTemplate.ID).
 					SetWindmillPath(flowPath).
 					Exec(ctx); err != nil {
-					log.Error().Err(err).Msg("failed to set windmill path on job template")
+					zerolog.Ctx(ctx).Error().Err(err).Msg("failed to set windmill path on job template")
 
 					return nil, fmt.Errorf("failed to set windmill path on job template: %w", err)
 				}
 			case ent.OpUpdate, ent.OpUpdateOne:
 				if hasWindmillUpdate {
 					if err := updateWindmillFlow(ctx, mutation, oldWindmillPath, oldDownloadURL); err != nil {
-						log.Error().Err(err).Msg("failed to update windmill flow")
+						zerolog.Ctx(ctx).Error().Err(err).Msg("failed to update windmill flow")
 
 						return nil, fmt.Errorf("failed to update job template: %w", err)
 					}
@@ -194,7 +194,7 @@ func updateWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMuta
 		}
 
 		if len(ids) == 0 {
-			log.Error().Msg("no ids found, unable to update windmill flow")
+			zerolog.Ctx(ctx).Error().Msg("no ids found, unable to update windmill flow")
 
 			return nil
 		}
@@ -225,7 +225,7 @@ func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 	)
 
 	if err != nil {
-		log.Error().Err(err).Msg("failed to create httpsling requestor")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create httpsling requestor")
 
 		return "", ErrInternalServerError
 	}
@@ -249,7 +249,7 @@ func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 func generateFlowPath(ctx context.Context, mutation utils.GenericMutation) (string, error) {
 	entConfig := mutation.Client().EntConfig
 	if entConfig == nil {
-		log.Error().Msg("ent config is required, but not set, unable to create scheduled job")
+		zerolog.Ctx(ctx).Error().Msg("ent config is required, but not set, unable to create scheduled job")
 
 		return "", ErrInternalServerError
 	}
@@ -265,7 +265,7 @@ func generateFlowPath(ctx context.Context, mutation utils.GenericMutation) (stri
 
 	folderName, err := getCustomerFolderName(ctx, mutation)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get customer folder name")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get customer folder name")
 
 		return "", err
 	}
@@ -349,7 +349,7 @@ func HookScheduledJobCreate() ent.Hook {
 				}
 
 				if !exists {
-					log.Debug().Str("job_runner_id", jobRunnerID).Msg("requested job runner not found")
+					zerolog.Ctx(ctx).Debug().Str("job_runner_id", jobRunnerID).Msg("requested job runner not found")
 
 					return nil, &generated.NotFoundError{}
 				}
@@ -408,7 +408,7 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Schedul
 
 	_, err = windmillClient.CreateScheduledJob(ctx, scheduleReq)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to create windmill scheduled job")
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create windmill scheduled job")
 
 		return fmt.Errorf("failed to create scheduled job: %w", err)
 	}

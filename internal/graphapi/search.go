@@ -947,11 +947,13 @@ func adminSearchJobRunners(ctx context.Context, query string, after *entgql.Curs
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				jobrunner.OwnerIDContainsFold(query),   // search by OwnerID
-				jobrunner.NameContainsFold(query),      // search by Name
-				jobrunner.IPAddressContainsFold(query), // search by IPAddress
-				jobrunner.VersionContainsFold(query),   // search by Version
-				jobrunner.OsContainsFold(query),        // search by Os
+				jobrunner.OwnerIDContainsFold(query),          // search by OwnerID
+				jobrunner.InternalNotesContainsFold(query),    // search by InternalNotes
+				jobrunner.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				jobrunner.NameContainsFold(query),             // search by Name
+				jobrunner.IPAddressContainsFold(query),        // search by IPAddress
+				jobrunner.VersionContainsFold(query),          // search by Version
+				jobrunner.OsContainsFold(query),               // search by Os
 			),
 		)
 
@@ -1057,9 +1059,11 @@ func adminSearchJobTemplates(ctx context.Context, query string, after *entgql.Cu
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				jobtemplate.OwnerIDContainsFold(query),     // search by OwnerID
-				jobtemplate.TitleContainsFold(query),       // search by Title
-				jobtemplate.DescriptionContainsFold(query), // search by Description
+				jobtemplate.OwnerIDContainsFold(query),          // search by OwnerID
+				jobtemplate.InternalNotesContainsFold(query),    // search by InternalNotes
+				jobtemplate.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				jobtemplate.TitleContainsFold(query),            // search by Title
+				jobtemplate.DescriptionContainsFold(query),      // search by Description
 			),
 		)
 
@@ -1126,8 +1130,10 @@ func adminSearchMappedControls(ctx context.Context, query string, after *entgql.
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				mappedcontrol.OwnerIDContainsFold(query),  // search by OwnerID
-				mappedcontrol.RelationContainsFold(query), // search by Relation
+				mappedcontrol.InternalNotesContainsFold(query),    // search by InternalNotes
+				mappedcontrol.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				mappedcontrol.OwnerIDContainsFold(query),          // search by OwnerID
+				mappedcontrol.RelationContainsFold(query),         // search by Relation
 			),
 		)
 
@@ -1589,6 +1595,8 @@ func adminSearchStandards(ctx context.Context, query string, after *entgql.Curso
 				},
 				standard.RevisionContainsFold(query),             // search by Revision
 				standard.OwnerIDContainsFold(query),              // search by OwnerID
+				standard.InternalNotesContainsFold(query),        // search by InternalNotes
+				standard.SystemInternalIDContainsFold(query),     // search by SystemInternalID
 				standard.NameContainsFold(query),                 // search by Name
 				standard.ShortNameContainsFold(query),            // search by ShortName
 				standard.FrameworkContainsFold(query),            // search by Framework
@@ -1597,7 +1605,7 @@ func adminSearchStandards(ctx context.Context, query string, after *entgql.Curso
 				standard.GoverningBodyContainsFold(query),        // search by GoverningBody
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(domains)::text LIKE $11", likeQuery)) // search by Domains
+					s.Where(sql.ExprP("(domains)::text LIKE $13", likeQuery)) // search by Domains
 				},
 				standard.LinkContainsFold(query),         // search by Link
 				standard.StandardTypeContainsFold(query), // search by StandardType
@@ -1717,11 +1725,13 @@ func adminSearchSubprocessors(ctx context.Context, query string, after *entgql.C
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				subprocessor.OwnerIDContainsFold(query),         // search by OwnerID
-				subprocessor.NameContainsFold(query),            // search by Name
-				subprocessor.DescriptionContainsFold(query),     // search by Description
-				subprocessor.LogoRemoteURLContainsFold(query),   // search by LogoRemoteURL
-				subprocessor.LogoLocalFileIDContainsFold(query), // search by LogoLocalFileID
+				subprocessor.OwnerIDContainsFold(query),          // search by OwnerID
+				subprocessor.InternalNotesContainsFold(query),    // search by InternalNotes
+				subprocessor.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				subprocessor.NameContainsFold(query),             // search by Name
+				subprocessor.DescriptionContainsFold(query),      // search by Description
+				subprocessor.LogoRemoteURLContainsFold(query),    // search by LogoRemoteURL
+				subprocessor.LogoLocalFileIDContainsFold(query),  // search by LogoLocalFileID
 			),
 		)
 

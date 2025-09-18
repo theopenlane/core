@@ -68,6 +68,10 @@ func (ec *executionContext) fieldContext_JobRunnerCreatePayload_jobRunner(_ cont
 				return ec.fieldContext_JobRunner_ownerID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_JobRunner_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_JobRunner_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_JobRunner_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_JobRunner_name(ctx, field)
 			case "status":
@@ -158,6 +162,10 @@ func (ec *executionContext) fieldContext_JobRunnerUpdatePayload_jobRunner(_ cont
 				return ec.fieldContext_JobRunner_ownerID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_JobRunner_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_JobRunner_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_JobRunner_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_JobRunner_name(ctx, field)
 			case "status":

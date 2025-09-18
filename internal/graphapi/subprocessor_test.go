@@ -385,7 +385,7 @@ func TestUpdateSubprocessor(t *testing.T) {
 			updateInput: testclient.UpdateSubprocessorInput{
 				Tags: []string{"unauthorized"},
 			},
-			errorMsg: "attempted to set admin only field",
+			errorMsg: notAuthorizedErrorMsg,
 		},
 	}
 
