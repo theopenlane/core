@@ -259,7 +259,7 @@ type MutationResolver interface {
 	CreateBulkCSVTrustCenterCompliance(ctx context.Context, input graphql.Upload) (*model.TrustCenterComplianceBulkCreatePayload, error)
 	UpdateTrustCenterCompliance(ctx context.Context, id string, input generated.UpdateTrustCenterComplianceInput) (*model.TrustCenterComplianceUpdatePayload, error)
 	DeleteTrustCenterCompliance(ctx context.Context, id string) (*model.TrustCenterComplianceDeletePayload, error)
-	CreateTrustCenterDoc(ctx context.Context, input generated.CreateTrustCenterDocInput) (*model.TrustCenterDocCreatePayload, error)
+	CreateTrustCenterDoc(ctx context.Context, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) (*model.TrustCenterDocCreatePayload, error)
 	CreateBulkTrustCenterDoc(ctx context.Context, input []*generated.CreateTrustCenterDocInput) (*model.TrustCenterDocBulkCreatePayload, error)
 	CreateBulkCSVTrustCenterDoc(ctx context.Context, input graphql.Upload) (*model.TrustCenterDocBulkCreatePayload, error)
 	UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput) (*model.TrustCenterDocUpdatePayload, error)
@@ -1841,6 +1841,11 @@ func (ec *executionContext) field_Mutation_createTrustCenterDoc_args(ctx context
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "trustCenterDocFile", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["trustCenterDocFile"] = arg1
 	return args, nil
 }
 
@@ -14933,7 +14938,7 @@ func (ec *executionContext) _Mutation_createTrustCenterDoc(ctx context.Context, 
 		ec.fieldContext_Mutation_createTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterDoc(ctx, fc.Args["input"].(generated.CreateTrustCenterDocInput))
+			return ec.resolvers.Mutation().CreateTrustCenterDoc(ctx, fc.Args["input"].(generated.CreateTrustCenterDocInput), fc.Args["trustCenterDocFile"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterDocCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocCreatePayload,

@@ -9374,6 +9374,20 @@ input CreateTrustCenterDocInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	title of the document
+	"""
+	title: String!
+	"""
+	category of the document
+	"""
+	category: String!
+	"""
+	visibility of the document
+	"""
+	visibility: TrustCenterDocTrustCenterDocumentVisibility
+	trustCenterID: ID
+	fileID: ID
 }
 """
 Input for createTrustCenterDomain mutation
@@ -9401,6 +9415,7 @@ input CreateTrustCenterInput {
 	customDomainID: ID
 	settingID: ID
 	trustCenterSubprocessorIDs: [ID!]
+	trustCenterDocIDs: [ID!]
 	trustCenterComplianceIDs: [ID!]
 	createTrustCenterSetting: CreateTrustCenterSettingInput
 }
@@ -28547,7 +28562,7 @@ type Mutation {
 		values of the trustCenterDoc
 		"""
 		input: CreateTrustCenterDocInput!
-	): TrustCenterDocCreatePayload!
+	trustCenterDocFile: Upload!): TrustCenterDocCreatePayload!
 	"""
 	Create multiple new trustCenterDocs
 	"""
@@ -54761,6 +54776,37 @@ type TrustCenter implements Node {
 		"""
 		where: TrustCenterSubprocessorWhereInput
 	): TrustCenterSubprocessorConnection!
+	trustCenterDocs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for TrustCenterDocs returned from the connection.
+		"""
+		orderBy: [TrustCenterDocOrder!]
+
+		"""
+		Filtering options for TrustCenterDocs returned from the connection.
+		"""
+		where: TrustCenterDocWhereInput
+	): TrustCenterDocConnection!
 	trustCenterCompliances(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -55308,6 +55354,31 @@ type TrustCenterDoc implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	ID of the trust center
+	"""
+	trustCenterID: ID
+	"""
+	title of the document
+	"""
+	title: String!
+	"""
+	category of the document
+	"""
+	category: String!
+	"""
+	ID of the file containing the document
+	"""
+	fileID: ID
+	"""
+	visibility of the document
+	"""
+	visibility: TrustCenterDocTrustCenterDocumentVisibility
+	trustCenter: TrustCenter
+	"""
+	the file containing the document content
+	"""
+	file: File
 }
 """
 Return response for createBulkTrustCenterDoc mutation
@@ -55379,6 +55450,26 @@ type TrustCenterDocHistory implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	ID of the trust center
+	"""
+	trustCenterID: String
+	"""
+	title of the document
+	"""
+	title: String!
+	"""
+	category of the document
+	"""
+	category: String!
+	"""
+	ID of the file containing the document
+	"""
+	fileID: String
+	"""
+	visibility of the document
+	"""
+	visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
 }
 """
 A connection to a list of items.
@@ -55438,6 +55529,14 @@ enum TrustCenterDocHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+}
+"""
+TrustCenterDocHistoryTrustCenterDocumentVisibility is enum for the field visibility
+"""
+enum TrustCenterDocHistoryTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+	PUBLICLY_VISIBLE
+	PROTECTED
+	NOT_VISIBLE
 }
 """
 TrustCenterDocHistoryWhereInput is used for filtering TrustCenterDocHistory objects.
@@ -55558,6 +55657,83 @@ input TrustCenterDocHistoryWhereInput {
 	updatedByNotNil: Boolean
 	updatedByEqualFold: String
 	updatedByContainsFold: String
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: String
+	trustCenterIDNEQ: String
+	trustCenterIDIn: [String!]
+	trustCenterIDNotIn: [String!]
+	trustCenterIDGT: String
+	trustCenterIDGTE: String
+	trustCenterIDLT: String
+	trustCenterIDLTE: String
+	trustCenterIDContains: String
+	trustCenterIDHasPrefix: String
+	trustCenterIDHasSuffix: String
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: String
+	trustCenterIDContainsFold: String
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleEqualFold: String
+	titleContainsFold: String
+	"""
+	category field predicates
+	"""
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryEqualFold: String
+	categoryContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: String
+	fileIDNEQ: String
+	fileIDIn: [String!]
+	fileIDNotIn: [String!]
+	fileIDGT: String
+	fileIDGTE: String
+	fileIDLT: String
+	fileIDLTE: String
+	fileIDContains: String
+	fileIDHasPrefix: String
+	fileIDHasSuffix: String
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: String
+	fileIDContainsFold: String
+	"""
+	visibility field predicates
+	"""
+	visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
+	visibilityNEQ: TrustCenterDocHistoryTrustCenterDocumentVisibility
+	visibilityIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
+	visibilityNotIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
+	visibilityIsNil: Boolean
+	visibilityNotNil: Boolean
 }
 """
 Ordering options for TrustCenterDoc connections
@@ -55578,6 +55754,14 @@ Properties by which TrustCenterDoc connections can be ordered.
 enum TrustCenterDocOrderField {
 	created_at
 	updated_at
+}
+"""
+TrustCenterDocTrustCenterDocumentVisibility is enum for the field visibility
+"""
+enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+	PUBLICLY_VISIBLE
+	PROTECTED
+	NOT_VISIBLE
 }
 """
 Return response for updateTrustCenterDoc mutation
@@ -55671,6 +55855,93 @@ input TrustCenterDocWhereInput {
 	updatedByNotNil: Boolean
 	updatedByEqualFold: String
 	updatedByContainsFold: String
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: ID
+	trustCenterIDNEQ: ID
+	trustCenterIDIn: [ID!]
+	trustCenterIDNotIn: [ID!]
+	trustCenterIDGT: ID
+	trustCenterIDGTE: ID
+	trustCenterIDLT: ID
+	trustCenterIDLTE: ID
+	trustCenterIDContains: ID
+	trustCenterIDHasPrefix: ID
+	trustCenterIDHasSuffix: ID
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: ID
+	trustCenterIDContainsFold: ID
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleEqualFold: String
+	titleContainsFold: String
+	"""
+	category field predicates
+	"""
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryEqualFold: String
+	categoryContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: ID
+	fileIDNEQ: ID
+	fileIDIn: [ID!]
+	fileIDNotIn: [ID!]
+	fileIDGT: ID
+	fileIDGTE: ID
+	fileIDLT: ID
+	fileIDLTE: ID
+	fileIDContains: ID
+	fileIDHasPrefix: ID
+	fileIDHasSuffix: ID
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: ID
+	fileIDContainsFold: ID
+	"""
+	visibility field predicates
+	"""
+	visibility: TrustCenterDocTrustCenterDocumentVisibility
+	visibilityNEQ: TrustCenterDocTrustCenterDocumentVisibility
+	visibilityIn: [TrustCenterDocTrustCenterDocumentVisibility!]
+	visibilityNotIn: [TrustCenterDocTrustCenterDocumentVisibility!]
+	visibilityIsNil: Boolean
+	visibilityNotNil: Boolean
+	"""
+	trust_center edge predicates
+	"""
+	hasTrustCenter: Boolean
+	hasTrustCenterWith: [TrustCenterWhereInput!]
+	"""
+	file edge predicates
+	"""
+	hasFile: Boolean
+	hasFileWith: [FileWhereInput!]
 }
 """
 Return response for createTrustCenterDomain mutation
@@ -57634,6 +57905,11 @@ input TrustCenterWhereInput {
 	"""
 	hasTrustCenterSubprocessors: Boolean
 	hasTrustCenterSubprocessorsWith: [TrustCenterSubprocessorWhereInput!]
+	"""
+	trust_center_docs edge predicates
+	"""
+	hasTrustCenterDocs: Boolean
+	hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
 	"""
 	trust_center_compliances edge predicates
 	"""
@@ -60653,6 +60929,23 @@ input UpdateTrustCenterDocInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	title of the document
+	"""
+	title: String
+	"""
+	category of the document
+	"""
+	category: String
+	"""
+	visibility of the document
+	"""
+	visibility: TrustCenterDocTrustCenterDocumentVisibility
+	clearVisibility: Boolean
+	trustCenterID: ID
+	clearTrustCenter: Boolean
+	fileID: ID
+	clearFile: Boolean
 }
 """
 UpdateTrustCenterInput is used for update TrustCenter object.
@@ -60674,6 +60967,9 @@ input UpdateTrustCenterInput {
 	addTrustCenterSubprocessorIDs: [ID!]
 	removeTrustCenterSubprocessorIDs: [ID!]
 	clearTrustCenterSubprocessors: Boolean
+	addTrustCenterDocIDs: [ID!]
+	removeTrustCenterDocIDs: [ID!]
+	clearTrustCenterDocs: Boolean
 	addTrustCenterComplianceIDs: [ID!]
 	removeTrustCenterComplianceIDs: [ID!]
 	clearTrustCenterCompliances: Boolean

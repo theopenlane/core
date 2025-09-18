@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -37,6 +38,16 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
+	// FieldTitle holds the string denoting the title field in the database.
+	FieldTitle = "title"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
+	// FieldFileID holds the string denoting the file_id field in the database.
+	FieldFileID = "file_id"
+	// FieldVisibility holds the string denoting the visibility field in the database.
+	FieldVisibility = "visibility"
 	// Table holds the table name of the trustcenterdochistory in the database.
 	Table = "trust_center_doc_history"
 )
@@ -54,6 +65,11 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldTrustCenterID,
+	FieldTitle,
+	FieldCategory,
+	FieldFileID,
+	FieldVisibility,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -96,6 +112,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("trustcenterdochistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultVisibility enums.TrustCenterDocumentVisibility = "NOT_VISIBLE"
+
+// VisibilityValidator is a validator for the "visibility" field enum values. It is called by the builders before save.
+func VisibilityValidator(v enums.TrustCenterDocumentVisibility) error {
+	switch v.String() {
+	case "PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE":
+		return nil
+	default:
+		return fmt.Errorf("trustcenterdochistory: invalid enum value for visibility field: %q", v)
 	}
 }
 
@@ -152,9 +180,41 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
+}
+
+// ByTitle orders the results by the title field.
+func ByTitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTitle, opts...).ToFunc()
+}
+
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
+}
+
+// ByFileID orders the results by the file_id field.
+func ByFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileID, opts...).ToFunc()
+}
+
+// ByVisibility orders the results by the visibility field.
+func ByVisibility(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVisibility, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.TrustCenterDocumentVisibility must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterDocumentVisibility)(nil)
+	// enums.TrustCenterDocumentVisibility must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterDocumentVisibility)(nil)
 )

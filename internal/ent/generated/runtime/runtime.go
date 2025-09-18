@@ -6348,16 +6348,23 @@ func init() {
 	trustcenterdocMixinHooks0 := trustcenterdocMixin[0].Hooks()
 	trustcenterdocMixinHooks1 := trustcenterdocMixin[1].Hooks()
 	trustcenterdocMixinHooks2 := trustcenterdocMixin[2].Hooks()
+	trustcenterdocHooks := schema.TrustCenterDoc{}.Hooks()
 
 	trustcenterdoc.Hooks[1] = trustcenterdocMixinHooks0[0]
 
 	trustcenterdoc.Hooks[2] = trustcenterdocMixinHooks1[0]
 
 	trustcenterdoc.Hooks[3] = trustcenterdocMixinHooks2[0]
+
+	trustcenterdoc.Hooks[4] = trustcenterdocHooks[0]
+
+	trustcenterdoc.Hooks[5] = trustcenterdocHooks[1]
 	trustcenterdocMixinInters1 := trustcenterdocMixin[1].Interceptors()
 	trustcenterdocMixinInters2 := trustcenterdocMixin[2].Interceptors()
+	trustcenterdocInters := schema.TrustCenterDoc{}.Interceptors()
 	trustcenterdoc.Interceptors[0] = trustcenterdocMixinInters1[0]
 	trustcenterdoc.Interceptors[1] = trustcenterdocMixinInters2[0]
+	trustcenterdoc.Interceptors[2] = trustcenterdocInters[0]
 	trustcenterdocMixinFields0 := trustcenterdocMixin[0].Fields()
 	_ = trustcenterdocMixinFields0
 	trustcenterdocMixinFields3 := trustcenterdocMixin[3].Fields()
@@ -6380,6 +6387,18 @@ func init() {
 	trustcenterdocDescTags := trustcenterdocMixinFields4[0].Descriptor()
 	// trustcenterdoc.DefaultTags holds the default value on creation for the tags field.
 	trustcenterdoc.DefaultTags = trustcenterdocDescTags.Default.([]string)
+	// trustcenterdocDescTrustCenterID is the schema descriptor for trust_center_id field.
+	trustcenterdocDescTrustCenterID := trustcenterdocFields[0].Descriptor()
+	// trustcenterdoc.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	trustcenterdoc.TrustCenterIDValidator = trustcenterdocDescTrustCenterID.Validators[0].(func(string) error)
+	// trustcenterdocDescTitle is the schema descriptor for title field.
+	trustcenterdocDescTitle := trustcenterdocFields[1].Descriptor()
+	// trustcenterdoc.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	trustcenterdoc.TitleValidator = trustcenterdocDescTitle.Validators[0].(func(string) error)
+	// trustcenterdocDescCategory is the schema descriptor for category field.
+	trustcenterdocDescCategory := trustcenterdocFields[2].Descriptor()
+	// trustcenterdoc.CategoryValidator is a validator for the "category" field. It is called by the builders before save.
+	trustcenterdoc.CategoryValidator = trustcenterdocDescCategory.Validators[0].(func(string) error)
 	// trustcenterdocDescID is the schema descriptor for id field.
 	trustcenterdocDescID := trustcenterdocMixinFields3[0].Descriptor()
 	// trustcenterdoc.DefaultID holds the default value on creation for the id field.

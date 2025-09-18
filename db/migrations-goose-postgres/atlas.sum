@@ -1,4 +1,4 @@
-h1:nm1L4WkDKdjljeTjXVqUguWV3/3jPdWfzovMM12OMrw=
+h1:dcRwTMTFt7Tq+Gmo3PWnc0a4vRZNWPUzs/m37bLaCWc=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -51,3 +51,4 @@ h1:nm1L4WkDKdjljeTjXVqUguWV3/3jPdWfzovMM12OMrw=
 20250912193357_multiplestorageproviders.sql h1:HkHDHJm3WmpNzGHHP82R4QHwDWouk1CJpR7fLEmTxfY=
 20250915193350_identity_provider_auth_tested.sql h1:2DNHfGh/YUiJVQUJGZXn/wfyWeLbpIGOHtl1yl7Bhmk=
 20250917191810_init_tc_doc_schema.sql h1:D0T7sqpJ8YWodBveceqvZ5sBdb2Y27G+uW3xnM1EnrU=
+20250918231521_trustcenterdoc_schema.sql h1:EkewIwLM6MvBdhkoRc9ieczNmctckj10adSD1WuIbJI=

@@ -57,15 +57,18 @@ type TrustCenterEdges struct {
 	Setting *TrustCenterSetting `json:"setting,omitempty"`
 	// TrustCenterSubprocessors holds the value of the trust_center_subprocessors edge.
 	TrustCenterSubprocessors []*TrustCenterSubprocessor `json:"trust_center_subprocessors,omitempty"`
+	// TrustCenterDocs holds the value of the trust_center_docs edge.
+	TrustCenterDocs []*TrustCenterDoc `json:"trust_center_docs,omitempty"`
 	// TrustCenterCompliances holds the value of the trust_center_compliances edge.
 	TrustCenterCompliances []*TrustCenterCompliance `json:"trust_center_compliances,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedTrustCenterSubprocessors map[string][]*TrustCenterSubprocessor
+	namedTrustCenterDocs          map[string][]*TrustCenterDoc
 	namedTrustCenterCompliances   map[string][]*TrustCenterCompliance
 }
 
@@ -111,10 +114,19 @@ func (e TrustCenterEdges) TrustCenterSubprocessorsOrErr() ([]*TrustCenterSubproc
 	return nil, &NotLoadedError{edge: "trust_center_subprocessors"}
 }
 
+// TrustCenterDocsOrErr returns the TrustCenterDocs value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
+	if e.loadedTypes[4] {
+		return e.TrustCenterDocs, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_docs"}
+}
+
 // TrustCenterCompliancesOrErr returns the TrustCenterCompliances value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TrustCenterCompliancesOrErr() ([]*TrustCenterCompliance, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.TrustCenterCompliances, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_compliances"}
@@ -247,6 +259,11 @@ func (_m *TrustCenter) QueryTrustCenterSubprocessors() *TrustCenterSubprocessorQ
 	return NewTrustCenterClient(_m.config).QueryTrustCenterSubprocessors(_m)
 }
 
+// QueryTrustCenterDocs queries the "trust_center_docs" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryTrustCenterDocs() *TrustCenterDocQuery {
+	return NewTrustCenterClient(_m.config).QueryTrustCenterDocs(_m)
+}
+
 // QueryTrustCenterCompliances queries the "trust_center_compliances" edge of the TrustCenter entity.
 func (_m *TrustCenter) QueryTrustCenterCompliances() *TrustCenterComplianceQuery {
 	return NewTrustCenterClient(_m.config).QueryTrustCenterCompliances(_m)
@@ -329,6 +346,30 @@ func (_m *TrustCenter) appendNamedTrustCenterSubprocessors(name string, edges ..
 		_m.Edges.namedTrustCenterSubprocessors[name] = []*TrustCenterSubprocessor{}
 	} else {
 		_m.Edges.namedTrustCenterSubprocessors[name] = append(_m.Edges.namedTrustCenterSubprocessors[name], edges...)
+	}
+}
+
+// NamedTrustCenterDocs returns the TrustCenterDocs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenter) NamedTrustCenterDocs(name string) ([]*TrustCenterDoc, error) {
+	if _m.Edges.namedTrustCenterDocs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterDocs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenter) appendNamedTrustCenterDocs(name string, edges ...*TrustCenterDoc) {
+	if _m.Edges.namedTrustCenterDocs == nil {
+		_m.Edges.namedTrustCenterDocs = make(map[string][]*TrustCenterDoc)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterDocs[name] = []*TrustCenterDoc{}
+	} else {
+		_m.Edges.namedTrustCenterDocs[name] = append(_m.Edges.namedTrustCenterDocs[name], edges...)
 	}
 }
 

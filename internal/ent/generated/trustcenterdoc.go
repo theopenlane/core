@@ -10,7 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // TrustCenterDoc is the model entity for the TrustCenterDoc schema.
@@ -31,8 +34,56 @@ type TrustCenterDoc struct {
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
-	Tags         []string `json:"tags,omitempty"`
+	Tags []string `json:"tags,omitempty"`
+	// ID of the trust center
+	TrustCenterID string `json:"trust_center_id,omitempty"`
+	// title of the document
+	Title string `json:"title,omitempty"`
+	// category of the document
+	Category string `json:"category,omitempty"`
+	// ID of the file containing the document
+	FileID *string `json:"file_id,omitempty"`
+	// visibility of the document
+	Visibility enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the TrustCenterDocQuery when eager-loading is set.
+	Edges        TrustCenterDocEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// TrustCenterDocEdges holds the relations/edges for other nodes in the graph.
+type TrustCenterDocEdges struct {
+	// TrustCenter holds the value of the trust_center edge.
+	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
+	// the file containing the document content
+	File *File `json:"file,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [2]bool
+	// totalCount holds the count of the edges above.
+	totalCount [2]map[string]int
+}
+
+// TrustCenterOrErr returns the TrustCenter value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterDocEdges) TrustCenterOrErr() (*TrustCenter, error) {
+	if e.TrustCenter != nil {
+		return e.TrustCenter, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: trustcenter.Label}
+	}
+	return nil, &NotLoadedError{edge: "trust_center"}
+}
+
+// FileOrErr returns the File value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterDocEdges) FileOrErr() (*File, error) {
+	if e.File != nil {
+		return e.File, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "file"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -42,7 +93,7 @@ func (*TrustCenterDoc) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcenterdoc.FieldTags:
 			values[i] = new([]byte)
-		case trustcenterdoc.FieldID, trustcenterdoc.FieldCreatedBy, trustcenterdoc.FieldUpdatedBy, trustcenterdoc.FieldDeletedBy:
+		case trustcenterdoc.FieldID, trustcenterdoc.FieldCreatedBy, trustcenterdoc.FieldUpdatedBy, trustcenterdoc.FieldDeletedBy, trustcenterdoc.FieldTrustCenterID, trustcenterdoc.FieldTitle, trustcenterdoc.FieldCategory, trustcenterdoc.FieldFileID, trustcenterdoc.FieldVisibility:
 			values[i] = new(sql.NullString)
 		case trustcenterdoc.FieldCreatedAt, trustcenterdoc.FieldUpdatedAt, trustcenterdoc.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -111,6 +162,37 @@ func (_m *TrustCenterDoc) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case trustcenterdoc.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
+			}
+		case trustcenterdoc.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				_m.Title = value.String
+			}
+		case trustcenterdoc.FieldCategory:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category", values[i])
+			} else if value.Valid {
+				_m.Category = value.String
+			}
+		case trustcenterdoc.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = new(string)
+				*_m.FileID = value.String
+			}
+		case trustcenterdoc.FieldVisibility:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field visibility", values[i])
+			} else if value.Valid {
+				_m.Visibility = enums.TrustCenterDocumentVisibility(value.String)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -122,6 +204,16 @@ func (_m *TrustCenterDoc) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *TrustCenterDoc) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryTrustCenter queries the "trust_center" edge of the TrustCenterDoc entity.
+func (_m *TrustCenterDoc) QueryTrustCenter() *TrustCenterQuery {
+	return NewTrustCenterDocClient(_m.config).QueryTrustCenter(_m)
+}
+
+// QueryFile queries the "file" edge of the TrustCenterDoc entity.
+func (_m *TrustCenterDoc) QueryFile() *FileQuery {
+	return NewTrustCenterDocClient(_m.config).QueryFile(_m)
 }
 
 // Update returns a builder for updating this TrustCenterDoc.
@@ -167,6 +259,23 @@ func (_m *TrustCenterDoc) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
+	builder.WriteString(", ")
+	builder.WriteString("title=")
+	builder.WriteString(_m.Title)
+	builder.WriteString(", ")
+	builder.WriteString("category=")
+	builder.WriteString(_m.Category)
+	builder.WriteString(", ")
+	if v := _m.FileID; v != nil {
+		builder.WriteString("file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("visibility=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Visibility))
 	builder.WriteByte(')')
 	return builder.String()
 }

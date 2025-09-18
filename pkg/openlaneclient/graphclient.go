@@ -477,9 +477,7 @@ type OpenlaneGraphClient interface {
 	UpdateTrustCenterCompliance(ctx context.Context, updateTrustCenterComplianceID string, input UpdateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterCompliance, error)
 	GetAllTrustCenterComplianceHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterComplianceHistories, error)
 	GetTrustCenterComplianceHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterComplianceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterComplianceHistories, error)
-	CreateBulkCSVTrustCenterDoc(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterDoc, error)
-	CreateBulkTrustCenterDoc(ctx context.Context, input []*CreateTrustCenterDocInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterDoc, error)
-	CreateTrustCenterDoc(ctx context.Context, input CreateTrustCenterDocInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDoc, error)
+	CreateTrustCenterDoc(ctx context.Context, input CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDoc, error)
 	DeleteTrustCenterDoc(ctx context.Context, deleteTrustCenterDocID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterDoc, error)
 	GetAllTrustCenterDocs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterDocs, error)
 	GetTrustCenterDocByID(ctx context.Context, trustCenterDocID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterDocByID, error)
@@ -70004,129 +70002,52 @@ func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories) GetTo
 	return t.TotalCount
 }
 
-type CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc_File struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	Md5Hash      *string "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
-func (t *CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs) GetCreatedAt() *time.Time {
+func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc_File) GetID() string {
 	if t == nil {
-		t = &CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs{}
+		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc_File{}
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs) GetTags() []string {
+func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc_File) GetMd5Hash() *string {
 	if t == nil {
-		t = &CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs{}
+		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc_File{}
 	}
-	return t.Tags
+	return t.Md5Hash
 }
-func (t *CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs) GetUpdatedAt() *time.Time {
+func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc_File) GetPresignedURL() *string {
 	if t == nil {
-		t = &CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs{}
+		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc_File{}
 	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs{}
-	}
-	return t.UpdatedBy
-}
-
-type CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc struct {
-	TrustCenterDocs []*CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs "json:\"trustCenterDocs,omitempty\" graphql:\"trustCenterDocs\""
-}
-
-func (t *CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc) GetTrustCenterDocs() []*CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc_TrustCenterDocs {
-	if t == nil {
-		t = &CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc{}
-	}
-	return t.TrustCenterDocs
-}
-
-type CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs) GetID() string {
-	if t == nil {
-		t = &CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs{}
-	}
-	return t.ID
-}
-func (t *CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs{}
-	}
-	return t.UpdatedBy
-}
-
-type CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc struct {
-	TrustCenterDocs []*CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs "json:\"trustCenterDocs,omitempty\" graphql:\"trustCenterDocs\""
-}
-
-func (t *CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc) GetTrustCenterDocs() []*CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc_TrustCenterDocs {
-	if t == nil {
-		t = &CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc{}
-	}
-	return t.TrustCenterDocs
+	return t.PresignedURL
 }
 
 type CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Category      string                                                         "json:\"category\" graphql:\"category\""
+	CreatedAt     *time.Time                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	File          *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc_File "json:\"file,omitempty\" graphql:\"file\""
+	FileID        *string                                                        "json:\"fileID,omitempty\" graphql:\"fileID\""
+	ID            string                                                         "json:\"id\" graphql:\"id\""
+	Tags          []string                                                       "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                                                         "json:\"title\" graphql:\"title\""
+	TrustCenterID *string                                                        "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility    *enums.TrustCenterDocumentVisibility                           "json:\"visibility,omitempty\" graphql:\"visibility\""
 }
 
+func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetCategory() string {
+	if t == nil {
+		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.Category
+}
 func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc{}
@@ -70138,6 +70059,18 @@ func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetCreatedBy(
 		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc{}
 	}
 	return t.CreatedBy
+}
+func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetFile() *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc_File {
+	if t == nil {
+		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.File
+}
+func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetFileID() *string {
+	if t == nil {
+		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.FileID
 }
 func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetID() string {
 	if t == nil {
@@ -70151,6 +70084,18 @@ func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetTags() []s
 	}
 	return t.Tags
 }
+func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetTitle() string {
+	if t == nil {
+		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.Title
+}
+func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetTrustCenterID() *string {
+	if t == nil {
+		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.TrustCenterID
+}
 func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc{}
@@ -70162,6 +70107,12 @@ func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetUpdatedBy(
 		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc{}
 	}
 	return t.UpdatedBy
+}
+func (t *CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc) GetVisibility() *enums.TrustCenterDocumentVisibility {
+	if t == nil {
+		t = &CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.Visibility
 }
 
 type CreateTrustCenterDoc_CreateTrustCenterDoc struct {
@@ -70218,15 +70169,52 @@ func (t *GetAllTrustCenterDocs_TrustCenterDocs_PageInfo) GetStartCursor() *strin
 	return t.StartCursor
 }
 
-type GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node_File struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	Md5Hash      *string "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node_File) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node_File{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node_File) GetMd5Hash() *string {
+	if t == nil {
+		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node_File{}
+	}
+	return t.Md5Hash
+}
+func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node_File) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node_File{}
+	}
+	return t.PresignedURL
+}
+
+type GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node struct {
+	Category      string                                                 "json:\"category\" graphql:\"category\""
+	CreatedAt     *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	File          *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node_File "json:\"file,omitempty\" graphql:\"file\""
+	FileID        *string                                                "json:\"fileID,omitempty\" graphql:\"fileID\""
+	ID            string                                                 "json:\"id\" graphql:\"id\""
+	Tags          []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                                                 "json:\"title\" graphql:\"title\""
+	TrustCenterID *string                                                "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility    *enums.TrustCenterDocumentVisibility                   "json:\"visibility,omitempty\" graphql:\"visibility\""
+}
+
+func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetCategory() string {
+	if t == nil {
+		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.Category
+}
 func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node{}
@@ -70238,6 +70226,18 @@ func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetCreatedBy() *strin
 		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node{}
 	}
 	return t.CreatedBy
+}
+func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetFile() *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node_File {
+	if t == nil {
+		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.File
+}
+func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetFileID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.FileID
 }
 func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetID() string {
 	if t == nil {
@@ -70251,6 +70251,18 @@ func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.Title
+}
+func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.TrustCenterID
+}
 func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node{}
@@ -70262,6 +70274,12 @@ func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetUpdatedBy() *strin
 		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node{}
 	}
 	return t.UpdatedBy
+}
+func (t *GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node) GetVisibility() *enums.TrustCenterDocumentVisibility {
+	if t == nil {
+		t = &GetAllTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.Visibility
 }
 
 type GetAllTrustCenterDocs_TrustCenterDocs_Edges struct {
@@ -70300,15 +70318,52 @@ func (t *GetAllTrustCenterDocs_TrustCenterDocs) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type GetTrustCenterDocByID_TrustCenterDoc struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type GetTrustCenterDocByID_TrustCenterDoc_File struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	Md5Hash      *string "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetTrustCenterDocByID_TrustCenterDoc_File) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc_File{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterDocByID_TrustCenterDoc_File) GetMd5Hash() *string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc_File{}
+	}
+	return t.Md5Hash
+}
+func (t *GetTrustCenterDocByID_TrustCenterDoc_File) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc_File{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterDocByID_TrustCenterDoc struct {
+	Category      string                                     "json:\"category\" graphql:\"category\""
+	CreatedAt     *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	File          *GetTrustCenterDocByID_TrustCenterDoc_File "json:\"file,omitempty\" graphql:\"file\""
+	FileID        *string                                    "json:\"fileID,omitempty\" graphql:\"fileID\""
+	ID            string                                     "json:\"id\" graphql:\"id\""
+	Tags          []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                                     "json:\"title\" graphql:\"title\""
+	TrustCenterID *string                                    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility    *enums.TrustCenterDocumentVisibility       "json:\"visibility,omitempty\" graphql:\"visibility\""
+}
+
+func (t *GetTrustCenterDocByID_TrustCenterDoc) GetCategory() string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc{}
+	}
+	return t.Category
+}
 func (t *GetTrustCenterDocByID_TrustCenterDoc) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetTrustCenterDocByID_TrustCenterDoc{}
@@ -70320,6 +70375,18 @@ func (t *GetTrustCenterDocByID_TrustCenterDoc) GetCreatedBy() *string {
 		t = &GetTrustCenterDocByID_TrustCenterDoc{}
 	}
 	return t.CreatedBy
+}
+func (t *GetTrustCenterDocByID_TrustCenterDoc) GetFile() *GetTrustCenterDocByID_TrustCenterDoc_File {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc{}
+	}
+	return t.File
+}
+func (t *GetTrustCenterDocByID_TrustCenterDoc) GetFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc{}
+	}
+	return t.FileID
 }
 func (t *GetTrustCenterDocByID_TrustCenterDoc) GetID() string {
 	if t == nil {
@@ -70333,6 +70400,18 @@ func (t *GetTrustCenterDocByID_TrustCenterDoc) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetTrustCenterDocByID_TrustCenterDoc) GetTitle() string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc{}
+	}
+	return t.Title
+}
+func (t *GetTrustCenterDocByID_TrustCenterDoc) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc{}
+	}
+	return t.TrustCenterID
+}
 func (t *GetTrustCenterDocByID_TrustCenterDoc) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetTrustCenterDocByID_TrustCenterDoc{}
@@ -70344,6 +70423,12 @@ func (t *GetTrustCenterDocByID_TrustCenterDoc) GetUpdatedBy() *string {
 		t = &GetTrustCenterDocByID_TrustCenterDoc{}
 	}
 	return t.UpdatedBy
+}
+func (t *GetTrustCenterDocByID_TrustCenterDoc) GetVisibility() *enums.TrustCenterDocumentVisibility {
+	if t == nil {
+		t = &GetTrustCenterDocByID_TrustCenterDoc{}
+	}
+	return t.Visibility
 }
 
 type GetTrustCenterDocs_TrustCenterDocs_PageInfo struct {
@@ -70378,15 +70463,52 @@ func (t *GetTrustCenterDocs_TrustCenterDocs_PageInfo) GetStartCursor() *string {
 	return t.StartCursor
 }
 
-type GetTrustCenterDocs_TrustCenterDocs_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type GetTrustCenterDocs_TrustCenterDocs_Edges_Node_File struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	Md5Hash      *string "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node_File) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node_File{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node_File) GetMd5Hash() *string {
+	if t == nil {
+		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node_File{}
+	}
+	return t.Md5Hash
+}
+func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node_File) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node_File{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterDocs_TrustCenterDocs_Edges_Node struct {
+	Category      string                                              "json:\"category\" graphql:\"category\""
+	CreatedAt     *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	File          *GetTrustCenterDocs_TrustCenterDocs_Edges_Node_File "json:\"file,omitempty\" graphql:\"file\""
+	FileID        *string                                             "json:\"fileID,omitempty\" graphql:\"fileID\""
+	ID            string                                              "json:\"id\" graphql:\"id\""
+	Tags          []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                                              "json:\"title\" graphql:\"title\""
+	TrustCenterID *string                                             "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility    *enums.TrustCenterDocumentVisibility                "json:\"visibility,omitempty\" graphql:\"visibility\""
+}
+
+func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetCategory() string {
+	if t == nil {
+		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.Category
+}
 func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node{}
@@ -70398,6 +70520,18 @@ func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetCreatedBy() *string {
 		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node{}
 	}
 	return t.CreatedBy
+}
+func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetFile() *GetTrustCenterDocs_TrustCenterDocs_Edges_Node_File {
+	if t == nil {
+		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.File
+}
+func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.FileID
 }
 func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetID() string {
 	if t == nil {
@@ -70411,6 +70545,18 @@ func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.Title
+}
+func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.TrustCenterID
+}
 func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node{}
@@ -70422,6 +70568,12 @@ func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetUpdatedBy() *string {
 		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node{}
 	}
 	return t.UpdatedBy
+}
+func (t *GetTrustCenterDocs_TrustCenterDocs_Edges_Node) GetVisibility() *enums.TrustCenterDocumentVisibility {
+	if t == nil {
+		t = &GetTrustCenterDocs_TrustCenterDocs_Edges_Node{}
+	}
+	return t.Visibility
 }
 
 type GetTrustCenterDocs_TrustCenterDocs_Edges struct {
@@ -70460,15 +70612,52 @@ func (t *GetTrustCenterDocs_TrustCenterDocs) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc_File struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	Md5Hash      *string "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc_File) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc_File{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc_File) GetMd5Hash() *string {
+	if t == nil {
+		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc_File{}
+	}
+	return t.Md5Hash
+}
+func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc_File) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc_File{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc struct {
+	Category      string                                                         "json:\"category\" graphql:\"category\""
+	CreatedAt     *time.Time                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	File          *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc_File "json:\"file,omitempty\" graphql:\"file\""
+	FileID        *string                                                        "json:\"fileID,omitempty\" graphql:\"fileID\""
+	ID            string                                                         "json:\"id\" graphql:\"id\""
+	Tags          []string                                                       "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                                                         "json:\"title\" graphql:\"title\""
+	TrustCenterID *string                                                        "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility    *enums.TrustCenterDocumentVisibility                           "json:\"visibility,omitempty\" graphql:\"visibility\""
+}
+
+func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetCategory() string {
+	if t == nil {
+		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.Category
+}
 func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc{}
@@ -70480,6 +70669,18 @@ func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetCreatedBy(
 		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc{}
 	}
 	return t.CreatedBy
+}
+func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetFile() *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc_File {
+	if t == nil {
+		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.File
+}
+func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetFileID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.FileID
 }
 func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetID() string {
 	if t == nil {
@@ -70493,6 +70694,18 @@ func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetTags() []s
 	}
 	return t.Tags
 }
+func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetTitle() string {
+	if t == nil {
+		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.Title
+}
+func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetTrustCenterID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.TrustCenterID
+}
 func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc{}
@@ -70504,6 +70717,12 @@ func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetUpdatedBy(
 		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc{}
 	}
 	return t.UpdatedBy
+}
+func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc) GetVisibility() *enums.TrustCenterDocumentVisibility {
+	if t == nil {
+		t = &UpdateTrustCenterDoc_UpdateTrustCenterDoc_TrustCenterDoc{}
+	}
+	return t.Visibility
 }
 
 type UpdateTrustCenterDoc_UpdateTrustCenterDoc struct {
@@ -81416,28 +81635,6 @@ func (t *GetTrustCenterComplianceHistories) GetTrustCenterComplianceHistories() 
 		t = &GetTrustCenterComplianceHistories{}
 	}
 	return &t.TrustCenterComplianceHistories
-}
-
-type CreateBulkCSVTrustCenterDoc struct {
-	CreateBulkCSVTrustCenterDoc CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc "json:\"createBulkCSVTrustCenterDoc\" graphql:\"createBulkCSVTrustCenterDoc\""
-}
-
-func (t *CreateBulkCSVTrustCenterDoc) GetCreateBulkCSVTrustCenterDoc() *CreateBulkCSVTrustCenterDoc_CreateBulkCSVTrustCenterDoc {
-	if t == nil {
-		t = &CreateBulkCSVTrustCenterDoc{}
-	}
-	return &t.CreateBulkCSVTrustCenterDoc
-}
-
-type CreateBulkTrustCenterDoc struct {
-	CreateBulkTrustCenterDoc CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc "json:\"createBulkTrustCenterDoc\" graphql:\"createBulkTrustCenterDoc\""
-}
-
-func (t *CreateBulkTrustCenterDoc) GetCreateBulkTrustCenterDoc() *CreateBulkTrustCenterDoc_CreateBulkTrustCenterDoc {
-	if t == nil {
-		t = &CreateBulkTrustCenterDoc{}
-	}
-	return &t.CreateBulkTrustCenterDoc
 }
 
 type CreateTrustCenterDoc struct {
@@ -102840,85 +103037,34 @@ func (c *Client) GetTrustCenterComplianceHistories(ctx context.Context, first *i
 	return &res, nil
 }
 
-const CreateBulkCSVTrustCenterDocDocument = `mutation CreateBulkCSVTrustCenterDoc ($input: Upload!) {
-	createBulkCSVTrustCenterDoc(input: $input) {
-		trustCenterDocs {
-			createdAt
-			createdBy
-			id
-			tags
-			updatedAt
-			updatedBy
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVTrustCenterDoc(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterDoc, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVTrustCenterDoc
-	if err := c.Client.Post(ctx, "CreateBulkCSVTrustCenterDoc", CreateBulkCSVTrustCenterDocDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkTrustCenterDocDocument = `mutation CreateBulkTrustCenterDoc ($input: [CreateTrustCenterDocInput!]) {
-	createBulkTrustCenterDoc(input: $input) {
-		trustCenterDocs {
-			createdAt
-			createdBy
-			id
-			tags
-			updatedAt
-			updatedBy
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkTrustCenterDoc(ctx context.Context, input []*CreateTrustCenterDocInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterDoc, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkTrustCenterDoc
-	if err := c.Client.Post(ctx, "CreateBulkTrustCenterDoc", CreateBulkTrustCenterDocDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateTrustCenterDocDocument = `mutation CreateTrustCenterDoc ($input: CreateTrustCenterDocInput!) {
-	createTrustCenterDoc(input: $input) {
+const CreateTrustCenterDocDocument = `mutation CreateTrustCenterDoc ($input: CreateTrustCenterDocInput!, $trustCenterDocFile: Upload!) {
+	createTrustCenterDoc(input: $input, trustCenterDocFile: $trustCenterDocFile) {
 		trustCenterDoc {
-			createdAt
-			createdBy
 			id
-			tags
+			createdAt
 			updatedAt
+			createdBy
 			updatedBy
+			tags
+			trustCenterID
+			title
+			category
+			fileID
+			visibility
+			file {
+				id
+				md5Hash
+				presignedURL
+			}
 		}
 	}
 }
 `
 
-func (c *Client) CreateTrustCenterDoc(ctx context.Context, input CreateTrustCenterDocInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDoc, error) {
+func (c *Client) CreateTrustCenterDoc(ctx context.Context, input CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDoc, error) {
 	vars := map[string]any{
-		"input": input,
+		"input":              input,
+		"trustCenterDocFile": trustCenterDocFile,
 	}
 
 	var res CreateTrustCenterDoc
@@ -102968,12 +103114,22 @@ const GetAllTrustCenterDocsDocument = `query GetAllTrustCenterDocs {
 		}
 		edges {
 			node {
-				createdAt
-				createdBy
 				id
-				tags
+				createdAt
 				updatedAt
+				createdBy
 				updatedBy
+				tags
+				trustCenterID
+				title
+				category
+				fileID
+				visibility
+				file {
+					id
+					md5Hash
+					presignedURL
+				}
 			}
 		}
 	}
@@ -102997,12 +103153,22 @@ func (c *Client) GetAllTrustCenterDocs(ctx context.Context, interceptors ...clie
 
 const GetTrustCenterDocByIDDocument = `query GetTrustCenterDocByID ($trustCenterDocId: ID!) {
 	trustCenterDoc(id: $trustCenterDocId) {
-		createdAt
-		createdBy
 		id
-		tags
+		createdAt
 		updatedAt
+		createdBy
 		updatedBy
+		tags
+		trustCenterID
+		title
+		category
+		fileID
+		visibility
+		file {
+			id
+			md5Hash
+			presignedURL
+		}
 	}
 }
 `
@@ -103035,12 +103201,22 @@ const GetTrustCenterDocsDocument = `query GetTrustCenterDocs ($first: Int, $last
 		}
 		edges {
 			node {
-				createdAt
-				createdBy
 				id
-				tags
+				createdAt
 				updatedAt
+				createdBy
 				updatedBy
+				tags
+				trustCenterID
+				title
+				category
+				fileID
+				visibility
+				file {
+					id
+					md5Hash
+					presignedURL
+				}
 			}
 		}
 	}
@@ -103069,12 +103245,22 @@ func (c *Client) GetTrustCenterDocs(ctx context.Context, first *int64, last *int
 const UpdateTrustCenterDocDocument = `mutation UpdateTrustCenterDoc ($updateTrustCenterDocId: ID!, $input: UpdateTrustCenterDocInput!) {
 	updateTrustCenterDoc(id: $updateTrustCenterDocId, input: $input) {
 		trustCenterDoc {
-			createdAt
-			createdBy
 			id
-			tags
+			createdAt
 			updatedAt
+			createdBy
 			updatedBy
+			tags
+			trustCenterID
+			title
+			category
+			fileID
+			visibility
+			file {
+				id
+				md5Hash
+				presignedURL
+			}
 		}
 	}
 }
@@ -105352,8 +105538,6 @@ var DocumentOperationNames = map[string]string{
 	UpdateTrustCenterComplianceDocument:            "UpdateTrustCenterCompliance",
 	GetAllTrustCenterComplianceHistoriesDocument:   "GetAllTrustCenterComplianceHistories",
 	GetTrustCenterComplianceHistoriesDocument:      "GetTrustCenterComplianceHistories",
-	CreateBulkCSVTrustCenterDocDocument:            "CreateBulkCSVTrustCenterDoc",
-	CreateBulkTrustCenterDocDocument:               "CreateBulkTrustCenterDoc",
 	CreateTrustCenterDocDocument:                   "CreateTrustCenterDoc",
 	DeleteTrustCenterDocDocument:                   "DeleteTrustCenterDoc",
 	GetAllTrustCenterDocsDocument:                  "GetAllTrustCenterDocs",
