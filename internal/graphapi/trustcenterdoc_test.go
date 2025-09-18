@@ -546,7 +546,7 @@ func TestMutationDeleteTrustCenterDoc(t *testing.T) {
 			idToDelete:  trustCenterDoc2.ID,
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "trust center doc not found",

@@ -2021,3 +2021,58 @@ func (tb *TemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Templ
 
 	return template
 }
+
+// TrustCenterDocBuilder is used to create trust center documents
+type TrustCenterDocBuilder struct {
+	client *client
+
+	// Fields
+	Title         string
+	Category      string
+	TrustCenterID string
+	FileID        string
+	Visibility    enums.TrustCenterDocumentVisibility
+	Tags          []string
+}
+
+// MustNew trust center doc builder is used to create, without authz checks, trust center docs in the database
+func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterDoc {
+	ctx = setContext(ctx, tcdb.client.db)
+
+	if tcdb.Title == "" {
+		tcdb.Title = gofakeit.Sentence(3)
+	}
+
+	if tcdb.Category == "" {
+		tcdb.Category = gofakeit.Word()
+	}
+
+	if tcdb.TrustCenterID == "" {
+		// Create a trust center if not provided
+		trustCenter := (&TrustCenterBuilder{client: tcdb.client}).MustNew(ctx, t)
+		tcdb.TrustCenterID = trustCenter.ID
+	}
+
+	if len(tcdb.Tags) == 0 {
+		tcdb.Tags = []string{"test", "document"}
+	}
+
+	mutation := tcdb.client.db.TrustCenterDoc.Create().
+		SetTitle(tcdb.Title).
+		SetCategory(tcdb.Category).
+		SetTrustCenterID(tcdb.TrustCenterID).
+		SetTags(tcdb.Tags)
+
+	if tcdb.FileID != "" {
+		mutation.SetFileID(tcdb.FileID)
+	}
+
+	if tcdb.Visibility != "" {
+		mutation.SetVisibility(tcdb.Visibility)
+	}
+
+	trustCenterDoc, err := mutation.Save(ctx)
+	requireNoError(err)
+
+	return trustCenterDoc
+}
