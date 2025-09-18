@@ -1,39 +1,22 @@
-
-mutation CreateBulkCSVTrustCenterDoc($input: Upload!) {
-  createBulkCSVTrustCenterDoc(input: $input) {
-    trustCenterDocs {
-      createdAt
-      createdBy
-      id
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkTrustCenterDoc($input: [CreateTrustCenterDocInput!]) {
-  createBulkTrustCenterDoc(input: $input) {
-    trustCenterDocs {
-      createdAt
-      createdBy
-      id
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateTrustCenterDoc($input: CreateTrustCenterDocInput!) {
-  createTrustCenterDoc(input: $input) {
+mutation CreateTrustCenterDoc($input: CreateTrustCenterDocInput!, $trustCenterDocFile: Upload!) {
+  createTrustCenterDoc(input: $input, trustCenterDocFile: $trustCenterDocFile) {
     trustCenterDoc {
-      createdAt
-      createdBy
       id
-      tags
+      createdAt
       updatedAt
+      createdBy
       updatedBy
+      tags
+      trustCenterID
+      title
+      category
+      fileID
+      visibility
+      file {
+        id
+        md5Hash
+        presignedURL
+      }
     }
   }
 }
@@ -55,24 +38,45 @@ query GetAllTrustCenterDocs {
     }
     edges {
       node {
-        createdAt
-        createdBy
         id
-        tags
+        createdAt
         updatedAt
+        createdBy
         updatedBy
+        tags
+        trustCenterID
+        title
+        category
+        fileID
+        visibility
+        file {
+          id
+          md5Hash
+          presignedURL
+        }
       }
     }
   }
 }
+
 query GetTrustCenterDocByID($trustCenterDocId: ID!) {
   trustCenterDoc(id: $trustCenterDocId) {
-    createdAt
-    createdBy
     id
-    tags
+    createdAt
     updatedAt
+    createdBy
     updatedBy
+    tags
+    trustCenterID
+    title
+    category
+    fileID
+    visibility
+    file {
+      id
+      md5Hash
+      presignedURL
+    }
   }
 }
 
@@ -87,25 +91,46 @@ query GetTrustCenterDocs($first: Int, $last: Int, $where: TrustCenterDocWhereInp
     }
     edges {
       node {
-        createdAt
-        createdBy
         id
-        tags
+        createdAt
         updatedAt
+        createdBy
         updatedBy
+        tags
+        trustCenterID
+        title
+        category
+        fileID
+        visibility
+        file {
+          id
+          md5Hash
+          presignedURL
+        }
       }
     }
   }
 }
+
 mutation UpdateTrustCenterDoc($updateTrustCenterDocId: ID!, $input: UpdateTrustCenterDocInput!) {
   updateTrustCenterDoc(id: $updateTrustCenterDocId, input: $input) {
     trustCenterDoc {
-      createdAt
-      createdBy
       id
-      tags
+      createdAt
       updatedAt
+      createdBy
       updatedBy
+      tags
+      trustCenterID
+      title
+      category
+      fileID
+      visibility
+      file {
+        id
+        md5Hash
+        presignedURL
+      }
     }
   }
 }
