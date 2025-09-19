@@ -104,7 +104,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 					return unauthorized(c, err, conf, validator)
 				}
 
-				if strings.HasPrefix(claims.UserID, "anon:") {
+				if strings.HasPrefix(claims.UserID, "anon_") {
 					if !conf.AllowAnonymous {
 						return unauthorized(c, ErrAnonymousAccessNotAllowed, conf, validator)
 					}

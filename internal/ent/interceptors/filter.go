@@ -385,7 +385,7 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 	var context *map[string]any
 	var subjectID string
 	if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
-		subjectID = strings.ReplaceAll(anon.SubjectID, "anon:", "")
+		subjectID = anon.SubjectID
 	} else {
 		user, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
