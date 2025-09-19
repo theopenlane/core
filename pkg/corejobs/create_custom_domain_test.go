@@ -47,17 +47,15 @@ func TestCreateCustomDomainWorker(t *testing.T) {
 		expectedUpdateCustomDomain    *openlaneclient.UpdateCustomDomainInput
 		expectedInsertDeleteJobInput  *corejobs.DeleteCustomDomainArgs
 		expectedError                 string
-		callGetMappableDomain         bool
 		callCustomHostnames           bool
 		getCustomDomainResponse       *openlaneclient.GetCustomDomainByID
 		verificationCreateError       error
 		updateCustomDomainError       error
 	}{
 		{
-			name:                  "happy path",
-			customDomainID:        customDomainID,
-			callGetMappableDomain: true,
-			callCustomHostnames:   true,
+			name:                "happy path",
+			customDomainID:      customDomainID,
+			callCustomHostnames: true,
 			expectedCustomHostnames: &custom_hostnames.CustomHostnameNewParams{
 				ZoneID:   cloudflare.F(zoneID),
 				Hostname: cloudflare.F(cnameRecord),
@@ -85,6 +83,10 @@ func TestCreateCustomDomainWorker(t *testing.T) {
 					ID:                customDomainID,
 					MappableDomainID:  mappableDomainID,
 					OwnerID:           &ownerID,
+					MappableDomain: openlaneclient.GetCustomDomainByID_CustomDomain_MappableDomain{
+						ID:     mappableDomainID,
+						ZoneID: zoneID,
+					},
 				},
 			},
 		},
@@ -93,10 +95,9 @@ func TestCreateCustomDomainWorker(t *testing.T) {
 			expectedError: "custom_domain_id is required for the create_custom_domain job",
 		},
 		{
-			name:                  "dns verification already exists",
-			customDomainID:        customDomainID,
-			callGetMappableDomain: false,
-			callCustomHostnames:   false,
+			name:                "dns verification already exists",
+			customDomainID:      customDomainID,
+			callCustomHostnames: false,
 			getCustomDomainResponse: &openlaneclient.GetCustomDomainByID{
 				CustomDomain: openlaneclient.GetCustomDomainByID_CustomDomain{
 					CnameRecord:       cnameRecord,
@@ -104,15 +105,21 @@ func TestCreateCustomDomainWorker(t *testing.T) {
 					ID:                customDomainID,
 					MappableDomainID:  mappableDomainID,
 					OwnerID:           &ownerID,
+					MappableDomain: openlaneclient.GetCustomDomainByID_CustomDomain_MappableDomain{
+						ID:     mappableDomainID,
+						ZoneID: zoneID,
+					},
+					DNSVerification: &openlaneclient.GetCustomDomainByID_CustomDomain_DNSVerification{
+						ID: domainVerificationID,
+					},
 				},
 			},
 			expectedError: "custom domain already has a verification member",
 		},
 		{
-			name:                  "deletes on verification create error",
-			customDomainID:        customDomainID,
-			callGetMappableDomain: true,
-			callCustomHostnames:   true,
+			name:                "deletes on verification create error",
+			customDomainID:      customDomainID,
+			callCustomHostnames: true,
 			expectedCustomHostnames: &custom_hostnames.CustomHostnameNewParams{
 				ZoneID:   cloudflare.F(zoneID),
 				Hostname: cloudflare.F(cnameRecord),
@@ -137,6 +144,10 @@ func TestCreateCustomDomainWorker(t *testing.T) {
 					ID:                customDomainID,
 					MappableDomainID:  mappableDomainID,
 					OwnerID:           &ownerID,
+					MappableDomain: openlaneclient.GetCustomDomainByID_CustomDomain_MappableDomain{
+						ID:     mappableDomainID,
+						ZoneID: zoneID,
+					},
 				},
 			},
 			verificationCreateError: ErrTest,
@@ -148,10 +159,9 @@ func TestCreateCustomDomainWorker(t *testing.T) {
 			expectedError: "test error",
 		},
 		{
-			name:                  "deletes on update custom domain error",
-			customDomainID:        customDomainID,
-			callGetMappableDomain: true,
-			callCustomHostnames:   true,
+			name:                "deletes on update custom domain error",
+			customDomainID:      customDomainID,
+			callCustomHostnames: true,
 			expectedCustomHostnames: &custom_hostnames.CustomHostnameNewParams{
 				ZoneID:   cloudflare.F(zoneID),
 				Hostname: cloudflare.F(cnameRecord),
@@ -176,6 +186,10 @@ func TestCreateCustomDomainWorker(t *testing.T) {
 					ID:                customDomainID,
 					MappableDomainID:  mappableDomainID,
 					OwnerID:           &ownerID,
+					MappableDomain: openlaneclient.GetCustomDomainByID_CustomDomain_MappableDomain{
+						ID:     mappableDomainID,
+						ZoneID: zoneID,
+					},
 				},
 			},
 			updateCustomDomainError: ErrTest,
@@ -215,15 +229,6 @@ func TestCreateCustomDomainWorker(t *testing.T) {
 
 			if tc.getCustomDomainResponse != nil {
 				olMock.EXPECT().GetCustomDomainByID(mock.Anything, tc.customDomainID).Return(tc.getCustomDomainResponse, nil)
-			}
-
-			if tc.callGetMappableDomain {
-				olMock.EXPECT().GetMappableDomainByID(mock.Anything, mappableDomainID).Return(&openlaneclient.GetMappableDomainByID{
-					MappableDomain: openlaneclient.GetMappableDomainByID_MappableDomain{
-						ID:     mappableDomainID,
-						ZoneID: zoneID,
-					},
-				}, nil)
 			}
 
 			if tc.expectedCreateDNSVerification != nil {

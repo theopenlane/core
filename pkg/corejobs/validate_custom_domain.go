@@ -78,13 +78,35 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 			return err
 		}
 
-		customDomains = append(customDomains, &openlaneclient.CustomDomain{
+		cd := &openlaneclient.CustomDomain{
 			ID:                customDomain.GetCustomDomain().ID,
 			OwnerID:           customDomain.GetCustomDomain().OwnerID,
 			CnameRecord:       customDomain.GetCustomDomain().CnameRecord,
 			MappableDomainID:  customDomain.GetCustomDomain().MappableDomainID,
 			DNSVerificationID: customDomain.GetCustomDomain().DNSVerificationID,
-		})
+			MappableDomain: &openlaneclient.MappableDomain{
+				ID:     customDomain.GetCustomDomain().MappableDomain.ID,
+				Name:   customDomain.GetCustomDomain().MappableDomain.Name,
+				ZoneID: customDomain.GetCustomDomain().MappableDomain.ZoneID,
+			},
+		}
+
+		if customDomain.GetCustomDomain().DNSVerification != nil {
+			cd.DNSVerification = &openlaneclient.DNSVerification{
+				ID:                          customDomain.GetCustomDomain().DNSVerification.ID,
+				CloudflareHostnameID:        customDomain.GetCustomDomain().DNSVerification.CloudflareHostnameID,
+				DNSTxtRecord:                customDomain.GetCustomDomain().DNSVerification.DNSTxtRecord,
+				DNSTxtValue:                 customDomain.GetCustomDomain().DNSVerification.DNSTxtValue,
+				DNSVerificationStatus:       customDomain.GetCustomDomain().DNSVerification.DNSVerificationStatus,
+				DNSVerificationStatusReason: customDomain.GetCustomDomain().DNSVerification.DNSVerificationStatusReason,
+				AcmeChallengePath:           customDomain.GetCustomDomain().DNSVerification.AcmeChallengePath,
+				ExpectedAcmeChallengeValue:  customDomain.GetCustomDomain().DNSVerification.ExpectedAcmeChallengeValue,
+				AcmeChallengeStatus:         customDomain.GetCustomDomain().DNSVerification.AcmeChallengeStatus,
+				AcmeChallengeStatusReason:   customDomain.GetCustomDomain().DNSVerification.AcmeChallengeStatusReason,
+			}
+		}
+
+		customDomains = append(customDomains, cd)
 	} else {
 		// Otherwise, fetch all custom domains
 		log.Debug().Msg("No custom domain ID provided, would fetch all domains here")
@@ -95,13 +117,34 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 		}
 
 		for _, cd := range cds.GetCustomDomains().Edges {
-			customDomains = append(customDomains, &openlaneclient.CustomDomain{
+			customDomain := &openlaneclient.CustomDomain{
 				ID:                cd.Node.ID,
 				OwnerID:           cd.Node.OwnerID,
 				CnameRecord:       cd.Node.CnameRecord,
 				MappableDomainID:  cd.Node.MappableDomainID,
 				DNSVerificationID: cd.Node.DNSVerificationID,
-			})
+				MappableDomain: &openlaneclient.MappableDomain{
+					ID:     cd.Node.MappableDomain.ID,
+					Name:   cd.Node.MappableDomain.Name,
+					ZoneID: cd.Node.MappableDomain.ZoneID,
+				},
+			}
+			if cd.Node.DNSVerification != nil {
+				customDomain.DNSVerification = &openlaneclient.DNSVerification{
+					ID:                          cd.Node.DNSVerification.ID,
+					CloudflareHostnameID:        cd.Node.DNSVerification.CloudflareHostnameID,
+					DNSTxtRecord:                cd.Node.DNSVerification.DNSTxtRecord,
+					DNSTxtValue:                 cd.Node.DNSVerification.DNSTxtValue,
+					DNSVerificationStatus:       cd.Node.DNSVerification.DNSVerificationStatus,
+					DNSVerificationStatusReason: cd.Node.DNSVerification.DNSVerificationStatusReason,
+					AcmeChallengePath:           cd.Node.DNSVerification.AcmeChallengePath,
+					ExpectedAcmeChallengeValue:  cd.Node.DNSVerification.ExpectedAcmeChallengeValue,
+					AcmeChallengeStatus:         cd.Node.DNSVerification.AcmeChallengeStatus,
+					AcmeChallengeStatusReason:   cd.Node.DNSVerification.AcmeChallengeStatusReason,
+				}
+			}
+
+			customDomains = append(customDomains, customDomain)
 		}
 	}
 
@@ -110,7 +153,7 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 	// Process each custom domain
 	for _, customDomain := range customDomains {
 		// Skip domains without verification IDs
-		if customDomain.DNSVerificationID == nil {
+		if customDomain.DNSVerification == nil {
 			log.Debug().
 				Str("custom_domain_id", customDomain.ID).
 				Msg("No DNS verification ID found for custom domain")
@@ -118,29 +161,24 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 			continue
 		}
 
+		dnsVerification := customDomain.DNSVerification
+
 		log.Info().
 			Str("custom_domain_id", customDomain.ID).
 			Str("cname_record", customDomain.CnameRecord).
 			Msg("Processing custom domain")
 
-		// Get the associated mappable domain to find the Cloudflare zone ID
-		mappableDomain, err := w.olClient.GetMappableDomainByID(ctx, customDomain.MappableDomainID)
-		if err != nil {
-			log.Error().Err(err).Msg("error getting mappable domain")
+		mappableDomain := customDomain.MappableDomain
+		if mappableDomain == nil {
+			log.Error().
+				Str("custom_domain_id", customDomain.ID).
+				Msg("No mappable domain found for custom domain")
 
 			continue
 		}
 
-		// Get the DNS verification record to find the Cloudflare hostname ID
-		dnsVerification, err := w.olClient.GetDNSVerificationByID(ctx, *customDomain.DNSVerificationID)
-		if err != nil {
-			log.Error().Err(err).Msg("error getting dns verification")
-
-			continue
-		}
-
-		zoneID := mappableDomain.MappableDomain.ZoneID
-		cloudflareHostnameID := dnsVerification.DNSVerification.CloudflareHostnameID
+		zoneID := mappableDomain.ZoneID
+		cloudflareHostnameID := dnsVerification.CloudflareHostnameID
 
 		// Fetch the current status from Cloudflare
 		customHostname, err := w.cfClient.CustomHostnames().Get(ctx, cloudflareHostnameID, custom_hostnames.CustomHostnameGetParams{
@@ -157,7 +195,7 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 		dnsVerificationUpdate := openlaneclient.UpdateDNSVerificationInput{}
 
 		// Extract ACME challenge details if available and not already stored
-		if dnsVerification.DNSVerification.AcmeChallengePath == nil && len(customHostname.SSL.ValidationRecords) > 0 {
+		if dnsVerification.AcmeChallengePath == nil && len(customHostname.SSL.ValidationRecords) > 0 {
 			acmeChallengeURL, err := url.Parse(customHostname.SSL.ValidationRecords[0].HTTPURL)
 			if err != nil {
 				log.Error().Err(err).Msg("Unable to parse acme challenge url")
@@ -172,13 +210,13 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 		}
 
 		// Update SSL verification status if changed
-		if string(dnsVerification.DNSVerification.AcmeChallengeStatus) != string(customHostname.SSL.Status) {
+		if string(dnsVerification.AcmeChallengeStatus) != string(customHostname.SSL.Status) {
 			dnsVerificationUpdate.AcmeChallengeStatus = lo.ToPtr(enums.SSLVerificationStatus(customHostname.SSL.Status))
 			hasUpdates = true
 		}
 
 		// Update DNS verification status if changed
-		if string(dnsVerification.DNSVerification.DNSVerificationStatus) != string(customHostname.Status) {
+		if string(dnsVerification.DNSVerificationStatus) != string(customHostname.Status) {
 			dnsVerificationUpdate.DNSVerificationStatus = lo.ToPtr(enums.DNSVerificationStatus(customHostname.Status))
 			hasUpdates = true
 		}
@@ -187,7 +225,7 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 		if len(customHostname.VerificationErrors) > 0 {
 			verifyErrors := strings.Join(customHostname.VerificationErrors, ", ")
 
-			if dnsVerification.DNSVerification.DNSVerificationStatusReason == nil || *dnsVerification.DNSVerification.DNSVerificationStatusReason != verifyErrors {
+			if dnsVerification.DNSVerificationStatusReason == nil || *dnsVerification.DNSVerificationStatusReason != verifyErrors {
 				dnsVerificationUpdate.DNSVerificationStatusReason = &verifyErrors
 				hasUpdates = true
 			}
@@ -200,7 +238,7 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 				verifyErrors = fmt.Sprintf("%s, %s", verifyErrors, validationErr.Message)
 			}
 
-			if dnsVerification.DNSVerification.AcmeChallengeStatusReason == nil || *dnsVerification.DNSVerification.AcmeChallengeStatusReason != verifyErrors {
+			if dnsVerification.AcmeChallengeStatusReason == nil || *dnsVerification.AcmeChallengeStatusReason != verifyErrors {
 				dnsVerificationUpdate.AcmeChallengeStatusReason = &verifyErrors
 				hasUpdates = true
 			}

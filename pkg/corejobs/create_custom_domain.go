@@ -100,22 +100,19 @@ func (w *CreateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 	if err != nil {
 		return err
 	}
+	zoneID := customDomain.GetCustomDomain().MappableDomain.ZoneID
 
-	log.Debug().Str("custom_domain", customDomain.GetCustomDomain().ID).Msg("got custom domain")
+	log.Debug().
+		Str("custom_domain", customDomain.GetCustomDomain().ID).
+		Str("zone_id", zoneID).
+		Msg("got custom domain")
 
 	if customDomain.CustomDomain.DNSVerificationID != nil && *customDomain.CustomDomain.DNSVerificationID != "" {
 		return ErrDomainVerificationAlreadyExists
 	}
 
-	mappableDomain, err := w.olClient.GetMappableDomainByID(ctx, customDomain.CustomDomain.MappableDomainID)
-	if err != nil {
-		return err
-	}
-
-	log.Debug().Str("mappable_domain", mappableDomain.GetMappableDomain().ID).Msg("got mappable domain")
-
 	res, err := w.cfClient.CustomHostnames().New(ctx, custom_hostnames.CustomHostnameNewParams{
-		ZoneID:   cloudflare.F(mappableDomain.MappableDomain.ZoneID),
+		ZoneID:   cloudflare.F(zoneID),
 		Hostname: cloudflare.F(customDomain.CustomDomain.CnameRecord),
 		SSL: cloudflare.F(custom_hostnames.CustomHostnameNewParamsSSL{
 			Method: cloudflare.F(custom_hostnames.DCVMethodHTTP),
@@ -137,7 +134,7 @@ func (w *CreateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 		if err != nil {
 			_, insertErr := w.riverClient.Insert(ctx, DeleteCustomDomainArgs{
 				CloudflareCustomHostnameID: res.ID,
-				CloudflareZoneID:           mappableDomain.MappableDomain.ZoneID,
+				CloudflareZoneID:           zoneID,
 				DNSVerificationID:          dnsVerificationID,
 			}, nil)
 			if insertErr != nil {
