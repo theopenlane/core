@@ -78,13 +78,13 @@ See the [README](/config/README.md) in the `config` directory.
 >   When developing locally, unless you are specifically testing subscriptions and module enforcement, ensure the following settings are set to false:
 >
 >   ```yaml
->   entConfig:
+>    entConfig:
 >      modules:
->         enabled: false
->         useSandbox: true
+>        enabled: false
+>        useSandbox: true
 >
->      subscription:
->         enabled: false
+>    subscription:
+>      enabled: false
 >   ```
 >
 
