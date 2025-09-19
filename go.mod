@@ -17,7 +17,7 @@ require (
 	cloud.google.com/go/secretmanager v1.15.0
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.5
-	github.com/99designs/gqlgen v0.17.79
+	github.com/99designs/gqlgen v0.17.80
 	github.com/JesusIslam/tldr v0.6.0
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.33.0
@@ -86,7 +86,7 @@ require (
 	github.com/spf13/cobra v1.10.1
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/stripe/stripe-go/v82 v82.5.0
+	github.com/stripe/stripe-go/v82 v82.5.1
 	github.com/theopenlane/beacon v0.2.0
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
