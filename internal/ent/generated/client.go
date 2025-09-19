@@ -22157,6 +22157,25 @@ func (c *TemplateClient) QueryFiles(_m *Template) *FileQuery {
 	return query
 }
 
+// QueryTrustCenter queries the trust_center edge of a Template.
+func (c *TemplateClient) QueryTrustCenter(_m *Template) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, template.TrustCenterTable, template.TrustCenterColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.Template
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TemplateClient) Hooks() []Hook {
 	hooks := c.hooks.Template
@@ -22535,6 +22554,25 @@ func (c *TrustCenterClient) QueryTrustCenterCompliances(_m *TrustCenter) *TrustC
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterCompliance
 		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTemplates queries the templates edge of a TrustCenter.
+func (c *TrustCenterClient) QueryTemplates(_m *TrustCenter) *TemplateQuery {
+	query := (&TemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TemplatesTable, trustcenter.TemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Template
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

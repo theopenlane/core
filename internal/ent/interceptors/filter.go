@@ -3,6 +3,7 @@ package interceptors
 import (
 	"context"
 	"encoding/json"
+	"log/slog"
 	"strings"
 
 	"entgo.io/ent"
@@ -131,7 +132,9 @@ type skipperFunc func(ctx context.Context) bool
 // which is more performant than the ListObjectsRequest, especially for large lists
 func FilterQueryResults[V any](skipperFunc ...skipperFunc) ent.InterceptFunc {
 	return func(next ent.Querier) ent.Querier {
+		slog.Debug("FilterQueryResults")
 		return ent.QuerierFunc(func(ctx context.Context, query ent.Query) (ent.Value, error) {
+			slog.Debug("FilterQueryResults func")
 			return filterQueryResults[V](ctx, query, next, skipperFunc...)
 		})
 	}

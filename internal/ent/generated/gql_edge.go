@@ -7068,6 +7068,14 @@ func (_m *Template) Files(
 	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Template) TrustCenter(ctx context.Context) (*TrustCenter, error) {
+	result, err := _m.Edges.TrustCenterOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryTrustCenter().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *TrustCenter) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -7153,6 +7161,27 @@ func (_m *TrustCenter) TrustCenterCompliances(
 		return conn, nil
 	}
 	return _m.QueryTrustCenterCompliances().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *TrustCenter) Templates(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TemplateOrder, where *TemplateWhereInput,
+) (*TemplateConnection, error) {
+	opts := []TemplatePaginateOption{
+		WithTemplateOrder(orderBy),
+		WithTemplateFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
+	if nodes, err := _m.NamedTemplates(alias); err == nil || hasTotalCount {
+		pager, err := newTemplatePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TemplateConnection{Edges: []*TemplateEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTemplates().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *TrustCenterCompliance) TrustCenter(ctx context.Context) (*TrustCenter, error) {

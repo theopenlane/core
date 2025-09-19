@@ -2973,20 +2973,21 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Template",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			template.FieldCreatedAt:    {Type: field.TypeTime, Column: template.FieldCreatedAt},
-			template.FieldUpdatedAt:    {Type: field.TypeTime, Column: template.FieldUpdatedAt},
-			template.FieldCreatedBy:    {Type: field.TypeString, Column: template.FieldCreatedBy},
-			template.FieldUpdatedBy:    {Type: field.TypeString, Column: template.FieldUpdatedBy},
-			template.FieldDeletedAt:    {Type: field.TypeTime, Column: template.FieldDeletedAt},
-			template.FieldDeletedBy:    {Type: field.TypeString, Column: template.FieldDeletedBy},
-			template.FieldTags:         {Type: field.TypeJSON, Column: template.FieldTags},
-			template.FieldOwnerID:      {Type: field.TypeString, Column: template.FieldOwnerID},
-			template.FieldName:         {Type: field.TypeString, Column: template.FieldName},
-			template.FieldTemplateType: {Type: field.TypeEnum, Column: template.FieldTemplateType},
-			template.FieldDescription:  {Type: field.TypeString, Column: template.FieldDescription},
-			template.FieldKind:         {Type: field.TypeEnum, Column: template.FieldKind},
-			template.FieldJsonconfig:   {Type: field.TypeJSON, Column: template.FieldJsonconfig},
-			template.FieldUischema:     {Type: field.TypeJSON, Column: template.FieldUischema},
+			template.FieldCreatedAt:     {Type: field.TypeTime, Column: template.FieldCreatedAt},
+			template.FieldUpdatedAt:     {Type: field.TypeTime, Column: template.FieldUpdatedAt},
+			template.FieldCreatedBy:     {Type: field.TypeString, Column: template.FieldCreatedBy},
+			template.FieldUpdatedBy:     {Type: field.TypeString, Column: template.FieldUpdatedBy},
+			template.FieldDeletedAt:     {Type: field.TypeTime, Column: template.FieldDeletedAt},
+			template.FieldDeletedBy:     {Type: field.TypeString, Column: template.FieldDeletedBy},
+			template.FieldTags:          {Type: field.TypeJSON, Column: template.FieldTags},
+			template.FieldOwnerID:       {Type: field.TypeString, Column: template.FieldOwnerID},
+			template.FieldName:          {Type: field.TypeString, Column: template.FieldName},
+			template.FieldTemplateType:  {Type: field.TypeEnum, Column: template.FieldTemplateType},
+			template.FieldDescription:   {Type: field.TypeString, Column: template.FieldDescription},
+			template.FieldKind:          {Type: field.TypeEnum, Column: template.FieldKind},
+			template.FieldJsonconfig:    {Type: field.TypeJSON, Column: template.FieldJsonconfig},
+			template.FieldUischema:      {Type: field.TypeJSON, Column: template.FieldUischema},
+			template.FieldTrustCenterID: {Type: field.TypeString, Column: template.FieldTrustCenterID},
 		},
 	}
 	graph.Nodes[95] = &sqlgraph.Node{
@@ -3000,23 +3001,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TemplateHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			templatehistory.FieldHistoryTime:  {Type: field.TypeTime, Column: templatehistory.FieldHistoryTime},
-			templatehistory.FieldRef:          {Type: field.TypeString, Column: templatehistory.FieldRef},
-			templatehistory.FieldOperation:    {Type: field.TypeEnum, Column: templatehistory.FieldOperation},
-			templatehistory.FieldCreatedAt:    {Type: field.TypeTime, Column: templatehistory.FieldCreatedAt},
-			templatehistory.FieldUpdatedAt:    {Type: field.TypeTime, Column: templatehistory.FieldUpdatedAt},
-			templatehistory.FieldCreatedBy:    {Type: field.TypeString, Column: templatehistory.FieldCreatedBy},
-			templatehistory.FieldUpdatedBy:    {Type: field.TypeString, Column: templatehistory.FieldUpdatedBy},
-			templatehistory.FieldDeletedAt:    {Type: field.TypeTime, Column: templatehistory.FieldDeletedAt},
-			templatehistory.FieldDeletedBy:    {Type: field.TypeString, Column: templatehistory.FieldDeletedBy},
-			templatehistory.FieldTags:         {Type: field.TypeJSON, Column: templatehistory.FieldTags},
-			templatehistory.FieldOwnerID:      {Type: field.TypeString, Column: templatehistory.FieldOwnerID},
-			templatehistory.FieldName:         {Type: field.TypeString, Column: templatehistory.FieldName},
-			templatehistory.FieldTemplateType: {Type: field.TypeEnum, Column: templatehistory.FieldTemplateType},
-			templatehistory.FieldDescription:  {Type: field.TypeString, Column: templatehistory.FieldDescription},
-			templatehistory.FieldKind:         {Type: field.TypeEnum, Column: templatehistory.FieldKind},
-			templatehistory.FieldJsonconfig:   {Type: field.TypeJSON, Column: templatehistory.FieldJsonconfig},
-			templatehistory.FieldUischema:     {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
+			templatehistory.FieldHistoryTime:   {Type: field.TypeTime, Column: templatehistory.FieldHistoryTime},
+			templatehistory.FieldRef:           {Type: field.TypeString, Column: templatehistory.FieldRef},
+			templatehistory.FieldOperation:     {Type: field.TypeEnum, Column: templatehistory.FieldOperation},
+			templatehistory.FieldCreatedAt:     {Type: field.TypeTime, Column: templatehistory.FieldCreatedAt},
+			templatehistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: templatehistory.FieldUpdatedAt},
+			templatehistory.FieldCreatedBy:     {Type: field.TypeString, Column: templatehistory.FieldCreatedBy},
+			templatehistory.FieldUpdatedBy:     {Type: field.TypeString, Column: templatehistory.FieldUpdatedBy},
+			templatehistory.FieldDeletedAt:     {Type: field.TypeTime, Column: templatehistory.FieldDeletedAt},
+			templatehistory.FieldDeletedBy:     {Type: field.TypeString, Column: templatehistory.FieldDeletedBy},
+			templatehistory.FieldTags:          {Type: field.TypeJSON, Column: templatehistory.FieldTags},
+			templatehistory.FieldOwnerID:       {Type: field.TypeString, Column: templatehistory.FieldOwnerID},
+			templatehistory.FieldName:          {Type: field.TypeString, Column: templatehistory.FieldName},
+			templatehistory.FieldTemplateType:  {Type: field.TypeEnum, Column: templatehistory.FieldTemplateType},
+			templatehistory.FieldDescription:   {Type: field.TypeString, Column: templatehistory.FieldDescription},
+			templatehistory.FieldKind:          {Type: field.TypeEnum, Column: templatehistory.FieldKind},
+			templatehistory.FieldJsonconfig:    {Type: field.TypeJSON, Column: templatehistory.FieldJsonconfig},
+			templatehistory.FieldUischema:      {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
+			templatehistory.FieldTrustCenterID: {Type: field.TypeString, Column: templatehistory.FieldTrustCenterID},
 		},
 	}
 	graph.Nodes[96] = &sqlgraph.Node{
@@ -8512,6 +8514,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"trust_center",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   template.TrustCenterTable,
+			Columns: []string{template.TrustCenterColumn},
+			Bidi:    false,
+		},
+		"Template",
+		"TrustCenter",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -8582,6 +8596,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenter",
 		"TrustCenterCompliance",
+	)
+	graph.MustAddE(
+		"templates",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TemplatesTable,
+			Columns: []string{trustcenter.TemplatesColumn},
+			Bidi:    false,
+		},
+		"TrustCenter",
+		"Template",
 	)
 	graph.MustAddE(
 		"trust_center",
@@ -26811,6 +26837,11 @@ func (f *TemplateFilter) WhereUischema(p entql.BytesP) {
 	f.Where(p.Field(template.FieldUischema))
 }
 
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TemplateFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(template.FieldTrustCenterID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *TemplateFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -26847,6 +26878,20 @@ func (f *TemplateFilter) WhereHasFiles() {
 // WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
 func (f *TemplateFilter) WhereHasFilesWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
+func (f *TemplateFilter) WhereHasTrustCenter() {
+	f.Where(entql.HasEdge("trust_center"))
+}
+
+// WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
+func (f *TemplateFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
+	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -26976,6 +27021,11 @@ func (f *TemplateHistoryFilter) WhereJsonconfig(p entql.BytesP) {
 // WhereUischema applies the entql json.RawMessage predicate on the uischema field.
 func (f *TemplateHistoryFilter) WhereUischema(p entql.BytesP) {
 	f.Where(p.Field(templatehistory.FieldUischema))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TemplateHistoryFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(templatehistory.FieldTrustCenterID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -27146,6 +27196,20 @@ func (f *TrustCenterFilter) WhereHasTrustCenterCompliances() {
 // WhereHasTrustCenterCompliancesWith applies a predicate to check if query has an edge trust_center_compliances with a given conditions (other predicates).
 func (f *TrustCenterFilter) WhereHasTrustCenterCompliancesWith(preds ...predicate.TrustCenterCompliance) {
 	f.Where(entql.HasEdgeWith("trust_center_compliances", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTemplates applies a predicate to check if query has an edge templates.
+func (f *TrustCenterFilter) WhereHasTemplates() {
+	f.Where(entql.HasEdge("templates"))
+}
+
+// WhereHasTemplatesWith applies a predicate to check if query has an edge templates with a given conditions (other predicates).
+func (f *TrustCenterFilter) WhereHasTemplatesWith(preds ...predicate.Template) {
+	f.Where(entql.HasEdgeWith("templates", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -2494,7 +2494,7 @@ type ComplexityRoot struct {
 		CreateSubscriber                     func(childComplexity int, input generated.CreateSubscriberInput) int
 		CreateTFASetting                     func(childComplexity int, input generated.CreateTFASettingInput) int
 		CreateTask                           func(childComplexity int, input generated.CreateTaskInput) int
-		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput) int
+		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) int
 		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
 		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
@@ -2615,7 +2615,7 @@ type ComplexityRoot struct {
 		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
 		UpdateTask                           func(childComplexity int, id string, input generated.UpdateTaskInput) int
 		UpdateTaskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput) int
+		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) int
 		UpdateTrustCenter                    func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
 		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
 		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput) int
@@ -2976,6 +2976,7 @@ type ComplexityRoot struct {
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		TemplateCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Templates                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		TrustCenterDocs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		TrustCenters                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
 		UpdatedAt                     func(childComplexity int) int
 		UpdatedBy                     func(childComplexity int) int
@@ -4582,22 +4583,24 @@ type ComplexityRoot struct {
 	}
 
 	Template struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		Description  func(childComplexity int) int
-		Documents    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		Files        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID           func(childComplexity int) int
-		Jsonconfig   func(childComplexity int) int
-		Kind         func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Owner        func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		TemplateType func(childComplexity int) int
-		Uischema     func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Description   func(childComplexity int) int
+		Documents     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		Files         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID            func(childComplexity int) int
+		Jsonconfig    func(childComplexity int) int
+		Kind          func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		TemplateType  func(childComplexity int) int
+		TrustCenter   func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		Uischema      func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	TemplateBulkCreatePayload struct {
@@ -4624,22 +4627,23 @@ type ComplexityRoot struct {
 	}
 
 	TemplateHistory struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		Description  func(childComplexity int) int
-		HistoryTime  func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Jsonconfig   func(childComplexity int) int
-		Kind         func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Operation    func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Ref          func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		TemplateType func(childComplexity int) int
-		Uischema     func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Description   func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Jsonconfig    func(childComplexity int) int
+		Kind          func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		TemplateType  func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		Uischema      func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	TemplateHistoryConnection struct {
@@ -4668,6 +4672,7 @@ type ComplexityRoot struct {
 		Setting                  func(childComplexity int) int
 		Slug                     func(childComplexity int) int
 		Tags                     func(childComplexity int) int
+		Templates                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		TrustCenterCompliances   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
 		TrustCenterDocs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		TrustCenterSubprocessors func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
@@ -4761,6 +4766,8 @@ type ComplexityRoot struct {
 		File          func(childComplexity int) int
 		FileID        func(childComplexity int) int
 		ID            func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		Title         func(childComplexity int) int
 		TrustCenter   func(childComplexity int) int
@@ -4801,6 +4808,7 @@ type ComplexityRoot struct {
 		HistoryTime   func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
 		Ref           func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		Title         func(childComplexity int) int
@@ -17720,7 +17728,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTemplate(childComplexity, args["input"].(generated.CreateTemplateInput)), true
+		return e.complexity.Mutation.CreateTemplate(childComplexity, args["input"].(generated.CreateTemplateInput), args["templateFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.createTrustCenter":
 		if e.complexity.Mutation.CreateTrustCenter == nil {
@@ -19172,7 +19180,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateTemplateInput)), true
+		return e.complexity.Mutation.UpdateTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateTemplateInput), args["templateFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateTrustCenter":
 		if e.complexity.Mutation.UpdateTrustCenter == nil {
@@ -21333,6 +21341,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
+
+	case "Organization.trustCenterDocs":
+		if e.complexity.Organization.TrustCenterDocs == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_trustCenterDocs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.TrustCenterDocs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterDocOrder), args["where"].(*generated.TrustCenterDocWhereInput)), true
 
 	case "Organization.trustCenters":
 		if e.complexity.Organization.TrustCenters == nil {
@@ -31185,6 +31205,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Template.TemplateType(childComplexity), true
 
+	case "Template.trustCenter":
+		if e.complexity.Template.TrustCenter == nil {
+			break
+		}
+
+		return e.complexity.Template.TrustCenter(childComplexity), true
+
+	case "Template.trustCenterID":
+		if e.complexity.Template.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.Template.TrustCenterID(childComplexity), true
+
 	case "Template.uischema":
 		if e.complexity.Template.Uischema == nil {
 			break
@@ -31353,6 +31387,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TemplateHistory.TemplateType(childComplexity), true
 
+	case "TemplateHistory.trustCenterID":
+		if e.complexity.TemplateHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.TrustCenterID(childComplexity), true
+
 	case "TemplateHistory.uischema":
 		if e.complexity.TemplateHistory.Uischema == nil {
 			break
@@ -31485,6 +31526,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenter.Tags(childComplexity), true
+
+	case "TrustCenter.templates":
+		if e.complexity.TrustCenter.Templates == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenter_templates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenter.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
 
 	case "TrustCenter.trustCenterCompliances":
 		if e.complexity.TrustCenter.TrustCenterCompliances == nil {
@@ -31858,6 +31911,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDoc.ID(childComplexity), true
 
+	case "TrustCenterDoc.owner":
+		if e.complexity.TrustCenterDoc.Owner == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Owner(childComplexity), true
+
+	case "TrustCenterDoc.ownerID":
+		if e.complexity.TrustCenterDoc.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.OwnerID(childComplexity), true
+
 	case "TrustCenterDoc.tags":
 		if e.complexity.TrustCenterDoc.Tags == nil {
 			break
@@ -32011,6 +32078,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDocHistory.Operation(childComplexity), true
+
+	case "TrustCenterDocHistory.ownerID":
+		if e.complexity.TrustCenterDocHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.OwnerID(childComplexity), true
 
 	case "TrustCenterDocHistory.ref":
 		if e.complexity.TrustCenterDocHistory.Ref == nil {
@@ -45057,6 +45131,7 @@ input CreateOrganizationInput {
   scanIDs: [ID!]
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
+  trustCenterDocIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -45791,6 +45866,7 @@ input CreateTemplateInput {
   ownerID: ID
   documentIDs: [ID!]
   fileIDs: [ID!]
+  trustCenterID: ID
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -45825,6 +45901,7 @@ input CreateTrustCenterDocInput {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
+  ownerID: ID
   trustCenterID: ID
   fileID: ID
 }
@@ -45843,6 +45920,7 @@ input CreateTrustCenterInput {
   trustCenterSubprocessorIDs: [ID!]
   trustCenterDocIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
+  templateIDs: [ID!]
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -65906,6 +65984,37 @@ type Organization implements Node {
     """
     where: ExportWhereInput
   ): ExportConnection!
+  trustCenterDocs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterDocs returned from the connection.
+    """
+    orderBy: [TrustCenterDocOrder!]
+
+    """
+    Filtering options for TrustCenterDocs returned from the connection.
+    """
+    where: TrustCenterDocWhereInput
+  ): TrustCenterDocConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -67839,6 +67948,11 @@ input OrganizationWhereInput {
   """
   hasExports: Boolean
   hasExportsWith: [ExportWhereInput!]
+  """
+  trust_center_docs edge predicates
+  """
+  hasTrustCenterDocs: Boolean
+  hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
   """
   members edge predicates
   """
@@ -82632,7 +82746,7 @@ type Template implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -82659,6 +82773,10 @@ type Template implements Node {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  the id of the trust center this template is associated with
+  """
+  trustCenterID: ID
   owner: Organization
   documents(
     """
@@ -82722,6 +82840,7 @@ type Template implements Node {
     """
     where: FileWhereInput
   ): FileConnection!
+  trustCenter: TrustCenter
 }
 """
 A connection to a list of items.
@@ -82774,7 +82893,7 @@ type TemplateHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -82801,6 +82920,10 @@ type TemplateHistory implements Node {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  the id of the trust center this template is associated with
+  """
+  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -83064,6 +83187,24 @@ input TemplateHistoryWhereInput {
   kindNotIn: [TemplateHistoryTemplateKind!]
   kindIsNil: Boolean
   kindNotNil: Boolean
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 """
 Ordering options for Template connections
@@ -83246,6 +83387,24 @@ input TemplateWhereInput {
   kindIsNil: Boolean
   kindNotNil: Boolean
   """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -83260,6 +83419,11 @@ input TemplateWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
 }
 """
 The builtin Time type
@@ -83383,6 +83547,37 @@ type TrustCenter implements Node {
     """
     where: TrustCenterComplianceWhereInput
   ): TrustCenterComplianceConnection!
+  templates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Templates returned from the connection.
+    """
+    orderBy: [TemplateOrder!]
+
+    """
+    Filtering options for Templates returned from the connection.
+    """
+    where: TemplateWhereInput
+  ): TemplateConnection!
 }
 type TrustCenterCompliance implements Node {
   id: ID!
@@ -83846,6 +84041,10 @@ type TrustCenterDoc implements Node {
   """
   tags: [String!]
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
   ID of the trust center
   """
   trustCenterID: ID
@@ -83865,6 +84064,7 @@ type TrustCenterDoc implements Node {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
+  owner: Organization
   trustCenter: TrustCenter
   """
   the file containing the document content
@@ -83914,6 +84114,10 @@ type TrustCenterDocHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
   """
   ID of the trust center
   """
@@ -84122,6 +84326,24 @@ input TrustCenterDocHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   trust_center_id field predicates
   """
   trustCenterID: String
@@ -84311,6 +84533,24 @@ input TrustCenterDocWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   trust_center_id field predicates
   """
   trustCenterID: ID
@@ -84387,6 +84627,11 @@ input TrustCenterDocWhereInput {
   visibilityNotIn: [TrustCenterDocTrustCenterDocumentVisibility!]
   visibilityIsNil: Boolean
   visibilityNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
   """
   trust_center edge predicates
   """
@@ -86283,6 +86528,11 @@ input TrustCenterWhereInput {
   """
   hasTrustCenterCompliances: Boolean
   hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
+  """
+  templates edge predicates
+  """
+  hasTemplates: Boolean
+  hasTemplatesWith: [TemplateWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -88221,6 +88471,9 @@ input UpdateOrganizationInput {
   addExportIDs: [ID!]
   removeExportIDs: [ID!]
   clearExports: Boolean
+  addTrustCenterDocIDs: [ID!]
+  removeTrustCenterDocIDs: [ID!]
+  clearTrustCenterDocs: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -89237,14 +89490,14 @@ input UpdateTemplateInput {
   """
   uischema: Map
   clearUischema: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   addDocumentIDs: [ID!]
   removeDocumentIDs: [ID!]
   clearDocuments: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -89316,6 +89569,9 @@ input UpdateTrustCenterInput {
   addTrustCenterComplianceIDs: [ID!]
   removeTrustCenterComplianceIDs: [ID!]
   clearTrustCenterCompliances: Boolean
+  addTemplateIDs: [ID!]
+  removeTemplateIDs: [ID!]
+  clearTemplates: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
@@ -97209,6 +97465,7 @@ extend type Mutation{
         values of the template
         """
         input: CreateTemplateInput!
+        templateFiles: [Upload!]
     ): TemplateCreatePayload!
     """
     Create multiple new templates
@@ -97240,6 +97497,7 @@ extend type Mutation{
         New values for the template
         """
         input: UpdateTemplateInput!
+        templateFiles: [Upload!]
     ): TemplateUpdatePayload!
     """
     Delete an existing template

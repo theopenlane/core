@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
@@ -38,11 +39,13 @@ type TrustCenterQuery struct {
 	withTrustCenterSubprocessors      *TrustCenterSubprocessorQuery
 	withTrustCenterDocs               *TrustCenterDocQuery
 	withTrustCenterCompliances        *TrustCenterComplianceQuery
+	withTemplates                     *TemplateQuery
 	loadTotal                         []func(context.Context, []*TrustCenter) error
 	modifiers                         []func(*sql.Selector)
 	withNamedTrustCenterSubprocessors map[string]*TrustCenterSubprocessorQuery
 	withNamedTrustCenterDocs          map[string]*TrustCenterDocQuery
 	withNamedTrustCenterCompliances   map[string]*TrustCenterComplianceQuery
+	withNamedTemplates                map[string]*TemplateQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -223,6 +226,31 @@ func (_q *TrustCenterQuery) QueryTrustCenterCompliances() *TrustCenterCompliance
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterCompliance
 		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTemplates chains the current query on the "templates" edge.
+func (_q *TrustCenterQuery) QueryTemplates() *TemplateQuery {
+	query := (&TemplateClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, selector),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TemplatesTable, trustcenter.TemplatesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Template
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -427,6 +455,7 @@ func (_q *TrustCenterQuery) Clone() *TrustCenterQuery {
 		withTrustCenterSubprocessors: _q.withTrustCenterSubprocessors.Clone(),
 		withTrustCenterDocs:          _q.withTrustCenterDocs.Clone(),
 		withTrustCenterCompliances:   _q.withTrustCenterCompliances.Clone(),
+		withTemplates:                _q.withTemplates.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -497,6 +526,17 @@ func (_q *TrustCenterQuery) WithTrustCenterCompliances(opts ...func(*TrustCenter
 		opt(query)
 	}
 	_q.withTrustCenterCompliances = query
+	return _q
+}
+
+// WithTemplates tells the query-builder to eager-load the nodes that are connected to
+// the "templates" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithTemplates(opts ...func(*TemplateQuery)) *TrustCenterQuery {
+	query := (&TemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTemplates = query
 	return _q
 }
 
@@ -584,13 +624,14 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*TrustCenter{}
 		_spec       = _q.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			_q.withOwner != nil,
 			_q.withCustomDomain != nil,
 			_q.withSetting != nil,
 			_q.withTrustCenterSubprocessors != nil,
 			_q.withTrustCenterDocs != nil,
 			_q.withTrustCenterCompliances != nil,
+			_q.withTemplates != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -659,6 +700,13 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withTemplates; query != nil {
+		if err := _q.loadTemplates(ctx, query, nodes,
+			func(n *TrustCenter) { n.Edges.Templates = []*Template{} },
+			func(n *TrustCenter, e *Template) { n.Edges.Templates = append(n.Edges.Templates, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedTrustCenterSubprocessors {
 		if err := _q.loadTrustCenterSubprocessors(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedTrustCenterSubprocessors(name) },
@@ -677,6 +725,13 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadTrustCenterCompliances(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedTrustCenterCompliances(name) },
 			func(n *TrustCenter, e *TrustCenterCompliance) { n.appendNamedTrustCenterCompliances(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTemplates {
+		if err := _q.loadTemplates(ctx, query, nodes,
+			func(n *TrustCenter) { n.appendNamedTemplates(name) },
+			func(n *TrustCenter, e *Template) { n.appendNamedTemplates(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -863,6 +918,36 @@ func (_q *TrustCenterQuery) loadTrustCenterCompliances(ctx context.Context, quer
 	}
 	return nil
 }
+func (_q *TrustCenterQuery) loadTemplates(ctx context.Context, query *TemplateQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *Template)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenter)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(template.FieldTrustCenterID)
+	}
+	query.Where(predicate.Template(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenter.TemplatesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.TrustCenterID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *TrustCenterQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1007,6 +1092,20 @@ func (_q *TrustCenterQuery) WithNamedTrustCenterCompliances(name string, opts ..
 		_q.withNamedTrustCenterCompliances = make(map[string]*TrustCenterComplianceQuery)
 	}
 	_q.withNamedTrustCenterCompliances[name] = query
+	return _q
+}
+
+// WithNamedTemplates tells the query-builder to eager-load the nodes that are connected to the "templates"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithNamedTemplates(name string, opts ...func(*TemplateQuery)) *TrustCenterQuery {
+	query := (&TemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTemplates == nil {
+		_q.withNamedTemplates = make(map[string]*TemplateQuery)
+	}
+	_q.withNamedTemplates[name] = query
 	return _q
 }
 

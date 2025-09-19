@@ -4540,6 +4540,7 @@ var (
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// TemplatesTable holds the schema information for the "templates" table.
 	TemplatesTable = &schema.Table{
@@ -4551,6 +4552,12 @@ var (
 				Symbol:     "templates_organizations_templates",
 				Columns:    []*schema.Column{TemplatesColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "templates_trust_centers_templates",
+				Columns:    []*schema.Column{TemplatesColumns[15]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -4569,6 +4576,14 @@ var (
 				Columns: []*schema.Column{TemplatesColumns[8], TemplatesColumns[14], TemplatesColumns[9]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "template_trust_center_id",
+				Unique:  true,
+				Columns: []*schema.Column{TemplatesColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL and kind = 'TRUSTCENTER_NDA'",
 				},
 			},
 		},
@@ -4593,6 +4608,7 @@ var (
 		{Name: "kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"QUESTIONNAIRE"}, Default: "QUESTIONNAIRE"},
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// TemplateHistoryTable holds the schema information for the "template_history" table.
 	TemplateHistoryTable = &schema.Table{
@@ -8503,6 +8519,10 @@ func init() {
 		Table: "task_history",
 	}
 	TemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	TemplatesTable.ForeignKeys[1].RefTable = TrustCentersTable
+	TemplatesTable.Annotation = &entsql.Annotation{
+		Check: "trust_center_id IS NOT NULL OR kind != 'TRUSTCENTER_NDA'",
+	}
 	TemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "template_history",
 	}
