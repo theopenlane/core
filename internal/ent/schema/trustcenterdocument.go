@@ -71,7 +71,14 @@ func (TrustCenterDoc) Fields() []ent.Field {
 
 // Mixin of the TrustCenterDoc
 func (t TrustCenterDoc) Mixin() []ent.Mixin {
-	return mixinConfig{}.getMixins(t)
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			newObjectOwnedMixin[generated.TrustCenterDoc](t,
+				withParents(TrustCenter{}),
+				withOrganizationOwner(true),
+			),
+		},
+	}.getMixins(t)
 }
 
 // Edges of the TrustCenterDoc
@@ -95,7 +102,6 @@ func (t TrustCenterDoc) Edges() []ent.Edge {
 func (TrustCenterDoc) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTrustCenterDoc(),
-		hooks.HookTrustCenterDocAuthz(),
 	}
 }
 

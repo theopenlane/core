@@ -6348,6 +6348,7 @@ func init() {
 	trustcenterdocMixinHooks0 := trustcenterdocMixin[0].Hooks()
 	trustcenterdocMixinHooks1 := trustcenterdocMixin[1].Hooks()
 	trustcenterdocMixinHooks2 := trustcenterdocMixin[2].Hooks()
+	trustcenterdocMixinHooks6 := trustcenterdocMixin[6].Hooks()
 	trustcenterdocHooks := schema.TrustCenterDoc{}.Hooks()
 
 	trustcenterdoc.Hooks[1] = trustcenterdocMixinHooks0[0]
@@ -6356,21 +6357,28 @@ func init() {
 
 	trustcenterdoc.Hooks[3] = trustcenterdocMixinHooks2[0]
 
-	trustcenterdoc.Hooks[4] = trustcenterdocHooks[0]
+	trustcenterdoc.Hooks[4] = trustcenterdocMixinHooks6[0]
 
-	trustcenterdoc.Hooks[5] = trustcenterdocHooks[1]
+	trustcenterdoc.Hooks[5] = trustcenterdocMixinHooks6[1]
+
+	trustcenterdoc.Hooks[6] = trustcenterdocHooks[0]
 	trustcenterdocMixinInters1 := trustcenterdocMixin[1].Interceptors()
 	trustcenterdocMixinInters2 := trustcenterdocMixin[2].Interceptors()
+	trustcenterdocMixinInters6 := trustcenterdocMixin[6].Interceptors()
 	trustcenterdocInters := schema.TrustCenterDoc{}.Interceptors()
 	trustcenterdoc.Interceptors[0] = trustcenterdocMixinInters1[0]
 	trustcenterdoc.Interceptors[1] = trustcenterdocMixinInters2[0]
-	trustcenterdoc.Interceptors[2] = trustcenterdocInters[0]
+	trustcenterdoc.Interceptors[2] = trustcenterdocMixinInters6[0]
+	trustcenterdoc.Interceptors[3] = trustcenterdocMixinInters6[1]
+	trustcenterdoc.Interceptors[4] = trustcenterdocInters[0]
 	trustcenterdocMixinFields0 := trustcenterdocMixin[0].Fields()
 	_ = trustcenterdocMixinFields0
 	trustcenterdocMixinFields3 := trustcenterdocMixin[3].Fields()
 	_ = trustcenterdocMixinFields3
 	trustcenterdocMixinFields4 := trustcenterdocMixin[4].Fields()
 	_ = trustcenterdocMixinFields4
+	trustcenterdocMixinFields6 := trustcenterdocMixin[6].Fields()
+	_ = trustcenterdocMixinFields6
 	trustcenterdocFields := schema.TrustCenterDoc{}.Fields()
 	_ = trustcenterdocFields
 	// trustcenterdocDescCreatedAt is the schema descriptor for created_at field.
@@ -6387,6 +6395,10 @@ func init() {
 	trustcenterdocDescTags := trustcenterdocMixinFields4[0].Descriptor()
 	// trustcenterdoc.DefaultTags holds the default value on creation for the tags field.
 	trustcenterdoc.DefaultTags = trustcenterdocDescTags.Default.([]string)
+	// trustcenterdocDescOwnerID is the schema descriptor for owner_id field.
+	trustcenterdocDescOwnerID := trustcenterdocMixinFields6[0].Descriptor()
+	// trustcenterdoc.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	trustcenterdoc.OwnerIDValidator = trustcenterdocDescOwnerID.Validators[0].(func(string) error)
 	// trustcenterdocDescTrustCenterID is the schema descriptor for trust_center_id field.
 	trustcenterdocDescTrustCenterID := trustcenterdocFields[0].Descriptor()
 	// trustcenterdoc.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.

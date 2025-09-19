@@ -837,6 +837,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).TrustCenterDoc.Query().Where((trustcenterdoc.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcenterdocCount, err := FromContext(ctx).TrustCenterDoc.Delete().Where(trustcenterdoc.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", trustcenterdocCount).Msg("deleting trustcenterdoc")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")

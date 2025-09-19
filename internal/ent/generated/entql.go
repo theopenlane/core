@@ -3107,6 +3107,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdoc.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterdoc.FieldDeletedAt},
 			trustcenterdoc.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterdoc.FieldDeletedBy},
 			trustcenterdoc.FieldTags:          {Type: field.TypeJSON, Column: trustcenterdoc.FieldTags},
+			trustcenterdoc.FieldOwnerID:       {Type: field.TypeString, Column: trustcenterdoc.FieldOwnerID},
 			trustcenterdoc.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterdoc.FieldTrustCenterID},
 			trustcenterdoc.FieldTitle:         {Type: field.TypeString, Column: trustcenterdoc.FieldTitle},
 			trustcenterdoc.FieldCategory:      {Type: field.TypeString, Column: trustcenterdoc.FieldCategory},
@@ -3135,6 +3136,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdochistory.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterdochistory.FieldDeletedAt},
 			trustcenterdochistory.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterdochistory.FieldDeletedBy},
 			trustcenterdochistory.FieldTags:          {Type: field.TypeJSON, Column: trustcenterdochistory.FieldTags},
+			trustcenterdochistory.FieldOwnerID:       {Type: field.TypeString, Column: trustcenterdochistory.FieldOwnerID},
 			trustcenterdochistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterdochistory.FieldTrustCenterID},
 			trustcenterdochistory.FieldTitle:         {Type: field.TypeString, Column: trustcenterdochistory.FieldTitle},
 			trustcenterdochistory.FieldCategory:      {Type: field.TypeString, Column: trustcenterdochistory.FieldCategory},
@@ -7130,6 +7132,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Export",
 	)
 	graph.MustAddE(
+		"trust_center_docs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterDocsTable,
+			Columns: []string{organization.TrustCenterDocsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"TrustCenterDoc",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -8592,6 +8606,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterCompliance",
 		"Standard",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterdoc.OwnerTable,
+			Columns: []string{trustcenterdoc.OwnerColumn},
+			Bidi:    false,
+		},
+		"TrustCenterDoc",
+		"Organization",
 	)
 	graph.MustAddE(
 		"trust_center",
@@ -21227,6 +21253,20 @@ func (f *OrganizationFilter) WhereHasExportsWith(preds ...predicate.Export) {
 	})))
 }
 
+// WhereHasTrustCenterDocs applies a predicate to check if query has an edge trust_center_docs.
+func (f *OrganizationFilter) WhereHasTrustCenterDocs() {
+	f.Where(entql.HasEdge("trust_center_docs"))
+}
+
+// WhereHasTrustCenterDocsWith applies a predicate to check if query has an edge trust_center_docs with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasTrustCenterDocsWith(preds ...predicate.TrustCenterDoc) {
+	f.Where(entql.HasEdgeWith("trust_center_docs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -27400,6 +27440,11 @@ func (f *TrustCenterDocFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(trustcenterdoc.FieldTags))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *TrustCenterDocFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(trustcenterdoc.FieldOwnerID))
+}
+
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
 func (f *TrustCenterDocFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(trustcenterdoc.FieldTrustCenterID))
@@ -27423,6 +27468,20 @@ func (f *TrustCenterDocFilter) WhereFileID(p entql.StringP) {
 // WhereVisibility applies the entql string predicate on the visibility field.
 func (f *TrustCenterDocFilter) WhereVisibility(p entql.StringP) {
 	f.Where(p.Field(trustcenterdoc.FieldVisibility))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *TrustCenterDocFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *TrustCenterDocFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
@@ -27541,6 +27600,11 @@ func (f *TrustCenterDocHistoryFilter) WhereDeletedBy(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *TrustCenterDocHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(trustcenterdochistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *TrustCenterDocHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(trustcenterdochistory.FieldOwnerID))
 }
 
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.

@@ -60,6 +60,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -1306,6 +1307,21 @@ func (_c *OrganizationCreate) AddExports(v ...*Export) *OrganizationCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddExportIDs(ids...)
+}
+
+// AddTrustCenterDocIDs adds the "trust_center_docs" edge to the TrustCenterDoc entity by IDs.
+func (_c *OrganizationCreate) AddTrustCenterDocIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterDocIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterDocs adds the "trust_center_docs" edges to the TrustCenterDoc entity.
+func (_c *OrganizationCreate) AddTrustCenterDocs(v ...*TrustCenterDoc) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterDocIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2655,6 +2671,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.Export
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterDocsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterDocsTable,
+			Columns: []string{organization.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

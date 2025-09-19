@@ -146,6 +146,20 @@ func (_c *TrustCenterDocHistoryCreate) SetTags(v []string) *TrustCenterDocHistor
 	return _c
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (_c *TrustCenterDocHistoryCreate) SetOwnerID(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableOwnerID(v *string) *TrustCenterDocHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
 // SetTrustCenterID sets the "trust_center_id" field.
 func (_c *TrustCenterDocHistoryCreate) SetTrustCenterID(v string) *TrustCenterDocHistoryCreate {
 	_c.mutation.SetTrustCenterID(v)
@@ -389,6 +403,10 @@ func (_c *TrustCenterDocHistoryCreate) createSpec() (*TrustCenterDocHistory, *sq
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.OwnerID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	if value, ok := _c.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)

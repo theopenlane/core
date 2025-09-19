@@ -8105,6 +8105,7 @@ input CreateOrganizationInput {
   scanIDs: [ID!]
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
+  trustCenterDocIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -8873,6 +8874,7 @@ input CreateTrustCenterDocInput {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
+  ownerID: ID
   trustCenterID: ID
   fileID: ID
 }
@@ -28954,6 +28956,37 @@ type Organization implements Node {
     """
     where: ExportWhereInput
   ): ExportConnection!
+  trustCenterDocs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterDocs returned from the connection.
+    """
+    orderBy: [TrustCenterDocOrder!]
+
+    """
+    Filtering options for TrustCenterDocs returned from the connection.
+    """
+    where: TrustCenterDocWhereInput
+  ): TrustCenterDocConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -30887,6 +30920,11 @@ input OrganizationWhereInput {
   """
   hasExports: Boolean
   hasExportsWith: [ExportWhereInput!]
+  """
+  trust_center_docs edge predicates
+  """
+  hasTrustCenterDocs: Boolean
+  hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
   """
   members edge predicates
   """
@@ -46894,6 +46932,10 @@ type TrustCenterDoc implements Node {
   """
   tags: [String!]
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
   ID of the trust center
   """
   trustCenterID: ID
@@ -46913,6 +46955,7 @@ type TrustCenterDoc implements Node {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
+  owner: Organization
   trustCenter: TrustCenter
   """
   the file containing the document content
@@ -46962,6 +47005,10 @@ type TrustCenterDocHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
   """
   ID of the trust center
   """
@@ -47170,6 +47217,24 @@ input TrustCenterDocHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   trust_center_id field predicates
   """
   trustCenterID: String
@@ -47359,6 +47424,24 @@ input TrustCenterDocWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   trust_center_id field predicates
   """
   trustCenterID: ID
@@ -47435,6 +47518,11 @@ input TrustCenterDocWhereInput {
   visibilityNotIn: [TrustCenterDocTrustCenterDocumentVisibility!]
   visibilityIsNil: Boolean
   visibilityNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
   """
   trust_center edge predicates
   """
@@ -51269,6 +51357,9 @@ input UpdateOrganizationInput {
   addExportIDs: [ID!]
   removeExportIDs: [ID!]
   clearExports: Boolean
+  addTrustCenterDocIDs: [ID!]
+  removeTrustCenterDocIDs: [ID!]
+  clearTrustCenterDocs: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.

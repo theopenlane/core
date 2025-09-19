@@ -32,6 +32,8 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
 	// FieldTitle holds the string denoting the title field in the database.
@@ -42,12 +44,21 @@ const (
 	FieldFileID = "file_id"
 	// FieldVisibility holds the string denoting the visibility field in the database.
 	FieldVisibility = "visibility"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
 	// EdgeFile holds the string denoting the file edge name in mutations.
 	EdgeFile = "file"
 	// Table holds the table name of the trustcenterdoc in the database.
 	Table = "trust_center_docs"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "trust_center_docs"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
 	TrustCenterTable = "trust_center_docs"
 	// TrustCenterInverseTable is the table name for the TrustCenter entity.
@@ -74,6 +85,7 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldOwnerID,
 	FieldTrustCenterID,
 	FieldTitle,
 	FieldCategory,
@@ -97,8 +109,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
-	Interceptors [3]ent.Interceptor
+	Hooks        [7]ent.Hook
+	Interceptors [5]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -108,6 +120,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
 	// TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
 	TrustCenterIDValidator func(string) error
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
@@ -168,6 +182,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
 // ByTrustCenterID orders the results by the trust_center_id field.
 func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
@@ -193,6 +212,13 @@ func ByVisibility(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVisibility, opts...).ToFunc()
 }
 
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByTrustCenterField orders the results by trust_center field.
 func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -205,6 +231,13 @@ func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
 	}
+}
+func newOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
 }
 func newTrustCenterStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

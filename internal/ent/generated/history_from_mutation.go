@@ -11041,6 +11041,10 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetTags(tags)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if trustCenterID, exists := m.TrustCenterID(); exists {
 		create = create.SetTrustCenterID(trustCenterID)
 	}
@@ -11134,6 +11138,12 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetTags(trustcenterdoc.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(trustcenterdoc.OwnerID)
+		}
+
 		if trustCenterID, exists := m.TrustCenterID(); exists {
 			create = create.SetTrustCenterID(trustCenterID)
 		} else {
@@ -11206,6 +11216,7 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDeletedAt(trustcenterdoc.DeletedAt).
 			SetDeletedBy(trustcenterdoc.DeletedBy).
 			SetTags(trustcenterdoc.Tags).
+			SetOwnerID(trustcenterdoc.OwnerID).
 			SetTrustCenterID(trustcenterdoc.TrustCenterID).
 			SetTitle(trustcenterdoc.Title).
 			SetCategory(trustcenterdoc.Category).

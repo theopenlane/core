@@ -64,6 +64,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -142,6 +143,7 @@ type OrganizationQuery struct {
 	withScans                              *ScanQuery
 	withSubprocessors                      *SubprocessorQuery
 	withExports                            *ExportQuery
+	withTrustCenterDocs                    *TrustCenterDocQuery
 	withMembers                            *OrgMembershipQuery
 	loadTotal                              []func(context.Context, []*Organization) error
 	modifiers                              []func(*sql.Selector)
@@ -208,6 +210,7 @@ type OrganizationQuery struct {
 	withNamedScans                         map[string]*ScanQuery
 	withNamedSubprocessors                 map[string]*SubprocessorQuery
 	withNamedExports                       map[string]*ExportQuery
+	withNamedTrustCenterDocs               map[string]*TrustCenterDocQuery
 	withNamedMembers                       map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -1895,6 +1898,31 @@ func (_q *OrganizationQuery) QueryExports() *ExportQuery {
 	return query
 }
 
+// QueryTrustCenterDocs chains the current query on the "trust_center_docs" edge.
+func (_q *OrganizationQuery) QueryTrustCenterDocs() *TrustCenterDocQuery {
+	query := (&TrustCenterDocClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(trustcenterdoc.Table, trustcenterdoc.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterDocsTable, organization.TrustCenterDocsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: _q.config}).Query()
@@ -2178,6 +2206,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withScans:                         _q.withScans.Clone(),
 		withSubprocessors:                 _q.withSubprocessors.Clone(),
 		withExports:                       _q.withExports.Clone(),
+		withTrustCenterDocs:               _q.withTrustCenterDocs.Clone(),
 		withMembers:                       _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -2912,6 +2941,17 @@ func (_q *OrganizationQuery) WithExports(opts ...func(*ExportQuery)) *Organizati
 	return _q
 }
 
+// WithTrustCenterDocs tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_docs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithTrustCenterDocs(opts ...func(*TrustCenterDocQuery)) *OrganizationQuery {
+	query := (&TrustCenterDocClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustCenterDocs = query
+	return _q
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -3007,7 +3047,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [67]bool{
+		loadedTypes = [68]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -3074,6 +3114,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withScans != nil,
 			_q.withSubprocessors != nil,
 			_q.withExports != nil,
+			_q.withTrustCenterDocs != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -3585,6 +3626,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withTrustCenterDocs; query != nil {
+		if err := _q.loadTrustCenterDocs(ctx, query, nodes,
+			func(n *Organization) { n.Edges.TrustCenterDocs = []*TrustCenterDoc{} },
+			func(n *Organization, e *TrustCenterDoc) { n.Edges.TrustCenterDocs = append(n.Edges.TrustCenterDocs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -4032,6 +4080,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadExports(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedExports(name) },
 			func(n *Organization, e *Export) { n.appendNamedExports(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTrustCenterDocs {
+		if err := _q.loadTrustCenterDocs(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedTrustCenterDocs(name) },
+			func(n *Organization, e *TrustCenterDoc) { n.appendNamedTrustCenterDocs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -6185,6 +6240,36 @@ func (_q *OrganizationQuery) loadExports(ctx context.Context, query *ExportQuery
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadTrustCenterDocs(ctx context.Context, query *TrustCenterDocQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *TrustCenterDoc)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(trustcenterdoc.FieldOwnerID)
+	}
+	query.Where(predicate.TrustCenterDoc(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.TrustCenterDocsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -7199,6 +7284,20 @@ func (_q *OrganizationQuery) WithNamedExports(name string, opts ...func(*ExportQ
 		_q.withNamedExports = make(map[string]*ExportQuery)
 	}
 	_q.withNamedExports[name] = query
+	return _q
+}
+
+// WithNamedTrustCenterDocs tells the query-builder to eager-load the nodes that are connected to the "trust_center_docs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedTrustCenterDocs(name string, opts ...func(*TrustCenterDocQuery)) *OrganizationQuery {
+	query := (&TrustCenterDocClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTrustCenterDocs == nil {
+		_q.withNamedTrustCenterDocs = make(map[string]*TrustCenterDocQuery)
+	}
+	_q.withNamedTrustCenterDocs[name] = query
 	return _q
 }
 

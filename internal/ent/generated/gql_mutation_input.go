@@ -6712,6 +6712,7 @@ type CreateOrganizationInput struct {
 	ScanIDs                         []string
 	SubprocessorIDs                 []string
 	ExportIDs                       []string
+	TrustCenterDocIDs               []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -6921,6 +6922,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ExportIDs; len(v) > 0 {
 		m.AddExportIDs(v...)
 	}
+	if v := i.TrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -7120,6 +7124,9 @@ type UpdateOrganizationInput struct {
 	ClearExports                          bool
 	AddExportIDs                          []string
 	RemoveExportIDs                       []string
+	ClearTrustCenterDocs                  bool
+	AddTrustCenterDocIDs                  []string
+	RemoveTrustCenterDocIDs               []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -7690,6 +7697,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveExportIDs; len(v) > 0 {
 		m.RemoveExportIDs(v...)
+	}
+	if i.ClearTrustCenterDocs {
+		m.ClearTrustCenterDocs()
+	}
+	if v := i.AddTrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
+	if v := i.RemoveTrustCenterDocIDs; len(v) > 0 {
+		m.RemoveTrustCenterDocIDs(v...)
 	}
 }
 
@@ -11527,6 +11543,7 @@ type CreateTrustCenterDocInput struct {
 	Title         string
 	Category      string
 	Visibility    *enums.TrustCenterDocumentVisibility
+	OwnerID       *string
 	TrustCenterID *string
 	FileID        *string
 }
@@ -11540,6 +11557,9 @@ func (i *CreateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	m.SetCategory(i.Category)
 	if v := i.Visibility; v != nil {
 		m.SetVisibility(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)

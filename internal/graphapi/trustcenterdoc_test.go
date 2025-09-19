@@ -53,6 +53,15 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
+		{
+			// Intentionally not implementing anonymous access to trust center docs at the moment.
+			// TODO(acookin): configure correct trust center document access
+			name:     "anonymous user cannot query trust center doc (yet)",
+			queryID:  trustCenterDoc.ID,
+			client:   suite.client.api,
+			ctx:      createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
+			errorMsg: couldNotFindUser,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -304,6 +313,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 		ctx             context.Context
 		expectedResults int64
 		where           *testclient.TrustCenterDocWhereInput
+		errorMsg        string
 	}{
 		{
 			name:            "return all for user1",
@@ -362,11 +372,25 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 			},
 			expectedResults: 0,
 		},
+		{
+			name:   "anonymous user cannot query trust center docs (yet)",
+			client: suite.client.api,
+			ctx:    createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID),
+			where: &testclient.TrustCenterDocWhereInput{
+				Title: &trustCenterDoc1.Title,
+			},
+			errorMsg: couldNotFindUser,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetTrustCenterDocs(tc.ctx, nil, nil, tc.where)
+
+			if tc.errorMsg != "" {
+				assert.ErrorContains(t, err, tc.errorMsg)
+				return
+			}
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
@@ -466,7 +490,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:             "trust center doc not found",
@@ -546,7 +570,7 @@ func TestMutationDeleteTrustCenterDoc(t *testing.T) {
 			idToDelete:  trustCenterDoc2.ID,
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "trust center doc not found",

@@ -3331,6 +3331,9 @@ func (_m *TrustCenterDocHistory) changes(new *TrustCenterDocHistory) []Change {
 	if !reflect.DeepEqual(_m.Tags, new.Tags) {
 		changes = append(changes, NewChange(trustcenterdochistory.FieldTags, _m.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(trustcenterdochistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(_m.TrustCenterID, new.TrustCenterID) {
 		changes = append(changes, NewChange(trustcenterdochistory.FieldTrustCenterID, _m.TrustCenterID, new.TrustCenterID))
 	}

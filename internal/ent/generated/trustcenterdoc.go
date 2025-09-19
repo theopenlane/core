@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/pkg/enums"
@@ -35,6 +36,8 @@ type TrustCenterDoc struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// ID of the trust center
 	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// title of the document
@@ -53,15 +56,28 @@ type TrustCenterDoc struct {
 
 // TrustCenterDocEdges holds the relations/edges for other nodes in the graph.
 type TrustCenterDocEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// the file containing the document content
 	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterDocEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
@@ -69,7 +85,7 @@ type TrustCenterDocEdges struct {
 func (e TrustCenterDocEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -80,7 +96,7 @@ func (e TrustCenterDocEdges) TrustCenterOrErr() (*TrustCenter, error) {
 func (e TrustCenterDocEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -93,7 +109,7 @@ func (*TrustCenterDoc) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcenterdoc.FieldTags:
 			values[i] = new([]byte)
-		case trustcenterdoc.FieldID, trustcenterdoc.FieldCreatedBy, trustcenterdoc.FieldUpdatedBy, trustcenterdoc.FieldDeletedBy, trustcenterdoc.FieldTrustCenterID, trustcenterdoc.FieldTitle, trustcenterdoc.FieldCategory, trustcenterdoc.FieldFileID, trustcenterdoc.FieldVisibility:
+		case trustcenterdoc.FieldID, trustcenterdoc.FieldCreatedBy, trustcenterdoc.FieldUpdatedBy, trustcenterdoc.FieldDeletedBy, trustcenterdoc.FieldOwnerID, trustcenterdoc.FieldTrustCenterID, trustcenterdoc.FieldTitle, trustcenterdoc.FieldCategory, trustcenterdoc.FieldFileID, trustcenterdoc.FieldVisibility:
 			values[i] = new(sql.NullString)
 		case trustcenterdoc.FieldCreatedAt, trustcenterdoc.FieldUpdatedAt, trustcenterdoc.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -162,6 +178,12 @@ func (_m *TrustCenterDoc) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case trustcenterdoc.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				_m.OwnerID = value.String
+			}
 		case trustcenterdoc.FieldTrustCenterID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
@@ -204,6 +226,11 @@ func (_m *TrustCenterDoc) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *TrustCenterDoc) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryOwner queries the "owner" edge of the TrustCenterDoc entity.
+func (_m *TrustCenterDoc) QueryOwner() *OrganizationQuery {
+	return NewTrustCenterDocClient(_m.config).QueryOwner(_m)
 }
 
 // QueryTrustCenter queries the "trust_center" edge of the TrustCenterDoc entity.
@@ -259,6 +286,9 @@ func (_m *TrustCenterDoc) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)

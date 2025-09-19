@@ -330,6 +330,9 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.OwnerIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldOwnerID, field.TypeString)
+	}
 	if value, ok := _u.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
 	}
@@ -704,6 +707,9 @@ func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.OwnerIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := _u.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
