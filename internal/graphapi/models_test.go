@@ -1443,13 +1443,13 @@ func (e *MappedControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.M
 		mutation.SetSource(e.Source)
 	}
 
-	// if e.InternalID != "" {
-	// 	mutation.SetInternalID(e.InternalID)
-	// }
+	if e.InternalID != "" {
+		mutation.SetSystemInternalID(e.InternalID)
+	}
 
-	// if e.InternalNotes != "" {
-	// 	mutation.SetInternalNotes(e.InternalNotes)
-	// }
+	if e.InternalNotes != "" {
+		mutation.SetInternalNotes(e.InternalNotes)
+	}
 
 	mappedControl, err := mutation.Save(ctx)
 	requireNoError(err)

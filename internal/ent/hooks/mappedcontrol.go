@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
 )
@@ -28,6 +29,9 @@ func HookMappedControl() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	},
-		hook.HasOp(ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate),
+		hook.And(
+			hook.HasFields(mappedcontrol.FieldSource),
+			hook.HasOp(ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate),
+		),
 	)
 }

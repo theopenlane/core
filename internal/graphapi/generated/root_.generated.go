@@ -58,7 +58,8 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
-	Hidden func(ctx context.Context, obj any, next graphql.Resolver, ifArg *bool) (res any, err error)
+	Hidden   func(ctx context.Context, obj any, next graphql.Resolver, ifArg *bool) (res any, err error)
+	ReadOnly func(ctx context.Context, obj any, next graphql.Resolver) (res any, err error)
 }
 
 type ComplexityRoot struct {
@@ -37130,7 +37131,8 @@ type CustomDomainBulkCreatePayload {
     """
     customDomains: [CustomDomain!]
 }`, BuiltIn: false},
-	{Name: "../schema/directives.graphql", Input: `directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
+	{Name: "../schema/directives.graphql", Input: `directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION 
+directive @readOnly on INPUT_FIELD_DEFINITION
 `, BuiltIn: false},
 	{Name: "../schema/dnsverification.graphql", Input: `extend type Query {
     """
@@ -37736,11 +37738,11 @@ type ActionPlan implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   due date of the action plan
   """
@@ -37994,11 +37996,11 @@ type ActionPlanHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   due date of the action plan
   """
@@ -38889,11 +38891,11 @@ type Asset implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the type of the asset, e.g. technology, domain, device, etc
   """
@@ -39170,11 +39172,11 @@ type AssetHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the type of the asset, e.g. technology, domain, device, etc
   """
@@ -40681,11 +40683,11 @@ type Control implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the unique reference code for the control
   """
@@ -41364,11 +41366,11 @@ type ControlHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the unique reference code for the control
   """
@@ -41914,11 +41916,11 @@ type ControlImplementation implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   status of the %s, e.g. draft, published, archived, etc.
   """
@@ -42191,11 +42193,11 @@ type ControlImplementationHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   status of the %s, e.g. draft, published, archived, etc.
   """
@@ -42824,11 +42826,11 @@ type ControlObjective implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the control objective
   """
@@ -43302,11 +43304,11 @@ type ControlObjectiveHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the control objective
   """
@@ -44751,11 +44753,11 @@ input CreateActionPlanInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   due date of the action plan
   """
@@ -44787,11 +44789,11 @@ input CreateAssetInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the type of the asset, e.g. technology, domain, device, etc
   """
@@ -44878,11 +44880,11 @@ input CreateControlImplementationInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   status of the %s, e.g. draft, published, archived, etc.
   """
@@ -44991,11 +44993,11 @@ input CreateControlInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the unique reference code for the control
   """
@@ -45037,11 +45039,11 @@ input CreateControlObjectiveInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the name of the control objective
   """
@@ -45096,11 +45098,11 @@ input CreateCustomDomainInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the name of the custom domain
   """
@@ -45183,11 +45185,11 @@ input CreateEntityInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the name of the entity
   """
@@ -45232,11 +45234,11 @@ input CreateEntityTypeInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the name of the entity
   """
@@ -45359,11 +45361,11 @@ input CreateFileInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the name of the file provided in the payload key without the extension
   """
@@ -45545,11 +45547,11 @@ input CreateHushInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the logical name of the corresponding hush secret or it's general grouping
   """
@@ -45604,11 +45606,11 @@ input CreateInternalPolicyInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the name of the policy
   """
@@ -45752,11 +45754,11 @@ input CreateJobRunnerInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the name of the runner
   """
@@ -45838,11 +45840,11 @@ input CreateJobTemplateInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the title of the job
   """
@@ -45900,11 +45902,11 @@ input CreateMappedControlInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
@@ -45941,11 +45943,11 @@ input CreateNarrativeInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the name of the narrative
   """
@@ -46298,11 +46300,11 @@ input CreateProcedureInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   This will contain the url used to create/update the procedure
   """
@@ -46568,11 +46570,11 @@ input CreateStandardInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the long name of the standard body
   """
@@ -46612,11 +46614,11 @@ input CreateStandardInput {
   """
   indicates if the standard should be made available to all users, only for system owned standards
   """
-  isPublic: Boolean
+  isPublic: Boolean @readOnly
   """
   indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
-  freeToUse: Boolean
+  freeToUse: Boolean @readOnly
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -46709,11 +46711,11 @@ input CreateSubcontrolInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the unique reference code for the control
   """
@@ -46745,11 +46747,11 @@ input CreateSubprocessorInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   name of the standard body
   """
@@ -46857,11 +46859,11 @@ input CreateTemplateInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   """
   the name of the template
   """
@@ -47109,11 +47111,11 @@ type CustomDomain implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the custom domain
   """
@@ -47184,11 +47186,11 @@ type CustomDomainHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the custom domain
   """
@@ -49117,11 +49119,11 @@ type Entity implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the entity
   """
@@ -49482,11 +49484,11 @@ type EntityHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the entity
   """
@@ -49871,11 +49873,11 @@ type EntityType implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the entity
   """
@@ -49967,11 +49969,11 @@ type EntityTypeHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the entity
   """
@@ -52762,11 +52764,11 @@ type File implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the file provided in the payload key without the extension
   """
@@ -53016,11 +53018,11 @@ type FileHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the file provided in the payload key without the extension
   """
@@ -56841,11 +56843,11 @@ type Hush implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the logical name of the corresponding hush secret or it's general grouping
   """
@@ -57020,11 +57022,11 @@ type HushHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the logical name of the corresponding hush secret or it's general grouping
   """
@@ -57665,11 +57667,11 @@ type Integration implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the integration
   """
@@ -57839,11 +57841,11 @@ type IntegrationHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the integration
   """
@@ -58429,11 +58431,11 @@ type InternalPolicy implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the policy
   """
@@ -58936,11 +58938,11 @@ type InternalPolicyHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the policy
   """
@@ -60603,11 +60605,11 @@ type JobRunner implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the runner
   """
@@ -61545,11 +61547,11 @@ type JobTemplate implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the title of the job
   """
@@ -61665,11 +61667,11 @@ type JobTemplateHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the title of the job
   """
@@ -62719,11 +62721,11 @@ type MappedControl implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the organization id that owns the object
   """
@@ -62982,11 +62984,11 @@ type MappedControlHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the organization id that owns the object
   """
@@ -63607,11 +63609,11 @@ type Narrative implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the narrative
   """
@@ -63901,11 +63903,11 @@ type NarrativeHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the narrative
   """
@@ -70512,11 +70514,11 @@ type Procedure implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   This will contain the most recent file id if this procedure was created from a file
   """
@@ -70957,11 +70959,11 @@ type ProcedureHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   This will contain the most recent file id if this procedure was created from a file
   """
@@ -80060,11 +80062,11 @@ type Standard implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the long name of the standard body
   """
@@ -80104,11 +80106,11 @@ type Standard implements Node {
   """
   indicates if the standard should be made available to all users, only for system owned standards
   """
-  isPublic: Boolean
+  isPublic: Boolean @hidden(if: true)
   """
   indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
-  freeToUse: Boolean
+  freeToUse: Boolean @hidden(if: true)
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -80239,11 +80241,11 @@ type StandardHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the long name of the standard body
   """
@@ -80283,11 +80285,11 @@ type StandardHistory implements Node {
   """
   indicates if the standard should be made available to all users, only for system owned standards
   """
-  isPublic: Boolean
+  isPublic: Boolean @hidden(if: true)
   """
   indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
-  freeToUse: Boolean
+  freeToUse: Boolean @hidden(if: true)
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -81250,11 +81252,11 @@ type Subcontrol implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the unique reference code for the control
   """
@@ -81747,11 +81749,11 @@ type SubcontrolHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the unique reference code for the control
   """
@@ -82776,11 +82778,11 @@ type Subprocessor implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   name of the standard body
   """
@@ -82916,11 +82918,11 @@ type SubprocessorHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   name of the standard body
   """
@@ -85171,11 +85173,11 @@ type Template implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the template
   """
@@ -85325,11 +85327,11 @@ type TemplateHistory implements Node {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
+  internalNotes: String @hidden(if: true)
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @hidden(if: true)
   """
   the name of the template
   """
@@ -88466,12 +88468,12 @@ input UpdateActionPlanInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   due date of the action plan
@@ -88518,12 +88520,12 @@ input UpdateAssetInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the type of the asset, e.g. technology, domain, device, etc
@@ -88644,12 +88646,12 @@ input UpdateControlImplementationInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   status of the %s, e.g. draft, published, archived, etc.
@@ -88796,12 +88798,12 @@ input UpdateControlInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the unique reference code for the control
@@ -88881,12 +88883,12 @@ input UpdateControlObjectiveInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the name of the control objective
@@ -88973,12 +88975,12 @@ input UpdateCustomDomainInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   ownerID: ID
   clearOwner: Boolean
@@ -89075,12 +89077,12 @@ input UpdateEntityInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the name of the entity
@@ -89154,12 +89156,12 @@ input UpdateEntityTypeInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the name of the entity
@@ -89333,12 +89335,12 @@ input UpdateFileInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the name of the file provided in the payload key without the extension
@@ -89642,12 +89644,12 @@ input UpdateHushInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the logical name of the corresponding hush secret or it's general grouping
@@ -89711,12 +89713,12 @@ input UpdateInternalPolicyInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the name of the policy
@@ -89896,12 +89898,12 @@ input UpdateJobRunnerInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the name of the runner
@@ -90004,12 +90006,12 @@ input UpdateJobTemplateInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the title of the job
@@ -90070,12 +90072,12 @@ input UpdateMappedControlInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
@@ -90131,12 +90133,12 @@ input UpdateNarrativeInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the name of the narrative
@@ -90645,12 +90647,12 @@ input UpdateProcedureInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   This will contain the url used to create/update the procedure
@@ -91032,12 +91034,12 @@ input UpdateStandardInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the long name of the standard body
@@ -91087,13 +91089,13 @@ input UpdateStandardInput {
   """
   indicates if the standard should be made available to all users, only for system owned standards
   """
-  isPublic: Boolean
-  clearIsPublic: Boolean
+  isPublic: Boolean @readOnly
+  clearIsPublic: Boolean @readOnly
   """
   indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
-  freeToUse: Boolean
-  clearFreeToUse: Boolean
+  freeToUse: Boolean @readOnly
+  clearFreeToUse: Boolean @readOnly
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -91214,12 +91216,12 @@ input UpdateSubcontrolInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the unique reference code for the control
@@ -91275,12 +91277,12 @@ input UpdateSubprocessorInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   name of the standard body
@@ -91443,12 +91445,12 @@ input UpdateTemplateInput {
   """
   internal notes about the object creation, this field is only available to system admins
   """
-  internalNotes: String
-  clearInternalNotes: Boolean
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
   """
   an internal identifier for the mapping, this field is only available to system admins
   """
-  systemInternalID: String
+  systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
   the name of the template

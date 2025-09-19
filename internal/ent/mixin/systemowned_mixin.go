@@ -2,7 +2,6 @@ package mixin
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
@@ -16,26 +15,19 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/internal/graphapi/directives"
 )
 
 // SystemOwnedMixin implements the revision pattern for schemas.
 type SystemOwnedMixin struct {
 	mixin.Schema
-
-	// AdditionalAdminOnlyFields can be set to add additional fields that are only
-	// available to system admins
-	AdditionalAdminOnlyFields []string
 }
 
 func NewSystemOwnedMixin(additionalFields ...string) SystemOwnedMixin {
-	return SystemOwnedMixin{
-		AdditionalAdminOnlyFields: additionalFields,
-	}
+	return SystemOwnedMixin{}
 }
 
 // Fields of the SystemOwnedMixin.
@@ -54,10 +46,16 @@ func (SystemOwnedMixin) Fields() []ent.Field {
 		field.String("internal_notes").
 			Optional().
 			Comment("internal notes about the object creation, this field is only available to system admins").
+			Annotations(
+				directives.HiddenDirectiveAnnotation,
+			).
 			Nillable(),
 		field.String("system_internal_id").
 			Optional().
 			Comment("an internal identifier for the mapping, this field is only available to system admins").
+			Annotations(
+				directives.HiddenDirectiveAnnotation,
+			).
 			Nillable(),
 	}
 }
@@ -69,16 +67,12 @@ func (d SystemOwnedMixin) Hooks() []ent.Hook {
 	}
 }
 
-func (SystemOwnedMixin) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the SystemOwnedMixin
 func (d SystemOwnedMixin) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.AllowMutationIfSystemAdmin(),
-			SystemOwnedSchema(d.AdditionalAdminOnlyFields...),
+			SystemOwnedSchema(),
 		},
 	}
 }
@@ -122,50 +116,22 @@ func HookSystemOwnedCreate() ent.Hook {
 	}, ent.OpCreate)
 }
 
-// InterceptorSystemFields handles returning internal only fields for system owned schemas
-func InterceptorSystemFields() ent.Interceptor {
-	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		admin, err := rule.CheckIsSystemAdminWithContext(ctx)
-		if err != nil {
-			return err
-		}
-
-		if admin {
-			return nil
-		}
-
-		// if not a system admin, do not return system owned fields
-		return nil
-	})
-}
-
+// SystemOwnedSchema is a privacy rule that checks if the object is system owned
+// and if the user is a system admin
+// For create operations, since the field is automatically set, we skip the check
+// For update operations, the rule checks if the existing object is system owned
+// and denys if it is and the user is not a system admin
 func SystemOwnedSchema(additionalFields ...string) privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m generated.Mutation) error {
+		// on create check continue, the field is automatically set based on user role
+		if m.Op() == ent.OpCreate {
+			return privacy.Skip
+		}
+
 		mut, ok := m.(SystemOwnedMutation)
 		if !ok || mut == nil {
 			return privacy.Skipf("not a system owned mutation")
 		}
-
-		systemOwned, _ := mut.SystemOwned()
-		internalID, _ := mut.SystemInternalID()
-		internalNotes, _ := mut.InternalNotes()
-
-		hasAdditionalAdminField := false
-		// check any additional fields that should be admin only
-		for _, field := range additionalFields {
-			value, ok := mut.Field(field)
-			if ok && value != nil && value != "" && value != false {
-				hasAdditionalAdminField = true
-				break
-			}
-
-			if mut.FieldCleared(field) {
-				hasAdditionalAdminField = true
-				break
-			}
-		}
-
-		hasAdminField := systemOwned || hasAdditionalAdminField || internalID != "" || internalNotes != ""
 
 		admin, err := rule.CheckIsSystemAdminWithContext(ctx)
 		if err != nil {
@@ -176,35 +142,26 @@ func SystemOwnedSchema(additionalFields ...string) privacy.MutationRuleFunc {
 			return privacy.Allow
 		}
 
-		// if the field was not in the mutation, check the database
-		if !hasAdminField {
-			switch m.Op() {
-			case ent.OpCreate:
-				// on create check if system owned is being set, if not continue
-				return privacy.Skipf("no system owned field set")
-			default:
-				// on update, update one, delete, delete one, always check
-				// to ensure the system owned field is set
-				ids, err := mut.IDs(ctx)
-				if err != nil {
-					return err
-				}
-
-				systemOwned, err = queryForSystemOwned(ctx, mut, ids)
-				if err != nil {
-					return err
-				}
-
-				if systemOwned {
-					return generated.ErrPermissionDenied
-				}
-			}
+		systemOwned, _ := mut.SystemOwned()
+		if systemOwned {
+			return generated.ErrPermissionDenied
 		}
 
-		if hasAdminField {
-			zerolog.Ctx(ctx).Debug().Msg("user attempted to set system owned field without being a system admin")
+		// if the field was not in the mutation, check the database
+		// on update, update one, delete, delete one, always check
+		// to ensure the system owned field is set
+		ids, err := mut.IDs(ctx)
+		if err != nil {
+			return err
+		}
 
-			return fmt.Errorf("%w: %w", hooks.ErrInvalidInput, rule.ErrAdminOnlyField)
+		systemOwned, err = queryForSystemOwned(ctx, mut, ids)
+		if err != nil {
+			return err
+		}
+
+		if systemOwned {
+			return generated.ErrPermissionDenied
 		}
 
 		return privacy.Skip

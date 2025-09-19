@@ -1,1 +1,2 @@
 directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
+directive @readOnly on INPUT_FIELD_DEFINITION

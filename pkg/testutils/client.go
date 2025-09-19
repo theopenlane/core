@@ -10,6 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/theopenlane/core/internal/graphapi"
+	"github.com/theopenlane/core/internal/graphapi/directives"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -138,9 +139,13 @@ func testGraphServer(c *ent.Client, u *objects.Objects) *handler.Server {
 	// add the pool to the resolver without a metrics collector
 	r.WithPool(100, false) //nolint:mnd
 
+	conf := gqlgenerated.Config{Resolvers: r}
+
+	directives.ImplementAllDirectives(&conf)
+
 	srv := handler.New(
 		gqlgenerated.NewExecutableSchema(
-			gqlgenerated.Config{Resolvers: r},
+			conf,
 		))
 
 	// add all the transports to the server

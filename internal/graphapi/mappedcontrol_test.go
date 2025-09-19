@@ -30,10 +30,6 @@ func TestQueryMappedControl(t *testing.T) {
 
 	systemMappedControl := (&MappedControlBuilder{client: suite.client, ToControlIDs: []string{systemToControl.ID}, FromControlIDs: []string{systemFromControl.ID}, Source: enums.MappingSourceSuggested}).MustNew(systemAdminUser.UserCtx, t)
 
-	if systemMappedControl == nil {
-		t.Fatal("expected systemMappedControl to be returned")
-	}
-
 	// add test cases for querying the mappedControl
 	testCases := []struct {
 		name     string
@@ -108,14 +104,14 @@ func TestQueryMappedControl(t *testing.T) {
 			toControls := resp.MappedControl.ToControls.Edges
 			assert.Check(t, is.Len(toControls, 1), "expected exactly one to control")
 
-			// // ensure internal only fields are not returned
-			// if tc.ctx == systemAdminUser.UserCtx {
-			// 	assert.Check(t, resp.MappedControl.SystemInternalID != nil)
-			// 	assert.Check(t, resp.MappedControl.InternalNotes != nil)
-			// } else {
-			// 	assert.Check(t, resp.MappedControl.SystemInternalID == nil)
-			// 	assert.Check(t, resp.MappedControl.InternalNotes == nil)
-			// }
+			// ensure internal only fields are not returned
+			if tc.ctx == systemAdminUser.UserCtx {
+				assert.Check(t, resp.MappedControl.SystemInternalID != nil)
+				assert.Check(t, resp.MappedControl.InternalNotes != nil)
+			} else {
+				assert.Check(t, resp.MappedControl.SystemInternalID == nil)
+				assert.Check(t, resp.MappedControl.InternalNotes == nil)
+			}
 		})
 	}
 

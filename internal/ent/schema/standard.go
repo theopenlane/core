@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/internal/graphapi/directives"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -104,10 +105,16 @@ func (Standard) Fields() []ent.Field {
 		field.Bool("is_public").
 			Optional().
 			Default(false).
+			Annotations(
+				directives.HiddenDirectiveAnnotation,
+			).
 			Comment("indicates if the standard should be made available to all users, only for system owned standards"),
 		field.Bool("free_to_use").
 			Optional().
 			Default(false).
+			Annotations(
+				directives.HiddenDirectiveAnnotation,
+			).
 			Comment("indicates if the standard is freely distributable under a trial license, only for system owned standards"),
 		field.String("standard_type").
 			Annotations(
@@ -135,15 +142,6 @@ func (s Standard) Edges() []ent.Edge {
 	}
 }
 
-var (
-	// additional fields to be treated as system owned fields
-	// in additional to the defaults in the system owned mixin
-	systemOwnedFields = []string{
-		"is_public",
-		"free_to_use",
-	}
-)
-
 // Mixin of the Standard
 func (s Standard) Mixin() []ent.Mixin {
 	return mixinConfig{
@@ -152,7 +150,7 @@ func (s Standard) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(s,
 				withAllowAnonymousTrustCenterAccess(true),
 			),
-			mixin.NewSystemOwnedMixin(systemOwnedFields...),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(s)
 }
