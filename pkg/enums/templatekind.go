@@ -13,7 +13,7 @@ var (
 	// TemplateKindQuestionnaire indicates the questionnaire.
 	TemplateKindQuestionnaire TemplateKind = "QUESTIONNAIRE"
 	// TemplateKindTrustCenterNda indicates the trust center NDA.
-	TemplateKindTrustCenterNda TemplateKind = "TrustCenterNda"
+	TemplateKindTrustCenterNda TemplateKind = "TRUSTCENTER_NDA"
 	// TemplateKindInvalid is used when an unknown or unsupported value is provided.
 	TemplateKindInvalid TemplateKind = "TEMPLATEKIND_INVALID"
 )

@@ -3343,6 +3343,9 @@ func (_m *TemplateHistory) changes(new *TemplateHistory) []Change {
 	if !reflect.DeepEqual(_m.Uischema, new.Uischema) {
 		changes = append(changes, NewChange(templatehistory.FieldUischema, _m.Uischema, new.Uischema))
 	}
+	if !reflect.DeepEqual(_m.TrustCenterID, new.TrustCenterID) {
+		changes = append(changes, NewChange(templatehistory.FieldTrustCenterID, _m.TrustCenterID, new.TrustCenterID))
+	}
 	return changes
 }
 

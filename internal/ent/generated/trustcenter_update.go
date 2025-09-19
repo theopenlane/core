@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
@@ -262,6 +263,21 @@ func (_u *TrustCenterUpdate) AddTrustCenterCompliances(v ...*TrustCenterComplian
 	return _u.AddTrustCenterComplianceIDs(ids...)
 }
 
+// AddTemplateIDs adds the "templates" edge to the Template entity by IDs.
+func (_u *TrustCenterUpdate) AddTemplateIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.AddTemplateIDs(ids...)
+	return _u
+}
+
+// AddTemplates adds the "templates" edges to the Template entity.
+func (_u *TrustCenterUpdate) AddTemplates(v ...*Template) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTemplateIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_u *TrustCenterUpdate) Mutation() *TrustCenterMutation {
 	return _u.mutation
@@ -346,6 +362,27 @@ func (_u *TrustCenterUpdate) RemoveTrustCenterCompliances(v ...*TrustCenterCompl
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterComplianceIDs(ids...)
+}
+
+// ClearTemplates clears all "templates" edges to the Template entity.
+func (_u *TrustCenterUpdate) ClearTemplates() *TrustCenterUpdate {
+	_u.mutation.ClearTemplates()
+	return _u
+}
+
+// RemoveTemplateIDs removes the "templates" edge to Template entities by IDs.
+func (_u *TrustCenterUpdate) RemoveTemplateIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.RemoveTemplateIDs(ids...)
+	return _u
+}
+
+// RemoveTemplates removes "templates" edges to Template entities.
+func (_u *TrustCenterUpdate) RemoveTemplates(v ...*Template) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTemplateIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -707,6 +744,54 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TemplatesTable,
+			Columns: []string{trustcenter.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Template
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !_u.mutation.TemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TemplatesTable,
+			Columns: []string{trustcenter.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TemplatesTable,
+			Columns: []string{trustcenter.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenter
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -955,6 +1040,21 @@ func (_u *TrustCenterUpdateOne) AddTrustCenterCompliances(v ...*TrustCenterCompl
 	return _u.AddTrustCenterComplianceIDs(ids...)
 }
 
+// AddTemplateIDs adds the "templates" edge to the Template entity by IDs.
+func (_u *TrustCenterUpdateOne) AddTemplateIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.AddTemplateIDs(ids...)
+	return _u
+}
+
+// AddTemplates adds the "templates" edges to the Template entity.
+func (_u *TrustCenterUpdateOne) AddTemplates(v ...*Template) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTemplateIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_u *TrustCenterUpdateOne) Mutation() *TrustCenterMutation {
 	return _u.mutation
@@ -1039,6 +1139,27 @@ func (_u *TrustCenterUpdateOne) RemoveTrustCenterCompliances(v ...*TrustCenterCo
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterComplianceIDs(ids...)
+}
+
+// ClearTemplates clears all "templates" edges to the Template entity.
+func (_u *TrustCenterUpdateOne) ClearTemplates() *TrustCenterUpdateOne {
+	_u.mutation.ClearTemplates()
+	return _u
+}
+
+// RemoveTemplateIDs removes the "templates" edge to Template entities by IDs.
+func (_u *TrustCenterUpdateOne) RemoveTemplateIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.RemoveTemplateIDs(ids...)
+	return _u
+}
+
+// RemoveTemplates removes "templates" edges to Template entities.
+func (_u *TrustCenterUpdateOne) RemoveTemplates(v ...*Template) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTemplateIDs(ids...)
 }
 
 // Where appends a list predicates to the TrustCenterUpdate builder.
@@ -1425,6 +1546,54 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TemplatesTable,
+			Columns: []string{trustcenter.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Template
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !_u.mutation.TemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TemplatesTable,
+			Columns: []string{trustcenter.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TemplatesTable,
+			Columns: []string{trustcenter.TemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

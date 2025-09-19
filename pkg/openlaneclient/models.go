@@ -6094,10 +6094,11 @@ type CreateTemplateInput struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema    map[string]any `json:"uischema,omitempty"`
-	OwnerID     *string        `json:"ownerID,omitempty"`
-	DocumentIDs []string       `json:"documentIDs,omitempty"`
-	FileIDs     []string       `json:"fileIDs,omitempty"`
+	Uischema       map[string]any `json:"uischema,omitempty"`
+	OwnerID        *string        `json:"ownerID,omitempty"`
+	DocumentIDs    []string       `json:"documentIDs,omitempty"`
+	FileIDs        []string       `json:"fileIDs,omitempty"`
+	TrustCenterIDs []string       `json:"trustCenterIDs,omitempty"`
 }
 
 // CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -27629,7 +27630,7 @@ type Template struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
@@ -27648,10 +27649,11 @@ type Template struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema  map[string]any          `json:"uischema,omitempty"`
-	Owner     *Organization           `json:"owner,omitempty"`
-	Documents *DocumentDataConnection `json:"documents"`
-	Files     *FileConnection         `json:"files"`
+	Uischema     map[string]any          `json:"uischema,omitempty"`
+	Owner        *Organization           `json:"owner,omitempty"`
+	Documents    *DocumentDataConnection `json:"documents"`
+	Files        *FileConnection         `json:"files"`
+	TrustCenters *TrustCenterConnection  `json:"trustCenters"`
 }
 
 func (Template) IsNode() {}
@@ -27703,7 +27705,7 @@ type TemplateHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
@@ -28140,6 +28142,9 @@ type TemplateWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// trust_centers edge predicates
+	HasTrustCenters     *bool                    `json:"hasTrustCenters,omitempty"`
+	HasTrustCentersWith []*TrustCenterWhereInput `json:"hasTrustCentersWith,omitempty"`
 }
 
 type TrustCenter struct {
@@ -32914,16 +32919,17 @@ type UpdateTemplateInput struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
-	Uischema          map[string]any `json:"uischema,omitempty"`
-	ClearUischema     *bool          `json:"clearUischema,omitempty"`
-	OwnerID           *string        `json:"ownerID,omitempty"`
-	ClearOwner        *bool          `json:"clearOwner,omitempty"`
-	AddDocumentIDs    []string       `json:"addDocumentIDs,omitempty"`
-	RemoveDocumentIDs []string       `json:"removeDocumentIDs,omitempty"`
-	ClearDocuments    *bool          `json:"clearDocuments,omitempty"`
-	AddFileIDs        []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs     []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles        *bool          `json:"clearFiles,omitempty"`
+	Uischema             map[string]any `json:"uischema,omitempty"`
+	ClearUischema        *bool          `json:"clearUischema,omitempty"`
+	AddDocumentIDs       []string       `json:"addDocumentIDs,omitempty"`
+	RemoveDocumentIDs    []string       `json:"removeDocumentIDs,omitempty"`
+	ClearDocuments       *bool          `json:"clearDocuments,omitempty"`
+	AddFileIDs           []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs        []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles           *bool          `json:"clearFiles,omitempty"`
+	AddTrustCenterIDs    []string       `json:"addTrustCenterIDs,omitempty"`
+	RemoveTrustCenterIDs []string       `json:"removeTrustCenterIDs,omitempty"`
+	ClearTrustCenters    *bool          `json:"clearTrustCenters,omitempty"`
 }
 
 // UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.

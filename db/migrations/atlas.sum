@@ -52,4 +52,8 @@ h1:2rSOL3zKy9GXtkOU3oAFcguIREPUAdqG3mkmd2Xg9bA=
 20250915193341_identity_provider_auth_tested.sql h1:8wS4GAEXFi80tdbE7ReFKg+ikgR8e+hAv/4V8e294yU=
 20250917191805_init_tc_doc_schema.sql h1:Cda7YHshi36cu9Qma0IT6WSRaXMvESfx4LUgvDm4V1c=
 20250918231517_trustcenterdoc_schema.sql h1:5DYkI8IFFreytJAT6WpIxvsKrfreLh+bEwMRjxoxIBY=
+<<<<<<< HEAD
 20250919172311_system_owned.sql h1:YrWz2EMkPzGoPy086VATJ0T4m5GEAlU7JTmGOe+tfJI=
+=======
+20250919190235_trustcenterdoc_schema.sql h1:Hbg9tVCK7XQeavhNkCIrjA4MeVaObXEhtJfiU8mwN40=
+>>>>>>> 1a2b30cf (prep Templates to support trust center NDA templates)

@@ -262,6 +262,20 @@ func (_c *TemplateHistoryCreate) SetUischema(v map[string]interface{}) *Template
 	return _c
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *TemplateHistoryCreate) SetTrustCenterID(v string) *TemplateHistoryCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableTrustCenterID(v *string) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TemplateHistoryCreate) SetID(v string) *TemplateHistoryCreate {
 	_c.mutation.SetID(v)
@@ -507,6 +521,10 @@ func (_c *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.Uischema(); ok {
 		_spec.SetField(templatehistory.FieldUischema, field.TypeJSON, value)
 		_node.Uischema = value
+	}
+	if value, ok := _c.mutation.TrustCenterID(); ok {
+		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
 	}
 	return _node, _spec
 }

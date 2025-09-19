@@ -1079,6 +1079,13 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).Template.Query().Where((template.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if templateCount, err := FromContext(ctx).Template.Delete().Where(template.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", templateCount).Msg("deleting template")
+			return err
+		}
+	}
+
 	return nil
 }
 
