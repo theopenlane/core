@@ -7068,6 +7068,27 @@ func (_m *Template) Files(
 	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Template) TrustCenters(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterOrder, where *TrustCenterWhereInput,
+) (*TrustCenterConnection, error) {
+	opts := []TrustCenterPaginateOption{
+		WithTrustCenterOrder(orderBy),
+		WithTrustCenterFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
+	if nodes, err := _m.NamedTrustCenters(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterConnection{Edges: []*TrustCenterEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTrustCenters().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *TrustCenter) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

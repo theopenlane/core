@@ -62,6 +62,8 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_TrustCenterDoc_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
 			case "title":
@@ -72,6 +74,8 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
+			case "owner":
+				return ec.fieldContext_TrustCenterDoc_owner(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "file":
@@ -117,6 +121,8 @@ func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_TrustCenterDoc_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
 			case "title":
@@ -127,6 +133,8 @@ func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
+			case "owner":
+				return ec.fieldContext_TrustCenterDoc_owner(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "file":
@@ -199,6 +207,8 @@ func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_TrustCenterDoc_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
 			case "title":
@@ -209,6 +219,8 @@ func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
+			case "owner":
+				return ec.fieldContext_TrustCenterDoc_owner(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "file":

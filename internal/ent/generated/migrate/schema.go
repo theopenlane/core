@@ -4619,6 +4619,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "template_trust_centers", Type: field.TypeString, Nullable: true},
 		{Name: "custom_domain_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCentersTable holds the schema information for the "trust_centers" table.
@@ -4634,8 +4635,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_centers_custom_domains_custom_domain",
+				Symbol:     "trust_centers_templates_trust_centers",
 				Columns:    []*schema.Column{TrustCentersColumns[10]},
+				RefColumns: []*schema.Column{TemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_centers_custom_domains_custom_domain",
+				Columns:    []*schema.Column{TrustCentersColumns[11]},
 				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8507,7 +8514,8 @@ func init() {
 		Table: "template_history",
 	}
 	TrustCentersTable.ForeignKeys[0].RefTable = OrganizationsTable
-	TrustCentersTable.ForeignKeys[1].RefTable = CustomDomainsTable
+	TrustCentersTable.ForeignKeys[1].RefTable = TemplatesTable
+	TrustCentersTable.ForeignKeys[2].RefTable = CustomDomainsTable
 	TrustCenterCompliancesTable.ForeignKeys[0].RefTable = StandardsTable
 	TrustCenterCompliancesTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterComplianceHistoryTable.Annotation = &entsql.Annotation{

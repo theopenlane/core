@@ -8840,6 +8840,7 @@ input CreateTemplateInput {
   ownerID: ID
   documentIDs: [ID!]
   fileIDs: [ID!]
+  trustCenterIDs: [ID!]
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -45718,7 +45719,7 @@ type Template implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -45808,6 +45809,37 @@ type Template implements Node {
     """
     where: FileWhereInput
   ): FileConnection!
+  trustCenters(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenters returned from the connection.
+    """
+    orderBy: [TrustCenterOrder!]
+
+    """
+    Filtering options for TrustCenters returned from the connection.
+    """
+    where: TrustCenterWhereInput
+  ): TrustCenterConnection!
 }
 """
 A connection to a list of items.
@@ -45860,7 +45892,7 @@ type TemplateHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -46346,6 +46378,11 @@ input TemplateWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  trust_centers edge predicates
+  """
+  hasTrustCenters: Boolean
+  hasTrustCentersWith: [TrustCenterWhereInput!]
 }
 """
 The builtin Time type
@@ -52376,14 +52413,15 @@ input UpdateTemplateInput {
   """
   uischema: Map
   clearUischema: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   addDocumentIDs: [ID!]
   removeDocumentIDs: [ID!]
   clearDocuments: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addTrustCenterIDs: [ID!]
+  removeTrustCenterIDs: [ID!]
+  clearTrustCenters: Boolean
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.

@@ -34,7 +34,7 @@ type Template struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the template
 	Name string `json:"name,omitempty"`
@@ -62,14 +62,17 @@ type TemplateEdges struct {
 	Documents []*DocumentData `json:"documents,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
+	// TrustCenters holds the value of the trust_centers edge.
+	TrustCenters []*TrustCenter `json:"trust_centers,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
-	namedDocuments map[string][]*DocumentData
-	namedFiles     map[string][]*File
+	namedDocuments    map[string][]*DocumentData
+	namedFiles        map[string][]*File
+	namedTrustCenters map[string][]*TrustCenter
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -99,6 +102,15 @@ func (e TemplateEdges) FilesOrErr() ([]*File, error) {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
+}
+
+// TrustCentersOrErr returns the TrustCenters value or an error if the edge
+// was not loaded in eager-loading.
+func (e TemplateEdges) TrustCentersOrErr() ([]*TrustCenter, error) {
+	if e.loadedTypes[3] {
+		return e.TrustCenters, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_centers"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -251,6 +263,11 @@ func (_m *Template) QueryFiles() *FileQuery {
 	return NewTemplateClient(_m.config).QueryFiles(_m)
 }
 
+// QueryTrustCenters queries the "trust_centers" edge of the Template entity.
+func (_m *Template) QueryTrustCenters() *TrustCenterQuery {
+	return NewTemplateClient(_m.config).QueryTrustCenters(_m)
+}
+
 // Update returns a builder for updating this Template.
 // Note that you need to call Template.Unwrap() before calling this method if this Template
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -364,6 +381,30 @@ func (_m *Template) appendNamedFiles(name string, edges ...*File) {
 		_m.Edges.namedFiles[name] = []*File{}
 	} else {
 		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedTrustCenters returns the TrustCenters named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Template) NamedTrustCenters(name string) ([]*TrustCenter, error) {
+	if _m.Edges.namedTrustCenters == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenters[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Template) appendNamedTrustCenters(name string, edges ...*TrustCenter) {
+	if _m.Edges.namedTrustCenters == nil {
+		_m.Edges.namedTrustCenters = make(map[string][]*TrustCenter)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenters[name] = []*TrustCenter{}
+	} else {
+		_m.Edges.namedTrustCenters[name] = append(_m.Edges.namedTrustCenters[name], edges...)
 	}
 }
 

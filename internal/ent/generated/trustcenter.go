@@ -43,8 +43,9 @@ type TrustCenter struct {
 	CustomDomainID string `json:"custom_domain_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterQuery when eager-loading is set.
-	Edges        TrustCenterEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                  TrustCenterEdges `json:"edges"`
+	template_trust_centers *string
+	selectValues           sql.SelectValues
 }
 
 // TrustCenterEdges holds the relations/edges for other nodes in the graph.
@@ -143,6 +144,8 @@ func (*TrustCenter) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case trustcenter.FieldCreatedAt, trustcenter.FieldUpdatedAt, trustcenter.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case trustcenter.ForeignKeys[0]: // template_trust_centers
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -225,6 +228,13 @@ func (_m *TrustCenter) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field custom_domain_id", values[i])
 			} else if value.Valid {
 				_m.CustomDomainID = value.String
+			}
+		case trustcenter.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field template_trust_centers", values[i])
+			} else if value.Valid {
+				_m.template_trust_centers = new(string)
+				*_m.template_trust_centers = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

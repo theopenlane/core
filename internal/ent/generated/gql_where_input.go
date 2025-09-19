@@ -77148,6 +77148,10 @@ type TemplateWhereInput struct {
 	// "files" edge predicates.
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+
+	// "trust_centers" edge predicates.
+	HasTrustCenters     *bool                    `json:"hasTrustCenters,omitempty"`
+	HasTrustCentersWith []*TrustCenterWhereInput `json:"hasTrustCentersWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -77614,6 +77618,24 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, template.HasFilesWith(with...))
+	}
+	if i.HasTrustCenters != nil {
+		p := template.HasTrustCenters()
+		if !*i.HasTrustCenters {
+			p = template.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCentersWith) > 0 {
+		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCentersWith))
+		for _, w := range i.HasTrustCentersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCentersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, template.HasTrustCentersWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

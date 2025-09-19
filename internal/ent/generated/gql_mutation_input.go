@@ -11185,16 +11185,17 @@ func (c *TaskUpdateOne) SetInput(i UpdateTaskInput) *TaskUpdateOne {
 
 // CreateTemplateInput represents a mutation input for creating templates.
 type CreateTemplateInput struct {
-	Tags         []string
-	Name         string
-	TemplateType *enums.DocumentType
-	Description  *string
-	Kind         *enums.TemplateKind
-	Jsonconfig   map[string]interface{}
-	Uischema     map[string]interface{}
-	OwnerID      *string
-	DocumentIDs  []string
-	FileIDs      []string
+	Tags           []string
+	Name           string
+	TemplateType   *enums.DocumentType
+	Description    *string
+	Kind           *enums.TemplateKind
+	Jsonconfig     map[string]interface{}
+	Uischema       map[string]interface{}
+	OwnerID        *string
+	DocumentIDs    []string
+	FileIDs        []string
+	TrustCenterIDs []string
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
@@ -11227,6 +11228,9 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.TrustCenterIDs; len(v) > 0 {
+		m.AddTrustCenterIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTemplateInput on the TemplateCreate builder.
@@ -11237,26 +11241,27 @@ func (c *TemplateCreate) SetInput(i CreateTemplateInput) *TemplateCreate {
 
 // UpdateTemplateInput represents a mutation input for updating templates.
 type UpdateTemplateInput struct {
-	ClearTags         bool
-	Tags              []string
-	AppendTags        []string
-	Name              *string
-	TemplateType      *enums.DocumentType
-	ClearDescription  bool
-	Description       *string
-	ClearKind         bool
-	Kind              *enums.TemplateKind
-	Jsonconfig        map[string]interface{}
-	ClearUischema     bool
-	Uischema          map[string]interface{}
-	ClearOwner        bool
-	OwnerID           *string
-	ClearDocuments    bool
-	AddDocumentIDs    []string
-	RemoveDocumentIDs []string
-	ClearFiles        bool
-	AddFileIDs        []string
-	RemoveFileIDs     []string
+	ClearTags            bool
+	Tags                 []string
+	AppendTags           []string
+	Name                 *string
+	TemplateType         *enums.DocumentType
+	ClearDescription     bool
+	Description          *string
+	ClearKind            bool
+	Kind                 *enums.TemplateKind
+	Jsonconfig           map[string]interface{}
+	ClearUischema        bool
+	Uischema             map[string]interface{}
+	ClearDocuments       bool
+	AddDocumentIDs       []string
+	RemoveDocumentIDs    []string
+	ClearFiles           bool
+	AddFileIDs           []string
+	RemoveFileIDs        []string
+	ClearTrustCenters    bool
+	AddTrustCenterIDs    []string
+	RemoveTrustCenterIDs []string
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -11297,12 +11302,6 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
 	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
 	if i.ClearDocuments {
 		m.ClearDocuments()
 	}
@@ -11320,6 +11319,15 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearTrustCenters {
+		m.ClearTrustCenters()
+	}
+	if v := i.AddTrustCenterIDs; len(v) > 0 {
+		m.AddTrustCenterIDs(v...)
+	}
+	if v := i.RemoveTrustCenterIDs; len(v) > 0 {
+		m.RemoveTrustCenterIDs(v...)
 	}
 }
 

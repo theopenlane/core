@@ -8512,6 +8512,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"trust_centers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.TrustCentersTable,
+			Columns: []string{template.TrustCentersColumn},
+			Bidi:    false,
+		},
+		"Template",
+		"TrustCenter",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -26847,6 +26859,20 @@ func (f *TemplateFilter) WhereHasFiles() {
 // WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
 func (f *TemplateFilter) WhereHasFilesWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenters applies a predicate to check if query has an edge trust_centers.
+func (f *TemplateFilter) WhereHasTrustCenters() {
+	f.Where(entql.HasEdge("trust_centers"))
+}
+
+// WhereHasTrustCentersWith applies a predicate to check if query has an edge trust_centers with a given conditions (other predicates).
+func (f *TemplateFilter) WhereHasTrustCentersWith(preds ...predicate.TrustCenter) {
+	f.Where(entql.HasEdgeWith("trust_centers", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
