@@ -129,6 +129,48 @@ func (_c *ControlImplementationCreate) SetNillableOwnerID(v *string) *ControlImp
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ControlImplementationCreate) SetSystemOwned(v bool) *ControlImplementationCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ControlImplementationCreate) SetNillableSystemOwned(v *bool) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ControlImplementationCreate) SetInternalNotes(v string) *ControlImplementationCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ControlImplementationCreate) SetNillableInternalNotes(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ControlImplementationCreate) SetSystemInternalID(v string) *ControlImplementationCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ControlImplementationCreate) SetNillableSystemInternalID(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetStatus sets the "status" field.
 func (_c *ControlImplementationCreate) SetStatus(v enums.DocumentStatus) *ControlImplementationCreate {
 	_c.mutation.SetStatus(v)
@@ -363,6 +405,10 @@ func (_c *ControlImplementationCreate) defaults() error {
 		v := controlimplementation.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := controlimplementation.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := controlimplementation.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -452,6 +498,18 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(controlimplementation.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(controlimplementation.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(controlimplementation.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(controlimplementation.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(controlimplementation.FieldStatus, field.TypeEnum, value)

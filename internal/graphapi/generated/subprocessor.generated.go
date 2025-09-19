@@ -66,6 +66,10 @@ func (ec *executionContext) fieldContext_SubprocessorBulkCreatePayload_subproces
 				return ec.fieldContext_Subprocessor_ownerID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Subprocessor_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Subprocessor_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Subprocessor_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Subprocessor_name(ctx, field)
 			case "description":
@@ -127,6 +131,10 @@ func (ec *executionContext) fieldContext_SubprocessorCreatePayload_subprocessor(
 				return ec.fieldContext_Subprocessor_ownerID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Subprocessor_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Subprocessor_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Subprocessor_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Subprocessor_name(ctx, field)
 			case "description":
@@ -215,6 +223,10 @@ func (ec *executionContext) fieldContext_SubprocessorUpdatePayload_subprocessor(
 				return ec.fieldContext_Subprocessor_ownerID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Subprocessor_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Subprocessor_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Subprocessor_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Subprocessor_name(ctx, field)
 			case "description":

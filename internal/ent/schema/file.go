@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -133,6 +134,7 @@ func (f File) Mixin() []ent.Mixin {
 					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{}, TrustCenterDoc{}), // used to create parent tuples for the file
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 			),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(f)
 }

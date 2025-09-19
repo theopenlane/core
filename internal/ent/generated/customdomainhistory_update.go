@@ -142,6 +142,46 @@ func (_u *CustomDomainHistoryUpdate) ClearOwnerID() *CustomDomainHistoryUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *CustomDomainHistoryUpdate) SetInternalNotes(v string) *CustomDomainHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *CustomDomainHistoryUpdate) SetNillableInternalNotes(v *string) *CustomDomainHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *CustomDomainHistoryUpdate) ClearInternalNotes() *CustomDomainHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *CustomDomainHistoryUpdate) SetSystemInternalID(v string) *CustomDomainHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *CustomDomainHistoryUpdate) SetNillableSystemInternalID(v *string) *CustomDomainHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *CustomDomainHistoryUpdate) ClearSystemInternalID() *CustomDomainHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetDNSVerificationID sets the "dns_verification_id" field.
 func (_u *CustomDomainHistoryUpdate) SetDNSVerificationID(v string) *CustomDomainHistoryUpdate {
 	_u.mutation.SetDNSVerificationID(v)
@@ -273,6 +313,21 @@ func (_u *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(customdomainhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(customdomainhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(customdomainhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(customdomainhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(customdomainhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.DNSVerificationID(); ok {
 		_spec.SetField(customdomainhistory.FieldDNSVerificationID, field.TypeString, value)
@@ -411,6 +466,46 @@ func (_u *CustomDomainHistoryUpdateOne) SetNillableOwnerID(v *string) *CustomDom
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *CustomDomainHistoryUpdateOne) ClearOwnerID() *CustomDomainHistoryUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *CustomDomainHistoryUpdateOne) SetInternalNotes(v string) *CustomDomainHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *CustomDomainHistoryUpdateOne) SetNillableInternalNotes(v *string) *CustomDomainHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *CustomDomainHistoryUpdateOne) ClearInternalNotes() *CustomDomainHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *CustomDomainHistoryUpdateOne) SetSystemInternalID(v string) *CustomDomainHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *CustomDomainHistoryUpdateOne) SetNillableSystemInternalID(v *string) *CustomDomainHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *CustomDomainHistoryUpdateOne) ClearSystemInternalID() *CustomDomainHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -575,6 +670,21 @@ func (_u *CustomDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Cus
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(customdomainhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(customdomainhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(customdomainhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(customdomainhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(customdomainhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.DNSVerificationID(); ok {
 		_spec.SetField(customdomainhistory.FieldDNSVerificationID, field.TypeString, value)

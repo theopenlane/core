@@ -146,6 +146,48 @@ func (_c *MappedControlHistoryCreate) SetTags(v []string) *MappedControlHistoryC
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *MappedControlHistoryCreate) SetSystemOwned(v bool) *MappedControlHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *MappedControlHistoryCreate) SetNillableSystemOwned(v *bool) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *MappedControlHistoryCreate) SetInternalNotes(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *MappedControlHistoryCreate) SetNillableInternalNotes(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *MappedControlHistoryCreate) SetSystemInternalID(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *MappedControlHistoryCreate) SetNillableSystemInternalID(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *MappedControlHistoryCreate) SetOwnerID(v string) *MappedControlHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -292,6 +334,10 @@ func (_c *MappedControlHistoryCreate) defaults() error {
 		v := mappedcontrolhistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := mappedcontrolhistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.MappingType(); !ok {
 		v := mappedcontrolhistory.DefaultMappingType
 		_c.mutation.SetMappingType(v)
@@ -411,6 +457,18 @@ func (_c *MappedControlHistoryCreate) createSpec() (*MappedControlHistory, *sqlg
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldOwnerID, field.TypeString, value)

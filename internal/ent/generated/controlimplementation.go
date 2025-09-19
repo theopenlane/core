@@ -36,6 +36,12 @@ type ControlImplementation struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// status of the %s, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
@@ -156,9 +162,9 @@ func (*ControlImplementation) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case controlimplementation.FieldTags:
 			values[i] = new([]byte)
-		case controlimplementation.FieldVerified:
+		case controlimplementation.FieldSystemOwned, controlimplementation.FieldVerified:
 			values[i] = new(sql.NullBool)
-		case controlimplementation.FieldID, controlimplementation.FieldCreatedBy, controlimplementation.FieldUpdatedBy, controlimplementation.FieldDeletedBy, controlimplementation.FieldOwnerID, controlimplementation.FieldStatus, controlimplementation.FieldDetails:
+		case controlimplementation.FieldID, controlimplementation.FieldCreatedBy, controlimplementation.FieldUpdatedBy, controlimplementation.FieldDeletedBy, controlimplementation.FieldOwnerID, controlimplementation.FieldInternalNotes, controlimplementation.FieldSystemInternalID, controlimplementation.FieldStatus, controlimplementation.FieldDetails:
 			values[i] = new(sql.NullString)
 		case controlimplementation.FieldCreatedAt, controlimplementation.FieldUpdatedAt, controlimplementation.FieldDeletedAt, controlimplementation.FieldImplementationDate, controlimplementation.FieldVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -236,6 +242,26 @@ func (_m *ControlImplementation) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case controlimplementation.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case controlimplementation.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case controlimplementation.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case controlimplementation.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -375,6 +401,19 @@ func (_m *ControlImplementation) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

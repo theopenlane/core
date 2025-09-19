@@ -175,6 +175,46 @@ func (_u *InternalPolicyUpdate) ClearOwnerID() *InternalPolicyUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *InternalPolicyUpdate) SetInternalNotes(v string) *InternalPolicyUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableInternalNotes(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *InternalPolicyUpdate) ClearInternalNotes() *InternalPolicyUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *InternalPolicyUpdate) SetSystemInternalID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableSystemInternalID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *InternalPolicyUpdate) ClearSystemInternalID() *InternalPolicyUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *InternalPolicyUpdate) SetName(v string) *InternalPolicyUpdate {
 	_u.mutation.SetName(v)
@@ -1093,6 +1133,21 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(internalpolicy.FieldRevision, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(internalpolicy.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(internalpolicy.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(internalpolicy.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(internalpolicy.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(internalpolicy.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(internalpolicy.FieldName, field.TypeString, value)
@@ -2014,6 +2069,46 @@ func (_u *InternalPolicyUpdateOne) SetNillableOwnerID(v *string) *InternalPolicy
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *InternalPolicyUpdateOne) ClearOwnerID() *InternalPolicyUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *InternalPolicyUpdateOne) SetInternalNotes(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableInternalNotes(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *InternalPolicyUpdateOne) ClearInternalNotes() *InternalPolicyUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *InternalPolicyUpdateOne) SetSystemInternalID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableSystemInternalID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *InternalPolicyUpdateOne) ClearSystemInternalID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -2965,6 +3060,21 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(internalpolicy.FieldRevision, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(internalpolicy.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(internalpolicy.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(internalpolicy.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(internalpolicy.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(internalpolicy.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(internalpolicy.FieldName, field.TypeString, value)

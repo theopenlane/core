@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -164,7 +163,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 	case ent.OpQueryIDs, ent.OpQueryFirstID:
 		ids, ok := v.([]string)
 		if !ok {
-			log.Error().Str("query_type", q.Type()).Msgf("failed to cast query results to expected slice %T", v)
+			zerolog.Ctx(ctx).Error().Str("query_type", q.Type()).Msgf("failed to cast query results to expected slice %T", v)
 
 			return nil, ErrRetrievingObjects
 		}
@@ -230,7 +229,7 @@ func filterIDList(ctx context.Context, ids []string, objectType string) ([]strin
 func singleIDCheck(ctx context.Context, v ent.Value, objectType string) (bool, error) {
 	id, ok := v.(string)
 	if !ok {
-		log.Error().Msgf("failed to cast query results to expected single ID %T", v)
+		zerolog.Ctx(ctx).Error().Msgf("failed to cast query results to expected single ID %T", v)
 
 		return false, ErrRetrievingObjects
 	}

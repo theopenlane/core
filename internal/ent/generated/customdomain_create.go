@@ -127,6 +127,48 @@ func (_c *CustomDomainCreate) SetNillableOwnerID(v *string) *CustomDomainCreate 
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *CustomDomainCreate) SetSystemOwned(v bool) *CustomDomainCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *CustomDomainCreate) SetNillableSystemOwned(v *bool) *CustomDomainCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *CustomDomainCreate) SetInternalNotes(v string) *CustomDomainCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *CustomDomainCreate) SetNillableInternalNotes(v *string) *CustomDomainCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *CustomDomainCreate) SetSystemInternalID(v string) *CustomDomainCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *CustomDomainCreate) SetNillableSystemInternalID(v *string) *CustomDomainCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetCnameRecord sets the "cname_record" field.
 func (_c *CustomDomainCreate) SetCnameRecord(v string) *CustomDomainCreate {
 	_c.mutation.SetCnameRecord(v)
@@ -237,6 +279,10 @@ func (_c *CustomDomainCreate) defaults() error {
 		v := customdomain.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := customdomain.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if customdomain.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized customdomain.DefaultID (forgotten import generated/runtime?)")
@@ -331,6 +377,18 @@ func (_c *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(customdomain.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(customdomain.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(customdomain.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(customdomain.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.CnameRecord(); ok {
 		_spec.SetField(customdomain.FieldCnameRecord, field.TypeString, value)

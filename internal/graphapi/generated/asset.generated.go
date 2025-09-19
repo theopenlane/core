@@ -64,6 +64,12 @@ func (ec *executionContext) fieldContext_AssetBulkCreatePayload_assets(_ context
 				return ec.fieldContext_Asset_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Asset_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Asset_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Asset_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Asset_systemInternalID(ctx, field)
 			case "assetType":
 				return ec.fieldContext_Asset_assetType(ctx, field)
 			case "name":
@@ -135,6 +141,12 @@ func (ec *executionContext) fieldContext_AssetCreatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Asset_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Asset_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Asset_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Asset_systemInternalID(ctx, field)
 			case "assetType":
 				return ec.fieldContext_Asset_assetType(ctx, field)
 			case "name":
@@ -233,6 +245,12 @@ func (ec *executionContext) fieldContext_AssetUpdatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Asset_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Asset_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Asset_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Asset_systemInternalID(ctx, field)
 			case "assetType":
 				return ec.fieldContext_Asset_assetType(ctx, field)
 			case "name":

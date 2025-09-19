@@ -128,6 +128,46 @@ func (_u *HushUpdate) ClearOwnerID() *HushUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *HushUpdate) SetInternalNotes(v string) *HushUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *HushUpdate) SetNillableInternalNotes(v *string) *HushUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *HushUpdate) ClearInternalNotes() *HushUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *HushUpdate) SetSystemInternalID(v string) *HushUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *HushUpdate) SetNillableSystemInternalID(v *string) *HushUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *HushUpdate) ClearSystemInternalID() *HushUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *HushUpdate) SetName(v string) *HushUpdate {
 	_u.mutation.SetName(v)
@@ -422,11 +462,6 @@ func (_u *HushUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *HushUpdate) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := hush.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Hush.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := hush.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Hush.name": %w`, err)}
@@ -482,6 +517,21 @@ func (_u *HushUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(hush.FieldDeletedBy, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(hush.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(hush.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(hush.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(hush.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(hush.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(hush.FieldName, field.TypeString, value)
@@ -819,6 +869,46 @@ func (_u *HushUpdateOne) ClearOwnerID() *HushUpdateOne {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *HushUpdateOne) SetInternalNotes(v string) *HushUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *HushUpdateOne) SetNillableInternalNotes(v *string) *HushUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *HushUpdateOne) ClearInternalNotes() *HushUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *HushUpdateOne) SetSystemInternalID(v string) *HushUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *HushUpdateOne) SetNillableSystemInternalID(v *string) *HushUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *HushUpdateOne) ClearSystemInternalID() *HushUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *HushUpdateOne) SetName(v string) *HushUpdateOne {
 	_u.mutation.SetName(v)
@@ -1126,11 +1216,6 @@ func (_u *HushUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *HushUpdateOne) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := hush.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Hush.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := hush.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Hush.name": %w`, err)}
@@ -1203,6 +1288,21 @@ func (_u *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) {
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(hush.FieldDeletedBy, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(hush.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(hush.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(hush.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(hush.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(hush.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(hush.FieldName, field.TypeString, value)

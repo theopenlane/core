@@ -188,6 +188,34 @@ func (_c *StandardHistoryCreate) SetNillableSystemOwned(v *bool) *StandardHistor
 	return _c
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *StandardHistoryCreate) SetInternalNotes(v string) *StandardHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *StandardHistoryCreate) SetNillableInternalNotes(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *StandardHistoryCreate) SetSystemInternalID(v string) *StandardHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *StandardHistoryCreate) SetNillableSystemInternalID(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *StandardHistoryCreate) SetName(v string) *StandardHistoryCreate {
 	_c.mutation.SetName(v)
@@ -568,6 +596,14 @@ func (_c *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(standardhistory.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(standardhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(standardhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(standardhistory.FieldName, field.TypeString, value)

@@ -138,6 +138,46 @@ func (_u *FileUpdate) ClearTags() *FileUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *FileUpdate) SetInternalNotes(v string) *FileUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableInternalNotes(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *FileUpdate) ClearInternalNotes() *FileUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *FileUpdate) SetSystemInternalID(v string) *FileUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableSystemInternalID(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *FileUpdate) ClearSystemInternalID() *FileUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_u *FileUpdate) SetProvidedFileName(v string) *FileUpdate {
 	_u.mutation.SetProvidedFileName(v)
@@ -1175,6 +1215,21 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(file.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(file.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(file.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(file.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(file.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(file.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
 	}
@@ -2159,6 +2214,46 @@ func (_u *FileUpdateOne) AppendTags(v []string) *FileUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *FileUpdateOne) ClearTags() *FileUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *FileUpdateOne) SetInternalNotes(v string) *FileUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableInternalNotes(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *FileUpdateOne) ClearInternalNotes() *FileUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *FileUpdateOne) SetSystemInternalID(v string) *FileUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableSystemInternalID(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *FileUpdateOne) ClearSystemInternalID() *FileUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -3228,6 +3323,21 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(file.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(file.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(file.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(file.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(file.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(file.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)

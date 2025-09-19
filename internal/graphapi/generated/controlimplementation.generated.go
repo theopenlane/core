@@ -64,6 +64,12 @@ func (ec *executionContext) fieldContext_ControlImplementationBulkCreatePayload_
 				return ec.fieldContext_ControlImplementation_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ControlImplementation_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ControlImplementation_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_ControlImplementation_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_ControlImplementation_systemInternalID(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlImplementation_status(ctx, field)
 			case "implementationDate":
@@ -131,6 +137,12 @@ func (ec *executionContext) fieldContext_ControlImplementationCreatePayload_cont
 				return ec.fieldContext_ControlImplementation_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ControlImplementation_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ControlImplementation_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_ControlImplementation_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_ControlImplementation_systemInternalID(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlImplementation_status(ctx, field)
 			case "implementationDate":
@@ -225,6 +237,12 @@ func (ec *executionContext) fieldContext_ControlImplementationUpdatePayload_cont
 				return ec.fieldContext_ControlImplementation_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ControlImplementation_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ControlImplementation_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_ControlImplementation_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_ControlImplementation_systemInternalID(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlImplementation_status(ctx, field)
 			case "implementationDate":

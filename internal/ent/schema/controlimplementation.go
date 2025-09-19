@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -86,6 +87,7 @@ func (c ControlImplementation) Mixin() []ent.Mixin {
 				withOrganizationOwner(true),
 			),
 			newGroupPermissionsMixin(),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(c)
 }

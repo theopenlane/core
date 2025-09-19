@@ -141,6 +141,34 @@ func (_c *SubprocessorCreate) SetNillableSystemOwned(v *bool) *SubprocessorCreat
 	return _c
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *SubprocessorCreate) SetInternalNotes(v string) *SubprocessorCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *SubprocessorCreate) SetNillableInternalNotes(v *string) *SubprocessorCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *SubprocessorCreate) SetSystemInternalID(v string) *SubprocessorCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *SubprocessorCreate) SetNillableSystemInternalID(v *string) *SubprocessorCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *SubprocessorCreate) SetName(v string) *SubprocessorCreate {
 	_c.mutation.SetName(v)
@@ -408,6 +436,14 @@ func (_c *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(subprocessor.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(subprocessor.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(subprocessor.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(subprocessor.FieldName, field.TypeString, value)

@@ -122,6 +122,46 @@ func (_u *FileHistoryUpdate) ClearTags() *FileHistoryUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *FileHistoryUpdate) SetInternalNotes(v string) *FileHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableInternalNotes(v *string) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *FileHistoryUpdate) ClearInternalNotes() *FileHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *FileHistoryUpdate) SetSystemInternalID(v string) *FileHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableSystemInternalID(v *string) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *FileHistoryUpdate) ClearSystemInternalID() *FileHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_u *FileHistoryUpdate) SetProvidedFileName(v string) *FileHistoryUpdate {
 	_u.mutation.SetProvidedFileName(v)
@@ -568,6 +608,21 @@ func (_u *FileHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(filehistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(filehistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(filehistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(filehistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(filehistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(filehistory.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)
 	}
@@ -784,6 +839,46 @@ func (_u *FileHistoryUpdateOne) AppendTags(v []string) *FileHistoryUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *FileHistoryUpdateOne) ClearTags() *FileHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *FileHistoryUpdateOne) SetInternalNotes(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableInternalNotes(v *string) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *FileHistoryUpdateOne) ClearInternalNotes() *FileHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *FileHistoryUpdateOne) SetSystemInternalID(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableSystemInternalID(v *string) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *FileHistoryUpdateOne) ClearSystemInternalID() *FileHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -1262,6 +1357,21 @@ func (_u *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(filehistory.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(filehistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(filehistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(filehistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(filehistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(filehistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)

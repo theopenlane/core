@@ -144,6 +144,46 @@ func (_u *EntityTypeUpdate) ClearOwnerID() *EntityTypeUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *EntityTypeUpdate) SetInternalNotes(v string) *EntityTypeUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *EntityTypeUpdate) SetNillableInternalNotes(v *string) *EntityTypeUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *EntityTypeUpdate) ClearInternalNotes() *EntityTypeUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *EntityTypeUpdate) SetSystemInternalID(v string) *EntityTypeUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *EntityTypeUpdate) SetNillableSystemInternalID(v *string) *EntityTypeUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *EntityTypeUpdate) ClearSystemInternalID() *EntityTypeUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *EntityTypeUpdate) SetName(v string) *EntityTypeUpdate {
 	_u.mutation.SetName(v)
@@ -254,11 +294,6 @@ func (_u *EntityTypeUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *EntityTypeUpdate) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := entitytype.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "EntityType.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := entitytype.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "EntityType.name": %w`, err)}
@@ -325,6 +360,21 @@ func (_u *EntityTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entitytype.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(entitytype.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(entitytype.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(entitytype.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(entitytype.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(entitytype.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entitytype.FieldName, field.TypeString, value)
@@ -542,6 +592,46 @@ func (_u *EntityTypeUpdateOne) ClearOwnerID() *EntityTypeUpdateOne {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *EntityTypeUpdateOne) SetInternalNotes(v string) *EntityTypeUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *EntityTypeUpdateOne) SetNillableInternalNotes(v *string) *EntityTypeUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *EntityTypeUpdateOne) ClearInternalNotes() *EntityTypeUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *EntityTypeUpdateOne) SetSystemInternalID(v string) *EntityTypeUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *EntityTypeUpdateOne) SetNillableSystemInternalID(v *string) *EntityTypeUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *EntityTypeUpdateOne) ClearSystemInternalID() *EntityTypeUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *EntityTypeUpdateOne) SetName(v string) *EntityTypeUpdateOne {
 	_u.mutation.SetName(v)
@@ -665,11 +755,6 @@ func (_u *EntityTypeUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *EntityTypeUpdateOne) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := entitytype.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "EntityType.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := entitytype.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "EntityType.name": %w`, err)}
@@ -753,6 +838,21 @@ func (_u *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType, 
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entitytype.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(entitytype.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(entitytype.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(entitytype.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(entitytype.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(entitytype.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entitytype.FieldName, field.TypeString, value)

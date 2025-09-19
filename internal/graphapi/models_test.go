@@ -278,6 +278,8 @@ type MappedControlBuilder struct {
 	Relation          string
 	Confidence        int
 	Source            enums.MappingSource
+	InternalID        string
+	InternalNotes     string
 }
 
 type EvidenceBuilder struct {
@@ -1391,6 +1393,16 @@ func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T
 
 // MustNew controlImplementation builder is used to create, without authz checks, controlImplementations in the database
 func (e *MappedControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.MappedControl {
+	if ctx == systemAdminUser.UserCtx {
+		if e.InternalID == "" {
+			e.InternalID = ulids.New().String()
+		}
+
+		if e.InternalNotes == "" {
+			e.InternalNotes = "Created by system admin user"
+		}
+	}
+
 	ctx = setContext(ctx, e.client.db)
 
 	if len(e.FromControlIDs) == 0 && len(e.FromSubcontrolIDs) == 0 {
@@ -1429,6 +1441,14 @@ func (e *MappedControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.M
 
 	if e.Source != "" {
 		mutation.SetSource(e.Source)
+	}
+
+	if e.InternalID != "" {
+		mutation.SetSystemInternalID(e.InternalID)
+	}
+
+	if e.InternalNotes != "" {
+		mutation.SetInternalNotes(e.InternalNotes)
 	}
 
 	mappedControl, err := mutation.Save(ctx)

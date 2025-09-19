@@ -154,6 +154,48 @@ func (_c *HushHistoryCreate) SetNillableOwnerID(v *string) *HushHistoryCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *HushHistoryCreate) SetSystemOwned(v bool) *HushHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *HushHistoryCreate) SetNillableSystemOwned(v *bool) *HushHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *HushHistoryCreate) SetInternalNotes(v string) *HushHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *HushHistoryCreate) SetNillableInternalNotes(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *HushHistoryCreate) SetSystemInternalID(v string) *HushHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *HushHistoryCreate) SetNillableSystemInternalID(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *HushHistoryCreate) SetName(v string) *HushHistoryCreate {
 	_c.mutation.SetName(v)
@@ -336,6 +378,10 @@ func (_c *HushHistoryCreate) defaults() error {
 		v := hushhistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := hushhistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if hushhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized hushhistory.DefaultID (forgotten import generated/runtime?)")
@@ -437,6 +483,18 @@ func (_c *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(hushhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(hushhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(hushhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(hushhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(hushhistory.FieldName, field.TypeString, value)

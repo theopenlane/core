@@ -56,7 +56,7 @@ mutation UpdateOrg {
   updateOrganizationSetting(
     id: "<orgSettingID>"
     input: {
-      identityProvider: GOOGLEWORKSPACE
+      identityProvider: GOOGLE_WORKSPACE
       identityProviderClientID: "<client-id>"
       identityProviderClientSecret: "<client-secret>"
       oidcDiscoveryEndpoint: "https://accounts.google.com"

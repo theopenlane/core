@@ -159,6 +159,48 @@ func (_c *CustomDomainHistoryCreate) SetNillableOwnerID(v *string) *CustomDomain
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *CustomDomainHistoryCreate) SetSystemOwned(v bool) *CustomDomainHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *CustomDomainHistoryCreate) SetNillableSystemOwned(v *bool) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *CustomDomainHistoryCreate) SetInternalNotes(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *CustomDomainHistoryCreate) SetNillableInternalNotes(v *string) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *CustomDomainHistoryCreate) SetSystemInternalID(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *CustomDomainHistoryCreate) SetNillableSystemInternalID(v *string) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetCnameRecord sets the "cname_record" field.
 func (_c *CustomDomainHistoryCreate) SetCnameRecord(v string) *CustomDomainHistoryCreate {
 	_c.mutation.SetCnameRecord(v)
@@ -260,6 +302,10 @@ func (_c *CustomDomainHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.Tags(); !ok {
 		v := customdomainhistory.DefaultTags
 		_c.mutation.SetTags(v)
+	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := customdomainhistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if customdomainhistory.DefaultID == nil {
@@ -369,6 +415,18 @@ func (_c *CustomDomainHistoryCreate) createSpec() (*CustomDomainHistory, *sqlgra
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(customdomainhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(customdomainhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(customdomainhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(customdomainhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.CnameRecord(); ok {
 		_spec.SetField(customdomainhistory.FieldCnameRecord, field.TypeString, value)

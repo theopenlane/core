@@ -165,6 +165,48 @@ func (_c *NarrativeHistoryCreate) SetNillableOwnerID(v *string) *NarrativeHistor
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *NarrativeHistoryCreate) SetSystemOwned(v bool) *NarrativeHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *NarrativeHistoryCreate) SetNillableSystemOwned(v *bool) *NarrativeHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *NarrativeHistoryCreate) SetInternalNotes(v string) *NarrativeHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *NarrativeHistoryCreate) SetNillableInternalNotes(v *string) *NarrativeHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *NarrativeHistoryCreate) SetSystemInternalID(v string) *NarrativeHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *NarrativeHistoryCreate) SetNillableSystemInternalID(v *string) *NarrativeHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *NarrativeHistoryCreate) SetName(v string) *NarrativeHistoryCreate {
 	_c.mutation.SetName(v)
@@ -274,6 +316,10 @@ func (_c *NarrativeHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.Tags(); !ok {
 		v := narrativehistory.DefaultTags
 		_c.mutation.SetTags(v)
+	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := narrativehistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if narrativehistory.DefaultID == nil {
@@ -387,6 +433,18 @@ func (_c *NarrativeHistoryCreate) createSpec() (*NarrativeHistory, *sqlgraph.Cre
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(narrativehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(narrativehistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(narrativehistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(narrativehistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(narrativehistory.FieldName, field.TypeString, value)

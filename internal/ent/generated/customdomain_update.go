@@ -144,6 +144,46 @@ func (_u *CustomDomainUpdate) ClearOwnerID() *CustomDomainUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *CustomDomainUpdate) SetInternalNotes(v string) *CustomDomainUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *CustomDomainUpdate) SetNillableInternalNotes(v *string) *CustomDomainUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *CustomDomainUpdate) ClearInternalNotes() *CustomDomainUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *CustomDomainUpdate) SetSystemInternalID(v string) *CustomDomainUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *CustomDomainUpdate) SetNillableSystemInternalID(v *string) *CustomDomainUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *CustomDomainUpdate) ClearSystemInternalID() *CustomDomainUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetDNSVerificationID sets the "dns_verification_id" field.
 func (_u *CustomDomainUpdate) SetDNSVerificationID(v string) *CustomDomainUpdate {
 	_u.mutation.SetDNSVerificationID(v)
@@ -299,6 +339,21 @@ func (_u *CustomDomainUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(customdomain.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(customdomain.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(customdomain.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(customdomain.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(customdomain.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(customdomain.FieldSystemInternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -496,6 +551,46 @@ func (_u *CustomDomainUpdateOne) ClearOwnerID() *CustomDomainUpdateOne {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *CustomDomainUpdateOne) SetInternalNotes(v string) *CustomDomainUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *CustomDomainUpdateOne) SetNillableInternalNotes(v *string) *CustomDomainUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *CustomDomainUpdateOne) ClearInternalNotes() *CustomDomainUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *CustomDomainUpdateOne) SetSystemInternalID(v string) *CustomDomainUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *CustomDomainUpdateOne) SetNillableSystemInternalID(v *string) *CustomDomainUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *CustomDomainUpdateOne) ClearSystemInternalID() *CustomDomainUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetDNSVerificationID sets the "dns_verification_id" field.
 func (_u *CustomDomainUpdateOne) SetDNSVerificationID(v string) *CustomDomainUpdateOne {
 	_u.mutation.SetDNSVerificationID(v)
@@ -681,6 +776,21 @@ func (_u *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDoma
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(customdomain.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(customdomain.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(customdomain.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(customdomain.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(customdomain.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(customdomain.FieldSystemInternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

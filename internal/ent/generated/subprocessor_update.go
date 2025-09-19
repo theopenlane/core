@@ -145,6 +145,46 @@ func (_u *SubprocessorUpdate) ClearOwnerID() *SubprocessorUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *SubprocessorUpdate) SetInternalNotes(v string) *SubprocessorUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *SubprocessorUpdate) SetNillableInternalNotes(v *string) *SubprocessorUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *SubprocessorUpdate) ClearInternalNotes() *SubprocessorUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *SubprocessorUpdate) SetSystemInternalID(v string) *SubprocessorUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *SubprocessorUpdate) SetNillableSystemInternalID(v *string) *SubprocessorUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *SubprocessorUpdate) ClearSystemInternalID() *SubprocessorUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *SubprocessorUpdate) SetName(v string) *SubprocessorUpdate {
 	_u.mutation.SetName(v)
@@ -451,6 +491,18 @@ func (_u *SubprocessorUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(subprocessor.FieldSystemOwned, field.TypeBool)
 	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(subprocessor.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(subprocessor.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(subprocessor.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(subprocessor.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(subprocessor.FieldName, field.TypeString, value)
 	}
@@ -755,6 +807,46 @@ func (_u *SubprocessorUpdateOne) SetNillableOwnerID(v *string) *SubprocessorUpda
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *SubprocessorUpdateOne) ClearOwnerID() *SubprocessorUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *SubprocessorUpdateOne) SetInternalNotes(v string) *SubprocessorUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *SubprocessorUpdateOne) SetNillableInternalNotes(v *string) *SubprocessorUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *SubprocessorUpdateOne) ClearInternalNotes() *SubprocessorUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *SubprocessorUpdateOne) SetSystemInternalID(v string) *SubprocessorUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *SubprocessorUpdateOne) SetNillableSystemInternalID(v *string) *SubprocessorUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *SubprocessorUpdateOne) ClearSystemInternalID() *SubprocessorUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -1093,6 +1185,18 @@ func (_u *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subprocess
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(subprocessor.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(subprocessor.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(subprocessor.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(subprocessor.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(subprocessor.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(subprocessor.FieldName, field.TypeString, value)

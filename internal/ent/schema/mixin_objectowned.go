@@ -119,6 +119,8 @@ func withHookFuncs(hookFuncs ...HookFunc) objectOwnedOption {
 }
 
 // withSkipForSystemAdmin allows the owner id field to be empty for system admins
+// if the mixin config is used and also includes the system owned mixin, this will be
+// automatically set to true
 func withSkipForSystemAdmin(allow bool) objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
 		o.AllowEmptyForSystemAdmin = allow

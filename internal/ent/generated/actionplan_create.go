@@ -312,6 +312,48 @@ func (_c *ActionPlanCreate) SetNillableOwnerID(v *string) *ActionPlanCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ActionPlanCreate) SetSystemOwned(v bool) *ActionPlanCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableSystemOwned(v *bool) *ActionPlanCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ActionPlanCreate) SetInternalNotes(v string) *ActionPlanCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableInternalNotes(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ActionPlanCreate) SetSystemInternalID(v string) *ActionPlanCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableSystemInternalID(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetDueDate sets the "due_date" field.
 func (_c *ActionPlanCreate) SetDueDate(v time.Time) *ActionPlanCreate {
 	_c.mutation.SetDueDate(v)
@@ -527,6 +569,10 @@ func (_c *ActionPlanCreate) defaults() error {
 		v := actionplan.DefaultDismissedImprovementSuggestions
 		_c.mutation.SetDismissedImprovementSuggestions(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := actionplan.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if actionplan.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized actionplan.DefaultID (forgotten import generated/runtime?)")
@@ -560,11 +606,6 @@ func (_c *ActionPlanCreate) check() error {
 	if v, ok := _c.mutation.ReviewFrequency(); ok {
 		if err := actionplan.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
-		}
-	}
-	if v, ok := _c.mutation.OwnerID(); ok {
-		if err := actionplan.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.owner_id": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.Priority(); ok {
@@ -695,6 +736,18 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 		_node.DismissedImprovementSuggestions = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(actionplan.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(actionplan.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(actionplan.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)

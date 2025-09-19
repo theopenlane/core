@@ -68,6 +68,12 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_InternalPolicy_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_InternalPolicy_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_InternalPolicy_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
 			case "status":
@@ -181,6 +187,12 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_InternalPolicy_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_InternalPolicy_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_InternalPolicy_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
 			case "status":
@@ -321,6 +333,12 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_InternalPolicy_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_InternalPolicy_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_InternalPolicy_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
 			case "status":
@@ -461,6 +479,12 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_InternalPolicy_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_InternalPolicy_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_InternalPolicy_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
 			case "status":

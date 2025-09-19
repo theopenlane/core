@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -80,6 +81,7 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			NewDocumentMixin(a),
 			newOrgOwnedMixin(a),
+			mixin.NewSystemOwnedMixin(),
 		}}.getMixins(a)
 }
 

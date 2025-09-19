@@ -62,6 +62,12 @@ func (ec *executionContext) fieldContext_MappedControlBulkCreatePayload_mappedCo
 				return ec.fieldContext_MappedControl_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappedControl_tags(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_MappedControl_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_MappedControl_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_MappedControl_systemInternalID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_MappedControl_ownerID(ctx, field)
 			case "mappingType":
@@ -127,6 +133,12 @@ func (ec *executionContext) fieldContext_MappedControlCreatePayload_mappedContro
 				return ec.fieldContext_MappedControl_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappedControl_tags(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_MappedControl_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_MappedControl_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_MappedControl_systemInternalID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_MappedControl_ownerID(ctx, field)
 			case "mappingType":
@@ -219,6 +231,12 @@ func (ec *executionContext) fieldContext_MappedControlUpdatePayload_mappedContro
 				return ec.fieldContext_MappedControl_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappedControl_tags(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_MappedControl_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_MappedControl_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_MappedControl_systemInternalID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_MappedControl_ownerID(ctx, field)
 			case "mappingType":

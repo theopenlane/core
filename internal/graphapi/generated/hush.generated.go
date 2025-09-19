@@ -62,6 +62,12 @@ func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.
 				return ec.fieldContext_Hush_updatedBy(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Hush_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Hush_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Hush_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Hush_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Hush_name(ctx, field)
 			case "description":
@@ -127,6 +133,12 @@ func (ec *executionContext) fieldContext_HushBulkUpdatePayload_hushes(_ context.
 				return ec.fieldContext_Hush_updatedBy(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Hush_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Hush_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Hush_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Hush_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Hush_name(ctx, field)
 			case "description":
@@ -219,6 +231,12 @@ func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_updatedBy(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Hush_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Hush_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Hush_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Hush_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Hush_name(ctx, field)
 			case "description":
@@ -311,6 +329,12 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_updatedBy(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Hush_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Hush_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Hush_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Hush_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Hush_name(ctx, field)
 			case "description":

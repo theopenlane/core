@@ -465,6 +465,46 @@ func (_u *ProcedureHistoryUpdate) ClearDismissedImprovementSuggestions() *Proced
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ProcedureHistoryUpdate) SetInternalNotes(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableInternalNotes(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ProcedureHistoryUpdate) ClearInternalNotes() *ProcedureHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ProcedureHistoryUpdate) SetSystemInternalID(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableSystemInternalID(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ProcedureHistoryUpdate) ClearSystemInternalID() *ProcedureHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetFileID sets the "file_id" field.
 func (_u *ProcedureHistoryUpdate) SetFileID(v string) *ProcedureHistoryUpdate {
 	_u.mutation.SetFileID(v)
@@ -763,6 +803,21 @@ func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(procedurehistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(procedurehistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(procedurehistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(procedurehistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(procedurehistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.FileID(); ok {
 		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)
@@ -1232,6 +1287,46 @@ func (_u *ProcedureHistoryUpdateOne) ClearDismissedImprovementSuggestions() *Pro
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ProcedureHistoryUpdateOne) SetInternalNotes(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableInternalNotes(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ProcedureHistoryUpdateOne) ClearInternalNotes() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ProcedureHistoryUpdateOne) SetSystemInternalID(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableSystemInternalID(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ProcedureHistoryUpdateOne) ClearSystemInternalID() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetFileID sets the "file_id" field.
 func (_u *ProcedureHistoryUpdateOne) SetFileID(v string) *ProcedureHistoryUpdateOne {
 	_u.mutation.SetFileID(v)
@@ -1560,6 +1655,21 @@ func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proced
 	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(procedurehistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(procedurehistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(procedurehistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(procedurehistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(procedurehistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.FileID(); ok {
 		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)

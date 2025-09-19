@@ -159,6 +159,48 @@ func (_c *EntityHistoryCreate) SetNillableOwnerID(v *string) *EntityHistoryCreat
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *EntityHistoryCreate) SetSystemOwned(v bool) *EntityHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableSystemOwned(v *bool) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *EntityHistoryCreate) SetInternalNotes(v string) *EntityHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableInternalNotes(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *EntityHistoryCreate) SetSystemInternalID(v string) *EntityHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableSystemInternalID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *EntityHistoryCreate) SetName(v string) *EntityHistoryCreate {
 	_c.mutation.SetName(v)
@@ -311,6 +353,10 @@ func (_c *EntityHistoryCreate) defaults() error {
 		v := entityhistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := entityhistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := entityhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -417,6 +463,18 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(entityhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(entityhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(entityhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(entityhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(entityhistory.FieldName, field.TypeString, value)

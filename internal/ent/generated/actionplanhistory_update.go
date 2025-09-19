@@ -465,6 +465,46 @@ func (_u *ActionPlanHistoryUpdate) ClearOwnerID() *ActionPlanHistoryUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ActionPlanHistoryUpdate) SetInternalNotes(v string) *ActionPlanHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableInternalNotes(v *string) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ActionPlanHistoryUpdate) ClearInternalNotes() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ActionPlanHistoryUpdate) SetSystemInternalID(v string) *ActionPlanHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableSystemInternalID(v *string) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ActionPlanHistoryUpdate) ClearSystemInternalID() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanHistoryUpdate) SetDueDate(v time.Time) *ActionPlanHistoryUpdate {
 	_u.mutation.SetDueDate(v)
@@ -788,6 +828,21 @@ func (_u *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(actionplanhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(actionplanhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(actionplanhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(actionplanhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)
@@ -1263,6 +1318,46 @@ func (_u *ActionPlanHistoryUpdateOne) ClearOwnerID() *ActionPlanHistoryUpdateOne
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ActionPlanHistoryUpdateOne) SetInternalNotes(v string) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableInternalNotes(v *string) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearInternalNotes() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ActionPlanHistoryUpdateOne) SetSystemInternalID(v string) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableSystemInternalID(v *string) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearSystemInternalID() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanHistoryUpdateOne) SetDueDate(v time.Time) *ActionPlanHistoryUpdateOne {
 	_u.mutation.SetDueDate(v)
@@ -1616,6 +1711,21 @@ func (_u *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Actio
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(actionplanhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(actionplanhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(actionplanhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(actionplanhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)

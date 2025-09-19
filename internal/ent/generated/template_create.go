@@ -128,6 +128,48 @@ func (_c *TemplateCreate) SetNillableOwnerID(v *string) *TemplateCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *TemplateCreate) SetSystemOwned(v bool) *TemplateCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableSystemOwned(v *bool) *TemplateCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *TemplateCreate) SetInternalNotes(v string) *TemplateCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableInternalNotes(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *TemplateCreate) SetSystemInternalID(v string) *TemplateCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableSystemInternalID(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *TemplateCreate) SetName(v string) *TemplateCreate {
 	_c.mutation.SetName(v)
@@ -292,6 +334,10 @@ func (_c *TemplateCreate) defaults() error {
 		v := template.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := template.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.TemplateType(); !ok {
 		v := template.DefaultTemplateType
 		_c.mutation.SetTemplateType(v)
@@ -399,6 +445,18 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(template.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(template.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(template.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(template.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(template.FieldName, field.TypeString, value)

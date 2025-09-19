@@ -348,6 +348,48 @@ func (_c *ProcedureHistoryCreate) SetDismissedImprovementSuggestions(v []string)
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ProcedureHistoryCreate) SetSystemOwned(v bool) *ProcedureHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableSystemOwned(v *bool) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ProcedureHistoryCreate) SetInternalNotes(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableInternalNotes(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ProcedureHistoryCreate) SetSystemInternalID(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableSystemInternalID(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetFileID sets the "file_id" field.
 func (_c *ProcedureHistoryCreate) SetFileID(v string) *ProcedureHistoryCreate {
 	_c.mutation.SetFileID(v)
@@ -495,6 +537,10 @@ func (_c *ProcedureHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.DismissedImprovementSuggestions(); !ok {
 		v := procedurehistory.DefaultDismissedImprovementSuggestions
 		_c.mutation.SetDismissedImprovementSuggestions(v)
+	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := procedurehistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if procedurehistory.DefaultID == nil {
@@ -686,6 +732,18 @@ func (_c *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cre
 	if value, ok := _c.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 		_node.DismissedImprovementSuggestions = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(procedurehistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(procedurehistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(procedurehistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.FileID(); ok {
 		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)

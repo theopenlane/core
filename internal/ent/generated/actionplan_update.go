@@ -470,6 +470,46 @@ func (_u *ActionPlanUpdate) ClearOwnerID() *ActionPlanUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ActionPlanUpdate) SetInternalNotes(v string) *ActionPlanUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableInternalNotes(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ActionPlanUpdate) ClearInternalNotes() *ActionPlanUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ActionPlanUpdate) SetSystemInternalID(v string) *ActionPlanUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableSystemInternalID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ActionPlanUpdate) ClearSystemInternalID() *ActionPlanUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanUpdate) SetDueDate(v time.Time) *ActionPlanUpdate {
 	_u.mutation.SetDueDate(v)
@@ -740,11 +780,6 @@ func (_u *ActionPlanUpdate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := actionplan.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Priority(); ok {
 		if err := actionplan.PriorityValidator(v); err != nil {
 			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.priority": %w`, err)}
@@ -928,6 +963,21 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(actionplan.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(actionplan.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(actionplan.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(actionplan.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(actionplan.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
@@ -1640,6 +1690,46 @@ func (_u *ActionPlanUpdateOne) ClearOwnerID() *ActionPlanUpdateOne {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ActionPlanUpdateOne) SetInternalNotes(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableInternalNotes(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ActionPlanUpdateOne) ClearInternalNotes() *ActionPlanUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ActionPlanUpdateOne) SetSystemInternalID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableSystemInternalID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ActionPlanUpdateOne) ClearSystemInternalID() *ActionPlanUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanUpdateOne) SetDueDate(v time.Time) *ActionPlanUpdateOne {
 	_u.mutation.SetDueDate(v)
@@ -1923,11 +2013,6 @@ func (_u *ActionPlanUpdateOne) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := actionplan.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Priority(); ok {
 		if err := actionplan.PriorityValidator(v); err != nil {
 			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.priority": %w`, err)}
@@ -2128,6 +2213,21 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(actionplan.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(actionplan.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(actionplan.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(actionplan.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(actionplan.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)

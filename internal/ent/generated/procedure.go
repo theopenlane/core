@@ -74,6 +74,12 @@ type Procedure struct {
 	ImprovementSuggestions []string `json:"improvement_suggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
 	DismissedImprovementSuggestions []string `json:"dismissed_improvement_suggestions,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// This will contain the most recent file id if this procedure was created from a file
 	FileID *string `json:"file_id,omitempty"`
 	// This will contain the url used to create/update the procedure
@@ -262,9 +268,9 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case procedure.FieldTags, procedure.FieldTagSuggestions, procedure.FieldDismissedTagSuggestions, procedure.FieldControlSuggestions, procedure.FieldDismissedControlSuggestions, procedure.FieldImprovementSuggestions, procedure.FieldDismissedImprovementSuggestions:
 			values[i] = new([]byte)
-		case procedure.FieldApprovalRequired:
+		case procedure.FieldApprovalRequired, procedure.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldFileID, procedure.FieldURL:
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldInternalNotes, procedure.FieldSystemInternalID, procedure.FieldFileID, procedure.FieldURL:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -460,6 +466,26 @@ func (_m *Procedure) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.DismissedImprovementSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
 				}
+			}
+		case procedure.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case procedure.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case procedure.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case procedure.FieldFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -660,6 +686,19 @@ func (_m *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_improvement_suggestions=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DismissedImprovementSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	if v := _m.FileID; v != nil {
 		builder.WriteString("file_id=")

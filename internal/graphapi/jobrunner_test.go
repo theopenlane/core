@@ -114,7 +114,7 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 			client:   apiTokenClient,
 			ctx:      newUser.UserCtx,
 			runnerID: systemJob.ID,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: notAuthorizedErrorMsg,
 		},
 	}
 

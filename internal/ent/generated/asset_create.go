@@ -130,6 +130,48 @@ func (_c *AssetCreate) SetNillableOwnerID(v *string) *AssetCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *AssetCreate) SetSystemOwned(v bool) *AssetCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableSystemOwned(v *bool) *AssetCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *AssetCreate) SetInternalNotes(v string) *AssetCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableInternalNotes(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *AssetCreate) SetSystemInternalID(v string) *AssetCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableSystemInternalID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetAssetType sets the "asset_type" field.
 func (_c *AssetCreate) SetAssetType(v enums.AssetType) *AssetCreate {
 	_c.mutation.SetAssetType(v)
@@ -376,6 +418,10 @@ func (_c *AssetCreate) defaults() error {
 		v := asset.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := asset.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.AssetType(); !ok {
 		v := asset.DefaultAssetType
 		_c.mutation.SetAssetType(v)
@@ -392,11 +438,6 @@ func (_c *AssetCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *AssetCreate) check() error {
-	if v, ok := _c.mutation.OwnerID(); ok {
-		if err := asset.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Asset.owner_id": %w`, err)}
-		}
-	}
 	if _, ok := _c.mutation.AssetType(); !ok {
 		return &ValidationError{Name: "asset_type", err: errors.New(`generated: missing required field "Asset.asset_type"`)}
 	}
@@ -476,6 +517,18 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(asset.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(asset.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(asset.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(asset.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.AssetType(); ok {
 		_spec.SetField(asset.FieldAssetType, field.TypeEnum, value)

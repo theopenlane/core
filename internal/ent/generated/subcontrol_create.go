@@ -356,6 +356,48 @@ func (_c *SubcontrolCreate) SetNillableOwnerID(v *string) *SubcontrolCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *SubcontrolCreate) SetSystemOwned(v bool) *SubcontrolCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableSystemOwned(v *bool) *SubcontrolCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *SubcontrolCreate) SetInternalNotes(v string) *SubcontrolCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableInternalNotes(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *SubcontrolCreate) SetSystemInternalID(v string) *SubcontrolCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableSystemInternalID(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_c *SubcontrolCreate) SetRefCode(v string) *SubcontrolCreate {
 	_c.mutation.SetRefCode(v)
@@ -649,6 +691,10 @@ func (_c *SubcontrolCreate) defaults() error {
 		v := subcontrol.DefaultControlType
 		_c.mutation.SetControlType(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := subcontrol.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if subcontrol.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized subcontrol.DefaultID (forgotten import generated/runtime?)")
@@ -843,6 +889,18 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.References(); ok {
 		_spec.SetField(subcontrol.FieldReferences, field.TypeJSON, value)
 		_node.References = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(subcontrol.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(subcontrol.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(subcontrol.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(subcontrol.FieldRefCode, field.TypeString, value)

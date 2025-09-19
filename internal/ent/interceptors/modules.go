@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gertd/go-pluralize"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	entintercept "github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -127,7 +127,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 			} else {
 				// this shouldn't happen unless a REST request is requesting data that isn't in the base module
 				// adding warning here to indicate potential misconfiguration
-				log.Error().Err(err).Msg("graphql operation not found, unable to set graphql error for missing module")
+				zerolog.Ctx(ctx).Error().Err(err).Msg("graphql operation not found, unable to set graphql error for missing module")
 
 				return generated.ErrPermissionDenied
 			}

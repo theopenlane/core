@@ -68,6 +68,10 @@ func (ec *executionContext) fieldContext_JobTemplateBulkCreatePayload_jobTemplat
 				return ec.fieldContext_JobTemplate_ownerID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_JobTemplate_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_JobTemplate_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_JobTemplate_systemInternalID(ctx, field)
 			case "title":
 				return ec.fieldContext_JobTemplate_title(ctx, field)
 			case "description":
@@ -131,6 +135,10 @@ func (ec *executionContext) fieldContext_JobTemplateCreatePayload_jobTemplate(_ 
 				return ec.fieldContext_JobTemplate_ownerID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_JobTemplate_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_JobTemplate_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_JobTemplate_systemInternalID(ctx, field)
 			case "title":
 				return ec.fieldContext_JobTemplate_title(ctx, field)
 			case "description":
@@ -221,6 +229,10 @@ func (ec *executionContext) fieldContext_JobTemplateUpdatePayload_jobTemplate(_ 
 				return ec.fieldContext_JobTemplate_ownerID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_JobTemplate_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_JobTemplate_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_JobTemplate_systemInternalID(ctx, field)
 			case "title":
 				return ec.fieldContext_JobTemplate_title(ctx, field)
 			case "description":

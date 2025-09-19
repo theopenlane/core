@@ -143,6 +143,46 @@ func (_u *JobTemplateHistoryUpdate) ClearOwnerID() *JobTemplateHistoryUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *JobTemplateHistoryUpdate) SetInternalNotes(v string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *JobTemplateHistoryUpdate) SetNillableInternalNotes(v *string) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *JobTemplateHistoryUpdate) ClearInternalNotes() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *JobTemplateHistoryUpdate) SetSystemInternalID(v string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *JobTemplateHistoryUpdate) SetNillableSystemInternalID(v *string) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *JobTemplateHistoryUpdate) ClearSystemInternalID() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *JobTemplateHistoryUpdate) SetTitle(v string) *JobTemplateHistoryUpdate {
 	_u.mutation.SetTitle(v)
@@ -364,6 +404,18 @@ func (_u *JobTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldSystemOwned, field.TypeBool)
 	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(jobtemplatehistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(jobtemplatehistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(jobtemplatehistory.FieldTitle, field.TypeString, value)
 	}
@@ -530,6 +582,46 @@ func (_u *JobTemplateHistoryUpdateOne) SetNillableOwnerID(v *string) *JobTemplat
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *JobTemplateHistoryUpdateOne) ClearOwnerID() *JobTemplateHistoryUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *JobTemplateHistoryUpdateOne) SetInternalNotes(v string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *JobTemplateHistoryUpdateOne) SetNillableInternalNotes(v *string) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *JobTemplateHistoryUpdateOne) ClearInternalNotes() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *JobTemplateHistoryUpdateOne) SetSystemInternalID(v string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *JobTemplateHistoryUpdateOne) SetNillableSystemInternalID(v *string) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *JobTemplateHistoryUpdateOne) ClearSystemInternalID() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -783,6 +875,18 @@ func (_u *JobTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *JobT
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(jobtemplatehistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(jobtemplatehistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(jobtemplatehistory.FieldTitle, field.TypeString, value)

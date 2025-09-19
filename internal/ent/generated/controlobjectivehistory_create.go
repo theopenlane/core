@@ -180,6 +180,48 @@ func (_c *ControlObjectiveHistoryCreate) SetNillableOwnerID(v *string) *ControlO
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ControlObjectiveHistoryCreate) SetSystemOwned(v bool) *ControlObjectiveHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ControlObjectiveHistoryCreate) SetNillableSystemOwned(v *bool) *ControlObjectiveHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ControlObjectiveHistoryCreate) SetInternalNotes(v string) *ControlObjectiveHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ControlObjectiveHistoryCreate) SetNillableInternalNotes(v *string) *ControlObjectiveHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ControlObjectiveHistoryCreate) SetSystemInternalID(v string) *ControlObjectiveHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ControlObjectiveHistoryCreate) SetNillableSystemInternalID(v *string) *ControlObjectiveHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *ControlObjectiveHistoryCreate) SetName(v string) *ControlObjectiveHistoryCreate {
 	_c.mutation.SetName(v)
@@ -350,6 +392,10 @@ func (_c *ControlObjectiveHistoryCreate) defaults() error {
 		v := controlobjectivehistory.DefaultRevision
 		_c.mutation.SetRevision(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := controlobjectivehistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := controlobjectivehistory.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -484,6 +530,18 @@ func (_c *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistory,
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(controlobjectivehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(controlobjectivehistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(controlobjectivehistory.FieldName, field.TypeString, value)

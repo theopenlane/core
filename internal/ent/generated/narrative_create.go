@@ -136,6 +136,48 @@ func (_c *NarrativeCreate) SetNillableOwnerID(v *string) *NarrativeCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *NarrativeCreate) SetSystemOwned(v bool) *NarrativeCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *NarrativeCreate) SetNillableSystemOwned(v *bool) *NarrativeCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *NarrativeCreate) SetInternalNotes(v string) *NarrativeCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *NarrativeCreate) SetNillableInternalNotes(v *string) *NarrativeCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *NarrativeCreate) SetSystemInternalID(v string) *NarrativeCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *NarrativeCreate) SetNillableSystemInternalID(v *string) *NarrativeCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *NarrativeCreate) SetName(v string) *NarrativeCreate {
 	_c.mutation.SetName(v)
@@ -349,6 +391,10 @@ func (_c *NarrativeCreate) defaults() error {
 		v := narrative.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := narrative.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if narrative.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized narrative.DefaultID (forgotten import generated/runtime?)")
@@ -449,6 +495,18 @@ func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(narrative.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(narrative.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(narrative.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(narrative.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(narrative.FieldName, field.TypeString, value)

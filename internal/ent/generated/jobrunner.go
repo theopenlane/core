@@ -40,6 +40,10 @@ type JobRunner struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// the name of the runner
 	Name string `json:"name,omitempty"`
 	// the status of this runner
@@ -102,7 +106,7 @@ func (*JobRunner) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case jobrunner.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case jobrunner.FieldID, jobrunner.FieldCreatedBy, jobrunner.FieldUpdatedBy, jobrunner.FieldDeletedBy, jobrunner.FieldDisplayID, jobrunner.FieldOwnerID, jobrunner.FieldName, jobrunner.FieldStatus, jobrunner.FieldIPAddress, jobrunner.FieldVersion, jobrunner.FieldOs:
+		case jobrunner.FieldID, jobrunner.FieldCreatedBy, jobrunner.FieldUpdatedBy, jobrunner.FieldDeletedBy, jobrunner.FieldDisplayID, jobrunner.FieldOwnerID, jobrunner.FieldInternalNotes, jobrunner.FieldSystemInternalID, jobrunner.FieldName, jobrunner.FieldStatus, jobrunner.FieldIPAddress, jobrunner.FieldVersion, jobrunner.FieldOs:
 			values[i] = new(sql.NullString)
 		case jobrunner.FieldCreatedAt, jobrunner.FieldUpdatedAt, jobrunner.FieldDeletedAt, jobrunner.FieldLastSeen:
 			values[i] = new(sql.NullTime)
@@ -188,6 +192,20 @@ func (_m *JobRunner) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
 			} else if value.Valid {
 				_m.SystemOwned = value.Bool
+			}
+		case jobrunner.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case jobrunner.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case jobrunner.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -300,6 +318,16 @@ func (_m *JobRunner) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

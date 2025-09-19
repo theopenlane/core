@@ -132,6 +132,48 @@ func (_c *EntityCreate) SetNillableOwnerID(v *string) *EntityCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *EntityCreate) SetSystemOwned(v bool) *EntityCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableSystemOwned(v *bool) *EntityCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *EntityCreate) SetInternalNotes(v string) *EntityCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableInternalNotes(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *EntityCreate) SetSystemInternalID(v string) *EntityCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableSystemInternalID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *EntityCreate) SetName(v string) *EntityCreate {
 	_c.mutation.SetName(v)
@@ -422,6 +464,10 @@ func (_c *EntityCreate) defaults() error {
 		v := entity.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := entity.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := entity.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -438,11 +484,6 @@ func (_c *EntityCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *EntityCreate) check() error {
-	if v, ok := _c.mutation.OwnerID(); ok {
-		if err := entity.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Entity.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _c.mutation.Name(); ok {
 		if err := entity.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Entity.name": %w`, err)}
@@ -521,6 +562,18 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(entity.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(entity.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(entity.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(entity.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(entity.FieldName, field.TypeString, value)

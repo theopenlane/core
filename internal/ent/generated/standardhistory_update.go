@@ -163,6 +163,46 @@ func (_u *StandardHistoryUpdate) ClearOwnerID() *StandardHistoryUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *StandardHistoryUpdate) SetInternalNotes(v string) *StandardHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *StandardHistoryUpdate) SetNillableInternalNotes(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *StandardHistoryUpdate) ClearInternalNotes() *StandardHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *StandardHistoryUpdate) SetSystemInternalID(v string) *StandardHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *StandardHistoryUpdate) SetNillableSystemInternalID(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *StandardHistoryUpdate) ClearSystemInternalID() *StandardHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *StandardHistoryUpdate) SetName(v string) *StandardHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -549,6 +589,18 @@ func (_u *StandardHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(standardhistory.FieldSystemOwned, field.TypeBool)
 	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(standardhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(standardhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(standardhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(standardhistory.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(standardhistory.FieldName, field.TypeString, value)
 	}
@@ -780,6 +832,46 @@ func (_u *StandardHistoryUpdateOne) SetNillableOwnerID(v *string) *StandardHisto
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *StandardHistoryUpdateOne) ClearOwnerID() *StandardHistoryUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *StandardHistoryUpdateOne) SetInternalNotes(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *StandardHistoryUpdateOne) SetNillableInternalNotes(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *StandardHistoryUpdateOne) ClearInternalNotes() *StandardHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *StandardHistoryUpdateOne) SetSystemInternalID(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *StandardHistoryUpdateOne) SetNillableSystemInternalID(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *StandardHistoryUpdateOne) ClearSystemInternalID() *StandardHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -1198,6 +1290,18 @@ func (_u *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Standar
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(standardhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(standardhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(standardhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(standardhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(standardhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(standardhistory.FieldName, field.TypeString, value)

@@ -148,6 +148,34 @@ func (_c *JobTemplateCreate) SetNillableSystemOwned(v *bool) *JobTemplateCreate 
 	return _c
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *JobTemplateCreate) SetInternalNotes(v string) *JobTemplateCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *JobTemplateCreate) SetNillableInternalNotes(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *JobTemplateCreate) SetSystemInternalID(v string) *JobTemplateCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *JobTemplateCreate) SetNillableSystemInternalID(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *JobTemplateCreate) SetTitle(v string) *JobTemplateCreate {
 	_c.mutation.SetTitle(v)
@@ -422,6 +450,14 @@ func (_c *JobTemplateCreate) createSpec() (*JobTemplate, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(jobtemplate.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(jobtemplate.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(jobtemplate.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(jobtemplate.FieldTitle, field.TypeString, value)

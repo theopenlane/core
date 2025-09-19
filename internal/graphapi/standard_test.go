@@ -148,11 +148,10 @@ func TestQueryStandard(t *testing.T) {
 
 			assert.Check(t, resp.Standard.Framework != nil)
 
-			if tc.queryID == publicStandard.ID {
-				assert.Check(t, *resp.Standard.IsPublic)
-
+			if tc.ctx == systemAdminUser.UserCtx {
+				assert.Check(t, resp.Standard.IsPublic != nil)
 			} else {
-				assert.Check(t, !*resp.Standard.IsPublic)
+				assert.Check(t, resp.Standard.IsPublic == nil)
 			}
 
 			assert.Check(t, is.Equal(tc.expectedControlCount, resp.Standard.Controls.TotalCount))
@@ -380,7 +379,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: invalidInputErrorMsg,
 		},
 		{
 			name: "user not authorized to make public standard",
@@ -390,7 +389,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: invalidInputErrorMsg,
 		},
 		{
 			name: "user not authorized to free to use standard",
@@ -400,7 +399,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: invalidInputErrorMsg,
 		},
 		{
 			name: "user not authorized, not enough permissions",
@@ -453,19 +452,22 @@ func TestMutationCreateStandard(t *testing.T) {
 			}
 			assert.Check(t, is.Equal(expectedSystemOwned, *resp.CreateStandard.Standard.SystemOwned))
 
-			expectedIsPublic := false
-			if tc.request.IsPublic != nil {
-				expectedIsPublic = *tc.request.IsPublic
-			}
-			assert.Check(t, is.Equal(expectedIsPublic, *resp.CreateStandard.Standard.IsPublic))
+			if tc.ctx == systemAdminUser.UserCtx || tc.client == patClientSystemAdmin {
+				isPublic := false
+				if tc.request.IsPublic != nil {
+					isPublic = *tc.request.IsPublic
+				}
+				assert.Check(t, is.Equal(isPublic, *resp.CreateStandard.Standard.IsPublic))
 
-			// this field isn't currently used to enforce anything, it may change to restrict
-			// usage on tiers + features
-			expectedFreeToUse := false
-			if tc.request.FreeToUse != nil {
-				expectedFreeToUse = *tc.request.FreeToUse
+				expectedFreeToUse := false
+				if tc.request.FreeToUse != nil {
+					expectedFreeToUse = *tc.request.FreeToUse
+				}
+				assert.Check(t, is.Equal(expectedFreeToUse, *resp.CreateStandard.Standard.FreeToUse))
+			} else {
+				// these are private fields, so they should not be set or returned except to system admins
+				assert.Check(t, resp.CreateStandard.Standard.IsPublic == nil)
 			}
-			assert.Check(t, is.Equal(expectedFreeToUse, *resp.CreateStandard.Standard.FreeToUse))
 
 			expectedTags := []string{}
 			if tc.request.Tags != nil {
@@ -526,8 +528,12 @@ func TestMutationCreateStandard(t *testing.T) {
 
 			// cleanup the created standard
 			ctx := tc.ctx
-			if tc.client != suite.client.api {
+			if tc.ctx != systemAdminUser.UserCtx && tc.client != suite.client.api {
 				ctx = testUser1.UserCtx
+			}
+
+			if tc.client == patClientSystemAdmin {
+				ctx = systemAdminUser.UserCtx
 			}
 
 			(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: resp.CreateStandard.Standard.ID}).MustDelete(ctx, t)
@@ -596,7 +602,17 @@ func TestMutationUpdateStandard(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: invalidInputErrorMsg,
+		},
+		{
+			name: "update not allowed, cannot update public field",
+			id:   standardOrgOwned.ID,
+			request: testclient.UpdateStandardInput{
+				ClearIsPublic: lo.ToPtr(true),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: invalidInputErrorMsg,
 		},
 		{
 			name: "bad request, invalid link",
@@ -734,7 +750,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 	}
 
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOrgOwned.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardSystemOwned.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardSystemOwned.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestMutationDeleteStandard(t *testing.T) {

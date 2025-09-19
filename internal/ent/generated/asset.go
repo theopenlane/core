@@ -36,6 +36,12 @@ type Asset struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// the type of the asset, e.g. technology, domain, device, etc
 	AssetType enums.AssetType `json:"asset_type,omitempty"`
 	// the name of the asset, e.g. matts computer, office router, IP address, etc
@@ -159,7 +165,9 @@ func (*Asset) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case asset.FieldTags, asset.FieldCategories:
 			values[i] = new([]byte)
-		case asset.FieldID, asset.FieldCreatedBy, asset.FieldUpdatedBy, asset.FieldDeletedBy, asset.FieldOwnerID, asset.FieldAssetType, asset.FieldName, asset.FieldDescription, asset.FieldIdentifier, asset.FieldWebsite, asset.FieldCpe:
+		case asset.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
+		case asset.FieldID, asset.FieldCreatedBy, asset.FieldUpdatedBy, asset.FieldDeletedBy, asset.FieldOwnerID, asset.FieldInternalNotes, asset.FieldSystemInternalID, asset.FieldAssetType, asset.FieldName, asset.FieldDescription, asset.FieldIdentifier, asset.FieldWebsite, asset.FieldCpe:
 			values[i] = new(sql.NullString)
 		case asset.FieldCreatedAt, asset.FieldUpdatedAt, asset.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -235,6 +243,26 @@ func (_m *Asset) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case asset.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case asset.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case asset.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case asset.FieldAssetType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -381,6 +409,19 @@ func (_m *Asset) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("asset_type=")
 	builder.WriteString(fmt.Sprintf("%v", _m.AssetType))

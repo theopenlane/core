@@ -104,6 +104,12 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_delegateID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Subcontrol_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Subcontrol_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Subcontrol_systemInternalID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
@@ -219,6 +225,12 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_delegateID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Subcontrol_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Subcontrol_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Subcontrol_systemInternalID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
@@ -361,6 +373,12 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_delegateID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Subcontrol_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Subcontrol_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Subcontrol_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Subcontrol_systemInternalID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":

@@ -323,6 +323,48 @@ func (_c *ProcedureCreate) SetDismissedImprovementSuggestions(v []string) *Proce
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ProcedureCreate) SetSystemOwned(v bool) *ProcedureCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableSystemOwned(v *bool) *ProcedureCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ProcedureCreate) SetInternalNotes(v string) *ProcedureCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableInternalNotes(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ProcedureCreate) SetSystemInternalID(v string) *ProcedureCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableSystemInternalID(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetFileID sets the "file_id" field.
 func (_c *ProcedureCreate) SetFileID(v string) *ProcedureCreate {
 	_c.mutation.SetFileID(v)
@@ -619,6 +661,10 @@ func (_c *ProcedureCreate) defaults() error {
 		v := procedure.DefaultDismissedImprovementSuggestions
 		_c.mutation.SetDismissedImprovementSuggestions(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := procedure.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if procedure.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized procedure.DefaultID (forgotten import generated/runtime?)")
@@ -789,6 +835,18 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(procedure.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 		_node.DismissedImprovementSuggestions = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(procedure.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(procedure.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(procedure.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.URL(); ok {
 		_spec.SetField(procedure.FieldURL, field.TypeString, value)

@@ -315,7 +315,7 @@ func assertErrorMessage(t *testing.T, err *gqlerror.Error, msg string) {
 
 func requireNoError(err error) {
 	if err != nil {
-		log.Error().Err(err).Send()
+		log.Error().Err(err).Msg("fatal error during test setup or teardown")
 
 		os.Exit(1)
 	}

@@ -100,6 +100,12 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Procedure_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Procedure_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
 			case "fileID":
 				return ec.fieldContext_Procedure_fileID(ctx, field)
 			case "url":
@@ -209,6 +215,12 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Procedure_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Procedure_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
 			case "fileID":
 				return ec.fieldContext_Procedure_fileID(ctx, field)
 			case "url":
@@ -345,6 +357,12 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Procedure_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Procedure_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
 			case "fileID":
 				return ec.fieldContext_Procedure_fileID(ctx, field)
 			case "url":
@@ -481,6 +499,12 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
 			case "dismissedImprovementSuggestions":
 				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Procedure_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Procedure_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
 			case "fileID":
 				return ec.fieldContext_Procedure_fileID(ctx, field)
 			case "url":

@@ -68,6 +68,10 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_ownerID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Standard_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Standard_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Standard_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Standard_name(ctx, field)
 			case "shortName":
@@ -147,6 +151,10 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_ownerID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Standard_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Standard_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Standard_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Standard_name(ctx, field)
 			case "shortName":
@@ -253,6 +261,10 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_ownerID(ctx, field)
 			case "systemOwned":
 				return ec.fieldContext_Standard_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Standard_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Standard_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Standard_name(ctx, field)
 			case "shortName":

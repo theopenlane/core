@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
@@ -79,10 +78,9 @@ func (t Subprocessor) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(t,
-				withSkipForSystemAdmin(true), // allow empty owner_id for system admin
 				withAllowAnonymousTrustCenterAccess(true),
 			),
-			mixin.SystemOwnedMixin{},
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(t)
 }
@@ -115,7 +113,6 @@ func (Subprocessor) Hooks() []ent.Hook {
 func (t Subprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.SystemOwnedSubprocessor(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
