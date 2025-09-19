@@ -1,2 +1,11 @@
+"""
+Indicates if a field will be returned in a query, if true, only system-admins
+can retrieve the value
+"""
 directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
+"""
+Indicates is the input field is read-only by non-system admin users.
+If an input is marked as @readOnly, only system-admin users
+can set the field
+"""
 directive @readOnly on INPUT_FIELD_DEFINITION

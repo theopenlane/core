@@ -145,7 +145,7 @@ func HookSystemOwnedCreate() ent.Hook {
 // For create operations, since the field is automatically set, we skip the check
 // For update operations, the rule checks if the existing object is system owned
 // and denys if it is and the user is not a system admin
-func SystemOwnedSchema(additionalFields ...string) privacy.MutationRuleFunc {
+func SystemOwnedSchema() privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m generated.Mutation) error {
 		// on create check continue, the field is automatically set based on user role
 		if m.Op() == ent.OpCreate {
