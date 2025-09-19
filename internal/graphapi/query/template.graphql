@@ -26,8 +26,8 @@ mutation CreateBulkTemplate($input: [CreateTemplateInput!]) {
   }
 }
 
-mutation CreateTemplate($input: CreateTemplateInput!) {
-  createTemplate(input: $input) {
+mutation CreateTemplate($input: CreateTemplateInput!, $templateFiles: [Upload!]) {
+  createTemplate(input: $input, templateFiles: $templateFiles) {
     template {
       description
       id
@@ -36,6 +36,14 @@ mutation CreateTemplate($input: CreateTemplateInput!) {
       uischema
       kind
       ownerID
+      files {
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
     }
   }
 }
@@ -55,6 +63,14 @@ query GetAllTemplates {
         updatedAt
         updatedBy
         ownerID
+        files {
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
       }
     }
   }
@@ -73,11 +89,19 @@ query GetTemplateByID($getTemplateId: ID!) {
     updatedBy
     kind
     ownerID
+    files {
+      edges {
+        node {
+          id
+          presignedURL
+        }
+      }
+    }
   }
 }
 
-mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
-  updateTemplate(id: $updateTemplateId, input: $input) {
+mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!, $templateFiles: [Upload!]) {
+  updateTemplate(id: $updateTemplateId, input: $input, templateFiles: $templateFiles) {
     template {
       createdAt
       createdBy
@@ -90,6 +114,14 @@ mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
       updatedBy
       kind
       ownerID
+      files {
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
     }
   }
 }

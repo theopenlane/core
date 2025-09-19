@@ -189,6 +189,20 @@ func (_c *TemplateCreate) SetUischema(v map[string]interface{}) *TemplateCreate 
 	return _c
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *TemplateCreate) SetTrustCenterID(v string) *TemplateCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableTrustCenterID(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TemplateCreate) SetID(v string) *TemplateCreate {
 	_c.mutation.SetID(v)
@@ -238,19 +252,9 @@ func (_c *TemplateCreate) AddFiles(v ...*File) *TemplateCreate {
 	return _c.AddFileIDs(ids...)
 }
 
-// AddTrustCenterIDs adds the "trust_centers" edge to the TrustCenter entity by IDs.
-func (_c *TemplateCreate) AddTrustCenterIDs(ids ...string) *TemplateCreate {
-	_c.mutation.AddTrustCenterIDs(ids...)
-	return _c
-}
-
-// AddTrustCenters adds the "trust_centers" edges to the TrustCenter entity.
-func (_c *TemplateCreate) AddTrustCenters(v ...*TrustCenter) *TemplateCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddTrustCenterIDs(ids...)
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_c *TemplateCreate) SetTrustCenter(v *TrustCenter) *TemplateCreate {
+	return _c.SetTrustCenterID(v.ID)
 }
 
 // Mutation returns the TemplateMutation object of the builder.
@@ -497,21 +501,22 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.TrustCentersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   template.TrustCentersTable,
-			Columns: []string{template.TrustCentersColumn},
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   template.TrustCenterTable,
+			Columns: []string{template.TrustCenterColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenter
+		edge.Schema = _c.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.TrustCenterID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

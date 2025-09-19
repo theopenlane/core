@@ -209,6 +209,26 @@ func (_u *TemplateHistoryUpdate) ClearUischema() *TemplateHistoryUpdate {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TemplateHistoryUpdate) SetTrustCenterID(v string) *TemplateHistoryUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TemplateHistoryUpdate) SetNillableTrustCenterID(v *string) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TemplateHistoryUpdate) ClearTrustCenterID() *TemplateHistoryUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // Mutation returns the TemplateHistoryMutation object of the builder.
 func (_u *TemplateHistoryUpdate) Mutation() *TemplateHistoryMutation {
 	return _u.mutation
@@ -362,6 +382,12 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -563,6 +589,26 @@ func (_u *TemplateHistoryUpdateOne) ClearUischema() *TemplateHistoryUpdateOne {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TemplateHistoryUpdateOne) SetTrustCenterID(v string) *TemplateHistoryUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TemplateHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TemplateHistoryUpdateOne) ClearTrustCenterID() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // Mutation returns the TemplateHistoryMutation object of the builder.
 func (_u *TemplateHistoryUpdateOne) Mutation() *TemplateHistoryMutation {
 	return _u.mutation
@@ -746,6 +792,12 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

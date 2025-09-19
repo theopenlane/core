@@ -1850,6 +1850,7 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(uischema)::text LIKE $7", likeQuery)) // search by Uischema
 				},
+				template.TrustCenterIDContainsFold(query), // search by TrustCenterID
 			),
 		)
 

@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"os"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
@@ -95,7 +96,7 @@ func create(ctx context.Context) error {
 	input, err := createValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.CreateTemplate(ctx, input)
+	o, err := client.CreateTemplate(ctx, input, []*graphql.Upload{})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

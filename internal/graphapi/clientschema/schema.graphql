@@ -9353,7 +9353,7 @@ input CreateTemplateInput {
 	ownerID: ID
 	documentIDs: [ID!]
 	fileIDs: [ID!]
-	trustCenterIDs: [ID!]
+	trustCenterID: ID
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -9420,6 +9420,7 @@ input CreateTrustCenterInput {
 	trustCenterSubprocessorIDs: [ID!]
 	trustCenterDocIDs: [ID!]
 	trustCenterComplianceIDs: [ID!]
+	templateIDs: [ID!]
 	createTrustCenterSetting: CreateTrustCenterSettingInput
 }
 """
@@ -28415,7 +28416,7 @@ type Mutation {
 		values of the template
 		"""
 		input: CreateTemplateInput!
-	): TemplateCreatePayload!
+	templateFiles: [Upload!]): TemplateCreatePayload!
 	"""
 	Create multiple new templates
 	"""
@@ -28447,7 +28448,7 @@ type Mutation {
 		New values for the template
 		"""
 		input: UpdateTemplateInput!
-	): TemplateUpdatePayload!
+	templateFiles: [Upload!]): TemplateUpdatePayload!
 	"""
 	Delete an existing template
 	"""
@@ -54117,6 +54118,10 @@ type Template implements Node {
 	the uischema for the template to render in the UI
 	"""
 	uischema: Map
+	"""
+	the id of the trust center this template is associated with
+	"""
+	trustCenterID: ID
 	owner: Organization
 	documents(
 		"""
@@ -54180,37 +54185,7 @@ type Template implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
-	trustCenters(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for TrustCenters returned from the connection.
-		"""
-		orderBy: [TrustCenterOrder!]
-
-		"""
-		Filtering options for TrustCenters returned from the connection.
-		"""
-		where: TrustCenterWhereInput
-	): TrustCenterConnection!
+	trustCenter: TrustCenter
 }
 """
 Return response for createBulkTemplate mutation
@@ -54317,6 +54292,10 @@ type TemplateHistory implements Node {
 	the uischema for the template to render in the UI
 	"""
 	uischema: Map
+	"""
+	the id of the trust center this template is associated with
+	"""
+	trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -54580,6 +54559,24 @@ input TemplateHistoryWhereInput {
 	kindNotIn: [TemplateHistoryTemplateKind!]
 	kindIsNil: Boolean
 	kindNotNil: Boolean
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: String
+	trustCenterIDNEQ: String
+	trustCenterIDIn: [String!]
+	trustCenterIDNotIn: [String!]
+	trustCenterIDGT: String
+	trustCenterIDGTE: String
+	trustCenterIDLT: String
+	trustCenterIDLTE: String
+	trustCenterIDContains: String
+	trustCenterIDHasPrefix: String
+	trustCenterIDHasSuffix: String
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: String
+	trustCenterIDContainsFold: String
 }
 """
 Ordering options for Template connections
@@ -54771,6 +54768,24 @@ input TemplateWhereInput {
 	kindIsNil: Boolean
 	kindNotNil: Boolean
 	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: ID
+	trustCenterIDNEQ: ID
+	trustCenterIDIn: [ID!]
+	trustCenterIDNotIn: [ID!]
+	trustCenterIDGT: ID
+	trustCenterIDGTE: ID
+	trustCenterIDLT: ID
+	trustCenterIDLTE: ID
+	trustCenterIDContains: ID
+	trustCenterIDHasPrefix: ID
+	trustCenterIDHasSuffix: ID
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: ID
+	trustCenterIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -54786,10 +54801,10 @@ input TemplateWhereInput {
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
 	"""
-	trust_centers edge predicates
+	trust_center edge predicates
 	"""
-	hasTrustCenters: Boolean
-	hasTrustCentersWith: [TrustCenterWhereInput!]
+	hasTrustCenter: Boolean
+	hasTrustCenterWith: [TrustCenterWhereInput!]
 }
 """
 The builtin Time type
@@ -54913,6 +54928,37 @@ type TrustCenter implements Node {
 		"""
 		where: TrustCenterComplianceWhereInput
 	): TrustCenterComplianceConnection!
+	templates(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Templates returned from the connection.
+		"""
+		orderBy: [TemplateOrder!]
+
+		"""
+		Filtering options for Templates returned from the connection.
+		"""
+		where: TemplateWhereInput
+	): TemplateConnection!
 }
 type TrustCenterCompliance implements Node {
 	id: ID!
@@ -58040,6 +58086,11 @@ input TrustCenterWhereInput {
 	"""
 	hasTrustCenterCompliances: Boolean
 	hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
+	"""
+	templates edge predicates
+	"""
+	hasTemplates: Boolean
+	hasTemplatesWith: [TemplateWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -61028,9 +61079,8 @@ input UpdateTemplateInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
-	addTrustCenterIDs: [ID!]
-	removeTrustCenterIDs: [ID!]
-	clearTrustCenters: Boolean
+	trustCenterID: ID
+	clearTrustCenter: Boolean
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -61102,6 +61152,9 @@ input UpdateTrustCenterInput {
 	addTrustCenterComplianceIDs: [ID!]
 	removeTrustCenterComplianceIDs: [ID!]
 	clearTrustCenterCompliances: Boolean
+	addTemplateIDs: [ID!]
+	removeTemplateIDs: [ID!]
+	clearTemplates: Boolean
 	updateTrustCenterSetting: UpdateTrustCenterSettingInput
 }
 """

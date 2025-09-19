@@ -11185,17 +11185,17 @@ func (c *TaskUpdateOne) SetInput(i UpdateTaskInput) *TaskUpdateOne {
 
 // CreateTemplateInput represents a mutation input for creating templates.
 type CreateTemplateInput struct {
-	Tags           []string
-	Name           string
-	TemplateType   *enums.DocumentType
-	Description    *string
-	Kind           *enums.TemplateKind
-	Jsonconfig     map[string]interface{}
-	Uischema       map[string]interface{}
-	OwnerID        *string
-	DocumentIDs    []string
-	FileIDs        []string
-	TrustCenterIDs []string
+	Tags          []string
+	Name          string
+	TemplateType  *enums.DocumentType
+	Description   *string
+	Kind          *enums.TemplateKind
+	Jsonconfig    map[string]interface{}
+	Uischema      map[string]interface{}
+	OwnerID       *string
+	DocumentIDs   []string
+	FileIDs       []string
+	TrustCenterID *string
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
@@ -11228,8 +11228,8 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
-	if v := i.TrustCenterIDs; len(v) > 0 {
-		m.AddTrustCenterIDs(v...)
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
 	}
 }
 
@@ -11241,27 +11241,26 @@ func (c *TemplateCreate) SetInput(i CreateTemplateInput) *TemplateCreate {
 
 // UpdateTemplateInput represents a mutation input for updating templates.
 type UpdateTemplateInput struct {
-	ClearTags            bool
-	Tags                 []string
-	AppendTags           []string
-	Name                 *string
-	TemplateType         *enums.DocumentType
-	ClearDescription     bool
-	Description          *string
-	ClearKind            bool
-	Kind                 *enums.TemplateKind
-	Jsonconfig           map[string]interface{}
-	ClearUischema        bool
-	Uischema             map[string]interface{}
-	ClearDocuments       bool
-	AddDocumentIDs       []string
-	RemoveDocumentIDs    []string
-	ClearFiles           bool
-	AddFileIDs           []string
-	RemoveFileIDs        []string
-	ClearTrustCenters    bool
-	AddTrustCenterIDs    []string
-	RemoveTrustCenterIDs []string
+	ClearTags         bool
+	Tags              []string
+	AppendTags        []string
+	Name              *string
+	TemplateType      *enums.DocumentType
+	ClearDescription  bool
+	Description       *string
+	ClearKind         bool
+	Kind              *enums.TemplateKind
+	Jsonconfig        map[string]interface{}
+	ClearUischema     bool
+	Uischema          map[string]interface{}
+	ClearDocuments    bool
+	AddDocumentIDs    []string
+	RemoveDocumentIDs []string
+	ClearFiles        bool
+	AddFileIDs        []string
+	RemoveFileIDs     []string
+	ClearTrustCenter  bool
+	TrustCenterID     *string
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -11320,14 +11319,11 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
 	}
-	if i.ClearTrustCenters {
-		m.ClearTrustCenters()
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
 	}
-	if v := i.AddTrustCenterIDs; len(v) > 0 {
-		m.AddTrustCenterIDs(v...)
-	}
-	if v := i.RemoveTrustCenterIDs; len(v) > 0 {
-		m.RemoveTrustCenterIDs(v...)
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
 	}
 }
 
@@ -11352,6 +11348,7 @@ type CreateTrustCenterInput struct {
 	TrustCenterSubprocessorIDs []string
 	TrustCenterDocIDs          []string
 	TrustCenterComplianceIDs   []string
+	TemplateIDs                []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -11376,6 +11373,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.TrustCenterComplianceIDs; len(v) > 0 {
 		m.AddTrustCenterComplianceIDs(v...)
+	}
+	if v := i.TemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
 	}
 }
 
@@ -11405,6 +11405,9 @@ type UpdateTrustCenterInput struct {
 	ClearTrustCenterCompliances      bool
 	AddTrustCenterComplianceIDs      []string
 	RemoveTrustCenterComplianceIDs   []string
+	ClearTemplates                   bool
+	AddTemplateIDs                   []string
+	RemoveTemplateIDs                []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -11462,6 +11465,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.RemoveTrustCenterComplianceIDs; len(v) > 0 {
 		m.RemoveTrustCenterComplianceIDs(v...)
+	}
+	if i.ClearTemplates {
+		m.ClearTemplates()
+	}
+	if v := i.AddTemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
+	}
+	if v := i.RemoveTemplateIDs; len(v) > 0 {
+		m.RemoveTemplateIDs(v...)
 	}
 }
 

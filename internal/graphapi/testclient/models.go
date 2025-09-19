@@ -5584,11 +5584,11 @@ type CreateTemplateInput struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema       map[string]any `json:"uischema,omitempty"`
-	OwnerID        *string        `json:"ownerID,omitempty"`
-	DocumentIDs    []string       `json:"documentIDs,omitempty"`
-	FileIDs        []string       `json:"fileIDs,omitempty"`
-	TrustCenterIDs []string       `json:"trustCenterIDs,omitempty"`
+	Uischema      map[string]any `json:"uischema,omitempty"`
+	OwnerID       *string        `json:"ownerID,omitempty"`
+	DocumentIDs   []string       `json:"documentIDs,omitempty"`
+	FileIDs       []string       `json:"fileIDs,omitempty"`
+	TrustCenterID *string        `json:"trustCenterID,omitempty"`
 }
 
 // CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -5635,6 +5635,7 @@ type CreateTrustCenterInput struct {
 	TrustCenterSubprocessorIDs []string                       `json:"trustCenterSubprocessorIDs,omitempty"`
 	TrustCenterDocIDs          []string                       `json:"trustCenterDocIDs,omitempty"`
 	TrustCenterComplianceIDs   []string                       `json:"trustCenterComplianceIDs,omitempty"`
+	TemplateIDs                []string                       `json:"templateIDs,omitempty"`
 	CreateTrustCenterSetting   *CreateTrustCenterSettingInput `json:"createTrustCenterSetting,omitempty"`
 }
 
@@ -25935,11 +25936,13 @@ type Template struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema     map[string]any          `json:"uischema,omitempty"`
-	Owner        *Organization           `json:"owner,omitempty"`
-	Documents    *DocumentDataConnection `json:"documents"`
-	Files        *FileConnection         `json:"files"`
-	TrustCenters *TrustCenterConnection  `json:"trustCenters"`
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// the id of the trust center this template is associated with
+	TrustCenterID *string                 `json:"trustCenterID,omitempty"`
+	Owner         *Organization           `json:"owner,omitempty"`
+	Documents     *DocumentDataConnection `json:"documents"`
+	Files         *FileConnection         `json:"files"`
+	TrustCenter   *TrustCenter            `json:"trustCenter,omitempty"`
 }
 
 func (Template) IsNode() {}
@@ -26005,6 +26008,8 @@ type TemplateHistory struct {
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
 	Uischema map[string]any `json:"uischema,omitempty"`
+	// the id of the trust center this template is associated with
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
 }
 
 func (TemplateHistory) IsNode() {}
@@ -26194,6 +26199,22 @@ type TemplateHistoryWhereInput struct {
 	KindNotIn  []enums.TemplateKind `json:"kindNotIn,omitempty"`
 	KindIsNil  *bool                `json:"kindIsNil,omitempty"`
 	KindNotNil *bool                `json:"kindNotNil,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 }
 
 // Ordering options for Template connections
@@ -26339,6 +26360,22 @@ type TemplateWhereInput struct {
 	KindNotIn  []enums.TemplateKind `json:"kindNotIn,omitempty"`
 	KindIsNil  *bool                `json:"kindIsNil,omitempty"`
 	KindNotNil *bool                `json:"kindNotNil,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -26348,9 +26385,9 @@ type TemplateWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
-	// trust_centers edge predicates
-	HasTrustCenters     *bool                    `json:"hasTrustCenters,omitempty"`
-	HasTrustCentersWith []*TrustCenterWhereInput `json:"hasTrustCentersWith,omitempty"`
+	// trust_center edge predicates
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
 }
 
 type TrustCenter struct {
@@ -26373,6 +26410,7 @@ type TrustCenter struct {
 	TrustCenterSubprocessors *TrustCenterSubprocessorConnection `json:"trustCenterSubprocessors"`
 	TrustCenterDocs          *TrustCenterDocConnection          `json:"trustCenterDocs"`
 	TrustCenterCompliances   *TrustCenterComplianceConnection   `json:"trustCenterCompliances"`
+	Templates                *TemplateConnection                `json:"templates"`
 }
 
 func (TrustCenter) IsNode() {}
@@ -28726,6 +28764,9 @@ type TrustCenterWhereInput struct {
 	// trust_center_compliances edge predicates
 	HasTrustCenterCompliances     *bool                              `json:"hasTrustCenterCompliances,omitempty"`
 	HasTrustCenterCompliancesWith []*TrustCenterComplianceWhereInput `json:"hasTrustCenterCompliancesWith,omitempty"`
+	// templates edge predicates
+	HasTemplates     *bool                 `json:"hasTemplates,omitempty"`
+	HasTemplatesWith []*TemplateWhereInput `json:"hasTemplatesWith,omitempty"`
 }
 
 // UpdateAPITokenInput is used for update APIToken object.
@@ -31005,17 +31046,16 @@ type UpdateTemplateInput struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
-	Uischema             map[string]any `json:"uischema,omitempty"`
-	ClearUischema        *bool          `json:"clearUischema,omitempty"`
-	AddDocumentIDs       []string       `json:"addDocumentIDs,omitempty"`
-	RemoveDocumentIDs    []string       `json:"removeDocumentIDs,omitempty"`
-	ClearDocuments       *bool          `json:"clearDocuments,omitempty"`
-	AddFileIDs           []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs        []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles           *bool          `json:"clearFiles,omitempty"`
-	AddTrustCenterIDs    []string       `json:"addTrustCenterIDs,omitempty"`
-	RemoveTrustCenterIDs []string       `json:"removeTrustCenterIDs,omitempty"`
-	ClearTrustCenters    *bool          `json:"clearTrustCenters,omitempty"`
+	Uischema          map[string]any `json:"uischema,omitempty"`
+	ClearUischema     *bool          `json:"clearUischema,omitempty"`
+	AddDocumentIDs    []string       `json:"addDocumentIDs,omitempty"`
+	RemoveDocumentIDs []string       `json:"removeDocumentIDs,omitempty"`
+	ClearDocuments    *bool          `json:"clearDocuments,omitempty"`
+	AddFileIDs        []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs     []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles        *bool          `json:"clearFiles,omitempty"`
+	TrustCenterID     *string        `json:"trustCenterID,omitempty"`
+	ClearTrustCenter  *bool          `json:"clearTrustCenter,omitempty"`
 }
 
 // UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -31072,6 +31112,9 @@ type UpdateTrustCenterInput struct {
 	AddTrustCenterComplianceIDs      []string                       `json:"addTrustCenterComplianceIDs,omitempty"`
 	RemoveTrustCenterComplianceIDs   []string                       `json:"removeTrustCenterComplianceIDs,omitempty"`
 	ClearTrustCenterCompliances      *bool                          `json:"clearTrustCenterCompliances,omitempty"`
+	AddTemplateIDs                   []string                       `json:"addTemplateIDs,omitempty"`
+	RemoveTemplateIDs                []string                       `json:"removeTemplateIDs,omitempty"`
+	ClearTemplates                   *bool                          `json:"clearTemplates,omitempty"`
 	UpdateTrustCenterSetting         *UpdateTrustCenterSettingInput `json:"updateTrustCenterSetting,omitempty"`
 }
 
