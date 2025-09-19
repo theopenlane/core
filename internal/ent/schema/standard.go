@@ -179,7 +179,6 @@ func (s Standard) Interceptors() []ent.Interceptor {
 func (s Standard) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			// rule.SystemOwnedStandards(), // checks for the system owned field
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),

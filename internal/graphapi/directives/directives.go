@@ -23,6 +23,8 @@ const (
 	ReadOnly = "readOnly"
 )
 
+// ImplementAllDirectives is a helper function that can be used to add all active directives to the gqlgen config
+// in the resolver setup
 func ImplementAllDirectives(cfg *gqlgenerated.Config) {
 	cfg.Directives.Hidden = HiddenDirective
 	cfg.Directives.ReadOnly = ReadOnlyDirective
@@ -45,7 +47,7 @@ var HiddenDirectiveAnnotation = entgql.Directives(
 // HiddenDirective is the implementation for the hidden directive that can be used to hide a field from non-system admin users
 // if the user is a system admin, the field will be returned
 // otherwise, the field will be returned as nil
-var HiddenDirective = func(ctx context.Context, obj any, next graphql.Resolver, isHidden *bool) (any, error) {
+var HiddenDirective = func(ctx context.Context, _ any, next graphql.Resolver, isHidden *bool) (any, error) {
 	if admin, err := rule.CheckIsSystemAdminWithContext(ctx); err == nil && admin {
 		// if the user is a system admin, always return the field
 		return next(ctx)
@@ -60,17 +62,19 @@ var HiddenDirective = func(ctx context.Context, obj any, next graphql.Resolver, 
 	return next(ctx)
 }
 
+// NewReadOnlyDirective returns a new readOnly directive to mark a field as read only
 func NewReadOnlyDirective() entgql.Directive {
 	return entgql.NewDirective(ReadOnly, nil)
 }
 
+// ReadOnlyDirectiveAnnotation is an annotation that can be used to mark a field as read only
 var ReadOnlyDirectiveAnnotation = entgql.Directives(
 	NewReadOnlyDirective(),
 )
 
 // ReadOnlyDirective is the implementation for the readOnly directive that can be used to mark input fields as read only
 // this will prevent the field from being used in create and update mutations
-var ReadOnlyDirective = func(ctx context.Context, obj any, next graphql.Resolver) (any, error) {
+var ReadOnlyDirective = func(ctx context.Context, _ any, next graphql.Resolver) (any, error) {
 	// first check to make sure this is a graphql request
 	if !graphql.HasOperationContext(ctx) {
 		// if we can't get the operation context, continue to the next resolver

@@ -104,7 +104,7 @@ func TestQueryMappedControl(t *testing.T) {
 			toControls := resp.MappedControl.ToControls.Edges
 			assert.Check(t, is.Len(toControls, 1), "expected exactly one to control")
 
-			// ensure internal only fields are not returned
+			// ensure internal only fields are not returned for non system admin users
 			if tc.ctx == systemAdminUser.UserCtx {
 				assert.Check(t, resp.MappedControl.SystemInternalID != nil)
 				assert.Check(t, resp.MappedControl.InternalNotes != nil)

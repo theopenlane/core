@@ -366,10 +366,19 @@ func validateEdgeDefinition(e *edgeDefinition) {
 	}
 }
 
+// autoSetSkipForSystemAdmin checks if both SystemOwnedMixin and ObjectOwnedMixin are present in the mixinConfig
+// if both are present it returns true to indicate that the ObjectOwnedMixin should have its AllowEmptyForSystemAdmin
+// field set to true to allow system admins to bypass the organization ownership requirement
 func autoSetSkipForSystemAdmin(mixinConfig *mixinConfig) bool {
 	hasSystemOwnedMixin := false
 	for _, m := range mixinConfig.additionalMixins {
-		if _, ok := m.(mixin.SystemOwnedMixin); ok {
+		if so, ok := m.(mixin.SystemOwnedMixin); ok {
+			// ensure its actually the SystemOwnedMixin by checking the name
+			// because the mixin doesn't have any distinguishing fields or methods
+			if so.Name() != mixin.SystemOwnedMixinName {
+				continue
+			}
+
 			hasSystemOwnedMixin = true
 
 			break

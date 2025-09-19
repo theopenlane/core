@@ -113,7 +113,6 @@ func (Subprocessor) Hooks() []ent.Hook {
 func (t Subprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			// rule.SystemOwnedSubprocessor(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

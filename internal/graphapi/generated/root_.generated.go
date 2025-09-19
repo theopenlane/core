@@ -37131,7 +37131,7 @@ type CustomDomainBulkCreatePayload {
     """
     customDomains: [CustomDomain!]
 }`, BuiltIn: false},
-	{Name: "../schema/directives.graphql", Input: `directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION 
+	{Name: "../schema/directives.graphql", Input: `directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
 directive @readOnly on INPUT_FIELD_DEFINITION
 `, BuiltIn: false},
 	{Name: "../schema/dnsverification.graphql", Input: `extend type Query {

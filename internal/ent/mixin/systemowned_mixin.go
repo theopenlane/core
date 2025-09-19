@@ -22,6 +22,11 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/directives"
 )
 
+const (
+	// SystemOwnedMixinName is the name of the SystemOwnedMixin
+	SystemOwnedMixinName = "SystemOwnedMixin"
+)
+
 // SystemOwnedMixin implements the revision pattern for schemas.
 type SystemOwnedMixin struct {
 	mixin.Schema
@@ -31,14 +36,21 @@ type SystemOwnedMixin struct {
 // The options can be used to customize the behavior of the mixin, however, there are currently no options.
 func NewSystemOwnedMixin(opts ...SystemOwnedMixinOption) SystemOwnedMixin {
 	m := SystemOwnedMixin{}
+
 	for _, opt := range opts {
 		opt(&m)
 	}
+
 	return m
 }
 
 // SystemOwnedMixinOption is a function that configures the SystemOwnedMixin
 type SystemOwnedMixinOption func(*SystemOwnedMixin)
+
+// Name of the SystemOwnedMixin
+func (SystemOwnedMixin) Name() string {
+	return "SystemOwnedMixin"
+}
 
 // Fields of the SystemOwnedMixin.
 func (SystemOwnedMixin) Fields() []ent.Field {

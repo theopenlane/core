@@ -15,6 +15,9 @@ type Extension struct {
 	entc.DefaultExtension
 }
 
+// ensure Extension implements the entc.Extension interface
+var _ entc.Extension = (*Extension)(nil)
+
 // ExtensionOption allow for control over the behavior of the generator
 type ExtensionOption func(*Extension) error
 
@@ -37,6 +40,10 @@ func (e *Extension) SchemaHooks() []entgql.SchemaHook {
 	return []entgql.SchemaHook{hook}
 }
 
+// hook is used to add the @readOnly directive to input fields that are marked as @hidden
+// this prevents hidden fields from being set in create and update mutations
+// as of today, there is no way to annotate a schema to do this automatically so we use a schema
+// hook to modify the generated schema
 var hook = func(_ *gen.Graph, s *ast.Schema) error {
 	for _, t := range s.Types {
 		object := s.Types[getInputObjectName(t.Name)]
@@ -54,6 +61,9 @@ var hook = func(_ *gen.Graph, s *ast.Schema) error {
 	return nil
 }
 
+// setReadOnlyDirective checks if a field in an input object corresponds to a field in the main object
+// that is marked with the @hidden directive. If it is, it adds the @readOnly directive to the input field
+// and also to the clear<FieldName> field if it exists
 func setReadOnlyDirective(f *ast.FieldDefinition, object *ast.Definition, t *ast.Definition) {
 	// get the directives from the corresponding object field
 	field := object.Fields.ForName(f.Name)
@@ -78,8 +88,6 @@ func setReadOnlyDirective(f *ast.FieldDefinition, object *ast.Definition, t *ast
 			}
 		}
 	}
-
-	return
 }
 
 // getInputObjectName returns the input object name by stripping the CRUD operation from the resolver name
@@ -91,5 +99,3 @@ func getInputObjectName(objectName string) string {
 
 	return strings.ReplaceAll(objectName, "Input", "")
 }
-
-var _ entc.Extension = (*Extension)(nil)
