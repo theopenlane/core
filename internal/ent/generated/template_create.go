@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -237,6 +238,21 @@ func (_c *TemplateCreate) AddFiles(v ...*File) *TemplateCreate {
 	return _c.AddFileIDs(ids...)
 }
 
+// AddTrustCenterIDs adds the "trust_centers" edge to the TrustCenter entity by IDs.
+func (_c *TemplateCreate) AddTrustCenterIDs(ids ...string) *TemplateCreate {
+	_c.mutation.AddTrustCenterIDs(ids...)
+	return _c
+}
+
+// AddTrustCenters adds the "trust_centers" edges to the TrustCenter entity.
+func (_c *TemplateCreate) AddTrustCenters(v ...*TrustCenter) *TemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterIDs(ids...)
+}
+
 // Mutation returns the TemplateMutation object of the builder.
 func (_c *TemplateCreate) Mutation() *TemplateMutation {
 	return _c.mutation
@@ -312,6 +328,11 @@ func (_c *TemplateCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *TemplateCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
+		if err := template.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Template.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Template.name"`)}
 	}
@@ -471,6 +492,23 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCentersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.TrustCentersTable,
+			Columns: []string{template.TrustCentersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

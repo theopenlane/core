@@ -41,6 +41,7 @@ var validMimeTypes = map[string][]string{
 	"procedureFile":      importSchemaMimeTypes,
 	"policyFile":         importSchemaMimeTypes,
 	"trustCenterDocFile": {"application/pdf", "image/jpeg", "image/png"},
+	"templateFiles":      {"application/pdf", "image/jpeg", "image/png"},
 }
 
 // MimeTypeValidator returns a validation function for the given key

@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"entgo.io/contrib/entgql"
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -299,6 +300,13 @@ type CreateTrustCenterDomainInput struct {
 	CnameRecord string `json:"cnameRecord"`
 	// trust center ID
 	TrustCenterID string `json:"trustCenterID"`
+}
+
+type CreateTrustCenterNDAInput struct {
+	// trust center id
+	TrustCenterID string `json:"trustCenterID"`
+	// NDA file
+	NdaFile graphql.Upload `json:"ndaFile"`
 }
 
 // Return response for createBulkCustomDomain mutation
@@ -1523,6 +1531,10 @@ type TrustCenterDocUpdatePayload struct {
 // Return response for createTrustCenterDomain mutation
 type TrustCenterDomainCreatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
+}
+
+type TrustCenterNDACreatePayload struct {
+	Template *generated.Template `json:"template"`
 }
 
 // Return response for createBulkTrustCenterSetting mutation

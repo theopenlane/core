@@ -22157,6 +22157,25 @@ func (c *TemplateClient) QueryFiles(_m *Template) *FileQuery {
 	return query
 }
 
+// QueryTrustCenters queries the trust_centers edge of a Template.
+func (c *TemplateClient) QueryTrustCenters(_m *Template) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, template.TrustCentersTable, template.TrustCentersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenter
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TemplateClient) Hooks() []Hook {
 	hooks := c.hooks.Template

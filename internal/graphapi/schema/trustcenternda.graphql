@@ -1,0 +1,26 @@
+extend type Mutation{
+    """
+    Create a Trust Center NDA Template
+    """
+    createTrustCenterNDA(
+        """
+        values of the trustCenterNDA
+        """
+        input: CreateTrustCenterNDAInput!
+        """
+        NDA file
+        """
+        templateFiles: [Upload]!
+    ): TrustCenterNDACreatePayload!
+}
+
+type TrustCenterNDACreatePayload {
+    template: Template!
+}
+
+input CreateTrustCenterNDAInput {
+    """
+    trust center id
+    """
+    trustCenterID: ID!
+}

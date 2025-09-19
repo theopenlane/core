@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
@@ -5126,6 +5127,7 @@ type CreateOrganizationInput struct {
 	ScanIDs                         []string                        `json:"scanIDs,omitempty"`
 	SubprocessorIDs                 []string                        `json:"subprocessorIDs,omitempty"`
 	ExportIDs                       []string                        `json:"exportIDs,omitempty"`
+	TrustCenterDocIDs               []string                        `json:"trustCenterDocIDs,omitempty"`
 	CreateOrgSettings               *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -5609,6 +5611,7 @@ type CreateTrustCenterDocInput struct {
 	Category string `json:"category"`
 	// visibility of the document
 	Visibility    *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	OwnerID       *string                              `json:"ownerID,omitempty"`
 	TrustCenterID *string                              `json:"trustCenterID,omitempty"`
 	FileID        *string                              `json:"fileID,omitempty"`
 }
@@ -5633,6 +5636,13 @@ type CreateTrustCenterInput struct {
 	TrustCenterDocIDs          []string                       `json:"trustCenterDocIDs,omitempty"`
 	TrustCenterComplianceIDs   []string                       `json:"trustCenterComplianceIDs,omitempty"`
 	CreateTrustCenterSetting   *CreateTrustCenterSettingInput `json:"createTrustCenterSetting,omitempty"`
+}
+
+type CreateTrustCenterNDAInput struct {
+	// trust center id
+	TrustCenterID string `json:"trustCenterID"`
+	// NDA file
+	NdaFile graphql.Upload `json:"ndaFile"`
 }
 
 // CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -17328,6 +17338,7 @@ type Organization struct {
 	Scans                         *ScanConnection                       `json:"scans"`
 	Subprocessors                 *SubprocessorConnection               `json:"subprocessors"`
 	Exports                       *ExportConnection                     `json:"exports"`
+	TrustCenterDocs               *TrustCenterDocConnection             `json:"trustCenterDocs"`
 	Members                       *OrgMembershipConnection              `json:"members"`
 }
 
@@ -18726,6 +18737,9 @@ type OrganizationWhereInput struct {
 	// exports edge predicates
 	HasExports     *bool               `json:"hasExports,omitempty"`
 	HasExportsWith []*ExportWhereInput `json:"hasExportsWith,omitempty"`
+	// trust_center_docs edge predicates
+	HasTrustCenterDocs     *bool                       `json:"hasTrustCenterDocs,omitempty"`
+	HasTrustCenterDocsWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -26751,6 +26765,8 @@ type TrustCenterDoc struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// ID of the trust center
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// title of the document
@@ -26761,6 +26777,7 @@ type TrustCenterDoc struct {
 	FileID *string `json:"fileID,omitempty"`
 	// visibility of the document
 	Visibility  *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	Owner       *Organization                        `json:"owner,omitempty"`
 	TrustCenter *TrustCenter                         `json:"trustCenter,omitempty"`
 	// the file containing the document content
 	File *File `json:"file,omitempty"`
@@ -26815,6 +26832,8 @@ type TrustCenterDocHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// ID of the trust center
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// title of the document
@@ -26956,6 +26975,22 @@ type TrustCenterDocHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// trust_center_id field predicates
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -27110,6 +27145,22 @@ type TrustCenterDocWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// trust_center_id field predicates
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -27177,6 +27228,9 @@ type TrustCenterDocWhereInput struct {
 	VisibilityNotIn  []enums.TrustCenterDocumentVisibility `json:"visibilityNotIn,omitempty"`
 	VisibilityIsNil  *bool                                 `json:"visibilityIsNil,omitempty"`
 	VisibilityNotNil *bool                                 `json:"visibilityNotNil,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
@@ -27394,6 +27448,10 @@ type TrustCenterHistoryWhereInput struct {
 	CustomDomainIDNotNil       *bool    `json:"customDomainIDNotNil,omitempty"`
 	CustomDomainIDEqualFold    *string  `json:"customDomainIDEqualFold,omitempty"`
 	CustomDomainIDContainsFold *string  `json:"customDomainIDContainsFold,omitempty"`
+}
+
+type TrustCenterNDACreatePayload struct {
+	Template *Template `json:"template"`
 }
 
 // Ordering options for TrustCenter connections
@@ -30202,6 +30260,9 @@ type UpdateOrganizationInput struct {
 	AddExportIDs                          []string                        `json:"addExportIDs,omitempty"`
 	RemoveExportIDs                       []string                        `json:"removeExportIDs,omitempty"`
 	ClearExports                          *bool                           `json:"clearExports,omitempty"`
+	AddTrustCenterDocIDs                  []string                        `json:"addTrustCenterDocIDs,omitempty"`
+	RemoveTrustCenterDocIDs               []string                        `json:"removeTrustCenterDocIDs,omitempty"`
+	ClearTrustCenterDocs                  *bool                           `json:"clearTrustCenterDocs,omitempty"`
 	AddOrgMembers                         []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	RemoveOrgMembers                      []string                        `json:"removeOrgMembers,omitempty"`
 	UpdateOrgSettings                     *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`

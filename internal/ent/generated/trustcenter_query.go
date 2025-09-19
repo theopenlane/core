@@ -38,6 +38,7 @@ type TrustCenterQuery struct {
 	withTrustCenterSubprocessors      *TrustCenterSubprocessorQuery
 	withTrustCenterDocs               *TrustCenterDocQuery
 	withTrustCenterCompliances        *TrustCenterComplianceQuery
+	withFKs                           bool
 	loadTotal                         []func(context.Context, []*TrustCenter) error
 	modifiers                         []func(*sql.Selector)
 	withNamedTrustCenterSubprocessors map[string]*TrustCenterSubprocessorQuery
@@ -583,6 +584,7 @@ func (_q *TrustCenterQuery) prepareQuery(ctx context.Context) error {
 func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenter, error) {
 	var (
 		nodes       = []*TrustCenter{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [6]bool{
 			_q.withOwner != nil,
@@ -593,6 +595,9 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withTrustCenterCompliances != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, trustcenter.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TrustCenter).scanValues(nil, columns)
 	}

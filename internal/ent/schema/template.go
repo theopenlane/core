@@ -9,6 +9,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -83,7 +84,10 @@ func (Template) Fields() []ent.Field {
 func (t Template) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(t, withSkipForSystemAdmin(true)),
+			newObjectOwnedMixin[generated.Template](t,
+				withParents(TrustCenter{}),
+				withOrganizationOwner(true),
+			),
 		},
 	}.getMixins(t)
 }
@@ -97,6 +101,7 @@ func (t Template) Edges() []ent.Edge {
 			cascadeDelete: "Template",
 		}),
 		defaultEdgeToWithPagination(t, File{}),
+		defaultEdgeToWithPagination(t, TrustCenter{}),
 	}
 }
 
@@ -113,6 +118,7 @@ func (Template) Indexes() []ent.Index {
 func (Template) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTemplate(),
+		hooks.HookTemplateFiles(),
 	}
 }
 

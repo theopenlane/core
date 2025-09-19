@@ -52,6 +52,8 @@ const (
 	EdgeDocuments = "documents"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
+	// EdgeTrustCenters holds the string denoting the trust_centers edge name in mutations.
+	EdgeTrustCenters = "trust_centers"
 	// Table holds the table name of the template in the database.
 	Table = "templates"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -73,6 +75,13 @@ const (
 	// FilesInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	FilesInverseTable = "files"
+	// TrustCentersTable is the table that holds the trust_centers relation/edge.
+	TrustCentersTable = "trust_centers"
+	// TrustCentersInverseTable is the table name for the TrustCenter entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
+	TrustCentersInverseTable = "trust_centers"
+	// TrustCentersColumn is the table column denoting the trust_centers relation/edge.
+	TrustCentersColumn = "template_trust_centers"
 )
 
 // Columns holds all SQL columns for template fields.
@@ -116,8 +125,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
-	Interceptors [3]ent.Interceptor
+	Hooks        [8]ent.Hook
+	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -127,6 +136,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
@@ -254,6 +265,20 @@ func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustCentersCount orders the results by trust_centers count.
+func ByTrustCentersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCentersStep(), opts...)
+	}
+}
+
+// ByTrustCenters orders the results by trust_centers terms.
+func ByTrustCenters(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCentersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -273,6 +298,13 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+	)
+}
+func newTrustCentersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCentersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCentersTable, TrustCentersColumn),
 	)
 }
 
