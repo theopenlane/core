@@ -1,0 +1,104 @@
+extend type Query {
+    """
+    Look up trustCenterDoc by ID
+    """
+     trustCenterDoc(
+        """
+        ID of the trustCenterDoc
+        """
+        id: ID!
+    ):  TrustCenterDoc!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterDoc
+    """
+    createTrustCenterDoc(
+        """
+        values of the trustCenterDoc
+        """
+        input: CreateTrustCenterDocInput!
+        trustCenterDocFile: Upload!
+    ): TrustCenterDocCreatePayload!
+    """
+    Create multiple new trustCenterDocs
+    """
+    createBulkTrustCenterDoc(
+        """
+        values of the trustCenterDoc
+        """
+        input: [CreateTrustCenterDocInput!]
+    ): TrustCenterDocBulkCreatePayload!
+    """
+    Create multiple new trustCenterDocs via file upload
+    """
+    createBulkCSVTrustCenterDoc(
+        """
+        csv file containing values of the trustCenterDoc
+        """
+        input: Upload!
+    ): TrustCenterDocBulkCreatePayload!
+    """
+    Update an existing trustCenterDoc
+    """
+    updateTrustCenterDoc(
+        """
+        ID of the trustCenterDoc
+        """
+        id: ID!
+        """
+        New values for the trustCenterDoc
+        """
+        input: UpdateTrustCenterDocInput!
+    ): TrustCenterDocUpdatePayload!
+    """
+    Delete an existing trustCenterDoc
+    """
+    deleteTrustCenterDoc(
+        """
+        ID of the trustCenterDoc
+        """
+        id: ID!
+    ): TrustCenterDocDeletePayload!
+}
+
+"""
+Return response for createTrustCenterDoc mutation
+"""
+type TrustCenterDocCreatePayload {
+    """
+    Created trustCenterDoc
+    """
+    trustCenterDoc: TrustCenterDoc!
+}
+
+"""
+Return response for updateTrustCenterDoc mutation
+"""
+type TrustCenterDocUpdatePayload {
+    """
+    Updated trustCenterDoc
+    """
+    trustCenterDoc: TrustCenterDoc!
+}
+
+"""
+Return response for deleteTrustCenterDoc mutation
+"""
+type TrustCenterDocDeletePayload {
+    """
+    Deleted trustCenterDoc ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterDoc mutation
+"""
+type TrustCenterDocBulkCreatePayload {
+    """
+    Created trustCenterDocs
+    """
+    trustCenterDocs: [TrustCenterDoc!]
+}

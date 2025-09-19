@@ -1285,6 +1285,7 @@ type SearchResults struct {
 	Templates                   *generated.TemplateConnection                   `json:"templates,omitempty"`
 	TrustCenters                *generated.TrustCenterConnection                `json:"trustCenters,omitempty"`
 	TrustCenterCompliances      *generated.TrustCenterComplianceConnection      `json:"trustCenterCompliances,omitempty"`
+	TrustCenterDocs             *generated.TrustCenterDocConnection             `json:"trustCenterDocs,omitempty"`
 	Users                       *generated.UserConnection                       `json:"users,omitempty"`
 	UserSettings                *generated.UserSettingConnection                `json:"userSettings,omitempty"`
 	Webauthns                   *generated.WebauthnConnection                   `json:"webauthns,omitempty"`
@@ -1493,6 +1494,30 @@ type TrustCenterCreatePayload struct {
 type TrustCenterDeletePayload struct {
 	// Deleted trustCenter ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkTrustCenterDoc mutation
+type TrustCenterDocBulkCreatePayload struct {
+	// Created trustCenterDocs
+	TrustCenterDocs []*generated.TrustCenterDoc `json:"trustCenterDocs,omitempty"`
+}
+
+// Return response for createTrustCenterDoc mutation
+type TrustCenterDocCreatePayload struct {
+	// Created trustCenterDoc
+	TrustCenterDoc *generated.TrustCenterDoc `json:"trustCenterDoc"`
+}
+
+// Return response for deleteTrustCenterDoc mutation
+type TrustCenterDocDeletePayload struct {
+	// Deleted trustCenterDoc ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenterDoc mutation
+type TrustCenterDocUpdatePayload struct {
+	// Updated trustCenterDoc
+	TrustCenterDoc *generated.TrustCenterDoc `json:"trustCenterDoc"`
 }
 
 // Return response for createTrustCenterDomain mutation

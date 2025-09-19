@@ -467,4 +467,23 @@ func (suite *GraphTestSuite) orgSubscriptionMocks() {
 		}
 
 	}).Return(nil)
+
+	// setup mocks for subscription schedule creation
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionScheduleCreateParams"), mock.AnythingOfType("*stripe.SubscriptionSchedule")).Run(func(args mock.Arguments) {
+		mockSubscriptionScheduleResult := args.Get(4).(*stripe.SubscriptionSchedule)
+
+		*mockSubscriptionScheduleResult = stripe.SubscriptionSchedule{
+			ID:     "sched_test_schedule",
+			Status: "active",
+		}
+
+	}).Return(nil)
+
+	// setup mocks for customer update params
+	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerUpdateParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
+		mockCustomerUpdateResult := args.Get(4).(*stripe.Customer)
+
+		*mockCustomerUpdateResult = *mockCustomer
+
+	}).Return(nil)
 }

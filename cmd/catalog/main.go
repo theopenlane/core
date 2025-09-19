@@ -10,6 +10,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/manifoldco/promptui"
 	"github.com/rs/zerolog/log"
 	"github.com/urfave/cli/v3"
 
@@ -45,6 +46,9 @@ type stripeClient interface {
 	UpdatePriceMetadata(ctx context.Context, priceID string, metadata map[string]string) (*stripe.Price, error)
 	UpdateProductWithParams(ctx context.Context, productID string, params *stripe.ProductUpdateParams) (*stripe.Product, error)
 	UpdateProductWithOptions(baseParams *stripe.ProductUpdateParams, opts ...entitlements.ProductUpdateOption) *stripe.ProductUpdateParams
+	SearchCustomers(ctx context.Context, query string) ([]*stripe.Customer, error)
+	ListSubscriptions(ctx context.Context, customerID string) ([]*stripe.Subscription, error)
+	UpdateSubscription(ctx context.Context, id string, params *stripe.SubscriptionUpdateParams) (*stripe.Subscription, error)
 }
 
 // newClient is a function that creates a new stripe client. It can be replaced in tests for mocking purposes
@@ -88,10 +92,30 @@ func catalogApp() *cli.Command {
 				Usage: "write price IDs back to catalog file",
 				Value: true, // default to true to ensure up to date price IDs
 			},
+			&cli.BoolFlag{
+				Name:  "add-module",
+				Usage: "interactively add a module to an organization's subscription",
+			},
+			&cli.StringFlag{
+				Name:  "org-id",
+				Usage: "organization ID (required when using --add-module)",
+			},
 		},
 		Action: func(ctx context.Context, c *cli.Command) error {
 			catalogFile := c.String("catalog")
 			apiKey := c.String("stripe-key")
+
+			// Check if add-module mode
+			if c.Bool("add-module") {
+				orgID := c.String("org-id")
+				if orgID == "" {
+					return ErrOrgIDRequired
+				}
+
+				return addModuleInteractive(ctx, catalogFile, apiKey, orgID)
+			}
+
+			// Otherwise, do reconciliation
 			takeover := c.Bool("takeover")
 			write := c.Bool("write")
 
@@ -211,6 +235,21 @@ func catalogApp() *cli.Command {
 }
 
 var ErrExpectedClient = fmt.Errorf("expected stripeClient type")
+
+// Static errors for better error handling
+var (
+	ErrNoCustomerFound             = fmt.Errorf("no customer found for organization")
+	ErrNoSubscriptionFound         = fmt.Errorf("no subscription found for organization")
+	ErrMultipleCustomersFound      = fmt.Errorf("found multiple customers for organization")
+	ErrMultipleActiveSubscriptions = fmt.Errorf("found multiple active subscriptions for customer")
+	ErrNoModulesAvailable          = fmt.Errorf("no modules available")
+	ErrOrgIDRequired               = fmt.Errorf("--org-id is required when using --add-module")
+)
+
+const (
+	centsToDollars  = 100
+	maxDisplayItems = 10
+)
 
 // buildProductMap fetches all existing Stripe products and indexes them by ID
 // and name so lookups can prefer unique identifiers when available
@@ -531,4 +570,242 @@ func printFeatureReports(reports []featureReport) {
 	}
 
 	_ = writer.Render()
+}
+
+// addModuleInteractive implements the interactive add-module functionality
+func addModuleInteractive(ctx context.Context, catalogFile, apiKey, orgID string) error {
+	cat, err := catalog.LoadCatalog(catalogFile)
+	if err != nil {
+		return fmt.Errorf("load catalog: %w", err)
+	}
+
+	sc, err := newClient(entitlements.WithAPIKey(apiKey))
+	if err != nil {
+		return fmt.Errorf("stripe client: %w", err)
+	}
+
+	customer, subscription, err := findCustomerAndSubscription(ctx, sc, orgID)
+	if err != nil {
+		return fmt.Errorf("find customer and subscription: %w", err)
+	}
+
+	if customer == nil {
+		return fmt.Errorf("%w: %s", ErrNoCustomerFound, orgID)
+	}
+
+	if subscription == nil {
+		return fmt.Errorf("%w: %s", ErrNoSubscriptionFound, orgID)
+	}
+
+	fmt.Printf("Found customer: %s\n", customer.Name)
+	fmt.Printf("Current subscription: %s (status: %s)\n", subscription.ID, subscription.Status)
+
+	availableModules := getAvailableModules(cat, subscription)
+	if len(availableModules) == 0 {
+		fmt.Println("No additional modules available to add")
+		return nil
+	}
+
+	// Present interactive module selection
+	selectedModule, selectedPrice, err := selectModuleInteractively(availableModules)
+	if err != nil {
+		return fmt.Errorf("module selection: %w", err)
+	}
+
+	// Add module to subscription
+	err = addModuleToSubscription(ctx, sc, subscription, selectedModule, selectedPrice)
+	if err != nil {
+		return fmt.Errorf("add module to subscription: %w", err)
+	}
+
+	fmt.Printf("Successfully added module '%s' to subscription\n", selectedModule.DisplayName)
+
+	return nil
+}
+
+// findCustomerAndSubscription finds the Stripe customer and active subscription for an organization
+func findCustomerAndSubscription(ctx context.Context, sc stripeClient, orgID string) (*stripe.Customer, *stripe.Subscription, error) {
+	// Search for customer by name (which is the org ID)
+	customers, err := sc.SearchCustomers(ctx, fmt.Sprintf("name:'%s'", orgID))
+	if err != nil {
+		return nil, nil, fmt.Errorf("search customers: %w", err)
+	}
+
+	if len(customers) == 0 {
+		return nil, nil, nil
+	}
+
+	if len(customers) > 1 {
+		return nil, nil, fmt.Errorf("%w: %s", ErrMultipleCustomersFound, orgID)
+	}
+
+	customer := customers[0]
+
+	// Get active subscriptions for the customer
+	subscriptions, err := sc.ListSubscriptions(ctx, customer.ID)
+	if err != nil {
+		return nil, nil, fmt.Errorf("list subscriptions: %w", err)
+	}
+
+	// Find active subscription
+	var activeSubscription *stripe.Subscription
+	for _, sub := range subscriptions {
+		if entitlements.IsSubscriptionActive(sub.Status) {
+			if activeSubscription != nil {
+				return nil, nil, fmt.Errorf("%w: %s", ErrMultipleActiveSubscriptions, customer.ID)
+			}
+
+			activeSubscription = sub
+		}
+	}
+
+	return customer, activeSubscription, nil
+}
+
+// getAvailableModules returns modules from the catalog that are not already in the subscription
+func getAvailableModules(cat *catalog.Catalog, subscription *stripe.Subscription) map[string]catalog.Feature {
+	// Get current subscription price IDs
+	currentPrices := make(map[string]bool)
+	if subscription != nil && subscription.Items != nil {
+		for _, item := range subscription.Items.Data {
+			if item.Price != nil {
+				currentPrices[item.Price.ID] = true
+			}
+		}
+	}
+
+	// Filter out modules that are already in the subscription
+	available := make(map[string]catalog.Feature)
+	for name, module := range cat.Modules {
+		// Skip if any price for this module is already in the subscription
+		hasPrice := false
+		for _, price := range module.Billing.Prices {
+			if currentPrices[price.PriceID] {
+				hasPrice = true
+				break
+			}
+		}
+
+		if !hasPrice {
+			available[name] = module
+		}
+	}
+
+	return available
+}
+
+// selectModuleInteractively presents the user with an interactive list of modules to choose from
+func selectModuleInteractively(modules map[string]catalog.Feature) (catalog.Feature, catalog.Price, error) {
+	if len(modules) == 0 {
+		return catalog.Feature{}, catalog.Price{}, ErrNoModulesAvailable
+	}
+
+	// Create sorted list for consistent ordering
+	type moduleOption struct {
+		name   string
+		module catalog.Feature
+		label  string
+	}
+
+	var options []moduleOption
+	for name, module := range modules {
+		label := fmt.Sprintf("%s - %s", module.DisplayName, module.Description)
+		options = append(options, moduleOption{
+			name:   name,
+			module: module,
+			label:  label,
+		})
+	}
+
+	// Sort by display name for consistency
+	slices.SortFunc(options, func(a, b moduleOption) int {
+		return strings.Compare(a.module.DisplayName, b.module.DisplayName)
+	})
+
+	// Create labels for the prompt
+	labels := make([]string, len(options))
+	for i, opt := range options {
+		labels[i] = opt.label
+	}
+
+	prompt := promptui.Select{
+		Label: "Select a module to add",
+		Items: labels,
+		Size:  maxDisplayItems,
+		Templates: &promptui.SelectTemplates{
+			Label:    "{{ . }}:",
+			Active:   "\U0001F449 {{ . | cyan }}",
+			Inactive: "  {{ . }}",
+			Selected: "\U00002705 {{ . | green }}",
+		},
+	}
+
+	index, _, err := prompt.Run()
+	if err != nil {
+		return catalog.Feature{}, catalog.Price{}, fmt.Errorf("module selection cancelled: %w", err)
+	}
+
+	selectedModule := options[index].module
+
+	// If module has multiple prices, let user choose
+	if len(selectedModule.Billing.Prices) > 1 {
+		selectedPrice, err := selectPriceInteractively(selectedModule.Billing.Prices)
+		if err != nil {
+			return catalog.Feature{}, catalog.Price{}, err
+		}
+		return selectedModule, selectedPrice, nil
+	}
+
+	return selectedModule, selectedModule.Billing.Prices[0], nil
+}
+
+// selectPriceInteractively presents the user with an interactive list of pricing options
+func selectPriceInteractively(prices []catalog.Price) (catalog.Price, error) {
+	// Create labels for each price option
+	labels := make([]string, len(prices))
+	for i, price := range prices {
+		amount := float64(price.UnitAmount) / centsToDollars
+		label := fmt.Sprintf("$%.2f/%s", amount, price.Interval)
+		if price.Nickname != "" {
+			label = fmt.Sprintf("%s (%s)", label, price.Nickname)
+		}
+		labels[i] = label
+	}
+
+	prompt := promptui.Select{
+		Label: "Select pricing option",
+		Items: labels,
+		Templates: &promptui.SelectTemplates{
+			Label:    "{{ . }}:",
+			Active:   "\U0001F449 {{ . | cyan }}",
+			Inactive: "  {{ . }}",
+			Selected: "\U00002705 {{ . | green }}",
+		},
+	}
+
+	index, _, err := prompt.Run()
+	if err != nil {
+		return catalog.Price{}, fmt.Errorf("price selection cancelled: %w", err)
+	}
+
+	return prices[index], nil
+}
+
+// addModuleToSubscription adds a new price item to an existing subscription
+func addModuleToSubscription(ctx context.Context, sc stripeClient, subscription *stripe.Subscription, _ catalog.Feature, price catalog.Price) error {
+	// Create subscription item for the new module
+	params := &stripe.SubscriptionUpdateParams{
+		Items: []*stripe.SubscriptionUpdateItemParams{
+			{
+				Price: stripe.String(price.PriceID),
+			},
+		},
+	}
+
+	_, err := sc.UpdateSubscription(ctx, subscription.ID, params)
+	if err != nil {
+		return fmt.Errorf("update subscription: %w", err)
+	}
+
+	return nil
 }

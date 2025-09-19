@@ -1112,6 +1112,25 @@ func (r *mutationResolver) bulkCreateTrustCenterCompliance(ctx context.Context, 
 	}, nil
 }
 
+// bulkCreateTrustCenterDoc uses the CreateBulk function to create multiple TrustCenterDoc entities
+func (r *mutationResolver) bulkCreateTrustCenterDoc(ctx context.Context, input []*generated.CreateTrustCenterDocInput) (*model.TrustCenterDocBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.TrustCenterDocCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.TrustCenterDoc.Create().SetInput(*data)
+	}
+
+	res, err := c.TrustCenterDoc.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterdoc"})
+	}
+
+	// return response
+	return &model.TrustCenterDocBulkCreatePayload{
+		TrustCenterDocs: res,
+	}, nil
+}
+
 // bulkCreateTrustCenterSubprocessor uses the CreateBulk function to create multiple TrustCenterSubprocessor entities
 func (r *mutationResolver) bulkCreateTrustCenterSubprocessor(ctx context.Context, input []*generated.CreateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

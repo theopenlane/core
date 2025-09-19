@@ -7072,6 +7072,7 @@ type CreateOrganizationInput struct {
 	ScanIDs                         []string
 	SubprocessorIDs                 []string
 	ExportIDs                       []string
+	TrustCenterDocIDs               []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -7281,6 +7282,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ExportIDs; len(v) > 0 {
 		m.AddExportIDs(v...)
 	}
+	if v := i.TrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -7480,6 +7484,9 @@ type UpdateOrganizationInput struct {
 	ClearExports                          bool
 	AddExportIDs                          []string
 	RemoveExportIDs                       []string
+	ClearTrustCenterDocs                  bool
+	AddTrustCenterDocIDs                  []string
+	RemoveTrustCenterDocIDs               []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -8050,6 +8057,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveExportIDs; len(v) > 0 {
 		m.RemoveExportIDs(v...)
+	}
+	if i.ClearTrustCenterDocs {
+		m.ClearTrustCenterDocs()
+	}
+	if v := i.AddTrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
+	if v := i.RemoveTrustCenterDocIDs; len(v) > 0 {
+		m.RemoveTrustCenterDocIDs(v...)
 	}
 }
 
@@ -11806,6 +11822,7 @@ type CreateTrustCenterInput struct {
 	CustomDomainID             *string
 	SettingID                  *string
 	TrustCenterSubprocessorIDs []string
+	TrustCenterDocIDs          []string
 	TrustCenterComplianceIDs   []string
 }
 
@@ -11825,6 +11842,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.TrustCenterSubprocessorIDs; len(v) > 0 {
 		m.AddTrustCenterSubprocessorIDs(v...)
+	}
+	if v := i.TrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
 	}
 	if v := i.TrustCenterComplianceIDs; len(v) > 0 {
 		m.AddTrustCenterComplianceIDs(v...)
@@ -11851,6 +11871,9 @@ type UpdateTrustCenterInput struct {
 	ClearTrustCenterSubprocessors    bool
 	AddTrustCenterSubprocessorIDs    []string
 	RemoveTrustCenterSubprocessorIDs []string
+	ClearTrustCenterDocs             bool
+	AddTrustCenterDocIDs             []string
+	RemoveTrustCenterDocIDs          []string
 	ClearTrustCenterCompliances      bool
 	AddTrustCenterComplianceIDs      []string
 	RemoveTrustCenterComplianceIDs   []string
@@ -11893,6 +11916,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.RemoveTrustCenterSubprocessorIDs; len(v) > 0 {
 		m.RemoveTrustCenterSubprocessorIDs(v...)
+	}
+	if i.ClearTrustCenterDocs {
+		m.ClearTrustCenterDocs()
+	}
+	if v := i.AddTrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
+	if v := i.RemoveTrustCenterDocIDs; len(v) > 0 {
+		m.RemoveTrustCenterDocIDs(v...)
 	}
 	if i.ClearTrustCenterCompliances {
 		m.ClearTrustCenterCompliances()
@@ -11981,6 +12013,108 @@ func (c *TrustCenterComplianceUpdate) SetInput(i UpdateTrustCenterComplianceInpu
 
 // SetInput applies the change-set in the UpdateTrustCenterComplianceInput on the TrustCenterComplianceUpdateOne builder.
 func (c *TrustCenterComplianceUpdateOne) SetInput(i UpdateTrustCenterComplianceInput) *TrustCenterComplianceUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateTrustCenterDocInput represents a mutation input for creating trustcenterdocs.
+type CreateTrustCenterDocInput struct {
+	Tags          []string
+	Title         string
+	Category      string
+	Visibility    *enums.TrustCenterDocumentVisibility
+	OwnerID       *string
+	TrustCenterID *string
+	FileID        *string
+}
+
+// Mutate applies the CreateTrustCenterDocInput on the TrustCenterDocMutation builder.
+func (i *CreateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetTitle(i.Title)
+	m.SetCategory(i.Category)
+	if v := i.Visibility; v != nil {
+		m.SetVisibility(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateTrustCenterDocInput on the TrustCenterDocCreate builder.
+func (c *TrustCenterDocCreate) SetInput(i CreateTrustCenterDocInput) *TrustCenterDocCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterDocInput represents a mutation input for updating trustcenterdocs.
+type UpdateTrustCenterDocInput struct {
+	ClearTags        bool
+	Tags             []string
+	AppendTags       []string
+	Title            *string
+	Category         *string
+	ClearVisibility  bool
+	Visibility       *enums.TrustCenterDocumentVisibility
+	ClearTrustCenter bool
+	TrustCenterID    *string
+	ClearFile        bool
+	FileID           *string
+}
+
+// Mutate applies the UpdateTrustCenterDocInput on the TrustCenterDocMutation builder.
+func (i *UpdateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
+	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
+	}
+	if i.ClearVisibility {
+		m.ClearVisibility()
+	}
+	if v := i.Visibility; v != nil {
+		m.SetVisibility(*v)
+	}
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	if i.ClearFile {
+		m.ClearFile()
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterDocInput on the TrustCenterDocUpdate builder.
+func (c *TrustCenterDocUpdate) SetInput(i UpdateTrustCenterDocInput) *TrustCenterDocUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterDocInput on the TrustCenterDocUpdateOne builder.
+func (c *TrustCenterDocUpdateOne) SetInput(i UpdateTrustCenterDocInput) *TrustCenterDocUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

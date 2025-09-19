@@ -28,7 +28,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.12
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.19.6
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.88.1
-	github.com/brianvoe/gofakeit/v7 v7.6.0
+	github.com/brianvoe/gofakeit/v7 v7.7.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.0.1
 	github.com/fatih/camelcase v1.0.0
@@ -103,7 +103,7 @@ require (
 	github.com/unidoc/unioffice v1.39.0
 	github.com/urfave/cli/v3 v3.4.1
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/windmill-labs/windmill-go-client v1.543.0
+	github.com/windmill-labs/windmill-go-client v1.544.2
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.44.0
@@ -123,7 +123,7 @@ require (
 
 require (
 	al.essio.dev/pkg/shellescape v1.6.0 // indirect
-	ariga.io/atlas v0.36.1
+	ariga.io/atlas v0.37.0
 	cel.dev/expr v0.24.0 // indirect
 	cloud.google.com/go v0.121.6 // indirect
 	cloud.google.com/go/auth v0.16.5 // indirect

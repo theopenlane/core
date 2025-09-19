@@ -2488,6 +2488,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVTask                    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTemplate                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterCompliance   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterDoc          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterSubprocessor func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVUserSetting             func(childComplexity int, input graphql.Upload) int
 		CreateBulkContact                    func(childComplexity int, input []*generated.CreateContactInput) int
@@ -2524,6 +2525,7 @@ type ComplexityRoot struct {
 		CreateBulkTask                       func(childComplexity int, input []*generated.CreateTaskInput) int
 		CreateBulkTemplate                   func(childComplexity int, input []*generated.CreateTemplateInput) int
 		CreateBulkTrustCenterCompliance      func(childComplexity int, input []*generated.CreateTrustCenterComplianceInput) int
+		CreateBulkTrustCenterDoc             func(childComplexity int, input []*generated.CreateTrustCenterDocInput) int
 		CreateBulkTrustCenterSubprocessor    func(childComplexity int, input []*generated.CreateTrustCenterSubprocessorInput) int
 		CreateBulkUserSetting                func(childComplexity int, input []*generated.CreateUserSettingInput) int
 		CreateContact                        func(childComplexity int, input generated.CreateContactInput) int
@@ -2580,6 +2582,7 @@ type ComplexityRoot struct {
 		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput) int
 		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
+		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
 		CreateTrustCenterDomain              func(childComplexity int, input model.CreateTrustCenterDomainInput) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
@@ -2638,6 +2641,7 @@ type ComplexityRoot struct {
 		DeleteTemplate                       func(childComplexity int, id string) int
 		DeleteTrustCenter                    func(childComplexity int, id string) int
 		DeleteTrustCenterCompliance          func(childComplexity int, id string) int
+		DeleteTrustCenterDoc                 func(childComplexity int, id string) int
 		DeleteTrustCenterSetting             func(childComplexity int, id string) int
 		DeleteTrustCenterSubprocessor        func(childComplexity int, id string) int
 		DeleteUser                           func(childComplexity int, id string) int
@@ -2699,6 +2703,7 @@ type ComplexityRoot struct {
 		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput) int
 		UpdateTrustCenter                    func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
 		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
+		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput) int
 		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
 		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
@@ -3632,6 +3637,7 @@ type ComplexityRoot struct {
 		AdminTaskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTemplateSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTrustCenterComplianceSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminTrustCenterDocSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTrustCenterSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminUserSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminUserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3825,6 +3831,10 @@ type ComplexityRoot struct {
 		TrustCenterComplianceHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterComplianceHistoryOrder, where *generated.TrustCenterComplianceHistoryWhereInput) int
 		TrustCenterComplianceSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		TrustCenterCompliances                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
+		TrustCenterDoc                        func(childComplexity int, id string) int
+		TrustCenterDocHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterDocHistoryOrder, where *generated.TrustCenterDocHistoryWhereInput) int
+		TrustCenterDocSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		TrustCenterDocs                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		TrustCenterHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterHistoryOrder, where *generated.TrustCenterHistoryWhereInput) int
 		TrustCenterSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		TrustCenterSetting                    func(childComplexity int, id string) int
@@ -4194,6 +4204,7 @@ type ComplexityRoot struct {
 		Templates                   func(childComplexity int) int
 		TotalCount                  func(childComplexity int) int
 		TrustCenterCompliances      func(childComplexity int) int
+		TrustCenterDocs             func(childComplexity int) int
 		TrustCenters                func(childComplexity int) int
 		UserSettings                func(childComplexity int) int
 		Users                       func(childComplexity int) int
@@ -4775,6 +4786,7 @@ type ComplexityRoot struct {
 		Slug                     func(childComplexity int) int
 		Tags                     func(childComplexity int) int
 		TrustCenterCompliances   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
+		TrustCenterDocs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		TrustCenterSubprocessors func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
@@ -4857,6 +4869,77 @@ type ComplexityRoot struct {
 
 	TrustCenterDeletePayload struct {
 		DeletedID func(childComplexity int) int
+	}
+
+	TrustCenterDoc struct {
+		Category      func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		File          func(childComplexity int) int
+		FileID        func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Title         func(childComplexity int) int
+		TrustCenter   func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+		Visibility    func(childComplexity int) int
+	}
+
+	TrustCenterDocBulkCreatePayload struct {
+		TrustCenterDocs func(childComplexity int) int
+	}
+
+	TrustCenterDocConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TrustCenterDocCreatePayload struct {
+		TrustCenterDoc func(childComplexity int) int
+	}
+
+	TrustCenterDocDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	TrustCenterDocEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TrustCenterDocHistory struct {
+		Category      func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		FileID        func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Title         func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+		Visibility    func(childComplexity int) int
+	}
+
+	TrustCenterDocHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TrustCenterDocHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TrustCenterDocUpdatePayload struct {
+		TrustCenterDoc func(childComplexity int) int
 	}
 
 	TrustCenterDomainCreatePayload struct {
@@ -17240,6 +17323,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVTrustCenterCompliance(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVTrustCenterDoc":
+		if e.complexity.Mutation.CreateBulkCSVTrustCenterDoc == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVTrustCenterDoc_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVTrustCenterDoc(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVTrustCenterSubprocessor":
 		if e.complexity.Mutation.CreateBulkCSVTrustCenterSubprocessor == nil {
 			break
@@ -17671,6 +17766,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkTrustCenterCompliance(childComplexity, args["input"].([]*generated.CreateTrustCenterComplianceInput)), true
+
+	case "Mutation.createBulkTrustCenterDoc":
+		if e.complexity.Mutation.CreateBulkTrustCenterDoc == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkTrustCenterDoc_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkTrustCenterDoc(childComplexity, args["input"].([]*generated.CreateTrustCenterDocInput)), true
 
 	case "Mutation.createBulkTrustCenterSubprocessor":
 		if e.complexity.Mutation.CreateBulkTrustCenterSubprocessor == nil {
@@ -18343,6 +18450,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateTrustCenterCompliance(childComplexity, args["input"].(generated.CreateTrustCenterComplianceInput)), true
+
+	case "Mutation.createTrustCenterDoc":
+		if e.complexity.Mutation.CreateTrustCenterDoc == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTrustCenterDoc_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTrustCenterDoc(childComplexity, args["input"].(generated.CreateTrustCenterDocInput), args["trustCenterDocFile"].(graphql.Upload)), true
 
 	case "Mutation.createTrustCenterDomain":
 		if e.complexity.Mutation.CreateTrustCenterDomain == nil {
@@ -19039,6 +19158,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteTrustCenterCompliance(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteTrustCenterDoc":
+		if e.complexity.Mutation.DeleteTrustCenterDoc == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteTrustCenterDoc_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteTrustCenterDoc(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteTrustCenterSetting":
 		if e.complexity.Mutation.DeleteTrustCenterSetting == nil {
@@ -19771,6 +19902,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateTrustCenterCompliance(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterComplianceInput)), true
+
+	case "Mutation.updateTrustCenterDoc":
+		if e.complexity.Mutation.UpdateTrustCenterDoc == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTrustCenterDoc_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTrustCenterDoc(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterDocInput)), true
 
 	case "Mutation.updateTrustCenterSetting":
 		if e.complexity.Mutation.UpdateTrustCenterSetting == nil {
@@ -25089,6 +25232,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminTrustCenterComplianceSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminTrustCenterDocSearch":
+		if e.complexity.Query.AdminTrustCenterDocSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminTrustCenterDocSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminTrustCenterDocSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminTrustCenterSearch":
 		if e.complexity.Query.AdminTrustCenterSearch == nil {
 			break
@@ -27390,6 +27545,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.TrustCenterCompliances(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterComplianceOrder), args["where"].(*generated.TrustCenterComplianceWhereInput)), true
 
+	case "Query.trustCenterDoc":
+		if e.complexity.Query.TrustCenterDoc == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterDoc_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterDoc(childComplexity, args["id"].(string)), true
+
+	case "Query.trustCenterDocHistories":
+		if e.complexity.Query.TrustCenterDocHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterDocHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterDocHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.TrustCenterDocHistoryOrder), args["where"].(*generated.TrustCenterDocHistoryWhereInput)), true
+
+	case "Query.trustCenterDocSearch":
+		if e.complexity.Query.TrustCenterDocSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterDocSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterDocSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.trustCenterDocs":
+		if e.complexity.Query.TrustCenterDocs == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterDocs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterDocs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterDocOrder), args["where"].(*generated.TrustCenterDocWhereInput)), true
+
 	case "Query.trustCenterHistories":
 		if e.complexity.Query.TrustCenterHistories == nil {
 			break
@@ -29348,6 +29551,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.TrustCenterCompliances(childComplexity), true
+
+	case "SearchResults.trustCenterDocs":
+		if e.complexity.SearchResults.TrustCenterDocs == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.TrustCenterDocs(childComplexity), true
 
 	case "SearchResults.trustCenters":
 		if e.complexity.SearchResults.TrustCenters == nil {
@@ -32217,6 +32427,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenter.TrustCenterCompliances(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterComplianceOrder), args["where"].(*generated.TrustCenterComplianceWhereInput)), true
 
+	case "TrustCenter.trustCenterDocs":
+		if e.complexity.TrustCenter.TrustCenterDocs == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenter_trustCenterDocs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenter.TrustCenterDocs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterDocOrder), args["where"].(*generated.TrustCenterDocWhereInput)), true
+
 	case "TrustCenter.trustCenterSubprocessors":
 		if e.complexity.TrustCenter.TrustCenterSubprocessors == nil {
 			break
@@ -32522,6 +32744,293 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDeletePayload.DeletedID(childComplexity), true
+
+	case "TrustCenterDoc.category":
+		if e.complexity.TrustCenterDoc.Category == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Category(childComplexity), true
+
+	case "TrustCenterDoc.createdAt":
+		if e.complexity.TrustCenterDoc.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.CreatedAt(childComplexity), true
+
+	case "TrustCenterDoc.createdBy":
+		if e.complexity.TrustCenterDoc.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.CreatedBy(childComplexity), true
+
+	case "TrustCenterDoc.file":
+		if e.complexity.TrustCenterDoc.File == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.File(childComplexity), true
+
+	case "TrustCenterDoc.fileID":
+		if e.complexity.TrustCenterDoc.FileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.FileID(childComplexity), true
+
+	case "TrustCenterDoc.id":
+		if e.complexity.TrustCenterDoc.ID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.ID(childComplexity), true
+
+	case "TrustCenterDoc.tags":
+		if e.complexity.TrustCenterDoc.Tags == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Tags(childComplexity), true
+
+	case "TrustCenterDoc.title":
+		if e.complexity.TrustCenterDoc.Title == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Title(childComplexity), true
+
+	case "TrustCenterDoc.trustCenter":
+		if e.complexity.TrustCenterDoc.TrustCenter == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.TrustCenter(childComplexity), true
+
+	case "TrustCenterDoc.trustCenterID":
+		if e.complexity.TrustCenterDoc.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.TrustCenterID(childComplexity), true
+
+	case "TrustCenterDoc.updatedAt":
+		if e.complexity.TrustCenterDoc.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.UpdatedAt(childComplexity), true
+
+	case "TrustCenterDoc.updatedBy":
+		if e.complexity.TrustCenterDoc.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.UpdatedBy(childComplexity), true
+
+	case "TrustCenterDoc.visibility":
+		if e.complexity.TrustCenterDoc.Visibility == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Visibility(childComplexity), true
+
+	case "TrustCenterDocBulkCreatePayload.trustCenterDocs":
+		if e.complexity.TrustCenterDocBulkCreatePayload.TrustCenterDocs == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocBulkCreatePayload.TrustCenterDocs(childComplexity), true
+
+	case "TrustCenterDocConnection.edges":
+		if e.complexity.TrustCenterDocConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocConnection.Edges(childComplexity), true
+
+	case "TrustCenterDocConnection.pageInfo":
+		if e.complexity.TrustCenterDocConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocConnection.PageInfo(childComplexity), true
+
+	case "TrustCenterDocConnection.totalCount":
+		if e.complexity.TrustCenterDocConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocConnection.TotalCount(childComplexity), true
+
+	case "TrustCenterDocCreatePayload.trustCenterDoc":
+		if e.complexity.TrustCenterDocCreatePayload.TrustCenterDoc == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocCreatePayload.TrustCenterDoc(childComplexity), true
+
+	case "TrustCenterDocDeletePayload.deletedID":
+		if e.complexity.TrustCenterDocDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocDeletePayload.DeletedID(childComplexity), true
+
+	case "TrustCenterDocEdge.cursor":
+		if e.complexity.TrustCenterDocEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocEdge.Cursor(childComplexity), true
+
+	case "TrustCenterDocEdge.node":
+		if e.complexity.TrustCenterDocEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocEdge.Node(childComplexity), true
+
+	case "TrustCenterDocHistory.category":
+		if e.complexity.TrustCenterDocHistory.Category == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.Category(childComplexity), true
+
+	case "TrustCenterDocHistory.createdAt":
+		if e.complexity.TrustCenterDocHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.CreatedAt(childComplexity), true
+
+	case "TrustCenterDocHistory.createdBy":
+		if e.complexity.TrustCenterDocHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.CreatedBy(childComplexity), true
+
+	case "TrustCenterDocHistory.fileID":
+		if e.complexity.TrustCenterDocHistory.FileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.FileID(childComplexity), true
+
+	case "TrustCenterDocHistory.historyTime":
+		if e.complexity.TrustCenterDocHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.HistoryTime(childComplexity), true
+
+	case "TrustCenterDocHistory.id":
+		if e.complexity.TrustCenterDocHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.ID(childComplexity), true
+
+	case "TrustCenterDocHistory.operation":
+		if e.complexity.TrustCenterDocHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.Operation(childComplexity), true
+
+	case "TrustCenterDocHistory.ref":
+		if e.complexity.TrustCenterDocHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.Ref(childComplexity), true
+
+	case "TrustCenterDocHistory.tags":
+		if e.complexity.TrustCenterDocHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.Tags(childComplexity), true
+
+	case "TrustCenterDocHistory.title":
+		if e.complexity.TrustCenterDocHistory.Title == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.Title(childComplexity), true
+
+	case "TrustCenterDocHistory.trustCenterID":
+		if e.complexity.TrustCenterDocHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.TrustCenterID(childComplexity), true
+
+	case "TrustCenterDocHistory.updatedAt":
+		if e.complexity.TrustCenterDocHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.UpdatedAt(childComplexity), true
+
+	case "TrustCenterDocHistory.updatedBy":
+		if e.complexity.TrustCenterDocHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.UpdatedBy(childComplexity), true
+
+	case "TrustCenterDocHistory.visibility":
+		if e.complexity.TrustCenterDocHistory.Visibility == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.Visibility(childComplexity), true
+
+	case "TrustCenterDocHistoryConnection.edges":
+		if e.complexity.TrustCenterDocHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistoryConnection.Edges(childComplexity), true
+
+	case "TrustCenterDocHistoryConnection.pageInfo":
+		if e.complexity.TrustCenterDocHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistoryConnection.PageInfo(childComplexity), true
+
+	case "TrustCenterDocHistoryConnection.totalCount":
+		if e.complexity.TrustCenterDocHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistoryConnection.TotalCount(childComplexity), true
+
+	case "TrustCenterDocHistoryEdge.cursor":
+		if e.complexity.TrustCenterDocHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistoryEdge.Cursor(childComplexity), true
+
+	case "TrustCenterDocHistoryEdge.node":
+		if e.complexity.TrustCenterDocHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistoryEdge.Node(childComplexity), true
+
+	case "TrustCenterDocUpdatePayload.trustCenterDoc":
+		if e.complexity.TrustCenterDocUpdatePayload.TrustCenterDoc == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocUpdatePayload.TrustCenterDoc(childComplexity), true
 
 	case "TrustCenterDomainCreatePayload.customDomain":
 		if e.complexity.TrustCenterDomainCreatePayload.CustomDomain == nil {
@@ -34452,6 +34961,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateTaskInput,
 		ec.unmarshalInputCreateTemplateInput,
 		ec.unmarshalInputCreateTrustCenterComplianceInput,
+		ec.unmarshalInputCreateTrustCenterDocInput,
 		ec.unmarshalInputCreateTrustCenterDomainInput,
 		ec.unmarshalInputCreateTrustCenterInput,
 		ec.unmarshalInputCreateTrustCenterSettingInput,
@@ -34621,6 +35131,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTrustCenterComplianceHistoryWhereInput,
 		ec.unmarshalInputTrustCenterComplianceOrder,
 		ec.unmarshalInputTrustCenterComplianceWhereInput,
+		ec.unmarshalInputTrustCenterDocHistoryOrder,
+		ec.unmarshalInputTrustCenterDocHistoryWhereInput,
+		ec.unmarshalInputTrustCenterDocOrder,
+		ec.unmarshalInputTrustCenterDocWhereInput,
 		ec.unmarshalInputTrustCenterHistoryOrder,
 		ec.unmarshalInputTrustCenterHistoryWhereInput,
 		ec.unmarshalInputTrustCenterOrder,
@@ -34683,6 +35197,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateTaskInput,
 		ec.unmarshalInputUpdateTemplateInput,
 		ec.unmarshalInputUpdateTrustCenterComplianceInput,
+		ec.unmarshalInputUpdateTrustCenterDocInput,
 		ec.unmarshalInputUpdateTrustCenterInput,
 		ec.unmarshalInputUpdateTrustCenterSettingInput,
 		ec.unmarshalInputUpdateTrustCenterSubprocessorInput,
@@ -35978,6 +36493,31 @@ type ActionPlanBulkUpdatePayload {
         """
         last: Int
     ): TrustCenterComplianceConnection
+    """
+    Search across TrustCenterDoc objects
+    """
+    adminTrustCenterDocSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): TrustCenterDocConnection
     """
     Search across User objects
     """
@@ -46905,6 +47445,30 @@ input CreateTrustCenterComplianceInput {
   standardID: ID!
 }
 """
+CreateTrustCenterDocInput is used for create TrustCenterDoc object.
+Input was generated by ent.
+"""
+input CreateTrustCenterDocInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  title of the document
+  """
+  title: String!
+  """
+  category of the document
+  """
+  category: String!
+  """
+  visibility of the document
+  """
+  visibility: TrustCenterDocTrustCenterDocumentVisibility
+  trustCenterID: ID
+  fileID: ID
+}
+"""
 CreateTrustCenterInput is used for create TrustCenter object.
 Input was generated by ent.
 """
@@ -46917,6 +47481,7 @@ input CreateTrustCenterInput {
   customDomainID: ID
   settingID: ID
   trustCenterSubprocessorIDs: [ID!]
+  trustCenterDocIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
 }
 """
@@ -76684,6 +77249,68 @@ type Query {
     """
     where: TrustCenterComplianceHistoryWhereInput
   ): TrustCenterComplianceHistoryConnection!
+  trustCenterDocs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterDocs returned from the connection.
+    """
+    orderBy: [TrustCenterDocOrder!]
+
+    """
+    Filtering options for TrustCenterDocs returned from the connection.
+    """
+    where: TrustCenterDocWhereInput
+  ): TrustCenterDocConnection!
+  trustCenterDocHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterDocHistories returned from the connection.
+    """
+    orderBy: TrustCenterDocHistoryOrder
+
+    """
+    Filtering options for TrustCenterDocHistories returned from the connection.
+    """
+    where: TrustCenterDocHistoryWhereInput
+  ): TrustCenterDocHistoryConnection!
   trustCenterHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -85962,6 +86589,37 @@ type TrustCenter implements Node {
     """
     where: TrustCenterSubprocessorWhereInput
   ): TrustCenterSubprocessorConnection!
+  trustCenterDocs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterDocs returned from the connection.
+    """
+    orderBy: [TrustCenterDocOrder!]
+
+    """
+    Filtering options for TrustCenterDocs returned from the connection.
+    """
+    where: TrustCenterDocWhereInput
+  ): TrustCenterDocConnection!
   trustCenterCompliances(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -86444,6 +87102,569 @@ type TrustCenterConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+type TrustCenterDoc implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  ID of the trust center
+  """
+  trustCenterID: ID
+  """
+  title of the document
+  """
+  title: String!
+  """
+  category of the document
+  """
+  category: String!
+  """
+  ID of the file containing the document
+  """
+  fileID: ID
+  """
+  visibility of the document
+  """
+  visibility: TrustCenterDocTrustCenterDocumentVisibility
+  trustCenter: TrustCenter
+  """
+  the file containing the document content
+  """
+  file: File
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterDocConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrustCenterDocEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterDocEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TrustCenterDoc
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type TrustCenterDocHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: TrustCenterDocHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  ID of the trust center
+  """
+  trustCenterID: String
+  """
+  title of the document
+  """
+  title: String!
+  """
+  category of the document
+  """
+  category: String!
+  """
+  ID of the file containing the document
+  """
+  fileID: String
+  """
+  visibility of the document
+  """
+  visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterDocHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrustCenterDocHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterDocHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TrustCenterDocHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+TrustCenterDocHistoryOpType is enum for the field operation
+"""
+enum TrustCenterDocHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for TrustCenterDocHistory connections
+"""
+input TrustCenterDocHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TrustCenterDocHistories.
+  """
+  field: TrustCenterDocHistoryOrderField!
+}
+"""
+Properties by which TrustCenterDocHistory connections can be ordered.
+"""
+enum TrustCenterDocHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+TrustCenterDocHistoryTrustCenterDocumentVisibility is enum for the field visibility
+"""
+enum TrustCenterDocHistoryTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+  PUBLICLY_VISIBLE
+  PROTECTED
+  NOT_VISIBLE
+}
+"""
+TrustCenterDocHistoryWhereInput is used for filtering TrustCenterDocHistory objects.
+Input was generated by ent.
+"""
+input TrustCenterDocHistoryWhereInput {
+  not: TrustCenterDocHistoryWhereInput
+  and: [TrustCenterDocHistoryWhereInput!]
+  or: [TrustCenterDocHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: TrustCenterDocHistoryOpType
+  operationNEQ: TrustCenterDocHistoryOpType
+  operationIn: [TrustCenterDocHistoryOpType!]
+  operationNotIn: [TrustCenterDocHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryEqualFold: String
+  categoryContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
+  """
+  visibility field predicates
+  """
+  visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
+  visibilityNEQ: TrustCenterDocHistoryTrustCenterDocumentVisibility
+  visibilityIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
+  visibilityNotIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
+  visibilityIsNil: Boolean
+  visibilityNotNil: Boolean
+}
+"""
+Ordering options for TrustCenterDoc connections
+"""
+input TrustCenterDocOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TrustCenterDocs.
+  """
+  field: TrustCenterDocOrderField!
+}
+"""
+Properties by which TrustCenterDoc connections can be ordered.
+"""
+enum TrustCenterDocOrderField {
+  created_at
+  updated_at
+}
+"""
+TrustCenterDocTrustCenterDocumentVisibility is enum for the field visibility
+"""
+enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+  PUBLICLY_VISIBLE
+  PROTECTED
+  NOT_VISIBLE
+}
+"""
+TrustCenterDocWhereInput is used for filtering TrustCenterDoc objects.
+Input was generated by ent.
+"""
+input TrustCenterDocWhereInput {
+  not: TrustCenterDocWhereInput
+  and: [TrustCenterDocWhereInput!]
+  or: [TrustCenterDocWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryEqualFold: String
+  categoryContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
+  visibility field predicates
+  """
+  visibility: TrustCenterDocTrustCenterDocumentVisibility
+  visibilityNEQ: TrustCenterDocTrustCenterDocumentVisibility
+  visibilityIn: [TrustCenterDocTrustCenterDocumentVisibility!]
+  visibilityNotIn: [TrustCenterDocTrustCenterDocumentVisibility!]
+  visibilityIsNil: Boolean
+  visibilityNotNil: Boolean
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 """
 An edge in a connection.
@@ -88320,6 +89541,11 @@ input TrustCenterWhereInput {
   """
   hasTrustCenterSubprocessors: Boolean
   hasTrustCenterSubprocessorsWith: [TrustCenterSubprocessorWhereInput!]
+  """
+  trust_center_docs edge predicates
+  """
+  hasTrustCenterDocs: Boolean
+  hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
   """
   trust_center_compliances edge predicates
   """
@@ -91504,6 +92730,35 @@ input UpdateTrustCenterComplianceInput {
   standardID: ID
 }
 """
+UpdateTrustCenterDocInput is used for update TrustCenterDoc object.
+Input was generated by ent.
+"""
+input UpdateTrustCenterDocInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  title of the document
+  """
+  title: String
+  """
+  category of the document
+  """
+  category: String
+  """
+  visibility of the document
+  """
+  visibility: TrustCenterDocTrustCenterDocumentVisibility
+  clearVisibility: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
+  fileID: ID
+  clearFile: Boolean
+}
+"""
 UpdateTrustCenterInput is used for update TrustCenter object.
 Input was generated by ent.
 """
@@ -91523,6 +92778,9 @@ input UpdateTrustCenterInput {
   addTrustCenterSubprocessorIDs: [ID!]
   removeTrustCenterSubprocessorIDs: [ID!]
   clearTrustCenterSubprocessors: Boolean
+  addTrustCenterDocIDs: [ID!]
+  removeTrustCenterDocIDs: [ID!]
+  clearTrustCenterDocs: Boolean
   addTrustCenterComplianceIDs: [ID!]
   removeTrustCenterComplianceIDs: [ID!]
   clearTrustCenterCompliances: Boolean
@@ -98654,6 +99912,31 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): TrustCenterComplianceConnection
     """
+    Search across TrustCenterDoc objects
+    """
+    trustCenterDocSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): TrustCenterDocConnection
+    """
     Search across User objects
     """
     userSearch(
@@ -98780,6 +100063,7 @@ type SearchResults{
   templates: TemplateConnection
   trustCenters: TrustCenterConnection
   trustCenterCompliances: TrustCenterComplianceConnection
+  trustCenterDocs: TrustCenterDocConnection
   users: UserConnection
   userSettings: UserSettingConnection
   webauthns: WebauthnConnection
@@ -99723,6 +101007,110 @@ type TrustCenterComplianceBulkCreatePayload {
     Created trustCenterCompliances
     """
     trustCenterCompliances: [TrustCenterCompliance!]
+}`, BuiltIn: false},
+	{Name: "../schema/trustcenterdoc.graphql", Input: `extend type Query {
+    """
+    Look up trustCenterDoc by ID
+    """
+     trustCenterDoc(
+        """
+        ID of the trustCenterDoc
+        """
+        id: ID!
+    ):  TrustCenterDoc!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterDoc
+    """
+    createTrustCenterDoc(
+        """
+        values of the trustCenterDoc
+        """
+        input: CreateTrustCenterDocInput!
+        trustCenterDocFile: Upload!
+    ): TrustCenterDocCreatePayload!
+    """
+    Create multiple new trustCenterDocs
+    """
+    createBulkTrustCenterDoc(
+        """
+        values of the trustCenterDoc
+        """
+        input: [CreateTrustCenterDocInput!]
+    ): TrustCenterDocBulkCreatePayload!
+    """
+    Create multiple new trustCenterDocs via file upload
+    """
+    createBulkCSVTrustCenterDoc(
+        """
+        csv file containing values of the trustCenterDoc
+        """
+        input: Upload!
+    ): TrustCenterDocBulkCreatePayload!
+    """
+    Update an existing trustCenterDoc
+    """
+    updateTrustCenterDoc(
+        """
+        ID of the trustCenterDoc
+        """
+        id: ID!
+        """
+        New values for the trustCenterDoc
+        """
+        input: UpdateTrustCenterDocInput!
+    ): TrustCenterDocUpdatePayload!
+    """
+    Delete an existing trustCenterDoc
+    """
+    deleteTrustCenterDoc(
+        """
+        ID of the trustCenterDoc
+        """
+        id: ID!
+    ): TrustCenterDocDeletePayload!
+}
+
+"""
+Return response for createTrustCenterDoc mutation
+"""
+type TrustCenterDocCreatePayload {
+    """
+    Created trustCenterDoc
+    """
+    trustCenterDoc: TrustCenterDoc!
+}
+
+"""
+Return response for updateTrustCenterDoc mutation
+"""
+type TrustCenterDocUpdatePayload {
+    """
+    Updated trustCenterDoc
+    """
+    trustCenterDoc: TrustCenterDoc!
+}
+
+"""
+Return response for deleteTrustCenterDoc mutation
+"""
+type TrustCenterDocDeletePayload {
+    """
+    Deleted trustCenterDoc ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterDoc mutation
+"""
+type TrustCenterDocBulkCreatePayload {
+    """
+    Created trustCenterDocs
+    """
+    trustCenterDocs: [TrustCenterDoc!]
 }`, BuiltIn: false},
 	{Name: "../schema/trustcenterdomain.graphql", Input: `extend type Mutation{
     """

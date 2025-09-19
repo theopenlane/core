@@ -63,6 +63,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -836,6 +837,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).TrustCenterDoc.Query().Where((trustcenterdoc.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcenterdocCount, err := FromContext(ctx).TrustCenterDoc.Delete().Where(trustcenterdoc.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", trustcenterdocCount).Msg("deleting trustcenterdoc")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")
@@ -1057,6 +1065,13 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).TrustCenterDoc.Query().Where((trustcenterdoc.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcenterdocCount, err := FromContext(ctx).TrustCenterDoc.Delete().Where(trustcenterdoc.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", trustcenterdocCount).Msg("deleting trustcenterdoc")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).TrustCenterCompliance.Query().Where((trustcentercompliance.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcentercomplianceCount, err := FromContext(ctx).TrustCenterCompliance.Delete().Where(trustcentercompliance.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", trustcentercomplianceCount).Msg("deleting trustcentercompliance")
@@ -1075,6 +1090,18 @@ func TrustCenterComplianceEdgeCleanup(ctx context.Context, id string) error {
 
 func TrustCenterComplianceHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentercompliancehistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TrustCenterDocEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterdoc edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TrustCenterDocHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterdochistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

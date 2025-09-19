@@ -958,6 +958,26 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    trustCenterDocs {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          trustCenterID
+          title
+          category
+          fileID
+        }
+      }
+    }
     users {
       totalCount
       pageInfo {
