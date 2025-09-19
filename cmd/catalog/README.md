@@ -200,3 +200,18 @@ module trust_center         product:true missing_prices:0
 [WARN] price price_1RddewR7q8Ny5Jw0MQVf1GOp for feature domain_scanning does not match catalog; to modify an existing price create a new one and update subscriptions
 addon domain_scanning      product:true missing_prices:0
 ```
+
+## Add module to customer subscription
+
+In the event you're wanting to test adding a module to a subscription (in either a sandbox or production) you can use this CLI interactively to find + update a customer subscription. You need to pass in the organization ID you're trying to update (which is the customer name in stripe) and your API key. You'll be presented with an interactive prompt displaying available modules to add to the subscription (which will automatically exclude the ones on the subscription already) and the price you'd like to associate (which should be the monthly and yearly options for the product).
+
+```bash
+➜  core git:(feat-cataloglocal) ✗ go run cmd/catalog/main.go --add-module --org-id="01K5EYSC7B20GJY6NJ2ZCF2YYC" --stripe-key="yourkey"
+Found customer: 01K5EYSC7B20GJY6NJ2ZCF2YYC
+Current subscription: sub_1S8lrpJIzM4Pa2ZcKei6suR6 (status: trialing)
+✅ Vulnerability Tracking and Management - Vulnerability Tracking and Management
+✅ $100.00/month (price_vulnerability_mgmt_monthly)
+Successfully added module 'Vulnerability Tracking and Management' to subscription
+```
+
+While it's not difficult to add a module + price via stripe's UI, it be somewhat annoying to have to set folks up with access to a sandbox account and also isn't conducive for basic autmation with something like Taskfile.
