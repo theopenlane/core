@@ -612,7 +612,7 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 
 // createAnonymousTrustCenterContext creates a context for an anonymous trust center user
 func createAnonymousTrustCenterContext(trustCenterID, organizationID string) context.Context {
-	anonUserID := fmt.Sprintf("anon:%s", ulids.New().String())
+	anonUserID := fmt.Sprintf("anon_%s", ulids.New().String())
 
 	anonUser := &auth.AnonymousTrustCenterUser{
 		SubjectID:          anonUserID,
