@@ -74,6 +74,20 @@ See the [README](/config/README.md) in the `config` directory.
 1. Update the configuration with whatever respective settings you desire; the
    defaults inside should allow you to run the server without a problem
 
+   :::info
+   When developing locally, unless you are specifically testing subscriptions and module enforcement, ensure the following settings are set to false:
+
+   ```yaml
+   entConfig:
+      modules:
+         enabled: false
+         useSandbox: true
+
+      subscription:
+         enabled: false
+   ```
+   :::
+
 1. Use the task commands to start the server
 
    Run the core server in development mode with dependencies in docker
@@ -125,9 +139,11 @@ if err := client.InitCSRF(ctx); err != nil {
 
 The CLI has been updated to call `ClientWithCSRFToken` automatically, but other custom clients will need to adopt one of the approaches.
 
-NOTE: Because the CSRF middleware stores the token only in the client’s cookie and not on the server, restarting the core server (or core server running in Kubernetes pods) does not invalidate the token. When the middleware receives a request, it checks the token in the `csrf_token` cookie against the `X-CSRF-Token` header. If the cookie is already present, that same token is used — no new token is generated. The token cookie persists until it expires (default 24h), so clients will continue to send the same value even if the server has restarted.
+:::note
+Because the CSRF middleware stores the token only in the client’s cookie and not on the server, restarting the core server (or core server running in Kubernetes pods) does not invalidate the token. When the middleware receives a request, it checks the token in the `csrf_token` cookie against the `X-CSRF-Token` header. If the cookie is already present, that same token is used — no new token is generated. The token cookie persists until it expires (default 24h), so clients will continue to send the same value even if the server has restarted.
 
 Therefore, rolling restarts on Kubernetes will not force new tokens to be issued and should not cause requests to fail, provided the client retains its CSRF cookie.
+:::
 
 ### Creating Queries in GraphQL
 
