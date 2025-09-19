@@ -181,6 +181,8 @@ const (
 	EdgeSubprocessors = "subprocessors"
 	// EdgeExports holds the string denoting the exports edge name in mutations.
 	EdgeExports = "exports"
+	// EdgeTrustCenterDocs holds the string denoting the trust_center_docs edge name in mutations.
+	EdgeTrustCenterDocs = "trust_center_docs"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -633,6 +635,13 @@ const (
 	ExportsInverseTable = "exports"
 	// ExportsColumn is the table column denoting the exports relation/edge.
 	ExportsColumn = "owner_id"
+	// TrustCenterDocsTable is the table that holds the trust_center_docs relation/edge.
+	TrustCenterDocsTable = "trust_center_docs"
+	// TrustCenterDocsInverseTable is the table name for the TrustCenterDoc entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterdoc" package.
+	TrustCenterDocsInverseTable = "trust_center_docs"
+	// TrustCenterDocsColumn is the table column denoting the trust_center_docs relation/edge.
+	TrustCenterDocsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1717,6 +1726,20 @@ func ByExports(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByTrustCenterDocsCount orders the results by trust_center_docs count.
+func ByTrustCenterDocsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterDocsStep(), opts...)
+	}
+}
+
+// ByTrustCenterDocs orders the results by trust_center_docs terms.
+func ByTrustCenterDocs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterDocsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2190,6 +2213,13 @@ func newExportsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ExportsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ExportsTable, ExportsColumn),
+	)
+}
+func newTrustCenterDocsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterDocsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterDocsTable, TrustCenterDocsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

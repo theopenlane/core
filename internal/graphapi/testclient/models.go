@@ -5603,6 +5603,14 @@ type CreateTrustCenterComplianceInput struct {
 type CreateTrustCenterDocInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// title of the document
+	Title string `json:"title"`
+	// category of the document
+	Category string `json:"category"`
+	// visibility of the document
+	Visibility    *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	TrustCenterID *string                              `json:"trustCenterID,omitempty"`
+	FileID        *string                              `json:"fileID,omitempty"`
 }
 
 // Input for createTrustCenterDomain mutation
@@ -5622,6 +5630,7 @@ type CreateTrustCenterInput struct {
 	CustomDomainID             *string                        `json:"customDomainID,omitempty"`
 	SettingID                  *string                        `json:"settingID,omitempty"`
 	TrustCenterSubprocessorIDs []string                       `json:"trustCenterSubprocessorIDs,omitempty"`
+	TrustCenterDocIDs          []string                       `json:"trustCenterDocIDs,omitempty"`
 	TrustCenterComplianceIDs   []string                       `json:"trustCenterComplianceIDs,omitempty"`
 	CreateTrustCenterSetting   *CreateTrustCenterSettingInput `json:"createTrustCenterSetting,omitempty"`
 }
@@ -26351,6 +26360,7 @@ type TrustCenter struct {
 	CustomDomain             *CustomDomain                      `json:"customDomain,omitempty"`
 	Setting                  *TrustCenterSetting                `json:"setting,omitempty"`
 	TrustCenterSubprocessors *TrustCenterSubprocessorConnection `json:"trustCenterSubprocessors"`
+	TrustCenterDocs          *TrustCenterDocConnection          `json:"trustCenterDocs"`
 	TrustCenterCompliances   *TrustCenterComplianceConnection   `json:"trustCenterCompliances"`
 }
 
@@ -26741,6 +26751,19 @@ type TrustCenterDoc struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// ID of the trust center
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// title of the document
+	Title string `json:"title"`
+	// category of the document
+	Category string `json:"category"`
+	// ID of the file containing the document
+	FileID *string `json:"fileID,omitempty"`
+	// visibility of the document
+	Visibility  *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	TrustCenter *TrustCenter                         `json:"trustCenter,omitempty"`
+	// the file containing the document content
+	File *File `json:"file,omitempty"`
 }
 
 func (TrustCenterDoc) IsNode() {}
@@ -26792,6 +26815,16 @@ type TrustCenterDocHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// ID of the trust center
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// title of the document
+	Title string `json:"title"`
+	// category of the document
+	Category string `json:"category"`
+	// ID of the file containing the document
+	FileID *string `json:"fileID,omitempty"`
+	// visibility of the document
+	Visibility *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 }
 
 func (TrustCenterDocHistory) IsNode() {}
@@ -26923,6 +26956,73 @@ type TrustCenterDocHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// visibility field predicates
+	Visibility       *enums.TrustCenterDocumentVisibility  `json:"visibility,omitempty"`
+	VisibilityNeq    *enums.TrustCenterDocumentVisibility  `json:"visibilityNEQ,omitempty"`
+	VisibilityIn     []enums.TrustCenterDocumentVisibility `json:"visibilityIn,omitempty"`
+	VisibilityNotIn  []enums.TrustCenterDocumentVisibility `json:"visibilityNotIn,omitempty"`
+	VisibilityIsNil  *bool                                 `json:"visibilityIsNil,omitempty"`
+	VisibilityNotNil *bool                                 `json:"visibilityNotNil,omitempty"`
 }
 
 // Ordering options for TrustCenterDoc connections
@@ -27010,6 +27110,79 @@ type TrustCenterDocWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// visibility field predicates
+	Visibility       *enums.TrustCenterDocumentVisibility  `json:"visibility,omitempty"`
+	VisibilityNeq    *enums.TrustCenterDocumentVisibility  `json:"visibilityNEQ,omitempty"`
+	VisibilityIn     []enums.TrustCenterDocumentVisibility `json:"visibilityIn,omitempty"`
+	VisibilityNotIn  []enums.TrustCenterDocumentVisibility `json:"visibilityNotIn,omitempty"`
+	VisibilityIsNil  *bool                                 `json:"visibilityIsNil,omitempty"`
+	VisibilityNotNil *bool                                 `json:"visibilityNotNil,omitempty"`
+	// trust_center edge predicates
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+	// file edge predicates
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 // Return response for createTrustCenterDomain mutation
@@ -28496,6 +28669,9 @@ type TrustCenterWhereInput struct {
 	// trust_center_subprocessors edge predicates
 	HasTrustCenterSubprocessors     *bool                                `json:"hasTrustCenterSubprocessors,omitempty"`
 	HasTrustCenterSubprocessorsWith []*TrustCenterSubprocessorWhereInput `json:"hasTrustCenterSubprocessorsWith,omitempty"`
+	// trust_center_docs edge predicates
+	HasTrustCenterDocs     *bool                       `json:"hasTrustCenterDocs,omitempty"`
+	HasTrustCenterDocsWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocsWith,omitempty"`
 	// trust_center_compliances edge predicates
 	HasTrustCenterCompliances     *bool                              `json:"hasTrustCenterCompliances,omitempty"`
 	HasTrustCenterCompliancesWith []*TrustCenterComplianceWhereInput `json:"hasTrustCenterCompliancesWith,omitempty"`
@@ -30806,6 +30982,17 @@ type UpdateTrustCenterDocInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// title of the document
+	Title *string `json:"title,omitempty"`
+	// category of the document
+	Category *string `json:"category,omitempty"`
+	// visibility of the document
+	Visibility       *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	ClearVisibility  *bool                                `json:"clearVisibility,omitempty"`
+	TrustCenterID    *string                              `json:"trustCenterID,omitempty"`
+	ClearTrustCenter *bool                                `json:"clearTrustCenter,omitempty"`
+	FileID           *string                              `json:"fileID,omitempty"`
+	ClearFile        *bool                                `json:"clearFile,omitempty"`
 }
 
 // UpdateTrustCenterInput is used for update TrustCenter object.
@@ -30824,6 +31011,9 @@ type UpdateTrustCenterInput struct {
 	AddTrustCenterSubprocessorIDs    []string                       `json:"addTrustCenterSubprocessorIDs,omitempty"`
 	RemoveTrustCenterSubprocessorIDs []string                       `json:"removeTrustCenterSubprocessorIDs,omitempty"`
 	ClearTrustCenterSubprocessors    *bool                          `json:"clearTrustCenterSubprocessors,omitempty"`
+	AddTrustCenterDocIDs             []string                       `json:"addTrustCenterDocIDs,omitempty"`
+	RemoveTrustCenterDocIDs          []string                       `json:"removeTrustCenterDocIDs,omitempty"`
+	ClearTrustCenterDocs             *bool                          `json:"clearTrustCenterDocs,omitempty"`
 	AddTrustCenterComplianceIDs      []string                       `json:"addTrustCenterComplianceIDs,omitempty"`
 	RemoveTrustCenterComplianceIDs   []string                       `json:"removeTrustCenterComplianceIDs,omitempty"`
 	ClearTrustCenterCompliances      *bool                          `json:"clearTrustCenterCompliances,omitempty"`

@@ -16057,6 +16057,25 @@ func (c *OrganizationClient) QueryExports(_m *Organization) *ExportQuery {
 	return query
 }
 
+// QueryTrustCenterDocs queries the trust_center_docs edge of a Organization.
+func (c *OrganizationClient) QueryTrustCenterDocs(_m *Organization) *TrustCenterDocQuery {
+	query := (&TrustCenterDocClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(trustcenterdoc.Table, trustcenterdoc.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterDocsTable, organization.TrustCenterDocsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(_m *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -22484,6 +22503,25 @@ func (c *TrustCenterClient) QueryTrustCenterSubprocessors(_m *TrustCenter) *Trus
 	return query
 }
 
+// QueryTrustCenterDocs queries the trust_center_docs edge of a TrustCenter.
+func (c *TrustCenterClient) QueryTrustCenterDocs(_m *TrustCenter) *TrustCenterDocQuery {
+	query := (&TrustCenterDocClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(trustcenterdoc.Table, trustcenterdoc.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterDocsTable, trustcenter.TrustCenterDocsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryTrustCenterCompliances queries the trust_center_compliances edge of a TrustCenter.
 func (c *TrustCenterClient) QueryTrustCenterCompliances(_m *TrustCenter) *TrustCenterComplianceQuery {
 	query := (&TrustCenterComplianceClient{config: c.config}).Query()
@@ -22944,6 +22982,63 @@ func (c *TrustCenterDocClient) GetX(ctx context.Context, id string) *TrustCenter
 		panic(err)
 	}
 	return obj
+}
+
+// QueryOwner queries the owner edge of a TrustCenterDoc.
+func (c *TrustCenterDocClient) QueryOwner(_m *TrustCenterDoc) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterdoc.OwnerTable, trustcenterdoc.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustCenter queries the trust_center edge of a TrustCenterDoc.
+func (c *TrustCenterDocClient) QueryTrustCenter(_m *TrustCenterDoc) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterdoc.TrustCenterTable, trustcenterdoc.TrustCenterColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFile queries the file edge of a TrustCenterDoc.
+func (c *TrustCenterDocClient) QueryFile(_m *TrustCenterDoc) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterdoc.FileTable, trustcenterdoc.FileColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

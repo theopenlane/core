@@ -12,8 +12,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -122,9 +125,119 @@ func (_u *TrustCenterDocUpdate) ClearTags() *TrustCenterDocUpdate {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TrustCenterDocUpdate) SetTrustCenterID(v string) *TrustCenterDocUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableTrustCenterID(v *string) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TrustCenterDocUpdate) ClearTrustCenterID() *TrustCenterDocUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
+// SetTitle sets the "title" field.
+func (_u *TrustCenterDocUpdate) SetTitle(v string) *TrustCenterDocUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableTitle(v *string) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// SetCategory sets the "category" field.
+func (_u *TrustCenterDocUpdate) SetCategory(v string) *TrustCenterDocUpdate {
+	_u.mutation.SetCategory(v)
+	return _u
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableCategory(v *string) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetCategory(*v)
+	}
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *TrustCenterDocUpdate) SetFileID(v string) *TrustCenterDocUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableFileID(v *string) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *TrustCenterDocUpdate) ClearFileID() *TrustCenterDocUpdate {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
+// SetVisibility sets the "visibility" field.
+func (_u *TrustCenterDocUpdate) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocUpdate {
+	_u.mutation.SetVisibility(v)
+	return _u
+}
+
+// SetNillableVisibility sets the "visibility" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableVisibility(v *enums.TrustCenterDocumentVisibility) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetVisibility(*v)
+	}
+	return _u
+}
+
+// ClearVisibility clears the value of the "visibility" field.
+func (_u *TrustCenterDocUpdate) ClearVisibility() *TrustCenterDocUpdate {
+	_u.mutation.ClearVisibility()
+	return _u
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_u *TrustCenterDocUpdate) SetTrustCenter(v *TrustCenter) *TrustCenterDocUpdate {
+	return _u.SetTrustCenterID(v.ID)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_u *TrustCenterDocUpdate) SetFile(v *File) *TrustCenterDocUpdate {
+	return _u.SetFileID(v.ID)
+}
+
 // Mutation returns the TrustCenterDocMutation object of the builder.
 func (_u *TrustCenterDocUpdate) Mutation() *TrustCenterDocMutation {
 	return _u.mutation
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (_u *TrustCenterDocUpdate) ClearTrustCenter() *TrustCenterDocUpdate {
+	_u.mutation.ClearTrustCenter()
+	return _u
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (_u *TrustCenterDocUpdate) ClearFile() *TrustCenterDocUpdate {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -169,6 +282,31 @@ func (_u *TrustCenterDocUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *TrustCenterDocUpdate) check() error {
+	if v, ok := _u.mutation.TrustCenterID(); ok {
+		if err := trustcenterdoc.TrustCenterIDValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.trust_center_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Title(); ok {
+		if err := trustcenterdoc.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.title": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Category(); ok {
+		if err := trustcenterdoc.CategoryValidator(v); err != nil {
+			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Visibility(); ok {
+		if err := trustcenterdoc.VisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.visibility": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *TrustCenterDocUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterDocUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -176,6 +314,9 @@ func (_u *TrustCenterDocUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) 
 }
 
 func (_u *TrustCenterDocUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterdoc.Table, trustcenterdoc.Columns, sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -224,6 +365,80 @@ func (_u *TrustCenterDocUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdoc.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(trustcenterdoc.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Category(); ok {
+		_spec.SetField(trustcenterdoc.FieldCategory, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Visibility(); ok {
+		_spec.SetField(trustcenterdoc.FieldVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.VisibilityCleared() {
+		_spec.ClearField(trustcenterdoc.FieldVisibility, field.TypeEnum)
+	}
+	if _u.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterdoc.TrustCenterTable,
+			Columns: []string{trustcenterdoc.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterdoc.TrustCenterTable,
+			Columns: []string{trustcenterdoc.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.FileTable,
+			Columns: []string{trustcenterdoc.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.FileTable,
+			Columns: []string{trustcenterdoc.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterDoc
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -339,9 +554,119 @@ func (_u *TrustCenterDocUpdateOne) ClearTags() *TrustCenterDocUpdateOne {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TrustCenterDocUpdateOne) SetTrustCenterID(v string) *TrustCenterDocUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TrustCenterDocUpdateOne) ClearTrustCenterID() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
+// SetTitle sets the "title" field.
+func (_u *TrustCenterDocUpdateOne) SetTitle(v string) *TrustCenterDocUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableTitle(v *string) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// SetCategory sets the "category" field.
+func (_u *TrustCenterDocUpdateOne) SetCategory(v string) *TrustCenterDocUpdateOne {
+	_u.mutation.SetCategory(v)
+	return _u
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableCategory(v *string) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetCategory(*v)
+	}
+	return _u
+}
+
+// SetFileID sets the "file_id" field.
+func (_u *TrustCenterDocUpdateOne) SetFileID(v string) *TrustCenterDocUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableFileID(v *string) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
+	}
+	return _u
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (_u *TrustCenterDocUpdateOne) ClearFileID() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearFileID()
+	return _u
+}
+
+// SetVisibility sets the "visibility" field.
+func (_u *TrustCenterDocUpdateOne) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocUpdateOne {
+	_u.mutation.SetVisibility(v)
+	return _u
+}
+
+// SetNillableVisibility sets the "visibility" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableVisibility(v *enums.TrustCenterDocumentVisibility) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetVisibility(*v)
+	}
+	return _u
+}
+
+// ClearVisibility clears the value of the "visibility" field.
+func (_u *TrustCenterDocUpdateOne) ClearVisibility() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearVisibility()
+	return _u
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_u *TrustCenterDocUpdateOne) SetTrustCenter(v *TrustCenter) *TrustCenterDocUpdateOne {
+	return _u.SetTrustCenterID(v.ID)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (_u *TrustCenterDocUpdateOne) SetFile(v *File) *TrustCenterDocUpdateOne {
+	return _u.SetFileID(v.ID)
+}
+
 // Mutation returns the TrustCenterDocMutation object of the builder.
 func (_u *TrustCenterDocUpdateOne) Mutation() *TrustCenterDocMutation {
 	return _u.mutation
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (_u *TrustCenterDocUpdateOne) ClearTrustCenter() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearTrustCenter()
+	return _u
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (_u *TrustCenterDocUpdateOne) ClearFile() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // Where appends a list predicates to the TrustCenterDocUpdate builder.
@@ -399,6 +724,31 @@ func (_u *TrustCenterDocUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *TrustCenterDocUpdateOne) check() error {
+	if v, ok := _u.mutation.TrustCenterID(); ok {
+		if err := trustcenterdoc.TrustCenterIDValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.trust_center_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Title(); ok {
+		if err := trustcenterdoc.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.title": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Category(); ok {
+		if err := trustcenterdoc.CategoryValidator(v); err != nil {
+			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Visibility(); ok {
+		if err := trustcenterdoc.VisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.visibility": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *TrustCenterDocUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterDocUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -406,6 +756,9 @@ func (_u *TrustCenterDocUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder
 }
 
 func (_u *TrustCenterDocUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterDoc, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterdoc.Table, trustcenterdoc.Columns, sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -471,6 +824,80 @@ func (_u *TrustCenterDocUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdoc.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(trustcenterdoc.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Category(); ok {
+		_spec.SetField(trustcenterdoc.FieldCategory, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Visibility(); ok {
+		_spec.SetField(trustcenterdoc.FieldVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.VisibilityCleared() {
+		_spec.ClearField(trustcenterdoc.FieldVisibility, field.TypeEnum)
+	}
+	if _u.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterdoc.TrustCenterTable,
+			Columns: []string{trustcenterdoc.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterdoc.TrustCenterTable,
+			Columns: []string{trustcenterdoc.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.FileTable,
+			Columns: []string{trustcenterdoc.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.FileTable,
+			Columns: []string{trustcenterdoc.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterDoc
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

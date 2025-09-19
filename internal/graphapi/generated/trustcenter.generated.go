@@ -76,6 +76,8 @@ func (ec *executionContext) fieldContext_TrustCenterCreatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_setting(ctx, field)
 			case "trustCenterSubprocessors":
 				return ec.fieldContext_TrustCenter_trustCenterSubprocessors(ctx, field)
+			case "trustCenterDocs":
+				return ec.fieldContext_TrustCenter_trustCenterDocs(ctx, field)
 			case "trustCenterCompliances":
 				return ec.fieldContext_TrustCenter_trustCenterCompliances(ctx, field)
 			}
@@ -160,6 +162,8 @@ func (ec *executionContext) fieldContext_TrustCenterUpdatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_setting(ctx, field)
 			case "trustCenterSubprocessors":
 				return ec.fieldContext_TrustCenter_trustCenterSubprocessors(ctx, field)
+			case "trustCenterDocs":
+				return ec.fieldContext_TrustCenter_trustCenterDocs(ctx, field)
 			case "trustCenterCompliances":
 				return ec.fieldContext_TrustCenter_trustCenterCompliances(ctx, field)
 			}
