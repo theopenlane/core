@@ -11,6 +11,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog"
+	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -26,9 +27,18 @@ type SystemOwnedMixin struct {
 	mixin.Schema
 }
 
-func NewSystemOwnedMixin(additionalFields ...string) SystemOwnedMixin {
-	return SystemOwnedMixin{}
+// NewSystemOwnedMixin creates a new SystemOwnedMixin with the given options.
+// The options can be used to customize the behavior of the mixin, however, there are currently no options.
+func NewSystemOwnedMixin(opts ...SystemOwnedMixinOption) SystemOwnedMixin {
+	m := SystemOwnedMixin{}
+	for _, opt := range opts {
+		opt(&m)
+	}
+	return m
 }
+
+// SystemOwnedMixinOption is a function that configures the SystemOwnedMixin
+type SystemOwnedMixinOption func(*SystemOwnedMixin)
 
 // Fields of the SystemOwnedMixin.
 func (SystemOwnedMixin) Fields() []ent.Field {
@@ -88,8 +98,10 @@ type SystemOwnedMutation interface {
 	SetSystemOwned(bool)
 	OldSystemOwned(context.Context) (bool, error)
 	SystemInternalID() (string, bool)
+	ClearSystemInternalID()
 	SetSystemInternalID(string)
 	InternalNotes() (string, bool)
+	ClearInternalNotes()
 	SetInternalNotes(string)
 }
 
@@ -168,6 +180,7 @@ func SystemOwnedSchema(additionalFields ...string) privacy.MutationRuleFunc {
 	})
 }
 
+// queryForSystemOwned checks the database to see if any of the objects are system owned
 func queryForSystemOwned(ctx context.Context, m SystemOwnedMutation, ids []string) (bool, error) {
 	// if no ids, return false and continue to the next rule
 	// this would happen if the object being mutated does not exist
@@ -179,7 +192,7 @@ func queryForSystemOwned(ctx context.Context, m SystemOwnedMutation, ids []strin
 	query := "SELECT system_owned FROM " + table + " WHERE id in ($1)"
 
 	var rows sql.Rows
-	if err := m.Client().Driver().Query(ctx, query, toAnySlice(ids), &rows); err != nil {
+	if err := m.Client().Driver().Query(ctx, query, lo.ToAnySlice(ids), &rows); err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to check for object system owned status")
 
 		return false, err
@@ -201,13 +214,4 @@ func queryForSystemOwned(ctx context.Context, m SystemOwnedMutation, ids []strin
 	}
 
 	return false, nil
-}
-
-func toAnySlice(input []string) []any {
-	output := make([]any, len(input))
-	for i, v := range input {
-		output[i] = v
-	}
-
-	return output
 }

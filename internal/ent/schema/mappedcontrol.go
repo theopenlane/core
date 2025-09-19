@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
@@ -139,13 +138,6 @@ func (MappedControl) Hooks() []ent.Hook {
 			ent.OpCreate,
 		),
 		hooks.HookMappedControl(),
-	}
-}
-
-// Interceptors of the MappedControl
-func (MappedControl) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorMappedControls(),
 	}
 }
 
