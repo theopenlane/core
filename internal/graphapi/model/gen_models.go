@@ -1296,6 +1296,17 @@ type SearchResults struct {
 	Webauthns                   *generated.WebauthnConnection                   `json:"webauthns,omitempty"`
 }
 
+type SendTrustCenterNDAEmailPayload struct {
+	Success bool `json:"success"`
+}
+
+type SendTrustCenterNDAInput struct {
+	// trust center id
+	TrustCenterID string `json:"trustCenterID"`
+	// email address
+	Email string `json:"email"`
+}
+
 // Return response for createBulkStandard mutation
 type StandardBulkCreatePayload struct {
 	// Created standards

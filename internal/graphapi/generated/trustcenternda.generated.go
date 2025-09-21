@@ -4,6 +4,7 @@ package gqlgenerated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strconv"
 	"sync/atomic"
@@ -26,6 +27,33 @@ import (
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _SendTrustCenterNDAEmailPayload_success(ctx context.Context, field graphql.CollectedField, obj *model.SendTrustCenterNDAEmailPayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SendTrustCenterNDAEmailPayload_success,
+		func(ctx context.Context) (any, error) { return obj.Success, nil },
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_SendTrustCenterNDAEmailPayload_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SendTrustCenterNDAEmailPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
 
 func (ec *executionContext) _TrustCenterNDACreatePayload_template(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterNDACreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
@@ -200,6 +228,40 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterNDAInput(ctx context.
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputSendTrustCenterNDAInput(ctx context.Context, obj any) (model.SendTrustCenterNDAInput, error) {
+	var it model.SendTrustCenterNDAInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"trustCenterID", "email"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "trustCenterID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trustCenterID"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustCenterID = data
+		case "email":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Email = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -207,6 +269,45 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterNDAInput(ctx context.
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var sendTrustCenterNDAEmailPayloadImplementors = []string{"SendTrustCenterNDAEmailPayload"}
+
+func (ec *executionContext) _SendTrustCenterNDAEmailPayload(ctx context.Context, sel ast.SelectionSet, obj *model.SendTrustCenterNDAEmailPayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sendTrustCenterNDAEmailPayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SendTrustCenterNDAEmailPayload")
+		case "success":
+			out.Values[i] = ec._SendTrustCenterNDAEmailPayload_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
 
 var trustCenterNDACreatePayloadImplementors = []string{"TrustCenterNDACreatePayload"}
 
@@ -292,6 +393,25 @@ func (ec *executionContext) _TrustCenterNDAUpdatePayload(ctx context.Context, se
 
 func (ec *executionContext) unmarshalNCreateTrustCenterNDAInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateTrustCenterNDAInput(ctx context.Context, v any) (model.CreateTrustCenterNDAInput, error) {
 	res, err := ec.unmarshalInputCreateTrustCenterNDAInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNSendTrustCenterNDAEmailPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSendTrustCenterNDAEmailPayload(ctx context.Context, sel ast.SelectionSet, v model.SendTrustCenterNDAEmailPayload) graphql.Marshaler {
+	return ec._SendTrustCenterNDAEmailPayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNSendTrustCenterNDAEmailPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSendTrustCenterNDAEmailPayload(ctx context.Context, sel ast.SelectionSet, v *model.SendTrustCenterNDAEmailPayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._SendTrustCenterNDAEmailPayload(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNSendTrustCenterNDAInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSendTrustCenterNDAInput(ctx context.Context, v any) (model.SendTrustCenterNDAInput, error) {
+	res, err := ec.unmarshalInputSendTrustCenterNDAInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

@@ -30380,6 +30380,12 @@ type Mutation {
 		"""
 		templateFiles: [Upload!]
 	): TrustCenterNDAUpdatePayload!
+	sendTrustCenterNDAEmail(
+		"""
+		values of the trustCenterNDA
+		"""
+		input: SendTrustCenterNDAInput!
+	): SendTrustCenterNDAEmailPayload!
 	"""
 	Create a new trustCenterSetting
 	"""
@@ -51017,6 +51023,19 @@ type SearchResults {
 	users: UserConnection
 	userSettings: UserSettingConnection
 	webauthns: WebauthnConnection
+}
+type SendTrustCenterNDAEmailPayload {
+	success: Boolean!
+}
+input SendTrustCenterNDAInput {
+	"""
+	trust center id
+	"""
+	trustCenterID: ID!
+	"""
+	email address
+	"""
+	email: String!
 }
 type Standard implements Node {
 	id: ID!

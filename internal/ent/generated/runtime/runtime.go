@@ -6406,8 +6406,6 @@ func init() {
 	_ = trustcenterMixinFields3
 	trustcenterMixinFields4 := trustcenterMixin[4].Fields()
 	_ = trustcenterMixinFields4
-	trustcenterMixinFields6 := trustcenterMixin[6].Fields()
-	_ = trustcenterMixinFields6
 	trustcenterFields := schema.TrustCenter{}.Fields()
 	_ = trustcenterFields
 	// trustcenterDescCreatedAt is the schema descriptor for created_at field.
@@ -6424,10 +6422,6 @@ func init() {
 	trustcenterDescTags := trustcenterMixinFields4[0].Descriptor()
 	// trustcenter.DefaultTags holds the default value on creation for the tags field.
 	trustcenter.DefaultTags = trustcenterDescTags.Default.([]string)
-	// trustcenterDescOwnerID is the schema descriptor for owner_id field.
-	trustcenterDescOwnerID := trustcenterMixinFields6[0].Descriptor()
-	// trustcenter.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	trustcenter.OwnerIDValidator = trustcenterDescOwnerID.Validators[0].(func(string) error)
 	// trustcenterDescSlug is the schema descriptor for slug field.
 	trustcenterDescSlug := trustcenterFields[0].Descriptor()
 	// trustcenter.SlugValidator is a validator for the "slug" field. It is called by the builders before save.

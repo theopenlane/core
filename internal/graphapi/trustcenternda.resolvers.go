@@ -20,3 +20,8 @@ func (r *mutationResolver) CreateTrustCenterNda(ctx context.Context, input model
 func (r *mutationResolver) UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload) (*model.TrustCenterNDAUpdatePayload, error) {
 	return updateTrustCenterNDA(ctx, id)
 }
+
+// SendTrustCenterNDAEmail is the resolver for the sendTrustCenterNDAEmail field.
+func (r *mutationResolver) SendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDAInput) (*model.SendTrustCenterNDAEmailPayload, error) {
+	return sendTrustCenterNDAEmail(ctx, input, r)
+}

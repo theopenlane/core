@@ -2647,6 +2647,7 @@ type ComplexityRoot struct {
 		DeleteTrustCenterSubprocessor        func(childComplexity int, id string) int
 		DeleteUser                           func(childComplexity int, id string) int
 		DeleteWebauthn                       func(childComplexity int, id string) int
+		SendTrustCenterNDAEmail              func(childComplexity int, input model.SendTrustCenterNDAInput) int
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
@@ -4212,6 +4213,10 @@ type ComplexityRoot struct {
 		UserSettings                func(childComplexity int) int
 		Users                       func(childComplexity int) int
 		Webauthns                   func(childComplexity int) int
+	}
+
+	SendTrustCenterNDAEmailPayload struct {
+		Success func(childComplexity int) int
 	}
 
 	Standard struct {
@@ -19249,6 +19254,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteWebauthn(childComplexity, args["id"].(string)), true
 
+	case "Mutation.sendTrustCenterNDAEmail":
+		if e.complexity.Mutation.SendTrustCenterNDAEmail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendTrustCenterNDAEmail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.SendTrustCenterNDAEmail(childComplexity, args["input"].(model.SendTrustCenterNDAInput)), true
+
 	case "Mutation.updateAPIToken":
 		if e.complexity.Mutation.UpdateAPIToken == nil {
 			break
@@ -29641,6 +29658,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Webauthns(childComplexity), true
 
+	case "SendTrustCenterNDAEmailPayload.success":
+		if e.complexity.SendTrustCenterNDAEmailPayload.Success == nil {
+			break
+		}
+
+		return e.complexity.SendTrustCenterNDAEmailPayload.Success(childComplexity), true
+
 	case "Standard.controls":
 		if e.complexity.Standard.Controls == nil {
 			break
@@ -35226,6 +35250,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputScheduledJobRunOrder,
 		ec.unmarshalInputScheduledJobRunWhereInput,
 		ec.unmarshalInputScheduledJobWhereInput,
+		ec.unmarshalInputSendTrustCenterNDAInput,
 		ec.unmarshalInputStandardHistoryOrder,
 		ec.unmarshalInputStandardHistoryWhereInput,
 		ec.unmarshalInputStandardOrder,
@@ -101495,6 +101520,13 @@ extend input CreateTrustCenterInput {
         """
         templateFiles: [Upload!]
     ): TrustCenterNDAUpdatePayload!
+
+    sendTrustCenterNDAEmail(
+        """
+        values of the trustCenterNDA
+        """
+        input: SendTrustCenterNDAInput!
+    ): SendTrustCenterNDAEmailPayload!
 }
 
 type TrustCenterNDACreatePayload {
@@ -101510,6 +101542,21 @@ input CreateTrustCenterNDAInput {
 
 type TrustCenterNDAUpdatePayload {
     template: Template!
+}
+
+type SendTrustCenterNDAEmailPayload {
+    success: Boolean!
+}
+
+input SendTrustCenterNDAInput {
+    """
+    trust center id
+    """
+    trustCenterID: ID!
+    """
+    email address
+    """
+    email: String!
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcentersetting.graphql", Input: `extend type Query {
