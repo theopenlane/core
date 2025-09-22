@@ -4669,7 +4669,7 @@ var (
 			},
 			{
 				Symbol:     "templates_trust_centers_templates",
-				Columns:    []*schema.Column{TemplatesColumns[15]},
+				Columns:    []*schema.Column{TemplatesColumns[18]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4694,7 +4694,7 @@ var (
 			{
 				Name:    "template_trust_center_id",
 				Unique:  true,
-				Columns: []*schema.Column{TemplatesColumns[15]},
+				Columns: []*schema.Column{TemplatesColumns[18]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL and kind = 'TRUSTCENTER_NDA'",
 				},

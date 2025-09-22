@@ -11653,6 +11653,7 @@ type CreateTemplateInput struct {
 	OwnerID          *string
 	DocumentIDs      []string
 	FileIDs          []string
+	TrustCenterID    *string
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
@@ -11691,6 +11692,9 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateTemplateInput on the TemplateCreate builder.
@@ -11717,14 +11721,14 @@ type UpdateTemplateInput struct {
 	Jsonconfig            map[string]interface{}
 	ClearUischema         bool
 	Uischema              map[string]interface{}
-	ClearOwner            bool
-	OwnerID               *string
 	ClearDocuments        bool
 	AddDocumentIDs        []string
 	RemoveDocumentIDs     []string
 	ClearFiles            bool
 	AddFileIDs            []string
 	RemoveFileIDs         []string
+	ClearTrustCenter      bool
+	TrustCenterID         *string
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -11777,12 +11781,6 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
 	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
 	if i.ClearDocuments {
 		m.ClearDocuments()
 	}
@@ -11800,6 +11798,12 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
 	}
 }
 
@@ -11824,6 +11828,7 @@ type CreateTrustCenterInput struct {
 	TrustCenterSubprocessorIDs []string
 	TrustCenterDocIDs          []string
 	TrustCenterComplianceIDs   []string
+	TemplateIDs                []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -11848,6 +11853,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.TrustCenterComplianceIDs; len(v) > 0 {
 		m.AddTrustCenterComplianceIDs(v...)
+	}
+	if v := i.TemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
 	}
 }
 
@@ -11877,6 +11885,9 @@ type UpdateTrustCenterInput struct {
 	ClearTrustCenterCompliances      bool
 	AddTrustCenterComplianceIDs      []string
 	RemoveTrustCenterComplianceIDs   []string
+	ClearTemplates                   bool
+	AddTemplateIDs                   []string
+	RemoveTemplateIDs                []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -11934,6 +11945,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.RemoveTrustCenterComplianceIDs; len(v) > 0 {
 		m.RemoveTrustCenterComplianceIDs(v...)
+	}
+	if i.ClearTemplates {
+		m.ClearTemplates()
+	}
+	if v := i.AddTemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
+	}
+	if v := i.RemoveTemplateIDs; len(v) > 0 {
+		m.RemoveTemplateIDs(v...)
 	}
 }
 

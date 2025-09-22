@@ -6,7 +6,7 @@ can retrieve the value
 """
 directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
 """
-Indicates is the input field is read-only by non-system admin users. 
+Indicates is the input field is read-only by non-system admin users.
 If an input is marked as @readOnly, only system-admin users
 can set the field
 """
