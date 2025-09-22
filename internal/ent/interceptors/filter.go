@@ -218,7 +218,7 @@ func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
 
 // filterIDList filters a list of object ids to only include the objects that the user has access to
 func filterIDList(ctx context.Context, ids []string, objectType string) ([]string, error) {
-	zerolog.Ctx(ctx).Debug().Msg("filterIDList")
+	zerolog.Ctx(ctx).Debug().Str("object", objectType).Strs("ids", ids).Msg("filterIDList")
 	allowedIDs, err := filterAuthorizedObjectIDs(ctx, objectType, ids)
 	if err != nil {
 		return nil, err
@@ -229,7 +229,7 @@ func filterIDList(ctx context.Context, ids []string, objectType string) ([]strin
 
 // singleIDCheck checks if a single object id is allowed and returns a boolean
 func singleIDCheck(ctx context.Context, v ent.Value, objectType string) (bool, error) {
-	zerolog.Ctx(ctx).Debug().Msg("singleIDCheck")
+	zerolog.Ctx(ctx).Debug().Str("object", objectType).Msg("singleIDCheck")
 	id, ok := v.(string)
 	if !ok {
 		zerolog.Ctx(ctx).Error().Msgf("failed to cast query results to expected single ID %T", v)
@@ -252,7 +252,7 @@ func singleIDCheck(ctx context.Context, v ent.Value, objectType string) (bool, e
 // filterListObjects filters a list of objects to only include the objects that the user has access to
 // and returns the filtered list as the ent.Value
 func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Query) (ent.Value, error) {
-	zerolog.Ctx(ctx).Debug().Msg("filterListObjects")
+	zerolog.Ctx(ctx).Debug().Str("type", q.Type()).Msg("filterListObjects")
 	listResults := v.([]*T)
 	if len(listResults) == 0 {
 		return v, nil
@@ -301,7 +301,7 @@ func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Quer
 
 // singleObjectCheck checks if a single object is allowed and returns the object if it is
 func singleObjectCheck[T any](ctx context.Context, v ent.Value, q intercept.Query) (ent.Value, error) {
-	zerolog.Ctx(ctx).Debug().Msg("singleObjectCheck")
+	zerolog.Ctx(ctx).Debug().Str("type", q.Type()).Msg("singleObjectCheck")
 	objectIDs, err := getObjectIDsFromEntValues(v)
 	if err != nil {
 		return nil, err

@@ -51,7 +51,7 @@ func HookTemplateAuthz() ent.Hook {
 
 			if m.Op().Is(ent.OpCreate) {
 				createdTemplate := retValue.(*generated.Template)
-				if createdTemplate.TemplateType == enums.RootTemplate && createdTemplate.OwnerID == "" {
+				if createdTemplate.SystemOwned {
 					err = templateCreateHook(ctx, m)
 				}
 			} else if isDeleteOp(ctx, m) {

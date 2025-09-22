@@ -15111,6 +15111,89 @@ func (_c *MockOpenlaneGraphClient_DeleteTask_Call) RunAndReturn(run func(ctx con
 	return _c
 }
 
+// DeleteTemplate provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) DeleteTemplate(ctx context.Context, deleteTemplateID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTemplate, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, deleteTemplateID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, deleteTemplateID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteTemplate")
+	}
+
+	var r0 *openlaneclient.DeleteTemplate
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTemplate, error)); ok {
+		return returnFunc(ctx, deleteTemplateID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.DeleteTemplate); ok {
+		r0 = returnFunc(ctx, deleteTemplateID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.DeleteTemplate)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, deleteTemplateID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_DeleteTemplate_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteTemplate'
+type MockOpenlaneGraphClient_DeleteTemplate_Call struct {
+	*mock.Call
+}
+
+// DeleteTemplate is a helper method to define mock.On call
+//   - ctx context.Context
+//   - deleteTemplateID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) DeleteTemplate(ctx interface{}, deleteTemplateID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteTemplate_Call {
+	return &MockOpenlaneGraphClient_DeleteTemplate_Call{Call: _e.mock.On("DeleteTemplate",
+		append([]interface{}{ctx, deleteTemplateID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTemplate_Call) Run(run func(ctx context.Context, deleteTemplateID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteTemplate_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTemplate_Call) Return(deleteTemplate *openlaneclient.DeleteTemplate, err error) *MockOpenlaneGraphClient_DeleteTemplate_Call {
+	_c.Call.Return(deleteTemplate, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTemplate_Call) RunAndReturn(run func(ctx context.Context, deleteTemplateID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTemplate, error)) *MockOpenlaneGraphClient_DeleteTemplate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // DeleteTrustCenter provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) DeleteTrustCenter(ctx context.Context, deleteTrustCenterID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenter, error) {
 	var tmpRet mock.Arguments
@@ -36443,12 +36526,12 @@ func (_c *MockOpenlaneGraphClient_GetTasks_Call) RunAndReturn(run func(ctx conte
 }
 
 // GetTemplateByID provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetTemplateByID(ctx context.Context, getTemplateID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateByID, error) {
+func (_mock *MockOpenlaneGraphClient) GetTemplateByID(ctx context.Context, templateID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateByID, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, getTemplateID, interceptors)
+		tmpRet = _mock.Called(ctx, templateID, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, getTemplateID)
+		tmpRet = _mock.Called(ctx, templateID)
 	}
 	ret := tmpRet
 
@@ -36459,17 +36542,17 @@ func (_mock *MockOpenlaneGraphClient) GetTemplateByID(ctx context.Context, getTe
 	var r0 *openlaneclient.GetTemplateByID
 	var r1 error
 	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateByID, error)); ok {
-		return returnFunc(ctx, getTemplateID, interceptors...)
+		return returnFunc(ctx, templateID, interceptors...)
 	}
 	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.GetTemplateByID); ok {
-		r0 = returnFunc(ctx, getTemplateID, interceptors...)
+		r0 = returnFunc(ctx, templateID, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetTemplateByID)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, getTemplateID, interceptors...)
+		r1 = returnFunc(ctx, templateID, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -36483,14 +36566,14 @@ type MockOpenlaneGraphClient_GetTemplateByID_Call struct {
 
 // GetTemplateByID is a helper method to define mock.On call
 //   - ctx context.Context
-//   - getTemplateID string
+//   - templateID string
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetTemplateByID(ctx interface{}, getTemplateID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTemplateByID_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetTemplateByID(ctx interface{}, templateID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTemplateByID_Call {
 	return &MockOpenlaneGraphClient_GetTemplateByID_Call{Call: _e.mock.On("GetTemplateByID",
-		append([]interface{}{ctx, getTemplateID}, interceptors...)...)}
+		append([]interface{}{ctx, templateID}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetTemplateByID_Call) Run(run func(ctx context.Context, getTemplateID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTemplateByID_Call {
+func (_c *MockOpenlaneGraphClient_GetTemplateByID_Call) Run(run func(ctx context.Context, templateID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTemplateByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -36520,7 +36603,7 @@ func (_c *MockOpenlaneGraphClient_GetTemplateByID_Call) Return(getTemplateByID *
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetTemplateByID_Call) RunAndReturn(run func(ctx context.Context, getTemplateID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateByID, error)) *MockOpenlaneGraphClient_GetTemplateByID_Call {
+func (_c *MockOpenlaneGraphClient_GetTemplateByID_Call) RunAndReturn(run func(ctx context.Context, templateID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateByID, error)) *MockOpenlaneGraphClient_GetTemplateByID_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -36616,6 +36699,101 @@ func (_c *MockOpenlaneGraphClient_GetTemplateHistories_Call) Return(getTemplateH
 }
 
 func (_c *MockOpenlaneGraphClient_GetTemplateHistories_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TemplateHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateHistories, error)) *MockOpenlaneGraphClient_GetTemplateHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTemplates provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTemplates(ctx context.Context, first *int64, last *int64, where *openlaneclient.TemplateWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplates, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTemplates")
+	}
+
+	var r0 *openlaneclient.GetTemplates
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TemplateWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplates, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TemplateWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTemplates); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTemplates)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.TemplateWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTemplates_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTemplates'
+type MockOpenlaneGraphClient_GetTemplates_Call struct {
+	*mock.Call
+}
+
+// GetTemplates is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.TemplateWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTemplates(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTemplates_Call {
+	return &MockOpenlaneGraphClient_GetTemplates_Call{Call: _e.mock.On("GetTemplates",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTemplates_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TemplateWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTemplates_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.TemplateWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.TemplateWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTemplates_Call) Return(getTemplates *openlaneclient.GetTemplates, err error) *MockOpenlaneGraphClient_GetTemplates_Call {
+	_c.Call.Return(getTemplates, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTemplates_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TemplateWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplates, error)) *MockOpenlaneGraphClient_GetTemplates_Call {
 	_c.Call.Return(run)
 	return _c
 }

@@ -1,13 +1,19 @@
 mutation CreateBulkCSVTemplate($input: Upload!) {
   createBulkCSVTemplate(input: $input) {
     templates {
+      createdAt
+      createdBy
       description
       id
       jsonconfig
       name
-      uischema
-      kind
       ownerID
+      tags
+      templateType
+      uischema
+      updatedAt
+      updatedBy
+      kind
     }
   }
 }
@@ -15,13 +21,19 @@ mutation CreateBulkCSVTemplate($input: Upload!) {
 mutation CreateBulkTemplate($input: [CreateTemplateInput!]) {
   createBulkTemplate(input: $input) {
     templates {
+      createdAt
+      createdBy
       description
       id
       jsonconfig
       name
-      uischema
-      kind
       ownerID
+      tags
+      templateType
+      uischema
+      updatedAt
+      updatedBy
+      kind
     }
   }
 }
@@ -29,13 +41,19 @@ mutation CreateBulkTemplate($input: [CreateTemplateInput!]) {
 mutation CreateTemplate($input: CreateTemplateInput!, $templateFiles: [Upload!]) {
   createTemplate(input: $input, templateFiles: $templateFiles) {
     template {
+      createdAt
+      createdBy
       description
       id
       jsonconfig
       name
-      uischema
-      kind
       ownerID
+      tags
+      templateType
+      uischema
+      updatedAt
+      updatedBy
+      kind
       files {
         edges {
           node {
@@ -48,8 +66,21 @@ mutation CreateTemplate($input: CreateTemplateInput!, $templateFiles: [Upload!])
   }
 }
 
+mutation DeleteTemplate($deleteTemplateId: ID!) {
+  deleteTemplate(id: $deleteTemplateId) {
+    deletedID
+  }
+}
+
 query GetAllTemplates {
   templates {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         createdAt
@@ -58,11 +89,13 @@ query GetAllTemplates {
         id
         jsonconfig
         name
+        ownerID
+        tags
+        templateType
         uischema
-        kind
         updatedAt
         updatedBy
-        ownerID
+        kind
         files {
           edges {
             node {
@@ -76,19 +109,21 @@ query GetAllTemplates {
   }
 }
 
-query GetTemplateByID($getTemplateId: ID!) {
-  template(id: $getTemplateId) {
+query GetTemplateByID($templateId: ID!) {
+  template(id: $templateId) {
     createdAt
     createdBy
     description
     id
     jsonconfig
     name
+    ownerID
+    tags
+    templateType
     uischema
     updatedAt
     updatedBy
     kind
-    ownerID
     files {
       edges {
         node {
@@ -100,8 +135,49 @@ query GetTemplateByID($getTemplateId: ID!) {
   }
 }
 
+query GetTemplates($first: Int, $last: Int, $where: TemplateWhereInput) {
+  templates(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        id
+        jsonconfig
+        name
+        ownerID
+        tags
+        templateType
+        uischema
+        updatedAt
+        updatedBy
+        kind
+        files {
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!, $templateFiles: [Upload!]) {
-  updateTemplate(id: $updateTemplateId, input: $input, templateFiles: $templateFiles) {
+  updateTemplate(
+    id: $updateTemplateId
+    input: $input
+    templateFiles: $templateFiles
+  ) {
     template {
       createdAt
       createdBy
@@ -109,11 +185,13 @@ mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!, $t
       id
       jsonconfig
       name
+      ownerID
+      tags
+      templateType
       uischema
       updatedAt
       updatedBy
       kind
-      ownerID
       files {
         edges {
           node {
