@@ -122,7 +122,7 @@ func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http
 
 // GenerateOauthAuthSession creates a new auth session for the oauth user and their default organization id
 func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWriter, user *generated.User, oauthRequest models.OauthTokenRequest) (*models.AuthData, error) {
-	auth, err := a.createTokenPair(ctx, user, "")
+	auth, err := a.createTokenPair(ctx, user, oauthRequest.OrgID)
 	if err != nil {
 		return nil, err
 	}

@@ -269,6 +269,14 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	ctx = ent.NewContext(ctx, suite.db)
 
+	ssoUser := suite.db.User.Create().
+		SetEmail("sso@example.com").
+		SetFirstName("SSO").
+		SetLastName("User").
+		SetLastLoginProvider(enums.AuthProviderOIDC).
+		SetLastSeen(time.Now()).
+		SaveX(ctx)
+
 	discovery := oidc.server.URL + "/.well-known/openid-configuration"
 	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
 		IdentityProviderLoginEnforced: lo.ToPtr(true),
@@ -287,7 +295,13 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 		SetOrganizationID(org.ID).
 		ExecX(ctx)
 
-	suite.db.UserSetting.Update().Where(usersetting.UserID(testUser1.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         ssoUser.ID,
+		Role:           &enums.RoleMember,
+	}).ExecX(ctx)
+
+	suite.db.UserSetting.Update().Where(usersetting.UserID(ssoUser.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
 
 	req := httptest.NewRequest(http.MethodGet, "/v1/sso/login?organization_id="+org.ID, nil)
 	rec := httptest.NewRecorder()

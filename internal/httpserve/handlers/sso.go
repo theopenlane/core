@@ -125,12 +125,18 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	// set the context for the authenticated user
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
+	orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
+	if err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
 	// build the OAuth session request
 	oauthReq := apimodels.OauthTokenRequest{
 		Email:            tokens.IDTokenClaims.Email,
 		ExternalUserName: tokens.IDTokenClaims.Name,
 		AuthProvider:     "oidc",
 		Image:            tokens.IDTokenClaims.Picture,
+		OrgID:            orgCookie.Value,
 	}
 
 	// generate the session and auth data for the user
@@ -141,11 +147,6 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 
 	if tokenID, tErr := sessions.GetCookie(ctx.Request(), "token_id"); tErr == nil {
 		tokenType, err := sessions.GetCookie(ctx.Request(), "token_type")
-		if err != nil {
-			return h.BadRequest(ctx, err)
-		}
-
-		orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
 		if err != nil {
 			return h.BadRequest(ctx, err)
 		}

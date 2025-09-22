@@ -952,6 +952,7 @@ type OauthTokenRequest struct {
 	ExternalUserName string `json:"externalUserName" description:"The username of the user from the external provider" example:"jsnow"`
 	ClientToken      string `json:"clientToken" description:"The token provided by the external provider"`
 	Image            string `json:"image,omitempty" description:"The image URL of the user from the external provider"`
+	OrgID            string `json:"org_id,omitempty" description:"the organization id for the sso connection"`
 }
 
 // ExampleOauthTokenRequest is an example OAuth token request for OpenAPI documentation
