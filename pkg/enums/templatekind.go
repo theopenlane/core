@@ -22,6 +22,7 @@ var (
 func (TemplateKind) Values() []string {
 	return []string{
 		string(TemplateKindQuestionnaire),
+		string(TemplateKindTrustCenterNda),
 	}
 }
 
@@ -35,6 +36,8 @@ func ToTemplateKind(r string) *TemplateKind {
 	switch strings.ToUpper(r) {
 	case TemplateKindQuestionnaire.String():
 		return &TemplateKindQuestionnaire
+	case TemplateKindTrustCenterNda.String():
+		return &TemplateKindTrustCenterNda
 	default:
 		return &TemplateKindInvalid
 	}

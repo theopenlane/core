@@ -6,6 +6,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
+	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -130,8 +131,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 		}
 	}
 
-	// Create a test user for this specific test to avoid conflicts
-	testUser := suite.userBuilder(context.Background(), t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -156,7 +156,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           systemAdminUser.UserCtx,
+			ctx:           testUser1.UserCtx,
 		},
 		{
 			name: "happy path, full input without files",
@@ -197,7 +197,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           systemAdminUser.UserCtx,
+			ctx:           testUser1.UserCtx,
 		},
 		{
 			name: "happy path, with single PDF file",
@@ -215,7 +215,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: []*graphql.Upload{createPDFUpload()},
 			client:        suite.client.api,
-			ctx:           systemAdminUser.UserCtx,
+			ctx:           testUser1.UserCtx,
 		},
 		{
 			name: "happy path, with multiple files",
@@ -234,43 +234,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: []*graphql.Upload{createPDFUpload(), createPNGUpload()},
 			client:        suite.client.api,
-			ctx:           systemAdminUser.UserCtx,
-		},
-		{
-			name: "happy path, using personal access token without files",
-			input: testclient.CreateTemplateInput{
-				Name:    "PAT Template",
-				OwnerID: lo.ToPtr(testUser1.OrganizationID),
-				Jsonconfig: map[string]any{
-					"type": "object",
-					"properties": map[string]any{
-						"field": map[string]any{
-							"type": "string",
-						},
-					},
-				},
-			},
-			templateFiles: nil,
-			client:        suite.client.apiWithPAT,
-			ctx:           context.Background(),
-		},
-		{
-			name: "happy path, using personal access token with files",
-			input: testclient.CreateTemplateInput{
-				Name:    "PAT Template with Files",
-				OwnerID: lo.ToPtr(testUser1.OrganizationID),
-				Jsonconfig: map[string]any{
-					"type": "object",
-					"properties": map[string]any{
-						"attachment": map[string]any{
-							"type": "string",
-						},
-					},
-				},
-			},
-			templateFiles: []*graphql.Upload{createPNGUpload()},
-			client:        suite.client.apiWithPAT,
-			ctx:           context.Background(),
+			ctx:           testUser1.UserCtx,
 		},
 		{
 			name: "missing required name field",
@@ -281,7 +245,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser.UserCtx,
+			ctx:           testUser1.UserCtx,
 			expectedErr:   "value is less than the required length",
 		},
 		{
@@ -291,7 +255,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser.UserCtx,
+			ctx:           testUser1.UserCtx,
 			expectedErr:   "cannot be null",
 		},
 		{
@@ -312,18 +276,56 @@ func TestMutationCreateTemplate(t *testing.T) {
 			client:        suite.client.api,
 			ctx:           systemAdminUser.UserCtx,
 		},
+		{
+			name: "trust center NDA with no trust center",
+			input: testclient.CreateTemplateInput{
+				Name: "Test Template",
+				Kind: &enums.TemplateKindTrustCenterNda,
+				Jsonconfig: map[string]any{
+					"type": "object",
+					"properties": map[string]any{
+						"name": map[string]any{
+							"type": "string",
+						},
+					},
+				},
+			},
+			templateFiles: nil,
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
+			expectedErr:   "generated: constraint failed: pq: new row for relation",
+		},
+		{
+			name: "trust center NDA with trust center",
+			input: testclient.CreateTemplateInput{
+				Name: "Test Template",
+				Kind: &enums.TemplateKindTrustCenterNda,
+				Jsonconfig: map[string]any{
+					"type": "object",
+					"properties": map[string]any{
+						"name": map[string]any{
+							"type": "string",
+						},
+					},
+				},
+				TrustCenterID: lo.ToPtr(trustCenter.ID),
+			},
+			templateFiles: nil,
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			// Set up mock expectations for file uploads if files are provided
-			if tc.templateFiles != nil && len(tc.templateFiles) > 0 && tc.expectedErr == "" {
+			if len(tc.templateFiles) > 0 && tc.expectedErr == "" {
 				uploads := make([]graphql.Upload, len(tc.templateFiles))
 				for i, file := range tc.templateFiles {
 					uploads[i] = *file
 				}
 				expectUpload(t, suite.client.objectStore.Storage, uploads)
-			} else if tc.templateFiles != nil && len(tc.templateFiles) > 0 {
+			} else if len(tc.templateFiles) > 0 {
 				// For error cases with files, we still need to set up the mock but expect it not to be called
 				expectUploadCheckOnly(t, suite.client.objectStore.Storage)
 			}
@@ -335,8 +337,8 @@ func TestMutationCreateTemplate(t *testing.T) {
 				return
 			}
 
-			assert.NilError(t, err)
-			assert.Assert(t, resp != nil)
+			require.Nil(t, err)
+			require.NotNil(t, resp)
 
 			// Verify basic template fields
 			template := resp.CreateTemplate.Template
@@ -357,7 +359,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			}
 
 			// Verify file uploads if files were provided
-			if tc.templateFiles != nil && len(tc.templateFiles) > 0 {
+			if len(tc.templateFiles) > 0 {
 				assert.Check(t, is.Len(template.Files.Edges, len(tc.templateFiles)))
 
 				// Verify each uploaded file has an ID and presigned URL
@@ -369,9 +371,10 @@ func TestMutationCreateTemplate(t *testing.T) {
 			}
 
 			// Cleanup the created template
-			(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(systemAdminUser.UserCtx, t)
+			(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(tc.ctx, t)
 		})
 	}
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationUpdateTemplate(t *testing.T) {

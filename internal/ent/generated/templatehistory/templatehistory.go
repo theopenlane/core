@@ -152,7 +152,7 @@ const DefaultKind enums.TemplateKind = "QUESTIONNAIRE"
 // KindValidator is a validator for the "kind" field enum values. It is called by the builders before save.
 func KindValidator(k enums.TemplateKind) error {
 	switch k.String() {
-	case "QUESTIONNAIRE":
+	case "QUESTIONNAIRE", "TRUSTCENTER_NDA":
 		return nil
 	default:
 		return fmt.Errorf("templatehistory: invalid enum value for kind field: %q", k)

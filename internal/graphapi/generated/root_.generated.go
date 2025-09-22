@@ -86142,6 +86142,7 @@ TemplateHistoryTemplateKind is enum for the field kind
 """
 enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
   QUESTIONNAIRE
+  TRUSTCENTER_NDA
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -86402,6 +86403,7 @@ TemplateTemplateKind is enum for the field kind
 """
 enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
   QUESTIONNAIRE
+  TRUSTCENTER_NDA
 }
 """
 TemplateWhereInput is used for filtering Template objects.
