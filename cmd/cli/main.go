@@ -56,6 +56,7 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/trustcentercompliance"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/trustcenterdoc"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/trustcenterdomain"
+	_ "github.com/theopenlane/core/cmd/cli/cmd/trustcenternda"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/trustcentersubprocessors"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/user"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/usersetting"

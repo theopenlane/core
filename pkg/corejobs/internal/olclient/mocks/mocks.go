@@ -10700,6 +10700,95 @@ func (_c *MockOpenlaneGraphClient_CreateTrustCenterDomain_Call) RunAndReturn(run
 	return _c
 }
 
+// CreateTrustCenterNda provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateTrustCenterNda(ctx context.Context, input openlaneclient.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterNda, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, templateFiles, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input, templateFiles)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateTrustCenterNda")
+	}
+
+	var r0 *openlaneclient.CreateTrustCenterNda
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterNDAInput, []*graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterNda, error)); ok {
+		return returnFunc(ctx, input, templateFiles, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterNDAInput, []*graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.CreateTrustCenterNda); ok {
+		r0 = returnFunc(ctx, input, templateFiles, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateTrustCenterNda)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateTrustCenterNDAInput, []*graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, templateFiles, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateTrustCenterNda_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateTrustCenterNda'
+type MockOpenlaneGraphClient_CreateTrustCenterNda_Call struct {
+	*mock.Call
+}
+
+// CreateTrustCenterNda is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateTrustCenterNDAInput
+//   - templateFiles []*graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateTrustCenterNda(ctx interface{}, input interface{}, templateFiles interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTrustCenterNda_Call {
+	return &MockOpenlaneGraphClient_CreateTrustCenterNda_Call{Call: _e.mock.On("CreateTrustCenterNda",
+		append([]interface{}{ctx, input, templateFiles}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterNda_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTrustCenterNda_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateTrustCenterNDAInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateTrustCenterNDAInput)
+		}
+		var arg2 []*graphql.Upload
+		if args[2] != nil {
+			arg2 = args[2].([]*graphql.Upload)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterNda_Call) Return(createTrustCenterNda *openlaneclient.CreateTrustCenterNda, err error) *MockOpenlaneGraphClient_CreateTrustCenterNda_Call {
+	_c.Call.Return(createTrustCenterNda, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterNda_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterNda, error)) *MockOpenlaneGraphClient_CreateTrustCenterNda_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateTrustCenterSetting provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) CreateTrustCenterSetting(ctx context.Context, input openlaneclient.CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterSetting, error) {
 	var tmpRet mock.Arguments
@@ -43090,6 +43179,95 @@ func (_c *MockOpenlaneGraphClient_UpdateTrustCenterDoc_Call) Return(updateTrustC
 }
 
 func (_c *MockOpenlaneGraphClient_UpdateTrustCenterDoc_Call) RunAndReturn(run func(ctx context.Context, updateTrustCenterDocID string, input openlaneclient.UpdateTrustCenterDocInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterDoc, error)) *MockOpenlaneGraphClient_UpdateTrustCenterDoc_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateTrustCenterNda provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterNda, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, id, templateFiles, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, id, templateFiles)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateTrustCenterNda")
+	}
+
+	var r0 *openlaneclient.UpdateTrustCenterNda
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, []*graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterNda, error)); ok {
+		return returnFunc(ctx, id, templateFiles, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, []*graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.UpdateTrustCenterNda); ok {
+		r0 = returnFunc(ctx, id, templateFiles, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateTrustCenterNda)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, []*graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, id, templateFiles, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateTrustCenterNda_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateTrustCenterNda'
+type MockOpenlaneGraphClient_UpdateTrustCenterNda_Call struct {
+	*mock.Call
+}
+
+// UpdateTrustCenterNda is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id string
+//   - templateFiles []*graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateTrustCenterNda(ctx interface{}, id interface{}, templateFiles interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTrustCenterNda_Call {
+	return &MockOpenlaneGraphClient_UpdateTrustCenterNda_Call{Call: _e.mock.On("UpdateTrustCenterNda",
+		append([]interface{}{ctx, id, templateFiles}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterNda_Call) Run(run func(ctx context.Context, id string, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTrustCenterNda_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []*graphql.Upload
+		if args[2] != nil {
+			arg2 = args[2].([]*graphql.Upload)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterNda_Call) Return(updateTrustCenterNda *openlaneclient.UpdateTrustCenterNda, err error) *MockOpenlaneGraphClient_UpdateTrustCenterNda_Call {
+	_c.Call.Return(updateTrustCenterNda, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterNda_Call) RunAndReturn(run func(ctx context.Context, id string, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterNda, error)) *MockOpenlaneGraphClient_UpdateTrustCenterNda_Call {
 	_c.Call.Return(run)
 	return _c
 }
