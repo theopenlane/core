@@ -488,6 +488,8 @@ type OpenlaneGraphClient interface {
 	CreateTrustCenterDomain(ctx context.Context, input CreateTrustCenterDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDomain, error)
 	GetAllTrustCenterHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterHistories, error)
 	GetTrustCenterHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterHistories, error)
+	CreateTrustCenterNda(ctx context.Context, input CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterNda, error)
+	UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterNda, error)
 	CreateTrustCenterSetting(ctx context.Context, input CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSetting, error)
 	DeleteTrustCenterSetting(ctx context.Context, deleteTrustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterSetting, error)
 	GetAllTrustCenterSettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSettings, error)
@@ -71677,6 +71679,200 @@ func (t *GetTrustCenterHistories_TrustCenterHistories) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges_Node struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges_Node) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges_Node{}
+	}
+	return t.PresignedURL
+}
+
+type CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges struct {
+	Node *CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges) GetNode() *CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges_Node {
+	if t == nil {
+		t = &CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges{}
+	}
+	return t.Node
+}
+
+type CreateTrustCenterNda_CreateTrustCenterNda_Template_Files struct {
+	Edges []*CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateTrustCenterNda_CreateTrustCenterNda_Template_Files) GetEdges() []*CreateTrustCenterNda_CreateTrustCenterNda_Template_Files_Edges {
+	if t == nil {
+		t = &CreateTrustCenterNda_CreateTrustCenterNda_Template_Files{}
+	}
+	return t.Edges
+}
+
+type CreateTrustCenterNda_CreateTrustCenterNda_Template struct {
+	Files         CreateTrustCenterNda_CreateTrustCenterNda_Template_Files "json:\"files\" graphql:\"files\""
+	ID            string                                                   "json:\"id\" graphql:\"id\""
+	Jsonconfig    map[string]any                                           "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind          *enums.TemplateKind                                      "json:\"kind,omitempty\" graphql:\"kind\""
+	Name          string                                                   "json:\"name\" graphql:\"name\""
+	TrustCenterID *string                                                  "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+}
+
+func (t *CreateTrustCenterNda_CreateTrustCenterNda_Template) GetFiles() *CreateTrustCenterNda_CreateTrustCenterNda_Template_Files {
+	if t == nil {
+		t = &CreateTrustCenterNda_CreateTrustCenterNda_Template{}
+	}
+	return &t.Files
+}
+func (t *CreateTrustCenterNda_CreateTrustCenterNda_Template) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterNda_CreateTrustCenterNda_Template{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterNda_CreateTrustCenterNda_Template) GetJsonconfig() map[string]any {
+	if t == nil {
+		t = &CreateTrustCenterNda_CreateTrustCenterNda_Template{}
+	}
+	return t.Jsonconfig
+}
+func (t *CreateTrustCenterNda_CreateTrustCenterNda_Template) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &CreateTrustCenterNda_CreateTrustCenterNda_Template{}
+	}
+	return t.Kind
+}
+func (t *CreateTrustCenterNda_CreateTrustCenterNda_Template) GetName() string {
+	if t == nil {
+		t = &CreateTrustCenterNda_CreateTrustCenterNda_Template{}
+	}
+	return t.Name
+}
+func (t *CreateTrustCenterNda_CreateTrustCenterNda_Template) GetTrustCenterID() *string {
+	if t == nil {
+		t = &CreateTrustCenterNda_CreateTrustCenterNda_Template{}
+	}
+	return t.TrustCenterID
+}
+
+type CreateTrustCenterNda_CreateTrustCenterNda struct {
+	Template CreateTrustCenterNda_CreateTrustCenterNda_Template "json:\"template\" graphql:\"template\""
+}
+
+func (t *CreateTrustCenterNda_CreateTrustCenterNda) GetTemplate() *CreateTrustCenterNda_CreateTrustCenterNda_Template {
+	if t == nil {
+		t = &CreateTrustCenterNda_CreateTrustCenterNda{}
+	}
+	return &t.Template
+}
+
+type UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges_Node struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges_Node) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges_Node{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges struct {
+	Node *UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges) GetNode() *UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges_Node {
+	if t == nil {
+		t = &UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files struct {
+	Edges []*UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files) GetEdges() []*UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files_Edges {
+	if t == nil {
+		t = &UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files{}
+	}
+	return t.Edges
+}
+
+type UpdateTrustCenterNda_UpdateTrustCenterNda_Template struct {
+	Files         UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files "json:\"files\" graphql:\"files\""
+	ID            string                                                   "json:\"id\" graphql:\"id\""
+	Jsonconfig    map[string]any                                           "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind          *enums.TemplateKind                                      "json:\"kind,omitempty\" graphql:\"kind\""
+	Name          string                                                   "json:\"name\" graphql:\"name\""
+	TrustCenterID *string                                                  "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+}
+
+func (t *UpdateTrustCenterNda_UpdateTrustCenterNda_Template) GetFiles() *UpdateTrustCenterNda_UpdateTrustCenterNda_Template_Files {
+	if t == nil {
+		t = &UpdateTrustCenterNda_UpdateTrustCenterNda_Template{}
+	}
+	return &t.Files
+}
+func (t *UpdateTrustCenterNda_UpdateTrustCenterNda_Template) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenterNda_UpdateTrustCenterNda_Template{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenterNda_UpdateTrustCenterNda_Template) GetJsonconfig() map[string]any {
+	if t == nil {
+		t = &UpdateTrustCenterNda_UpdateTrustCenterNda_Template{}
+	}
+	return t.Jsonconfig
+}
+func (t *UpdateTrustCenterNda_UpdateTrustCenterNda_Template) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &UpdateTrustCenterNda_UpdateTrustCenterNda_Template{}
+	}
+	return t.Kind
+}
+func (t *UpdateTrustCenterNda_UpdateTrustCenterNda_Template) GetName() string {
+	if t == nil {
+		t = &UpdateTrustCenterNda_UpdateTrustCenterNda_Template{}
+	}
+	return t.Name
+}
+func (t *UpdateTrustCenterNda_UpdateTrustCenterNda_Template) GetTrustCenterID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterNda_UpdateTrustCenterNda_Template{}
+	}
+	return t.TrustCenterID
+}
+
+type UpdateTrustCenterNda_UpdateTrustCenterNda struct {
+	Template UpdateTrustCenterNda_UpdateTrustCenterNda_Template "json:\"template\" graphql:\"template\""
+}
+
+func (t *UpdateTrustCenterNda_UpdateTrustCenterNda) GetTemplate() *UpdateTrustCenterNda_UpdateTrustCenterNda_Template {
+	if t == nil {
+		t = &UpdateTrustCenterNda_UpdateTrustCenterNda{}
+	}
+	return &t.Template
+}
+
 type CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting struct {
 	AccentColor        *string                     "json:\"accentColor,omitempty\" graphql:\"accentColor\""
 	BackgroundColor    *string                     "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
@@ -81991,6 +82187,28 @@ func (t *GetTrustCenterHistories) GetTrustCenterHistories() *GetTrustCenterHisto
 		t = &GetTrustCenterHistories{}
 	}
 	return &t.TrustCenterHistories
+}
+
+type CreateTrustCenterNda struct {
+	CreateTrustCenterNda CreateTrustCenterNda_CreateTrustCenterNda "json:\"createTrustCenterNDA\" graphql:\"createTrustCenterNDA\""
+}
+
+func (t *CreateTrustCenterNda) GetCreateTrustCenterNda() *CreateTrustCenterNda_CreateTrustCenterNda {
+	if t == nil {
+		t = &CreateTrustCenterNda{}
+	}
+	return &t.CreateTrustCenterNda
+}
+
+type UpdateTrustCenterNda struct {
+	UpdateTrustCenterNda UpdateTrustCenterNda_UpdateTrustCenterNda "json:\"updateTrustCenterNDA\" graphql:\"updateTrustCenterNDA\""
+}
+
+func (t *UpdateTrustCenterNda) GetUpdateTrustCenterNda() *UpdateTrustCenterNda_UpdateTrustCenterNda {
+	if t == nil {
+		t = &UpdateTrustCenterNda{}
+	}
+	return &t.UpdateTrustCenterNda
 }
 
 type CreateTrustCenterSetting struct {
@@ -103780,6 +103998,84 @@ func (c *Client) GetTrustCenterHistories(ctx context.Context, first *int64, last
 	return &res, nil
 }
 
+const CreateTrustCenterNdaDocument = `mutation CreateTrustCenterNda ($input: CreateTrustCenterNDAInput!, $templateFiles: [Upload!]) {
+	createTrustCenterNDA(input: $input, templateFiles: $templateFiles) {
+		template {
+			id
+			name
+			kind
+			jsonconfig
+			trustCenterID
+			files {
+				edges {
+					node {
+						id
+						presignedURL
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterNda(ctx context.Context, input CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterNda, error) {
+	vars := map[string]any{
+		"input":         input,
+		"templateFiles": templateFiles,
+	}
+
+	var res CreateTrustCenterNda
+	if err := c.Client.Post(ctx, "CreateTrustCenterNda", CreateTrustCenterNdaDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTrustCenterNdaDocument = `mutation UpdateTrustCenterNda ($id: ID!, $templateFiles: [Upload!]) {
+	updateTrustCenterNDA(id: $id, templateFiles: $templateFiles) {
+		template {
+			id
+			name
+			kind
+			jsonconfig
+			trustCenterID
+			files {
+				edges {
+					node {
+						id
+						presignedURL
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterNda, error) {
+	vars := map[string]any{
+		"id":            id,
+		"templateFiles": templateFiles,
+	}
+
+	var res UpdateTrustCenterNda
+	if err := c.Client.Post(ctx, "UpdateTrustCenterNda", UpdateTrustCenterNdaDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateTrustCenterSettingDocument = `mutation CreateTrustCenterSetting ($input: CreateTrustCenterSettingInput!) {
 	createTrustCenterSetting(input: $input) {
 		trustCenterSetting {
@@ -105826,6 +106122,8 @@ var DocumentOperationNames = map[string]string{
 	CreateTrustCenterDomainDocument:                "CreateTrustCenterDomain",
 	GetAllTrustCenterHistoriesDocument:             "GetAllTrustCenterHistories",
 	GetTrustCenterHistoriesDocument:                "GetTrustCenterHistories",
+	CreateTrustCenterNdaDocument:                   "CreateTrustCenterNda",
+	UpdateTrustCenterNdaDocument:                   "UpdateTrustCenterNda",
 	CreateTrustCenterSettingDocument:               "CreateTrustCenterSetting",
 	DeleteTrustCenterSettingDocument:               "DeleteTrustCenterSetting",
 	GetAllTrustCenterSettingsDocument:              "GetAllTrustCenterSettings",

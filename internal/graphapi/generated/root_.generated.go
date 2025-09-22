@@ -2584,6 +2584,7 @@ type ComplexityRoot struct {
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
 		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
 		CreateTrustCenterDomain              func(childComplexity int, input model.CreateTrustCenterDomainInput) int
+		CreateTrustCenterNda                 func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
 		CreateUploadInternalPolicy           func(childComplexity int, policyFile graphql.Upload, ownerID *string) int
@@ -2704,6 +2705,7 @@ type ComplexityRoot struct {
 		UpdateTrustCenter                    func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
 		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
 		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput) int
+		UpdateTrustCenterNda                 func(childComplexity int, id string, templateFiles []*graphql.Upload) int
 		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
 		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
@@ -4983,6 +4985,14 @@ type ComplexityRoot struct {
 	TrustCenterHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	TrustCenterNDACreatePayload struct {
+		Template func(childComplexity int) int
+	}
+
+	TrustCenterNDAUpdatePayload struct {
+		Template func(childComplexity int) int
 	}
 
 	TrustCenterSetting struct {
@@ -18483,6 +18493,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateTrustCenterDomain(childComplexity, args["input"].(model.CreateTrustCenterDomainInput)), true
 
+	case "Mutation.createTrustCenterNDA":
+		if e.complexity.Mutation.CreateTrustCenterNda == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTrustCenterNDA_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTrustCenterNda(childComplexity, args["input"].(model.CreateTrustCenterNDAInput), args["templateFiles"].([]*graphql.Upload)), true
+
 	case "Mutation.createTrustCenterSetting":
 		if e.complexity.Mutation.CreateTrustCenterSetting == nil {
 			break
@@ -19922,6 +19944,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateTrustCenterDoc(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterDocInput)), true
+
+	case "Mutation.updateTrustCenterNDA":
+		if e.complexity.Mutation.UpdateTrustCenterNda == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTrustCenterNDA_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTrustCenterNda(childComplexity, args["id"].(string), args["templateFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateTrustCenterSetting":
 		if e.complexity.Mutation.UpdateTrustCenterSetting == nil {
@@ -33246,6 +33280,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterHistoryEdge.Node(childComplexity), true
 
+	case "TrustCenterNDACreatePayload.template":
+		if e.complexity.TrustCenterNDACreatePayload.Template == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDACreatePayload.Template(childComplexity), true
+
+	case "TrustCenterNDAUpdatePayload.template":
+		if e.complexity.TrustCenterNDAUpdatePayload.Template == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDAUpdatePayload.Template(childComplexity), true
+
 	case "TrustCenterSetting.accentColor":
 		if e.complexity.TrustCenterSetting.AccentColor == nil {
 			break
@@ -35038,6 +35086,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateTrustCenterDocInput,
 		ec.unmarshalInputCreateTrustCenterDomainInput,
 		ec.unmarshalInputCreateTrustCenterInput,
+		ec.unmarshalInputCreateTrustCenterNDAInput,
 		ec.unmarshalInputCreateTrustCenterSettingInput,
 		ec.unmarshalInputCreateTrustCenterSubprocessorInput,
 		ec.unmarshalInputCreateUserInput,
@@ -101419,6 +101468,48 @@ input CreateTrustCenterDomainInput {
 
 extend input CreateTrustCenterInput {
   createTrustCenterSetting: CreateTrustCenterSettingInput
+}
+`, BuiltIn: false},
+	{Name: "../schema/trustcenternda.graphql", Input: `extend type Mutation{
+    """
+    Create a Trust Center NDA Template
+    """
+    createTrustCenterNDA(
+        """
+        values of the trustCenterNDA
+        """
+        input: CreateTrustCenterNDAInput!
+        """
+        NDA file
+        """
+        templateFiles: [Upload!]
+    ): TrustCenterNDACreatePayload!
+
+    updateTrustCenterNDA(
+        """
+        ID of the trust center
+        """
+        id: ID!
+        """
+        NDA file
+        """
+        templateFiles: [Upload!]
+    ): TrustCenterNDAUpdatePayload!
+}
+
+type TrustCenterNDACreatePayload {
+    template: Template!
+}
+
+input CreateTrustCenterNDAInput {
+    """
+    trust center id
+    """
+    trustCenterID: ID!
+}
+
+type TrustCenterNDAUpdatePayload {
+    template: Template!
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcentersetting.graphql", Input: `extend type Query {

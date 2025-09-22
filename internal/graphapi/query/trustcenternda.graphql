@@ -1,0 +1,39 @@
+mutation CreateTrustCenterNda($input: CreateTrustCenterNDAInput!, $templateFiles: [Upload!]) {
+    createTrustCenterNDA(input: $input, templateFiles: $templateFiles) {
+        template {
+            id
+            name
+            kind
+            jsonconfig
+            trustCenterID
+            files {
+                edges {
+                node {
+                    id
+                    presignedURL
+                }
+                }
+            }
+        }
+    }
+}
+
+mutation UpdateTrustCenterNda($id: ID!, $templateFiles: [Upload!]) {
+    updateTrustCenterNDA(id: $id, templateFiles: $templateFiles) {
+        template {
+            id
+            name
+            kind
+            jsonconfig
+            trustCenterID
+            files {
+                edges {
+                node {
+                    id
+                    presignedURL
+                }
+                }
+            }
+        }
+    }
+}

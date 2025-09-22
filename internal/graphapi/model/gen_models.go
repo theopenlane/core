@@ -301,6 +301,11 @@ type CreateTrustCenterDomainInput struct {
 	TrustCenterID string `json:"trustCenterID"`
 }
 
+type CreateTrustCenterNDAInput struct {
+	// trust center id
+	TrustCenterID string `json:"trustCenterID"`
+}
+
 // Return response for createBulkCustomDomain mutation
 type CustomDomainBulkCreatePayload struct {
 	// Created customDomains
@@ -1523,6 +1528,14 @@ type TrustCenterDocUpdatePayload struct {
 // Return response for createTrustCenterDomain mutation
 type TrustCenterDomainCreatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
+}
+
+type TrustCenterNDACreatePayload struct {
+	Template *generated.Template `json:"template"`
+}
+
+type TrustCenterNDAUpdatePayload struct {
+	Template *generated.Template `json:"template"`
 }
 
 // Return response for createBulkTrustCenterSetting mutation
