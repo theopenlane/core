@@ -30405,6 +30405,15 @@ type Mutation {
 		input: SendTrustCenterNDAInput!
 	): SendTrustCenterNDAEmailPayload!
 	"""
+	Submit a response to a Trust Center NDA
+	"""
+	submitTrustCenterNDAResponse(
+		"""
+		values of the trustCenterNDA submission
+		"""
+		input: SubmitTrustCenterNDAResponseInput!
+	): SubmitTrustCenterNDAResponsePayload!
+	"""
 	Create a new trustCenterSetting
 	"""
 	createTrustCenterSetting(
@@ -53986,6 +53995,19 @@ input SubcontrolWhereInput {
 	"""
 	hasScheduledJobs: Boolean
 	hasScheduledJobsWith: [ScheduledJobWhereInput!]
+}
+input SubmitTrustCenterNDAResponseInput {
+	"""
+	template id
+	"""
+	templateID: ID!
+	"""
+	json response
+	"""
+	response: Map!
+}
+type SubmitTrustCenterNDAResponsePayload {
+	documentData: DocumentData!
 }
 type Subprocessor implements Node {
 	id: ID!

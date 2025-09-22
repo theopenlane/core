@@ -257,6 +257,7 @@ func createAnonymousTrustCenterUserFromClaims(_ context.Context, _ *ent.Client, 
 		OrganizationID:     claims.OrgID,
 		AuthenticationType: authType,
 		TrustCenterID:      claims.TrustCenterID,
+		SubjectEmail:       claims.Email,
 	}, nil
 }
 

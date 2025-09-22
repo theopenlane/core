@@ -32,6 +32,8 @@ func init() {
 	createCmd.Flags().StringP("json-config", "j", "", "json payload for the template")
 	createCmd.Flags().StringP("ui-schema", "u", "", "ui schema for the template")
 	createCmd.Flags().StringP("type", "t", "DOCUMENT", "type of the template")
+	createCmd.Flags().StringP("kind", "k", "QUESTIONNAIRE", "kind of the template")
+	createCmd.Flags().StringP("trust-center-id", "c", "", "trust center id to associate with the template")
 }
 
 // createValidation validates the required fields for the command
@@ -77,6 +79,16 @@ func createValidation() (input openlaneclient.CreateTemplateInput, err error) {
 	templateType := cmd.Config.String("type")
 	if templateType != "" {
 		input.TemplateType = enums.ToDocumentType(templateType)
+	}
+
+	templateKind := cmd.Config.String("kind")
+	if templateKind != "" {
+		input.Kind = enums.ToTemplateKind(templateKind)
+	}
+
+	trustCenterID := cmd.Config.String("trust-center-id")
+	if trustCenterID != "" {
+		input.TrustCenterID = &trustCenterID
 	}
 
 	return input, nil

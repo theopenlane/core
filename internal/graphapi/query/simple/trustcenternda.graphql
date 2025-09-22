@@ -24,6 +24,14 @@ mutation SendTrustCenterNDAEmail($input: SendTrustCenterNDAInput!) {
   }
 }
 
+mutation SubmitTrustCenterNDAResponse($input: SubmitTrustCenterNDAResponseInput!) {
+  submitTrustCenterNDAResponse(input: $input) {
+    documentData {
+      id
+    }
+  }
+}
+
 mutation UpdateTrustCenterNda($id: ID!, $templateFiles: [Upload!]) {
   updateTrustCenterNDA(id: $id, templateFiles: $templateFiles) {
     template {

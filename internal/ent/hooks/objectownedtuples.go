@@ -9,6 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -38,7 +39,7 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string) ent.Hook {
 			var addTuples []fgax.TupleKey
 
 			// add user permissions to the object on creation
-			if m.Op() == ent.OpCreate {
+			if _, ok := contextx.From[auth.TrustCenterNDAContextKey](ctx); !ok && m.Op() == ent.OpCreate {
 				subjectID, err := auth.GetSubjectIDFromContext(ctx)
 				if err != nil {
 					return nil, err

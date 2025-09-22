@@ -43,3 +43,11 @@ mutation SendTrustCenterNDAEmail($input: SendTrustCenterNDAInput!) {
         success
     }
 }
+
+mutation SubmitTrustCenterNDAResponse($input: SubmitTrustCenterNDAResponseInput!) {
+    submitTrustCenterNDAResponse(input: $input) {
+        documentData {
+            id
+        }
+    }
+}

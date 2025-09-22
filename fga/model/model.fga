@@ -389,9 +389,9 @@ type document_data
     define can_edit: [user, service] or (editor but not blocked)
     define can_delete: [user, service] or (editor but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [template]
+    define parent: [template, user]
     # allow a group to be assigned to add edit/view permissions for a set of users
-    define editor: [group#member] or can_edit from parent
+    define editor: [group#member, organization#owner] or can_edit from parent
     define viewer: [group#member] or editor or can_view from parent
     # allow users or groups to be blocked from view + edit access
     define blocked: [user, group#member]
