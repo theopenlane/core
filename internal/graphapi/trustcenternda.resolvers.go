@@ -13,10 +13,10 @@ import (
 
 // CreateTrustCenterNda is the resolver for the createTrustCenterNDA field.
 func (r *mutationResolver) CreateTrustCenterNda(ctx context.Context, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) (*model.TrustCenterNDACreatePayload, error) {
-	return createTrustCenterNDA(ctx, input, templateFiles)
+	return createTrustCenterNDA(ctx, input)
 }
 
 // UpdateTrustCenterNda is the resolver for the updateTrustCenterNDA field.
 func (r *mutationResolver) UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload) (*model.TrustCenterNDAUpdatePayload, error) {
-	return updateTrustCenterNDA(ctx, id, templateFiles)
+	return updateTrustCenterNDA(ctx, id)
 }

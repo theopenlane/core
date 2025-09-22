@@ -8,7 +8,6 @@ import (
 	"errors"
 	"html/template"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	gentemplate "github.com/theopenlane/core/internal/ent/generated/template"
@@ -22,12 +21,10 @@ import (
 var trustCenterNDATemplate string
 
 var (
-	errOneNDAOnly          = errors.New("one NDA file is required")
-	errNDATemplateNotFound = errors.New("NDA template not found")
-	errNDATemplateRequired = errors.New("one NDA template is required")
+	errOneNDAOnly = errors.New("one NDA file is required")
 )
 
-func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAInput, _ []*graphql.Upload) (*model.TrustCenterNDACreatePayload, error) {
+func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAInput) (*model.TrustCenterNDACreatePayload, error) {
 	txnCtx := withTransactionalMutation(ctx)
 
 	trustCenter, err := txnCtx.TrustCenter.Get(ctx, input.TrustCenterID)
@@ -107,19 +104,11 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 
 }
 
-func updateTrustCenterNDA(ctx context.Context, id string, _ []*graphql.Upload) (*model.TrustCenterNDAUpdatePayload, error) {
+func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDAUpdatePayload, error) {
 	txnCtx := withTransactionalMutation(ctx)
-	templates, err := txnCtx.Template.Query().Where(gentemplate.TrustCenterIDEQ(id)).All(ctx)
+	ndaTemplate, err := txnCtx.Template.Query().Where(gentemplate.TrustCenterIDEQ(id)).Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenternda"})
-	}
-
-	if len(templates) == 0 {
-		return nil, parseRequestError(errNDATemplateNotFound, action{action: ActionUpdate, object: "trustcenternda"})
-	}
-
-	if len(templates) != 1 {
-		return nil, parseRequestError(errNDATemplateRequired, action{action: ActionUpdate, object: "trustcenternda"})
 	}
 
 	key := "templateFiles"
@@ -127,7 +116,7 @@ func updateTrustCenterNDA(ctx context.Context, id string, _ []*graphql.Upload) (
 	files, _ := objects.FilesFromContextWithKey(ctx, key)
 	if len(files) != 1 {
 		return &model.TrustCenterNDAUpdatePayload{
-			Template: templates[0],
+			Template: ndaTemplate,
 		}, nil
 	}
 
@@ -142,7 +131,7 @@ func updateTrustCenterNDA(ctx context.Context, id string, _ []*graphql.Upload) (
 		TrustCenterID string
 		NDAFileID     string
 	}{
-		TrustCenterID: templates[0].TrustCenterID,
+		TrustCenterID: ndaTemplate.TrustCenterID,
 		NDAFileID:     files[0].ID,
 	}
 
@@ -162,7 +151,7 @@ func updateTrustCenterNDA(ctx context.Context, id string, _ []*graphql.Upload) (
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenternda"})
 	}
 
-	updatedTmpl, err := txnCtx.Template.UpdateOne(templates[0]).SetJsonconfig(outputInterface).Save(ctx)
+	updatedTmpl, err := txnCtx.Template.UpdateOne(ndaTemplate).SetJsonconfig(outputInterface).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenternda"})
 	}
