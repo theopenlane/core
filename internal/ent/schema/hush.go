@@ -8,6 +8,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/hush"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -120,6 +121,7 @@ func (h Hush) Mixin() []ent.Mixin {
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(h),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(h)
 }

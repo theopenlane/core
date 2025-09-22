@@ -180,6 +180,48 @@ func (_c *InternalPolicyHistoryCreate) SetNillableOwnerID(v *string) *InternalPo
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *InternalPolicyHistoryCreate) SetSystemOwned(v bool) *InternalPolicyHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableSystemOwned(v *bool) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *InternalPolicyHistoryCreate) SetInternalNotes(v string) *InternalPolicyHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableInternalNotes(v *string) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *InternalPolicyHistoryCreate) SetSystemInternalID(v string) *InternalPolicyHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableSystemInternalID(v *string) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *InternalPolicyHistoryCreate) SetName(v string) *InternalPolicyHistoryCreate {
 	_c.mutation.SetName(v)
@@ -456,6 +498,10 @@ func (_c *InternalPolicyHistoryCreate) defaults() error {
 		v := internalpolicyhistory.DefaultRevision
 		_c.mutation.SetRevision(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := internalpolicyhistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := internalpolicyhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -622,6 +668,18 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(internalpolicyhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(internalpolicyhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(internalpolicyhistory.FieldName, field.TypeString, value)

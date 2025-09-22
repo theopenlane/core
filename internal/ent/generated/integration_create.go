@@ -128,6 +128,48 @@ func (_c *IntegrationCreate) SetNillableOwnerID(v *string) *IntegrationCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *IntegrationCreate) SetSystemOwned(v bool) *IntegrationCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableSystemOwned(v *bool) *IntegrationCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *IntegrationCreate) SetInternalNotes(v string) *IntegrationCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableInternalNotes(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *IntegrationCreate) SetSystemInternalID(v string) *IntegrationCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableSystemInternalID(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *IntegrationCreate) SetName(v string) *IntegrationCreate {
 	_c.mutation.SetName(v)
@@ -301,6 +343,10 @@ func (_c *IntegrationCreate) defaults() error {
 		v := integration.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := integration.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if integration.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized integration.DefaultID (forgotten import generated/runtime?)")
@@ -313,11 +359,6 @@ func (_c *IntegrationCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *IntegrationCreate) check() error {
-	if v, ok := _c.mutation.OwnerID(); ok {
-		if err := integration.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Integration.owner_id": %w`, err)}
-		}
-	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Integration.name"`)}
 	}
@@ -389,6 +430,18 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(integration.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(integration.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(integration.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(integration.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)

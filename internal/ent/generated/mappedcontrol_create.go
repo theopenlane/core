@@ -115,6 +115,48 @@ func (_c *MappedControlCreate) SetTags(v []string) *MappedControlCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *MappedControlCreate) SetSystemOwned(v bool) *MappedControlCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *MappedControlCreate) SetNillableSystemOwned(v *bool) *MappedControlCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *MappedControlCreate) SetInternalNotes(v string) *MappedControlCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *MappedControlCreate) SetNillableInternalNotes(v *string) *MappedControlCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *MappedControlCreate) SetSystemInternalID(v string) *MappedControlCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *MappedControlCreate) SetNillableSystemInternalID(v *string) *MappedControlCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *MappedControlCreate) SetOwnerID(v string) *MappedControlCreate {
 	_c.mutation.SetOwnerID(v)
@@ -349,6 +391,10 @@ func (_c *MappedControlCreate) defaults() error {
 		v := mappedcontrol.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := mappedcontrol.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.MappingType(); !ok {
 		v := mappedcontrol.DefaultMappingType
 		_c.mutation.SetMappingType(v)
@@ -450,6 +496,18 @@ func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(mappedcontrol.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(mappedcontrol.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(mappedcontrol.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(mappedcontrol.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrol.FieldMappingType, field.TypeEnum, value)

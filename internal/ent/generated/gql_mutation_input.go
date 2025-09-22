@@ -198,6 +198,8 @@ type CreateActionPlanInput struct {
 	DismissedControlSuggestions     []string
 	ImprovementSuggestions          []string
 	DismissedImprovementSuggestions []string
+	InternalNotes                   *string
+	SystemInternalID                *string
 	DueDate                         *time.Time
 	Priority                        *enums.Priority
 	Source                          *string
@@ -253,6 +255,12 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.DismissedImprovementSuggestions; v != nil {
 		m.SetDismissedImprovementSuggestions(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
@@ -327,6 +335,10 @@ type UpdateActionPlanInput struct {
 	ClearDismissedImprovementSuggestions  bool
 	DismissedImprovementSuggestions       []string
 	AppendDismissedImprovementSuggestions []string
+	ClearInternalNotes                    bool
+	InternalNotes                         *string
+	ClearSystemInternalID                 bool
+	SystemInternalID                      *string
 	ClearDueDate                          bool
 	DueDate                               *time.Time
 	ClearPriority                         bool
@@ -460,6 +472,18 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if i.AppendDismissedImprovementSuggestions != nil {
 		m.AppendDismissedImprovementSuggestions(i.DismissedImprovementSuggestions)
 	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
 	if i.ClearDueDate {
 		m.ClearDueDate()
 	}
@@ -539,27 +563,35 @@ func (c *ActionPlanUpdateOne) SetInput(i UpdateActionPlanInput) *ActionPlanUpdat
 
 // CreateAssetInput represents a mutation input for creating assets.
 type CreateAssetInput struct {
-	Tags            []string
-	AssetType       *enums.AssetType
-	Name            string
-	Description     *string
-	Identifier      *string
-	Website         *string
-	Cpe             *string
-	Categories      []string
-	OwnerID         *string
-	BlockedGroupIDs []string
-	EditorIDs       []string
-	ViewerIDs       []string
-	ScanIDs         []string
-	EntityIDs       []string
-	ControlIDs      []string
+	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
+	AssetType        *enums.AssetType
+	Name             string
+	Description      *string
+	Identifier       *string
+	Website          *string
+	Cpe              *string
+	Categories       []string
+	OwnerID          *string
+	BlockedGroupIDs  []string
+	EditorIDs        []string
+	ViewerIDs        []string
+	ScanIDs          []string
+	EntityIDs        []string
+	ControlIDs       []string
 }
 
 // Mutate applies the CreateAssetInput on the AssetMutation builder.
 func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.AssetType; v != nil {
 		m.SetAssetType(*v)
@@ -614,6 +646,10 @@ type UpdateAssetInput struct {
 	ClearTags             bool
 	Tags                  []string
 	AppendTags            []string
+	ClearInternalNotes    bool
+	InternalNotes         *string
+	ClearSystemInternalID bool
+	SystemInternalID      *string
 	AssetType             *enums.AssetType
 	Name                  *string
 	ClearDescription      bool
@@ -659,6 +695,18 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.AssetType; v != nil {
 		m.SetAssetType(*v)
@@ -961,6 +1009,8 @@ type CreateControlInput struct {
 	ImplementationGuidance   []models.ImplementationGuidance
 	ExampleEvidence          []models.ExampleEvidence
 	References               []models.Reference
+	InternalNotes            *string
+	SystemInternalID         *string
 	RefCode                  string
 	EvidenceIDs              []string
 	ControlObjectiveIDs      []string
@@ -1039,6 +1089,12 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.References; v != nil {
 		m.SetReferences(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetRefCode(i.RefCode)
 	if v := i.EvidenceIDs; len(v) > 0 {
@@ -1153,6 +1209,10 @@ type UpdateControlInput struct {
 	ClearReferences                bool
 	References                     []models.Reference
 	AppendReferences               []models.Reference
+	ClearInternalNotes             bool
+	InternalNotes                  *string
+	ClearSystemInternalID          bool
+	SystemInternalID               *string
 	RefCode                        *string
 	ClearEvidence                  bool
 	AddEvidenceIDs                 []string
@@ -1338,6 +1398,18 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if i.AppendReferences != nil {
 		m.AppendReferences(i.References)
 	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
 	if v := i.RefCode; v != nil {
 		m.SetRefCode(*v)
 	}
@@ -1520,6 +1592,8 @@ func (c *ControlUpdateOne) SetInput(i UpdateControlInput) *ControlUpdateOne {
 // CreateControlImplementationInput represents a mutation input for creating controlimplementations.
 type CreateControlImplementationInput struct {
 	Tags               []string
+	InternalNotes      *string
+	SystemInternalID   *string
 	Status             *enums.DocumentStatus
 	ImplementationDate *time.Time
 	Verified           *bool
@@ -1538,6 +1612,12 @@ type CreateControlImplementationInput struct {
 func (i *CreateControlImplementationInput) Mutate(m *ControlImplementationMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -1588,6 +1668,10 @@ type UpdateControlImplementationInput struct {
 	ClearTags               bool
 	Tags                    []string
 	AppendTags              []string
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearSystemInternalID   bool
+	SystemInternalID        *string
 	ClearStatus             bool
 	Status                  *enums.DocumentStatus
 	ClearImplementationDate bool
@@ -1628,6 +1712,18 @@ func (i *UpdateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if i.ClearStatus {
 		m.ClearStatus()
@@ -1731,6 +1827,8 @@ func (c *ControlImplementationUpdateOne) SetInput(i UpdateControlImplementationI
 type CreateControlObjectiveInput struct {
 	Tags                 []string
 	Revision             *string
+	InternalNotes        *string
+	SystemInternalID     *string
 	Name                 string
 	DesiredOutcome       *string
 	Status               *enums.ObjectiveStatus
@@ -1760,6 +1858,12 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.DesiredOutcome; v != nil {
@@ -1834,6 +1938,10 @@ type UpdateControlObjectiveInput struct {
 	AppendTags                []string
 	ClearRevision             bool
 	Revision                  *string
+	ClearInternalNotes        bool
+	InternalNotes             *string
+	ClearSystemInternalID     bool
+	SystemInternalID          *string
 	Name                      *string
 	ClearDesiredOutcome       bool
 	DesiredOutcome            *string
@@ -1901,6 +2009,18 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -2066,6 +2186,8 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 // CreateCustomDomainInput represents a mutation input for creating customdomains.
 type CreateCustomDomainInput struct {
 	Tags              []string
+	InternalNotes     *string
+	SystemInternalID  *string
 	CnameRecord       string
 	OwnerID           *string
 	MappableDomainID  string
@@ -2076,6 +2198,12 @@ type CreateCustomDomainInput struct {
 func (i *CreateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetCnameRecord(i.CnameRecord)
 	if v := i.OwnerID; v != nil {
@@ -2095,13 +2223,17 @@ func (c *CustomDomainCreate) SetInput(i CreateCustomDomainInput) *CustomDomainCr
 
 // UpdateCustomDomainInput represents a mutation input for updating customdomains.
 type UpdateCustomDomainInput struct {
-	ClearTags            bool
-	Tags                 []string
-	AppendTags           []string
-	ClearOwner           bool
-	OwnerID              *string
-	ClearDNSVerification bool
-	DNSVerificationID    *string
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	ClearInternalNotes    bool
+	InternalNotes         *string
+	ClearSystemInternalID bool
+	SystemInternalID      *string
+	ClearOwner            bool
+	OwnerID               *string
+	ClearDNSVerification  bool
+	DNSVerificationID     *string
 }
 
 // Mutate applies the UpdateCustomDomainInput on the CustomDomainMutation builder.
@@ -2114,6 +2246,18 @@ func (i *UpdateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -2395,29 +2539,37 @@ func (c *DocumentDataUpdateOne) SetInput(i UpdateDocumentDataInput) *DocumentDat
 
 // CreateEntityInput represents a mutation input for creating entities.
 type CreateEntityInput struct {
-	Tags            []string
-	Name            *string
-	DisplayName     *string
-	Description     *string
-	Domains         []string
-	Status          *string
-	OwnerID         *string
-	BlockedGroupIDs []string
-	EditorIDs       []string
-	ViewerIDs       []string
-	ContactIDs      []string
-	DocumentIDs     []string
-	NoteIDs         []string
-	FileIDs         []string
-	AssetIDs        []string
-	ScanIDs         []string
-	EntityTypeID    *string
+	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
+	Name             *string
+	DisplayName      *string
+	Description      *string
+	Domains          []string
+	Status           *string
+	OwnerID          *string
+	BlockedGroupIDs  []string
+	EditorIDs        []string
+	ViewerIDs        []string
+	ContactIDs       []string
+	DocumentIDs      []string
+	NoteIDs          []string
+	FileIDs          []string
+	AssetIDs         []string
+	ScanIDs          []string
+	EntityTypeID     *string
 }
 
 // Mutate applies the CreateEntityInput on the EntityMutation builder.
 func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -2480,6 +2632,10 @@ type UpdateEntityInput struct {
 	ClearTags             bool
 	Tags                  []string
 	AppendTags            []string
+	ClearInternalNotes    bool
+	InternalNotes         *string
+	ClearSystemInternalID bool
+	SystemInternalID      *string
 	ClearName             bool
 	Name                  *string
 	ClearDisplayName      bool
@@ -2534,6 +2690,18 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if i.ClearName {
 		m.ClearName()
@@ -2677,16 +2845,24 @@ func (c *EntityUpdateOne) SetInput(i UpdateEntityInput) *EntityUpdateOne {
 
 // CreateEntityTypeInput represents a mutation input for creating entitytypes.
 type CreateEntityTypeInput struct {
-	Tags      []string
-	Name      string
-	OwnerID   *string
-	EntityIDs []string
+	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
+	Name             string
+	OwnerID          *string
+	EntityIDs        []string
 }
 
 // Mutate applies the CreateEntityTypeInput on the EntityTypeMutation builder.
 func (i *CreateEntityTypeInput) Mutate(m *EntityTypeMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.OwnerID; v != nil {
@@ -2705,15 +2881,19 @@ func (c *EntityTypeCreate) SetInput(i CreateEntityTypeInput) *EntityTypeCreate {
 
 // UpdateEntityTypeInput represents a mutation input for updating entitytypes.
 type UpdateEntityTypeInput struct {
-	ClearTags       bool
-	Tags            []string
-	AppendTags      []string
-	Name            *string
-	ClearOwner      bool
-	OwnerID         *string
-	ClearEntities   bool
-	AddEntityIDs    []string
-	RemoveEntityIDs []string
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	ClearInternalNotes    bool
+	InternalNotes         *string
+	ClearSystemInternalID bool
+	SystemInternalID      *string
+	Name                  *string
+	ClearOwner            bool
+	OwnerID               *string
+	ClearEntities         bool
+	AddEntityIDs          []string
+	RemoveEntityIDs       []string
 }
 
 // Mutate applies the UpdateEntityTypeInput on the EntityTypeMutation builder.
@@ -2726,6 +2906,18 @@ func (i *UpdateEntityTypeInput) Mutate(m *EntityTypeMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -3380,6 +3572,8 @@ func (c *ExportUpdateOne) SetInput(i UpdateExportInput) *ExportUpdateOne {
 // CreateFileInput represents a mutation input for creating files.
 type CreateFileInput struct {
 	Tags                   []string
+	InternalNotes          *string
+	SystemInternalID       *string
 	ProvidedFileName       string
 	ProvidedFileExtension  string
 	ProvidedFileSize       *int64
@@ -3419,6 +3613,12 @@ type CreateFileInput struct {
 func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetProvidedFileName(i.ProvidedFileName)
 	m.SetProvidedFileExtension(i.ProvidedFileExtension)
@@ -3526,6 +3726,10 @@ type UpdateFileInput struct {
 	ClearTags                    bool
 	Tags                         []string
 	AppendTags                   []string
+	ClearInternalNotes           bool
+	InternalNotes                *string
+	ClearSystemInternalID        bool
+	SystemInternalID             *string
 	ProvidedFileName             *string
 	ProvidedFileExtension        *string
 	ClearProvidedFileSize        bool
@@ -3617,6 +3821,18 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.ProvidedFileName; v != nil {
 		m.SetProvidedFileName(*v)
@@ -4659,23 +4875,31 @@ func (c *GroupSettingUpdateOne) SetInput(i UpdateGroupSettingInput) *GroupSettin
 
 // CreateHushInput represents a mutation input for creating hushes.
 type CreateHushInput struct {
-	Name           string
-	Description    *string
-	Kind           *string
-	SecretName     *string
-	SecretValue    *string
-	CredentialSet  *models.CredentialSet
-	Metadata       map[string]interface{}
-	LastUsedAt     *time.Time
-	ExpiresAt      *time.Time
-	OwnerID        *string
-	IntegrationIDs []string
-	FileIDs        []string
-	EventIDs       []string
+	InternalNotes    *string
+	SystemInternalID *string
+	Name             string
+	Description      *string
+	Kind             *string
+	SecretName       *string
+	SecretValue      *string
+	CredentialSet    *models.CredentialSet
+	Metadata         map[string]interface{}
+	LastUsedAt       *time.Time
+	ExpiresAt        *time.Time
+	OwnerID          *string
+	IntegrationIDs   []string
+	FileIDs          []string
+	EventIDs         []string
 }
 
 // Mutate applies the CreateHushInput on the HushMutation builder.
 func (i *CreateHushInput) Mutate(m *HushMutation) {
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
 	m.SetName(i.Name)
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
@@ -4723,34 +4947,50 @@ func (c *HushCreate) SetInput(i CreateHushInput) *HushCreate {
 
 // UpdateHushInput represents a mutation input for updating hushes.
 type UpdateHushInput struct {
-	Name                 *string
-	ClearDescription     bool
-	Description          *string
-	ClearKind            bool
-	Kind                 *string
-	ClearCredentialSet   bool
-	CredentialSet        *models.CredentialSet
-	ClearMetadata        bool
-	Metadata             map[string]interface{}
-	ClearLastUsedAt      bool
-	LastUsedAt           *time.Time
-	ClearExpiresAt       bool
-	ExpiresAt            *time.Time
-	ClearOwner           bool
-	OwnerID              *string
-	ClearIntegrations    bool
-	AddIntegrationIDs    []string
-	RemoveIntegrationIDs []string
-	ClearFiles           bool
-	AddFileIDs           []string
-	RemoveFileIDs        []string
-	ClearEvents          bool
-	AddEventIDs          []string
-	RemoveEventIDs       []string
+	ClearInternalNotes    bool
+	InternalNotes         *string
+	ClearSystemInternalID bool
+	SystemInternalID      *string
+	Name                  *string
+	ClearDescription      bool
+	Description           *string
+	ClearKind             bool
+	Kind                  *string
+	ClearCredentialSet    bool
+	CredentialSet         *models.CredentialSet
+	ClearMetadata         bool
+	Metadata              map[string]interface{}
+	ClearLastUsedAt       bool
+	LastUsedAt            *time.Time
+	ClearExpiresAt        bool
+	ExpiresAt             *time.Time
+	ClearOwner            bool
+	OwnerID               *string
+	ClearIntegrations     bool
+	AddIntegrationIDs     []string
+	RemoveIntegrationIDs  []string
+	ClearFiles            bool
+	AddFileIDs            []string
+	RemoveFileIDs         []string
+	ClearEvents           bool
+	AddEventIDs           []string
+	RemoveEventIDs        []string
 }
 
 // Mutate applies the UpdateHushInput on the HushMutation builder.
 func (i *UpdateHushInput) Mutate(m *HushMutation) {
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
 	}
@@ -4841,6 +5081,8 @@ func (c *HushUpdateOne) SetInput(i UpdateHushInput) *HushUpdateOne {
 type CreateInternalPolicyInput struct {
 	Tags                            []string
 	Revision                        *string
+	InternalNotes                   *string
+	SystemInternalID                *string
 	Name                            string
 	Status                          *enums.DocumentStatus
 	PolicyType                      *string
@@ -4879,6 +5121,12 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
@@ -4980,6 +5228,10 @@ type UpdateInternalPolicyInput struct {
 	AppendTags                            []string
 	ClearRevision                         bool
 	Revision                              *string
+	ClearInternalNotes                    bool
+	InternalNotes                         *string
+	ClearSystemInternalID                 bool
+	SystemInternalID                      *string
 	Name                                  *string
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus
@@ -5072,6 +5324,18 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -5518,6 +5782,8 @@ func (c *JobResultUpdateOne) SetInput(i UpdateJobResultInput) *JobResultUpdateOn
 // CreateJobRunnerInput represents a mutation input for creating jobrunners.
 type CreateJobRunnerInput struct {
 	Tags              []string
+	InternalNotes     *string
+	SystemInternalID  *string
 	Name              string
 	IPAddress         *string
 	LastSeen          *time.Time
@@ -5531,6 +5797,12 @@ type CreateJobRunnerInput struct {
 func (i *CreateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.IPAddress; v != nil {
@@ -5564,6 +5836,10 @@ type UpdateJobRunnerInput struct {
 	ClearTags               bool
 	Tags                    []string
 	AppendTags              []string
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearSystemInternalID   bool
+	SystemInternalID        *string
 	Name                    *string
 	ClearIPAddress          bool
 	IPAddress               *string
@@ -5590,6 +5866,18 @@ func (i *UpdateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -5877,20 +6165,28 @@ func (c *JobRunnerTokenUpdateOne) SetInput(i UpdateJobRunnerTokenInput) *JobRunn
 
 // CreateJobTemplateInput represents a mutation input for creating jobtemplates.
 type CreateJobTemplateInput struct {
-	Tags          []string
-	Title         string
-	Description   *string
-	Platform      enums.JobPlatformType
-	DownloadURL   string
-	Configuration models.JobConfiguration
-	Cron          *models.Cron
-	OwnerID       *string
+	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
+	Title            string
+	Description      *string
+	Platform         enums.JobPlatformType
+	DownloadURL      string
+	Configuration    models.JobConfiguration
+	Cron             *models.Cron
+	OwnerID          *string
 }
 
 // Mutate applies the CreateJobTemplateInput on the JobTemplateMutation builder.
 func (i *CreateJobTemplateInput) Mutate(m *JobTemplateMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetTitle(i.Title)
 	if v := i.Description; v != nil {
@@ -5920,6 +6216,10 @@ type UpdateJobTemplateInput struct {
 	ClearTags             bool
 	Tags                  []string
 	AppendTags            []string
+	ClearInternalNotes    bool
+	InternalNotes         *string
+	ClearSystemInternalID bool
+	SystemInternalID      *string
 	Title                 *string
 	ClearDescription      bool
 	Description           *string
@@ -5946,6 +6246,18 @@ func (i *UpdateJobTemplateInput) Mutate(m *JobTemplateMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
@@ -6076,6 +6388,8 @@ func (c *MappableDomainUpdateOne) SetInput(i UpdateMappableDomainInput) *Mappabl
 // CreateMappedControlInput represents a mutation input for creating mappedcontrols.
 type CreateMappedControlInput struct {
 	Tags              []string
+	InternalNotes     *string
+	SystemInternalID  *string
 	MappingType       *enums.MappingType
 	Relation          *string
 	Confidence        *int
@@ -6093,6 +6407,12 @@ type CreateMappedControlInput struct {
 func (i *CreateMappedControlInput) Mutate(m *MappedControlMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.MappingType; v != nil {
 		m.SetMappingType(*v)
@@ -6140,6 +6460,10 @@ type UpdateMappedControlInput struct {
 	ClearTags               bool
 	Tags                    []string
 	AppendTags              []string
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearSystemInternalID   bool
+	SystemInternalID        *string
 	MappingType             *enums.MappingType
 	ClearRelation           bool
 	Relation                *string
@@ -6179,6 +6503,18 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.MappingType; v != nil {
 		m.SetMappingType(*v)
@@ -6278,6 +6614,8 @@ func (c *MappedControlUpdateOne) SetInput(i UpdateMappedControlInput) *MappedCon
 // CreateNarrativeInput represents a mutation input for creating narratives.
 type CreateNarrativeInput struct {
 	Tags              []string
+	InternalNotes     *string
+	SystemInternalID  *string
 	Name              string
 	Description       *string
 	Details           *string
@@ -6295,6 +6633,12 @@ type CreateNarrativeInput struct {
 func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Description; v != nil {
@@ -6340,6 +6684,10 @@ type UpdateNarrativeInput struct {
 	ClearTags               bool
 	Tags                    []string
 	AppendTags              []string
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearSystemInternalID   bool
+	SystemInternalID        *string
 	Name                    *string
 	ClearDescription        bool
 	Description             *string
@@ -6378,6 +6726,18 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -8176,6 +8536,8 @@ type CreateProcedureInput struct {
 	DismissedControlSuggestions     []string
 	ImprovementSuggestions          []string
 	DismissedImprovementSuggestions []string
+	InternalNotes                   *string
+	SystemInternalID                *string
 	URL                             *string
 	OwnerID                         *string
 	BlockedGroupIDs                 []string
@@ -8236,6 +8598,12 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.DismissedImprovementSuggestions; v != nil {
 		m.SetDismissedImprovementSuggestions(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.URL; v != nil {
 		m.SetURL(*v)
@@ -8325,6 +8693,10 @@ type UpdateProcedureInput struct {
 	ClearDismissedImprovementSuggestions  bool
 	DismissedImprovementSuggestions       []string
 	AppendDismissedImprovementSuggestions []string
+	ClearInternalNotes                    bool
+	InternalNotes                         *string
+	ClearSystemInternalID                 bool
+	SystemInternalID                      *string
 	ClearURL                              bool
 	URL                                   *string
 	ClearOwner                            bool
@@ -8473,6 +8845,18 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if i.AppendDismissedImprovementSuggestions != nil {
 		m.AppendDismissedImprovementSuggestions(i.DismissedImprovementSuggestions)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if i.ClearURL {
 		m.ClearURL()
@@ -9851,6 +10235,8 @@ func (c *ScheduledJobRunUpdateOne) SetInput(i UpdateScheduledJobRunInput) *Sched
 type CreateStandardInput struct {
 	Tags                     []string
 	Revision                 *string
+	InternalNotes            *string
+	SystemInternalID         *string
 	Name                     string
 	ShortName                *string
 	Framework                *string
@@ -9876,6 +10262,12 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.ShortName; v != nil {
@@ -9938,6 +10330,10 @@ type UpdateStandardInput struct {
 	AppendTags                     []string
 	ClearRevision                  bool
 	Revision                       *string
+	ClearInternalNotes             bool
+	InternalNotes                  *string
+	ClearSystemInternalID          bool
+	SystemInternalID               *string
 	Name                           *string
 	ClearShortName                 bool
 	ShortName                      *string
@@ -9990,6 +10386,18 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -10127,6 +10535,8 @@ type CreateSubcontrolInput struct {
 	ImplementationGuidance   []models.ImplementationGuidance
 	ExampleEvidence          []models.ExampleEvidence
 	References               []models.Reference
+	InternalNotes            *string
+	SystemInternalID         *string
 	RefCode                  string
 	EvidenceIDs              []string
 	ControlObjectiveIDs      []string
@@ -10199,6 +10609,12 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.References; v != nil {
 		m.SetReferences(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetRefCode(i.RefCode)
 	if v := i.EvidenceIDs; len(v) > 0 {
@@ -10293,6 +10709,10 @@ type UpdateSubcontrolInput struct {
 	ClearReferences                bool
 	References                     []models.Reference
 	AppendReferences               []models.Reference
+	ClearInternalNotes             bool
+	InternalNotes                  *string
+	ClearSystemInternalID          bool
+	SystemInternalID               *string
 	RefCode                        *string
 	ClearEvidence                  bool
 	AddEvidenceIDs                 []string
@@ -10459,6 +10879,18 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if i.AppendReferences != nil {
 		m.AppendReferences(i.References)
 	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
 	if v := i.RefCode; v != nil {
 		m.SetRefCode(*v)
 	}
@@ -10584,6 +11016,8 @@ func (c *SubcontrolUpdateOne) SetInput(i UpdateSubcontrolInput) *SubcontrolUpdat
 // CreateSubprocessorInput represents a mutation input for creating subprocessors.
 type CreateSubprocessorInput struct {
 	Tags                       []string
+	InternalNotes              *string
+	SystemInternalID           *string
 	Name                       string
 	Description                *string
 	LogoRemoteURL              *string
@@ -10597,6 +11031,12 @@ type CreateSubprocessorInput struct {
 func (i *CreateSubprocessorInput) Mutate(m *SubprocessorMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Description; v != nil {
@@ -10630,6 +11070,10 @@ type UpdateSubprocessorInput struct {
 	ClearTags                        bool
 	Tags                             []string
 	AppendTags                       []string
+	ClearInternalNotes               bool
+	InternalNotes                    *string
+	ClearSystemInternalID            bool
+	SystemInternalID                 *string
 	Name                             *string
 	ClearDescription                 bool
 	Description                      *string
@@ -10657,6 +11101,18 @@ func (i *UpdateSubprocessorInput) Mutate(m *SubprocessorMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -11185,22 +11641,30 @@ func (c *TaskUpdateOne) SetInput(i UpdateTaskInput) *TaskUpdateOne {
 
 // CreateTemplateInput represents a mutation input for creating templates.
 type CreateTemplateInput struct {
-	Tags         []string
-	Name         string
-	TemplateType *enums.DocumentType
-	Description  *string
-	Kind         *enums.TemplateKind
-	Jsonconfig   map[string]interface{}
-	Uischema     map[string]interface{}
-	OwnerID      *string
-	DocumentIDs  []string
-	FileIDs      []string
+	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
+	Name             string
+	TemplateType     *enums.DocumentType
+	Description      *string
+	Kind             *enums.TemplateKind
+	Jsonconfig       map[string]interface{}
+	Uischema         map[string]interface{}
+	OwnerID          *string
+	DocumentIDs      []string
+	FileIDs          []string
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
 func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.TemplateType; v != nil {
@@ -11237,26 +11701,30 @@ func (c *TemplateCreate) SetInput(i CreateTemplateInput) *TemplateCreate {
 
 // UpdateTemplateInput represents a mutation input for updating templates.
 type UpdateTemplateInput struct {
-	ClearTags         bool
-	Tags              []string
-	AppendTags        []string
-	Name              *string
-	TemplateType      *enums.DocumentType
-	ClearDescription  bool
-	Description       *string
-	ClearKind         bool
-	Kind              *enums.TemplateKind
-	Jsonconfig        map[string]interface{}
-	ClearUischema     bool
-	Uischema          map[string]interface{}
-	ClearOwner        bool
-	OwnerID           *string
-	ClearDocuments    bool
-	AddDocumentIDs    []string
-	RemoveDocumentIDs []string
-	ClearFiles        bool
-	AddFileIDs        []string
-	RemoveFileIDs     []string
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	ClearInternalNotes    bool
+	InternalNotes         *string
+	ClearSystemInternalID bool
+	SystemInternalID      *string
+	Name                  *string
+	TemplateType          *enums.DocumentType
+	ClearDescription      bool
+	Description           *string
+	ClearKind             bool
+	Kind                  *enums.TemplateKind
+	Jsonconfig            map[string]interface{}
+	ClearUischema         bool
+	Uischema              map[string]interface{}
+	ClearOwner            bool
+	OwnerID               *string
+	ClearDocuments        bool
+	AddDocumentIDs        []string
+	RemoveDocumentIDs     []string
+	ClearFiles            bool
+	AddFileIDs            []string
+	RemoveFileIDs         []string
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -11269,6 +11737,18 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)

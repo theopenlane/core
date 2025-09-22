@@ -64,6 +64,12 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 				return ec.fieldContext_Template_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Template_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Template_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Template_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Template_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Template_name(ctx, field)
 			case "templateType":
@@ -125,6 +131,12 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 				return ec.fieldContext_Template_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Template_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Template_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Template_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Template_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Template_name(ctx, field)
 			case "templateType":
@@ -213,6 +225,12 @@ func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ contex
 				return ec.fieldContext_Template_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Template_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Template_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Template_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Template_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Template_name(ctx, field)
 			case "templateType":

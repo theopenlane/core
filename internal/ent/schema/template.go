@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -83,7 +84,8 @@ func (Template) Fields() []ent.Field {
 func (t Template) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(t, withSkipForSystemAdmin(true)),
+			newOrgOwnedMixin(t),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(t)
 }

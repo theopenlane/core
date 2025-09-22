@@ -124,6 +124,46 @@ func (_u *HushHistoryUpdate) ClearOwnerID() *HushHistoryUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *HushHistoryUpdate) SetInternalNotes(v string) *HushHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *HushHistoryUpdate) SetNillableInternalNotes(v *string) *HushHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *HushHistoryUpdate) ClearInternalNotes() *HushHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *HushHistoryUpdate) SetSystemInternalID(v string) *HushHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *HushHistoryUpdate) SetNillableSystemInternalID(v *string) *HushHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *HushHistoryUpdate) ClearSystemInternalID() *HushHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *HushHistoryUpdate) SetName(v string) *HushHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -351,6 +391,21 @@ func (_u *HushHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(hushhistory.FieldOwnerID, field.TypeString)
 	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(hushhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(hushhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(hushhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(hushhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(hushhistory.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(hushhistory.FieldName, field.TypeString, value)
 	}
@@ -509,6 +564,46 @@ func (_u *HushHistoryUpdateOne) SetNillableOwnerID(v *string) *HushHistoryUpdate
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *HushHistoryUpdateOne) ClearOwnerID() *HushHistoryUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *HushHistoryUpdateOne) SetInternalNotes(v string) *HushHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *HushHistoryUpdateOne) SetNillableInternalNotes(v *string) *HushHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *HushHistoryUpdateOne) ClearInternalNotes() *HushHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *HushHistoryUpdateOne) SetSystemInternalID(v string) *HushHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *HushHistoryUpdateOne) SetNillableSystemInternalID(v *string) *HushHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *HushHistoryUpdateOne) ClearSystemInternalID() *HushHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -768,6 +863,21 @@ func (_u *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHistory
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(hushhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(hushhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(hushhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(hushhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(hushhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(hushhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(hushhistory.FieldName, field.TypeString, value)

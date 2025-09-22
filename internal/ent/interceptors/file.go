@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
@@ -34,7 +33,7 @@ func InterceptorFile() ent.Interceptor {
 			}
 
 			if au.IsSystemAdmin {
-				log.Debug().Msg("user is system admin, skipping organization filter")
+				zerolog.Ctx(ctx).Debug().Msg("user is system admin, skipping organization filter")
 
 				return nil
 			}

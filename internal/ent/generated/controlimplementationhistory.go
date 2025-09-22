@@ -42,6 +42,12 @@ type ControlImplementationHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// status of the %s, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
@@ -64,9 +70,9 @@ func (*ControlImplementationHistory) scanValues(columns []string) ([]any, error)
 			values[i] = new([]byte)
 		case controlimplementationhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlimplementationhistory.FieldVerified:
+		case controlimplementationhistory.FieldSystemOwned, controlimplementationhistory.FieldVerified:
 			values[i] = new(sql.NullBool)
-		case controlimplementationhistory.FieldID, controlimplementationhistory.FieldRef, controlimplementationhistory.FieldCreatedBy, controlimplementationhistory.FieldUpdatedBy, controlimplementationhistory.FieldDeletedBy, controlimplementationhistory.FieldOwnerID, controlimplementationhistory.FieldStatus, controlimplementationhistory.FieldDetails:
+		case controlimplementationhistory.FieldID, controlimplementationhistory.FieldRef, controlimplementationhistory.FieldCreatedBy, controlimplementationhistory.FieldUpdatedBy, controlimplementationhistory.FieldDeletedBy, controlimplementationhistory.FieldOwnerID, controlimplementationhistory.FieldInternalNotes, controlimplementationhistory.FieldSystemInternalID, controlimplementationhistory.FieldStatus, controlimplementationhistory.FieldDetails:
 			values[i] = new(sql.NullString)
 		case controlimplementationhistory.FieldHistoryTime, controlimplementationhistory.FieldCreatedAt, controlimplementationhistory.FieldUpdatedAt, controlimplementationhistory.FieldDeletedAt, controlimplementationhistory.FieldImplementationDate, controlimplementationhistory.FieldVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -158,6 +164,26 @@ func (_m *ControlImplementationHistory) assignValues(columns []string, values []
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case controlimplementationhistory.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case controlimplementationhistory.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case controlimplementationhistory.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case controlimplementationhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -257,6 +283,19 @@ func (_m *ControlImplementationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

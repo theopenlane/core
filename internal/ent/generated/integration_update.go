@@ -146,6 +146,46 @@ func (_u *IntegrationUpdate) ClearOwnerID() *IntegrationUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *IntegrationUpdate) SetInternalNotes(v string) *IntegrationUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableInternalNotes(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *IntegrationUpdate) ClearInternalNotes() *IntegrationUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *IntegrationUpdate) SetSystemInternalID(v string) *IntegrationUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableSystemInternalID(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *IntegrationUpdate) ClearSystemInternalID() *IntegrationUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *IntegrationUpdate) SetName(v string) *IntegrationUpdate {
 	_u.mutation.SetName(v)
@@ -400,11 +440,6 @@ func (_u *IntegrationUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *IntegrationUpdate) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := integration.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Integration.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := integration.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Integration.name": %w`, err)}
@@ -471,6 +506,21 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(integration.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(integration.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(integration.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(integration.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(integration.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(integration.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)
@@ -808,6 +858,46 @@ func (_u *IntegrationUpdateOne) ClearOwnerID() *IntegrationUpdateOne {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *IntegrationUpdateOne) SetInternalNotes(v string) *IntegrationUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableInternalNotes(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *IntegrationUpdateOne) ClearInternalNotes() *IntegrationUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *IntegrationUpdateOne) SetSystemInternalID(v string) *IntegrationUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableSystemInternalID(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *IntegrationUpdateOne) ClearSystemInternalID() *IntegrationUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *IntegrationUpdateOne) SetName(v string) *IntegrationUpdateOne {
 	_u.mutation.SetName(v)
@@ -1075,11 +1165,6 @@ func (_u *IntegrationUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *IntegrationUpdateOne) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := integration.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Integration.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := integration.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Integration.name": %w`, err)}
@@ -1163,6 +1248,21 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(integration.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(integration.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(integration.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(integration.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(integration.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(integration.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)

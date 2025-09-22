@@ -360,6 +360,48 @@ func (_c *ControlCreate) SetNillableOwnerID(v *string) *ControlCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ControlCreate) SetSystemOwned(v bool) *ControlCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableSystemOwned(v *bool) *ControlCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ControlCreate) SetInternalNotes(v string) *ControlCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableInternalNotes(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ControlCreate) SetSystemInternalID(v string) *ControlCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableSystemInternalID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_c *ControlCreate) SetRefCode(v string) *ControlCreate {
 	_c.mutation.SetRefCode(v)
@@ -751,6 +793,10 @@ func (_c *ControlCreate) defaults() error {
 		v := control.DefaultControlType
 		_c.mutation.SetControlType(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := control.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if control.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized control.DefaultID (forgotten import generated/runtime?)")
@@ -934,6 +980,18 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.References(); ok {
 		_spec.SetField(control.FieldReferences, field.TypeJSON, value)
 		_node.References = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(control.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(control.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(control.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)

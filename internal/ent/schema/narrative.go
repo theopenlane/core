@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -86,6 +87,7 @@ func (n Narrative) Mixin() []ent.Mixin {
 			),
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(n)
 }

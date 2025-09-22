@@ -142,6 +142,46 @@ func (_u *IntegrationHistoryUpdate) ClearOwnerID() *IntegrationHistoryUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *IntegrationHistoryUpdate) SetInternalNotes(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillableInternalNotes(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *IntegrationHistoryUpdate) ClearInternalNotes() *IntegrationHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *IntegrationHistoryUpdate) SetSystemInternalID(v string) *IntegrationHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillableSystemInternalID(v *string) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *IntegrationHistoryUpdate) ClearSystemInternalID() *IntegrationHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *IntegrationHistoryUpdate) SetName(v string) *IntegrationHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -340,6 +380,21 @@ func (_u *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(integrationhistory.FieldOwnerID, field.TypeString)
 	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(integrationhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(integrationhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(integrationhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(integrationhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(integrationhistory.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integrationhistory.FieldName, field.TypeString, value)
 	}
@@ -498,6 +553,46 @@ func (_u *IntegrationHistoryUpdateOne) SetNillableOwnerID(v *string) *Integratio
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *IntegrationHistoryUpdateOne) ClearOwnerID() *IntegrationHistoryUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *IntegrationHistoryUpdateOne) SetInternalNotes(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillableInternalNotes(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *IntegrationHistoryUpdateOne) ClearInternalNotes() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *IntegrationHistoryUpdateOne) SetSystemInternalID(v string) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillableSystemInternalID(v *string) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *IntegrationHistoryUpdateOne) ClearSystemInternalID() *IntegrationHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -728,6 +823,21 @@ func (_u *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(integrationhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(integrationhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(integrationhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(integrationhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(integrationhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(integrationhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integrationhistory.FieldName, field.TypeString, value)

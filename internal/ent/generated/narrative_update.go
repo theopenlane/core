@@ -127,6 +127,46 @@ func (_u *NarrativeUpdate) ClearTags() *NarrativeUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *NarrativeUpdate) SetInternalNotes(v string) *NarrativeUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *NarrativeUpdate) SetNillableInternalNotes(v *string) *NarrativeUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *NarrativeUpdate) ClearInternalNotes() *NarrativeUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *NarrativeUpdate) SetSystemInternalID(v string) *NarrativeUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *NarrativeUpdate) SetNillableSystemInternalID(v *string) *NarrativeUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *NarrativeUpdate) ClearSystemInternalID() *NarrativeUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *NarrativeUpdate) SetName(v string) *NarrativeUpdate {
 	_u.mutation.SetName(v)
@@ -548,6 +588,21 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(narrative.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(narrative.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(narrative.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(narrative.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(narrative.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(narrative.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(narrative.FieldName, field.TypeString, value)
@@ -1014,6 +1069,46 @@ func (_u *NarrativeUpdateOne) ClearTags() *NarrativeUpdateOne {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *NarrativeUpdateOne) SetInternalNotes(v string) *NarrativeUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *NarrativeUpdateOne) SetNillableInternalNotes(v *string) *NarrativeUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *NarrativeUpdateOne) ClearInternalNotes() *NarrativeUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *NarrativeUpdateOne) SetSystemInternalID(v string) *NarrativeUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *NarrativeUpdateOne) SetNillableSystemInternalID(v *string) *NarrativeUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *NarrativeUpdateOne) ClearSystemInternalID() *NarrativeUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *NarrativeUpdateOne) SetName(v string) *NarrativeUpdateOne {
 	_u.mutation.SetName(v)
@@ -1465,6 +1560,21 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(narrative.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(narrative.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(narrative.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(narrative.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(narrative.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(narrative.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(narrative.FieldName, field.TypeString, value)

@@ -38,6 +38,10 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
+	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
+	FieldInternalNotes = "internal_notes"
+	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
+	FieldSystemInternalID = "system_internal_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldShortName holds the string denoting the short_name field in the database.
@@ -108,6 +112,8 @@ var Columns = []string{
 	FieldRevision,
 	FieldOwnerID,
 	FieldSystemOwned,
+	FieldInternalNotes,
+	FieldSystemInternalID,
 	FieldName,
 	FieldShortName,
 	FieldFramework,
@@ -233,6 +239,16 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // BySystemOwned orders the results by the system_owned field.
 func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
+}
+
+// ByInternalNotes orders the results by the internal_notes field.
+func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalNotes, opts...).ToFunc()
+}
+
+// BySystemInternalID orders the results by the system_internal_id field.
+func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

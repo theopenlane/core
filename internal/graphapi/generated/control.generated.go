@@ -104,6 +104,12 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_delegateID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Control_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Control_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Control_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Control_systemInternalID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -231,6 +237,12 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_delegateID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Control_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Control_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Control_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Control_systemInternalID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -385,6 +397,12 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_delegateID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Control_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Control_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Control_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Control_systemInternalID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -539,6 +557,12 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_delegateID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Control_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Control_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Control_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Control_systemInternalID(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":

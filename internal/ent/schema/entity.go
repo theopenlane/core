@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/models"
@@ -99,6 +100,7 @@ func (e Entity) Mixin() []ent.Mixin {
 			// fga type for entity so its not actually used
 			// until that is added and the policy on the schema is updated
 			newGroupPermissionsMixin(),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(e)
 }
