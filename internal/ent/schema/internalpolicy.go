@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -90,9 +91,9 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			// all policies must be associated to an organization
-			newOrgOwnedMixin(i,
-				withSkipForSystemAdmin(true),
-			),
+			// unless they are system owned to be used as templates
+			newOrgOwnedMixin(i),
+			mixin.NewSystemOwnedMixin(),
 			// add group edit permissions to the procedure
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 			// policies are documents

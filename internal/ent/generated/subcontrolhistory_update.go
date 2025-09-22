@@ -490,6 +490,46 @@ func (_u *SubcontrolHistoryUpdate) ClearDelegateID() *SubcontrolHistoryUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *SubcontrolHistoryUpdate) SetInternalNotes(v string) *SubcontrolHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdate) SetNillableInternalNotes(v *string) *SubcontrolHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *SubcontrolHistoryUpdate) ClearInternalNotes() *SubcontrolHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *SubcontrolHistoryUpdate) SetSystemInternalID(v string) *SubcontrolHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdate) SetNillableSystemInternalID(v *string) *SubcontrolHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *SubcontrolHistoryUpdate) ClearSystemInternalID() *SubcontrolHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *SubcontrolHistoryUpdate) SetRefCode(v string) *SubcontrolHistoryUpdate {
 	_u.mutation.SetRefCode(v)
@@ -798,6 +838,21 @@ func (_u *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(subcontrolhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(subcontrolhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(subcontrolhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)
@@ -1285,6 +1340,46 @@ func (_u *SubcontrolHistoryUpdateOne) ClearDelegateID() *SubcontrolHistoryUpdate
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *SubcontrolHistoryUpdateOne) SetInternalNotes(v string) *SubcontrolHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdateOne) SetNillableInternalNotes(v *string) *SubcontrolHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *SubcontrolHistoryUpdateOne) ClearInternalNotes() *SubcontrolHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *SubcontrolHistoryUpdateOne) SetSystemInternalID(v string) *SubcontrolHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdateOne) SetNillableSystemInternalID(v *string) *SubcontrolHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *SubcontrolHistoryUpdateOne) ClearSystemInternalID() *SubcontrolHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *SubcontrolHistoryUpdateOne) SetRefCode(v string) *SubcontrolHistoryUpdateOne {
 	_u.mutation.SetRefCode(v)
@@ -1623,6 +1718,21 @@ func (_u *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Subco
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(subcontrolhistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(subcontrolhistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(subcontrolhistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)

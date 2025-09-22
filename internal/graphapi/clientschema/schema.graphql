@@ -1,6 +1,16 @@
 directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
+"""
+Indicates if a field will be returned in a query, if true, only system-admins
+can retrieve the value
+"""
 directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
+"""
+Indicates is the input field is read-only by non-system admin users.
+If an input is marked as @readOnly, only system-admin users
+can set the field
+"""
+directive @readOnly on INPUT_FIELD_DEFINITION
 """
 AAGUID (Authenticator Attestation Global Unique Identifier) is a 128-bit identifier used in the WebAuthn and FIDO2 protocols to uniquely identify the model of an authenticator device
 """
@@ -431,6 +441,18 @@ type ActionPlan implements Node {
 	"""
 	ownerID: ID
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	due date of the action plan
 	"""
 	dueDate: Time
@@ -716,6 +738,18 @@ type ActionPlanHistory implements Node {
 	the organization id that owns the object
 	"""
 	ownerID: String
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	due date of the action plan
 	"""
@@ -1106,6 +1140,49 @@ input ActionPlanHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	due_date field predicates
 	"""
 	dueDate: Time
@@ -1438,6 +1515,49 @@ input ActionPlanWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	due_date field predicates
 	"""
 	dueDate: Time
@@ -1543,6 +1663,18 @@ type Asset implements Node {
 	the organization id that owns the object
 	"""
 	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the type of the asset, e.g. technology, domain, device, etc
 	"""
@@ -1840,6 +1972,18 @@ type AssetHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the type of the asset, e.g. technology, domain, device, etc
 	"""
 	assetType: AssetHistoryAssetType!
@@ -2073,6 +2217,49 @@ input AssetHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	asset_type field predicates
 	"""
 	assetType: AssetHistoryAssetType
@@ -2282,6 +2469,49 @@ input AssetWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	asset_type field predicates
 	"""
@@ -3421,6 +3651,18 @@ type Control implements Node {
 	"""
 	ownerID: ID
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the unique reference code for the control
 	"""
 	refCode: String!
@@ -4193,6 +4435,18 @@ type ControlHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the unique reference code for the control
 	"""
 	refCode: String!
@@ -4639,6 +4893,49 @@ input ControlHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	ref_code field predicates
 	"""
 	refCode: String
@@ -4687,6 +4984,18 @@ type ControlImplementation implements Node {
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	status of the %s, e.g. draft, published, archived, etc.
 	"""
@@ -4980,6 +5289,18 @@ type ControlImplementationHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	status of the %s, e.g. draft, published, archived, etc.
 	"""
 	status: ControlImplementationHistoryDocumentStatus
@@ -5211,6 +5532,49 @@ input ControlImplementationHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	status field predicates
 	"""
 	status: ControlImplementationHistoryDocumentStatus
@@ -5406,6 +5770,49 @@ input ControlImplementationWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	status field predicates
 	"""
 	status: ControlImplementationDocumentStatus
@@ -5523,6 +5930,18 @@ type ControlObjective implements Node {
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the name of the control objective
 	"""
@@ -6017,6 +6436,18 @@ type ControlObjectiveHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the name of the control objective
 	"""
 	name: String!
@@ -6299,6 +6730,49 @@ input ControlObjectiveHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -6585,6 +7059,49 @@ input ControlObjectiveWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -7102,6 +7619,49 @@ input ControlWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	ref_code field predicates
 	"""
 	refCode: String
@@ -7347,6 +7907,14 @@ input CreateActionPlanInput {
 	"""
 	dismissedImprovementSuggestions: [String!]
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	due date of the action plan
 	"""
 	dueDate: Time
@@ -7374,6 +7942,14 @@ input CreateAssetInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
 	"""
 	the type of the asset, e.g. technology, domain, device, etc
 	"""
@@ -7457,6 +8033,14 @@ input CreateControlImplementationInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
 	"""
 	status of the %s, e.g. draft, published, archived, etc.
 	"""
@@ -7563,6 +8147,14 @@ input CreateControlInput {
 	"""
 	references: [Reference!]
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	the unique reference code for the control
 	"""
 	refCode: String!
@@ -7600,6 +8192,14 @@ input CreateControlObjectiveInput {
 	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	"""
 	revision: String
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
 	"""
 	the name of the control objective
 	"""
@@ -7655,6 +8255,14 @@ input CreateCustomDomainInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
 	"""
 	the name of the custom domain
 	"""
@@ -7735,6 +8343,14 @@ input CreateEntityInput {
 	"""
 	tags: [String!]
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	the name of the entity
 	"""
 	name: String
@@ -7776,6 +8392,14 @@ input CreateEntityTypeInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
 	"""
 	the name of the entity
 	"""
@@ -7895,6 +8519,14 @@ input CreateFileInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
 	"""
 	the name of the file provided in the payload key without the extension
 	"""
@@ -8084,6 +8716,14 @@ Input was generated by ent.
 """
 input CreateHushInput {
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	the logical name of the corresponding hush secret or it's general grouping
 	"""
 	name: String!
@@ -8134,6 +8774,14 @@ input CreateInternalPolicyInput {
 	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	"""
 	revision: String
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
 	"""
 	the name of the policy
 	"""
@@ -8275,6 +8923,14 @@ input CreateJobRunnerInput {
 	"""
 	tags: [String!]
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	the name of the runner
 	"""
 	name: String!
@@ -8353,6 +9009,14 @@ input CreateJobTemplateInput {
 	"""
 	tags: [String!]
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	the title of the job
 	"""
 	title: String!
@@ -8407,6 +9071,14 @@ input CreateMappedControlInput {
 	"""
 	tags: [String!]
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
 	mappingType: MappedControlMappingType
@@ -8443,6 +9115,14 @@ input CreateNarrativeInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
 	"""
 	the name of the narrative
 	"""
@@ -8612,6 +9292,7 @@ input CreateOrganizationInput {
 	scanIDs: [ID!]
 	subprocessorIDs: [ID!]
 	exportIDs: [ID!]
+	trustCenterDocIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -8793,6 +9474,14 @@ input CreateProcedureInput {
 	improvement suggestions dismissed by the user for the procedure
 	"""
 	dismissedImprovementSuggestions: [String!]
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
 	"""
 	This will contain the url used to create/update the procedure
 	"""
@@ -9061,6 +9750,14 @@ input CreateStandardInput {
 	"""
 	revision: String
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	the long name of the standard body
 	"""
 	name: String!
@@ -9099,11 +9796,11 @@ input CreateStandardInput {
 	"""
 	indicates if the standard should be made available to all users, only for system owned standards
 	"""
-	isPublic: Boolean
+	isPublic: Boolean @readOnly
 	"""
 	indicates if the standard is freely distributable under a trial license, only for system owned standards
 	"""
-	freeToUse: Boolean
+	freeToUse: Boolean @readOnly
 	"""
 	type of the standard - cybersecurity, healthcare , financial, etc.
 	"""
@@ -9194,6 +9891,14 @@ input CreateSubcontrolInput {
 	"""
 	references: [Reference!]
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	the unique reference code for the control
 	"""
 	refCode: String!
@@ -9221,6 +9926,14 @@ input CreateSubprocessorInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
 	"""
 	name of the standard body
 	"""
@@ -9326,6 +10039,14 @@ input CreateTemplateInput {
 	"""
 	tags: [String!]
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	the name of the template
 	"""
 	name: String!
@@ -9352,6 +10073,7 @@ input CreateTemplateInput {
 	ownerID: ID
 	documentIDs: [ID!]
 	fileIDs: [ID!]
+	trustCenterID: ID
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -9374,6 +10096,21 @@ input CreateTrustCenterDocInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	title of the document
+	"""
+	title: String!
+	"""
+	category of the document
+	"""
+	category: String!
+	"""
+	visibility of the document
+	"""
+	visibility: TrustCenterDocTrustCenterDocumentVisibility
+	ownerID: ID
+	trustCenterID: ID
+	fileID: ID
 }
 """
 Input for createTrustCenterDomain mutation
@@ -9401,7 +10138,9 @@ input CreateTrustCenterInput {
 	customDomainID: ID
 	settingID: ID
 	trustCenterSubprocessorIDs: [ID!]
+	trustCenterDocIDs: [ID!]
 	trustCenterComplianceIDs: [ID!]
+	templateIDs: [ID!]
 	createTrustCenterSetting: CreateTrustCenterSettingInput
 }
 """
@@ -9594,6 +10333,18 @@ type CustomDomain implements Node {
 	"""
 	ownerID: ID
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the name of the custom domain
 	"""
 	cnameRecord: String!
@@ -9683,6 +10434,18 @@ type CustomDomainHistory implements Node {
 	the organization id that owns the object
 	"""
 	ownerID: String
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the name of the custom domain
 	"""
@@ -9894,6 +10657,49 @@ input CustomDomainHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	cname_record field predicates
 	"""
 	cnameRecord: String
@@ -10075,6 +10881,49 @@ input CustomDomainWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	cname_record field predicates
 	"""
@@ -11604,6 +12453,18 @@ type Entity implements Node {
 	"""
 	ownerID: ID
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the name of the entity
 	"""
 	name: String
@@ -11984,6 +12845,18 @@ type EntityHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the name of the entity
 	"""
 	name: String
@@ -12208,6 +13081,49 @@ input EntityHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -12317,6 +13233,18 @@ type EntityType implements Node {
 	the organization id that owns the object
 	"""
 	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the name of the entity
 	"""
@@ -12428,6 +13356,18 @@ type EntityTypeHistory implements Node {
 	the organization id that owns the object
 	"""
 	ownerID: String
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the name of the entity
 	"""
@@ -12631,6 +13571,49 @@ input EntityTypeHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -12779,6 +13762,49 @@ input EntityTypeWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -12915,6 +13941,49 @@ input EntityWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -15222,6 +16291,18 @@ type File implements Node {
 	"""
 	tags: [String!]
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the name of the file provided in the payload key without the extension
 	"""
 	providedFileName: String!
@@ -15474,6 +16555,18 @@ type FileHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the name of the file provided in the payload key without the extension
 	"""
 	providedFileName: String!
@@ -15715,6 +16808,49 @@ input FileHistoryWhereInput {
 	updatedByNotNil: Boolean
 	updatedByEqualFold: String
 	updatedByContainsFold: String
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	provided_file_name field predicates
 	"""
@@ -16087,6 +17223,49 @@ input FileWhereInput {
 	updatedByNotNil: Boolean
 	updatedByEqualFold: String
 	updatedByContainsFold: String
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	provided_file_name field predicates
 	"""
@@ -19481,6 +20660,18 @@ type Hush implements Node {
 	"""
 	ownerID: ID
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the logical name of the corresponding hush secret or it's general grouping
 	"""
 	name: String!
@@ -19687,6 +20878,18 @@ type HushHistory implements Node {
 	the organization id that owns the object
 	"""
 	ownerID: String
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the logical name of the corresponding hush secret or it's general grouping
 	"""
@@ -19918,6 +21121,49 @@ input HushHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -20131,6 +21377,49 @@ input HushWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -20247,6 +21536,18 @@ type Integration implements Node {
 	the organization id that owns the object
 	"""
 	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the name of the integration
 	"""
@@ -20418,6 +21719,18 @@ type IntegrationHistory implements Node {
 	the organization id that owns the object
 	"""
 	ownerID: String
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the name of the integration
 	"""
@@ -20639,6 +21952,49 @@ input IntegrationHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -20816,6 +22172,49 @@ input IntegrationWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -20910,6 +22309,18 @@ type InternalPolicy implements Node {
 	the organization id that owns the object
 	"""
 	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the name of the policy
 	"""
@@ -21446,6 +22857,18 @@ type InternalPolicyHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the name of the policy
 	"""
 	name: String!
@@ -21769,6 +23192,49 @@ input InternalPolicyHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -22101,6 +23567,49 @@ input InternalPolicyWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -23099,6 +24608,14 @@ type JobRunner implements Node {
 	"""
 	systemOwned: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the name of the runner
 	"""
 	name: String!
@@ -23955,6 +25472,42 @@ input JobRunnerWhereInput {
 	systemOwnedIsNil: Boolean
 	systemOwnedNotNil: Boolean
 	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -24077,6 +25630,14 @@ type JobTemplate implements Node {
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the title of the job
 	"""
@@ -24216,6 +25777,14 @@ type JobTemplateHistory implements Node {
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the title of the job
 	"""
@@ -24470,6 +26039,42 @@ input JobTemplateHistoryWhereInput {
 	systemOwnedIsNil: Boolean
 	systemOwnedNotNil: Boolean
 	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	title field predicates
 	"""
 	title: String
@@ -24673,6 +26278,42 @@ input JobTemplateWhereInput {
 	systemOwnedNEQ: Boolean
 	systemOwnedIsNil: Boolean
 	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	title field predicates
 	"""
@@ -25232,6 +26873,18 @@ type MappedControl implements Node {
 	"""
 	tags: [String!]
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the organization id that owns the object
 	"""
 	ownerID: ID
@@ -25510,6 +27163,18 @@ type MappedControlHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the organization id that owns the object
 	"""
 	ownerID: String
@@ -25729,6 +27394,49 @@ input MappedControlHistoryWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: String
@@ -25926,6 +27634,49 @@ input MappedControlWhereInput {
 	updatedByNotNil: Boolean
 	updatedByEqualFold: String
 	updatedByContainsFold: String
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -28397,7 +30148,7 @@ type Mutation {
 		values of the template
 		"""
 		input: CreateTemplateInput!
-	): TemplateCreatePayload!
+	templateFiles: [Upload!]): TemplateCreatePayload!
 	"""
 	Create multiple new templates
 	"""
@@ -28429,7 +30180,7 @@ type Mutation {
 		New values for the template
 		"""
 		input: UpdateTemplateInput!
-	): TemplateUpdatePayload!
+	templateFiles: [Upload!]): TemplateUpdatePayload!
 	"""
 	Delete an existing template
 	"""
@@ -28547,7 +30298,7 @@ type Mutation {
 		values of the trustCenterDoc
 		"""
 		input: CreateTrustCenterDocInput!
-	): TrustCenterDocCreatePayload!
+	trustCenterDocFile: Upload!): TrustCenterDocCreatePayload!
 	"""
 	Create multiple new trustCenterDocs
 	"""
@@ -28781,6 +30532,18 @@ type Narrative implements Node {
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the name of the narrative
 	"""
@@ -29091,6 +30854,18 @@ type NarrativeHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the name of the narrative
 	"""
 	name: String!
@@ -29317,6 +31092,49 @@ input NarrativeHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -29516,6 +31334,49 @@ input NarrativeWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -33266,6 +35127,37 @@ type Organization implements Node {
 		"""
 		where: ExportWhereInput
 	): ExportConnection!
+	trustCenterDocs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for TrustCenterDocs returned from the connection.
+		"""
+		orderBy: [TrustCenterDocOrder!]
+
+		"""
+		Filtering options for TrustCenterDocs returned from the connection.
+		"""
+		where: TrustCenterDocWhereInput
+	): TrustCenterDocConnection!
 	members(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -35272,6 +37164,11 @@ input OrganizationWhereInput {
 	hasExports: Boolean
 	hasExportsWith: [ExportWhereInput!]
 	"""
+	trust_center_docs edge predicates
+	"""
+	hasTrustCenterDocs: Boolean
+	hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+	"""
 	members edge predicates
 	"""
 	hasMembers: Boolean
@@ -35792,6 +37689,18 @@ type Procedure implements Node {
 	"""
 	dismissedImprovementSuggestions: [String!]
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	This will contain the most recent file id if this procedure was created from a file
 	"""
 	fileID: ID
@@ -36265,6 +38174,18 @@ type ProcedureHistory implements Node {
 	"""
 	dismissedImprovementSuggestions: [String!]
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	This will contain the most recent file id if this procedure was created from a file
 	"""
 	fileID: String
@@ -36654,6 +38575,49 @@ input ProcedureHistoryWhereInput {
 	delegateIDEqualFold: String
 	delegateIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	file_id field predicates
 	"""
 	fileID: String
@@ -36985,6 +38949,49 @@ input ProcedureWhereInput {
 	delegateIDNotNil: Boolean
 	delegateIDEqualFold: ID
 	delegateIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	file_id field predicates
 	"""
@@ -49003,6 +51010,14 @@ type Standard implements Node {
 	"""
 	systemOwned: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the long name of the standard body
 	"""
 	name: String!
@@ -49041,11 +51056,11 @@ type Standard implements Node {
 	"""
 	indicates if the standard should be made available to all users, only for system owned standards
 	"""
-	isPublic: Boolean
+	isPublic: Boolean @hidden(if: true)
 	"""
 	indicates if the standard is freely distributable under a trial license, only for system owned standards
 	"""
-	freeToUse: Boolean
+	freeToUse: Boolean @hidden(if: true)
 	"""
 	type of the standard - cybersecurity, healthcare , financial, etc.
 	"""
@@ -49201,6 +51216,14 @@ type StandardHistory implements Node {
 	"""
 	systemOwned: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the long name of the standard body
 	"""
 	name: String!
@@ -49239,11 +51262,11 @@ type StandardHistory implements Node {
 	"""
 	indicates if the standard should be made available to all users, only for system owned standards
 	"""
-	isPublic: Boolean
+	isPublic: Boolean @hidden(if: true)
 	"""
 	indicates if the standard is freely distributable under a trial license, only for system owned standards
 	"""
-	freeToUse: Boolean
+	freeToUse: Boolean @hidden(if: true)
 	"""
 	type of the standard - cybersecurity, healthcare , financial, etc.
 	"""
@@ -49489,6 +51512,42 @@ input StandardHistoryWhereInput {
 	systemOwnedNEQ: Boolean
 	systemOwnedIsNil: Boolean
 	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -49844,6 +51903,42 @@ input StandardWhereInput {
 	systemOwnedIsNil: Boolean
 	systemOwnedNotNil: Boolean
 	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -50136,6 +52231,18 @@ type Subcontrol implements Node {
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the unique reference code for the control
 	"""
@@ -50649,6 +52756,18 @@ type SubcontrolHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the unique reference code for the control
 	"""
 	refCode: String!
@@ -51095,6 +53214,49 @@ input SubcontrolHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	ref_code field predicates
 	"""
 	refCode: String
@@ -51472,6 +53634,49 @@ input SubcontrolWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	ref_code field predicates
 	"""
 	refCode: String
@@ -51592,6 +53797,14 @@ type Subprocessor implements Node {
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	name of the standard body
 	"""
@@ -51751,6 +53964,14 @@ type SubprocessorHistory implements Node {
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	name of the standard body
 	"""
@@ -51973,6 +54194,42 @@ input SubprocessorHistoryWhereInput {
 	systemOwnedIsNil: Boolean
 	systemOwnedNotNil: Boolean
 	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -52181,6 +54438,42 @@ input SubprocessorWhereInput {
 	systemOwnedNEQ: Boolean
 	systemOwnedIsNil: Boolean
 	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -54036,9 +56329,21 @@ type Template implements Node {
 	"""
 	tags: [String!]
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: ID
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the name of the template
 	"""
@@ -54063,6 +56368,10 @@ type Template implements Node {
 	the uischema for the template to render in the UI
 	"""
 	uischema: Map
+	"""
+	the id of the trust center this template is associated with
+	"""
+	trustCenterID: ID
 	owner: Organization
 	documents(
 		"""
@@ -54126,6 +56435,7 @@ type Template implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
+	trustCenter: TrustCenter
 }
 """
 Return response for createBulkTemplate mutation
@@ -54205,9 +56515,21 @@ type TemplateHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: String
+	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
 	"""
 	the name of the template
 	"""
@@ -54232,6 +56554,10 @@ type TemplateHistory implements Node {
 	the uischema for the template to render in the UI
 	"""
 	uischema: Map
+	"""
+	the id of the trust center this template is associated with
+	"""
+	trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -54307,6 +56633,7 @@ TemplateHistoryTemplateKind is enum for the field kind
 """
 enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
 	QUESTIONNAIRE
+	TRUSTCENTER_NDA
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -54446,6 +56773,49 @@ input TemplateHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -54495,6 +56865,24 @@ input TemplateHistoryWhereInput {
 	kindNotIn: [TemplateHistoryTemplateKind!]
 	kindIsNil: Boolean
 	kindNotNil: Boolean
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: String
+	trustCenterIDNEQ: String
+	trustCenterIDIn: [String!]
+	trustCenterIDNotIn: [String!]
+	trustCenterIDGT: String
+	trustCenterIDGTE: String
+	trustCenterIDLT: String
+	trustCenterIDLTE: String
+	trustCenterIDContains: String
+	trustCenterIDHasPrefix: String
+	trustCenterIDHasSuffix: String
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: String
+	trustCenterIDContainsFold: String
 }
 """
 Ordering options for Template connections
@@ -54524,6 +56912,7 @@ TemplateTemplateKind is enum for the field kind
 """
 enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
 	QUESTIONNAIRE
+	TRUSTCENTER_NDA
 }
 """
 Return response for updateTemplate mutation
@@ -54636,6 +57025,49 @@ input TemplateWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -54686,6 +57118,24 @@ input TemplateWhereInput {
 	kindIsNil: Boolean
 	kindNotNil: Boolean
 	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: ID
+	trustCenterIDNEQ: ID
+	trustCenterIDIn: [ID!]
+	trustCenterIDNotIn: [ID!]
+	trustCenterIDGT: ID
+	trustCenterIDGTE: ID
+	trustCenterIDLT: ID
+	trustCenterIDLTE: ID
+	trustCenterIDContains: ID
+	trustCenterIDHasPrefix: ID
+	trustCenterIDHasSuffix: ID
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: ID
+	trustCenterIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -54700,6 +57150,11 @@ input TemplateWhereInput {
 	"""
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
+	"""
+	trust_center edge predicates
+	"""
+	hasTrustCenter: Boolean
+	hasTrustCenterWith: [TrustCenterWhereInput!]
 }
 """
 The builtin Time type
@@ -54761,6 +57216,37 @@ type TrustCenter implements Node {
 		"""
 		where: TrustCenterSubprocessorWhereInput
 	): TrustCenterSubprocessorConnection!
+	trustCenterDocs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for TrustCenterDocs returned from the connection.
+		"""
+		orderBy: [TrustCenterDocOrder!]
+
+		"""
+		Filtering options for TrustCenterDocs returned from the connection.
+		"""
+		where: TrustCenterDocWhereInput
+	): TrustCenterDocConnection!
 	trustCenterCompliances(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -54792,6 +57278,37 @@ type TrustCenter implements Node {
 		"""
 		where: TrustCenterComplianceWhereInput
 	): TrustCenterComplianceConnection!
+	templates(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Templates returned from the connection.
+		"""
+		orderBy: [TemplateOrder!]
+
+		"""
+		Filtering options for Templates returned from the connection.
+		"""
+		where: TemplateWhereInput
+	): TemplateConnection!
 }
 type TrustCenterCompliance implements Node {
 	id: ID!
@@ -55308,6 +57825,36 @@ type TrustCenterDoc implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: ID
+	"""
+	ID of the trust center
+	"""
+	trustCenterID: ID
+	"""
+	title of the document
+	"""
+	title: String!
+	"""
+	category of the document
+	"""
+	category: String!
+	"""
+	ID of the file containing the document
+	"""
+	fileID: ID
+	"""
+	visibility of the document
+	"""
+	visibility: TrustCenterDocTrustCenterDocumentVisibility
+	owner: Organization
+	trustCenter: TrustCenter
+	"""
+	the file containing the document content
+	"""
+	file: File
 }
 """
 Return response for createBulkTrustCenterDoc mutation
@@ -55379,6 +57926,30 @@ type TrustCenterDocHistory implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: String
+	"""
+	ID of the trust center
+	"""
+	trustCenterID: String
+	"""
+	title of the document
+	"""
+	title: String!
+	"""
+	category of the document
+	"""
+	category: String!
+	"""
+	ID of the file containing the document
+	"""
+	fileID: String
+	"""
+	visibility of the document
+	"""
+	visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
 }
 """
 A connection to a list of items.
@@ -55438,6 +58009,14 @@ enum TrustCenterDocHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+}
+"""
+TrustCenterDocHistoryTrustCenterDocumentVisibility is enum for the field visibility
+"""
+enum TrustCenterDocHistoryTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+	PUBLICLY_VISIBLE
+	PROTECTED
+	NOT_VISIBLE
 }
 """
 TrustCenterDocHistoryWhereInput is used for filtering TrustCenterDocHistory objects.
@@ -55558,6 +58137,101 @@ input TrustCenterDocHistoryWhereInput {
 	updatedByNotNil: Boolean
 	updatedByEqualFold: String
 	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: String
+	trustCenterIDNEQ: String
+	trustCenterIDIn: [String!]
+	trustCenterIDNotIn: [String!]
+	trustCenterIDGT: String
+	trustCenterIDGTE: String
+	trustCenterIDLT: String
+	trustCenterIDLTE: String
+	trustCenterIDContains: String
+	trustCenterIDHasPrefix: String
+	trustCenterIDHasSuffix: String
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: String
+	trustCenterIDContainsFold: String
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleEqualFold: String
+	titleContainsFold: String
+	"""
+	category field predicates
+	"""
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryEqualFold: String
+	categoryContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: String
+	fileIDNEQ: String
+	fileIDIn: [String!]
+	fileIDNotIn: [String!]
+	fileIDGT: String
+	fileIDGTE: String
+	fileIDLT: String
+	fileIDLTE: String
+	fileIDContains: String
+	fileIDHasPrefix: String
+	fileIDHasSuffix: String
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: String
+	fileIDContainsFold: String
+	"""
+	visibility field predicates
+	"""
+	visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
+	visibilityNEQ: TrustCenterDocHistoryTrustCenterDocumentVisibility
+	visibilityIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
+	visibilityNotIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
+	visibilityIsNil: Boolean
+	visibilityNotNil: Boolean
 }
 """
 Ordering options for TrustCenterDoc connections
@@ -55578,6 +58252,14 @@ Properties by which TrustCenterDoc connections can be ordered.
 enum TrustCenterDocOrderField {
 	created_at
 	updated_at
+}
+"""
+TrustCenterDocTrustCenterDocumentVisibility is enum for the field visibility
+"""
+enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+	PUBLICLY_VISIBLE
+	PROTECTED
+	NOT_VISIBLE
 }
 """
 Return response for updateTrustCenterDoc mutation
@@ -55671,6 +58353,116 @@ input TrustCenterDocWhereInput {
 	updatedByNotNil: Boolean
 	updatedByEqualFold: String
 	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: ID
+	trustCenterIDNEQ: ID
+	trustCenterIDIn: [ID!]
+	trustCenterIDNotIn: [ID!]
+	trustCenterIDGT: ID
+	trustCenterIDGTE: ID
+	trustCenterIDLT: ID
+	trustCenterIDLTE: ID
+	trustCenterIDContains: ID
+	trustCenterIDHasPrefix: ID
+	trustCenterIDHasSuffix: ID
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: ID
+	trustCenterIDContainsFold: ID
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleEqualFold: String
+	titleContainsFold: String
+	"""
+	category field predicates
+	"""
+	category: String
+	categoryNEQ: String
+	categoryIn: [String!]
+	categoryNotIn: [String!]
+	categoryGT: String
+	categoryGTE: String
+	categoryLT: String
+	categoryLTE: String
+	categoryContains: String
+	categoryHasPrefix: String
+	categoryHasSuffix: String
+	categoryEqualFold: String
+	categoryContainsFold: String
+	"""
+	file_id field predicates
+	"""
+	fileID: ID
+	fileIDNEQ: ID
+	fileIDIn: [ID!]
+	fileIDNotIn: [ID!]
+	fileIDGT: ID
+	fileIDGTE: ID
+	fileIDLT: ID
+	fileIDLTE: ID
+	fileIDContains: ID
+	fileIDHasPrefix: ID
+	fileIDHasSuffix: ID
+	fileIDIsNil: Boolean
+	fileIDNotNil: Boolean
+	fileIDEqualFold: ID
+	fileIDContainsFold: ID
+	"""
+	visibility field predicates
+	"""
+	visibility: TrustCenterDocTrustCenterDocumentVisibility
+	visibilityNEQ: TrustCenterDocTrustCenterDocumentVisibility
+	visibilityIn: [TrustCenterDocTrustCenterDocumentVisibility!]
+	visibilityNotIn: [TrustCenterDocTrustCenterDocumentVisibility!]
+	visibilityIsNil: Boolean
+	visibilityNotNil: Boolean
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	trust_center edge predicates
+	"""
+	hasTrustCenter: Boolean
+	hasTrustCenterWith: [TrustCenterWhereInput!]
+	"""
+	file edge predicates
+	"""
+	hasFile: Boolean
+	hasFileWith: [FileWhereInput!]
 }
 """
 Return response for createTrustCenterDomain mutation
@@ -57635,10 +60427,20 @@ input TrustCenterWhereInput {
 	hasTrustCenterSubprocessors: Boolean
 	hasTrustCenterSubprocessorsWith: [TrustCenterSubprocessorWhereInput!]
 	"""
+	trust_center_docs edge predicates
+	"""
+	hasTrustCenterDocs: Boolean
+	hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+	"""
 	trust_center_compliances edge predicates
 	"""
 	hasTrustCenterCompliances: Boolean
 	hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
+	"""
+	templates edge predicates
+	"""
+	hasTemplates: Boolean
+	hasTemplatesWith: [TemplateWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -57780,6 +60582,16 @@ input UpdateActionPlanInput {
 	appendDismissedImprovementSuggestions: [String!]
 	clearDismissedImprovementSuggestions: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
 	due date of the action plan
 	"""
 	dueDate: Time
@@ -57822,6 +60634,16 @@ input UpdateAssetInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	"""
 	the type of the asset, e.g. technology, domain, device, etc
 	"""
@@ -57938,6 +60760,16 @@ input UpdateControlImplementationInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	"""
 	status of the %s, e.g. draft, published, archived, etc.
 	"""
@@ -58081,6 +60913,16 @@ input UpdateControlInput {
 	appendReferences: [Reference!]
 	clearReferences: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
 	the unique reference code for the control
 	"""
 	refCode: String
@@ -58155,6 +60997,16 @@ input UpdateControlObjectiveInput {
 	"""
 	revision: String
 	clearRevision: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	"""
 	the name of the control objective
 	"""
@@ -58238,6 +61090,16 @@ input UpdateCustomDomainInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	dnsVerificationID: ID
@@ -58331,6 +61193,16 @@ input UpdateEntityInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
 	the name of the entity
 	"""
 	name: String
@@ -58400,6 +61272,16 @@ input UpdateEntityTypeInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	"""
 	the name of the entity
 	"""
@@ -58569,6 +61451,16 @@ input UpdateFileInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	"""
 	the name of the file provided in the payload key without the extension
 	"""
@@ -58877,6 +61769,16 @@ Input was generated by ent.
 """
 input UpdateHushInput {
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
 	the logical name of the corresponding hush secret or it's general grouping
 	"""
 	name: String
@@ -58935,6 +61837,16 @@ input UpdateInternalPolicyInput {
 	"""
 	revision: String
 	clearRevision: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	"""
 	the name of the policy
 	"""
@@ -59112,6 +62024,16 @@ input UpdateJobRunnerInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
 	the name of the runner
 	"""
 	name: String
@@ -59210,6 +62132,16 @@ input UpdateJobTemplateInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
 	the title of the job
 	"""
 	title: String
@@ -59266,6 +62198,16 @@ input UpdateMappedControlInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
 	mappingType: MappedControlMappingType
@@ -59316,6 +62258,16 @@ input UpdateNarrativeInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	"""
 	the name of the narrative
 	"""
@@ -59589,6 +62541,9 @@ input UpdateOrganizationInput {
 	addExportIDs: [ID!]
 	removeExportIDs: [ID!]
 	clearExports: Boolean
+	addTrustCenterDocIDs: [ID!]
+	removeTrustCenterDocIDs: [ID!]
+	clearTrustCenterDocs: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
@@ -59823,6 +62778,16 @@ input UpdateProcedureInput {
 	dismissedImprovementSuggestions: [String!]
 	appendDismissedImprovementSuggestions: [String!]
 	clearDismissedImprovementSuggestions: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	"""
 	This will contain the url used to create/update the procedure
 	"""
@@ -60204,6 +63169,16 @@ input UpdateStandardInput {
 	revision: String
 	clearRevision: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
 	the long name of the standard body
 	"""
 	name: String
@@ -60251,13 +63226,13 @@ input UpdateStandardInput {
 	"""
 	indicates if the standard should be made available to all users, only for system owned standards
 	"""
-	isPublic: Boolean
-	clearIsPublic: Boolean
+	isPublic: Boolean @readOnly
+	clearIsPublic: Boolean @readOnly
 	"""
 	indicates if the standard is freely distributable under a trial license, only for system owned standards
 	"""
-	freeToUse: Boolean
-	clearFreeToUse: Boolean
+	freeToUse: Boolean @readOnly
+	clearFreeToUse: Boolean @readOnly
 	"""
 	type of the standard - cybersecurity, healthcare , financial, etc.
 	"""
@@ -60377,6 +63352,16 @@ input UpdateSubcontrolInput {
 	appendReferences: [Reference!]
 	clearReferences: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
 	the unique reference code for the control
 	"""
 	refCode: String
@@ -60427,6 +63412,16 @@ input UpdateSubprocessorInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	"""
 	name of the standard body
 	"""
@@ -60592,6 +63587,16 @@ input UpdateTemplateInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
 	the name of the template
 	"""
 	name: String
@@ -60618,14 +63623,14 @@ input UpdateTemplateInput {
 	"""
 	uischema: Map
 	clearUischema: Boolean
-	ownerID: ID
-	clearOwner: Boolean
 	addDocumentIDs: [ID!]
 	removeDocumentIDs: [ID!]
 	clearDocuments: Boolean
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
+	trustCenterID: ID
+	clearTrustCenter: Boolean
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -60653,6 +63658,23 @@ input UpdateTrustCenterDocInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	title of the document
+	"""
+	title: String
+	"""
+	category of the document
+	"""
+	category: String
+	"""
+	visibility of the document
+	"""
+	visibility: TrustCenterDocTrustCenterDocumentVisibility
+	clearVisibility: Boolean
+	trustCenterID: ID
+	clearTrustCenter: Boolean
+	fileID: ID
+	clearFile: Boolean
 }
 """
 UpdateTrustCenterInput is used for update TrustCenter object.
@@ -60674,9 +63696,15 @@ input UpdateTrustCenterInput {
 	addTrustCenterSubprocessorIDs: [ID!]
 	removeTrustCenterSubprocessorIDs: [ID!]
 	clearTrustCenterSubprocessors: Boolean
+	addTrustCenterDocIDs: [ID!]
+	removeTrustCenterDocIDs: [ID!]
+	clearTrustCenterDocs: Boolean
 	addTrustCenterComplianceIDs: [ID!]
 	removeTrustCenterComplianceIDs: [ID!]
 	clearTrustCenterCompliances: Boolean
+	addTemplateIDs: [ID!]
+	removeTemplateIDs: [ID!]
+	clearTemplates: Boolean
 	updateTrustCenterSetting: UpdateTrustCenterSettingInput
 }
 """

@@ -12,7 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -21,12 +24,15 @@ import (
 // TrustCenterDocQuery is the builder for querying TrustCenterDoc entities.
 type TrustCenterDocQuery struct {
 	config
-	ctx        *QueryContext
-	order      []trustcenterdoc.OrderOption
-	inters     []Interceptor
-	predicates []predicate.TrustCenterDoc
-	loadTotal  []func(context.Context, []*TrustCenterDoc) error
-	modifiers  []func(*sql.Selector)
+	ctx             *QueryContext
+	order           []trustcenterdoc.OrderOption
+	inters          []Interceptor
+	predicates      []predicate.TrustCenterDoc
+	withOwner       *OrganizationQuery
+	withTrustCenter *TrustCenterQuery
+	withFile        *FileQuery
+	loadTotal       []func(context.Context, []*TrustCenterDoc) error
+	modifiers       []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -61,6 +67,81 @@ func (_q *TrustCenterDocQuery) Unique(unique bool) *TrustCenterDocQuery {
 func (_q *TrustCenterDocQuery) Order(o ...trustcenterdoc.OrderOption) *TrustCenterDocQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryOwner chains the current query on the "owner" edge.
+func (_q *TrustCenterDocQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterdoc.OwnerTable, trustcenterdoc.OwnerColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTrustCenter chains the current query on the "trust_center" edge.
+func (_q *TrustCenterDocQuery) QueryTrustCenter() *TrustCenterQuery {
+	query := (&TrustCenterClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, selector),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterdoc.TrustCenterTable, trustcenterdoc.TrustCenterColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFile chains the current query on the "file" edge.
+func (_q *TrustCenterDocQuery) QueryFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterdoc.FileTable, trustcenterdoc.FileColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first TrustCenterDoc entity from the query.
@@ -250,16 +331,52 @@ func (_q *TrustCenterDocQuery) Clone() *TrustCenterDocQuery {
 		return nil
 	}
 	return &TrustCenterDocQuery{
-		config:     _q.config,
-		ctx:        _q.ctx.Clone(),
-		order:      append([]trustcenterdoc.OrderOption{}, _q.order...),
-		inters:     append([]Interceptor{}, _q.inters...),
-		predicates: append([]predicate.TrustCenterDoc{}, _q.predicates...),
+		config:          _q.config,
+		ctx:             _q.ctx.Clone(),
+		order:           append([]trustcenterdoc.OrderOption{}, _q.order...),
+		inters:          append([]Interceptor{}, _q.inters...),
+		predicates:      append([]predicate.TrustCenterDoc{}, _q.predicates...),
+		withOwner:       _q.withOwner.Clone(),
+		withTrustCenter: _q.withTrustCenter.Clone(),
+		withFile:        _q.withFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterDocQuery) WithOwner(opts ...func(*OrganizationQuery)) *TrustCenterDocQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withOwner = query
+	return _q
+}
+
+// WithTrustCenter tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterDocQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *TrustCenterDocQuery {
+	query := (&TrustCenterClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustCenter = query
+	return _q
+}
+
+// WithFile tells the query-builder to eager-load the nodes that are connected to
+// the "file" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterDocQuery) WithFile(opts ...func(*FileQuery)) *TrustCenterDocQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFile = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -344,8 +461,13 @@ func (_q *TrustCenterDocQuery) prepareQuery(ctx context.Context) error {
 
 func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenterDoc, error) {
 	var (
-		nodes = []*TrustCenterDoc{}
-		_spec = _q.querySpec()
+		nodes       = []*TrustCenterDoc{}
+		_spec       = _q.querySpec()
+		loadedTypes = [3]bool{
+			_q.withOwner != nil,
+			_q.withTrustCenter != nil,
+			_q.withFile != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TrustCenterDoc).scanValues(nil, columns)
@@ -353,6 +475,7 @@ func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &TrustCenterDoc{config: _q.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	_spec.Node.Schema = _q.schemaConfig.TrustCenterDoc
@@ -369,12 +492,121 @@ func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
+			func(n *TrustCenterDoc, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTrustCenter; query != nil {
+		if err := _q.loadTrustCenter(ctx, query, nodes, nil,
+			func(n *TrustCenterDoc, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFile; query != nil {
+		if err := _q.loadFile(ctx, query, nodes, nil,
+			func(n *TrustCenterDoc, e *File) { n.Edges.File = e }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range _q.loadTotal {
 		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (_q *TrustCenterDocQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*TrustCenterDoc, init func(*TrustCenterDoc), assign func(*TrustCenterDoc, *Organization)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterDoc)
+	for i := range nodes {
+		fk := nodes[i].OwnerID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *TrustCenterDocQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*TrustCenterDoc, init func(*TrustCenterDoc), assign func(*TrustCenterDoc, *TrustCenter)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterDoc)
+	for i := range nodes {
+		fk := nodes[i].TrustCenterID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(trustcenter.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "trust_center_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *TrustCenterDocQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*TrustCenterDoc, init func(*TrustCenterDoc), assign func(*TrustCenterDoc, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterDoc)
+	for i := range nodes {
+		if nodes[i].FileID == nil {
+			continue
+		}
+		fk := *nodes[i].FileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (_q *TrustCenterDocQuery) sqlCount(ctx context.Context) (int, error) {
@@ -406,6 +638,15 @@ func (_q *TrustCenterDocQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != trustcenterdoc.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if _q.withOwner != nil {
+			_spec.Node.AddColumnOnce(trustcenterdoc.FieldOwnerID)
+		}
+		if _q.withTrustCenter != nil {
+			_spec.Node.AddColumnOnce(trustcenterdoc.FieldTrustCenterID)
+		}
+		if _q.withFile != nil {
+			_spec.Node.AddColumnOnce(trustcenterdoc.FieldFileID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

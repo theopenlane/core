@@ -16,7 +16,7 @@ import (
 )
 
 // CreateTrustCenterDoc is the resolver for the createTrustCenterDoc field.
-func (r *mutationResolver) CreateTrustCenterDoc(ctx context.Context, input generated.CreateTrustCenterDocInput) (*model.TrustCenterDocCreatePayload, error) {
+func (r *mutationResolver) CreateTrustCenterDoc(ctx context.Context, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) (*model.TrustCenterDocCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterDoc.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterdoc"})

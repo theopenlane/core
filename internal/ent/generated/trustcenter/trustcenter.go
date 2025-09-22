@@ -43,8 +43,12 @@ const (
 	EdgeSetting = "setting"
 	// EdgeTrustCenterSubprocessors holds the string denoting the trust_center_subprocessors edge name in mutations.
 	EdgeTrustCenterSubprocessors = "trust_center_subprocessors"
+	// EdgeTrustCenterDocs holds the string denoting the trust_center_docs edge name in mutations.
+	EdgeTrustCenterDocs = "trust_center_docs"
 	// EdgeTrustCenterCompliances holds the string denoting the trust_center_compliances edge name in mutations.
 	EdgeTrustCenterCompliances = "trust_center_compliances"
+	// EdgeTemplates holds the string denoting the templates edge name in mutations.
+	EdgeTemplates = "templates"
 	// Table holds the table name of the trustcenter in the database.
 	Table = "trust_centers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -75,6 +79,13 @@ const (
 	TrustCenterSubprocessorsInverseTable = "trust_center_subprocessors"
 	// TrustCenterSubprocessorsColumn is the table column denoting the trust_center_subprocessors relation/edge.
 	TrustCenterSubprocessorsColumn = "trust_center_id"
+	// TrustCenterDocsTable is the table that holds the trust_center_docs relation/edge.
+	TrustCenterDocsTable = "trust_center_docs"
+	// TrustCenterDocsInverseTable is the table name for the TrustCenterDoc entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterdoc" package.
+	TrustCenterDocsInverseTable = "trust_center_docs"
+	// TrustCenterDocsColumn is the table column denoting the trust_center_docs relation/edge.
+	TrustCenterDocsColumn = "trust_center_id"
 	// TrustCenterCompliancesTable is the table that holds the trust_center_compliances relation/edge.
 	TrustCenterCompliancesTable = "trust_center_compliances"
 	// TrustCenterCompliancesInverseTable is the table name for the TrustCenterCompliance entity.
@@ -82,6 +93,13 @@ const (
 	TrustCenterCompliancesInverseTable = "trust_center_compliances"
 	// TrustCenterCompliancesColumn is the table column denoting the trust_center_compliances relation/edge.
 	TrustCenterCompliancesColumn = "trust_center_id"
+	// TemplatesTable is the table that holds the templates relation/edge.
+	TemplatesTable = "templates"
+	// TemplatesInverseTable is the table name for the Template entity.
+	// It exists in this package in order to avoid circular dependency with the "template" package.
+	TemplatesInverseTable = "templates"
+	// TemplatesColumn is the table column denoting the templates relation/edge.
+	TemplatesColumn = "trust_center_id"
 )
 
 // Columns holds all SQL columns for trustcenter fields.
@@ -222,6 +240,20 @@ func ByTrustCenterSubprocessors(term sql.OrderTerm, terms ...sql.OrderTerm) Orde
 	}
 }
 
+// ByTrustCenterDocsCount orders the results by trust_center_docs count.
+func ByTrustCenterDocsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterDocsStep(), opts...)
+	}
+}
+
+// ByTrustCenterDocs orders the results by trust_center_docs terms.
+func ByTrustCenterDocs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterDocsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByTrustCenterCompliancesCount orders the results by trust_center_compliances count.
 func ByTrustCenterCompliancesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -233,6 +265,20 @@ func ByTrustCenterCompliancesCount(opts ...sql.OrderTermOption) OrderOption {
 func ByTrustCenterCompliances(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterCompliancesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTemplatesCount orders the results by templates count.
+func ByTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTemplatesStep(), opts...)
+	}
+}
+
+// ByTemplates orders the results by templates terms.
+func ByTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -263,10 +309,24 @@ func newTrustCenterSubprocessorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterSubprocessorsTable, TrustCenterSubprocessorsColumn),
 	)
 }
+func newTrustCenterDocsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterDocsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterDocsTable, TrustCenterDocsColumn),
+	)
+}
 func newTrustCenterCompliancesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterCompliancesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterCompliancesTable, TrustCenterCompliancesColumn),
+	)
+}
+func newTemplatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TemplatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TemplatesTable, TemplatesColumn),
 	)
 }

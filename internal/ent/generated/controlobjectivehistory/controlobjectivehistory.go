@@ -44,6 +44,12 @@ const (
 	FieldRevision = "revision"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldSystemOwned holds the string denoting the system_owned field in the database.
+	FieldSystemOwned = "system_owned"
+	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
+	FieldInternalNotes = "internal_notes"
+	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
+	FieldSystemInternalID = "system_internal_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDesiredOutcome holds the string denoting the desired_outcome field in the database.
@@ -78,6 +84,9 @@ var Columns = []string{
 	FieldTags,
 	FieldRevision,
 	FieldOwnerID,
+	FieldSystemOwned,
+	FieldInternalNotes,
+	FieldSystemInternalID,
 	FieldName,
 	FieldDesiredOutcome,
 	FieldStatus,
@@ -118,6 +127,8 @@ var (
 	DefaultTags []string
 	// DefaultRevision holds the default value on creation for the "revision" field.
 	DefaultRevision string
+	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
+	DefaultSystemOwned bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -222,6 +233,21 @@ func ByRevision(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// BySystemOwned orders the results by the system_owned field.
+func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
+}
+
+// ByInternalNotes orders the results by the internal_notes field.
+func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalNotes, opts...).ToFunc()
+}
+
+// BySystemInternalID orders the results by the system_internal_id field.
+func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

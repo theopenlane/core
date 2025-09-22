@@ -110,6 +110,21 @@ func OwnerID(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
+func SystemOwned(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// InternalNotes applies equality check predicate on the "internal_notes" field. It's identical to InternalNotesEQ.
+func InternalNotes(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// SystemInternalID applies equality check predicate on the "system_internal_id" field. It's identical to SystemInternalIDEQ.
+func SystemInternalID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSystemInternalID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldName, v))
@@ -728,6 +743,176 @@ func OwnerIDEqualFold(v string) predicate.EntityHistory {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
+func SystemOwnedEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
+func SystemOwnedNEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
+func SystemOwnedIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldSystemOwned))
+}
+
+// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
+func SystemOwnedNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldSystemOwned))
+}
+
+// InternalNotesEQ applies the EQ predicate on the "internal_notes" field.
+func InternalNotesEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesNEQ applies the NEQ predicate on the "internal_notes" field.
+func InternalNotesNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesIn applies the In predicate on the "internal_notes" field.
+func InternalNotesIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesNotIn applies the NotIn predicate on the "internal_notes" field.
+func InternalNotesNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesGT applies the GT predicate on the "internal_notes" field.
+func InternalNotesGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldInternalNotes, v))
+}
+
+// InternalNotesGTE applies the GTE predicate on the "internal_notes" field.
+func InternalNotesGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldInternalNotes, v))
+}
+
+// InternalNotesLT applies the LT predicate on the "internal_notes" field.
+func InternalNotesLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldInternalNotes, v))
+}
+
+// InternalNotesLTE applies the LTE predicate on the "internal_notes" field.
+func InternalNotesLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldInternalNotes, v))
+}
+
+// InternalNotesContains applies the Contains predicate on the "internal_notes" field.
+func InternalNotesContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldInternalNotes, v))
+}
+
+// InternalNotesHasPrefix applies the HasPrefix predicate on the "internal_notes" field.
+func InternalNotesHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldInternalNotes, v))
+}
+
+// InternalNotesHasSuffix applies the HasSuffix predicate on the "internal_notes" field.
+func InternalNotesHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldInternalNotes, v))
+}
+
+// InternalNotesIsNil applies the IsNil predicate on the "internal_notes" field.
+func InternalNotesIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldInternalNotes))
+}
+
+// InternalNotesNotNil applies the NotNil predicate on the "internal_notes" field.
+func InternalNotesNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldInternalNotes))
+}
+
+// InternalNotesEqualFold applies the EqualFold predicate on the "internal_notes" field.
+func InternalNotesEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldInternalNotes, v))
+}
+
+// InternalNotesContainsFold applies the ContainsFold predicate on the "internal_notes" field.
+func InternalNotesContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldInternalNotes, v))
+}
+
+// SystemInternalIDEQ applies the EQ predicate on the "system_internal_id" field.
+func SystemInternalIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDNEQ applies the NEQ predicate on the "system_internal_id" field.
+func SystemInternalIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDIn applies the In predicate on the "system_internal_id" field.
+func SystemInternalIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldSystemInternalID, vs...))
+}
+
+// SystemInternalIDNotIn applies the NotIn predicate on the "system_internal_id" field.
+func SystemInternalIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldSystemInternalID, vs...))
+}
+
+// SystemInternalIDGT applies the GT predicate on the "system_internal_id" field.
+func SystemInternalIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDGTE applies the GTE predicate on the "system_internal_id" field.
+func SystemInternalIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDLT applies the LT predicate on the "system_internal_id" field.
+func SystemInternalIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDLTE applies the LTE predicate on the "system_internal_id" field.
+func SystemInternalIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDContains applies the Contains predicate on the "system_internal_id" field.
+func SystemInternalIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDHasPrefix applies the HasPrefix predicate on the "system_internal_id" field.
+func SystemInternalIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDHasSuffix applies the HasSuffix predicate on the "system_internal_id" field.
+func SystemInternalIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDIsNil applies the IsNil predicate on the "system_internal_id" field.
+func SystemInternalIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldSystemInternalID))
+}
+
+// SystemInternalIDNotNil applies the NotNil predicate on the "system_internal_id" field.
+func SystemInternalIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldSystemInternalID))
+}
+
+// SystemInternalIDEqualFold applies the EqualFold predicate on the "system_internal_id" field.
+func SystemInternalIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
+func SystemInternalIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldSystemInternalID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

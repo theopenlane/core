@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 
@@ -66,7 +65,7 @@ func InterceptorBillingPortalURLs() ent.Interceptor {
 // setPortalURLs sets the subscription URL for the org subscription response
 func setPortalURLs(ctx context.Context, orgSub *generated.OrgSubscription, q *generated.OrgSubscriptionQuery) error {
 	if orgSub == nil || !q.EntitlementManager.Config.IsEnabled() {
-		log.Debug().Ctx(ctx).Msg("organization does not have a subscription or entitlement manager is nil, skipping URL setting")
+		zerolog.Ctx(ctx).Debug().Msg("organization does not have a subscription or entitlement manager is nil, skipping URL setting")
 
 		return nil
 	}

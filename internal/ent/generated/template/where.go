@@ -103,6 +103,21 @@ func OwnerID(v string) predicate.Template {
 	return predicate.Template(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
+func SystemOwned(v bool) predicate.Template {
+	return predicate.Template(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// InternalNotes applies equality check predicate on the "internal_notes" field. It's identical to InternalNotesEQ.
+func InternalNotes(v string) predicate.Template {
+	return predicate.Template(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// SystemInternalID applies equality check predicate on the "system_internal_id" field. It's identical to SystemInternalIDEQ.
+func SystemInternalID(v string) predicate.Template {
+	return predicate.Template(sql.FieldEQ(FieldSystemInternalID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Template {
 	return predicate.Template(sql.FieldEQ(FieldName, v))
@@ -111,6 +126,11 @@ func Name(v string) predicate.Template {
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
 func Description(v string) predicate.Template {
 	return predicate.Template(sql.FieldEQ(FieldDescription, v))
+}
+
+// TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
+func TrustCenterID(v string) predicate.Template {
+	return predicate.Template(sql.FieldEQ(FieldTrustCenterID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -573,6 +593,176 @@ func OwnerIDContainsFold(v string) predicate.Template {
 	return predicate.Template(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
+// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
+func SystemOwnedEQ(v bool) predicate.Template {
+	return predicate.Template(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
+func SystemOwnedNEQ(v bool) predicate.Template {
+	return predicate.Template(sql.FieldNEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
+func SystemOwnedIsNil() predicate.Template {
+	return predicate.Template(sql.FieldIsNull(FieldSystemOwned))
+}
+
+// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
+func SystemOwnedNotNil() predicate.Template {
+	return predicate.Template(sql.FieldNotNull(FieldSystemOwned))
+}
+
+// InternalNotesEQ applies the EQ predicate on the "internal_notes" field.
+func InternalNotesEQ(v string) predicate.Template {
+	return predicate.Template(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesNEQ applies the NEQ predicate on the "internal_notes" field.
+func InternalNotesNEQ(v string) predicate.Template {
+	return predicate.Template(sql.FieldNEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesIn applies the In predicate on the "internal_notes" field.
+func InternalNotesIn(vs ...string) predicate.Template {
+	return predicate.Template(sql.FieldIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesNotIn applies the NotIn predicate on the "internal_notes" field.
+func InternalNotesNotIn(vs ...string) predicate.Template {
+	return predicate.Template(sql.FieldNotIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesGT applies the GT predicate on the "internal_notes" field.
+func InternalNotesGT(v string) predicate.Template {
+	return predicate.Template(sql.FieldGT(FieldInternalNotes, v))
+}
+
+// InternalNotesGTE applies the GTE predicate on the "internal_notes" field.
+func InternalNotesGTE(v string) predicate.Template {
+	return predicate.Template(sql.FieldGTE(FieldInternalNotes, v))
+}
+
+// InternalNotesLT applies the LT predicate on the "internal_notes" field.
+func InternalNotesLT(v string) predicate.Template {
+	return predicate.Template(sql.FieldLT(FieldInternalNotes, v))
+}
+
+// InternalNotesLTE applies the LTE predicate on the "internal_notes" field.
+func InternalNotesLTE(v string) predicate.Template {
+	return predicate.Template(sql.FieldLTE(FieldInternalNotes, v))
+}
+
+// InternalNotesContains applies the Contains predicate on the "internal_notes" field.
+func InternalNotesContains(v string) predicate.Template {
+	return predicate.Template(sql.FieldContains(FieldInternalNotes, v))
+}
+
+// InternalNotesHasPrefix applies the HasPrefix predicate on the "internal_notes" field.
+func InternalNotesHasPrefix(v string) predicate.Template {
+	return predicate.Template(sql.FieldHasPrefix(FieldInternalNotes, v))
+}
+
+// InternalNotesHasSuffix applies the HasSuffix predicate on the "internal_notes" field.
+func InternalNotesHasSuffix(v string) predicate.Template {
+	return predicate.Template(sql.FieldHasSuffix(FieldInternalNotes, v))
+}
+
+// InternalNotesIsNil applies the IsNil predicate on the "internal_notes" field.
+func InternalNotesIsNil() predicate.Template {
+	return predicate.Template(sql.FieldIsNull(FieldInternalNotes))
+}
+
+// InternalNotesNotNil applies the NotNil predicate on the "internal_notes" field.
+func InternalNotesNotNil() predicate.Template {
+	return predicate.Template(sql.FieldNotNull(FieldInternalNotes))
+}
+
+// InternalNotesEqualFold applies the EqualFold predicate on the "internal_notes" field.
+func InternalNotesEqualFold(v string) predicate.Template {
+	return predicate.Template(sql.FieldEqualFold(FieldInternalNotes, v))
+}
+
+// InternalNotesContainsFold applies the ContainsFold predicate on the "internal_notes" field.
+func InternalNotesContainsFold(v string) predicate.Template {
+	return predicate.Template(sql.FieldContainsFold(FieldInternalNotes, v))
+}
+
+// SystemInternalIDEQ applies the EQ predicate on the "system_internal_id" field.
+func SystemInternalIDEQ(v string) predicate.Template {
+	return predicate.Template(sql.FieldEQ(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDNEQ applies the NEQ predicate on the "system_internal_id" field.
+func SystemInternalIDNEQ(v string) predicate.Template {
+	return predicate.Template(sql.FieldNEQ(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDIn applies the In predicate on the "system_internal_id" field.
+func SystemInternalIDIn(vs ...string) predicate.Template {
+	return predicate.Template(sql.FieldIn(FieldSystemInternalID, vs...))
+}
+
+// SystemInternalIDNotIn applies the NotIn predicate on the "system_internal_id" field.
+func SystemInternalIDNotIn(vs ...string) predicate.Template {
+	return predicate.Template(sql.FieldNotIn(FieldSystemInternalID, vs...))
+}
+
+// SystemInternalIDGT applies the GT predicate on the "system_internal_id" field.
+func SystemInternalIDGT(v string) predicate.Template {
+	return predicate.Template(sql.FieldGT(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDGTE applies the GTE predicate on the "system_internal_id" field.
+func SystemInternalIDGTE(v string) predicate.Template {
+	return predicate.Template(sql.FieldGTE(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDLT applies the LT predicate on the "system_internal_id" field.
+func SystemInternalIDLT(v string) predicate.Template {
+	return predicate.Template(sql.FieldLT(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDLTE applies the LTE predicate on the "system_internal_id" field.
+func SystemInternalIDLTE(v string) predicate.Template {
+	return predicate.Template(sql.FieldLTE(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDContains applies the Contains predicate on the "system_internal_id" field.
+func SystemInternalIDContains(v string) predicate.Template {
+	return predicate.Template(sql.FieldContains(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDHasPrefix applies the HasPrefix predicate on the "system_internal_id" field.
+func SystemInternalIDHasPrefix(v string) predicate.Template {
+	return predicate.Template(sql.FieldHasPrefix(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDHasSuffix applies the HasSuffix predicate on the "system_internal_id" field.
+func SystemInternalIDHasSuffix(v string) predicate.Template {
+	return predicate.Template(sql.FieldHasSuffix(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDIsNil applies the IsNil predicate on the "system_internal_id" field.
+func SystemInternalIDIsNil() predicate.Template {
+	return predicate.Template(sql.FieldIsNull(FieldSystemInternalID))
+}
+
+// SystemInternalIDNotNil applies the NotNil predicate on the "system_internal_id" field.
+func SystemInternalIDNotNil() predicate.Template {
+	return predicate.Template(sql.FieldNotNull(FieldSystemInternalID))
+}
+
+// SystemInternalIDEqualFold applies the EqualFold predicate on the "system_internal_id" field.
+func SystemInternalIDEqualFold(v string) predicate.Template {
+	return predicate.Template(sql.FieldEqualFold(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
+func SystemInternalIDContainsFold(v string) predicate.Template {
+	return predicate.Template(sql.FieldContainsFold(FieldSystemInternalID, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Template {
 	return predicate.Template(sql.FieldEQ(FieldName, v))
@@ -793,6 +983,81 @@ func UischemaNotNil() predicate.Template {
 	return predicate.Template(sql.FieldNotNull(FieldUischema))
 }
 
+// TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
+func TrustCenterIDEQ(v string) predicate.Template {
+	return predicate.Template(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
+func TrustCenterIDNEQ(v string) predicate.Template {
+	return predicate.Template(sql.FieldNEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
+func TrustCenterIDIn(vs ...string) predicate.Template {
+	return predicate.Template(sql.FieldIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
+func TrustCenterIDNotIn(vs ...string) predicate.Template {
+	return predicate.Template(sql.FieldNotIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
+func TrustCenterIDGT(v string) predicate.Template {
+	return predicate.Template(sql.FieldGT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
+func TrustCenterIDGTE(v string) predicate.Template {
+	return predicate.Template(sql.FieldGTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
+func TrustCenterIDLT(v string) predicate.Template {
+	return predicate.Template(sql.FieldLT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
+func TrustCenterIDLTE(v string) predicate.Template {
+	return predicate.Template(sql.FieldLTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
+func TrustCenterIDContains(v string) predicate.Template {
+	return predicate.Template(sql.FieldContains(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
+func TrustCenterIDHasPrefix(v string) predicate.Template {
+	return predicate.Template(sql.FieldHasPrefix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
+func TrustCenterIDHasSuffix(v string) predicate.Template {
+	return predicate.Template(sql.FieldHasSuffix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
+func TrustCenterIDIsNil() predicate.Template {
+	return predicate.Template(sql.FieldIsNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
+func TrustCenterIDNotNil() predicate.Template {
+	return predicate.Template(sql.FieldNotNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
+func TrustCenterIDEqualFold(v string) predicate.Template {
+	return predicate.Template(sql.FieldEqualFold(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
+func TrustCenterIDContainsFold(v string) predicate.Template {
+	return predicate.Template(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Template {
 	return predicate.Template(func(s *sql.Selector) {
@@ -872,6 +1137,35 @@ func HasFilesWith(preds ...predicate.File) predicate.Template {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.TemplateFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.
+func HasTrustCenter() predicate.Template {
+	return predicate.Template(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.Template
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterWith applies the HasEdge predicate on the "trust_center" edge with a given conditions (other predicates).
+func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.Template {
+	return predicate.Template(func(s *sql.Selector) {
+		step := newTrustCenterStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.Template
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

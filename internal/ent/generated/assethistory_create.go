@@ -160,6 +160,48 @@ func (_c *AssetHistoryCreate) SetNillableOwnerID(v *string) *AssetHistoryCreate 
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *AssetHistoryCreate) SetSystemOwned(v bool) *AssetHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableSystemOwned(v *bool) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *AssetHistoryCreate) SetInternalNotes(v string) *AssetHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableInternalNotes(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *AssetHistoryCreate) SetSystemInternalID(v string) *AssetHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableSystemInternalID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetAssetType sets the "asset_type" field.
 func (_c *AssetHistoryCreate) SetAssetType(v enums.AssetType) *AssetHistoryCreate {
 	_c.mutation.SetAssetType(v)
@@ -318,6 +360,10 @@ func (_c *AssetHistoryCreate) defaults() error {
 		v := assethistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := assethistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.AssetType(); !ok {
 		v := assethistory.DefaultAssetType
 		_c.mutation.SetAssetType(v)
@@ -435,6 +481,18 @@ func (_c *AssetHistoryCreate) createSpec() (*AssetHistory, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(assethistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(assethistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(assethistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(assethistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.AssetType(); ok {
 		_spec.SetField(assethistory.FieldAssetType, field.TypeEnum, value)

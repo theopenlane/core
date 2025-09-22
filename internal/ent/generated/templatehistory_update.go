@@ -123,23 +123,43 @@ func (_u *TemplateHistoryUpdate) ClearTags() *TemplateHistoryUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *TemplateHistoryUpdate) SetOwnerID(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *TemplateHistoryUpdate) SetInternalNotes(v string) *TemplateHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
 	return _u
 }
 
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableOwnerID(v *string) *TemplateHistoryUpdate {
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *TemplateHistoryUpdate) SetNillableInternalNotes(v *string) *TemplateHistoryUpdate {
 	if v != nil {
-		_u.SetOwnerID(*v)
+		_u.SetInternalNotes(*v)
 	}
 	return _u
 }
 
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *TemplateHistoryUpdate) ClearOwnerID() *TemplateHistoryUpdate {
-	_u.mutation.ClearOwnerID()
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *TemplateHistoryUpdate) ClearInternalNotes() *TemplateHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *TemplateHistoryUpdate) SetSystemInternalID(v string) *TemplateHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *TemplateHistoryUpdate) SetNillableSystemInternalID(v *string) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *TemplateHistoryUpdate) ClearSystemInternalID() *TemplateHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -226,6 +246,26 @@ func (_u *TemplateHistoryUpdate) SetUischema(v map[string]interface{}) *Template
 // ClearUischema clears the value of the "uischema" field.
 func (_u *TemplateHistoryUpdate) ClearUischema() *TemplateHistoryUpdate {
 	_u.mutation.ClearUischema()
+	return _u
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TemplateHistoryUpdate) SetTrustCenterID(v string) *TemplateHistoryUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TemplateHistoryUpdate) SetNillableTrustCenterID(v *string) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TemplateHistoryUpdate) ClearTrustCenterID() *TemplateHistoryUpdate {
+	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -353,11 +393,23 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(templatehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(templatehistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(templatehistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(templatehistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(templatehistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(templatehistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(templatehistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(templatehistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(templatehistory.FieldName, field.TypeString, value)
@@ -385,6 +437,12 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -500,23 +558,43 @@ func (_u *TemplateHistoryUpdateOne) ClearTags() *TemplateHistoryUpdateOne {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *TemplateHistoryUpdateOne) SetOwnerID(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *TemplateHistoryUpdateOne) SetInternalNotes(v string) *TemplateHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
 	return _u
 }
 
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableOwnerID(v *string) *TemplateHistoryUpdateOne {
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *TemplateHistoryUpdateOne) SetNillableInternalNotes(v *string) *TemplateHistoryUpdateOne {
 	if v != nil {
-		_u.SetOwnerID(*v)
+		_u.SetInternalNotes(*v)
 	}
 	return _u
 }
 
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *TemplateHistoryUpdateOne) ClearOwnerID() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *TemplateHistoryUpdateOne) ClearInternalNotes() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *TemplateHistoryUpdateOne) SetSystemInternalID(v string) *TemplateHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *TemplateHistoryUpdateOne) SetNillableSystemInternalID(v *string) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *TemplateHistoryUpdateOne) ClearSystemInternalID() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -603,6 +681,26 @@ func (_u *TemplateHistoryUpdateOne) SetUischema(v map[string]interface{}) *Templ
 // ClearUischema clears the value of the "uischema" field.
 func (_u *TemplateHistoryUpdateOne) ClearUischema() *TemplateHistoryUpdateOne {
 	_u.mutation.ClearUischema()
+	return _u
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TemplateHistoryUpdateOne) SetTrustCenterID(v string) *TemplateHistoryUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TemplateHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TemplateHistoryUpdateOne) ClearTrustCenterID() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -760,11 +858,23 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(templatehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(templatehistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(templatehistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(templatehistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(templatehistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(templatehistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(templatehistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(templatehistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(templatehistory.FieldName, field.TypeString, value)
@@ -792,6 +902,12 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

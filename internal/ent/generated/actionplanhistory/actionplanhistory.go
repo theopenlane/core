@@ -74,6 +74,12 @@ const (
 	FieldDismissedImprovementSuggestions = "dismissed_improvement_suggestions"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldSystemOwned holds the string denoting the system_owned field in the database.
+	FieldSystemOwned = "system_owned"
+	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
+	FieldInternalNotes = "internal_notes"
+	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
+	FieldSystemInternalID = "system_internal_id"
 	// FieldDueDate holds the string denoting the due_date field in the database.
 	FieldDueDate = "due_date"
 	// FieldPriority holds the string denoting the priority field in the database.
@@ -115,6 +121,9 @@ var Columns = []string{
 	FieldImprovementSuggestions,
 	FieldDismissedImprovementSuggestions,
 	FieldOwnerID,
+	FieldSystemOwned,
+	FieldInternalNotes,
+	FieldSystemInternalID,
 	FieldDueDate,
 	FieldPriority,
 	FieldSource,
@@ -167,6 +176,8 @@ var (
 	DefaultImprovementSuggestions []string
 	// DefaultDismissedImprovementSuggestions holds the default value on creation for the "dismissed_improvement_suggestions" field.
 	DefaultDismissedImprovementSuggestions []string
+	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
+	DefaultSystemOwned bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -326,6 +337,21 @@ func BySummary(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// BySystemOwned orders the results by the system_owned field.
+func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
+}
+
+// ByInternalNotes orders the results by the internal_notes field.
+func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalNotes, opts...).ToFunc()
+}
+
+// BySystemInternalID orders the results by the system_internal_id field.
+func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
 }
 
 // ByDueDate orders the results by the due_date field.

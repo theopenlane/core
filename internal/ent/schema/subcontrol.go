@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -117,6 +118,7 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 				withParents(Control{}),
 				withOrganizationOwner(true),
 			),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(s)
 }

@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -132,6 +131,7 @@ type skipperFunc func(ctx context.Context) bool
 func FilterQueryResults[V any](skipperFunc ...skipperFunc) ent.InterceptFunc {
 	return func(next ent.Querier) ent.Querier {
 		return ent.QuerierFunc(func(ctx context.Context, query ent.Query) (ent.Value, error) {
+			zerolog.Ctx(ctx).Debug().Msg("FilterQueryResults")
 			return filterQueryResults[V](ctx, query, next, skipperFunc...)
 		})
 	}
@@ -164,7 +164,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 	case ent.OpQueryIDs, ent.OpQueryFirstID:
 		ids, ok := v.([]string)
 		if !ok {
-			log.Error().Str("query_type", q.Type()).Msgf("failed to cast query results to expected slice %T", v)
+			zerolog.Ctx(ctx).Error().Str("query_type", q.Type()).Msgf("failed to cast query results to expected slice %T", v)
 
 			return nil, ErrRetrievingObjects
 		}
@@ -218,6 +218,7 @@ func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
 
 // filterIDList filters a list of object ids to only include the objects that the user has access to
 func filterIDList(ctx context.Context, ids []string, objectType string) ([]string, error) {
+	zerolog.Ctx(ctx).Debug().Str("object", objectType).Strs("ids", ids).Msg("filterIDList")
 	allowedIDs, err := filterAuthorizedObjectIDs(ctx, objectType, ids)
 	if err != nil {
 		return nil, err
@@ -228,9 +229,10 @@ func filterIDList(ctx context.Context, ids []string, objectType string) ([]strin
 
 // singleIDCheck checks if a single object id is allowed and returns a boolean
 func singleIDCheck(ctx context.Context, v ent.Value, objectType string) (bool, error) {
+	zerolog.Ctx(ctx).Debug().Str("object", objectType).Msg("singleIDCheck")
 	id, ok := v.(string)
 	if !ok {
-		log.Error().Msgf("failed to cast query results to expected single ID %T", v)
+		zerolog.Ctx(ctx).Error().Msgf("failed to cast query results to expected single ID %T", v)
 
 		return false, ErrRetrievingObjects
 	}
@@ -250,6 +252,7 @@ func singleIDCheck(ctx context.Context, v ent.Value, objectType string) (bool, e
 // filterListObjects filters a list of objects to only include the objects that the user has access to
 // and returns the filtered list as the ent.Value
 func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Query) (ent.Value, error) {
+	zerolog.Ctx(ctx).Debug().Str("type", q.Type()).Msg("filterListObjects")
 	listResults := v.([]*T)
 	if len(listResults) == 0 {
 		return v, nil
@@ -298,6 +301,7 @@ func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Quer
 
 // singleObjectCheck checks if a single object is allowed and returns the object if it is
 func singleObjectCheck[T any](ctx context.Context, v ent.Value, q intercept.Query) (ent.Value, error) {
+	zerolog.Ctx(ctx).Debug().Str("type", q.Type()).Msg("singleObjectCheck")
 	objectIDs, err := getObjectIDsFromEntValues(v)
 	if err != nil {
 		return nil, err
@@ -382,10 +386,11 @@ func getObjectIDFromEntValue(m ent.Value) (string, error) {
 // this is intended to be used in place of GetAuthorizedObjectIDs when you already have the object ids
 // and just need to filter them based on the user's permissions
 func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs []string) ([]string, error) {
+	zerolog.Ctx(ctx).Debug().Str("object_type", objectType).Strs("object_ids", objectIDs).Msg("filterAuthorizedObjectIDs")
 	var context *map[string]any
 	var subjectID string
 	if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
-		subjectID = strings.ReplaceAll(anon.SubjectID, "anon:", "")
+		subjectID = anon.SubjectID
 	} else {
 		user, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {

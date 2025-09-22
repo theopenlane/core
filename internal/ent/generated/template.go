@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -34,8 +35,14 @@ type Template struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// the name of the template
 	Name string `json:"name,omitempty"`
 	// the type of the template, either a provided template or an implementation (document)
@@ -48,6 +55,8 @@ type Template struct {
 	Jsonconfig map[string]interface{} `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
 	Uischema map[string]interface{} `json:"uischema,omitempty"`
+	// the id of the trust center this template is associated with
+	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TemplateQuery when eager-loading is set.
 	Edges        TemplateEdges `json:"edges"`
@@ -62,11 +71,13 @@ type TemplateEdges struct {
 	Documents []*DocumentData `json:"documents,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
+	// TrustCenter holds the value of the trust_center edge.
+	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
 	namedDocuments map[string][]*DocumentData
 	namedFiles     map[string][]*File
@@ -101,6 +112,17 @@ func (e TemplateEdges) FilesOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "files"}
 }
 
+// TrustCenterOrErr returns the TrustCenter value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TemplateEdges) TrustCenterOrErr() (*TrustCenter, error) {
+	if e.TrustCenter != nil {
+		return e.TrustCenter, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: trustcenter.Label}
+	}
+	return nil, &NotLoadedError{edge: "trust_center"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Template) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -108,7 +130,9 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case template.FieldTags, template.FieldJsonconfig, template.FieldUischema:
 			values[i] = new([]byte)
-		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldDeletedBy, template.FieldOwnerID, template.FieldName, template.FieldTemplateType, template.FieldDescription, template.FieldKind:
+		case template.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
+		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldDeletedBy, template.FieldOwnerID, template.FieldInternalNotes, template.FieldSystemInternalID, template.FieldName, template.FieldTemplateType, template.FieldDescription, template.FieldKind, template.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case template.FieldCreatedAt, template.FieldUpdatedAt, template.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -183,6 +207,26 @@ func (_m *Template) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case template.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case template.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case template.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
+			}
 		case template.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -223,6 +267,12 @@ func (_m *Template) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field uischema: %w", err)
 				}
 			}
+		case template.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -249,6 +299,11 @@ func (_m *Template) QueryDocuments() *DocumentDataQuery {
 // QueryFiles queries the "files" edge of the Template entity.
 func (_m *Template) QueryFiles() *FileQuery {
 	return NewTemplateClient(_m.config).QueryFiles(_m)
+}
+
+// QueryTrustCenter queries the "trust_center" edge of the Template entity.
+func (_m *Template) QueryTrustCenter() *TrustCenterQuery {
+	return NewTemplateClient(_m.config).QueryTrustCenter(_m)
 }
 
 // Update returns a builder for updating this Template.
@@ -298,6 +353,19 @@ func (_m *Template) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
@@ -315,6 +383,9 @@ func (_m *Template) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("uischema=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Uischema))
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }

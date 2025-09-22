@@ -40,6 +40,12 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldSystemOwned holds the string denoting the system_owned field in the database.
+	FieldSystemOwned = "system_owned"
+	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
+	FieldInternalNotes = "internal_notes"
+	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
+	FieldSystemInternalID = "system_internal_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldTemplateType holds the string denoting the template_type field in the database.
@@ -52,6 +58,8 @@ const (
 	FieldJsonconfig = "jsonconfig"
 	// FieldUischema holds the string denoting the uischema field in the database.
 	FieldUischema = "uischema"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// Table holds the table name of the templatehistory in the database.
 	Table = "template_history"
 )
@@ -70,12 +78,16 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
+	FieldSystemOwned,
+	FieldInternalNotes,
+	FieldSystemInternalID,
 	FieldName,
 	FieldTemplateType,
 	FieldDescription,
 	FieldKind,
 	FieldJsonconfig,
 	FieldUischema,
+	FieldTrustCenterID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -107,6 +119,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
+	DefaultSystemOwned bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -138,7 +152,7 @@ const DefaultKind enums.TemplateKind = "QUESTIONNAIRE"
 // KindValidator is a validator for the "kind" field enum values. It is called by the builders before save.
 func KindValidator(k enums.TemplateKind) error {
 	switch k.String() {
-	case "QUESTIONNAIRE":
+	case "QUESTIONNAIRE", "TRUSTCENTER_NDA":
 		return nil
 	default:
 		return fmt.Errorf("templatehistory: invalid enum value for kind field: %q", k)
@@ -203,6 +217,21 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// BySystemOwned orders the results by the system_owned field.
+func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
+}
+
+// ByInternalNotes orders the results by the internal_notes field.
+func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalNotes, opts...).ToFunc()
+}
+
+// BySystemInternalID orders the results by the system_internal_id field.
+func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -221,6 +250,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByKind orders the results by the kind field.
 func ByKind(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldKind, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
 var (

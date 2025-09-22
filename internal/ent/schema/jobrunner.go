@@ -81,10 +81,9 @@ func (j JobRunner) Mixin() []ent.Mixin {
 		prefix: "RUN",
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(j,
-				withSkipForSystemAdmin(true),
 				withSkipTokenTypesObjects(&token.JobRunnerRegistrationToken{}),
 			),
-			mixin.SystemOwnedMixin{},
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(j)
 }
@@ -137,7 +136,6 @@ func (j JobRunner) Policy() ent.Policy {
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
-			rule.SystemOwnedJobRunner(),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),

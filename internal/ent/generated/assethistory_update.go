@@ -143,6 +143,46 @@ func (_u *AssetHistoryUpdate) ClearOwnerID() *AssetHistoryUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *AssetHistoryUpdate) SetInternalNotes(v string) *AssetHistoryUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableInternalNotes(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *AssetHistoryUpdate) ClearInternalNotes() *AssetHistoryUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *AssetHistoryUpdate) SetSystemInternalID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableSystemInternalID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *AssetHistoryUpdate) ClearSystemInternalID() *AssetHistoryUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetAssetType sets the "asset_type" field.
 func (_u *AssetHistoryUpdate) SetAssetType(v enums.AssetType) *AssetHistoryUpdate {
 	_u.mutation.SetAssetType(v)
@@ -394,6 +434,21 @@ func (_u *AssetHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assethistory.FieldOwnerID, field.TypeString)
 	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(assethistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(assethistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(assethistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(assethistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(assethistory.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.AssetType(); ok {
 		_spec.SetField(assethistory.FieldAssetType, field.TypeEnum, value)
 	}
@@ -566,6 +621,46 @@ func (_u *AssetHistoryUpdateOne) SetNillableOwnerID(v *string) *AssetHistoryUpda
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *AssetHistoryUpdateOne) ClearOwnerID() *AssetHistoryUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *AssetHistoryUpdateOne) SetInternalNotes(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableInternalNotes(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *AssetHistoryUpdateOne) ClearInternalNotes() *AssetHistoryUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *AssetHistoryUpdateOne) SetSystemInternalID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableSystemInternalID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *AssetHistoryUpdateOne) ClearSystemInternalID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -849,6 +944,21 @@ func (_u *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHisto
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assethistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(assethistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(assethistory.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(assethistory.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(assethistory.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(assethistory.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.AssetType(); ok {
 		_spec.SetField(assethistory.FieldAssetType, field.TypeEnum, value)

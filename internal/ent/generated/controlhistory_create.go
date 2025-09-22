@@ -377,6 +377,48 @@ func (_c *ControlHistoryCreate) SetNillableOwnerID(v *string) *ControlHistoryCre
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ControlHistoryCreate) SetSystemOwned(v bool) *ControlHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableSystemOwned(v *bool) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ControlHistoryCreate) SetInternalNotes(v string) *ControlHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableInternalNotes(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ControlHistoryCreate) SetSystemInternalID(v string) *ControlHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableSystemInternalID(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_c *ControlHistoryCreate) SetRefCode(v string) *ControlHistoryCreate {
 	_c.mutation.SetRefCode(v)
@@ -484,6 +526,10 @@ func (_c *ControlHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.ControlType(); !ok {
 		v := controlhistory.DefaultControlType
 		_c.mutation.SetControlType(v)
+	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := controlhistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if controlhistory.DefaultID == nil {
@@ -688,6 +734,18 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(controlhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(controlhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(controlhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(controlhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)

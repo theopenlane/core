@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -38,7 +39,19 @@ type TrustCenterDocHistory struct {
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
-	Tags         []string `json:"tags,omitempty"`
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
+	// ID of the trust center
+	TrustCenterID string `json:"trust_center_id,omitempty"`
+	// title of the document
+	Title string `json:"title,omitempty"`
+	// category of the document
+	Category string `json:"category,omitempty"`
+	// ID of the file containing the document
+	FileID *string `json:"file_id,omitempty"`
+	// visibility of the document
+	Visibility   enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -51,7 +64,7 @@ func (*TrustCenterDocHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case trustcenterdochistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldDeletedBy:
+		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldDeletedBy, trustcenterdochistory.FieldOwnerID, trustcenterdochistory.FieldTrustCenterID, trustcenterdochistory.FieldTitle, trustcenterdochistory.FieldCategory, trustcenterdochistory.FieldFileID, trustcenterdochistory.FieldVisibility:
 			values[i] = new(sql.NullString)
 		case trustcenterdochistory.FieldHistoryTime, trustcenterdochistory.FieldCreatedAt, trustcenterdochistory.FieldUpdatedAt, trustcenterdochistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -138,6 +151,43 @@ func (_m *TrustCenterDocHistory) assignValues(columns []string, values []any) er
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case trustcenterdochistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				_m.OwnerID = value.String
+			}
+		case trustcenterdochistory.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
+			}
+		case trustcenterdochistory.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				_m.Title = value.String
+			}
+		case trustcenterdochistory.FieldCategory:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category", values[i])
+			} else if value.Valid {
+				_m.Category = value.String
+			}
+		case trustcenterdochistory.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = new(string)
+				*_m.FileID = value.String
+			}
+		case trustcenterdochistory.FieldVisibility:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field visibility", values[i])
+			} else if value.Valid {
+				_m.Visibility = enums.TrustCenterDocumentVisibility(value.String)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -203,6 +253,26 @@ func (_m *TrustCenterDocHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
+	builder.WriteString(", ")
+	builder.WriteString("title=")
+	builder.WriteString(_m.Title)
+	builder.WriteString(", ")
+	builder.WriteString("category=")
+	builder.WriteString(_m.Category)
+	builder.WriteString(", ")
+	if v := _m.FileID; v != nil {
+		builder.WriteString("file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("visibility=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Visibility))
 	builder.WriteByte(')')
 	return builder.String()
 }

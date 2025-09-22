@@ -58,7 +58,8 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
-	Hidden func(ctx context.Context, obj any, next graphql.Resolver, ifArg *bool) (res any, err error)
+	Hidden   func(ctx context.Context, obj any, next graphql.Resolver, ifArg *bool) (res any, err error)
+	ReadOnly func(ctx context.Context, obj any, next graphql.Resolver) (res any, err error)
 }
 
 type ComplexityRoot struct {
@@ -129,6 +130,7 @@ type ComplexityRoot struct {
 		DueDate                         func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		InternalNotes                   func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Owner                           func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
@@ -141,6 +143,8 @@ type ComplexityRoot struct {
 		Source                          func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Summary                         func(childComplexity int) int
+		SystemInternalID                func(childComplexity int) int
+		SystemOwned                     func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
@@ -191,6 +195,7 @@ type ComplexityRoot struct {
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		InternalNotes                   func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Operation                       func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
@@ -202,6 +207,8 @@ type ComplexityRoot struct {
 		Source                          func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Summary                         func(childComplexity int) int
+		SystemInternalID                func(childComplexity int) int
+		SystemOwned                     func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
@@ -224,27 +231,30 @@ type ComplexityRoot struct {
 	}
 
 	Asset struct {
-		AssetType     func(childComplexity int) int
-		BlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Categories    func(childComplexity int) int
-		Controls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		Cpe           func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		Editors       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Entities      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		ID            func(childComplexity int) int
-		Identifier    func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Scans         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		Tags          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		Viewers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Website       func(childComplexity int) int
+		AssetType        func(childComplexity int) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Categories       func(childComplexity int) int
+		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		Cpe              func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		ID               func(childComplexity int) int
+		Identifier       func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Website          func(childComplexity int) int
 	}
 
 	AssetBulkCreatePayload struct {
@@ -271,23 +281,26 @@ type ComplexityRoot struct {
 	}
 
 	AssetHistory struct {
-		AssetType   func(childComplexity int) int
-		Categories  func(childComplexity int) int
-		Cpe         func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Description func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Identifier  func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		Website     func(childComplexity int) int
+		AssetType        func(childComplexity int) int
+		Categories       func(childComplexity int) int
+		Cpe              func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		Identifier       func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Website          func(childComplexity int) int
 	}
 
 	AssetHistoryConnection struct {
@@ -434,6 +447,7 @@ type ComplexityRoot struct {
 		ExampleEvidence        func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		ImplementationGuidance func(childComplexity int) int
+		InternalNotes          func(childComplexity int) int
 		InternalPolicies       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		MappedCategories       func(childComplexity int) int
 		Narratives             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
@@ -454,6 +468,8 @@ type ComplexityRoot struct {
 		Status                 func(childComplexity int) int
 		Subcategory            func(childComplexity int) int
 		Subcontrols            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SystemInternalID       func(childComplexity int) int
+		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt              func(childComplexity int) int
@@ -535,6 +551,7 @@ type ComplexityRoot struct {
 		HistoryTime            func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		ImplementationGuidance func(childComplexity int) int
+		InternalNotes          func(childComplexity int) int
 		MappedCategories       func(childComplexity int) int
 		Operation              func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
@@ -547,6 +564,8 @@ type ComplexityRoot struct {
 		StandardID             func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		Subcategory            func(childComplexity int) int
+		SystemInternalID       func(childComplexity int) int
+		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
@@ -572,10 +591,13 @@ type ComplexityRoot struct {
 		Editors            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                 func(childComplexity int) int
 		ImplementationDate func(childComplexity int) int
+		InternalNotes      func(childComplexity int) int
 		Owner              func(childComplexity int) int
 		OwnerID            func(childComplexity int) int
 		Status             func(childComplexity int) int
 		Subcontrols        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SystemInternalID   func(childComplexity int) int
+		SystemOwned        func(childComplexity int) int
 		Tags               func(childComplexity int) int
 		Tasks              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt          func(childComplexity int) int
@@ -615,10 +637,13 @@ type ComplexityRoot struct {
 		HistoryTime        func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		ImplementationDate func(childComplexity int) int
+		InternalNotes      func(childComplexity int) int
 		Operation          func(childComplexity int) int
 		OwnerID            func(childComplexity int) int
 		Ref                func(childComplexity int) int
 		Status             func(childComplexity int) int
+		SystemInternalID   func(childComplexity int) int
+		SystemOwned        func(childComplexity int) int
 		Tags               func(childComplexity int) int
 		UpdatedAt          func(childComplexity int) int
 		UpdatedBy          func(childComplexity int) int
@@ -653,6 +678,7 @@ type ComplexityRoot struct {
 		Editors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Evidence             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		ID                   func(childComplexity int) int
+		InternalNotes        func(childComplexity int) int
 		InternalPolicies     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Name                 func(childComplexity int) int
 		Narratives           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
@@ -666,6 +692,8 @@ type ComplexityRoot struct {
 		Status               func(childComplexity int) int
 		Subcategory          func(childComplexity int) int
 		Subcontrols          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SystemInternalID     func(childComplexity int) int
+		SystemOwned          func(childComplexity int) int
 		Tags                 func(childComplexity int) int
 		Tasks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt            func(childComplexity int) int
@@ -705,6 +733,7 @@ type ComplexityRoot struct {
 		DisplayID            func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
+		InternalNotes        func(childComplexity int) int
 		Name                 func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
@@ -713,6 +742,8 @@ type ComplexityRoot struct {
 		Source               func(childComplexity int) int
 		Status               func(childComplexity int) int
 		Subcategory          func(childComplexity int) int
+		SystemInternalID     func(childComplexity int) int
+		SystemOwned          func(childComplexity int) int
 		Tags                 func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
@@ -744,10 +775,13 @@ type ComplexityRoot struct {
 		DNSVerification   func(childComplexity int) int
 		DNSVerificationID func(childComplexity int) int
 		ID                func(childComplexity int) int
+		InternalNotes     func(childComplexity int) int
 		MappableDomain    func(childComplexity int) int
 		MappableDomainID  func(childComplexity int) int
 		Owner             func(childComplexity int) int
 		OwnerID           func(childComplexity int) int
+		SystemInternalID  func(childComplexity int) int
+		SystemOwned       func(childComplexity int) int
 		Tags              func(childComplexity int) int
 		UpdatedAt         func(childComplexity int) int
 		UpdatedBy         func(childComplexity int) int
@@ -783,10 +817,13 @@ type ComplexityRoot struct {
 		DNSVerificationID func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
 		ID                func(childComplexity int) int
+		InternalNotes     func(childComplexity int) int
 		MappableDomainID  func(childComplexity int) int
 		Operation         func(childComplexity int) int
 		OwnerID           func(childComplexity int) int
 		Ref               func(childComplexity int) int
+		SystemInternalID  func(childComplexity int) int
+		SystemOwned       func(childComplexity int) int
 		Tags              func(childComplexity int) int
 		UpdatedAt         func(childComplexity int) int
 		UpdatedBy         func(childComplexity int) int
@@ -958,30 +995,33 @@ type ComplexityRoot struct {
 	}
 
 	Entity struct {
-		Assets        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		BlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Contacts      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayName   func(childComplexity int) int
-		Documents     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		Domains       func(childComplexity int) int
-		Editors       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		EntityType    func(childComplexity int) int
-		EntityTypeID  func(childComplexity int) int
-		Files         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID            func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Notes         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Scans         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		Status        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-		Viewers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Contacts         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DisplayName      func(childComplexity int) int
+		Documents        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		Domains          func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		EntityType       func(childComplexity int) int
+		EntityTypeID     func(childComplexity int) int
+		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Notes            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Status           func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	EntityBulkCreatePayload struct {
@@ -1008,22 +1048,25 @@ type ComplexityRoot struct {
 	}
 
 	EntityHistory struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		Description  func(childComplexity int) int
-		DisplayName  func(childComplexity int) int
-		Domains      func(childComplexity int) int
-		EntityTypeID func(childComplexity int) int
-		HistoryTime  func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Operation    func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Ref          func(childComplexity int) int
-		Status       func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DisplayName      func(childComplexity int) int
+		Domains          func(childComplexity int) int
+		EntityTypeID     func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		Status           func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	EntityHistoryConnection struct {
@@ -1038,16 +1081,19 @@ type ComplexityRoot struct {
 	}
 
 	EntityType struct {
-		CreatedAt func(childComplexity int) int
-		CreatedBy func(childComplexity int) int
-		Entities  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		ID        func(childComplexity int) int
-		Name      func(childComplexity int) int
-		Owner     func(childComplexity int) int
-		OwnerID   func(childComplexity int) int
-		Tags      func(childComplexity int) int
-		UpdatedAt func(childComplexity int) int
-		UpdatedBy func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	EntityTypeBulkCreatePayload struct {
@@ -1074,17 +1120,20 @@ type ComplexityRoot struct {
 	}
 
 	EntityTypeHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	EntityTypeHistoryConnection struct {
@@ -1311,6 +1360,7 @@ type ComplexityRoot struct {
 		Groups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                    func(childComplexity int) int
 		Integrations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes         func(childComplexity int) int
 		LastAccessedAt        func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
 		Metadata              func(childComplexity int) int
@@ -1330,6 +1380,8 @@ type ComplexityRoot struct {
 		StorageVolume         func(childComplexity int) int
 		StoreKey              func(childComplexity int) int
 		Subprocessor          func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
 		Tags                  func(childComplexity int) int
 		Template              func(childComplexity int) int
 		TrustCenterSetting    func(childComplexity int) int
@@ -1363,6 +1415,7 @@ type ComplexityRoot struct {
 		DetectedMimeType      func(childComplexity int) int
 		HistoryTime           func(childComplexity int) int
 		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
 		LastAccessedAt        func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
 		Metadata              func(childComplexity int) int
@@ -1378,6 +1431,8 @@ type ComplexityRoot struct {
 		StorageScheme         func(childComplexity int) int
 		StorageVolume         func(childComplexity int) int
 		StoreKey              func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
 		Tags                  func(childComplexity int) int
 		URI                   func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
@@ -1662,24 +1717,27 @@ type ComplexityRoot struct {
 	}
 
 	Hush struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		CredentialSet func(childComplexity int) int
-		Description   func(childComplexity int) int
-		Events        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		ExpiresAt     func(childComplexity int) int
-		Files         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID            func(childComplexity int) int
-		Integrations  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		Kind          func(childComplexity int) int
-		LastUsedAt    func(childComplexity int) int
-		Metadata      func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		SecretName    func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		CredentialSet    func(childComplexity int) int
+		Description      func(childComplexity int) int
+		Events           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		ExpiresAt        func(childComplexity int) int
+		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID               func(childComplexity int) int
+		Integrations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes    func(childComplexity int) int
+		Kind             func(childComplexity int) int
+		LastUsedAt       func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		SecretName       func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	HushBulkCreatePayload struct {
@@ -1711,23 +1769,26 @@ type ComplexityRoot struct {
 	}
 
 	HushHistory struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		CredentialSet func(childComplexity int) int
-		Description   func(childComplexity int) int
-		ExpiresAt     func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Kind          func(childComplexity int) int
-		LastUsedAt    func(childComplexity int) int
-		Metadata      func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		SecretName    func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		CredentialSet    func(childComplexity int) int
+		Description      func(childComplexity int) int
+		ExpiresAt        func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Kind             func(childComplexity int) int
+		LastUsedAt       func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SecretName       func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	HushHistoryConnection struct {
@@ -1746,22 +1807,25 @@ type ComplexityRoot struct {
 	}
 
 	Integration struct {
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Description     func(childComplexity int) int
-		Events          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID              func(childComplexity int) int
-		IntegrationType func(childComplexity int) int
-		Kind            func(childComplexity int) int
-		Metadata        func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Owner           func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Secrets         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		Events           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID               func(childComplexity int) int
+		IntegrationType  func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Kind             func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Secrets          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	IntegrationConnection struct {
@@ -1780,21 +1844,24 @@ type ComplexityRoot struct {
 	}
 
 	IntegrationHistory struct {
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Description     func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		IntegrationType func(childComplexity int) int
-		Kind            func(childComplexity int) int
-		Metadata        func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		IntegrationType  func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Kind             func(childComplexity int) int
+		Metadata         func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	IntegrationHistoryConnection struct {
@@ -1831,6 +1898,7 @@ type ComplexityRoot struct {
 		FileID                          func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		InternalNotes                   func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Narratives                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                           func(childComplexity int) int
@@ -1845,6 +1913,8 @@ type ComplexityRoot struct {
 		Status                          func(childComplexity int) int
 		Subcontrols                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary                         func(childComplexity int) int
+		SystemInternalID                func(childComplexity int) int
+		SystemOwned                     func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
 		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
@@ -1897,6 +1967,7 @@ type ComplexityRoot struct {
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		InternalNotes                   func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Operation                       func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
@@ -1907,6 +1978,8 @@ type ComplexityRoot struct {
 		Revision                        func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Summary                         func(childComplexity int) int
+		SystemInternalID                func(childComplexity int) int
+		SystemOwned                     func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
 		URL                             func(childComplexity int) int
@@ -2017,23 +2090,25 @@ type ComplexityRoot struct {
 	}
 
 	JobRunner struct {
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		DisplayID       func(childComplexity int) int
-		ID              func(childComplexity int) int
-		IPAddress       func(childComplexity int) int
-		JobRunnerTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
-		LastSeen        func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Os              func(childComplexity int) int
-		Owner           func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Status          func(childComplexity int) int
-		SystemOwned     func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		Version         func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		ID               func(childComplexity int) int
+		IPAddress        func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		JobRunnerTokens  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
+		LastSeen         func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Os               func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Status           func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		Version          func(childComplexity int) int
 	}
 
 	JobRunnerConnection struct {
@@ -2141,23 +2216,25 @@ type ComplexityRoot struct {
 	}
 
 	JobTemplate struct {
-		Configuration func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Cron          func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayID     func(childComplexity int) int
-		DownloadURL   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Platform      func(childComplexity int) int
-		ScheduledJobs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
-		SystemOwned   func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Title         func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Configuration    func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Cron             func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DownloadURL      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Platform         func(childComplexity int) int
+		ScheduledJobs    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	JobTemplateBulkCreatePayload struct {
@@ -2184,24 +2261,26 @@ type ComplexityRoot struct {
 	}
 
 	JobTemplateHistory struct {
-		Configuration func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Cron          func(childComplexity int) int
-		Description   func(childComplexity int) int
-		DisplayID     func(childComplexity int) int
-		DownloadURL   func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Platform      func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		SystemOwned   func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Title         func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Configuration    func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Cron             func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		DownloadURL      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Platform         func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Title            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	JobTemplateHistoryConnection struct {
@@ -2284,24 +2363,27 @@ type ComplexityRoot struct {
 	}
 
 	MappedControl struct {
-		BlockedGroups   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Confidence      func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Editors         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		FromControls    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		FromSubcontrols func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		ID              func(childComplexity int) int
-		MappingType     func(childComplexity int) int
-		Owner           func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Relation        func(childComplexity int) int
-		Source          func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		ToControls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		ToSubcontrols   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Confidence       func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		FromControls     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		FromSubcontrols  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		MappingType      func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Relation         func(childComplexity int) int
+		Source           func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		ToControls       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ToSubcontrols    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	MappedControlBulkCreatePayload struct {
@@ -2328,20 +2410,23 @@ type ComplexityRoot struct {
 	}
 
 	MappedControlHistory struct {
-		Confidence  func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		MappingType func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Relation    func(childComplexity int) int
-		Source      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		Confidence       func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		MappingType      func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		Relation         func(childComplexity int) int
+		Source           func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	MappedControlHistoryConnection struct {
@@ -2494,10 +2579,10 @@ type ComplexityRoot struct {
 		CreateSubscriber                     func(childComplexity int, input generated.CreateSubscriberInput) int
 		CreateTFASetting                     func(childComplexity int, input generated.CreateTFASettingInput) int
 		CreateTask                           func(childComplexity int, input generated.CreateTaskInput) int
-		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput) int
+		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) int
 		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
-		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput) int
+		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
 		CreateTrustCenterDomain              func(childComplexity int, input model.CreateTrustCenterDomainInput) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
@@ -2615,7 +2700,7 @@ type ComplexityRoot struct {
 		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
 		UpdateTask                           func(childComplexity int, id string, input generated.UpdateTaskInput) int
 		UpdateTaskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput) int
+		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) int
 		UpdateTrustCenter                    func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
 		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
 		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput) int
@@ -2634,6 +2719,7 @@ type ComplexityRoot struct {
 		DisplayID        func(childComplexity int) int
 		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
 		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Name             func(childComplexity int) int
 		Owner            func(childComplexity int) int
@@ -2641,6 +2727,8 @@ type ComplexityRoot struct {
 		Procedures       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		Satisfies        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
@@ -2671,20 +2759,23 @@ type ComplexityRoot struct {
 	}
 
 	NarrativeHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Description func(childComplexity int) int
-		Details     func(childComplexity int) int
-		DisplayID   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		Details          func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	NarrativeHistoryConnection struct {
@@ -2976,6 +3067,7 @@ type ComplexityRoot struct {
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		TemplateCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Templates                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		TrustCenterDocs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		TrustCenters                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
 		UpdatedAt                     func(childComplexity int) int
 		UpdatedBy                     func(childComplexity int) int
@@ -3220,6 +3312,7 @@ type ComplexityRoot struct {
 		FileID                          func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		InternalNotes                   func(childComplexity int) int
 		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Name                            func(childComplexity int) int
 		Narratives                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
@@ -3234,6 +3327,8 @@ type ComplexityRoot struct {
 		Status                          func(childComplexity int) int
 		Subcontrols                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary                         func(childComplexity int) int
+		SystemInternalID                func(childComplexity int) int
+		SystemOwned                     func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
 		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
@@ -3286,6 +3381,7 @@ type ComplexityRoot struct {
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		InternalNotes                   func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Operation                       func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
@@ -3296,6 +3392,8 @@ type ComplexityRoot struct {
 		Revision                        func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Summary                         func(childComplexity int) int
+		SystemInternalID                func(childComplexity int) int
+		SystemOwned                     func(childComplexity int) int
 		TagSuggestions                  func(childComplexity int) int
 		Tags                            func(childComplexity int) int
 		URL                             func(childComplexity int) int
@@ -4125,6 +4223,7 @@ type ComplexityRoot struct {
 		GoverningBody          func(childComplexity int) int
 		GoverningBodyLogoURL   func(childComplexity int) int
 		ID                     func(childComplexity int) int
+		InternalNotes          func(childComplexity int) int
 		IsPublic               func(childComplexity int) int
 		Link                   func(childComplexity int) int
 		Name                   func(childComplexity int) int
@@ -4134,6 +4233,7 @@ type ComplexityRoot struct {
 		ShortName              func(childComplexity int) int
 		StandardType           func(childComplexity int) int
 		Status                 func(childComplexity int) int
+		SystemInternalID       func(childComplexity int) int
 		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		TrustCenterCompliances func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
@@ -4176,6 +4276,7 @@ type ComplexityRoot struct {
 		GoverningBodyLogoURL func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
+		InternalNotes        func(childComplexity int) int
 		IsPublic             func(childComplexity int) int
 		Link                 func(childComplexity int) int
 		Name                 func(childComplexity int) int
@@ -4186,6 +4287,7 @@ type ComplexityRoot struct {
 		ShortName            func(childComplexity int) int
 		StandardType         func(childComplexity int) int
 		Status               func(childComplexity int) int
+		SystemInternalID     func(childComplexity int) int
 		SystemOwned          func(childComplexity int) int
 		Tags                 func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
@@ -4233,6 +4335,7 @@ type ComplexityRoot struct {
 		ExampleEvidence        func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		ImplementationGuidance func(childComplexity int) int
+		InternalNotes          func(childComplexity int) int
 		InternalPolicies       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		MappedCategories       func(childComplexity int) int
 		Narratives             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
@@ -4248,6 +4351,8 @@ type ComplexityRoot struct {
 		Source                 func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		Subcategory            func(childComplexity int) int
+		SystemInternalID       func(childComplexity int) int
+		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt              func(childComplexity int) int
@@ -4296,6 +4401,7 @@ type ComplexityRoot struct {
 		HistoryTime            func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		ImplementationGuidance func(childComplexity int) int
+		InternalNotes          func(childComplexity int) int
 		MappedCategories       func(childComplexity int) int
 		Operation              func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
@@ -4307,6 +4413,8 @@ type ComplexityRoot struct {
 		Source                 func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		Subcategory            func(childComplexity int) int
+		SystemInternalID       func(childComplexity int) int
+		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
@@ -4333,12 +4441,14 @@ type ComplexityRoot struct {
 		Description              func(childComplexity int) int
 		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID                       func(childComplexity int) int
+		InternalNotes            func(childComplexity int) int
 		LogoFile                 func(childComplexity int) int
 		LogoLocalFileID          func(childComplexity int) int
 		LogoRemoteURL            func(childComplexity int) int
 		Name                     func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		SystemInternalID         func(childComplexity int) int
 		SystemOwned              func(childComplexity int) int
 		Tags                     func(childComplexity int) int
 		TrustCenterSubprocessors func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
@@ -4370,21 +4480,23 @@ type ComplexityRoot struct {
 	}
 
 	SubprocessorHistory struct {
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Description     func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		LogoLocalFileID func(childComplexity int) int
-		LogoRemoteURL   func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		SystemOwned     func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		LogoLocalFileID  func(childComplexity int) int
+		LogoRemoteURL    func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	SubprocessorHistoryConnection struct {
@@ -4582,22 +4694,27 @@ type ComplexityRoot struct {
 	}
 
 	Template struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		Description  func(childComplexity int) int
-		Documents    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		Files        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID           func(childComplexity int) int
-		Jsonconfig   func(childComplexity int) int
-		Kind         func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Owner        func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		TemplateType func(childComplexity int) int
-		Uischema     func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		Documents        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Jsonconfig       func(childComplexity int) int
+		Kind             func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		TemplateType     func(childComplexity int) int
+		TrustCenter      func(childComplexity int) int
+		TrustCenterID    func(childComplexity int) int
+		Uischema         func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	TemplateBulkCreatePayload struct {
@@ -4624,22 +4741,26 @@ type ComplexityRoot struct {
 	}
 
 	TemplateHistory struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		Description  func(childComplexity int) int
-		HistoryTime  func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Jsonconfig   func(childComplexity int) int
-		Kind         func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Operation    func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Ref          func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		TemplateType func(childComplexity int) int
-		Uischema     func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Description      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		Jsonconfig       func(childComplexity int) int
+		Kind             func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		TemplateType     func(childComplexity int) int
+		TrustCenterID    func(childComplexity int) int
+		Uischema         func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	TemplateHistoryConnection struct {
@@ -4668,7 +4789,9 @@ type ComplexityRoot struct {
 		Setting                  func(childComplexity int) int
 		Slug                     func(childComplexity int) int
 		Tags                     func(childComplexity int) int
+		Templates                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		TrustCenterCompliances   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
+		TrustCenterDocs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		TrustCenterSubprocessors func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
@@ -4754,12 +4877,21 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterDoc struct {
-		CreatedAt func(childComplexity int) int
-		CreatedBy func(childComplexity int) int
-		ID        func(childComplexity int) int
-		Tags      func(childComplexity int) int
-		UpdatedAt func(childComplexity int) int
-		UpdatedBy func(childComplexity int) int
+		Category      func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		File          func(childComplexity int) int
+		FileID        func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Title         func(childComplexity int) int
+		TrustCenter   func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+		Visibility    func(childComplexity int) int
 	}
 
 	TrustCenterDocBulkCreatePayload struct {
@@ -4786,15 +4918,21 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterDocHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		Category      func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		FileID        func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Title         func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+		Visibility    func(childComplexity int) int
 	}
 
 	TrustCenterDocHistoryConnection struct {
@@ -5549,6 +5687,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.ImprovementSuggestions(childComplexity), true
 
+	case "ActionPlan.internalNotes":
+		if e.complexity.ActionPlan.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.InternalNotes(childComplexity), true
+
 	case "ActionPlan.name":
 		if e.complexity.ActionPlan.Name == nil {
 			break
@@ -5642,6 +5787,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.Summary(childComplexity), true
+
+	case "ActionPlan.systemInternalID":
+		if e.complexity.ActionPlan.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.SystemInternalID(childComplexity), true
+
+	case "ActionPlan.systemOwned":
+		if e.complexity.ActionPlan.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.SystemOwned(childComplexity), true
 
 	case "ActionPlan.tagSuggestions":
 		if e.complexity.ActionPlan.TagSuggestions == nil {
@@ -5846,6 +6005,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlanHistory.ImprovementSuggestions(childComplexity), true
 
+	case "ActionPlanHistory.internalNotes":
+		if e.complexity.ActionPlanHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.InternalNotes(childComplexity), true
+
 	case "ActionPlanHistory.name":
 		if e.complexity.ActionPlanHistory.Name == nil {
 			break
@@ -5922,6 +6088,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.Summary(childComplexity), true
+
+	case "ActionPlanHistory.systemInternalID":
+		if e.complexity.ActionPlanHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.SystemInternalID(childComplexity), true
+
+	case "ActionPlanHistory.systemOwned":
+		if e.complexity.ActionPlanHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.SystemOwned(childComplexity), true
 
 	case "ActionPlanHistory.tagSuggestions":
 		if e.complexity.ActionPlanHistory.TagSuggestions == nil {
@@ -6097,6 +6277,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Asset.Identifier(childComplexity), true
 
+	case "Asset.internalNotes":
+		if e.complexity.Asset.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Asset.InternalNotes(childComplexity), true
+
 	case "Asset.name":
 		if e.complexity.Asset.Name == nil {
 			break
@@ -6129,6 +6316,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Asset.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Asset.systemInternalID":
+		if e.complexity.Asset.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Asset.SystemInternalID(childComplexity), true
+
+	case "Asset.systemOwned":
+		if e.complexity.Asset.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Asset.SystemOwned(childComplexity), true
 
 	case "Asset.tags":
 		if e.complexity.Asset.Tags == nil {
@@ -6289,6 +6490,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssetHistory.Identifier(childComplexity), true
 
+	case "AssetHistory.internalNotes":
+		if e.complexity.AssetHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.InternalNotes(childComplexity), true
+
 	case "AssetHistory.name":
 		if e.complexity.AssetHistory.Name == nil {
 			break
@@ -6316,6 +6524,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssetHistory.Ref(childComplexity), true
+
+	case "AssetHistory.systemInternalID":
+		if e.complexity.AssetHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.SystemInternalID(childComplexity), true
+
+	case "AssetHistory.systemOwned":
+		if e.complexity.AssetHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.SystemOwned(childComplexity), true
 
 	case "AssetHistory.tags":
 		if e.complexity.AssetHistory.Tags == nil {
@@ -7034,6 +7256,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.ImplementationGuidance(childComplexity), true
 
+	case "Control.internalNotes":
+		if e.complexity.Control.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Control.InternalNotes(childComplexity), true
+
 	case "Control.internalPolicies":
 		if e.complexity.Control.InternalPolicies == nil {
 			break
@@ -7213,6 +7442,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "Control.systemInternalID":
+		if e.complexity.Control.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Control.SystemInternalID(childComplexity), true
+
+	case "Control.systemOwned":
+		if e.complexity.Control.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Control.SystemOwned(childComplexity), true
 
 	case "Control.tags":
 		if e.complexity.Control.Tags == nil {
@@ -7513,6 +7756,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlHistory.ImplementationGuidance(childComplexity), true
 
+	case "ControlHistory.internalNotes":
+		if e.complexity.ControlHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.InternalNotes(childComplexity), true
+
 	case "ControlHistory.mappedCategories":
 		if e.complexity.ControlHistory.MappedCategories == nil {
 			break
@@ -7596,6 +7846,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlHistory.Subcategory(childComplexity), true
+
+	case "ControlHistory.systemInternalID":
+		if e.complexity.ControlHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.SystemInternalID(childComplexity), true
+
+	case "ControlHistory.systemOwned":
+		if e.complexity.ControlHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.SystemOwned(childComplexity), true
 
 	case "ControlHistory.tags":
 		if e.complexity.ControlHistory.Tags == nil {
@@ -7724,6 +7988,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlImplementation.ImplementationDate(childComplexity), true
 
+	case "ControlImplementation.internalNotes":
+		if e.complexity.ControlImplementation.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.InternalNotes(childComplexity), true
+
 	case "ControlImplementation.owner":
 		if e.complexity.ControlImplementation.Owner == nil {
 			break
@@ -7756,6 +8027,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlImplementation.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "ControlImplementation.systemInternalID":
+		if e.complexity.ControlImplementation.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.SystemInternalID(childComplexity), true
+
+	case "ControlImplementation.systemOwned":
+		if e.complexity.ControlImplementation.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.SystemOwned(childComplexity), true
 
 	case "ControlImplementation.tags":
 		if e.complexity.ControlImplementation.Tags == nil {
@@ -7914,6 +8199,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlImplementationHistory.ImplementationDate(childComplexity), true
 
+	case "ControlImplementationHistory.internalNotes":
+		if e.complexity.ControlImplementationHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.InternalNotes(childComplexity), true
+
 	case "ControlImplementationHistory.operation":
 		if e.complexity.ControlImplementationHistory.Operation == nil {
 			break
@@ -7941,6 +8233,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlImplementationHistory.Status(childComplexity), true
+
+	case "ControlImplementationHistory.systemInternalID":
+		if e.complexity.ControlImplementationHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.SystemInternalID(childComplexity), true
+
+	case "ControlImplementationHistory.systemOwned":
+		if e.complexity.ControlImplementationHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.SystemOwned(childComplexity), true
 
 	case "ControlImplementationHistory.tags":
 		if e.complexity.ControlImplementationHistory.Tags == nil {
@@ -8116,6 +8422,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlObjective.ID(childComplexity), true
 
+	case "ControlObjective.internalNotes":
+		if e.complexity.ControlObjective.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.InternalNotes(childComplexity), true
+
 	case "ControlObjective.internalPolicies":
 		if e.complexity.ControlObjective.InternalPolicies == nil {
 			break
@@ -8236,6 +8549,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlObjective.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "ControlObjective.systemInternalID":
+		if e.complexity.ControlObjective.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.SystemInternalID(childComplexity), true
+
+	case "ControlObjective.systemOwned":
+		if e.complexity.ControlObjective.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.SystemOwned(childComplexity), true
 
 	case "ControlObjective.tags":
 		if e.complexity.ControlObjective.Tags == nil {
@@ -8394,6 +8721,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlObjectiveHistory.ID(childComplexity), true
 
+	case "ControlObjectiveHistory.internalNotes":
+		if e.complexity.ControlObjectiveHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.InternalNotes(childComplexity), true
+
 	case "ControlObjectiveHistory.name":
 		if e.complexity.ControlObjectiveHistory.Name == nil {
 			break
@@ -8449,6 +8783,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlObjectiveHistory.Subcategory(childComplexity), true
+
+	case "ControlObjectiveHistory.systemInternalID":
+		if e.complexity.ControlObjectiveHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.SystemInternalID(childComplexity), true
+
+	case "ControlObjectiveHistory.systemOwned":
+		if e.complexity.ControlObjectiveHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.SystemOwned(childComplexity), true
 
 	case "ControlObjectiveHistory.tags":
 		if e.complexity.ControlObjectiveHistory.Tags == nil {
@@ -8562,6 +8910,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CustomDomain.ID(childComplexity), true
 
+	case "CustomDomain.internalNotes":
+		if e.complexity.CustomDomain.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.InternalNotes(childComplexity), true
+
 	case "CustomDomain.mappableDomain":
 		if e.complexity.CustomDomain.MappableDomain == nil {
 			break
@@ -8589,6 +8944,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CustomDomain.OwnerID(childComplexity), true
+
+	case "CustomDomain.systemInternalID":
+		if e.complexity.CustomDomain.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.SystemInternalID(childComplexity), true
+
+	case "CustomDomain.systemOwned":
+		if e.complexity.CustomDomain.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.SystemOwned(childComplexity), true
 
 	case "CustomDomain.tags":
 		if e.complexity.CustomDomain.Tags == nil {
@@ -8709,6 +9078,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CustomDomainHistory.ID(childComplexity), true
 
+	case "CustomDomainHistory.internalNotes":
+		if e.complexity.CustomDomainHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.InternalNotes(childComplexity), true
+
 	case "CustomDomainHistory.mappableDomainID":
 		if e.complexity.CustomDomainHistory.MappableDomainID == nil {
 			break
@@ -8736,6 +9112,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CustomDomainHistory.Ref(childComplexity), true
+
+	case "CustomDomainHistory.systemInternalID":
+		if e.complexity.CustomDomainHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.SystemInternalID(childComplexity), true
+
+	case "CustomDomainHistory.systemOwned":
+		if e.complexity.CustomDomainHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.SystemOwned(childComplexity), true
 
 	case "CustomDomainHistory.tags":
 		if e.complexity.CustomDomainHistory.Tags == nil {
@@ -9573,6 +9963,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Entity.ID(childComplexity), true
 
+	case "Entity.internalNotes":
+		if e.complexity.Entity.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Entity.InternalNotes(childComplexity), true
+
 	case "Entity.name":
 		if e.complexity.Entity.Name == nil {
 			break
@@ -9624,6 +10021,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Entity.Status(childComplexity), true
+
+	case "Entity.systemInternalID":
+		if e.complexity.Entity.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Entity.SystemInternalID(childComplexity), true
+
+	case "Entity.systemOwned":
+		if e.complexity.Entity.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Entity.SystemOwned(childComplexity), true
 
 	case "Entity.tags":
 		if e.complexity.Entity.Tags == nil {
@@ -9770,6 +10181,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityHistory.ID(childComplexity), true
 
+	case "EntityHistory.internalNotes":
+		if e.complexity.EntityHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.InternalNotes(childComplexity), true
+
 	case "EntityHistory.name":
 		if e.complexity.EntityHistory.Name == nil {
 			break
@@ -9804,6 +10222,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EntityHistory.Status(childComplexity), true
+
+	case "EntityHistory.systemInternalID":
+		if e.complexity.EntityHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.SystemInternalID(childComplexity), true
+
+	case "EntityHistory.systemOwned":
+		if e.complexity.EntityHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.EntityHistory.SystemOwned(childComplexity), true
 
 	case "EntityHistory.tags":
 		if e.complexity.EntityHistory.Tags == nil {
@@ -9894,6 +10326,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityType.ID(childComplexity), true
 
+	case "EntityType.internalNotes":
+		if e.complexity.EntityType.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.EntityType.InternalNotes(childComplexity), true
+
 	case "EntityType.name":
 		if e.complexity.EntityType.Name == nil {
 			break
@@ -9914,6 +10353,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EntityType.OwnerID(childComplexity), true
+
+	case "EntityType.systemInternalID":
+		if e.complexity.EntityType.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.EntityType.SystemInternalID(childComplexity), true
+
+	case "EntityType.systemOwned":
+		if e.complexity.EntityType.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.EntityType.SystemOwned(childComplexity), true
 
 	case "EntityType.tags":
 		if e.complexity.EntityType.Tags == nil {
@@ -10020,6 +10473,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityTypeHistory.ID(childComplexity), true
 
+	case "EntityTypeHistory.internalNotes":
+		if e.complexity.EntityTypeHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.EntityTypeHistory.InternalNotes(childComplexity), true
+
 	case "EntityTypeHistory.name":
 		if e.complexity.EntityTypeHistory.Name == nil {
 			break
@@ -10047,6 +10507,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EntityTypeHistory.Ref(childComplexity), true
+
+	case "EntityTypeHistory.systemInternalID":
+		if e.complexity.EntityTypeHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.EntityTypeHistory.SystemInternalID(childComplexity), true
+
+	case "EntityTypeHistory.systemOwned":
+		if e.complexity.EntityTypeHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.EntityTypeHistory.SystemOwned(childComplexity), true
 
 	case "EntityTypeHistory.tags":
 		if e.complexity.EntityTypeHistory.Tags == nil {
@@ -11141,6 +11615,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
+	case "File.internalNotes":
+		if e.complexity.File.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.File.InternalNotes(childComplexity), true
+
 	case "File.lastAccessedAt":
 		if e.complexity.File.LastAccessedAt == nil {
 			break
@@ -11278,6 +11759,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.File.Subprocessor(childComplexity), true
+
+	case "File.systemInternalID":
+		if e.complexity.File.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.File.SystemInternalID(childComplexity), true
+
+	case "File.systemOwned":
+		if e.complexity.File.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.File.SystemOwned(childComplexity), true
 
 	case "File.tags":
 		if e.complexity.File.Tags == nil {
@@ -11426,6 +11921,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.FileHistory.ID(childComplexity), true
 
+	case "FileHistory.internalNotes":
+		if e.complexity.FileHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.InternalNotes(childComplexity), true
+
 	case "FileHistory.lastAccessedAt":
 		if e.complexity.FileHistory.LastAccessedAt == nil {
 			break
@@ -11530,6 +12032,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.FileHistory.StoreKey(childComplexity), true
+
+	case "FileHistory.systemInternalID":
+		if e.complexity.FileHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.SystemInternalID(childComplexity), true
+
+	case "FileHistory.systemOwned":
+		if e.complexity.FileHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.SystemOwned(childComplexity), true
 
 	case "FileHistory.tags":
 		if e.complexity.FileHistory.Tags == nil {
@@ -13026,6 +13542,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Hush.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
+	case "Hush.internalNotes":
+		if e.complexity.Hush.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Hush.InternalNotes(childComplexity), true
+
 	case "Hush.kind":
 		if e.complexity.Hush.Kind == nil {
 			break
@@ -13074,6 +13597,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Hush.SecretName(childComplexity), true
+
+	case "Hush.systemInternalID":
+		if e.complexity.Hush.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Hush.SystemInternalID(childComplexity), true
+
+	case "Hush.systemOwned":
+		if e.complexity.Hush.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Hush.SystemOwned(childComplexity), true
 
 	case "Hush.updatedAt":
 		if e.complexity.Hush.UpdatedAt == nil {
@@ -13208,6 +13745,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.HushHistory.ID(childComplexity), true
 
+	case "HushHistory.internalNotes":
+		if e.complexity.HushHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.InternalNotes(childComplexity), true
+
 	case "HushHistory.kind":
 		if e.complexity.HushHistory.Kind == nil {
 			break
@@ -13263,6 +13807,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.HushHistory.SecretName(childComplexity), true
+
+	case "HushHistory.systemInternalID":
+		if e.complexity.HushHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.SystemInternalID(childComplexity), true
+
+	case "HushHistory.systemOwned":
+		if e.complexity.HushHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.HushHistory.SystemOwned(childComplexity), true
 
 	case "HushHistory.updatedAt":
 		if e.complexity.HushHistory.UpdatedAt == nil {
@@ -13379,6 +13937,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Integration.IntegrationType(childComplexity), true
 
+	case "Integration.internalNotes":
+		if e.complexity.Integration.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Integration.InternalNotes(childComplexity), true
+
 	case "Integration.kind":
 		if e.complexity.Integration.Kind == nil {
 			break
@@ -13425,6 +13990,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Integration.Secrets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
+
+	case "Integration.systemInternalID":
+		if e.complexity.Integration.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Integration.SystemInternalID(childComplexity), true
+
+	case "Integration.systemOwned":
+		if e.complexity.Integration.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Integration.SystemOwned(childComplexity), true
 
 	case "Integration.tags":
 		if e.complexity.Integration.Tags == nil {
@@ -13531,6 +14110,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.IntegrationHistory.IntegrationType(childComplexity), true
 
+	case "IntegrationHistory.internalNotes":
+		if e.complexity.IntegrationHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.InternalNotes(childComplexity), true
+
 	case "IntegrationHistory.kind":
 		if e.complexity.IntegrationHistory.Kind == nil {
 			break
@@ -13572,6 +14158,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.IntegrationHistory.Ref(childComplexity), true
+
+	case "IntegrationHistory.systemInternalID":
+		if e.complexity.IntegrationHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.SystemInternalID(childComplexity), true
+
+	case "IntegrationHistory.systemOwned":
+		if e.complexity.IntegrationHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.SystemOwned(childComplexity), true
 
 	case "IntegrationHistory.tags":
 		if e.complexity.IntegrationHistory.Tags == nil {
@@ -13808,6 +14408,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.ImprovementSuggestions(childComplexity), true
 
+	case "InternalPolicy.internalNotes":
+		if e.complexity.InternalPolicy.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.InternalNotes(childComplexity), true
+
 	case "InternalPolicy.name":
 		if e.complexity.InternalPolicy.Name == nil {
 			break
@@ -13930,6 +14537,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.Summary(childComplexity), true
+
+	case "InternalPolicy.systemInternalID":
+		if e.complexity.InternalPolicy.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.SystemInternalID(childComplexity), true
+
+	case "InternalPolicy.systemOwned":
+		if e.complexity.InternalPolicy.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.SystemOwned(childComplexity), true
 
 	case "InternalPolicy.tagSuggestions":
 		if e.complexity.InternalPolicy.TagSuggestions == nil {
@@ -14153,6 +14774,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicyHistory.ImprovementSuggestions(childComplexity), true
 
+	case "InternalPolicyHistory.internalNotes":
+		if e.complexity.InternalPolicyHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.InternalNotes(childComplexity), true
+
 	case "InternalPolicyHistory.name":
 		if e.complexity.InternalPolicyHistory.Name == nil {
 			break
@@ -14222,6 +14850,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicyHistory.Summary(childComplexity), true
+
+	case "InternalPolicyHistory.systemInternalID":
+		if e.complexity.InternalPolicyHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.SystemInternalID(childComplexity), true
+
+	case "InternalPolicyHistory.systemOwned":
+		if e.complexity.InternalPolicyHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.SystemOwned(childComplexity), true
 
 	case "InternalPolicyHistory.tagSuggestions":
 		if e.complexity.InternalPolicyHistory.TagSuggestions == nil {
@@ -14681,6 +15323,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunner.IPAddress(childComplexity), true
 
+	case "JobRunner.internalNotes":
+		if e.complexity.JobRunner.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.InternalNotes(childComplexity), true
+
 	case "JobRunner.jobRunnerTokens":
 		if e.complexity.JobRunner.JobRunnerTokens == nil {
 			break
@@ -14734,6 +15383,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobRunner.Status(childComplexity), true
+
+	case "JobRunner.systemInternalID":
+		if e.complexity.JobRunner.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.SystemInternalID(childComplexity), true
 
 	case "JobRunner.systemOwned":
 		if e.complexity.JobRunner.SystemOwned == nil {
@@ -15202,6 +15858,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobTemplate.ID(childComplexity), true
 
+	case "JobTemplate.internalNotes":
+		if e.complexity.JobTemplate.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.InternalNotes(childComplexity), true
+
 	case "JobTemplate.owner":
 		if e.complexity.JobTemplate.Owner == nil {
 			break
@@ -15234,6 +15897,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobTemplate.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
+
+	case "JobTemplate.systemInternalID":
+		if e.complexity.JobTemplate.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.SystemInternalID(childComplexity), true
 
 	case "JobTemplate.systemOwned":
 		if e.complexity.JobTemplate.SystemOwned == nil {
@@ -15389,6 +16059,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobTemplateHistory.ID(childComplexity), true
 
+	case "JobTemplateHistory.internalNotes":
+		if e.complexity.JobTemplateHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.InternalNotes(childComplexity), true
+
 	case "JobTemplateHistory.operation":
 		if e.complexity.JobTemplateHistory.Operation == nil {
 			break
@@ -15416,6 +16093,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobTemplateHistory.Ref(childComplexity), true
+
+	case "JobTemplateHistory.systemInternalID":
+		if e.complexity.JobTemplateHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.SystemInternalID(childComplexity), true
 
 	case "JobTemplateHistory.systemOwned":
 		if e.complexity.JobTemplateHistory.SystemOwned == nil {
@@ -15813,6 +16497,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControl.ID(childComplexity), true
 
+	case "MappedControl.internalNotes":
+		if e.complexity.MappedControl.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.InternalNotes(childComplexity), true
+
 	case "MappedControl.mappingType":
 		if e.complexity.MappedControl.MappingType == nil {
 			break
@@ -15847,6 +16538,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControl.Source(childComplexity), true
+
+	case "MappedControl.systemInternalID":
+		if e.complexity.MappedControl.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.SystemInternalID(childComplexity), true
+
+	case "MappedControl.systemOwned":
+		if e.complexity.MappedControl.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.SystemOwned(childComplexity), true
 
 	case "MappedControl.tags":
 		if e.complexity.MappedControl.Tags == nil {
@@ -15984,6 +16689,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControlHistory.ID(childComplexity), true
 
+	case "MappedControlHistory.internalNotes":
+		if e.complexity.MappedControlHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.InternalNotes(childComplexity), true
+
 	case "MappedControlHistory.mappingType":
 		if e.complexity.MappedControlHistory.MappingType == nil {
 			break
@@ -16025,6 +16737,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControlHistory.Source(childComplexity), true
+
+	case "MappedControlHistory.systemInternalID":
+		if e.complexity.MappedControlHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.SystemInternalID(childComplexity), true
+
+	case "MappedControlHistory.systemOwned":
+		if e.complexity.MappedControlHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.SystemOwned(childComplexity), true
 
 	case "MappedControlHistory.tags":
 		if e.complexity.MappedControlHistory.Tags == nil {
@@ -17707,7 +18433,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTemplate(childComplexity, args["input"].(generated.CreateTemplateInput)), true
+		return e.complexity.Mutation.CreateTemplate(childComplexity, args["input"].(generated.CreateTemplateInput), args["templateFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.createTrustCenter":
 		if e.complexity.Mutation.CreateTrustCenter == nil {
@@ -17743,7 +18469,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTrustCenterDoc(childComplexity, args["input"].(generated.CreateTrustCenterDocInput)), true
+		return e.complexity.Mutation.CreateTrustCenterDoc(childComplexity, args["input"].(generated.CreateTrustCenterDocInput), args["trustCenterDocFile"].(graphql.Upload)), true
 
 	case "Mutation.createTrustCenterDomain":
 		if e.complexity.Mutation.CreateTrustCenterDomain == nil {
@@ -19159,7 +19885,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateTemplateInput)), true
+		return e.complexity.Mutation.UpdateTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateTemplateInput), args["templateFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateTrustCenter":
 		if e.complexity.Mutation.UpdateTrustCenter == nil {
@@ -19311,6 +20037,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Narrative.ID(childComplexity), true
 
+	case "Narrative.internalNotes":
+		if e.complexity.Narrative.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Narrative.InternalNotes(childComplexity), true
+
 	case "Narrative.internalPolicies":
 		if e.complexity.Narrative.InternalPolicies == nil {
 			break
@@ -19379,6 +20112,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Narrative.Satisfies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "Narrative.systemInternalID":
+		if e.complexity.Narrative.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Narrative.SystemInternalID(childComplexity), true
+
+	case "Narrative.systemOwned":
+		if e.complexity.Narrative.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Narrative.SystemOwned(childComplexity), true
 
 	case "Narrative.tags":
 		if e.complexity.Narrative.Tags == nil {
@@ -19518,6 +20265,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.NarrativeHistory.ID(childComplexity), true
 
+	case "NarrativeHistory.internalNotes":
+		if e.complexity.NarrativeHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.NarrativeHistory.InternalNotes(childComplexity), true
+
 	case "NarrativeHistory.name":
 		if e.complexity.NarrativeHistory.Name == nil {
 			break
@@ -19545,6 +20299,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.NarrativeHistory.Ref(childComplexity), true
+
+	case "NarrativeHistory.systemInternalID":
+		if e.complexity.NarrativeHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.NarrativeHistory.SystemInternalID(childComplexity), true
+
+	case "NarrativeHistory.systemOwned":
+		if e.complexity.NarrativeHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.NarrativeHistory.SystemOwned(childComplexity), true
 
 	case "NarrativeHistory.tags":
 		if e.complexity.NarrativeHistory.Tags == nil {
@@ -21321,6 +22089,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
 
+	case "Organization.trustCenterDocs":
+		if e.complexity.Organization.TrustCenterDocs == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_trustCenterDocs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.TrustCenterDocs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterDocOrder), args["where"].(*generated.TrustCenterDocWhereInput)), true
+
 	case "Organization.trustCenters":
 		if e.complexity.Organization.TrustCenters == nil {
 			break
@@ -22481,6 +23261,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.ImprovementSuggestions(childComplexity), true
 
+	case "Procedure.internalNotes":
+		if e.complexity.Procedure.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Procedure.InternalNotes(childComplexity), true
+
 	case "Procedure.internalPolicies":
 		if e.complexity.Procedure.InternalPolicies == nil {
 			break
@@ -22603,6 +23390,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.Summary(childComplexity), true
+
+	case "Procedure.systemInternalID":
+		if e.complexity.Procedure.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Procedure.SystemInternalID(childComplexity), true
+
+	case "Procedure.systemOwned":
+		if e.complexity.Procedure.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Procedure.SystemOwned(childComplexity), true
 
 	case "Procedure.tagSuggestions":
 		if e.complexity.Procedure.TagSuggestions == nil {
@@ -22826,6 +23627,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProcedureHistory.ImprovementSuggestions(childComplexity), true
 
+	case "ProcedureHistory.internalNotes":
+		if e.complexity.ProcedureHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.InternalNotes(childComplexity), true
+
 	case "ProcedureHistory.name":
 		if e.complexity.ProcedureHistory.Name == nil {
 			break
@@ -22895,6 +23703,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureHistory.Summary(childComplexity), true
+
+	case "ProcedureHistory.systemInternalID":
+		if e.complexity.ProcedureHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.SystemInternalID(childComplexity), true
+
+	case "ProcedureHistory.systemOwned":
+		if e.complexity.ProcedureHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.SystemOwned(childComplexity), true
 
 	case "ProcedureHistory.tagSuggestions":
 		if e.complexity.ProcedureHistory.TagSuggestions == nil {
@@ -28860,6 +29682,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Standard.ID(childComplexity), true
 
+	case "Standard.internalNotes":
+		if e.complexity.Standard.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Standard.InternalNotes(childComplexity), true
+
 	case "Standard.isPublic":
 		if e.complexity.Standard.IsPublic == nil {
 			break
@@ -28922,6 +29751,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Standard.Status(childComplexity), true
+
+	case "Standard.systemInternalID":
+		if e.complexity.Standard.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Standard.SystemInternalID(childComplexity), true
 
 	case "Standard.systemOwned":
 		if e.complexity.Standard.SystemOwned == nil {
@@ -29096,6 +29932,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.StandardHistory.ID(childComplexity), true
 
+	case "StandardHistory.internalNotes":
+		if e.complexity.StandardHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.InternalNotes(childComplexity), true
+
 	case "StandardHistory.isPublic":
 		if e.complexity.StandardHistory.IsPublic == nil {
 			break
@@ -29165,6 +30008,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.StandardHistory.Status(childComplexity), true
+
+	case "StandardHistory.systemInternalID":
+		if e.complexity.StandardHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.SystemInternalID(childComplexity), true
 
 	case "StandardHistory.systemOwned":
 		if e.complexity.StandardHistory.SystemOwned == nil {
@@ -29431,6 +30281,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.ImplementationGuidance(childComplexity), true
 
+	case "Subcontrol.internalNotes":
+		if e.complexity.Subcontrol.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.InternalNotes(childComplexity), true
+
 	case "Subcontrol.internalPolicies":
 		if e.complexity.Subcontrol.InternalPolicies == nil {
 			break
@@ -29560,6 +30417,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subcontrol.Subcategory(childComplexity), true
+
+	case "Subcontrol.systemInternalID":
+		if e.complexity.Subcontrol.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.SystemInternalID(childComplexity), true
+
+	case "Subcontrol.systemOwned":
+		if e.complexity.Subcontrol.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.SystemOwned(childComplexity), true
 
 	case "Subcontrol.tags":
 		if e.complexity.Subcontrol.Tags == nil {
@@ -29776,6 +30647,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubcontrolHistory.ImplementationGuidance(childComplexity), true
 
+	case "SubcontrolHistory.internalNotes":
+		if e.complexity.SubcontrolHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.InternalNotes(childComplexity), true
+
 	case "SubcontrolHistory.mappedCategories":
 		if e.complexity.SubcontrolHistory.MappedCategories == nil {
 			break
@@ -29852,6 +30730,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolHistory.Subcategory(childComplexity), true
+
+	case "SubcontrolHistory.systemInternalID":
+		if e.complexity.SubcontrolHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.SystemInternalID(childComplexity), true
+
+	case "SubcontrolHistory.systemOwned":
+		if e.complexity.SubcontrolHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.SystemOwned(childComplexity), true
 
 	case "SubcontrolHistory.tags":
 		if e.complexity.SubcontrolHistory.Tags == nil {
@@ -29956,6 +30848,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subprocessor.ID(childComplexity), true
 
+	case "Subprocessor.internalNotes":
+		if e.complexity.Subprocessor.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.InternalNotes(childComplexity), true
+
 	case "Subprocessor.logoFile":
 		if e.complexity.Subprocessor.LogoFile == nil {
 			break
@@ -29997,6 +30896,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subprocessor.OwnerID(childComplexity), true
+
+	case "Subprocessor.systemInternalID":
+		if e.complexity.Subprocessor.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.SystemInternalID(childComplexity), true
 
 	case "Subprocessor.systemOwned":
 		if e.complexity.Subprocessor.SystemOwned == nil {
@@ -30129,6 +31035,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubprocessorHistory.ID(childComplexity), true
 
+	case "SubprocessorHistory.internalNotes":
+		if e.complexity.SubprocessorHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.InternalNotes(childComplexity), true
+
 	case "SubprocessorHistory.logoLocalFileID":
 		if e.complexity.SubprocessorHistory.LogoLocalFileID == nil {
 			break
@@ -30170,6 +31083,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubprocessorHistory.Ref(childComplexity), true
+
+	case "SubprocessorHistory.systemInternalID":
+		if e.complexity.SubprocessorHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.SystemInternalID(childComplexity), true
 
 	case "SubprocessorHistory.systemOwned":
 		if e.complexity.SubprocessorHistory.SystemOwned == nil {
@@ -31123,6 +32043,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Template.ID(childComplexity), true
 
+	case "Template.internalNotes":
+		if e.complexity.Template.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.Template.InternalNotes(childComplexity), true
+
 	case "Template.jsonconfig":
 		if e.complexity.Template.Jsonconfig == nil {
 			break
@@ -31158,6 +32085,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Template.OwnerID(childComplexity), true
 
+	case "Template.systemInternalID":
+		if e.complexity.Template.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.Template.SystemInternalID(childComplexity), true
+
+	case "Template.systemOwned":
+		if e.complexity.Template.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Template.SystemOwned(childComplexity), true
+
 	case "Template.tags":
 		if e.complexity.Template.Tags == nil {
 			break
@@ -31171,6 +32112,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Template.TemplateType(childComplexity), true
+
+	case "Template.trustCenter":
+		if e.complexity.Template.TrustCenter == nil {
+			break
+		}
+
+		return e.complexity.Template.TrustCenter(childComplexity), true
+
+	case "Template.trustCenterID":
+		if e.complexity.Template.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.Template.TrustCenterID(childComplexity), true
 
 	case "Template.uischema":
 		if e.complexity.Template.Uischema == nil {
@@ -31284,6 +32239,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TemplateHistory.ID(childComplexity), true
 
+	case "TemplateHistory.internalNotes":
+		if e.complexity.TemplateHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.InternalNotes(childComplexity), true
+
 	case "TemplateHistory.jsonconfig":
 		if e.complexity.TemplateHistory.Jsonconfig == nil {
 			break
@@ -31326,6 +32288,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TemplateHistory.Ref(childComplexity), true
 
+	case "TemplateHistory.systemInternalID":
+		if e.complexity.TemplateHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.SystemInternalID(childComplexity), true
+
+	case "TemplateHistory.systemOwned":
+		if e.complexity.TemplateHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.SystemOwned(childComplexity), true
+
 	case "TemplateHistory.tags":
 		if e.complexity.TemplateHistory.Tags == nil {
 			break
@@ -31339,6 +32315,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TemplateHistory.TemplateType(childComplexity), true
+
+	case "TemplateHistory.trustCenterID":
+		if e.complexity.TemplateHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.TrustCenterID(childComplexity), true
 
 	case "TemplateHistory.uischema":
 		if e.complexity.TemplateHistory.Uischema == nil {
@@ -31473,6 +32456,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenter.Tags(childComplexity), true
 
+	case "TrustCenter.templates":
+		if e.complexity.TrustCenter.Templates == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenter_templates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenter.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
+
 	case "TrustCenter.trustCenterCompliances":
 		if e.complexity.TrustCenter.TrustCenterCompliances == nil {
 			break
@@ -31484,6 +32479,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenter.TrustCenterCompliances(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterComplianceOrder), args["where"].(*generated.TrustCenterComplianceWhereInput)), true
+
+	case "TrustCenter.trustCenterDocs":
+		if e.complexity.TrustCenter.TrustCenterDocs == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenter_trustCenterDocs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenter.TrustCenterDocs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterDocOrder), args["where"].(*generated.TrustCenterDocWhereInput)), true
 
 	case "TrustCenter.trustCenterSubprocessors":
 		if e.complexity.TrustCenter.TrustCenterSubprocessors == nil {
@@ -31791,6 +32798,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDeletePayload.DeletedID(childComplexity), true
 
+	case "TrustCenterDoc.category":
+		if e.complexity.TrustCenterDoc.Category == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Category(childComplexity), true
+
 	case "TrustCenterDoc.createdAt":
 		if e.complexity.TrustCenterDoc.CreatedAt == nil {
 			break
@@ -31805,6 +32819,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDoc.CreatedBy(childComplexity), true
 
+	case "TrustCenterDoc.file":
+		if e.complexity.TrustCenterDoc.File == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.File(childComplexity), true
+
+	case "TrustCenterDoc.fileID":
+		if e.complexity.TrustCenterDoc.FileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.FileID(childComplexity), true
+
 	case "TrustCenterDoc.id":
 		if e.complexity.TrustCenterDoc.ID == nil {
 			break
@@ -31812,12 +32840,47 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDoc.ID(childComplexity), true
 
+	case "TrustCenterDoc.owner":
+		if e.complexity.TrustCenterDoc.Owner == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Owner(childComplexity), true
+
+	case "TrustCenterDoc.ownerID":
+		if e.complexity.TrustCenterDoc.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.OwnerID(childComplexity), true
+
 	case "TrustCenterDoc.tags":
 		if e.complexity.TrustCenterDoc.Tags == nil {
 			break
 		}
 
 		return e.complexity.TrustCenterDoc.Tags(childComplexity), true
+
+	case "TrustCenterDoc.title":
+		if e.complexity.TrustCenterDoc.Title == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Title(childComplexity), true
+
+	case "TrustCenterDoc.trustCenter":
+		if e.complexity.TrustCenterDoc.TrustCenter == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.TrustCenter(childComplexity), true
+
+	case "TrustCenterDoc.trustCenterID":
+		if e.complexity.TrustCenterDoc.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.TrustCenterID(childComplexity), true
 
 	case "TrustCenterDoc.updatedAt":
 		if e.complexity.TrustCenterDoc.UpdatedAt == nil {
@@ -31832,6 +32895,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDoc.UpdatedBy(childComplexity), true
+
+	case "TrustCenterDoc.visibility":
+		if e.complexity.TrustCenterDoc.Visibility == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Visibility(childComplexity), true
 
 	case "TrustCenterDocBulkCreatePayload.trustCenterDocs":
 		if e.complexity.TrustCenterDocBulkCreatePayload.TrustCenterDocs == nil {
@@ -31889,6 +32959,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDocEdge.Node(childComplexity), true
 
+	case "TrustCenterDocHistory.category":
+		if e.complexity.TrustCenterDocHistory.Category == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.Category(childComplexity), true
+
 	case "TrustCenterDocHistory.createdAt":
 		if e.complexity.TrustCenterDocHistory.CreatedAt == nil {
 			break
@@ -31902,6 +32979,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDocHistory.CreatedBy(childComplexity), true
+
+	case "TrustCenterDocHistory.fileID":
+		if e.complexity.TrustCenterDocHistory.FileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.FileID(childComplexity), true
 
 	case "TrustCenterDocHistory.historyTime":
 		if e.complexity.TrustCenterDocHistory.HistoryTime == nil {
@@ -31924,6 +33008,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDocHistory.Operation(childComplexity), true
 
+	case "TrustCenterDocHistory.ownerID":
+		if e.complexity.TrustCenterDocHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.OwnerID(childComplexity), true
+
 	case "TrustCenterDocHistory.ref":
 		if e.complexity.TrustCenterDocHistory.Ref == nil {
 			break
@@ -31938,6 +33029,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDocHistory.Tags(childComplexity), true
 
+	case "TrustCenterDocHistory.title":
+		if e.complexity.TrustCenterDocHistory.Title == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.Title(childComplexity), true
+
+	case "TrustCenterDocHistory.trustCenterID":
+		if e.complexity.TrustCenterDocHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.TrustCenterID(childComplexity), true
+
 	case "TrustCenterDocHistory.updatedAt":
 		if e.complexity.TrustCenterDocHistory.UpdatedAt == nil {
 			break
@@ -31951,6 +33056,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDocHistory.UpdatedBy(childComplexity), true
+
+	case "TrustCenterDocHistory.visibility":
+		if e.complexity.TrustCenterDocHistory.Visibility == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.Visibility(childComplexity), true
 
 	case "TrustCenterDocHistoryConnection.edges":
 		if e.complexity.TrustCenterDocHistoryConnection.Edges == nil {
@@ -36633,7 +37745,17 @@ type CustomDomainBulkCreatePayload {
     """
     customDomains: [CustomDomain!]
 }`, BuiltIn: false},
-	{Name: "../schema/directives.graphql", Input: `directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
+	{Name: "../schema/directives.graphql", Input: `"""
+Indicates if a field will be returned in a query, if true, only system-admins
+can retrieve the value
+"""
+directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
+"""
+Indicates is the input field is read-only by non-system admin users.
+If an input is marked as @readOnly, only system-admin users
+can set the field
+"""
+directive @readOnly on INPUT_FIELD_DEFINITION
 `, BuiltIn: false},
 	{Name: "../schema/dnsverification.graphql", Input: `extend type Query {
     """
@@ -37233,6 +38355,18 @@ type ActionPlan implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   due date of the action plan
   """
   dueDate: Time
@@ -37478,6 +38612,18 @@ type ActionPlanHistory implements Node {
   the organization id that owns the object
   """
   ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   due date of the action plan
   """
@@ -37868,6 +39014,49 @@ input ActionPlanHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   due_date field predicates
   """
   dueDate: Time
@@ -38191,6 +39380,49 @@ input ActionPlanWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   due_date field predicates
   """
   dueDate: Time
@@ -38275,6 +39507,18 @@ type Asset implements Node {
   the organization id that owns the object
   """
   ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the type of the asset, e.g. technology, domain, device, etc
   """
@@ -38545,6 +39789,18 @@ type AssetHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the type of the asset, e.g. technology, domain, device, etc
   """
   assetType: AssetHistoryAssetType!
@@ -38778,6 +40034,49 @@ input AssetHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   asset_type field predicates
   """
   assetType: AssetHistoryAssetType
@@ -38978,6 +40277,49 @@ input AssetWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   asset_type field predicates
   """
@@ -39958,6 +41300,18 @@ type Control implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the unique reference code for the control
   """
   refCode: String!
@@ -40629,6 +41983,18 @@ type ControlHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the unique reference code for the control
   """
   refCode: String!
@@ -41075,6 +42441,49 @@ input ControlHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   ref_code field predicates
   """
   refCode: String
@@ -41123,6 +42532,18 @@ type ControlImplementation implements Node {
   the ID of the organization owner of the object
   """
   ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   status of the %s, e.g. draft, published, archived, etc.
   """
@@ -41389,6 +42810,18 @@ type ControlImplementationHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   status of the %s, e.g. draft, published, archived, etc.
   """
   status: ControlImplementationHistoryDocumentStatus
@@ -41620,6 +43053,49 @@ input ControlImplementationHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   status field predicates
   """
   status: ControlImplementationHistoryDocumentStatus
@@ -41806,6 +43282,49 @@ input ControlImplementationWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   status field predicates
   """
   status: ControlImplementationDocumentStatus
@@ -41923,6 +43442,18 @@ type ControlObjective implements Node {
   the ID of the organization owner of the object
   """
   ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the name of the control objective
   """
@@ -42390,6 +43921,18 @@ type ControlObjectiveHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the control objective
   """
   name: String!
@@ -42673,6 +44216,49 @@ input ControlObjectiveHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -42949,6 +44535,49 @@ input ControlObjectiveWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -43457,6 +45086,49 @@ input ControlWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   ref_code field predicates
   """
   refCode: String
@@ -43702,6 +45374,14 @@ input CreateActionPlanInput {
   """
   dismissedImprovementSuggestions: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   due date of the action plan
   """
   dueDate: Time
@@ -43729,6 +45409,14 @@ input CreateAssetInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
   """
   the type of the asset, e.g. technology, domain, device, etc
   """
@@ -43812,6 +45500,14 @@ input CreateControlImplementationInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
   """
   status of the %s, e.g. draft, published, archived, etc.
   """
@@ -43918,6 +45614,14 @@ input CreateControlInput {
   """
   references: [Reference!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   the unique reference code for the control
   """
   refCode: String!
@@ -43955,6 +45659,14 @@ input CreateControlObjectiveInput {
   revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
   """
   revision: String
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
   """
   the name of the control objective
   """
@@ -44006,6 +45718,14 @@ input CreateCustomDomainInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
   """
   the name of the custom domain
   """
@@ -44086,6 +45806,14 @@ input CreateEntityInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   the name of the entity
   """
   name: String
@@ -44126,6 +45854,14 @@ input CreateEntityTypeInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
   """
   the name of the entity
   """
@@ -44245,6 +45981,14 @@ input CreateFileInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
   """
   the name of the file provided in the payload key without the extension
   """
@@ -44424,6 +46168,14 @@ Input was generated by ent.
 """
 input CreateHushInput {
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   the logical name of the corresponding hush secret or it's general grouping
   """
   name: String!
@@ -44474,6 +46226,14 @@ input CreateInternalPolicyInput {
   revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
   """
   revision: String
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
   """
   the name of the policy
   """
@@ -44615,6 +46375,14 @@ input CreateJobRunnerInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   the name of the runner
   """
   name: String!
@@ -44693,6 +46461,14 @@ input CreateJobTemplateInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   the title of the job
   """
   title: String!
@@ -44747,6 +46523,14 @@ input CreateMappedControlInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
   mappingType: MappedControlMappingType
@@ -44779,6 +46563,14 @@ input CreateNarrativeInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
   """
   the name of the narrative
   """
@@ -44948,6 +46740,7 @@ input CreateOrganizationInput {
   scanIDs: [ID!]
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
+  trustCenterDocIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -45128,6 +46921,14 @@ input CreateProcedureInput {
   improvement suggestions dismissed by the user for the procedure
   """
   dismissedImprovementSuggestions: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
   """
   This will contain the url used to create/update the procedure
   """
@@ -45391,6 +47192,14 @@ input CreateStandardInput {
   """
   revision: String
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   the long name of the standard body
   """
   name: String!
@@ -45429,11 +47238,11 @@ input CreateStandardInput {
   """
   indicates if the standard should be made available to all users, only for system owned standards
   """
-  isPublic: Boolean
+  isPublic: Boolean @readOnly
   """
   indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
-  freeToUse: Boolean
+  freeToUse: Boolean @readOnly
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -45524,6 +47333,14 @@ input CreateSubcontrolInput {
   """
   references: [Reference!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   the unique reference code for the control
   """
   refCode: String!
@@ -45551,6 +47368,14 @@ input CreateSubprocessorInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
   """
   name of the standard body
   """
@@ -45656,6 +47481,14 @@ input CreateTemplateInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   the name of the template
   """
   name: String!
@@ -45682,6 +47515,7 @@ input CreateTemplateInput {
   ownerID: ID
   documentIDs: [ID!]
   fileIDs: [ID!]
+  trustCenterID: ID
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -45704,6 +47538,21 @@ input CreateTrustCenterDocInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  title of the document
+  """
+  title: String!
+  """
+  category of the document
+  """
+  category: String!
+  """
+  visibility of the document
+  """
+  visibility: TrustCenterDocTrustCenterDocumentVisibility
+  ownerID: ID
+  trustCenterID: ID
+  fileID: ID
 }
 """
 CreateTrustCenterInput is used for create TrustCenter object.
@@ -45718,7 +47567,9 @@ input CreateTrustCenterInput {
   customDomainID: ID
   settingID: ID
   trustCenterSubprocessorIDs: [ID!]
+  trustCenterDocIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
+  templateIDs: [ID!]
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -45906,6 +47757,18 @@ type CustomDomain implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the custom domain
   """
   cnameRecord: String!
@@ -45968,6 +47831,18 @@ type CustomDomainHistory implements Node {
   the organization id that owns the object
   """
   ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the name of the custom domain
   """
@@ -46179,6 +48054,49 @@ input CustomDomainHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   cname_record field predicates
   """
   cnameRecord: String
@@ -46351,6 +48269,49 @@ input CustomDomainWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   cname_record field predicates
   """
@@ -47804,6 +49765,18 @@ type Entity implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the entity
   """
   name: String
@@ -48157,6 +50130,18 @@ type EntityHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the entity
   """
   name: String
@@ -48381,6 +50366,49 @@ input EntityHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -48491,6 +50519,18 @@ type EntityType implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the entity
   """
   name: String!
@@ -48574,6 +50614,18 @@ type EntityTypeHistory implements Node {
   the organization id that owns the object
   """
   ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the name of the entity
   """
@@ -48777,6 +50829,49 @@ input EntityTypeHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -48916,6 +51011,49 @@ input EntityTypeWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -49043,6 +51181,49 @@ input EntityWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -51229,6 +53410,18 @@ type File implements Node {
   """
   tags: [String!]
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -51471,6 +53664,18 @@ type FileHistory implements Node {
   """
   tags: [String!]
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -51712,6 +53917,49 @@ input FileHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   provided_file_name field predicates
   """
@@ -52084,6 +54332,49 @@ input FileWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   provided_file_name field predicates
   """
@@ -55198,6 +57489,18 @@ type Hush implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the logical name of the corresponding hush secret or it's general grouping
   """
   name: String!
@@ -55364,6 +57667,18 @@ type HushHistory implements Node {
   the organization id that owns the object
   """
   ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the logical name of the corresponding hush secret or it's general grouping
   """
@@ -55595,6 +57910,49 @@ input HushHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -55799,6 +58157,49 @@ input HushWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -55911,6 +58312,18 @@ type Integration implements Node {
   the organization id that owns the object
   """
   ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the name of the integration
   """
@@ -56073,6 +58486,18 @@ type IntegrationHistory implements Node {
   the organization id that owns the object
   """
   ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the name of the integration
   """
@@ -56294,6 +58719,49 @@ input IntegrationHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -56471,6 +58939,49 @@ input IntegrationWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -56565,6 +59076,18 @@ type InternalPolicy implements Node {
   the organization id that owns the object
   """
   ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the name of the policy
   """
@@ -57061,6 +59584,18 @@ type InternalPolicyHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the policy
   """
   name: String!
@@ -57385,6 +59920,49 @@ input InternalPolicyHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -57707,6 +60285,49 @@ input InternalPolicyWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -58634,6 +61255,14 @@ type JobRunner implements Node {
   """
   systemOwned: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the runner
   """
   name: String!
@@ -59409,6 +62038,42 @@ input JobRunnerWhereInput {
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
   """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -59532,6 +62197,14 @@ type JobTemplate implements Node {
   """
   systemOwned: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the title of the job
   """
   title: String!
@@ -59643,6 +62316,14 @@ type JobTemplateHistory implements Node {
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the title of the job
   """
@@ -59897,6 +62578,42 @@ input JobTemplateHistoryWhereInput {
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
   """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   title field predicates
   """
   title: String
@@ -60091,6 +62808,42 @@ input JobTemplateWhereInput {
   systemOwnedNEQ: Boolean
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   title field predicates
   """
@@ -60614,6 +63367,18 @@ type MappedControl implements Node {
   """
   tags: [String!]
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -60865,6 +63630,18 @@ type MappedControlHistory implements Node {
   """
   tags: [String!]
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the organization id that owns the object
   """
   ownerID: String
@@ -61084,6 +63861,49 @@ input MappedControlHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -61273,6 +64093,49 @@ input MappedControlWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -61391,6 +64254,18 @@ type Narrative implements Node {
   the ID of the organization owner of the object
   """
   ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the name of the narrative
   """
@@ -61674,6 +64549,18 @@ type NarrativeHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the narrative
   """
   name: String!
@@ -61900,6 +64787,49 @@ input NarrativeHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -62090,6 +65020,49 @@ input NarrativeWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -65782,6 +68755,37 @@ type Organization implements Node {
     """
     where: ExportWhereInput
   ): ExportConnection!
+  trustCenterDocs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterDocs returned from the connection.
+    """
+    orderBy: [TrustCenterDocOrder!]
+
+    """
+    Filtering options for TrustCenterDocs returned from the connection.
+    """
+    where: TrustCenterDocWhereInput
+  ): TrustCenterDocConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -67716,6 +70720,11 @@ input OrganizationWhereInput {
   hasExports: Boolean
   hasExportsWith: [ExportWhereInput!]
   """
+  trust_center_docs edge predicates
+  """
+  hasTrustCenterDocs: Boolean
+  hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -68187,6 +71196,18 @@ type Procedure implements Node {
   """
   dismissedImprovementSuggestions: [String!]
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   This will contain the most recent file id if this procedure was created from a file
   """
   fileID: ID
@@ -68620,6 +71641,18 @@ type ProcedureHistory implements Node {
   """
   dismissedImprovementSuggestions: [String!]
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   This will contain the most recent file id if this procedure was created from a file
   """
   fileID: String
@@ -69009,6 +72042,49 @@ input ProcedureHistoryWhereInput {
   delegateIDEqualFold: String
   delegateIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   file_id field predicates
   """
   fileID: String
@@ -69331,6 +72407,49 @@ input ProcedureWhereInput {
   delegateIDNotNil: Boolean
   delegateIDEqualFold: ID
   delegateIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   file_id field predicates
   """
@@ -77691,6 +80810,14 @@ type Standard implements Node {
   """
   systemOwned: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the long name of the standard body
   """
   name: String!
@@ -77729,11 +80856,11 @@ type Standard implements Node {
   """
   indicates if the standard should be made available to all users, only for system owned standards
   """
-  isPublic: Boolean
+  isPublic: Boolean @hidden(if: true)
   """
   indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
-  freeToUse: Boolean
+  freeToUse: Boolean @hidden(if: true)
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -77862,6 +80989,14 @@ type StandardHistory implements Node {
   """
   systemOwned: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the long name of the standard body
   """
   name: String!
@@ -77900,11 +81035,11 @@ type StandardHistory implements Node {
   """
   indicates if the standard should be made available to all users, only for system owned standards
   """
-  isPublic: Boolean
+  isPublic: Boolean @hidden(if: true)
   """
   indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
-  freeToUse: Boolean
+  freeToUse: Boolean @hidden(if: true)
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -78150,6 +81285,42 @@ input StandardHistoryWhereInput {
   systemOwnedNEQ: Boolean
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -78496,6 +81667,42 @@ input StandardWhereInput {
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
   """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -78788,6 +81995,18 @@ type Subcontrol implements Node {
   the ID of the organization owner of the object
   """
   ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the unique reference code for the control
   """
@@ -79274,6 +82493,18 @@ type SubcontrolHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the unique reference code for the control
   """
   refCode: String!
@@ -79720,6 +82951,49 @@ input SubcontrolHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   ref_code field predicates
   """
   refCode: String
@@ -80088,6 +83362,49 @@ input SubcontrolWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   ref_code field predicates
   """
   refCode: String
@@ -80208,6 +83525,14 @@ type Subprocessor implements Node {
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   name of the standard body
   """
@@ -80340,6 +83665,14 @@ type SubprocessorHistory implements Node {
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   name of the standard body
   """
@@ -80562,6 +83895,42 @@ input SubprocessorHistoryWhereInput {
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
   """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -80761,6 +84130,42 @@ input SubprocessorWhereInput {
   systemOwnedNEQ: Boolean
   systemOwnedIsNil: Boolean
   systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -82508,9 +85913,21 @@ type Template implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the name of the template
   """
@@ -82535,6 +85952,10 @@ type Template implements Node {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  the id of the trust center this template is associated with
+  """
+  trustCenterID: ID
   owner: Organization
   documents(
     """
@@ -82598,6 +86019,7 @@ type Template implements Node {
     """
     where: FileWhereInput
   ): FileConnection!
+  trustCenter: TrustCenter
 }
 """
 A connection to a list of items.
@@ -82650,9 +86072,21 @@ type TemplateHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
   """
   the name of the template
   """
@@ -82677,6 +86111,10 @@ type TemplateHistory implements Node {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  the id of the trust center this template is associated with
+  """
+  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -82752,6 +86190,7 @@ TemplateHistoryTemplateKind is enum for the field kind
 """
 enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
   QUESTIONNAIRE
+  TRUSTCENTER_NDA
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -82891,6 +86330,49 @@ input TemplateHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -82940,6 +86422,24 @@ input TemplateHistoryWhereInput {
   kindNotIn: [TemplateHistoryTemplateKind!]
   kindIsNil: Boolean
   kindNotNil: Boolean
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 """
 Ordering options for Template connections
@@ -82969,6 +86469,7 @@ TemplateTemplateKind is enum for the field kind
 """
 enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
   QUESTIONNAIRE
+  TRUSTCENTER_NDA
 }
 """
 TemplateWhereInput is used for filtering Template objects.
@@ -83072,6 +86573,49 @@ input TemplateWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -83122,6 +86666,24 @@ input TemplateWhereInput {
   kindIsNil: Boolean
   kindNotNil: Boolean
   """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -83136,6 +86698,11 @@ input TemplateWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
 }
 """
 The builtin Time type
@@ -83197,6 +86764,37 @@ type TrustCenter implements Node {
     """
     where: TrustCenterSubprocessorWhereInput
   ): TrustCenterSubprocessorConnection!
+  trustCenterDocs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterDocs returned from the connection.
+    """
+    orderBy: [TrustCenterDocOrder!]
+
+    """
+    Filtering options for TrustCenterDocs returned from the connection.
+    """
+    where: TrustCenterDocWhereInput
+  ): TrustCenterDocConnection!
   trustCenterCompliances(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -83228,6 +86826,37 @@ type TrustCenter implements Node {
     """
     where: TrustCenterComplianceWhereInput
   ): TrustCenterComplianceConnection!
+  templates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Templates returned from the connection.
+    """
+    orderBy: [TemplateOrder!]
+
+    """
+    Filtering options for Templates returned from the connection.
+    """
+    where: TemplateWhereInput
+  ): TemplateConnection!
 }
 type TrustCenterCompliance implements Node {
   id: ID!
@@ -83690,6 +87319,36 @@ type TrustCenterDoc implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  ID of the trust center
+  """
+  trustCenterID: ID
+  """
+  title of the document
+  """
+  title: String!
+  """
+  category of the document
+  """
+  category: String!
+  """
+  ID of the file containing the document
+  """
+  fileID: ID
+  """
+  visibility of the document
+  """
+  visibility: TrustCenterDocTrustCenterDocumentVisibility
+  owner: Organization
+  trustCenter: TrustCenter
+  """
+  the file containing the document content
+  """
+  file: File
 }
 """
 A connection to a list of items.
@@ -83734,6 +87393,30 @@ type TrustCenterDocHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  ID of the trust center
+  """
+  trustCenterID: String
+  """
+  title of the document
+  """
+  title: String!
+  """
+  category of the document
+  """
+  category: String!
+  """
+  ID of the file containing the document
+  """
+  fileID: String
+  """
+  visibility of the document
+  """
+  visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
 }
 """
 A connection to a list of items.
@@ -83793,6 +87476,14 @@ enum TrustCenterDocHistoryOrderField {
   history_time
   created_at
   updated_at
+}
+"""
+TrustCenterDocHistoryTrustCenterDocumentVisibility is enum for the field visibility
+"""
+enum TrustCenterDocHistoryTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+  PUBLICLY_VISIBLE
+  PROTECTED
+  NOT_VISIBLE
 }
 """
 TrustCenterDocHistoryWhereInput is used for filtering TrustCenterDocHistory objects.
@@ -83913,6 +87604,101 @@ input TrustCenterDocHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryEqualFold: String
+  categoryContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
+  """
+  visibility field predicates
+  """
+  visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
+  visibilityNEQ: TrustCenterDocHistoryTrustCenterDocumentVisibility
+  visibilityIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
+  visibilityNotIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
+  visibilityIsNil: Boolean
+  visibilityNotNil: Boolean
 }
 """
 Ordering options for TrustCenterDoc connections
@@ -83933,6 +87719,14 @@ Properties by which TrustCenterDoc connections can be ordered.
 enum TrustCenterDocOrderField {
   created_at
   updated_at
+}
+"""
+TrustCenterDocTrustCenterDocumentVisibility is enum for the field visibility
+"""
+enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+  PUBLICLY_VISIBLE
+  PROTECTED
+  NOT_VISIBLE
 }
 """
 TrustCenterDocWhereInput is used for filtering TrustCenterDoc objects.
@@ -84017,6 +87811,116 @@ input TrustCenterDocWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  category field predicates
+  """
+  category: String
+  categoryNEQ: String
+  categoryIn: [String!]
+  categoryNotIn: [String!]
+  categoryGT: String
+  categoryGTE: String
+  categoryLT: String
+  categoryLTE: String
+  categoryContains: String
+  categoryHasPrefix: String
+  categoryHasSuffix: String
+  categoryEqualFold: String
+  categoryContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
+  visibility field predicates
+  """
+  visibility: TrustCenterDocTrustCenterDocumentVisibility
+  visibilityNEQ: TrustCenterDocTrustCenterDocumentVisibility
+  visibilityIn: [TrustCenterDocTrustCenterDocumentVisibility!]
+  visibilityNotIn: [TrustCenterDocTrustCenterDocumentVisibility!]
+  visibilityIsNil: Boolean
+  visibilityNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 """
 An edge in a connection.
@@ -85894,10 +89798,20 @@ input TrustCenterWhereInput {
   hasTrustCenterSubprocessors: Boolean
   hasTrustCenterSubprocessorsWith: [TrustCenterSubprocessorWhereInput!]
   """
+  trust_center_docs edge predicates
+  """
+  hasTrustCenterDocs: Boolean
+  hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+  """
   trust_center_compliances edge predicates
   """
   hasTrustCenterCompliances: Boolean
   hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
+  """
+  templates edge predicates
+  """
+  hasTemplates: Boolean
+  hasTemplatesWith: [TemplateWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -86039,6 +89953,16 @@ input UpdateActionPlanInput {
   appendDismissedImprovementSuggestions: [String!]
   clearDismissedImprovementSuggestions: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   due date of the action plan
   """
   dueDate: Time
@@ -86080,6 +90004,16 @@ input UpdateAssetInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   the type of the asset, e.g. technology, domain, device, etc
   """
@@ -86196,6 +90130,16 @@ input UpdateControlImplementationInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   status of the %s, e.g. draft, published, archived, etc.
   """
@@ -86339,6 +90283,16 @@ input UpdateControlInput {
   appendReferences: [Reference!]
   clearReferences: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   the unique reference code for the control
   """
   refCode: String
@@ -86413,6 +90367,16 @@ input UpdateControlObjectiveInput {
   """
   revision: String
   clearRevision: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   the name of the control objective
   """
@@ -86495,6 +90459,16 @@ input UpdateCustomDomainInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   ownerID: ID
   clearOwner: Boolean
   dnsVerificationID: ID
@@ -86588,6 +90562,16 @@ input UpdateEntityInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   the name of the entity
   """
   name: String
@@ -86656,6 +90640,16 @@ input UpdateEntityTypeInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   the name of the entity
   """
@@ -86825,6 +90819,16 @@ input UpdateFileInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   the name of the file provided in the payload key without the extension
   """
@@ -87125,6 +91129,16 @@ Input was generated by ent.
 """
 input UpdateHushInput {
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   the logical name of the corresponding hush secret or it's general grouping
   """
   name: String
@@ -87183,6 +91197,16 @@ input UpdateInternalPolicyInput {
   """
   revision: String
   clearRevision: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   the name of the policy
   """
@@ -87359,6 +91383,16 @@ input UpdateJobRunnerInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   the name of the runner
   """
   name: String
@@ -87457,6 +91491,16 @@ input UpdateJobTemplateInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   the title of the job
   """
   title: String
@@ -87513,6 +91557,16 @@ input UpdateMappedControlInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
   mappingType: MappedControlMappingType
@@ -87563,6 +91617,16 @@ input UpdateNarrativeInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   the name of the narrative
   """
@@ -87836,6 +91900,9 @@ input UpdateOrganizationInput {
   addExportIDs: [ID!]
   removeExportIDs: [ID!]
   clearExports: Boolean
+  addTrustCenterDocIDs: [ID!]
+  removeTrustCenterDocIDs: [ID!]
+  clearTrustCenterDocs: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -88067,6 +92134,16 @@ input UpdateProcedureInput {
   dismissedImprovementSuggestions: [String!]
   appendDismissedImprovementSuggestions: [String!]
   clearDismissedImprovementSuggestions: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   This will contain the url used to create/update the procedure
   """
@@ -88445,6 +92522,16 @@ input UpdateStandardInput {
   revision: String
   clearRevision: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   the long name of the standard body
   """
   name: String
@@ -88492,13 +92579,13 @@ input UpdateStandardInput {
   """
   indicates if the standard should be made available to all users, only for system owned standards
   """
-  isPublic: Boolean
-  clearIsPublic: Boolean
+  isPublic: Boolean @readOnly
+  clearIsPublic: Boolean @readOnly
   """
   indicates if the standard is freely distributable under a trial license, only for system owned standards
   """
-  freeToUse: Boolean
-  clearFreeToUse: Boolean
+  freeToUse: Boolean @readOnly
+  clearFreeToUse: Boolean @readOnly
   """
   type of the standard - cybersecurity, healthcare , financial, etc.
   """
@@ -88617,6 +92704,16 @@ input UpdateSubcontrolInput {
   appendReferences: [Reference!]
   clearReferences: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   the unique reference code for the control
   """
   refCode: String
@@ -88667,6 +92764,16 @@ input UpdateSubprocessorInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   name of the standard body
   """
@@ -88826,6 +92933,16 @@ input UpdateTemplateInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   the name of the template
   """
   name: String
@@ -88852,14 +92969,14 @@ input UpdateTemplateInput {
   """
   uischema: Map
   clearUischema: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   addDocumentIDs: [ID!]
   removeDocumentIDs: [ID!]
   clearDocuments: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -88887,6 +93004,23 @@ input UpdateTrustCenterDocInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  title of the document
+  """
+  title: String
+  """
+  category of the document
+  """
+  category: String
+  """
+  visibility of the document
+  """
+  visibility: TrustCenterDocTrustCenterDocumentVisibility
+  clearVisibility: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
+  fileID: ID
+  clearFile: Boolean
 }
 """
 UpdateTrustCenterInput is used for update TrustCenter object.
@@ -88908,9 +93042,15 @@ input UpdateTrustCenterInput {
   addTrustCenterSubprocessorIDs: [ID!]
   removeTrustCenterSubprocessorIDs: [ID!]
   clearTrustCenterSubprocessors: Boolean
+  addTrustCenterDocIDs: [ID!]
+  removeTrustCenterDocIDs: [ID!]
+  clearTrustCenterDocs: Boolean
   addTrustCenterComplianceIDs: [ID!]
   removeTrustCenterComplianceIDs: [ID!]
   clearTrustCenterCompliances: Boolean
+  addTemplateIDs: [ID!]
+  removeTemplateIDs: [ID!]
+  clearTemplates: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
@@ -96804,6 +100944,7 @@ extend type Mutation{
         values of the template
         """
         input: CreateTemplateInput!
+        templateFiles: [Upload!]
     ): TemplateCreatePayload!
     """
     Create multiple new templates
@@ -96835,6 +100976,7 @@ extend type Mutation{
         New values for the template
         """
         input: UpdateTemplateInput!
+        templateFiles: [Upload!]
     ): TemplateUpdatePayload!
     """
     Delete an existing template
@@ -97156,6 +101298,7 @@ extend type Mutation{
         values of the trustCenterDoc
         """
         input: CreateTrustCenterDocInput!
+        trustCenterDocFile: Upload!
     ): TrustCenterDocCreatePayload!
     """
     Create multiple new trustCenterDocs

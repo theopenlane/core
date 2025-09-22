@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -34,7 +34,7 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 
 		relation, err := getRelationToCheck(ctx, m)
 		if err != nil {
-			log.Error().Err(err).Msg("unable to determine relation to check")
+			zerolog.Ctx(ctx).Error().Err(err).Msg("unable to determine relation to check")
 
 			return err
 		}
@@ -47,7 +47,7 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 			Context:     utils.NewOrganizationContextKey(user.SubjectEmail),
 		}
 
-		log.Debug().Interface("tuple", ac).Msg("checking relationship tuples")
+		zerolog.Ctx(ctx).Debug().Interface("tuple", ac).Msg("checking relationship tuples")
 
 		access, err := m.Authz.CheckOrgAccess(ctx, ac)
 		if err != nil {
@@ -55,7 +55,7 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 		}
 
 		if access {
-			log.Debug().Str("relation", relation).Str("organization_id", oID).Msg("access allowed")
+			zerolog.Ctx(ctx).Debug().Str("relation", relation).Str("organization_id", oID).Msg("access allowed")
 
 			return privacy.Allow
 		}

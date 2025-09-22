@@ -14,9 +14,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -126,23 +126,43 @@ func (_u *TemplateUpdate) ClearTags() *TemplateUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *TemplateUpdate) SetOwnerID(v string) *TemplateUpdate {
-	_u.mutation.SetOwnerID(v)
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *TemplateUpdate) SetInternalNotes(v string) *TemplateUpdate {
+	_u.mutation.SetInternalNotes(v)
 	return _u
 }
 
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *TemplateUpdate) SetNillableOwnerID(v *string) *TemplateUpdate {
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableInternalNotes(v *string) *TemplateUpdate {
 	if v != nil {
-		_u.SetOwnerID(*v)
+		_u.SetInternalNotes(*v)
 	}
 	return _u
 }
 
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *TemplateUpdate) ClearOwnerID() *TemplateUpdate {
-	_u.mutation.ClearOwnerID()
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *TemplateUpdate) ClearInternalNotes() *TemplateUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *TemplateUpdate) SetSystemInternalID(v string) *TemplateUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableSystemInternalID(v *string) *TemplateUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *TemplateUpdate) ClearSystemInternalID() *TemplateUpdate {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -232,9 +252,24 @@ func (_u *TemplateUpdate) ClearUischema() *TemplateUpdate {
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *TemplateUpdate) SetOwner(v *Organization) *TemplateUpdate {
-	return _u.SetOwnerID(v.ID)
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TemplateUpdate) SetTrustCenterID(v string) *TemplateUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableTrustCenterID(v *string) *TemplateUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TemplateUpdate) ClearTrustCenterID() *TemplateUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
 }
 
 // AddDocumentIDs adds the "documents" edge to the DocumentData entity by IDs.
@@ -267,15 +302,14 @@ func (_u *TemplateUpdate) AddFiles(v ...*File) *TemplateUpdate {
 	return _u.AddFileIDs(ids...)
 }
 
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_u *TemplateUpdate) SetTrustCenter(v *TrustCenter) *TemplateUpdate {
+	return _u.SetTrustCenterID(v.ID)
+}
+
 // Mutation returns the TemplateMutation object of the builder.
 func (_u *TemplateUpdate) Mutation() *TemplateMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *TemplateUpdate) ClearOwner() *TemplateUpdate {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearDocuments clears all "documents" edges to the DocumentData entity.
@@ -318,6 +352,12 @@ func (_u *TemplateUpdate) RemoveFiles(v ...*File) *TemplateUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFileIDs(ids...)
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (_u *TemplateUpdate) ClearTrustCenter() *TemplateUpdate {
+	_u.mutation.ClearTrustCenter()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -441,6 +481,21 @@ func (_u *TemplateUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(template.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(template.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(template.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(template.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(template.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(template.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(template.FieldName, field.TypeString, value)
 	}
@@ -467,37 +522,6 @@ func (_u *TemplateUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   template.OwnerTable,
-			Columns: []string{template.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Template
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   template.OwnerTable,
-			Columns: []string{template.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Template
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -590,6 +614,37 @@ func (_u *TemplateUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   template.TrustCenterTable,
+			Columns: []string{template.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Template
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   template.TrustCenterTable,
+			Columns: []string{template.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -709,23 +764,43 @@ func (_u *TemplateUpdateOne) ClearTags() *TemplateUpdateOne {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *TemplateUpdateOne) SetOwnerID(v string) *TemplateUpdateOne {
-	_u.mutation.SetOwnerID(v)
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *TemplateUpdateOne) SetInternalNotes(v string) *TemplateUpdateOne {
+	_u.mutation.SetInternalNotes(v)
 	return _u
 }
 
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *TemplateUpdateOne) SetNillableOwnerID(v *string) *TemplateUpdateOne {
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableInternalNotes(v *string) *TemplateUpdateOne {
 	if v != nil {
-		_u.SetOwnerID(*v)
+		_u.SetInternalNotes(*v)
 	}
 	return _u
 }
 
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *TemplateUpdateOne) ClearOwnerID() *TemplateUpdateOne {
-	_u.mutation.ClearOwnerID()
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *TemplateUpdateOne) ClearInternalNotes() *TemplateUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *TemplateUpdateOne) SetSystemInternalID(v string) *TemplateUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableSystemInternalID(v *string) *TemplateUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *TemplateUpdateOne) ClearSystemInternalID() *TemplateUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -815,9 +890,24 @@ func (_u *TemplateUpdateOne) ClearUischema() *TemplateUpdateOne {
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *TemplateUpdateOne) SetOwner(v *Organization) *TemplateUpdateOne {
-	return _u.SetOwnerID(v.ID)
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *TemplateUpdateOne) SetTrustCenterID(v string) *TemplateUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableTrustCenterID(v *string) *TemplateUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *TemplateUpdateOne) ClearTrustCenterID() *TemplateUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
 }
 
 // AddDocumentIDs adds the "documents" edge to the DocumentData entity by IDs.
@@ -850,15 +940,14 @@ func (_u *TemplateUpdateOne) AddFiles(v ...*File) *TemplateUpdateOne {
 	return _u.AddFileIDs(ids...)
 }
 
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_u *TemplateUpdateOne) SetTrustCenter(v *TrustCenter) *TemplateUpdateOne {
+	return _u.SetTrustCenterID(v.ID)
+}
+
 // Mutation returns the TemplateMutation object of the builder.
 func (_u *TemplateUpdateOne) Mutation() *TemplateMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *TemplateUpdateOne) ClearOwner() *TemplateUpdateOne {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearDocuments clears all "documents" edges to the DocumentData entity.
@@ -901,6 +990,12 @@ func (_u *TemplateUpdateOne) RemoveFiles(v ...*File) *TemplateUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFileIDs(ids...)
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (_u *TemplateUpdateOne) ClearTrustCenter() *TemplateUpdateOne {
+	_u.mutation.ClearTrustCenter()
+	return _u
 }
 
 // Where appends a list predicates to the TemplateUpdate builder.
@@ -1054,6 +1149,21 @@ func (_u *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(template.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(template.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(template.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(template.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(template.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(template.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(template.FieldName, field.TypeString, value)
 	}
@@ -1080,37 +1190,6 @@ func (_u *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err 
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   template.OwnerTable,
-			Columns: []string{template.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Template
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   template.OwnerTable,
-			Columns: []string{template.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Template
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1203,6 +1282,37 @@ func (_u *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   template.TrustCenterTable,
+			Columns: []string{template.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Template
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   template.TrustCenterTable,
+			Columns: []string{template.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

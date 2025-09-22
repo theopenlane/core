@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -128,6 +129,48 @@ func (_c *TemplateCreate) SetNillableOwnerID(v *string) *TemplateCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *TemplateCreate) SetSystemOwned(v bool) *TemplateCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableSystemOwned(v *bool) *TemplateCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *TemplateCreate) SetInternalNotes(v string) *TemplateCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableInternalNotes(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *TemplateCreate) SetSystemInternalID(v string) *TemplateCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableSystemInternalID(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *TemplateCreate) SetName(v string) *TemplateCreate {
 	_c.mutation.SetName(v)
@@ -188,6 +231,20 @@ func (_c *TemplateCreate) SetUischema(v map[string]interface{}) *TemplateCreate 
 	return _c
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *TemplateCreate) SetTrustCenterID(v string) *TemplateCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableTrustCenterID(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TemplateCreate) SetID(v string) *TemplateCreate {
 	_c.mutation.SetID(v)
@@ -235,6 +292,11 @@ func (_c *TemplateCreate) AddFiles(v ...*File) *TemplateCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddFileIDs(ids...)
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_c *TemplateCreate) SetTrustCenter(v *TrustCenter) *TemplateCreate {
+	return _c.SetTrustCenterID(v.ID)
 }
 
 // Mutation returns the TemplateMutation object of the builder.
@@ -292,6 +354,10 @@ func (_c *TemplateCreate) defaults() error {
 		v := template.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := template.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.TemplateType(); !ok {
 		v := template.DefaultTemplateType
 		_c.mutation.SetTemplateType(v)
@@ -312,6 +378,11 @@ func (_c *TemplateCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *TemplateCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
+		if err := template.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Template.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Template.name"`)}
 	}
@@ -400,6 +471,18 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 		_spec.SetField(template.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(template.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(template.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(template.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
+	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(template.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -474,6 +557,24 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   template.TrustCenterTable,
+			Columns: []string{template.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TrustCenterID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

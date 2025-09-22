@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/entitlements/genfeatures"
 	"github.com/theopenlane/core/internal/genhelpers"
+	"github.com/theopenlane/core/internal/graphapi/directives"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/enums/exportenums"
 	"github.com/theopenlane/core/pkg/events/soiree"
@@ -60,18 +61,28 @@ func main() {
 
 	// generate the history schemas
 	historyExt, entfgaExt := preRun()
+	schemaHooks := []entgql.SchemaHook{}
 
 	xExt, err := entx.NewExtension(entx.WithJSONScalar())
 	if err != nil {
 		log.Fatal().Err(err).Msg("creating entx extension")
 	}
 
+	schemaHooks = append(schemaHooks, xExt.GQLSchemaHooks()...)
+
+	dExt, err := directives.NewExtension()
+	if err != nil {
+		log.Fatal().Err(err).Msg("creating directives extension")
+	}
+
+	schemaHooks = append(schemaHooks, dExt.SchemaHooks()...)
+
 	gqlExt, err := entgql.NewExtension(
 		entgql.WithSchemaGenerator(),
 		entgql.WithSchemaPath(graphSchemaDir+"ent.graphql"),
 		entgql.WithConfigPath(graphDir+"/generate/.gqlgen.yml"),
 		entgql.WithWhereInputs(true),
-		entgql.WithSchemaHook(xExt.GQLSchemaHooks()...),
+		entgql.WithSchemaHook(schemaHooks...),
 		WithGqlWithTemplates(),
 	)
 	if err != nil {

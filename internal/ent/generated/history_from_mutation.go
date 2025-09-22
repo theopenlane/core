@@ -144,6 +144,18 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if dueDate, exists := m.DueDate(); exists {
 		create = create.SetDueDate(dueDate)
 	}
@@ -337,6 +349,24 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetOwnerID(actionplan.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(actionplan.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(actionplan.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(actionplan.SystemInternalID)
+		}
+
 		if dueDate, exists := m.DueDate(); exists {
 			create = create.SetDueDate(dueDate)
 		} else {
@@ -415,6 +445,9 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetImprovementSuggestions(actionplan.ImprovementSuggestions).
 			SetDismissedImprovementSuggestions(actionplan.DismissedImprovementSuggestions).
 			SetOwnerID(actionplan.OwnerID).
+			SetSystemOwned(actionplan.SystemOwned).
+			SetNillableInternalNotes(actionplan.InternalNotes).
+			SetNillableSystemInternalID(actionplan.SystemInternalID).
 			SetDueDate(actionplan.DueDate).
 			SetPriority(actionplan.Priority).
 			SetSource(actionplan.Source).
@@ -473,6 +506,18 @@ func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if assetType, exists := m.AssetType(); exists {
@@ -582,6 +627,24 @@ func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(asset.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(asset.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(asset.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(asset.SystemInternalID)
+		}
+
 		if assetType, exists := m.AssetType(); exists {
 			create = create.SetAssetType(assetType)
 		} else {
@@ -667,6 +730,9 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(asset.DeletedBy).
 			SetTags(asset.Tags).
 			SetOwnerID(asset.OwnerID).
+			SetSystemOwned(asset.SystemOwned).
+			SetNillableInternalNotes(asset.InternalNotes).
+			SetNillableSystemInternalID(asset.SystemInternalID).
 			SetAssetType(asset.AssetType).
 			SetName(asset.Name).
 			SetDescription(asset.Description).
@@ -1067,6 +1133,18 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if refCode, exists := m.RefCode(); exists {
 		create = create.SetRefCode(refCode)
 	}
@@ -1274,6 +1352,24 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(control.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(control.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(control.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(control.SystemInternalID)
+		}
+
 		if refCode, exists := m.RefCode(); exists {
 			create = create.SetRefCode(refCode)
 		} else {
@@ -1349,6 +1445,9 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableControlOwnerID(control.ControlOwnerID).
 			SetDelegateID(control.DelegateID).
 			SetOwnerID(control.OwnerID).
+			SetSystemOwned(control.SystemOwned).
+			SetNillableInternalNotes(control.InternalNotes).
+			SetNillableSystemInternalID(control.SystemInternalID).
 			SetRefCode(control.RefCode).
 			SetStandardID(control.StandardID).
 			Save(ctx)
@@ -1406,6 +1505,18 @@ func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Cont
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if status, exists := m.Status(); exists {
@@ -1507,6 +1618,24 @@ func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetOwnerID(controlimplementation.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(controlimplementation.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(controlimplementation.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(controlimplementation.SystemInternalID)
+		}
+
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
@@ -1580,6 +1709,9 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetDeletedBy(controlimplementation.DeletedBy).
 			SetTags(controlimplementation.Tags).
 			SetOwnerID(controlimplementation.OwnerID).
+			SetSystemOwned(controlimplementation.SystemOwned).
+			SetNillableInternalNotes(controlimplementation.InternalNotes).
+			SetNillableSystemInternalID(controlimplementation.SystemInternalID).
 			SetStatus(controlimplementation.Status).
 			SetImplementationDate(controlimplementation.ImplementationDate).
 			SetVerified(controlimplementation.Verified).
@@ -1648,6 +1780,18 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -1769,6 +1913,24 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetOwnerID(controlobjective.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(controlobjective.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(controlobjective.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(controlobjective.SystemInternalID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -1856,6 +2018,9 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetTags(controlobjective.Tags).
 			SetRevision(controlobjective.Revision).
 			SetOwnerID(controlobjective.OwnerID).
+			SetSystemOwned(controlobjective.SystemOwned).
+			SetNillableInternalNotes(controlobjective.InternalNotes).
+			SetNillableSystemInternalID(controlobjective.SystemInternalID).
 			SetName(controlobjective.Name).
 			SetDesiredOutcome(controlobjective.DesiredOutcome).
 			SetStatus(controlobjective.Status).
@@ -1918,6 +2083,18 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if cnameRecord, exists := m.CnameRecord(); exists {
@@ -2011,6 +2188,24 @@ func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetOwnerID(customdomain.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(customdomain.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(customdomain.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(customdomain.SystemInternalID)
+		}
+
 		if cnameRecord, exists := m.CnameRecord(); exists {
 			create = create.SetCnameRecord(cnameRecord)
 		} else {
@@ -2072,6 +2267,9 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetDeletedBy(customdomain.DeletedBy).
 			SetTags(customdomain.Tags).
 			SetOwnerID(customdomain.OwnerID).
+			SetSystemOwned(customdomain.SystemOwned).
+			SetNillableInternalNotes(customdomain.InternalNotes).
+			SetNillableSystemInternalID(customdomain.SystemInternalID).
 			SetCnameRecord(customdomain.CnameRecord).
 			SetMappableDomainID(customdomain.MappableDomainID).
 			SetDNSVerificationID(customdomain.DNSVerificationID).
@@ -2611,6 +2809,18 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -2714,6 +2924,24 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(entity.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(entity.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(entity.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(entity.SystemInternalID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -2793,6 +3021,9 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(entity.DeletedBy).
 			SetTags(entity.Tags).
 			SetOwnerID(entity.OwnerID).
+			SetSystemOwned(entity.SystemOwned).
+			SetNillableInternalNotes(entity.InternalNotes).
+			SetNillableSystemInternalID(entity.SystemInternalID).
 			SetName(entity.Name).
 			SetDisplayName(entity.DisplayName).
 			SetDescription(entity.Description).
@@ -2854,6 +3085,18 @@ func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -2939,6 +3182,24 @@ func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetOwnerID(entitytype.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(entitytype.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(entitytype.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(entitytype.SystemInternalID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -2988,6 +3249,9 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDeletedBy(entitytype.DeletedBy).
 			SetTags(entitytype.Tags).
 			SetOwnerID(entitytype.OwnerID).
+			SetSystemOwned(entitytype.SystemOwned).
+			SetNillableInternalNotes(entitytype.InternalNotes).
+			SetNillableSystemInternalID(entitytype.SystemInternalID).
 			SetName(entitytype.Name).
 			Save(ctx)
 		if err != nil {
@@ -3331,6 +3595,18 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if providedFileName, exists := m.ProvidedFileName(); exists {
 		create = create.SetProvidedFileName(providedFileName)
 	}
@@ -3474,6 +3750,24 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(file.Tags)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(file.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(file.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(file.SystemInternalID)
 		}
 
 		if providedFileName, exists := m.ProvidedFileName(); exists {
@@ -3626,6 +3920,9 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedAt(file.DeletedAt).
 			SetDeletedBy(file.DeletedBy).
 			SetTags(file.Tags).
+			SetSystemOwned(file.SystemOwned).
+			SetNillableInternalNotes(file.InternalNotes).
+			SetNillableSystemInternalID(file.SystemInternalID).
 			SetProvidedFileName(file.ProvidedFileName).
 			SetProvidedFileExtension(file.ProvidedFileExtension).
 			SetProvidedFileSize(file.ProvidedFileSize).
@@ -4333,6 +4630,18 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -4442,6 +4751,24 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(hush.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(hush.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(hush.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(hush.SystemInternalID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -4538,6 +4865,9 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedAt(hush.DeletedAt).
 			SetDeletedBy(hush.DeletedBy).
 			SetOwnerID(hush.OwnerID).
+			SetSystemOwned(hush.SystemOwned).
+			SetNillableInternalNotes(hush.InternalNotes).
+			SetNillableSystemInternalID(hush.SystemInternalID).
 			SetName(hush.Name).
 			SetDescription(hush.Description).
 			SetKind(hush.Kind).
@@ -4602,6 +4932,18 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -4703,6 +5045,24 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetOwnerID(integration.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(integration.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(integration.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(integration.SystemInternalID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -4776,6 +5136,9 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetDeletedBy(integration.DeletedBy).
 			SetTags(integration.Tags).
 			SetOwnerID(integration.OwnerID).
+			SetSystemOwned(integration.SystemOwned).
+			SetNillableInternalNotes(integration.InternalNotes).
+			SetNillableSystemInternalID(integration.SystemInternalID).
 			SetName(integration.Name).
 			SetDescription(integration.Description).
 			SetKind(integration.Kind).
@@ -4844,6 +5207,18 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -5009,6 +5384,24 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetOwnerID(internalpolicy.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(internalpolicy.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(internalpolicy.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(internalpolicy.SystemInternalID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -5162,6 +5555,9 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetTags(internalpolicy.Tags).
 			SetRevision(internalpolicy.Revision).
 			SetOwnerID(internalpolicy.OwnerID).
+			SetSystemOwned(internalpolicy.SystemOwned).
+			SetNillableInternalNotes(internalpolicy.InternalNotes).
+			SetNillableSystemInternalID(internalpolicy.SystemInternalID).
 			SetName(internalpolicy.Name).
 			SetStatus(internalpolicy.Status).
 			SetPolicyType(internalpolicy.PolicyType).
@@ -5243,6 +5639,14 @@ func (m *JobTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if systemOwned, exists := m.SystemOwned(); exists {
 		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if title, exists := m.Title(); exists {
@@ -5364,6 +5768,18 @@ func (m *JobTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetSystemOwned(jobtemplate.SystemOwned)
 		}
 
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(jobtemplate.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(jobtemplate.SystemInternalID)
+		}
+
 		if title, exists := m.Title(); exists {
 			create = create.SetTitle(title)
 		} else {
@@ -5451,6 +5867,8 @@ func (m *JobTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetTags(jobtemplate.Tags).
 			SetOwnerID(jobtemplate.OwnerID).
 			SetSystemOwned(jobtemplate.SystemOwned).
+			SetNillableInternalNotes(jobtemplate.InternalNotes).
+			SetNillableSystemInternalID(jobtemplate.SystemInternalID).
 			SetTitle(jobtemplate.Title).
 			SetDescription(jobtemplate.Description).
 			SetPlatform(jobtemplate.Platform).
@@ -5701,6 +6119,18 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetTags(tags)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -5794,6 +6224,24 @@ func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetTags(mappedcontrol.Tags)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(mappedcontrol.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(mappedcontrol.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(mappedcontrol.SystemInternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -5866,6 +6314,9 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetDeletedAt(mappedcontrol.DeletedAt).
 			SetDeletedBy(mappedcontrol.DeletedBy).
 			SetTags(mappedcontrol.Tags).
+			SetSystemOwned(mappedcontrol.SystemOwned).
+			SetNillableInternalNotes(mappedcontrol.InternalNotes).
+			SetNillableSystemInternalID(mappedcontrol.SystemInternalID).
 			SetOwnerID(mappedcontrol.OwnerID).
 			SetMappingType(mappedcontrol.MappingType).
 			SetRelation(mappedcontrol.Relation).
@@ -5930,6 +6381,18 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -6029,6 +6492,24 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(narrative.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(narrative.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(narrative.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(narrative.SystemInternalID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -6091,6 +6572,9 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(narrative.DisplayID).
 			SetTags(narrative.Tags).
 			SetOwnerID(narrative.OwnerID).
+			SetSystemOwned(narrative.SystemOwned).
+			SetNillableInternalNotes(narrative.InternalNotes).
+			SetNillableSystemInternalID(narrative.SystemInternalID).
 			SetName(narrative.Name).
 			SetDescription(narrative.Description).
 			SetDetails(narrative.Details).
@@ -7525,6 +8009,18 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if fileID, exists := m.FileID(); exists {
 		create = create.SetNillableFileID(&fileID)
 	}
@@ -7720,6 +8216,24 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDismissedImprovementSuggestions(procedure.DismissedImprovementSuggestions)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(procedure.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(procedure.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(procedure.SystemInternalID)
+		}
+
 		if fileID, exists := m.FileID(); exists {
 			create = create.SetNillableFileID(&fileID)
 		} else {
@@ -7793,6 +8307,9 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDismissedControlSuggestions(procedure.DismissedControlSuggestions).
 			SetImprovementSuggestions(procedure.ImprovementSuggestions).
 			SetDismissedImprovementSuggestions(procedure.DismissedImprovementSuggestions).
+			SetSystemOwned(procedure.SystemOwned).
+			SetNillableInternalNotes(procedure.InternalNotes).
+			SetNillableSystemInternalID(procedure.SystemInternalID).
 			SetNillableFileID(procedure.FileID).
 			SetNillableURL(procedure.URL).
 			Save(ctx)
@@ -9140,6 +9657,14 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetSystemOwned(systemOwned)
 	}
 
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -9283,6 +9808,18 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetSystemOwned(standard.SystemOwned)
 		}
 
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(standard.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(standard.SystemInternalID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -9406,6 +9943,8 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRevision(standard.Revision).
 			SetOwnerID(standard.OwnerID).
 			SetSystemOwned(standard.SystemOwned).
+			SetNillableInternalNotes(standard.InternalNotes).
+			SetNillableSystemInternalID(standard.SystemInternalID).
 			SetName(standard.Name).
 			SetShortName(standard.ShortName).
 			SetFramework(standard.Framework).
@@ -9554,6 +10093,18 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if refCode, exists := m.RefCode(); exists {
@@ -9763,6 +10314,24 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetOwnerID(subcontrol.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(subcontrol.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(subcontrol.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(subcontrol.SystemInternalID)
+		}
+
 		if refCode, exists := m.RefCode(); exists {
 			create = create.SetRefCode(refCode)
 		} else {
@@ -9838,6 +10407,9 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetNillableControlOwnerID(subcontrol.ControlOwnerID).
 			SetDelegateID(subcontrol.DelegateID).
 			SetOwnerID(subcontrol.OwnerID).
+			SetSystemOwned(subcontrol.SystemOwned).
+			SetNillableInternalNotes(subcontrol.InternalNotes).
+			SetNillableSystemInternalID(subcontrol.SystemInternalID).
 			SetRefCode(subcontrol.RefCode).
 			SetControlID(subcontrol.ControlID).
 			Save(ctx)
@@ -9899,6 +10471,14 @@ func (m *SubprocessorMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if systemOwned, exists := m.SystemOwned(); exists {
 		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -10002,6 +10582,18 @@ func (m *SubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetSystemOwned(subprocessor.SystemOwned)
 		}
 
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(subprocessor.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(subprocessor.SystemInternalID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -10070,6 +10662,8 @@ func (m *SubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetTags(subprocessor.Tags).
 			SetOwnerID(subprocessor.OwnerID).
 			SetSystemOwned(subprocessor.SystemOwned).
+			SetNillableInternalNotes(subprocessor.InternalNotes).
+			SetNillableSystemInternalID(subprocessor.SystemInternalID).
 			SetName(subprocessor.Name).
 			SetDescription(subprocessor.Description).
 			SetNillableLogoRemoteURL(subprocessor.LogoRemoteURL).
@@ -10409,6 +11003,18 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -10431,6 +11037,10 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if uischema, exists := m.Uischema(); exists {
 		create = create.SetUischema(uischema)
+	}
+
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
 	}
 
 	_, err := create.Save(ctx)
@@ -10512,6 +11122,24 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(template.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(template.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(template.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(template.SystemInternalID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -10546,6 +11174,12 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUischema(uischema)
 		} else {
 			create = create.SetUischema(template.Uischema)
+		}
+
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(template.TrustCenterID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -10591,12 +11225,16 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(template.DeletedBy).
 			SetTags(template.Tags).
 			SetOwnerID(template.OwnerID).
+			SetSystemOwned(template.SystemOwned).
+			SetNillableInternalNotes(template.InternalNotes).
+			SetNillableSystemInternalID(template.SystemInternalID).
 			SetName(template.Name).
 			SetTemplateType(template.TemplateType).
 			SetDescription(template.Description).
 			SetKind(template.Kind).
 			SetJsonconfig(template.Jsonconfig).
 			SetUischema(template.Uischema).
+			SetTrustCenterID(template.TrustCenterID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -11041,6 +11679,30 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetTags(tags)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
+	if title, exists := m.Title(); exists {
+		create = create.SetTitle(title)
+	}
+
+	if category, exists := m.Category(); exists {
+		create = create.SetCategory(category)
+	}
+
+	if fileID, exists := m.FileID(); exists {
+		create = create.SetNillableFileID(&fileID)
+	}
+
+	if visibility, exists := m.Visibility(); exists {
+		create = create.SetVisibility(visibility)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -11114,6 +11776,42 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetTags(trustcenterdoc.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(trustcenterdoc.OwnerID)
+		}
+
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(trustcenterdoc.TrustCenterID)
+		}
+
+		if title, exists := m.Title(); exists {
+			create = create.SetTitle(title)
+		} else {
+			create = create.SetTitle(trustcenterdoc.Title)
+		}
+
+		if category, exists := m.Category(); exists {
+			create = create.SetCategory(category)
+		} else {
+			create = create.SetCategory(trustcenterdoc.Category)
+		}
+
+		if fileID, exists := m.FileID(); exists {
+			create = create.SetNillableFileID(&fileID)
+		} else {
+			create = create.SetNillableFileID(trustcenterdoc.FileID)
+		}
+
+		if visibility, exists := m.Visibility(); exists {
+			create = create.SetVisibility(visibility)
+		} else {
+			create = create.SetVisibility(trustcenterdoc.Visibility)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -11156,6 +11854,12 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDeletedAt(trustcenterdoc.DeletedAt).
 			SetDeletedBy(trustcenterdoc.DeletedBy).
 			SetTags(trustcenterdoc.Tags).
+			SetOwnerID(trustcenterdoc.OwnerID).
+			SetTrustCenterID(trustcenterdoc.TrustCenterID).
+			SetTitle(trustcenterdoc.Title).
+			SetCategory(trustcenterdoc.Category).
+			SetNillableFileID(trustcenterdoc.FileID).
+			SetVisibility(trustcenterdoc.Visibility).
 			Save(ctx)
 		if err != nil {
 			return err

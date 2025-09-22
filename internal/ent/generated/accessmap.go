@@ -1278,6 +1278,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "export",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "trust_center_docs": {
+	ObjectType:      "trust_center_doc",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "members": {
 	ObjectType:      "member",
 	SkipEditCheck:   true,
@@ -1751,6 +1755,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "trust_center": {
+	ObjectType:      "trust_center",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "trust_center": {"owner": {
 	ObjectType:      "owner",
@@ -1768,8 +1776,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "organization",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "trust_center_docs": {
+	ObjectType:      "trust_center_doc",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "trust_center_compliances": {
 	ObjectType:      "trust_center_compliance",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "templates": {
+	ObjectType:      "template",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -1782,7 +1798,20 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 },
-}, "trust_center_doc": {}, "trust_center_setting": {"trust_center": {
+}, "trust_center_doc": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "trust_center": {
+	ObjectType:      "trust_center",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "file": {
+	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "trust_center_setting": {"trust_center": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,

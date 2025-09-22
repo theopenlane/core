@@ -159,6 +159,48 @@ func (_c *IntegrationHistoryCreate) SetNillableOwnerID(v *string) *IntegrationHi
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *IntegrationHistoryCreate) SetSystemOwned(v bool) *IntegrationHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableSystemOwned(v *bool) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *IntegrationHistoryCreate) SetInternalNotes(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableInternalNotes(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *IntegrationHistoryCreate) SetSystemInternalID(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableSystemInternalID(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *IntegrationHistoryCreate) SetName(v string) *IntegrationHistoryCreate {
 	_c.mutation.SetName(v)
@@ -289,6 +331,10 @@ func (_c *IntegrationHistoryCreate) defaults() error {
 		v := integrationhistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := integrationhistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if integrationhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized integrationhistory.DefaultID (forgotten import generated/runtime?)")
@@ -394,6 +440,18 @@ func (_c *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgraph
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(integrationhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(integrationhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(integrationhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(integrationhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(integrationhistory.FieldName, field.TypeString, value)

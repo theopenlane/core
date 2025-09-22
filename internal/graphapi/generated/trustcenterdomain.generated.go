@@ -63,6 +63,12 @@ func (ec *executionContext) fieldContext_TrustCenterDomainCreatePayload_customDo
 				return ec.fieldContext_CustomDomain_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_CustomDomain_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_CustomDomain_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_CustomDomain_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_CustomDomain_systemInternalID(ctx, field)
 			case "cnameRecord":
 				return ec.fieldContext_CustomDomain_cnameRecord(ctx, field)
 			case "mappableDomainID":

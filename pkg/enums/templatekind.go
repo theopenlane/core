@@ -13,7 +13,7 @@ var (
 	// TemplateKindQuestionnaire indicates the questionnaire.
 	TemplateKindQuestionnaire TemplateKind = "QUESTIONNAIRE"
 	// TemplateKindTrustCenterNda indicates the trust center NDA.
-	TemplateKindTrustCenterNda TemplateKind = "TrustCenterNda"
+	TemplateKindTrustCenterNda TemplateKind = "TRUSTCENTER_NDA"
 	// TemplateKindInvalid is used when an unknown or unsupported value is provided.
 	TemplateKindInvalid TemplateKind = "TEMPLATEKIND_INVALID"
 )
@@ -22,6 +22,7 @@ var (
 func (TemplateKind) Values() []string {
 	return []string{
 		string(TemplateKindQuestionnaire),
+		string(TemplateKindTrustCenterNda),
 	}
 }
 
@@ -35,6 +36,8 @@ func ToTemplateKind(r string) *TemplateKind {
 	switch strings.ToUpper(r) {
 	case TemplateKindQuestionnaire.String():
 		return &TemplateKindQuestionnaire
+	case TemplateKindTrustCenterNda.String():
+		return &TemplateKindTrustCenterNda
 	default:
 		return &TemplateKindInvalid
 	}

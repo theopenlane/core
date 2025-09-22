@@ -838,6 +838,35 @@ func HasTrustCenterSubprocessorsWith(preds ...predicate.TrustCenterSubprocessor)
 	})
 }
 
+// HasTrustCenterDocs applies the HasEdge predicate on the "trust_center_docs" edge.
+func HasTrustCenterDocs() predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterDocsTable, TrustCenterDocsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterDocsWith applies the HasEdge predicate on the "trust_center_docs" edge with a given conditions (other predicates).
+func HasTrustCenterDocsWith(preds ...predicate.TrustCenterDoc) predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := newTrustCenterDocsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasTrustCenterCompliances applies the HasEdge predicate on the "trust_center_compliances" edge.
 func HasTrustCenterCompliances() predicate.TrustCenter {
 	return predicate.TrustCenter(func(s *sql.Selector) {
@@ -859,6 +888,35 @@ func HasTrustCenterCompliancesWith(preds ...predicate.TrustCenterCompliance) pre
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.TrustCenterCompliance
 		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTemplates applies the HasEdge predicate on the "templates" edge.
+func HasTemplates() predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TemplatesTable, TemplatesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Template
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTemplatesWith applies the HasEdge predicate on the "templates" edge with a given conditions (other predicates).
+func HasTemplatesWith(preds ...predicate.Template) predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := newTemplatesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Template
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

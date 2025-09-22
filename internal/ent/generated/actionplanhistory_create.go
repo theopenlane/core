@@ -342,6 +342,48 @@ func (_c *ActionPlanHistoryCreate) SetNillableOwnerID(v *string) *ActionPlanHist
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ActionPlanHistoryCreate) SetSystemOwned(v bool) *ActionPlanHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableSystemOwned(v *bool) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ActionPlanHistoryCreate) SetInternalNotes(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableInternalNotes(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ActionPlanHistoryCreate) SetSystemInternalID(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableSystemInternalID(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetDueDate sets the "due_date" field.
 func (_c *ActionPlanHistoryCreate) SetDueDate(v time.Time) *ActionPlanHistoryCreate {
 	_c.mutation.SetDueDate(v)
@@ -503,6 +545,10 @@ func (_c *ActionPlanHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.DismissedImprovementSuggestions(); !ok {
 		v := actionplanhistory.DefaultDismissedImprovementSuggestions
 		_c.mutation.SetDismissedImprovementSuggestions(v)
+	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := actionplanhistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if actionplanhistory.DefaultID == nil {
@@ -692,6 +738,18 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(actionplanhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(actionplanhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(actionplanhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)

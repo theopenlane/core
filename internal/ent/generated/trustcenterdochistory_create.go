@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -145,6 +146,74 @@ func (_c *TrustCenterDocHistoryCreate) SetTags(v []string) *TrustCenterDocHistor
 	return _c
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (_c *TrustCenterDocHistoryCreate) SetOwnerID(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableOwnerID(v *string) *TrustCenterDocHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *TrustCenterDocHistoryCreate) SetTrustCenterID(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableTrustCenterID(v *string) *TrustCenterDocHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
+// SetTitle sets the "title" field.
+func (_c *TrustCenterDocHistoryCreate) SetTitle(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetTitle(v)
+	return _c
+}
+
+// SetCategory sets the "category" field.
+func (_c *TrustCenterDocHistoryCreate) SetCategory(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetCategory(v)
+	return _c
+}
+
+// SetFileID sets the "file_id" field.
+func (_c *TrustCenterDocHistoryCreate) SetFileID(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetFileID(v)
+	return _c
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableFileID(v *string) *TrustCenterDocHistoryCreate {
+	if v != nil {
+		_c.SetFileID(*v)
+	}
+	return _c
+}
+
+// SetVisibility sets the "visibility" field.
+func (_c *TrustCenterDocHistoryCreate) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetVisibility(v)
+	return _c
+}
+
+// SetNillableVisibility sets the "visibility" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableVisibility(v *enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryCreate {
+	if v != nil {
+		_c.SetVisibility(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterDocHistoryCreate) SetID(v string) *TrustCenterDocHistoryCreate {
 	_c.mutation.SetID(v)
@@ -221,6 +290,10 @@ func (_c *TrustCenterDocHistoryCreate) defaults() error {
 		v := trustcenterdochistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.Visibility(); !ok {
+		v := trustcenterdochistory.DefaultVisibility
+		_c.mutation.SetVisibility(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcenterdochistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterdochistory.DefaultID (forgotten import generated/runtime?)")
@@ -242,6 +315,17 @@ func (_c *TrustCenterDocHistoryCreate) check() error {
 	if v, ok := _c.mutation.Operation(); ok {
 		if err := trustcenterdochistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDocHistory.operation": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.Title(); !ok {
+		return &ValidationError{Name: "title", err: errors.New(`generated: missing required field "TrustCenterDocHistory.title"`)}
+	}
+	if _, ok := _c.mutation.Category(); !ok {
+		return &ValidationError{Name: "category", err: errors.New(`generated: missing required field "TrustCenterDocHistory.category"`)}
+	}
+	if v, ok := _c.mutation.Visibility(); ok {
+		if err := trustcenterdochistory.VisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDocHistory.visibility": %w`, err)}
 		}
 	}
 	return nil
@@ -319,6 +403,30 @@ func (_c *TrustCenterDocHistoryCreate) createSpec() (*TrustCenterDocHistory, *sq
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.OwnerID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
+	}
+	if value, ok := _c.mutation.Title(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTitle, field.TypeString, value)
+		_node.Title = value
+	}
+	if value, ok := _c.mutation.Category(); ok {
+		_spec.SetField(trustcenterdochistory.FieldCategory, field.TypeString, value)
+		_node.Category = value
+	}
+	if value, ok := _c.mutation.FileID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldFileID, field.TypeString, value)
+		_node.FileID = &value
+	}
+	if value, ok := _c.mutation.Visibility(); ok {
+		_spec.SetField(trustcenterdochistory.FieldVisibility, field.TypeEnum, value)
+		_node.Visibility = value
 	}
 	return _node, _spec
 }

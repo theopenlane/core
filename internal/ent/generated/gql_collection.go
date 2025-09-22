@@ -768,6 +768,21 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, actionplan.FieldOwnerID)
 				fieldSeen[actionplan.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[actionplan.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldSystemOwned)
+				fieldSeen[actionplan.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[actionplan.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldInternalNotes)
+				fieldSeen[actionplan.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[actionplan.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldSystemInternalID)
+				fieldSeen[actionplan.FieldSystemInternalID] = struct{}{}
+			}
 		case "dueDate":
 			if _, ok := fieldSeen[actionplan.FieldDueDate]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldDueDate)
@@ -1002,6 +1017,21 @@ func (_q *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[actionplanhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldOwnerID)
 				fieldSeen[actionplanhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[actionplanhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldSystemOwned)
+				fieldSeen[actionplanhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[actionplanhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldInternalNotes)
+				fieldSeen[actionplanhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[actionplanhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldSystemInternalID)
+				fieldSeen[actionplanhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "dueDate":
 			if _, ok := fieldSeen[actionplanhistory.FieldDueDate]; !ok {
@@ -1693,6 +1723,21 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				selectedFields = append(selectedFields, asset.FieldOwnerID)
 				fieldSeen[asset.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[asset.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, asset.FieldSystemOwned)
+				fieldSeen[asset.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[asset.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, asset.FieldInternalNotes)
+				fieldSeen[asset.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[asset.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, asset.FieldSystemInternalID)
+				fieldSeen[asset.FieldSystemInternalID] = struct{}{}
+			}
 		case "assetType":
 			if _, ok := fieldSeen[asset.FieldAssetType]; !ok {
 				selectedFields = append(selectedFields, asset.FieldAssetType)
@@ -1862,6 +1907,21 @@ func (_q *AssetHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[assethistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, assethistory.FieldOwnerID)
 				fieldSeen[assethistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[assethistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldSystemOwned)
+				fieldSeen[assethistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[assethistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldInternalNotes)
+				fieldSeen[assethistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[assethistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldSystemInternalID)
+				fieldSeen[assethistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "assetType":
 			if _, ok := fieldSeen[assethistory.FieldAssetType]; !ok {
@@ -4172,6 +4232,21 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, control.FieldOwnerID)
 				fieldSeen[control.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[control.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, control.FieldSystemOwned)
+				fieldSeen[control.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[control.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, control.FieldInternalNotes)
+				fieldSeen[control.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[control.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, control.FieldSystemInternalID)
+				fieldSeen[control.FieldSystemInternalID] = struct{}{}
+			}
 		case "refCode":
 			if _, ok := fieldSeen[control.FieldRefCode]; !ok {
 				selectedFields = append(selectedFields, control.FieldRefCode)
@@ -4416,6 +4491,21 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldOwnerID)
 				fieldSeen[controlhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[controlhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldSystemOwned)
+				fieldSeen[controlhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[controlhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldInternalNotes)
+				fieldSeen[controlhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[controlhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldSystemInternalID)
+				fieldSeen[controlhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "refCode":
 			if _, ok := fieldSeen[controlhistory.FieldRefCode]; !ok {
@@ -5114,6 +5204,21 @@ func (_q *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, controlimplementation.FieldOwnerID)
 				fieldSeen[controlimplementation.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[controlimplementation.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldSystemOwned)
+				fieldSeen[controlimplementation.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[controlimplementation.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldInternalNotes)
+				fieldSeen[controlimplementation.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[controlimplementation.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldSystemInternalID)
+				fieldSeen[controlimplementation.FieldSystemInternalID] = struct{}{}
+			}
 		case "status":
 			if _, ok := fieldSeen[controlimplementation.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, controlimplementation.FieldStatus)
@@ -5273,6 +5378,21 @@ func (_q *ControlImplementationHistoryQuery) collectField(ctx context.Context, o
 			if _, ok := fieldSeen[controlimplementationhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, controlimplementationhistory.FieldOwnerID)
 				fieldSeen[controlimplementationhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldSystemOwned)
+				fieldSeen[controlimplementationhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldInternalNotes)
+				fieldSeen[controlimplementationhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldSystemInternalID)
+				fieldSeen[controlimplementationhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[controlimplementationhistory.FieldStatus]; !ok {
@@ -6542,6 +6662,21 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, controlobjective.FieldOwnerID)
 				fieldSeen[controlobjective.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[controlobjective.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldSystemOwned)
+				fieldSeen[controlobjective.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[controlobjective.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldInternalNotes)
+				fieldSeen[controlobjective.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[controlobjective.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldSystemInternalID)
+				fieldSeen[controlobjective.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[controlobjective.FieldName]; !ok {
 				selectedFields = append(selectedFields, controlobjective.FieldName)
@@ -6721,6 +6856,21 @@ func (_q *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[controlobjectivehistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldOwnerID)
 				fieldSeen[controlobjectivehistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldSystemOwned)
+				fieldSeen[controlobjectivehistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldInternalNotes)
+				fieldSeen[controlobjectivehistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldSystemInternalID)
+				fieldSeen[controlobjectivehistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[controlobjectivehistory.FieldName]; !ok {
@@ -6916,6 +7066,21 @@ func (_q *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, customdomain.FieldOwnerID)
 				fieldSeen[customdomain.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[customdomain.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldSystemOwned)
+				fieldSeen[customdomain.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[customdomain.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldInternalNotes)
+				fieldSeen[customdomain.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[customdomain.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldSystemInternalID)
+				fieldSeen[customdomain.FieldSystemInternalID] = struct{}{}
+			}
 		case "cnameRecord":
 			if _, ok := fieldSeen[customdomain.FieldCnameRecord]; !ok {
 				selectedFields = append(selectedFields, customdomain.FieldCnameRecord)
@@ -7065,6 +7230,21 @@ func (_q *CustomDomainHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[customdomainhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, customdomainhistory.FieldOwnerID)
 				fieldSeen[customdomainhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[customdomainhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldSystemOwned)
+				fieldSeen[customdomainhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[customdomainhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldInternalNotes)
+				fieldSeen[customdomainhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[customdomainhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldSystemInternalID)
+				fieldSeen[customdomainhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "cnameRecord":
 			if _, ok := fieldSeen[customdomainhistory.FieldCnameRecord]; !ok {
@@ -8982,6 +9162,21 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, entity.FieldOwnerID)
 				fieldSeen[entity.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[entity.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, entity.FieldSystemOwned)
+				fieldSeen[entity.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[entity.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, entity.FieldInternalNotes)
+				fieldSeen[entity.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[entity.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldSystemInternalID)
+				fieldSeen[entity.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[entity.FieldName]; !ok {
 				selectedFields = append(selectedFields, entity.FieldName)
@@ -9146,6 +9341,21 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[entityhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldOwnerID)
 				fieldSeen[entityhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[entityhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldSystemOwned)
+				fieldSeen[entityhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[entityhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldInternalNotes)
+				fieldSeen[entityhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[entityhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldSystemInternalID)
+				fieldSeen[entityhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[entityhistory.FieldName]; !ok {
@@ -9395,6 +9605,21 @@ func (_q *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, entitytype.FieldOwnerID)
 				fieldSeen[entitytype.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[entitytype.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, entitytype.FieldSystemOwned)
+				fieldSeen[entitytype.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[entitytype.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, entitytype.FieldInternalNotes)
+				fieldSeen[entitytype.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[entitytype.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, entitytype.FieldSystemInternalID)
+				fieldSeen[entitytype.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[entitytype.FieldName]; !ok {
 				selectedFields = append(selectedFields, entitytype.FieldName)
@@ -9534,6 +9759,21 @@ func (_q *EntityTypeHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[entitytypehistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, entitytypehistory.FieldOwnerID)
 				fieldSeen[entitytypehistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[entitytypehistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, entitytypehistory.FieldSystemOwned)
+				fieldSeen[entitytypehistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[entitytypehistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, entitytypehistory.FieldInternalNotes)
+				fieldSeen[entitytypehistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[entitytypehistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, entitytypehistory.FieldSystemInternalID)
+				fieldSeen[entitytypehistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[entitytypehistory.FieldName]; !ok {
@@ -12778,6 +13018,21 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, file.FieldTags)
 				fieldSeen[file.FieldTags] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[file.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, file.FieldSystemOwned)
+				fieldSeen[file.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[file.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, file.FieldInternalNotes)
+				fieldSeen[file.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[file.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, file.FieldSystemInternalID)
+				fieldSeen[file.FieldSystemInternalID] = struct{}{}
+			}
 		case "providedFileName":
 			if _, ok := fieldSeen[file.FieldProvidedFileName]; !ok {
 				selectedFields = append(selectedFields, file.FieldProvidedFileName)
@@ -12992,6 +13247,21 @@ func (_q *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[filehistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldTags)
 				fieldSeen[filehistory.FieldTags] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[filehistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldSystemOwned)
+				fieldSeen[filehistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[filehistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldInternalNotes)
+				fieldSeen[filehistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[filehistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldSystemInternalID)
+				fieldSeen[filehistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "providedFileName":
 			if _, ok := fieldSeen[filehistory.FieldProvidedFileName]; !ok {
@@ -17749,6 +18019,21 @@ func (_q *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, hush.FieldOwnerID)
 				fieldSeen[hush.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[hush.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, hush.FieldSystemOwned)
+				fieldSeen[hush.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[hush.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, hush.FieldInternalNotes)
+				fieldSeen[hush.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[hush.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, hush.FieldSystemInternalID)
+				fieldSeen[hush.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[hush.FieldName]; !ok {
 				selectedFields = append(selectedFields, hush.FieldName)
@@ -17918,6 +18203,21 @@ func (_q *HushHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[hushhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, hushhistory.FieldOwnerID)
 				fieldSeen[hushhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[hushhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldSystemOwned)
+				fieldSeen[hushhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[hushhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldInternalNotes)
+				fieldSeen[hushhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[hushhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldSystemInternalID)
+				fieldSeen[hushhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[hushhistory.FieldName]; !ok {
@@ -18363,6 +18663,21 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, integration.FieldOwnerID)
 				fieldSeen[integration.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[integration.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, integration.FieldSystemOwned)
+				fieldSeen[integration.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[integration.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, integration.FieldInternalNotes)
+				fieldSeen[integration.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[integration.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, integration.FieldSystemInternalID)
+				fieldSeen[integration.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[integration.FieldName]; !ok {
 				selectedFields = append(selectedFields, integration.FieldName)
@@ -18522,6 +18837,21 @@ func (_q *IntegrationHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[integrationhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, integrationhistory.FieldOwnerID)
 				fieldSeen[integrationhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[integrationhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldSystemOwned)
+				fieldSeen[integrationhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[integrationhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldInternalNotes)
+				fieldSeen[integrationhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[integrationhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldSystemInternalID)
+				fieldSeen[integrationhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[integrationhistory.FieldName]; !ok {
@@ -19751,6 +20081,21 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, internalpolicy.FieldOwnerID)
 				fieldSeen[internalpolicy.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[internalpolicy.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldSystemOwned)
+				fieldSeen[internalpolicy.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[internalpolicy.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldInternalNotes)
+				fieldSeen[internalpolicy.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[internalpolicy.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldSystemInternalID)
+				fieldSeen[internalpolicy.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[internalpolicy.FieldName]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldName)
@@ -19985,6 +20330,21 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[internalpolicyhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldOwnerID)
 				fieldSeen[internalpolicyhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldSystemOwned)
+				fieldSeen[internalpolicyhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldInternalNotes)
+				fieldSeen[internalpolicyhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldSystemInternalID)
+				fieldSeen[internalpolicyhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldName]; !ok {
@@ -20849,6 +21209,16 @@ func (_q *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, jobrunner.FieldSystemOwned)
 				fieldSeen[jobrunner.FieldSystemOwned] = struct{}{}
 			}
+		case "internalNotes":
+			if _, ok := fieldSeen[jobrunner.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldInternalNotes)
+				fieldSeen[jobrunner.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[jobrunner.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldSystemInternalID)
+				fieldSeen[jobrunner.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[jobrunner.FieldName]; !ok {
 				selectedFields = append(selectedFields, jobrunner.FieldName)
@@ -21546,6 +21916,16 @@ func (_q *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, jobtemplate.FieldSystemOwned)
 				fieldSeen[jobtemplate.FieldSystemOwned] = struct{}{}
 			}
+		case "internalNotes":
+			if _, ok := fieldSeen[jobtemplate.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldInternalNotes)
+				fieldSeen[jobtemplate.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[jobtemplate.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldSystemInternalID)
+				fieldSeen[jobtemplate.FieldSystemInternalID] = struct{}{}
+			}
 		case "title":
 			if _, ok := fieldSeen[jobtemplate.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, jobtemplate.FieldTitle)
@@ -21720,6 +22100,16 @@ func (_q *JobTemplateHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[jobtemplatehistory.FieldSystemOwned]; !ok {
 				selectedFields = append(selectedFields, jobtemplatehistory.FieldSystemOwned)
 				fieldSeen[jobtemplatehistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldInternalNotes)
+				fieldSeen[jobtemplatehistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldSystemInternalID)
+				fieldSeen[jobtemplatehistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "title":
 			if _, ok := fieldSeen[jobtemplatehistory.FieldTitle]; !ok {
@@ -22781,6 +23171,21 @@ func (_q *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, mappedcontrol.FieldTags)
 				fieldSeen[mappedcontrol.FieldTags] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[mappedcontrol.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldSystemOwned)
+				fieldSeen[mappedcontrol.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[mappedcontrol.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldInternalNotes)
+				fieldSeen[mappedcontrol.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[mappedcontrol.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, mappedcontrol.FieldSystemInternalID)
+				fieldSeen[mappedcontrol.FieldSystemInternalID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[mappedcontrol.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, mappedcontrol.FieldOwnerID)
@@ -22935,6 +23340,21 @@ func (_q *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, mappedcontrolhistory.FieldTags)
 				fieldSeen[mappedcontrolhistory.FieldTags] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldSystemOwned)
+				fieldSeen[mappedcontrolhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldInternalNotes)
+				fieldSeen[mappedcontrolhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldSystemInternalID)
+				fieldSeen[mappedcontrolhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldOwnerID]; !ok {
@@ -23746,6 +24166,21 @@ func (_q *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, narrative.FieldOwnerID)
 				fieldSeen[narrative.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[narrative.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldSystemOwned)
+				fieldSeen[narrative.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[narrative.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldInternalNotes)
+				fieldSeen[narrative.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[narrative.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldSystemInternalID)
+				fieldSeen[narrative.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[narrative.FieldName]; !ok {
 				selectedFields = append(selectedFields, narrative.FieldName)
@@ -23900,6 +24335,21 @@ func (_q *NarrativeHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[narrativehistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, narrativehistory.FieldOwnerID)
 				fieldSeen[narrativehistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[narrativehistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldSystemOwned)
+				fieldSeen[narrativehistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[narrativehistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldInternalNotes)
+				fieldSeen[narrativehistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[narrativehistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldSystemInternalID)
+				fieldSeen[narrativehistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[narrativehistory.FieldName]; !ok {
@@ -30626,6 +31076,95 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				*wq = *query
 			})
 
+		case "trustCenterDocs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterDocClient{config: _q.config}).Query()
+			)
+			args := newTrustCenterDocPaginateArgs(fieldArgs(ctx, new(TrustCenterDocWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTrustCenterDocPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.TrustCenterDocsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.TrustCenterDocsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[63] == nil {
+								nodes[i].Edges.totalCount[63] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[63][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.TrustCenterDocs)
+							if nodes[i].Edges.totalCount[63] == nil {
+								nodes[i].Edges.totalCount[63] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[63][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, trustcenterdocImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.TrustCenterDocsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedTrustCenterDocs(alias, func(wq *TrustCenterDocQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -30669,10 +31208,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[63] == nil {
-								nodes[i].Edges.totalCount[63] = make(map[string]int)
+							if nodes[i].Edges.totalCount[64] == nil {
+								nodes[i].Edges.totalCount[64] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[63][alias] = n
+							nodes[i].Edges.totalCount[64][alias] = n
 						}
 						return nil
 					})
@@ -30680,10 +31219,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[63] == nil {
-								nodes[i].Edges.totalCount[63] = make(map[string]int)
+							if nodes[i].Edges.totalCount[64] == nil {
+								nodes[i].Edges.totalCount[64] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[63][alias] = n
+							nodes[i].Edges.totalCount[64][alias] = n
 						}
 						return nil
 					})
@@ -32978,6 +33517,21 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, procedure.FieldDismissedImprovementSuggestions)
 				fieldSeen[procedure.FieldDismissedImprovementSuggestions] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[procedure.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldSystemOwned)
+				fieldSeen[procedure.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[procedure.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldInternalNotes)
+				fieldSeen[procedure.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[procedure.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldSystemInternalID)
+				fieldSeen[procedure.FieldSystemInternalID] = struct{}{}
+			}
 		case "fileID":
 			if _, ok := fieldSeen[procedure.FieldFileID]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldFileID)
@@ -33212,6 +33766,21 @@ func (_q *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[procedurehistory.FieldDismissedImprovementSuggestions]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldDismissedImprovementSuggestions)
 				fieldSeen[procedurehistory.FieldDismissedImprovementSuggestions] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[procedurehistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldSystemOwned)
+				fieldSeen[procedurehistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[procedurehistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldInternalNotes)
+				fieldSeen[procedurehistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[procedurehistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldSystemInternalID)
+				fieldSeen[procedurehistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "fileID":
 			if _, ok := fieldSeen[procedurehistory.FieldFileID]; !ok {
@@ -38903,6 +39472,16 @@ func (_q *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, standard.FieldSystemOwned)
 				fieldSeen[standard.FieldSystemOwned] = struct{}{}
 			}
+		case "internalNotes":
+			if _, ok := fieldSeen[standard.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, standard.FieldInternalNotes)
+				fieldSeen[standard.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[standard.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldSystemInternalID)
+				fieldSeen[standard.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[standard.FieldName]; !ok {
 				selectedFields = append(selectedFields, standard.FieldName)
@@ -39112,6 +39691,16 @@ func (_q *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[standardhistory.FieldSystemOwned]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldSystemOwned)
 				fieldSeen[standardhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[standardhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldInternalNotes)
+				fieldSeen[standardhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[standardhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldSystemInternalID)
+				fieldSeen[standardhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[standardhistory.FieldName]; !ok {
@@ -40374,6 +40963,21 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, subcontrol.FieldOwnerID)
 				fieldSeen[subcontrol.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[subcontrol.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldSystemOwned)
+				fieldSeen[subcontrol.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[subcontrol.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldInternalNotes)
+				fieldSeen[subcontrol.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[subcontrol.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldSystemInternalID)
+				fieldSeen[subcontrol.FieldSystemInternalID] = struct{}{}
+			}
 		case "refCode":
 			if _, ok := fieldSeen[subcontrol.FieldRefCode]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldRefCode)
@@ -40618,6 +41222,21 @@ func (_q *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[subcontrolhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldOwnerID)
 				fieldSeen[subcontrolhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[subcontrolhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldSystemOwned)
+				fieldSeen[subcontrolhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[subcontrolhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldInternalNotes)
+				fieldSeen[subcontrolhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldSystemInternalID)
+				fieldSeen[subcontrolhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "refCode":
 			if _, ok := fieldSeen[subcontrolhistory.FieldRefCode]; !ok {
@@ -40960,6 +41579,16 @@ func (_q *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, subprocessor.FieldSystemOwned)
 				fieldSeen[subprocessor.FieldSystemOwned] = struct{}{}
 			}
+		case "internalNotes":
+			if _, ok := fieldSeen[subprocessor.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, subprocessor.FieldInternalNotes)
+				fieldSeen[subprocessor.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[subprocessor.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, subprocessor.FieldSystemInternalID)
+				fieldSeen[subprocessor.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[subprocessor.FieldName]; !ok {
 				selectedFields = append(selectedFields, subprocessor.FieldName)
@@ -41119,6 +41748,16 @@ func (_q *SubprocessorHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[subprocessorhistory.FieldSystemOwned]; !ok {
 				selectedFields = append(selectedFields, subprocessorhistory.FieldSystemOwned)
 				fieldSeen[subprocessorhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[subprocessorhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldInternalNotes)
+				fieldSeen[subprocessorhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[subprocessorhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldSystemInternalID)
+				fieldSeen[subprocessorhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[subprocessorhistory.FieldName]; !ok {
@@ -43222,6 +43861,21 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			_q.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
+
+		case "trustCenter":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcenterImplementors)...); err != nil {
+				return err
+			}
+			_q.withTrustCenter = query
+			if _, ok := fieldSeen[template.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, template.FieldTrustCenterID)
+				fieldSeen[template.FieldTrustCenterID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[template.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, template.FieldCreatedAt)
@@ -43252,6 +43906,21 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, template.FieldOwnerID)
 				fieldSeen[template.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[template.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, template.FieldSystemOwned)
+				fieldSeen[template.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[template.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, template.FieldInternalNotes)
+				fieldSeen[template.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[template.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, template.FieldSystemInternalID)
+				fieldSeen[template.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[template.FieldName]; !ok {
 				selectedFields = append(selectedFields, template.FieldName)
@@ -43281,6 +43950,11 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if _, ok := fieldSeen[template.FieldUischema]; !ok {
 				selectedFields = append(selectedFields, template.FieldUischema)
 				fieldSeen[template.FieldUischema] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[template.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, template.FieldTrustCenterID)
+				fieldSeen[template.FieldTrustCenterID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -43417,6 +44091,21 @@ func (_q *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, templatehistory.FieldOwnerID)
 				fieldSeen[templatehistory.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[templatehistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldSystemOwned)
+				fieldSeen[templatehistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[templatehistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldInternalNotes)
+				fieldSeen[templatehistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[templatehistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldSystemInternalID)
+				fieldSeen[templatehistory.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[templatehistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, templatehistory.FieldName)
@@ -43446,6 +44135,11 @@ func (_q *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[templatehistory.FieldUischema]; !ok {
 				selectedFields = append(selectedFields, templatehistory.FieldUischema)
 				fieldSeen[templatehistory.FieldUischema] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[templatehistory.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldTrustCenterID)
+				fieldSeen[templatehistory.FieldTrustCenterID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -43662,6 +44356,95 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "trustCenterDocs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterDocClient{config: _q.config}).Query()
+			)
+			args := newTrustCenterDocPaginateArgs(fieldArgs(ctx, new(TrustCenterDocWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTrustCenterDocPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"trust_center_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(trustcenter.TrustCenterDocsColumn), ids...))
+						})
+						if err := query.GroupBy(trustcenter.TrustCenterDocsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.TrustCenterDocs)
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, trustcenterdocImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(trustcenter.TrustCenterDocsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedTrustCenterDocs(alias, func(wq *TrustCenterDocQuery) {
+				*wq = *query
+			})
+
 		case "trustCenterCompliances":
 			var (
 				alias = field.Alias
@@ -43705,10 +44488,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[4] == nil {
-								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							if nodes[i].Edges.totalCount[5] == nil {
+								nodes[i].Edges.totalCount[5] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[4][alias] = n
+							nodes[i].Edges.totalCount[5][alias] = n
 						}
 						return nil
 					})
@@ -43716,10 +44499,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterCompliances)
-							if nodes[i].Edges.totalCount[4] == nil {
-								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							if nodes[i].Edges.totalCount[5] == nil {
+								nodes[i].Edges.totalCount[5] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[4][alias] = n
+							nodes[i].Edges.totalCount[5][alias] = n
 						}
 						return nil
 					})
@@ -43748,6 +44531,95 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				query = pager.applyOrder(query)
 			}
 			_q.WithNamedTrustCenterCompliances(alias, func(wq *TrustCenterComplianceQuery) {
+				*wq = *query
+			})
+
+		case "templates":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TemplateClient{config: _q.config}).Query()
+			)
+			args := newTemplatePaginateArgs(fieldArgs(ctx, new(TemplateWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTemplatePager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"trust_center_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(trustcenter.TemplatesColumn), ids...))
+						})
+						if err := query.GroupBy(trustcenter.TemplatesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[6] == nil {
+								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[6][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Templates)
+							if nodes[i].Edges.totalCount[6] == nil {
+								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[6][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, templateImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(trustcenter.TemplatesColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedTemplates(alias, func(wq *TemplateQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -44169,6 +45041,51 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[trustcenterdoc.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldOwnerID)
+				fieldSeen[trustcenterdoc.FieldOwnerID] = struct{}{}
+			}
+
+		case "trustCenter":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcenterImplementors)...); err != nil {
+				return err
+			}
+			_q.withTrustCenter = query
+			if _, ok := fieldSeen[trustcenterdoc.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldTrustCenterID)
+				fieldSeen[trustcenterdoc.FieldTrustCenterID] = struct{}{}
+			}
+
+		case "file":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			_q.withFile = query
+			if _, ok := fieldSeen[trustcenterdoc.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldFileID)
+				fieldSeen[trustcenterdoc.FieldFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcenterdoc.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcenterdoc.FieldCreatedAt)
@@ -44193,6 +45110,36 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[trustcenterdoc.FieldTags]; !ok {
 				selectedFields = append(selectedFields, trustcenterdoc.FieldTags)
 				fieldSeen[trustcenterdoc.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[trustcenterdoc.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldOwnerID)
+				fieldSeen[trustcenterdoc.FieldOwnerID] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[trustcenterdoc.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldTrustCenterID)
+				fieldSeen[trustcenterdoc.FieldTrustCenterID] = struct{}{}
+			}
+		case "title":
+			if _, ok := fieldSeen[trustcenterdoc.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldTitle)
+				fieldSeen[trustcenterdoc.FieldTitle] = struct{}{}
+			}
+		case "category":
+			if _, ok := fieldSeen[trustcenterdoc.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldCategory)
+				fieldSeen[trustcenterdoc.FieldCategory] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[trustcenterdoc.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldFileID)
+				fieldSeen[trustcenterdoc.FieldFileID] = struct{}{}
+			}
+		case "visibility":
+			if _, ok := fieldSeen[trustcenterdoc.FieldVisibility]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldVisibility)
+				fieldSeen[trustcenterdoc.FieldVisibility] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -44323,6 +45270,36 @@ func (_q *TrustCenterDocHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[trustcenterdochistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, trustcenterdochistory.FieldTags)
 				fieldSeen[trustcenterdochistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldOwnerID)
+				fieldSeen[trustcenterdochistory.FieldOwnerID] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldTrustCenterID)
+				fieldSeen[trustcenterdochistory.FieldTrustCenterID] = struct{}{}
+			}
+		case "title":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldTitle)
+				fieldSeen[trustcenterdochistory.FieldTitle] = struct{}{}
+			}
+		case "category":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldCategory)
+				fieldSeen[trustcenterdochistory.FieldCategory] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldFileID)
+				fieldSeen[trustcenterdochistory.FieldFileID] = struct{}{}
+			}
+		case "visibility":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldVisibility]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldVisibility)
+				fieldSeen[trustcenterdochistory.FieldVisibility] = struct{}{}
 			}
 		case "id":
 		case "__typename":

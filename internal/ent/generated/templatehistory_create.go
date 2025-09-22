@@ -160,6 +160,48 @@ func (_c *TemplateHistoryCreate) SetNillableOwnerID(v *string) *TemplateHistoryC
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *TemplateHistoryCreate) SetSystemOwned(v bool) *TemplateHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableSystemOwned(v *bool) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *TemplateHistoryCreate) SetInternalNotes(v string) *TemplateHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableInternalNotes(v *string) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *TemplateHistoryCreate) SetSystemInternalID(v string) *TemplateHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableSystemInternalID(v *string) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *TemplateHistoryCreate) SetName(v string) *TemplateHistoryCreate {
 	_c.mutation.SetName(v)
@@ -217,6 +259,20 @@ func (_c *TemplateHistoryCreate) SetJsonconfig(v map[string]interface{}) *Templa
 // SetUischema sets the "uischema" field.
 func (_c *TemplateHistoryCreate) SetUischema(v map[string]interface{}) *TemplateHistoryCreate {
 	_c.mutation.SetUischema(v)
+	return _c
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *TemplateHistoryCreate) SetTrustCenterID(v string) *TemplateHistoryCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableTrustCenterID(v *string) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
 	return _c
 }
 
@@ -295,6 +351,10 @@ func (_c *TemplateHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.Tags(); !ok {
 		v := templatehistory.DefaultTags
 		_c.mutation.SetTags(v)
+	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := templatehistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
 	}
 	if _, ok := _c.mutation.TemplateType(); !ok {
 		v := templatehistory.DefaultTemplateType
@@ -426,6 +486,18 @@ func (_c *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Creat
 		_spec.SetField(templatehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(templatehistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(templatehistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(templatehistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
+	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(templatehistory.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -449,6 +521,10 @@ func (_c *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.Uischema(); ok {
 		_spec.SetField(templatehistory.FieldUischema, field.TypeJSON, value)
 		_node.Uischema = value
+	}
+	if value, ok := _c.mutation.TrustCenterID(); ok {
+		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
 	}
 	return _node, _spec
 }

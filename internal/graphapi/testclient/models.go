@@ -317,6 +317,12 @@ type ActionPlan struct {
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// due date of the action plan
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// priority of the action plan
@@ -425,6 +431,12 @@ type ActionPlanHistory struct {
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// due date of the action plan
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// priority of the action plan
@@ -702,6 +714,43 @@ type ActionPlanHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// due_date field predicates
 	DueDate       *time.Time   `json:"dueDate,omitempty"`
 	DueDateNeq    *time.Time   `json:"dueDateNEQ,omitempty"`
@@ -963,6 +1012,43 @@ type ActionPlanWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// due_date field predicates
 	DueDate       *time.Time   `json:"dueDate,omitempty"`
 	DueDateNeq    *time.Time   `json:"dueDateNEQ,omitempty"`
@@ -1033,6 +1119,12 @@ type Asset struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the type of the asset, e.g. technology, domain, device, etc
 	AssetType enums.AssetType `json:"assetType"`
 	// the name of the asset, e.g. matts computer, office router, IP address, etc
@@ -1106,6 +1198,12 @@ type AssetHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the type of the asset, e.g. technology, domain, device, etc
 	AssetType enums.AssetType `json:"assetType"`
 	// the name of the asset, e.g. matts computer, office router, IP address, etc
@@ -1266,6 +1364,43 @@ type AssetHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// asset_type field predicates
 	AssetType      *enums.AssetType  `json:"assetType,omitempty"`
 	AssetTypeNeq   *enums.AssetType  `json:"assetTypeNEQ,omitempty"`
@@ -1436,6 +1571,43 @@ type AssetWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// asset_type field predicates
 	AssetType      *enums.AssetType  `json:"assetType,omitempty"`
 	AssetTypeNeq   *enums.AssetType  `json:"assetTypeNEQ,omitempty"`
@@ -2202,6 +2374,12 @@ type Control struct {
 	DelegateID *string `json:"delegateID,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the standard that the control belongs to, if applicable
@@ -2372,6 +2550,12 @@ type ControlHistory struct {
 	DelegateID *string `json:"delegateID,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the standard that the control belongs to, if applicable
@@ -2702,6 +2886,43 @@ type ControlHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// ref_code field predicates
 	RefCode             *string  `json:"refCode,omitempty"`
 	RefCodeNeq          *string  `json:"refCodeNEQ,omitempty"`
@@ -2744,6 +2965,12 @@ type ControlImplementation struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// status of the %s, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
@@ -2814,6 +3041,12 @@ type ControlImplementationHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// status of the %s, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
@@ -2971,6 +3204,43 @@ type ControlImplementationHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// status field predicates
 	Status       *enums.DocumentStatus  `json:"status,omitempty"`
 	StatusNeq    *enums.DocumentStatus  `json:"statusNEQ,omitempty"`
@@ -3124,6 +3394,43 @@ type ControlImplementationWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// status field predicates
 	Status       *enums.DocumentStatus  `json:"status,omitempty"`
 	StatusNeq    *enums.DocumentStatus  `json:"statusNEQ,omitempty"`
@@ -3211,6 +3518,12 @@ type ControlObjective struct {
 	Revision *string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the control objective
 	Name string `json:"name"`
 	// the desired outcome or target of the control objective
@@ -3295,6 +3608,12 @@ type ControlObjectiveHistory struct {
 	Revision *string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the control objective
 	Name string `json:"name"`
 	// the desired outcome or target of the control objective
@@ -3486,6 +3805,43 @@ type ControlObjectiveHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -3711,6 +4067,43 @@ type ControlObjectiveWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -4124,6 +4517,43 @@ type ControlWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// ref_code field predicates
 	RefCode             *string  `json:"refCode,omitempty"`
 	RefCodeNeq          *string  `json:"refCodeNEQ,omitempty"`
@@ -4275,6 +4705,10 @@ type CreateActionPlanInput struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the action_plan
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// due date of the action plan
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// priority of the action plan
@@ -4294,6 +4728,10 @@ type CreateActionPlanInput struct {
 type CreateAssetInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the type of the asset, e.g. technology, domain, device, etc
 	AssetType *enums.AssetType `json:"assetType,omitempty"`
 	// the name of the asset, e.g. matts computer, office router, IP address, etc
@@ -4345,6 +4783,10 @@ type CreateContactInput struct {
 type CreateControlImplementationInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// status of the %s, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
 	// date the control was implemented
@@ -4403,6 +4845,10 @@ type CreateControlInput struct {
 	ExampleEvidence []*models.ExampleEvidence `json:"exampleEvidence,omitempty"`
 	// references for the control
 	References []*models.Reference `json:"references,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the unique reference code for the control
 	RefCode                  string   `json:"refCode"`
 	EvidenceIDs              []string `json:"evidenceIDs,omitempty"`
@@ -4434,6 +4880,10 @@ type CreateControlObjectiveInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision *string `json:"revision,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the control objective
 	Name string `json:"name"`
 	// the desired outcome or target of the control objective
@@ -4473,6 +4923,10 @@ type CreateControlWithSubcontrolsInput struct {
 type CreateCustomDomainInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the custom domain
 	CnameRecord       string  `json:"cnameRecord"`
 	OwnerID           *string `json:"ownerID,omitempty"`
@@ -4523,6 +4977,10 @@ type CreateDocumentDataInput struct {
 type CreateEntityInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the entity
 	Name *string `json:"name,omitempty"`
 	// The entity's displayed 'friendly' name
@@ -4552,6 +5010,10 @@ type CreateEntityInput struct {
 type CreateEntityTypeInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the entity
 	Name      string   `json:"name"`
 	OwnerID   *string  `json:"ownerID,omitempty"`
@@ -4633,6 +5095,10 @@ type CreateExportInput struct {
 type CreateFileInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
@@ -4770,6 +5236,10 @@ type CreateGroupSettingInput struct {
 // CreateHushInput is used for create Hush object.
 // Input was generated by ent.
 type CreateHushInput struct {
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name"`
 	// a description of the hush value or purpose, such as github PAT
@@ -4800,6 +5270,10 @@ type CreateInternalPolicyInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision *string `json:"revision,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the policy
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
@@ -4887,6 +5361,10 @@ type CreateJobResultInput struct {
 type CreateJobRunnerInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the runner
 	Name string `json:"name"`
 	// the IP address of this runner
@@ -4936,6 +5414,10 @@ type CreateJobRunnerTokenInput struct {
 type CreateJobTemplateInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the title of the job
 	Title string `json:"title"`
 	// the short description of the job and what it does
@@ -4968,6 +5450,10 @@ type CreateMappableDomainInput struct {
 type CreateMappedControlInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	MappingType *enums.MappingType `json:"mappingType,omitempty"`
 	// description of how the two controls are related
@@ -4995,6 +5481,10 @@ type CreateMemberWithProgramInput struct {
 type CreateNarrativeInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the narrative
 	Name string `json:"name"`
 	// the description of the narrative
@@ -5126,6 +5616,7 @@ type CreateOrganizationInput struct {
 	ScanIDs                         []string                        `json:"scanIDs,omitempty"`
 	SubprocessorIDs                 []string                        `json:"subprocessorIDs,omitempty"`
 	ExportIDs                       []string                        `json:"exportIDs,omitempty"`
+	TrustCenterDocIDs               []string                        `json:"trustCenterDocIDs,omitempty"`
 	CreateOrgSettings               *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -5226,6 +5717,10 @@ type CreateProcedureInput struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// This will contain the url used to create/update the procedure
 	URL               *string  `json:"url,omitempty"`
 	OwnerID           *string  `json:"ownerID,omitempty"`
@@ -5409,6 +5904,10 @@ type CreateStandardInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision *string `json:"revision,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the long name of the standard body
 	Name string `json:"name"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
@@ -5479,6 +5978,10 @@ type CreateSubcontrolInput struct {
 	ExampleEvidence []*models.ExampleEvidence `json:"exampleEvidence,omitempty"`
 	// references for the control
 	References []*models.Reference `json:"references,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the unique reference code for the control
 	RefCode                  string   `json:"refCode"`
 	EvidenceIDs              []string `json:"evidenceIDs,omitempty"`
@@ -5502,6 +6005,10 @@ type CreateSubcontrolInput struct {
 type CreateSubprocessorInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// name of the standard body
 	Name string `json:"name"`
 	// description of the subprocessor
@@ -5572,6 +6079,10 @@ type CreateTaskInput struct {
 type CreateTemplateInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the template
 	Name string `json:"name"`
 	// the type of the template, either a provided template or an implementation (document)
@@ -5583,10 +6094,11 @@ type CreateTemplateInput struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema    map[string]any `json:"uischema,omitempty"`
-	OwnerID     *string        `json:"ownerID,omitempty"`
-	DocumentIDs []string       `json:"documentIDs,omitempty"`
-	FileIDs     []string       `json:"fileIDs,omitempty"`
+	Uischema      map[string]any `json:"uischema,omitempty"`
+	OwnerID       *string        `json:"ownerID,omitempty"`
+	DocumentIDs   []string       `json:"documentIDs,omitempty"`
+	FileIDs       []string       `json:"fileIDs,omitempty"`
+	TrustCenterID *string        `json:"trustCenterID,omitempty"`
 }
 
 // CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -5603,6 +6115,15 @@ type CreateTrustCenterComplianceInput struct {
 type CreateTrustCenterDocInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// title of the document
+	Title string `json:"title"`
+	// category of the document
+	Category string `json:"category"`
+	// visibility of the document
+	Visibility    *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	OwnerID       *string                              `json:"ownerID,omitempty"`
+	TrustCenterID *string                              `json:"trustCenterID,omitempty"`
+	FileID        *string                              `json:"fileID,omitempty"`
 }
 
 // Input for createTrustCenterDomain mutation
@@ -5622,7 +6143,9 @@ type CreateTrustCenterInput struct {
 	CustomDomainID             *string                        `json:"customDomainID,omitempty"`
 	SettingID                  *string                        `json:"settingID,omitempty"`
 	TrustCenterSubprocessorIDs []string                       `json:"trustCenterSubprocessorIDs,omitempty"`
+	TrustCenterDocIDs          []string                       `json:"trustCenterDocIDs,omitempty"`
 	TrustCenterComplianceIDs   []string                       `json:"trustCenterComplianceIDs,omitempty"`
+	TemplateIDs                []string                       `json:"templateIDs,omitempty"`
 	CreateTrustCenterSetting   *CreateTrustCenterSettingInput `json:"createTrustCenterSetting,omitempty"`
 }
 
@@ -5740,6 +6263,12 @@ type CustomDomain struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the custom domain
 	CnameRecord string `json:"cnameRecord"`
 	// The mappable domain id that this custom domain maps to
@@ -5802,6 +6331,12 @@ type CustomDomainHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the custom domain
 	CnameRecord string `json:"cnameRecord"`
 	// The mappable domain id that this custom domain maps to
@@ -5955,6 +6490,43 @@ type CustomDomainHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// cname_record field predicates
 	CnameRecord             *string  `json:"cnameRecord,omitempty"`
 	CnameRecordNeq          *string  `json:"cnameRecordNEQ,omitempty"`
@@ -6102,6 +6674,43 @@ type CustomDomainWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// cname_record field predicates
 	CnameRecord             *string  `json:"cnameRecord,omitempty"`
 	CnameRecordNeq          *string  `json:"cnameRecordNEQ,omitempty"`
@@ -7125,6 +7734,12 @@ type Entity struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the entity
 	Name *string `json:"name,omitempty"`
 	// The entity's displayed 'friendly' name
@@ -7201,6 +7816,12 @@ type EntityHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the entity
 	Name *string `json:"name,omitempty"`
 	// The entity's displayed 'friendly' name
@@ -7360,6 +7981,43 @@ type EntityHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -7444,6 +8102,12 @@ type EntityType struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the entity
 	Name     string            `json:"name"`
 	Owner    *Organization     `json:"owner,omitempty"`
@@ -7501,6 +8165,12 @@ type EntityTypeHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the entity
 	Name string `json:"name"`
 }
@@ -7650,6 +8320,43 @@ type EntityTypeHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -7767,6 +8474,43 @@ type EntityTypeWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -7882,6 +8626,43 @@ type EntityWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -9103,6 +9884,12 @@ type File struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
@@ -9191,6 +9978,12 @@ type FileHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
@@ -9354,6 +10147,43 @@ type FileHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// provided_file_name field predicates
 	ProvidedFileName             *string  `json:"providedFileName,omitempty"`
 	ProvidedFileNameNeq          *string  `json:"providedFileNameNEQ,omitempty"`
@@ -9670,6 +10500,43 @@ type FileWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// provided_file_name field predicates
 	ProvidedFileName             *string  `json:"providedFileName,omitempty"`
 	ProvidedFileNameNeq          *string  `json:"providedFileNameNEQ,omitempty"`
@@ -11349,6 +12216,12 @@ type Hush struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name"`
 	// a description of the hush value or purpose, such as github PAT
@@ -11427,6 +12300,12 @@ type HushHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name"`
 	// a description of the hush value or purpose, such as github PAT
@@ -11589,6 +12468,43 @@ type HushHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -11760,6 +12676,43 @@ type HushWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -11852,6 +12805,12 @@ type Integration struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the integration
 	Name string `json:"name"`
 	// a description of the integration
@@ -11907,6 +12866,12 @@ type IntegrationHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the integration
 	Name string `json:"name"`
 	// a description of the integration
@@ -12064,6 +13029,43 @@ type IntegrationHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -12207,6 +13209,43 @@ type IntegrationWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -12281,6 +13320,12 @@ type InternalPolicy struct {
 	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the policy
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
@@ -12398,6 +13443,12 @@ type InternalPolicyHistory struct {
 	Revision *string `json:"revision,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the policy
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
@@ -12610,6 +13661,43 @@ type InternalPolicyHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -12883,6 +13971,43 @@ type InternalPolicyWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -13564,6 +14689,10 @@ type JobRunner struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the runner
 	Name string `json:"name"`
 	// the status of this runner
@@ -14157,6 +15286,38 @@ type JobRunnerWhereInput struct {
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
 	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -14257,6 +15418,10 @@ type JobTemplate struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the title of the job
 	Title string `json:"title"`
 	// the short description of the job and what it does
@@ -14328,6 +15493,10 @@ type JobTemplateHistory struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the title of the job
 	Title string `json:"title"`
 	// the short description of the job and what it does
@@ -14506,6 +15675,38 @@ type JobTemplateHistoryWhereInput struct {
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
 	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// title field predicates
 	Title             *string  `json:"title,omitempty"`
 	TitleNeq          *string  `json:"titleNEQ,omitempty"`
@@ -14663,6 +15864,38 @@ type JobTemplateWhereInput struct {
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
 	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// title field predicates
 	Title             *string  `json:"title,omitempty"`
 	TitleNeq          *string  `json:"titleNEQ,omitempty"`
@@ -15061,6 +16294,12 @@ type MappedControl struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
@@ -15129,6 +16368,12 @@ type MappedControlHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
@@ -15270,6 +16515,43 @@ type MappedControlHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -15412,6 +16694,43 @@ type MappedControlWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -15505,6 +16824,12 @@ type Narrative struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the narrative
 	Name string `json:"name"`
 	// the description of the narrative
@@ -15574,6 +16899,12 @@ type NarrativeHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the narrative
 	Name string `json:"name"`
 	// the description of the narrative
@@ -15741,6 +17072,43 @@ type NarrativeHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -15904,6 +17272,43 @@ type NarrativeWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -17319,6 +18724,7 @@ type Organization struct {
 	Scans                         *ScanConnection                       `json:"scans"`
 	Subprocessors                 *SubprocessorConnection               `json:"subprocessors"`
 	Exports                       *ExportConnection                     `json:"exports"`
+	TrustCenterDocs               *TrustCenterDocConnection             `json:"trustCenterDocs"`
 	Members                       *OrgMembershipConnection              `json:"members"`
 }
 
@@ -18717,6 +20123,9 @@ type OrganizationWhereInput struct {
 	// exports edge predicates
 	HasExports     *bool               `json:"hasExports,omitempty"`
 	HasExportsWith []*ExportWhereInput `json:"hasExportsWith,omitempty"`
+	// trust_center_docs edge predicates
+	HasTrustCenterDocs     *bool                       `json:"hasTrustCenterDocs,omitempty"`
+	HasTrustCenterDocsWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -19030,6 +20439,12 @@ type Procedure struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// This will contain the most recent file id if this procedure was created from a file
 	FileID *string `json:"fileID,omitempty"`
 	// This will contain the url used to create/update the procedure
@@ -19145,6 +20560,12 @@ type ProcedureHistory struct {
 	ImprovementSuggestions []string `json:"improvementSuggestions,omitempty"`
 	// improvement suggestions dismissed by the user for the procedure
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// This will contain the most recent file id if this procedure was created from a file
 	FileID *string `json:"fileID,omitempty"`
 	// This will contain the url used to create/update the procedure
@@ -19434,6 +20855,43 @@ type ProcedureHistoryWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// file_id field predicates
 	FileID             *string  `json:"fileID,omitempty"`
 	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
@@ -19707,6 +21165,43 @@ type ProcedureWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// file_id field predicates
 	FileID             *string  `json:"fileID,omitempty"`
 	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
@@ -22784,6 +24279,10 @@ type Standard struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the long name of the standard body
 	Name string `json:"name"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
@@ -22870,6 +24369,10 @@ type StandardHistory struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the long name of the standard body
 	Name string `json:"name"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
@@ -23064,6 +24567,38 @@ type StandardHistoryWhereInput struct {
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
 	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -23347,6 +24882,38 @@ type StandardWhereInput struct {
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
 	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -23567,6 +25134,12 @@ type Subcontrol struct {
 	DelegateID *string `json:"delegateID,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the parent control
@@ -23680,6 +25253,12 @@ type SubcontrolHistory struct {
 	DelegateID *string `json:"delegateID,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the parent control
@@ -24010,6 +25589,43 @@ type SubcontrolHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// ref_code field predicates
 	RefCode             *string  `json:"refCode,omitempty"`
 	RefCodeNeq          *string  `json:"refCodeNEQ,omitempty"`
@@ -24320,6 +25936,43 @@ type SubcontrolWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// ref_code field predicates
 	RefCode             *string  `json:"refCode,omitempty"`
 	RefCodeNeq          *string  `json:"refCodeNEQ,omitempty"`
@@ -24404,6 +26057,10 @@ type Subprocessor struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// name of the standard body
 	Name string `json:"name"`
 	// description of the subprocessor
@@ -24471,6 +26128,10 @@ type SubprocessorHistory struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// name of the standard body
 	Name string `json:"name"`
 	// description of the subprocessor
@@ -24631,6 +26292,38 @@ type SubprocessorHistoryWhereInput struct {
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
 	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -24801,6 +26494,38 @@ type SubprocessorWhereInput struct {
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
 	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
 	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -25906,8 +27631,14 @@ type Template struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the template
 	Name string `json:"name"`
 	// the type of the template, either a provided template or an implementation (document)
@@ -25919,10 +27650,13 @@ type Template struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema  map[string]any          `json:"uischema,omitempty"`
-	Owner     *Organization           `json:"owner,omitempty"`
-	Documents *DocumentDataConnection `json:"documents"`
-	Files     *FileConnection         `json:"files"`
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// the id of the trust center this template is associated with
+	TrustCenterID *string                 `json:"trustCenterID,omitempty"`
+	Owner         *Organization           `json:"owner,omitempty"`
+	Documents     *DocumentDataConnection `json:"documents"`
+	Files         *FileConnection         `json:"files"`
+	TrustCenter   *TrustCenter            `json:"trustCenter,omitempty"`
 }
 
 func (Template) IsNode() {}
@@ -25974,8 +27708,14 @@ type TemplateHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the template
 	Name string `json:"name"`
 	// the type of the template, either a provided template or an implementation (document)
@@ -25988,6 +27728,8 @@ type TemplateHistory struct {
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
 	Uischema map[string]any `json:"uischema,omitempty"`
+	// the id of the trust center this template is associated with
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
 }
 
 func (TemplateHistory) IsNode() {}
@@ -26135,6 +27877,43 @@ type TemplateHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -26177,6 +27956,22 @@ type TemplateHistoryWhereInput struct {
 	KindNotIn  []enums.TemplateKind `json:"kindNotIn,omitempty"`
 	KindIsNil  *bool                `json:"kindIsNil,omitempty"`
 	KindNotNil *bool                `json:"kindNotNil,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 }
 
 // Ordering options for Template connections
@@ -26280,6 +28075,43 @@ type TemplateWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -26322,6 +28154,22 @@ type TemplateWhereInput struct {
 	KindNotIn  []enums.TemplateKind `json:"kindNotIn,omitempty"`
 	KindIsNil  *bool                `json:"kindIsNil,omitempty"`
 	KindNotNil *bool                `json:"kindNotNil,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -26331,6 +28179,9 @@ type TemplateWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// trust_center edge predicates
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
 }
 
 type TrustCenter struct {
@@ -26351,7 +28202,9 @@ type TrustCenter struct {
 	CustomDomain             *CustomDomain                      `json:"customDomain,omitempty"`
 	Setting                  *TrustCenterSetting                `json:"setting,omitempty"`
 	TrustCenterSubprocessors *TrustCenterSubprocessorConnection `json:"trustCenterSubprocessors"`
+	TrustCenterDocs          *TrustCenterDocConnection          `json:"trustCenterDocs"`
 	TrustCenterCompliances   *TrustCenterComplianceConnection   `json:"trustCenterCompliances"`
+	Templates                *TemplateConnection                `json:"templates"`
 }
 
 func (TrustCenter) IsNode() {}
@@ -26741,6 +28594,22 @@ type TrustCenterDoc struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// ID of the trust center
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// title of the document
+	Title string `json:"title"`
+	// category of the document
+	Category string `json:"category"`
+	// ID of the file containing the document
+	FileID *string `json:"fileID,omitempty"`
+	// visibility of the document
+	Visibility  *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	Owner       *Organization                        `json:"owner,omitempty"`
+	TrustCenter *TrustCenter                         `json:"trustCenter,omitempty"`
+	// the file containing the document content
+	File *File `json:"file,omitempty"`
 }
 
 func (TrustCenterDoc) IsNode() {}
@@ -26792,6 +28661,18 @@ type TrustCenterDocHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// ID of the trust center
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// title of the document
+	Title string `json:"title"`
+	// category of the document
+	Category string `json:"category"`
+	// ID of the file containing the document
+	FileID *string `json:"fileID,omitempty"`
+	// visibility of the document
+	Visibility *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 }
 
 func (TrustCenterDocHistory) IsNode() {}
@@ -26923,6 +28804,89 @@ type TrustCenterDocHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// visibility field predicates
+	Visibility       *enums.TrustCenterDocumentVisibility  `json:"visibility,omitempty"`
+	VisibilityNeq    *enums.TrustCenterDocumentVisibility  `json:"visibilityNEQ,omitempty"`
+	VisibilityIn     []enums.TrustCenterDocumentVisibility `json:"visibilityIn,omitempty"`
+	VisibilityNotIn  []enums.TrustCenterDocumentVisibility `json:"visibilityNotIn,omitempty"`
+	VisibilityIsNil  *bool                                 `json:"visibilityIsNil,omitempty"`
+	VisibilityNotNil *bool                                 `json:"visibilityNotNil,omitempty"`
 }
 
 // Ordering options for TrustCenterDoc connections
@@ -27010,6 +28974,98 @@ type TrustCenterDocWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// category field predicates
+	Category             *string  `json:"category,omitempty"`
+	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGt           *string  `json:"categoryGT,omitempty"`
+	CategoryGte          *string  `json:"categoryGTE,omitempty"`
+	CategoryLt           *string  `json:"categoryLT,omitempty"`
+	CategoryLte          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDIsNil        *bool    `json:"fileIDIsNil,omitempty"`
+	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// visibility field predicates
+	Visibility       *enums.TrustCenterDocumentVisibility  `json:"visibility,omitempty"`
+	VisibilityNeq    *enums.TrustCenterDocumentVisibility  `json:"visibilityNEQ,omitempty"`
+	VisibilityIn     []enums.TrustCenterDocumentVisibility `json:"visibilityIn,omitempty"`
+	VisibilityNotIn  []enums.TrustCenterDocumentVisibility `json:"visibilityNotIn,omitempty"`
+	VisibilityIsNil  *bool                                 `json:"visibilityIsNil,omitempty"`
+	VisibilityNotNil *bool                                 `json:"visibilityNotNil,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// trust_center edge predicates
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+	// file edge predicates
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 // Return response for createTrustCenterDomain mutation
@@ -28496,9 +30552,15 @@ type TrustCenterWhereInput struct {
 	// trust_center_subprocessors edge predicates
 	HasTrustCenterSubprocessors     *bool                                `json:"hasTrustCenterSubprocessors,omitempty"`
 	HasTrustCenterSubprocessorsWith []*TrustCenterSubprocessorWhereInput `json:"hasTrustCenterSubprocessorsWith,omitempty"`
+	// trust_center_docs edge predicates
+	HasTrustCenterDocs     *bool                       `json:"hasTrustCenterDocs,omitempty"`
+	HasTrustCenterDocsWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocsWith,omitempty"`
 	// trust_center_compliances edge predicates
 	HasTrustCenterCompliances     *bool                              `json:"hasTrustCenterCompliances,omitempty"`
 	HasTrustCenterCompliancesWith []*TrustCenterComplianceWhereInput `json:"hasTrustCenterCompliancesWith,omitempty"`
+	// templates edge predicates
+	HasTemplates     *bool                 `json:"hasTemplates,omitempty"`
+	HasTemplatesWith []*TemplateWhereInput `json:"hasTemplatesWith,omitempty"`
 }
 
 // UpdateAPITokenInput is used for update APIToken object.
@@ -28591,6 +30653,12 @@ type UpdateActionPlanInput struct {
 	DismissedImprovementSuggestions       []string `json:"dismissedImprovementSuggestions,omitempty"`
 	AppendDismissedImprovementSuggestions []string `json:"appendDismissedImprovementSuggestions,omitempty"`
 	ClearDismissedImprovementSuggestions  *bool    `json:"clearDismissedImprovementSuggestions,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// due date of the action plan
 	DueDate      *time.Time `json:"dueDate,omitempty"`
 	ClearDueDate *bool      `json:"clearDueDate,omitempty"`
@@ -28625,6 +30693,12 @@ type UpdateAssetInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the type of the asset, e.g. technology, domain, device, etc
 	AssetType *enums.AssetType `json:"assetType,omitempty"`
 	// the name of the asset, e.g. matts computer, office router, IP address, etc
@@ -28709,6 +30783,12 @@ type UpdateControlImplementationInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// status of the %s, e.g. draft, published, archived, etc.
 	Status      *enums.DocumentStatus `json:"status,omitempty"`
 	ClearStatus *bool                 `json:"clearStatus,omitempty"`
@@ -28806,6 +30886,12 @@ type UpdateControlInput struct {
 	References       []*models.Reference `json:"references,omitempty"`
 	AppendReferences []*models.Reference `json:"appendReferences,omitempty"`
 	ClearReferences  *bool               `json:"clearReferences,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the unique reference code for the control
 	RefCode                        *string  `json:"refCode,omitempty"`
 	AddEvidenceIDs                 []string `json:"addEvidenceIDs,omitempty"`
@@ -28874,6 +30960,12 @@ type UpdateControlObjectiveInput struct {
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision      *string `json:"revision,omitempty"`
 	ClearRevision *bool   `json:"clearRevision,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the name of the control objective
 	Name *string `json:"name,omitempty"`
 	// the desired outcome or target of the control objective
@@ -28937,13 +31029,19 @@ type UpdateControlObjectiveInput struct {
 // Input was generated by ent.
 type UpdateCustomDomainInput struct {
 	// tags associated with the object
-	Tags                 []string `json:"tags,omitempty"`
-	AppendTags           []string `json:"appendTags,omitempty"`
-	ClearTags            *bool    `json:"clearTags,omitempty"`
-	OwnerID              *string  `json:"ownerID,omitempty"`
-	ClearOwner           *bool    `json:"clearOwner,omitempty"`
-	DNSVerificationID    *string  `json:"dnsVerificationID,omitempty"`
-	ClearDNSVerification *bool    `json:"clearDNSVerification,omitempty"`
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
+	OwnerID               *string `json:"ownerID,omitempty"`
+	ClearOwner            *bool   `json:"clearOwner,omitempty"`
+	DNSVerificationID     *string `json:"dnsVerificationID,omitempty"`
+	ClearDNSVerification  *bool   `json:"clearDNSVerification,omitempty"`
 }
 
 // UpdateDNSVerificationInput is used for update DNSVerification object.
@@ -29005,6 +31103,12 @@ type UpdateEntityInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the name of the entity
 	Name      *string `json:"name,omitempty"`
 	ClearName *bool   `json:"clearName,omitempty"`
@@ -29062,6 +31166,12 @@ type UpdateEntityTypeInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the name of the entity
 	Name            *string  `json:"name,omitempty"`
 	OwnerID         *string  `json:"ownerID,omitempty"`
@@ -29197,6 +31307,12 @@ type UpdateFileInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName *string `json:"providedFileName,omitempty"`
 	// the extension of the file provided
@@ -29450,6 +31566,12 @@ type UpdateGroupSettingInput struct {
 // UpdateHushInput is used for update Hush object.
 // Input was generated by ent.
 type UpdateHushInput struct {
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name *string `json:"name,omitempty"`
 	// a description of the hush value or purpose, such as github PAT
@@ -29492,6 +31614,12 @@ type UpdateInternalPolicyInput struct {
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision      *string `json:"revision,omitempty"`
 	ClearRevision *bool   `json:"clearRevision,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the name of the policy
 	Name *string `json:"name,omitempty"`
 	// status of the policy, e.g. draft, published, archived, etc.
@@ -29625,6 +31753,12 @@ type UpdateJobRunnerInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the name of the runner
 	Name *string `json:"name,omitempty"`
 	// the IP address of this runner
@@ -29696,6 +31830,12 @@ type UpdateJobTemplateInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the title of the job
 	Title *string `json:"title,omitempty"`
 	// the short description of the job and what it does
@@ -29736,6 +31876,12 @@ type UpdateMappedControlInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	MappingType *enums.MappingType `json:"mappingType,omitempty"`
 	// description of how the two controls are related
@@ -29776,6 +31922,12 @@ type UpdateNarrativeInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the name of the narrative
 	Name *string `json:"name,omitempty"`
 	// the description of the narrative
@@ -30026,6 +32178,9 @@ type UpdateOrganizationInput struct {
 	AddExportIDs                          []string                        `json:"addExportIDs,omitempty"`
 	RemoveExportIDs                       []string                        `json:"removeExportIDs,omitempty"`
 	ClearExports                          *bool                           `json:"clearExports,omitempty"`
+	AddTrustCenterDocIDs                  []string                        `json:"addTrustCenterDocIDs,omitempty"`
+	RemoveTrustCenterDocIDs               []string                        `json:"removeTrustCenterDocIDs,omitempty"`
+	ClearTrustCenterDocs                  *bool                           `json:"clearTrustCenterDocs,omitempty"`
 	AddOrgMembers                         []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	RemoveOrgMembers                      []string                        `json:"removeOrgMembers,omitempty"`
 	UpdateOrgSettings                     *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
@@ -30181,6 +32336,12 @@ type UpdateProcedureInput struct {
 	DismissedImprovementSuggestions       []string `json:"dismissedImprovementSuggestions,omitempty"`
 	AppendDismissedImprovementSuggestions []string `json:"appendDismissedImprovementSuggestions,omitempty"`
 	ClearDismissedImprovementSuggestions  *bool    `json:"clearDismissedImprovementSuggestions,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// This will contain the url used to create/update the procedure
 	URL                     *string             `json:"url,omitempty"`
 	ClearURL                *bool               `json:"clearURL,omitempty"`
@@ -30480,6 +32641,12 @@ type UpdateStandardInput struct {
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision      *string `json:"revision,omitempty"`
 	ClearRevision *bool   `json:"clearRevision,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the long name of the standard body
 	Name *string `json:"name,omitempty"`
 	// short name of the standard, e.g. SOC 2, ISO 27001, etc.
@@ -30592,6 +32759,12 @@ type UpdateSubcontrolInput struct {
 	References       []*models.Reference `json:"references,omitempty"`
 	AppendReferences []*models.Reference `json:"appendReferences,omitempty"`
 	ClearReferences  *bool               `json:"clearReferences,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the unique reference code for the control
 	RefCode                        *string  `json:"refCode,omitempty"`
 	AddEvidenceIDs                 []string `json:"addEvidenceIDs,omitempty"`
@@ -30638,6 +32811,12 @@ type UpdateSubprocessorInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// name of the standard body
 	Name *string `json:"name,omitempty"`
 	// description of the subprocessor
@@ -30762,6 +32941,12 @@ type UpdateTemplateInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the name of the template
 	Name *string `json:"name,omitempty"`
 	// the type of the template, either a provided template or an implementation (document)
@@ -30777,14 +32962,14 @@ type UpdateTemplateInput struct {
 	// the uischema for the template to render in the UI
 	Uischema          map[string]any `json:"uischema,omitempty"`
 	ClearUischema     *bool          `json:"clearUischema,omitempty"`
-	OwnerID           *string        `json:"ownerID,omitempty"`
-	ClearOwner        *bool          `json:"clearOwner,omitempty"`
 	AddDocumentIDs    []string       `json:"addDocumentIDs,omitempty"`
 	RemoveDocumentIDs []string       `json:"removeDocumentIDs,omitempty"`
 	ClearDocuments    *bool          `json:"clearDocuments,omitempty"`
 	AddFileIDs        []string       `json:"addFileIDs,omitempty"`
 	RemoveFileIDs     []string       `json:"removeFileIDs,omitempty"`
 	ClearFiles        *bool          `json:"clearFiles,omitempty"`
+	TrustCenterID     *string        `json:"trustCenterID,omitempty"`
+	ClearTrustCenter  *bool          `json:"clearTrustCenter,omitempty"`
 }
 
 // UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -30806,6 +32991,17 @@ type UpdateTrustCenterDocInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// title of the document
+	Title *string `json:"title,omitempty"`
+	// category of the document
+	Category *string `json:"category,omitempty"`
+	// visibility of the document
+	Visibility       *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	ClearVisibility  *bool                                `json:"clearVisibility,omitempty"`
+	TrustCenterID    *string                              `json:"trustCenterID,omitempty"`
+	ClearTrustCenter *bool                                `json:"clearTrustCenter,omitempty"`
+	FileID           *string                              `json:"fileID,omitempty"`
+	ClearFile        *bool                                `json:"clearFile,omitempty"`
 }
 
 // UpdateTrustCenterInput is used for update TrustCenter object.
@@ -30824,9 +33020,15 @@ type UpdateTrustCenterInput struct {
 	AddTrustCenterSubprocessorIDs    []string                       `json:"addTrustCenterSubprocessorIDs,omitempty"`
 	RemoveTrustCenterSubprocessorIDs []string                       `json:"removeTrustCenterSubprocessorIDs,omitempty"`
 	ClearTrustCenterSubprocessors    *bool                          `json:"clearTrustCenterSubprocessors,omitempty"`
+	AddTrustCenterDocIDs             []string                       `json:"addTrustCenterDocIDs,omitempty"`
+	RemoveTrustCenterDocIDs          []string                       `json:"removeTrustCenterDocIDs,omitempty"`
+	ClearTrustCenterDocs             *bool                          `json:"clearTrustCenterDocs,omitempty"`
 	AddTrustCenterComplianceIDs      []string                       `json:"addTrustCenterComplianceIDs,omitempty"`
 	RemoveTrustCenterComplianceIDs   []string                       `json:"removeTrustCenterComplianceIDs,omitempty"`
 	ClearTrustCenterCompliances      *bool                          `json:"clearTrustCenterCompliances,omitempty"`
+	AddTemplateIDs                   []string                       `json:"addTemplateIDs,omitempty"`
+	RemoveTemplateIDs                []string                       `json:"removeTemplateIDs,omitempty"`
+	ClearTemplates                   *bool                          `json:"clearTemplates,omitempty"`
 	UpdateTrustCenterSetting         *UpdateTrustCenterSettingInput `json:"updateTrustCenterSetting,omitempty"`
 }
 

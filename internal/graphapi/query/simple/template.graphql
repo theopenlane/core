@@ -38,8 +38,8 @@ mutation CreateBulkTemplate($input: [CreateTemplateInput!]) {
   }
 }
 
-mutation CreateTemplate($input: CreateTemplateInput!) {
-  createTemplate(input: $input) {
+mutation CreateTemplate($input: CreateTemplateInput!, $templateFiles: [Upload!]) {
+  createTemplate(input: $input, templateFiles: $templateFiles) {
     template {
       createdAt
       createdBy
@@ -54,6 +54,14 @@ mutation CreateTemplate($input: CreateTemplateInput!) {
       updatedAt
       updatedBy
       kind
+      files {
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
     }
   }
 }
@@ -88,6 +96,14 @@ query GetAllTemplates {
         updatedAt
         updatedBy
         kind
+        files {
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
       }
     }
   }
@@ -108,6 +124,14 @@ query GetTemplateByID($templateId: ID!) {
     updatedAt
     updatedBy
     kind
+    files {
+      edges {
+        node {
+          id
+          presignedURL
+        }
+      }
+    }
   }
 }
 
@@ -135,13 +159,25 @@ query GetTemplates($first: Int, $last: Int, $where: TemplateWhereInput) {
         updatedAt
         updatedBy
         kind
+        files {
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
       }
     }
   }
 }
 
-mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
-  updateTemplate(id: $updateTemplateId, input: $input) {
+mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!, $templateFiles: [Upload!]) {
+  updateTemplate(
+    id: $updateTemplateId
+    input: $input
+    templateFiles: $templateFiles
+  ) {
     template {
       createdAt
       createdBy
@@ -156,6 +192,14 @@ mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
       updatedAt
       updatedBy
       kind
+      files {
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
     }
   }
 }

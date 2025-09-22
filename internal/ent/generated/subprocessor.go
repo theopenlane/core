@@ -38,6 +38,10 @@ type Subprocessor struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// name of the standard body
 	Name string `json:"name,omitempty"`
 	// description of the subprocessor
@@ -121,7 +125,7 @@ func (*Subprocessor) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subprocessor.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case subprocessor.FieldID, subprocessor.FieldCreatedBy, subprocessor.FieldUpdatedBy, subprocessor.FieldDeletedBy, subprocessor.FieldOwnerID, subprocessor.FieldName, subprocessor.FieldDescription, subprocessor.FieldLogoRemoteURL, subprocessor.FieldLogoLocalFileID:
+		case subprocessor.FieldID, subprocessor.FieldCreatedBy, subprocessor.FieldUpdatedBy, subprocessor.FieldDeletedBy, subprocessor.FieldOwnerID, subprocessor.FieldInternalNotes, subprocessor.FieldSystemInternalID, subprocessor.FieldName, subprocessor.FieldDescription, subprocessor.FieldLogoRemoteURL, subprocessor.FieldLogoLocalFileID:
 			values[i] = new(sql.NullString)
 		case subprocessor.FieldCreatedAt, subprocessor.FieldUpdatedAt, subprocessor.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -201,6 +205,20 @@ func (_m *Subprocessor) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
 			} else if value.Valid {
 				_m.SystemOwned = value.Bool
+			}
+		case subprocessor.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case subprocessor.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case subprocessor.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -310,6 +328,16 @@ func (_m *Subprocessor) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

@@ -68,7 +68,7 @@ func CanCreateObjectsUnderParents(edges []string) privacy.MutationRuleFunc {
 		}
 
 		if err := CheckEdgesForAddedAccess(ctx, m, edgesToCheck); err != nil {
-			log.Error().Err(err).Msg("access not allowed to parent, cannot authorize creation")
+			zerolog.Ctx(ctx).Error().Err(err).Msg("access not allowed to parent, cannot authorize creation")
 
 			return privacy.Deny
 		}
@@ -233,7 +233,7 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 			}
 
 			if allow, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac); err != nil || !allow {
-				log.Error().Err(err).Str("edge", edge).Str("relation", ac.Relation).Msg("user does not have access to the object for edge permissions")
+				zerolog.Ctx(ctx).Error().Err(err).Str("edge", edge).Str("relation", ac.Relation).Msg("user does not have access to the object for edge permissions")
 
 				return generated.ErrPermissionDenied
 			}
@@ -252,13 +252,13 @@ func mapEdgeToObjectType(ctx context.Context, schema string, edge string) genera
 
 	schemaMap, ok := generated.EdgeAccessMap[schemaType]
 	if !ok {
-		log.Error().Str("schema", schema).Msg("schema not found in edge access map")
+		zerolog.Ctx(ctx).Error().Str("schema", schema).Msg("schema not found in edge access map")
 		return generated.EdgeAccess{}
 	}
 
 	edgeAccess, ok := schemaMap[edge]
 	if !ok {
-		log.Error().Str("edge", edge).Msg("edge not found in edge access map for schema")
+		zerolog.Ctx(ctx).Error().Str("edge", edge).Msg("edge not found in edge access map for schema")
 
 		return generated.EdgeAccess{}
 	}

@@ -47,6 +47,8 @@ query AdminSearch($query: String!) {
           improvementSuggestions
           dismissedImprovementSuggestions
           ownerID
+          internalNotes
+          systemInternalID
           source
         }
       }
@@ -64,6 +66,8 @@ query AdminSearch($query: String!) {
           id
           tags
           ownerID
+          internalNotes
+          systemInternalID
           name
           description
           identifier
@@ -124,6 +128,8 @@ query AdminSearch($query: String!) {
           controlOwnerID
           delegateID
           ownerID
+          internalNotes
+          systemInternalID
           refCode
           standardID
         }
@@ -142,6 +148,8 @@ query AdminSearch($query: String!) {
           id
           tags
           ownerID
+          internalNotes
+          systemInternalID
           details
         }
       }
@@ -161,6 +169,8 @@ query AdminSearch($query: String!) {
           tags
           revision
           ownerID
+          internalNotes
+          systemInternalID
           name
           desiredOutcome
           controlObjectiveType
@@ -182,6 +192,8 @@ query AdminSearch($query: String!) {
           id
           tags
           ownerID
+          internalNotes
+          systemInternalID
           cnameRecord
           mappableDomainID
           dnsVerificationID
@@ -242,6 +254,8 @@ query AdminSearch($query: String!) {
           id
           tags
           ownerID
+          internalNotes
+          systemInternalID
           name
           displayName
           description
@@ -264,6 +278,8 @@ query AdminSearch($query: String!) {
           id
           tags
           ownerID
+          internalNotes
+          systemInternalID
           name
         }
       }
@@ -321,6 +337,8 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
+          internalNotes
+          systemInternalID
           providedFileName
           providedFileExtension
           detectedMimeType
@@ -370,6 +388,8 @@ query AdminSearch($query: String!) {
           id
           tags
           ownerID
+          internalNotes
+          systemInternalID
           name
           kind
           integrationType
@@ -392,6 +412,8 @@ query AdminSearch($query: String!) {
           tags
           revision
           ownerID
+          internalNotes
+          systemInternalID
           name
           policyType
           details
@@ -439,6 +461,8 @@ query AdminSearch($query: String!) {
           displayID
           tags
           ownerID
+          internalNotes
+          systemInternalID
           name
           ipAddress
           version
@@ -495,6 +519,8 @@ query AdminSearch($query: String!) {
           displayID
           tags
           ownerID
+          internalNotes
+          systemInternalID
           title
           description
         }
@@ -529,6 +555,8 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
+          internalNotes
+          systemInternalID
           ownerID
           relation
         }
@@ -548,6 +576,8 @@ query AdminSearch($query: String!) {
           displayID
           tags
           ownerID
+          internalNotes
+          systemInternalID
           name
           description
           details
@@ -670,6 +700,8 @@ query AdminSearch($query: String!) {
           dismissedControlSuggestions
           improvementSuggestions
           dismissedImprovementSuggestions
+          internalNotes
+          systemInternalID
           fileID
           url
         }
@@ -755,6 +787,8 @@ query AdminSearch($query: String!) {
           tags
           revision
           ownerID
+          internalNotes
+          systemInternalID
           name
           shortName
           framework
@@ -798,6 +832,8 @@ query AdminSearch($query: String!) {
           controlOwnerID
           delegateID
           ownerID
+          internalNotes
+          systemInternalID
           refCode
           controlID
         }
@@ -816,6 +852,8 @@ query AdminSearch($query: String!) {
           id
           tags
           ownerID
+          internalNotes
+          systemInternalID
           name
           description
           logoRemoteURL
@@ -876,10 +914,13 @@ query AdminSearch($query: String!) {
           id
           tags
           ownerID
+          internalNotes
+          systemInternalID
           name
           description
           jsonconfig
           uischema
+          trustCenterID
         }
       }
     }
@@ -930,6 +971,11 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
+          ownerID
+          trustCenterID
+          title
+          category
+          fileID
         }
       }
     }

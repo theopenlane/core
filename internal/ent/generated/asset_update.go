@@ -148,6 +148,46 @@ func (_u *AssetUpdate) ClearOwnerID() *AssetUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *AssetUpdate) SetInternalNotes(v string) *AssetUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableInternalNotes(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *AssetUpdate) ClearInternalNotes() *AssetUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *AssetUpdate) SetSystemInternalID(v string) *AssetUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableSystemInternalID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *AssetUpdate) ClearSystemInternalID() *AssetUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetAssetType sets the "asset_type" field.
 func (_u *AssetUpdate) SetAssetType(v enums.AssetType) *AssetUpdate {
 	_u.mutation.SetAssetType(v)
@@ -550,11 +590,6 @@ func (_u *AssetUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *AssetUpdate) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := asset.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Asset.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.AssetType(); ok {
 		if err := asset.AssetTypeValidator(v); err != nil {
 			return &ValidationError{Name: "asset_type", err: fmt.Errorf(`generated: validator failed for field "Asset.asset_type": %w`, err)}
@@ -626,6 +661,21 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(asset.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(asset.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(asset.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(asset.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(asset.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(asset.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.AssetType(); ok {
 		_spec.SetField(asset.FieldAssetType, field.TypeEnum, value)
@@ -1121,6 +1171,46 @@ func (_u *AssetUpdateOne) ClearOwnerID() *AssetUpdateOne {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *AssetUpdateOne) SetInternalNotes(v string) *AssetUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableInternalNotes(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *AssetUpdateOne) ClearInternalNotes() *AssetUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *AssetUpdateOne) SetSystemInternalID(v string) *AssetUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableSystemInternalID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *AssetUpdateOne) ClearSystemInternalID() *AssetUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetAssetType sets the "asset_type" field.
 func (_u *AssetUpdateOne) SetAssetType(v enums.AssetType) *AssetUpdateOne {
 	_u.mutation.SetAssetType(v)
@@ -1536,11 +1626,6 @@ func (_u *AssetUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *AssetUpdateOne) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := asset.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Asset.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.AssetType(); ok {
 		if err := asset.AssetTypeValidator(v); err != nil {
 			return &ValidationError{Name: "asset_type", err: fmt.Errorf(`generated: validator failed for field "Asset.asset_type": %w`, err)}
@@ -1629,6 +1714,21 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(asset.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(asset.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(asset.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(asset.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(asset.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(asset.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.AssetType(); ok {
 		_spec.SetField(asset.FieldAssetType, field.TypeEnum, value)

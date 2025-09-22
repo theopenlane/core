@@ -34,6 +34,12 @@ type Hush struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name,omitempty"`
 	// a description of the hush value or purpose, such as github PAT
@@ -124,7 +130,9 @@ func (*Hush) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case hush.FieldCredentialSet, hush.FieldMetadata:
 			values[i] = new([]byte)
-		case hush.FieldID, hush.FieldCreatedBy, hush.FieldUpdatedBy, hush.FieldDeletedBy, hush.FieldOwnerID, hush.FieldName, hush.FieldDescription, hush.FieldKind, hush.FieldSecretName, hush.FieldSecretValue:
+		case hush.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
+		case hush.FieldID, hush.FieldCreatedBy, hush.FieldUpdatedBy, hush.FieldDeletedBy, hush.FieldOwnerID, hush.FieldInternalNotes, hush.FieldSystemInternalID, hush.FieldName, hush.FieldDescription, hush.FieldKind, hush.FieldSecretName, hush.FieldSecretValue:
 			values[i] = new(sql.NullString)
 		case hush.FieldCreatedAt, hush.FieldUpdatedAt, hush.FieldDeletedAt, hush.FieldLastUsedAt, hush.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
@@ -190,6 +198,26 @@ func (_m *Hush) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case hush.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case hush.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case hush.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case hush.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -327,6 +355,19 @@ func (_m *Hush) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

@@ -32,14 +32,16 @@ var sharedMimeTypes = []string{
 // to be used in the validation function
 // add the key and the valid mime types to the map
 var validMimeTypes = map[string][]string{
-	"avatarFile":    {"image/jpeg", "image/png"},
-	"logoFile":      {"image/jpeg", "image/png", "image/svg+xml"},
-	"faviconFile":   {"image/jpeg", "image/png", "image/x-icon"},
-	"evidenceFiles": sharedMimeTypes,
-	"noteFiles":     sharedMimeTypes,
-	"exportFiles":   {"text/csv", "text/plain; charset=utf-8", "text/plain", "application/json", "application/json; charset=utf-8"},
-	"procedureFile": importSchemaMimeTypes,
-	"policyFile":    importSchemaMimeTypes,
+	"avatarFile":         {"image/jpeg", "image/png"},
+	"logoFile":           {"image/jpeg", "image/png", "image/svg+xml"},
+	"faviconFile":        {"image/jpeg", "image/png", "image/x-icon"},
+	"evidenceFiles":      sharedMimeTypes,
+	"noteFiles":          sharedMimeTypes,
+	"exportFiles":        {"text/csv", "text/plain; charset=utf-8", "text/plain", "application/json", "application/json; charset=utf-8"},
+	"procedureFile":      importSchemaMimeTypes,
+	"policyFile":         importSchemaMimeTypes,
+	"trustCenterDocFile": {"application/pdf", "image/jpeg", "image/png"},
+	"templateFiles":      sharedMimeTypes,
 }
 
 // MimeTypeValidator returns a validation function for the given key

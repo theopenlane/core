@@ -68,6 +68,12 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkCreatePayload_contr
 				return ec.fieldContext_ControlObjective_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ControlObjective_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ControlObjective_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_ControlObjective_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_ControlObjective_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_ControlObjective_name(ctx, field)
 			case "desiredOutcome":
@@ -155,6 +161,12 @@ func (ec *executionContext) fieldContext_ControlObjectiveCreatePayload_controlOb
 				return ec.fieldContext_ControlObjective_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ControlObjective_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ControlObjective_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_ControlObjective_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_ControlObjective_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_ControlObjective_name(ctx, field)
 			case "desiredOutcome":
@@ -269,6 +281,12 @@ func (ec *executionContext) fieldContext_ControlObjectiveUpdatePayload_controlOb
 				return ec.fieldContext_ControlObjective_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ControlObjective_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_ControlObjective_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_ControlObjective_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_ControlObjective_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_ControlObjective_name(ctx, field)
 			case "desiredOutcome":

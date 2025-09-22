@@ -127,6 +127,46 @@ func (_u *MappedControlUpdate) ClearTags() *MappedControlUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *MappedControlUpdate) SetInternalNotes(v string) *MappedControlUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *MappedControlUpdate) SetNillableInternalNotes(v *string) *MappedControlUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *MappedControlUpdate) ClearInternalNotes() *MappedControlUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *MappedControlUpdate) SetSystemInternalID(v string) *MappedControlUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *MappedControlUpdate) SetNillableSystemInternalID(v *string) *MappedControlUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *MappedControlUpdate) ClearSystemInternalID() *MappedControlUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *MappedControlUpdate) SetOwnerID(v string) *MappedControlUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -580,6 +620,21 @@ func (_u *MappedControlUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(mappedcontrol.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(mappedcontrol.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(mappedcontrol.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(mappedcontrol.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(mappedcontrol.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(mappedcontrol.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrol.FieldMappingType, field.TypeEnum, value)
@@ -1035,6 +1090,46 @@ func (_u *MappedControlUpdateOne) AppendTags(v []string) *MappedControlUpdateOne
 // ClearTags clears the value of the "tags" field.
 func (_u *MappedControlUpdateOne) ClearTags() *MappedControlUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *MappedControlUpdateOne) SetInternalNotes(v string) *MappedControlUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *MappedControlUpdateOne) SetNillableInternalNotes(v *string) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *MappedControlUpdateOne) ClearInternalNotes() *MappedControlUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *MappedControlUpdateOne) SetSystemInternalID(v string) *MappedControlUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *MappedControlUpdateOne) SetNillableSystemInternalID(v *string) *MappedControlUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *MappedControlUpdateOne) ClearSystemInternalID() *MappedControlUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -1521,6 +1616,21 @@ func (_u *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedCon
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(mappedcontrol.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(mappedcontrol.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(mappedcontrol.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(mappedcontrol.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(mappedcontrol.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(mappedcontrol.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrol.FieldMappingType, field.TypeEnum, value)

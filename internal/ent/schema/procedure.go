@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -86,11 +87,12 @@ func (p Procedure) Mixin() []ent.Mixin {
 		prefix:          "PRD",
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(p, withSkipForSystemAdmin(true)),
+			newOrgOwnedMixin(p),
 			// add group edit permissions to the procedure
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 			// all procedures are documents
 			NewDocumentMixin(p),
+			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(p)
 }

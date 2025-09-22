@@ -6,8 +6,8 @@ import (
 	"slices"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
 
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -106,7 +106,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	}
 
 	if slices.Contains(au.OrganizationIDs, organizationID) && relation == fgax.CanView {
-		log.Debug().Str("relation", relation).Msg("access allowed for organization based on user's orgs")
+		zerolog.Ctx(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on user's orgs")
 
 		return privacy.Allow
 	}
@@ -114,7 +114,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	// check the cache first
 	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 		if hasRole, err := cache.HasRole(ctx, au.SubjectID, organizationID, relation); err == nil && hasRole {
-			log.Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
+			zerolog.Ctx(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
 
 			return privacy.Allow
 		}
@@ -135,11 +135,11 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	}
 
 	if access {
-		log.Debug().Str("relation", relation).Msg("access allowed for organization based on fga")
+		zerolog.Ctx(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on fga")
 
 		if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 			if err := cache.SetRole(ctx, au.SubjectID, organizationID, relation); err != nil {
-				log.Err(err).Msg("failed to set role cache")
+				zerolog.Ctx(ctx).Err(err).Msg("failed to set role cache")
 			}
 		}
 
@@ -153,7 +153,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 // HasOrgMutationAccess is a rule that returns allow decision if user has edit or delete access
 func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 	return privacy.OrganizationMutationRuleFunc(func(ctx context.Context, m *generated.OrganizationMutation) error {
-		log.Debug().Msg("checking mutation access")
+		zerolog.Ctx(ctx).Debug().Msg("checking mutation access")
 
 		relation := fgax.CanEdit
 		if m.Op().Is(ent.OpDelete | ent.OpDeleteOne) {
@@ -168,7 +168,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		// check the cache first
 		if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 			if hasRole, err := cache.HasRole(ctx, user.SubjectID, user.OrganizationID, relation); err == nil && hasRole {
-				log.Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
+				zerolog.Ctx(ctx).Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
 
 				return privacy.Allow
 			}
@@ -195,7 +195,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 				}
 
 				if !access {
-					log.Debug().Str("relation", relation).Str("organization_id", parentOrgID).
+					zerolog.Ctx(ctx).Debug().Str("relation", relation).Str("organization_id", parentOrgID).
 						Msg("access denied to parent org")
 
 					return generated.ErrPermissionDenied
@@ -210,12 +210,12 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 
 		// if it's not set return an error
 		if oID == "" {
-			log.Debug().Msg("missing expected organization id")
+			zerolog.Ctx(ctx).Debug().Msg("missing expected organization id")
 
 			return privacy.Denyf("missing organization ID information in context")
 		}
 
-		log.Debug().Str("relation", relation).
+		zerolog.Ctx(ctx).Debug().Str("relation", relation).
 			Str("organization_id", oID).
 			Msg("checking relationship tuples")
 
@@ -228,13 +228,13 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		if access {
-			log.Debug().Str("relation", relation).
+			zerolog.Ctx(ctx).Debug().Str("relation", relation).
 				Str("organization_id", oID).
 				Msg("access allowed")
 
 			if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 				if err := cache.SetRole(ctx, user.SubjectID, oID, relation); err != nil {
-					log.Err(err).Msg("failed to set role cache")
+					zerolog.Ctx(ctx).Err(err).Msg("failed to set role cache")
 				}
 			}
 

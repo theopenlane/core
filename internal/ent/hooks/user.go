@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 	"golang.org/x/text/cases"
@@ -310,7 +309,7 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 func sendRegisterWelcomeEmail(ctx context.Context, user *generated.User, m *generated.UserMutation) error {
 	// if there is not job client, we can't send the email
 	if m.Job == nil {
-		log.Info().Msg("no job client, skipping welcome email")
+		zerolog.Ctx(ctx).Info().Msg("no job client, skipping welcome email")
 
 		return nil
 	}

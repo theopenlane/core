@@ -66,6 +66,12 @@ func (ec *executionContext) fieldContext_NarrativeBulkCreatePayload_narratives(_
 				return ec.fieldContext_Narrative_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Narrative_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Narrative_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Narrative_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Narrative_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Narrative_name(ctx, field)
 			case "description":
@@ -133,6 +139,12 @@ func (ec *executionContext) fieldContext_NarrativeCreatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Narrative_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Narrative_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Narrative_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Narrative_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Narrative_name(ctx, field)
 			case "description":
@@ -227,6 +239,12 @@ func (ec *executionContext) fieldContext_NarrativeUpdatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Narrative_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Narrative_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Narrative_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Narrative_systemInternalID(ctx, field)
 			case "name":
 				return ec.fieldContext_Narrative_name(ctx, field)
 			case "description":
