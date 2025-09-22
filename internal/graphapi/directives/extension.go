@@ -37,26 +37,30 @@ func NewExtension(opts ...ExtensionOption) (*Extension, error) {
 
 // SchemaHooks of the extension to seamlessly edit the final gql interface
 func (e *Extension) SchemaHooks() []entgql.SchemaHook {
-	return []entgql.SchemaHook{hook}
+	return []entgql.SchemaHook{addReadOnlyDirectiveHook}
 }
 
-// hook is used to add the @readOnly directive to input fields that are marked as @hidden
+// addReadOnlyDirectiveHook is used to add the @readOnly directive to input fields that are marked as @hidden
 // this prevents hidden fields from being set in create and update mutations
 // as of today, there is no way to annotate a schema to do this automatically so we use a schema
-// hook to modify the generated schema
-var hook = func(_ *gen.Graph, s *ast.Schema) error {
+// addReadOnlyDirectiveHook to modify the generated schema
+var addReadOnlyDirectiveHook = func(_ *gen.Graph, s *ast.Schema) error {
 	for _, t := range s.Types {
+		// if the type is an input object, we want to check its fields for directives
+		// otherwise, skip it
+		if t.Kind != ast.InputObject {
+			continue
+		}
+
 		object := s.Types[getInputObjectName(t.Name)]
 		if object == nil {
 			continue
 		}
 
-		// if the type is an input object, we need to check its fields for directives
-		if t.Kind == ast.InputObject {
-			for _, f := range t.Fields {
-				setReadOnlyDirective(f, object, t)
-			}
+		for _, f := range t.Fields {
+			setReadOnlyDirective(f, object, t)
 		}
+
 	}
 	return nil
 }

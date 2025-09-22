@@ -129,7 +129,7 @@ func programDeleteHook(ctx context.Context, m *generated.ProgramMutation) error 
 	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
 
 	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete relationship tuples")
+		zerolog.Ctx(ctx).Error().Str("object", object).Err(err).Msg("failed to delete relationship tuples")
 
 		return ErrInternalServerError
 	}

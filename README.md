@@ -81,7 +81,6 @@ See the [README](/config/README.md) in the `config` directory.
 >    entConfig:
 >      modules:
 >        enabled: false
->        useSandbox: true
 >
 >    subscription:
 >      enabled: false

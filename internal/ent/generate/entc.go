@@ -67,12 +67,14 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("creating entx extension")
 	}
+
 	schemaHooks = append(schemaHooks, xExt.GQLSchemaHooks()...)
 
 	dExt, err := directives.NewExtension()
 	if err != nil {
 		log.Fatal().Err(err).Msg("creating directives extension")
 	}
+
 	schemaHooks = append(schemaHooks, dExt.SchemaHooks()...)
 
 	gqlExt, err := entgql.NewExtension(

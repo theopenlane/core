@@ -166,7 +166,7 @@ func trustCenterSettingDeleteHook(ctx context.Context, m *generated.TrustCenterS
 	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
 
 	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete relationship tuples")
+		zerolog.Ctx(ctx).Error().Err(err).Str("object", object).Msg("failed to delete relationship tuples")
 
 		return ErrInternalServerError
 	}
