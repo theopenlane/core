@@ -448,12 +448,12 @@ type OpenlaneGraphClient interface {
 	GetTaskHistories(ctx context.Context, first *int64, last *int64, where *TaskHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTaskHistories, error)
 	CreateBulkCSVTemplate(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTemplate, error)
 	CreateBulkTemplate(ctx context.Context, input []*CreateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTemplate, error)
-	CreateTemplate(ctx context.Context, input CreateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*CreateTemplate, error)
+	CreateTemplate(ctx context.Context, input CreateTemplateInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTemplate, error)
 	DeleteTemplate(ctx context.Context, deleteTemplateID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTemplate, error)
 	GetAllTemplates(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTemplates, error)
 	GetTemplateByID(ctx context.Context, templateID string, interceptors ...clientv2.RequestInterceptor) (*GetTemplateByID, error)
 	GetTemplates(ctx context.Context, first *int64, last *int64, where *TemplateWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTemplates, error)
-	UpdateTemplate(ctx context.Context, updateTemplateID string, input UpdateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTemplate, error)
+	UpdateTemplate(ctx context.Context, updateTemplateID string, input UpdateTemplateInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTemplate, error)
 	GetAllTemplateHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTemplateHistories, error)
 	GetTemplateHistories(ctx context.Context, first *int64, last *int64, where *TemplateHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTemplateHistories, error)
 	CreateTFASetting(ctx context.Context, input CreateTFASettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTFASetting, error)
@@ -65996,20 +65996,61 @@ func (t *CreateBulkTemplate_CreateBulkTemplate) GetTemplates() []*CreateBulkTemp
 	return t.Templates
 }
 
+type CreateTemplate_CreateTemplate_Template_Files_Edges_Node struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateTemplate_CreateTemplate_Template_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateTemplate_CreateTemplate_Template_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateTemplate_CreateTemplate_Template_Files_Edges_Node) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateTemplate_CreateTemplate_Template_Files_Edges_Node{}
+	}
+	return t.PresignedURL
+}
+
+type CreateTemplate_CreateTemplate_Template_Files_Edges struct {
+	Node *CreateTemplate_CreateTemplate_Template_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateTemplate_CreateTemplate_Template_Files_Edges) GetNode() *CreateTemplate_CreateTemplate_Template_Files_Edges_Node {
+	if t == nil {
+		t = &CreateTemplate_CreateTemplate_Template_Files_Edges{}
+	}
+	return t.Node
+}
+
+type CreateTemplate_CreateTemplate_Template_Files struct {
+	Edges []*CreateTemplate_CreateTemplate_Template_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateTemplate_CreateTemplate_Template_Files) GetEdges() []*CreateTemplate_CreateTemplate_Template_Files_Edges {
+	if t == nil {
+		t = &CreateTemplate_CreateTemplate_Template_Files{}
+	}
+	return t.Edges
+}
+
 type CreateTemplate_CreateTemplate_Template struct {
-	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
-	ID           string              "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string              "json:\"name\" graphql:\"name\""
-	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                                      "json:\"description,omitempty\" graphql:\"description\""
+	Files        CreateTemplate_CreateTemplate_Template_Files "json:\"files\" graphql:\"files\""
+	ID           string                                       "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any                               "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind                          "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                                       "json:\"name\" graphql:\"name\""
+	OwnerID      *string                                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType                           "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any                               "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateTemplate_CreateTemplate_Template) GetCreatedAt() *time.Time {
@@ -66029,6 +66070,12 @@ func (t *CreateTemplate_CreateTemplate_Template) GetDescription() *string {
 		t = &CreateTemplate_CreateTemplate_Template{}
 	}
 	return t.Description
+}
+func (t *CreateTemplate_CreateTemplate_Template) GetFiles() *CreateTemplate_CreateTemplate_Template_Files {
+	if t == nil {
+		t = &CreateTemplate_CreateTemplate_Template{}
+	}
+	return &t.Files
 }
 func (t *CreateTemplate_CreateTemplate_Template) GetID() string {
 	if t == nil {
@@ -66145,20 +66192,61 @@ func (t *GetAllTemplates_Templates_PageInfo) GetStartCursor() *string {
 	return t.StartCursor
 }
 
+type GetAllTemplates_Templates_Edges_Node_Files_Edges_Node struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllTemplates_Templates_Edges_Node_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTemplates_Templates_Edges_Node_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTemplates_Templates_Edges_Node_Files_Edges_Node) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTemplates_Templates_Edges_Node_Files_Edges_Node{}
+	}
+	return t.PresignedURL
+}
+
+type GetAllTemplates_Templates_Edges_Node_Files_Edges struct {
+	Node *GetAllTemplates_Templates_Edges_Node_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTemplates_Templates_Edges_Node_Files_Edges) GetNode() *GetAllTemplates_Templates_Edges_Node_Files_Edges_Node {
+	if t == nil {
+		t = &GetAllTemplates_Templates_Edges_Node_Files_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTemplates_Templates_Edges_Node_Files struct {
+	Edges []*GetAllTemplates_Templates_Edges_Node_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllTemplates_Templates_Edges_Node_Files) GetEdges() []*GetAllTemplates_Templates_Edges_Node_Files_Edges {
+	if t == nil {
+		t = &GetAllTemplates_Templates_Edges_Node_Files{}
+	}
+	return t.Edges
+}
+
 type GetAllTemplates_Templates_Edges_Node struct {
-	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
-	ID           string              "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string              "json:\"name\" graphql:\"name\""
-	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                                    "json:\"description,omitempty\" graphql:\"description\""
+	Files        GetAllTemplates_Templates_Edges_Node_Files "json:\"files\" graphql:\"files\""
+	ID           string                                     "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any                             "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind                        "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                                     "json:\"name\" graphql:\"name\""
+	OwnerID      *string                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType                         "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any                             "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllTemplates_Templates_Edges_Node) GetCreatedAt() *time.Time {
@@ -66178,6 +66266,12 @@ func (t *GetAllTemplates_Templates_Edges_Node) GetDescription() *string {
 		t = &GetAllTemplates_Templates_Edges_Node{}
 	}
 	return t.Description
+}
+func (t *GetAllTemplates_Templates_Edges_Node) GetFiles() *GetAllTemplates_Templates_Edges_Node_Files {
+	if t == nil {
+		t = &GetAllTemplates_Templates_Edges_Node{}
+	}
+	return &t.Files
 }
 func (t *GetAllTemplates_Templates_Edges_Node) GetID() string {
 	if t == nil {
@@ -66276,20 +66370,61 @@ func (t *GetAllTemplates_Templates) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GetTemplateByID_Template_Files_Edges_Node struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTemplateByID_Template_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTemplateByID_Template_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTemplateByID_Template_Files_Edges_Node) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTemplateByID_Template_Files_Edges_Node{}
+	}
+	return t.PresignedURL
+}
+
+type GetTemplateByID_Template_Files_Edges struct {
+	Node *GetTemplateByID_Template_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTemplateByID_Template_Files_Edges) GetNode() *GetTemplateByID_Template_Files_Edges_Node {
+	if t == nil {
+		t = &GetTemplateByID_Template_Files_Edges{}
+	}
+	return t.Node
+}
+
+type GetTemplateByID_Template_Files struct {
+	Edges []*GetTemplateByID_Template_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetTemplateByID_Template_Files) GetEdges() []*GetTemplateByID_Template_Files_Edges {
+	if t == nil {
+		t = &GetTemplateByID_Template_Files{}
+	}
+	return t.Edges
+}
+
 type GetTemplateByID_Template struct {
-	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
-	ID           string              "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string              "json:\"name\" graphql:\"name\""
-	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                        "json:\"description,omitempty\" graphql:\"description\""
+	Files        GetTemplateByID_Template_Files "json:\"files\" graphql:\"files\""
+	ID           string                         "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any                 "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind            "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                         "json:\"name\" graphql:\"name\""
+	OwnerID      *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType             "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any                 "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTemplateByID_Template) GetCreatedAt() *time.Time {
@@ -66309,6 +66444,12 @@ func (t *GetTemplateByID_Template) GetDescription() *string {
 		t = &GetTemplateByID_Template{}
 	}
 	return t.Description
+}
+func (t *GetTemplateByID_Template) GetFiles() *GetTemplateByID_Template_Files {
+	if t == nil {
+		t = &GetTemplateByID_Template{}
+	}
+	return &t.Files
 }
 func (t *GetTemplateByID_Template) GetID() string {
 	if t == nil {
@@ -66403,20 +66544,61 @@ func (t *GetTemplates_Templates_PageInfo) GetStartCursor() *string {
 	return t.StartCursor
 }
 
+type GetTemplates_Templates_Edges_Node_Files_Edges_Node struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTemplates_Templates_Edges_Node_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTemplates_Templates_Edges_Node_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTemplates_Templates_Edges_Node_Files_Edges_Node) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTemplates_Templates_Edges_Node_Files_Edges_Node{}
+	}
+	return t.PresignedURL
+}
+
+type GetTemplates_Templates_Edges_Node_Files_Edges struct {
+	Node *GetTemplates_Templates_Edges_Node_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTemplates_Templates_Edges_Node_Files_Edges) GetNode() *GetTemplates_Templates_Edges_Node_Files_Edges_Node {
+	if t == nil {
+		t = &GetTemplates_Templates_Edges_Node_Files_Edges{}
+	}
+	return t.Node
+}
+
+type GetTemplates_Templates_Edges_Node_Files struct {
+	Edges []*GetTemplates_Templates_Edges_Node_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetTemplates_Templates_Edges_Node_Files) GetEdges() []*GetTemplates_Templates_Edges_Node_Files_Edges {
+	if t == nil {
+		t = &GetTemplates_Templates_Edges_Node_Files{}
+	}
+	return t.Edges
+}
+
 type GetTemplates_Templates_Edges_Node struct {
-	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
-	ID           string              "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string              "json:\"name\" graphql:\"name\""
-	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                                 "json:\"description,omitempty\" graphql:\"description\""
+	Files        GetTemplates_Templates_Edges_Node_Files "json:\"files\" graphql:\"files\""
+	ID           string                                  "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any                          "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind                     "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                                  "json:\"name\" graphql:\"name\""
+	OwnerID      *string                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string                                "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType                      "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any                          "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTemplates_Templates_Edges_Node) GetCreatedAt() *time.Time {
@@ -66436,6 +66618,12 @@ func (t *GetTemplates_Templates_Edges_Node) GetDescription() *string {
 		t = &GetTemplates_Templates_Edges_Node{}
 	}
 	return t.Description
+}
+func (t *GetTemplates_Templates_Edges_Node) GetFiles() *GetTemplates_Templates_Edges_Node_Files {
+	if t == nil {
+		t = &GetTemplates_Templates_Edges_Node{}
+	}
+	return &t.Files
 }
 func (t *GetTemplates_Templates_Edges_Node) GetID() string {
 	if t == nil {
@@ -66534,20 +66722,61 @@ func (t *GetTemplates_Templates) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type UpdateTemplate_UpdateTemplate_Template_Files_Edges_Node struct {
+	ID           string  "json:\"id\" graphql:\"id\""
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateTemplate_UpdateTemplate_Template_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateTemplate_UpdateTemplate_Template_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateTemplate_UpdateTemplate_Template_Files_Edges_Node) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTemplate_UpdateTemplate_Template_Files_Edges_Node{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateTemplate_UpdateTemplate_Template_Files_Edges struct {
+	Node *UpdateTemplate_UpdateTemplate_Template_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateTemplate_UpdateTemplate_Template_Files_Edges) GetNode() *UpdateTemplate_UpdateTemplate_Template_Files_Edges_Node {
+	if t == nil {
+		t = &UpdateTemplate_UpdateTemplate_Template_Files_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateTemplate_UpdateTemplate_Template_Files struct {
+	Edges []*UpdateTemplate_UpdateTemplate_Template_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateTemplate_UpdateTemplate_Template_Files) GetEdges() []*UpdateTemplate_UpdateTemplate_Template_Files_Edges {
+	if t == nil {
+		t = &UpdateTemplate_UpdateTemplate_Template_Files{}
+	}
+	return t.Edges
+}
+
 type UpdateTemplate_UpdateTemplate_Template struct {
-	CreatedAt    *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
-	ID           string              "json:\"id\" graphql:\"id\""
-	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
-	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
-	Name         string              "json:\"name\" graphql:\"name\""
-	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
-	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
-	UpdatedAt    *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                                      "json:\"description,omitempty\" graphql:\"description\""
+	Files        UpdateTemplate_UpdateTemplate_Template_Files "json:\"files\" graphql:\"files\""
+	ID           string                                       "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any                               "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind                          "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string                                       "json:\"name\" graphql:\"name\""
+	OwnerID      *string                                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType                           "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any                               "json:\"uischema,omitempty\" graphql:\"uischema\""
+	UpdatedAt    *time.Time                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateTemplate_UpdateTemplate_Template) GetCreatedAt() *time.Time {
@@ -66567,6 +66796,12 @@ func (t *UpdateTemplate_UpdateTemplate_Template) GetDescription() *string {
 		t = &UpdateTemplate_UpdateTemplate_Template{}
 	}
 	return t.Description
+}
+func (t *UpdateTemplate_UpdateTemplate_Template) GetFiles() *UpdateTemplate_UpdateTemplate_Template_Files {
+	if t == nil {
+		t = &UpdateTemplate_UpdateTemplate_Template{}
+	}
+	return &t.Files
 }
 func (t *UpdateTemplate_UpdateTemplate_Template) GetID() string {
 	if t == nil {
@@ -101780,8 +102015,8 @@ func (c *Client) CreateBulkTemplate(ctx context.Context, input []*CreateTemplate
 	return &res, nil
 }
 
-const CreateTemplateDocument = `mutation CreateTemplate ($input: CreateTemplateInput!) {
-	createTemplate(input: $input) {
+const CreateTemplateDocument = `mutation CreateTemplate ($input: CreateTemplateInput!, $templateFiles: [Upload!]) {
+	createTemplate(input: $input, templateFiles: $templateFiles) {
 		template {
 			createdAt
 			createdBy
@@ -101796,14 +102031,23 @@ const CreateTemplateDocument = `mutation CreateTemplate ($input: CreateTemplateI
 			updatedAt
 			updatedBy
 			kind
+			files {
+				edges {
+					node {
+						id
+						presignedURL
+					}
+				}
+			}
 		}
 	}
 }
 `
 
-func (c *Client) CreateTemplate(ctx context.Context, input CreateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*CreateTemplate, error) {
+func (c *Client) CreateTemplate(ctx context.Context, input CreateTemplateInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTemplate, error) {
 	vars := map[string]any{
-		"input": input,
+		"input":         input,
+		"templateFiles": templateFiles,
 	}
 
 	var res CreateTemplate
@@ -101866,6 +102110,14 @@ const GetAllTemplatesDocument = `query GetAllTemplates {
 				updatedAt
 				updatedBy
 				kind
+				files {
+					edges {
+						node {
+							id
+							presignedURL
+						}
+					}
+				}
 			}
 		}
 	}
@@ -101902,6 +102154,14 @@ const GetTemplateByIDDocument = `query GetTemplateByID ($templateId: ID!) {
 		updatedAt
 		updatedBy
 		kind
+		files {
+			edges {
+				node {
+					id
+					presignedURL
+				}
+			}
+		}
 	}
 }
 `
@@ -101947,6 +102207,14 @@ const GetTemplatesDocument = `query GetTemplates ($first: Int, $last: Int, $wher
 				updatedAt
 				updatedBy
 				kind
+				files {
+					edges {
+						node {
+							id
+							presignedURL
+						}
+					}
+				}
 			}
 		}
 	}
@@ -101972,8 +102240,8 @@ func (c *Client) GetTemplates(ctx context.Context, first *int64, last *int64, wh
 	return &res, nil
 }
 
-const UpdateTemplateDocument = `mutation UpdateTemplate ($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
-	updateTemplate(id: $updateTemplateId, input: $input) {
+const UpdateTemplateDocument = `mutation UpdateTemplate ($updateTemplateId: ID!, $input: UpdateTemplateInput!, $templateFiles: [Upload!]) {
+	updateTemplate(id: $updateTemplateId, input: $input, templateFiles: $templateFiles) {
 		template {
 			createdAt
 			createdBy
@@ -101988,15 +102256,24 @@ const UpdateTemplateDocument = `mutation UpdateTemplate ($updateTemplateId: ID!,
 			updatedAt
 			updatedBy
 			kind
+			files {
+				edges {
+					node {
+						id
+						presignedURL
+					}
+				}
+			}
 		}
 	}
 }
 `
 
-func (c *Client) UpdateTemplate(ctx context.Context, updateTemplateID string, input UpdateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTemplate, error) {
+func (c *Client) UpdateTemplate(ctx context.Context, updateTemplateID string, input UpdateTemplateInput, templateFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTemplate, error) {
 	vars := map[string]any{
 		"updateTemplateId": updateTemplateID,
 		"input":            input,
+		"templateFiles":    templateFiles,
 	}
 
 	var res UpdateTemplate

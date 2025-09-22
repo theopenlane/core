@@ -141,8 +141,6 @@ func trustCenterSettingCreateHook(ctx context.Context, m *generated.TrustCenterS
 			return err
 		}
 
-		zerolog.Ctx(ctx).Debug().Msg(fmt.Sprintf("org tuple: %+v, request: %+v", orgTuple, req))
-
 		if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{orgTuple}, nil); err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 

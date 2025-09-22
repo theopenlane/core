@@ -6,7 +6,7 @@ can retrieve the value
 """
 directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
 """
-Indicates is the input field is read-only by non-system admin users. 
+Indicates is the input field is read-only by non-system admin users.
 If an input is marked as @readOnly, only system-admin users
 can set the field
 """
@@ -10073,6 +10073,7 @@ input CreateTemplateInput {
 	ownerID: ID
 	documentIDs: [ID!]
 	fileIDs: [ID!]
+	trustCenterID: ID
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -10139,6 +10140,7 @@ input CreateTrustCenterInput {
 	trustCenterSubprocessorIDs: [ID!]
 	trustCenterDocIDs: [ID!]
 	trustCenterComplianceIDs: [ID!]
+	templateIDs: [ID!]
 	createTrustCenterSetting: CreateTrustCenterSettingInput
 }
 """
@@ -30146,7 +30148,7 @@ type Mutation {
 		values of the template
 		"""
 		input: CreateTemplateInput!
-	): TemplateCreatePayload!
+	templateFiles: [Upload!]): TemplateCreatePayload!
 	"""
 	Create multiple new templates
 	"""
@@ -30178,7 +30180,7 @@ type Mutation {
 		New values for the template
 		"""
 		input: UpdateTemplateInput!
-	): TemplateUpdatePayload!
+	templateFiles: [Upload!]): TemplateUpdatePayload!
 	"""
 	Delete an existing template
 	"""
@@ -56327,7 +56329,7 @@ type Template implements Node {
 	"""
 	tags: [String!]
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: ID
 	"""
@@ -56366,6 +56368,10 @@ type Template implements Node {
 	the uischema for the template to render in the UI
 	"""
 	uischema: Map
+	"""
+	the id of the trust center this template is associated with
+	"""
+	trustCenterID: ID
 	owner: Organization
 	documents(
 		"""
@@ -56429,6 +56435,7 @@ type Template implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
+	trustCenter: TrustCenter
 }
 """
 Return response for createBulkTemplate mutation
@@ -56508,7 +56515,7 @@ type TemplateHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: String
 	"""
@@ -56547,6 +56554,10 @@ type TemplateHistory implements Node {
 	the uischema for the template to render in the UI
 	"""
 	uischema: Map
+	"""
+	the id of the trust center this template is associated with
+	"""
+	trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -56622,6 +56633,7 @@ TemplateHistoryTemplateKind is enum for the field kind
 """
 enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
 	QUESTIONNAIRE
+	TRUSTCENTER_NDA
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -56853,6 +56865,24 @@ input TemplateHistoryWhereInput {
 	kindNotIn: [TemplateHistoryTemplateKind!]
 	kindIsNil: Boolean
 	kindNotNil: Boolean
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: String
+	trustCenterIDNEQ: String
+	trustCenterIDIn: [String!]
+	trustCenterIDNotIn: [String!]
+	trustCenterIDGT: String
+	trustCenterIDGTE: String
+	trustCenterIDLT: String
+	trustCenterIDLTE: String
+	trustCenterIDContains: String
+	trustCenterIDHasPrefix: String
+	trustCenterIDHasSuffix: String
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: String
+	trustCenterIDContainsFold: String
 }
 """
 Ordering options for Template connections
@@ -56882,6 +56912,7 @@ TemplateTemplateKind is enum for the field kind
 """
 enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
 	QUESTIONNAIRE
+	TRUSTCENTER_NDA
 }
 """
 Return response for updateTemplate mutation
@@ -57087,6 +57118,24 @@ input TemplateWhereInput {
 	kindIsNil: Boolean
 	kindNotNil: Boolean
 	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: ID
+	trustCenterIDNEQ: ID
+	trustCenterIDIn: [ID!]
+	trustCenterIDNotIn: [ID!]
+	trustCenterIDGT: ID
+	trustCenterIDGTE: ID
+	trustCenterIDLT: ID
+	trustCenterIDLTE: ID
+	trustCenterIDContains: ID
+	trustCenterIDHasPrefix: ID
+	trustCenterIDHasSuffix: ID
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: ID
+	trustCenterIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -57101,6 +57150,11 @@ input TemplateWhereInput {
 	"""
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
+	"""
+	trust_center edge predicates
+	"""
+	hasTrustCenter: Boolean
+	hasTrustCenterWith: [TrustCenterWhereInput!]
 }
 """
 The builtin Time type
@@ -57224,6 +57278,37 @@ type TrustCenter implements Node {
 		"""
 		where: TrustCenterComplianceWhereInput
 	): TrustCenterComplianceConnection!
+	templates(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Templates returned from the connection.
+		"""
+		orderBy: [TemplateOrder!]
+
+		"""
+		Filtering options for Templates returned from the connection.
+		"""
+		where: TemplateWhereInput
+	): TemplateConnection!
 }
 type TrustCenterCompliance implements Node {
 	id: ID!
@@ -60351,6 +60436,11 @@ input TrustCenterWhereInput {
 	"""
 	hasTrustCenterCompliances: Boolean
 	hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
+	"""
+	templates edge predicates
+	"""
+	hasTemplates: Boolean
+	hasTemplatesWith: [TemplateWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -63533,14 +63623,14 @@ input UpdateTemplateInput {
 	"""
 	uischema: Map
 	clearUischema: Boolean
-	ownerID: ID
-	clearOwner: Boolean
 	addDocumentIDs: [ID!]
 	removeDocumentIDs: [ID!]
 	clearDocuments: Boolean
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
+	trustCenterID: ID
+	clearTrustCenter: Boolean
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -63612,6 +63702,9 @@ input UpdateTrustCenterInput {
 	addTrustCenterComplianceIDs: [ID!]
 	removeTrustCenterComplianceIDs: [ID!]
 	clearTrustCenterCompliances: Boolean
+	addTemplateIDs: [ID!]
+	removeTemplateIDs: [ID!]
+	clearTemplates: Boolean
 	updateTrustCenterSetting: UpdateTrustCenterSettingInput
 }
 """

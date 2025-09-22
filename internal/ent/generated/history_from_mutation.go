@@ -11039,6 +11039,10 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUischema(uischema)
 	}
 
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -11172,6 +11176,12 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUischema(template.Uischema)
 		}
 
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(template.TrustCenterID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -11224,6 +11234,7 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetKind(template.Kind).
 			SetJsonconfig(template.Jsonconfig).
 			SetUischema(template.Uischema).
+			SetTrustCenterID(template.TrustCenterID).
 			Save(ctx)
 		if err != nil {
 			return err

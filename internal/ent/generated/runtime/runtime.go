@@ -6268,21 +6268,30 @@ func init() {
 
 	template.Hooks[4] = templateMixinHooks6[0]
 
-	template.Hooks[5] = templateMixinHooks7[0]
+	template.Hooks[5] = templateMixinHooks6[1]
 
-	template.Hooks[6] = templateHooks[0]
+	template.Hooks[6] = templateMixinHooks7[0]
+
+	template.Hooks[7] = templateHooks[0]
+
+	template.Hooks[8] = templateHooks[1]
+
+	template.Hooks[9] = templateHooks[2]
 	templateMixinInters1 := templateMixin[1].Interceptors()
 	templateMixinInters2 := templateMixin[2].Interceptors()
 	templateMixinInters6 := templateMixin[6].Interceptors()
 	template.Interceptors[0] = templateMixinInters1[0]
 	template.Interceptors[1] = templateMixinInters2[0]
 	template.Interceptors[2] = templateMixinInters6[0]
+	template.Interceptors[3] = templateMixinInters6[1]
 	templateMixinFields0 := templateMixin[0].Fields()
 	_ = templateMixinFields0
 	templateMixinFields3 := templateMixin[3].Fields()
 	_ = templateMixinFields3
 	templateMixinFields4 := templateMixin[4].Fields()
 	_ = templateMixinFields4
+	templateMixinFields6 := templateMixin[6].Fields()
+	_ = templateMixinFields6
 	templateMixinFields7 := templateMixin[7].Fields()
 	_ = templateMixinFields7
 	templateFields := schema.Template{}.Fields()
@@ -6301,6 +6310,10 @@ func init() {
 	templateDescTags := templateMixinFields4[0].Descriptor()
 	// template.DefaultTags holds the default value on creation for the tags field.
 	template.DefaultTags = templateDescTags.Default.([]string)
+	// templateDescOwnerID is the schema descriptor for owner_id field.
+	templateDescOwnerID := templateMixinFields6[0].Descriptor()
+	// template.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	template.OwnerIDValidator = templateDescOwnerID.Validators[0].(func(string) error)
 	// templateDescSystemOwned is the schema descriptor for system_owned field.
 	templateDescSystemOwned := templateMixinFields7[0].Descriptor()
 	// template.DefaultSystemOwned holds the default value on creation for the system_owned field.

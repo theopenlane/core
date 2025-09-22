@@ -40,7 +40,7 @@ type TemplateHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
@@ -59,8 +59,10 @@ type TemplateHistory struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]interface{} `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
-	Uischema     map[string]interface{} `json:"uischema,omitempty"`
-	selectValues sql.SelectValues
+	Uischema map[string]interface{} `json:"uischema,omitempty"`
+	// the id of the trust center this template is associated with
+	TrustCenterID string `json:"trust_center_id,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -74,7 +76,7 @@ func (*TemplateHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case templatehistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case templatehistory.FieldID, templatehistory.FieldRef, templatehistory.FieldCreatedBy, templatehistory.FieldUpdatedBy, templatehistory.FieldDeletedBy, templatehistory.FieldOwnerID, templatehistory.FieldInternalNotes, templatehistory.FieldSystemInternalID, templatehistory.FieldName, templatehistory.FieldTemplateType, templatehistory.FieldDescription, templatehistory.FieldKind:
+		case templatehistory.FieldID, templatehistory.FieldRef, templatehistory.FieldCreatedBy, templatehistory.FieldUpdatedBy, templatehistory.FieldDeletedBy, templatehistory.FieldOwnerID, templatehistory.FieldInternalNotes, templatehistory.FieldSystemInternalID, templatehistory.FieldName, templatehistory.FieldTemplateType, templatehistory.FieldDescription, templatehistory.FieldKind, templatehistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case templatehistory.FieldHistoryTime, templatehistory.FieldCreatedAt, templatehistory.FieldUpdatedAt, templatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -227,6 +229,12 @@ func (_m *TemplateHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field uischema: %w", err)
 				}
 			}
+		case templatehistory.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -326,6 +334,9 @@ func (_m *TemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("uischema=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Uischema))
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }

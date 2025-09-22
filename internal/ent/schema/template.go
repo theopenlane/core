@@ -1,14 +1,19 @@
 package schema
 
 import (
+	"fmt"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -77,6 +82,9 @@ func (Template) Fields() []ent.Field {
 		field.JSON("uischema", map[string]any{}).
 			Comment("the uischema for the template to render in the UI").
 			Optional(),
+		field.String("trust_center_id").
+			Comment("the id of the trust center this template is associated with").
+			Optional(),
 	}
 }
 
@@ -84,7 +92,10 @@ func (Template) Fields() []ent.Field {
 func (t Template) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(t),
+			newObjectOwnedMixin[generated.Template](t,
+				withParents(TrustCenter{}, Organization{}),
+				withOrganizationOwner(true),
+			),
 			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(t)
@@ -99,6 +110,11 @@ func (t Template) Edges() []ent.Edge {
 			cascadeDelete: "Template",
 		}),
 		defaultEdgeToWithPagination(t, File{}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: TrustCenter{},
+			field:      "trust_center_id",
+		}),
 	}
 }
 
@@ -108,6 +124,18 @@ func (Template) Indexes() []ent.Index {
 		// names should be unique, but ignore deleted names
 		index.Fields("name", ownerFieldName, "template_type").
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		// Only one non-deleted NDA per trust center allowed
+		index.Fields("trust_center_id").
+			Unique().Annotations(entsql.IndexWhere(fmt.Sprintf("deleted_at is NULL and kind = '%s'", enums.TemplateKindTrustCenterNda.String()))),
+	}
+}
+
+func (Template) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{
+			Check: fmt.Sprintf("trust_center_id IS NOT NULL OR kind != '%s'", enums.TemplateKindTrustCenterNda.String()),
+		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -115,6 +143,8 @@ func (Template) Indexes() []ent.Index {
 func (Template) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTemplate(),
+		hooks.HookTemplateFiles(),
+		hooks.HookTemplateAuthz(),
 	}
 }
 
