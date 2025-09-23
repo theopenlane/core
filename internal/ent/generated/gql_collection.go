@@ -31765,6 +31765,11 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldAllowedEmailDomains)
 				fieldSeen[organizationsetting.FieldAllowedEmailDomains] = struct{}{}
 			}
+		case "allowMatchingDomainsAutojoin":
+			if _, ok := fieldSeen[organizationsetting.FieldAllowMatchingDomainsAutojoin]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldAllowMatchingDomainsAutojoin)
+				fieldSeen[organizationsetting.FieldAllowMatchingDomainsAutojoin] = struct{}{}
+			}
 		case "identityProvider":
 			if _, ok := fieldSeen[organizationsetting.FieldIdentityProvider]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProvider)
@@ -31800,10 +31805,30 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldOidcDiscoveryEndpoint)
 				fieldSeen[organizationsetting.FieldOidcDiscoveryEndpoint] = struct{}{}
 			}
+		case "samlSigninURL":
+			if _, ok := fieldSeen[organizationsetting.FieldSamlSigninURL]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldSamlSigninURL)
+				fieldSeen[organizationsetting.FieldSamlSigninURL] = struct{}{}
+			}
+		case "samlIssuer":
+			if _, ok := fieldSeen[organizationsetting.FieldSamlIssuer]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldSamlIssuer)
+				fieldSeen[organizationsetting.FieldSamlIssuer] = struct{}{}
+			}
+		case "samlCert":
+			if _, ok := fieldSeen[organizationsetting.FieldSamlCert]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldSamlCert)
+				fieldSeen[organizationsetting.FieldSamlCert] = struct{}{}
+			}
 		case "identityProviderLoginEnforced":
 			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderLoginEnforced]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderLoginEnforced)
 				fieldSeen[organizationsetting.FieldIdentityProviderLoginEnforced] = struct{}{}
+			}
+		case "multifactorAuthEnforced":
+			if _, ok := fieldSeen[organizationsetting.FieldMultifactorAuthEnforced]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldMultifactorAuthEnforced)
+				fieldSeen[organizationsetting.FieldMultifactorAuthEnforced] = struct{}{}
 			}
 		case "complianceWebhookToken":
 			if _, ok := fieldSeen[organizationsetting.FieldComplianceWebhookToken]; !ok {
@@ -31995,6 +32020,11 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldAllowedEmailDomains)
 				fieldSeen[organizationsettinghistory.FieldAllowedEmailDomains] = struct{}{}
 			}
+		case "allowMatchingDomainsAutojoin":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldAllowMatchingDomainsAutojoin]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin)
+				fieldSeen[organizationsettinghistory.FieldAllowMatchingDomainsAutojoin] = struct{}{}
+			}
 		case "identityProvider":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProvider]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProvider)
@@ -32030,10 +32060,30 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldOidcDiscoveryEndpoint)
 				fieldSeen[organizationsettinghistory.FieldOidcDiscoveryEndpoint] = struct{}{}
 			}
+		case "samlSigninURL":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldSamlSigninURL]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldSamlSigninURL)
+				fieldSeen[organizationsettinghistory.FieldSamlSigninURL] = struct{}{}
+			}
+		case "samlIssuer":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldSamlIssuer]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldSamlIssuer)
+				fieldSeen[organizationsettinghistory.FieldSamlIssuer] = struct{}{}
+			}
+		case "samlCert":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldSamlCert]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldSamlCert)
+				fieldSeen[organizationsettinghistory.FieldSamlCert] = struct{}{}
+			}
 		case "identityProviderLoginEnforced":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderLoginEnforced]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderLoginEnforced)
 				fieldSeen[organizationsettinghistory.FieldIdentityProviderLoginEnforced] = struct{}{}
+			}
+		case "multifactorAuthEnforced":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldMultifactorAuthEnforced]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldMultifactorAuthEnforced)
+				fieldSeen[organizationsettinghistory.FieldMultifactorAuthEnforced] = struct{}{}
 			}
 		case "complianceWebhookToken":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldComplianceWebhookToken]; !ok {

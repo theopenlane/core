@@ -8823,6 +8823,10 @@ input CreateOrganizationSettingInput {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -8847,9 +8851,25 @@ input CreateOrganizationSettingInput {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -31277,6 +31297,10 @@ type OrganizationSetting implements Node {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -31305,9 +31329,25 @@ type OrganizationSetting implements Node {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean!
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -31433,6 +31473,10 @@ type OrganizationSettingHistory implements Node {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingHistorySSOProvider
@@ -31461,9 +31505,25 @@ type OrganizationSettingHistory implements Node {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean!
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -31775,6 +31835,13 @@ input OrganizationSettingHistoryWhereInput {
   billingNotificationsEnabled: Boolean
   billingNotificationsEnabledNEQ: Boolean
   """
+  allow_matching_domains_autojoin field predicates
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  allowMatchingDomainsAutojoinNEQ: Boolean
+  allowMatchingDomainsAutojoinIsNil: Boolean
+  allowMatchingDomainsAutojoinNotNil: Boolean
+  """
   identity_provider field predicates
   """
   identityProvider: OrganizationSettingHistorySSOProvider
@@ -31879,10 +31946,71 @@ input OrganizationSettingHistoryWhereInput {
   oidcDiscoveryEndpointEqualFold: String
   oidcDiscoveryEndpointContainsFold: String
   """
+  saml_signin_url field predicates
+  """
+  samlSigninURL: String
+  samlSigninURLNEQ: String
+  samlSigninURLIn: [String!]
+  samlSigninURLNotIn: [String!]
+  samlSigninURLGT: String
+  samlSigninURLGTE: String
+  samlSigninURLLT: String
+  samlSigninURLLTE: String
+  samlSigninURLContains: String
+  samlSigninURLHasPrefix: String
+  samlSigninURLHasSuffix: String
+  samlSigninURLIsNil: Boolean
+  samlSigninURLNotNil: Boolean
+  samlSigninURLEqualFold: String
+  samlSigninURLContainsFold: String
+  """
+  saml_issuer field predicates
+  """
+  samlIssuer: String
+  samlIssuerNEQ: String
+  samlIssuerIn: [String!]
+  samlIssuerNotIn: [String!]
+  samlIssuerGT: String
+  samlIssuerGTE: String
+  samlIssuerLT: String
+  samlIssuerLTE: String
+  samlIssuerContains: String
+  samlIssuerHasPrefix: String
+  samlIssuerHasSuffix: String
+  samlIssuerIsNil: Boolean
+  samlIssuerNotNil: Boolean
+  samlIssuerEqualFold: String
+  samlIssuerContainsFold: String
+  """
+  saml_cert field predicates
+  """
+  samlCert: String
+  samlCertNEQ: String
+  samlCertIn: [String!]
+  samlCertNotIn: [String!]
+  samlCertGT: String
+  samlCertGTE: String
+  samlCertLT: String
+  samlCertLTE: String
+  samlCertContains: String
+  samlCertHasPrefix: String
+  samlCertHasSuffix: String
+  samlCertIsNil: Boolean
+  samlCertNotNil: Boolean
+  samlCertEqualFold: String
+  samlCertContainsFold: String
+  """
   identity_provider_login_enforced field predicates
   """
   identityProviderLoginEnforced: Boolean
   identityProviderLoginEnforcedNEQ: Boolean
+  """
+  multifactor_auth_enforced field predicates
+  """
+  multifactorAuthEnforced: Boolean
+  multifactorAuthEnforcedNEQ: Boolean
+  multifactorAuthEnforcedIsNil: Boolean
+  multifactorAuthEnforcedNotNil: Boolean
   """
   compliance_webhook_token field predicates
   """
@@ -32129,6 +32257,13 @@ input OrganizationSettingWhereInput {
   billingNotificationsEnabled: Boolean
   billingNotificationsEnabledNEQ: Boolean
   """
+  allow_matching_domains_autojoin field predicates
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  allowMatchingDomainsAutojoinNEQ: Boolean
+  allowMatchingDomainsAutojoinIsNil: Boolean
+  allowMatchingDomainsAutojoinNotNil: Boolean
+  """
   identity_provider field predicates
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -32233,10 +32368,71 @@ input OrganizationSettingWhereInput {
   oidcDiscoveryEndpointEqualFold: String
   oidcDiscoveryEndpointContainsFold: String
   """
+  saml_signin_url field predicates
+  """
+  samlSigninURL: String
+  samlSigninURLNEQ: String
+  samlSigninURLIn: [String!]
+  samlSigninURLNotIn: [String!]
+  samlSigninURLGT: String
+  samlSigninURLGTE: String
+  samlSigninURLLT: String
+  samlSigninURLLTE: String
+  samlSigninURLContains: String
+  samlSigninURLHasPrefix: String
+  samlSigninURLHasSuffix: String
+  samlSigninURLIsNil: Boolean
+  samlSigninURLNotNil: Boolean
+  samlSigninURLEqualFold: String
+  samlSigninURLContainsFold: String
+  """
+  saml_issuer field predicates
+  """
+  samlIssuer: String
+  samlIssuerNEQ: String
+  samlIssuerIn: [String!]
+  samlIssuerNotIn: [String!]
+  samlIssuerGT: String
+  samlIssuerGTE: String
+  samlIssuerLT: String
+  samlIssuerLTE: String
+  samlIssuerContains: String
+  samlIssuerHasPrefix: String
+  samlIssuerHasSuffix: String
+  samlIssuerIsNil: Boolean
+  samlIssuerNotNil: Boolean
+  samlIssuerEqualFold: String
+  samlIssuerContainsFold: String
+  """
+  saml_cert field predicates
+  """
+  samlCert: String
+  samlCertNEQ: String
+  samlCertIn: [String!]
+  samlCertNotIn: [String!]
+  samlCertGT: String
+  samlCertGTE: String
+  samlCertLT: String
+  samlCertLTE: String
+  samlCertContains: String
+  samlCertHasPrefix: String
+  samlCertHasSuffix: String
+  samlCertIsNil: Boolean
+  samlCertNotNil: Boolean
+  samlCertEqualFold: String
+  samlCertContainsFold: String
+  """
   identity_provider_login_enforced field predicates
   """
   identityProviderLoginEnforced: Boolean
   identityProviderLoginEnforcedNEQ: Boolean
+  """
+  multifactor_auth_enforced field predicates
+  """
+  multifactorAuthEnforced: Boolean
+  multifactorAuthEnforcedNEQ: Boolean
+  multifactorAuthEnforcedIsNil: Boolean
+  multifactorAuthEnforcedNotNil: Boolean
   """
   compliance_webhook_token field predicates
   """
@@ -53997,6 +54193,11 @@ input UpdateOrganizationSettingInput {
   appendAllowedEmailDomains: [String!]
   clearAllowedEmailDomains: Boolean
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  clearAllowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -54027,9 +54228,29 @@ input UpdateOrganizationSettingInput {
   oidcDiscoveryEndpoint: String
   clearOidcDiscoveryEndpoint: Boolean
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  clearSamlSigninURL: Boolean
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  clearSamlIssuer: Boolean
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  clearSamlCert: Boolean
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
+  clearMultifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """

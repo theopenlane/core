@@ -136,6 +136,11 @@ func BillingNotificationsEnabled(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldBillingNotificationsEnabled, v))
 }
 
+// AllowMatchingDomainsAutojoin applies equality check predicate on the "allow_matching_domains_autojoin" field. It's identical to AllowMatchingDomainsAutojoinEQ.
+func AllowMatchingDomainsAutojoin(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldAllowMatchingDomainsAutojoin, v))
+}
+
 // IdentityProviderClientID applies equality check predicate on the "identity_provider_client_id" field. It's identical to IdentityProviderClientIDEQ.
 func IdentityProviderClientID(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderClientID, v))
@@ -166,9 +171,29 @@ func OidcDiscoveryEndpoint(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldOidcDiscoveryEndpoint, v))
 }
 
+// SamlSigninURL applies equality check predicate on the "saml_signin_url" field. It's identical to SamlSigninURLEQ.
+func SamlSigninURL(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldSamlSigninURL, v))
+}
+
+// SamlIssuer applies equality check predicate on the "saml_issuer" field. It's identical to SamlIssuerEQ.
+func SamlIssuer(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldSamlIssuer, v))
+}
+
+// SamlCert applies equality check predicate on the "saml_cert" field. It's identical to SamlCertEQ.
+func SamlCert(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldSamlCert, v))
+}
+
 // IdentityProviderLoginEnforced applies equality check predicate on the "identity_provider_login_enforced" field. It's identical to IdentityProviderLoginEnforcedEQ.
 func IdentityProviderLoginEnforced(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderLoginEnforced, v))
+}
+
+// MultifactorAuthEnforced applies equality check predicate on the "multifactor_auth_enforced" field. It's identical to MultifactorAuthEnforcedEQ.
+func MultifactorAuthEnforced(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldMultifactorAuthEnforced, v))
 }
 
 // ComplianceWebhookToken applies equality check predicate on the "compliance_webhook_token" field. It's identical to ComplianceWebhookTokenEQ.
@@ -1156,6 +1181,26 @@ func AllowedEmailDomainsNotNil() predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldAllowedEmailDomains))
 }
 
+// AllowMatchingDomainsAutojoinEQ applies the EQ predicate on the "allow_matching_domains_autojoin" field.
+func AllowMatchingDomainsAutojoinEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldAllowMatchingDomainsAutojoin, v))
+}
+
+// AllowMatchingDomainsAutojoinNEQ applies the NEQ predicate on the "allow_matching_domains_autojoin" field.
+func AllowMatchingDomainsAutojoinNEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldAllowMatchingDomainsAutojoin, v))
+}
+
+// AllowMatchingDomainsAutojoinIsNil applies the IsNil predicate on the "allow_matching_domains_autojoin" field.
+func AllowMatchingDomainsAutojoinIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldAllowMatchingDomainsAutojoin))
+}
+
+// AllowMatchingDomainsAutojoinNotNil applies the NotNil predicate on the "allow_matching_domains_autojoin" field.
+func AllowMatchingDomainsAutojoinNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldAllowMatchingDomainsAutojoin))
+}
+
 // IdentityProviderEQ applies the EQ predicate on the "identity_provider" field.
 func IdentityProviderEQ(v enums.SSOProvider) predicate.OrganizationSettingHistory {
 	vc := v
@@ -1581,6 +1626,231 @@ func OidcDiscoveryEndpointContainsFold(v string) predicate.OrganizationSettingHi
 	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldOidcDiscoveryEndpoint, v))
 }
 
+// SamlSigninURLEQ applies the EQ predicate on the "saml_signin_url" field.
+func SamlSigninURLEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldSamlSigninURL, v))
+}
+
+// SamlSigninURLNEQ applies the NEQ predicate on the "saml_signin_url" field.
+func SamlSigninURLNEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldSamlSigninURL, v))
+}
+
+// SamlSigninURLIn applies the In predicate on the "saml_signin_url" field.
+func SamlSigninURLIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldSamlSigninURL, vs...))
+}
+
+// SamlSigninURLNotIn applies the NotIn predicate on the "saml_signin_url" field.
+func SamlSigninURLNotIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldSamlSigninURL, vs...))
+}
+
+// SamlSigninURLGT applies the GT predicate on the "saml_signin_url" field.
+func SamlSigninURLGT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldSamlSigninURL, v))
+}
+
+// SamlSigninURLGTE applies the GTE predicate on the "saml_signin_url" field.
+func SamlSigninURLGTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldSamlSigninURL, v))
+}
+
+// SamlSigninURLLT applies the LT predicate on the "saml_signin_url" field.
+func SamlSigninURLLT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldSamlSigninURL, v))
+}
+
+// SamlSigninURLLTE applies the LTE predicate on the "saml_signin_url" field.
+func SamlSigninURLLTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldSamlSigninURL, v))
+}
+
+// SamlSigninURLContains applies the Contains predicate on the "saml_signin_url" field.
+func SamlSigninURLContains(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldSamlSigninURL, v))
+}
+
+// SamlSigninURLHasPrefix applies the HasPrefix predicate on the "saml_signin_url" field.
+func SamlSigninURLHasPrefix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldSamlSigninURL, v))
+}
+
+// SamlSigninURLHasSuffix applies the HasSuffix predicate on the "saml_signin_url" field.
+func SamlSigninURLHasSuffix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldSamlSigninURL, v))
+}
+
+// SamlSigninURLIsNil applies the IsNil predicate on the "saml_signin_url" field.
+func SamlSigninURLIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldSamlSigninURL))
+}
+
+// SamlSigninURLNotNil applies the NotNil predicate on the "saml_signin_url" field.
+func SamlSigninURLNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldSamlSigninURL))
+}
+
+// SamlSigninURLEqualFold applies the EqualFold predicate on the "saml_signin_url" field.
+func SamlSigninURLEqualFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldSamlSigninURL, v))
+}
+
+// SamlSigninURLContainsFold applies the ContainsFold predicate on the "saml_signin_url" field.
+func SamlSigninURLContainsFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldSamlSigninURL, v))
+}
+
+// SamlIssuerEQ applies the EQ predicate on the "saml_issuer" field.
+func SamlIssuerEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldSamlIssuer, v))
+}
+
+// SamlIssuerNEQ applies the NEQ predicate on the "saml_issuer" field.
+func SamlIssuerNEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldSamlIssuer, v))
+}
+
+// SamlIssuerIn applies the In predicate on the "saml_issuer" field.
+func SamlIssuerIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldSamlIssuer, vs...))
+}
+
+// SamlIssuerNotIn applies the NotIn predicate on the "saml_issuer" field.
+func SamlIssuerNotIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldSamlIssuer, vs...))
+}
+
+// SamlIssuerGT applies the GT predicate on the "saml_issuer" field.
+func SamlIssuerGT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldSamlIssuer, v))
+}
+
+// SamlIssuerGTE applies the GTE predicate on the "saml_issuer" field.
+func SamlIssuerGTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldSamlIssuer, v))
+}
+
+// SamlIssuerLT applies the LT predicate on the "saml_issuer" field.
+func SamlIssuerLT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldSamlIssuer, v))
+}
+
+// SamlIssuerLTE applies the LTE predicate on the "saml_issuer" field.
+func SamlIssuerLTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldSamlIssuer, v))
+}
+
+// SamlIssuerContains applies the Contains predicate on the "saml_issuer" field.
+func SamlIssuerContains(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldSamlIssuer, v))
+}
+
+// SamlIssuerHasPrefix applies the HasPrefix predicate on the "saml_issuer" field.
+func SamlIssuerHasPrefix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldSamlIssuer, v))
+}
+
+// SamlIssuerHasSuffix applies the HasSuffix predicate on the "saml_issuer" field.
+func SamlIssuerHasSuffix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldSamlIssuer, v))
+}
+
+// SamlIssuerIsNil applies the IsNil predicate on the "saml_issuer" field.
+func SamlIssuerIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldSamlIssuer))
+}
+
+// SamlIssuerNotNil applies the NotNil predicate on the "saml_issuer" field.
+func SamlIssuerNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldSamlIssuer))
+}
+
+// SamlIssuerEqualFold applies the EqualFold predicate on the "saml_issuer" field.
+func SamlIssuerEqualFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldSamlIssuer, v))
+}
+
+// SamlIssuerContainsFold applies the ContainsFold predicate on the "saml_issuer" field.
+func SamlIssuerContainsFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldSamlIssuer, v))
+}
+
+// SamlCertEQ applies the EQ predicate on the "saml_cert" field.
+func SamlCertEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldSamlCert, v))
+}
+
+// SamlCertNEQ applies the NEQ predicate on the "saml_cert" field.
+func SamlCertNEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldSamlCert, v))
+}
+
+// SamlCertIn applies the In predicate on the "saml_cert" field.
+func SamlCertIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldSamlCert, vs...))
+}
+
+// SamlCertNotIn applies the NotIn predicate on the "saml_cert" field.
+func SamlCertNotIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldSamlCert, vs...))
+}
+
+// SamlCertGT applies the GT predicate on the "saml_cert" field.
+func SamlCertGT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldSamlCert, v))
+}
+
+// SamlCertGTE applies the GTE predicate on the "saml_cert" field.
+func SamlCertGTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldSamlCert, v))
+}
+
+// SamlCertLT applies the LT predicate on the "saml_cert" field.
+func SamlCertLT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldSamlCert, v))
+}
+
+// SamlCertLTE applies the LTE predicate on the "saml_cert" field.
+func SamlCertLTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldSamlCert, v))
+}
+
+// SamlCertContains applies the Contains predicate on the "saml_cert" field.
+func SamlCertContains(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldSamlCert, v))
+}
+
+// SamlCertHasPrefix applies the HasPrefix predicate on the "saml_cert" field.
+func SamlCertHasPrefix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldSamlCert, v))
+}
+
+// SamlCertHasSuffix applies the HasSuffix predicate on the "saml_cert" field.
+func SamlCertHasSuffix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldSamlCert, v))
+}
+
+// SamlCertIsNil applies the IsNil predicate on the "saml_cert" field.
+func SamlCertIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldSamlCert))
+}
+
+// SamlCertNotNil applies the NotNil predicate on the "saml_cert" field.
+func SamlCertNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldSamlCert))
+}
+
+// SamlCertEqualFold applies the EqualFold predicate on the "saml_cert" field.
+func SamlCertEqualFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldSamlCert, v))
+}
+
+// SamlCertContainsFold applies the ContainsFold predicate on the "saml_cert" field.
+func SamlCertContainsFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldSamlCert, v))
+}
+
 // IdentityProviderLoginEnforcedEQ applies the EQ predicate on the "identity_provider_login_enforced" field.
 func IdentityProviderLoginEnforcedEQ(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderLoginEnforced, v))
@@ -1589,6 +1859,26 @@ func IdentityProviderLoginEnforcedEQ(v bool) predicate.OrganizationSettingHistor
 // IdentityProviderLoginEnforcedNEQ applies the NEQ predicate on the "identity_provider_login_enforced" field.
 func IdentityProviderLoginEnforcedNEQ(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderLoginEnforced, v))
+}
+
+// MultifactorAuthEnforcedEQ applies the EQ predicate on the "multifactor_auth_enforced" field.
+func MultifactorAuthEnforcedEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldMultifactorAuthEnforced, v))
+}
+
+// MultifactorAuthEnforcedNEQ applies the NEQ predicate on the "multifactor_auth_enforced" field.
+func MultifactorAuthEnforcedNEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldMultifactorAuthEnforced, v))
+}
+
+// MultifactorAuthEnforcedIsNil applies the IsNil predicate on the "multifactor_auth_enforced" field.
+func MultifactorAuthEnforcedIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldMultifactorAuthEnforced))
+}
+
+// MultifactorAuthEnforcedNotNil applies the NotNil predicate on the "multifactor_auth_enforced" field.
+func MultifactorAuthEnforcedNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldMultifactorAuthEnforced))
 }
 
 // ComplianceWebhookTokenEQ applies the EQ predicate on the "compliance_webhook_token" field.

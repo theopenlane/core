@@ -82,6 +82,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
 			case "allowedEmailDomains":
 				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
+			case "allowMatchingDomainsAutojoin":
+				return ec.fieldContext_OrganizationSetting_allowMatchingDomainsAutojoin(ctx, field)
 			case "identityProvider":
 				return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
 			case "identityProviderClientID":
@@ -96,8 +98,16 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_identityProviderEntityID(ctx, field)
 			case "oidcDiscoveryEndpoint":
 				return ec.fieldContext_OrganizationSetting_oidcDiscoveryEndpoint(ctx, field)
+			case "samlSigninURL":
+				return ec.fieldContext_OrganizationSetting_samlSigninURL(ctx, field)
+			case "samlIssuer":
+				return ec.fieldContext_OrganizationSetting_samlIssuer(ctx, field)
+			case "samlCert":
+				return ec.fieldContext_OrganizationSetting_samlCert(ctx, field)
 			case "identityProviderLoginEnforced":
 				return ec.fieldContext_OrganizationSetting_identityProviderLoginEnforced(ctx, field)
+			case "multifactorAuthEnforced":
+				return ec.fieldContext_OrganizationSetting_multifactorAuthEnforced(ctx, field)
 			case "complianceWebhookToken":
 				return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
 			case "paymentMethodAdded":
@@ -167,6 +177,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
 			case "allowedEmailDomains":
 				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
+			case "allowMatchingDomainsAutojoin":
+				return ec.fieldContext_OrganizationSetting_allowMatchingDomainsAutojoin(ctx, field)
 			case "identityProvider":
 				return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
 			case "identityProviderClientID":
@@ -181,8 +193,16 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_identityProviderEntityID(ctx, field)
 			case "oidcDiscoveryEndpoint":
 				return ec.fieldContext_OrganizationSetting_oidcDiscoveryEndpoint(ctx, field)
+			case "samlSigninURL":
+				return ec.fieldContext_OrganizationSetting_samlSigninURL(ctx, field)
+			case "samlIssuer":
+				return ec.fieldContext_OrganizationSetting_samlIssuer(ctx, field)
+			case "samlCert":
+				return ec.fieldContext_OrganizationSetting_samlCert(ctx, field)
 			case "identityProviderLoginEnforced":
 				return ec.fieldContext_OrganizationSetting_identityProviderLoginEnforced(ctx, field)
+			case "multifactorAuthEnforced":
+				return ec.fieldContext_OrganizationSetting_multifactorAuthEnforced(ctx, field)
 			case "complianceWebhookToken":
 				return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
 			case "paymentMethodAdded":
@@ -279,6 +299,8 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
 			case "allowedEmailDomains":
 				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
+			case "allowMatchingDomainsAutojoin":
+				return ec.fieldContext_OrganizationSetting_allowMatchingDomainsAutojoin(ctx, field)
 			case "identityProvider":
 				return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
 			case "identityProviderClientID":
@@ -293,8 +315,16 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_identityProviderEntityID(ctx, field)
 			case "oidcDiscoveryEndpoint":
 				return ec.fieldContext_OrganizationSetting_oidcDiscoveryEndpoint(ctx, field)
+			case "samlSigninURL":
+				return ec.fieldContext_OrganizationSetting_samlSigninURL(ctx, field)
+			case "samlIssuer":
+				return ec.fieldContext_OrganizationSetting_samlIssuer(ctx, field)
+			case "samlCert":
+				return ec.fieldContext_OrganizationSetting_samlCert(ctx, field)
 			case "identityProviderLoginEnforced":
 				return ec.fieldContext_OrganizationSetting_identityProviderLoginEnforced(ctx, field)
+			case "multifactorAuthEnforced":
+				return ec.fieldContext_OrganizationSetting_multifactorAuthEnforced(ctx, field)
 			case "complianceWebhookToken":
 				return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
 			case "paymentMethodAdded":

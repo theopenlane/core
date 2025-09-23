@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVMappableDomain($input: Upload!) {
   createBulkCSVMappableDomain(input: $input) {
     mappableDomains {
@@ -73,6 +72,7 @@ query GetAllMappableDomains {
     }
   }
 }
+
 query GetMappableDomainByID($mappableDomainId: ID!) {
   mappableDomain(id: $mappableDomainId) {
     createdAt
@@ -109,6 +109,7 @@ query GetMappableDomains($first: Int, $last: Int, $where: MappableDomainWhereInp
     }
   }
 }
+
 mutation UpdateMappableDomain($updateMappableDomainId: ID!, $input: UpdateMappableDomainInput!) {
   updateMappableDomain(id: $updateMappableDomainId, input: $input) {
     mappableDomain {

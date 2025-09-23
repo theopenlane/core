@@ -79,6 +79,19 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 		}
 	}
 
+	// check if TFA is enforced for the target organization and user doesn't have TFA enabled
+	if err == nil && status.OrgTFAEnforced {
+		// Check if user has TFA enabled
+		if user.Edges.Setting == nil || !user.Edges.Setting.IsTfaEnabled {
+			out := &models.SwitchOrganizationReply{
+				Reply:    rout.Reply{Success: true},
+				NeedsTFA: true,
+			}
+
+			return h.Success(ctx, out, openapi)
+		}
+	}
+
 	// create new claims for the user
 	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(reqCtx, ctx.Response().Writer, user, in.TargetOrganizationID)
 	if err != nil {

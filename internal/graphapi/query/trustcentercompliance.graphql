@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVTrustCenterCompliance($input: Upload!) {
   createBulkCSVTrustCenterCompliance(input: $input) {
     trustCenterCompliances {
@@ -109,6 +108,7 @@ query GetAllTrustCenterCompliances {
     }
   }
 }
+
 query GetTrustCenterComplianceByID($trustCenterComplianceId: ID!) {
   trustCenterCompliance(id: $trustCenterComplianceId) {
     createdAt
@@ -163,6 +163,7 @@ query GetTrustCenterCompliances($first: Int, $last: Int, $where: TrustCenterComp
     }
   }
 }
+
 mutation UpdateTrustCenterCompliance($updateTrustCenterComplianceId: ID!, $input: UpdateTrustCenterComplianceInput!) {
   updateTrustCenterCompliance(id: $updateTrustCenterComplianceId, input: $input) {
     trustCenterCompliance {

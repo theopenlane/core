@@ -5643,6 +5643,8 @@ type CreateOrganizationSettingInput struct {
 	BillingNotificationsEnabled *bool `json:"billingNotificationsEnabled,omitempty"`
 	// domains allowed to access the organization, if empty all domains are allowed
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
+	// allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+	AllowMatchingDomainsAutojoin *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
 	// SSO provider type for the organization
 	IdentityProvider *enums.SSOProvider `json:"identityProvider,omitempty"`
 	// client ID for SSO integration
@@ -5655,8 +5657,16 @@ type CreateOrganizationSettingInput struct {
 	IdentityProviderEntityID *string `json:"identityProviderEntityID,omitempty"`
 	// OIDC discovery URL for the SSO provider
 	OidcDiscoveryEndpoint *string `json:"oidcDiscoveryEndpoint,omitempty"`
+	// the sign in URL to be used for SAML-based authentication
+	SamlSigninURL *string `json:"samlSigninURL,omitempty"`
+	// the SAML issuer
+	SamlIssuer *string `json:"samlIssuer,omitempty"`
+	// the x509 certificate used to validate SAML responses
+	SamlCert *string `json:"samlCert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced *bool `json:"identityProviderLoginEnforced,omitempty"`
+	// enforce 2fa / multifactor authentication for organization members
+	MultifactorAuthEnforced *bool `json:"multifactorAuthEnforced,omitempty"`
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken *string  `json:"complianceWebhookToken,omitempty"`
 	OrganizationID         *string  `json:"organizationID,omitempty"`
@@ -19047,6 +19057,8 @@ type OrganizationSetting struct {
 	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
 	// domains allowed to access the organization, if empty all domains are allowed
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
+	// allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+	AllowMatchingDomainsAutojoin *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
 	// SSO provider type for the organization
 	IdentityProvider *enums.SSOProvider `json:"identityProvider,omitempty"`
 	// client ID for SSO integration
@@ -19061,8 +19073,16 @@ type OrganizationSetting struct {
 	IdentityProviderEntityID *string `json:"identityProviderEntityID,omitempty"`
 	// OIDC discovery URL for the SSO provider
 	OidcDiscoveryEndpoint *string `json:"oidcDiscoveryEndpoint,omitempty"`
+	// the sign in URL to be used for SAML-based authentication
+	SamlSigninURL *string `json:"samlSigninURL,omitempty"`
+	// the SAML issuer
+	SamlIssuer *string `json:"samlIssuer,omitempty"`
+	// the x509 certificate used to validate SAML responses
+	SamlCert *string `json:"samlCert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identityProviderLoginEnforced"`
+	// enforce 2fa / multifactor authentication for organization members
+	MultifactorAuthEnforced *bool `json:"multifactorAuthEnforced,omitempty"`
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken *string `json:"complianceWebhookToken,omitempty"`
 	// whether or not a payment method has been added to the account
@@ -19140,6 +19160,8 @@ type OrganizationSettingHistory struct {
 	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
 	// domains allowed to access the organization, if empty all domains are allowed
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
+	// allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+	AllowMatchingDomainsAutojoin *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
 	// SSO provider type for the organization
 	IdentityProvider *enums.SSOProvider `json:"identityProvider,omitempty"`
 	// client ID for SSO integration
@@ -19154,8 +19176,16 @@ type OrganizationSettingHistory struct {
 	IdentityProviderEntityID *string `json:"identityProviderEntityID,omitempty"`
 	// OIDC discovery URL for the SSO provider
 	OidcDiscoveryEndpoint *string `json:"oidcDiscoveryEndpoint,omitempty"`
+	// the sign in URL to be used for SAML-based authentication
+	SamlSigninURL *string `json:"samlSigninURL,omitempty"`
+	// the SAML issuer
+	SamlIssuer *string `json:"samlIssuer,omitempty"`
+	// the x509 certificate used to validate SAML responses
+	SamlCert *string `json:"samlCert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identityProviderLoginEnforced"`
+	// enforce 2fa / multifactor authentication for organization members
+	MultifactorAuthEnforced *bool `json:"multifactorAuthEnforced,omitempty"`
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken *string `json:"complianceWebhookToken,omitempty"`
 	// whether or not a payment method has been added to the account
@@ -19381,6 +19411,11 @@ type OrganizationSettingHistoryWhereInput struct {
 	// billing_notifications_enabled field predicates
 	BillingNotificationsEnabled    *bool `json:"billingNotificationsEnabled,omitempty"`
 	BillingNotificationsEnabledNeq *bool `json:"billingNotificationsEnabledNEQ,omitempty"`
+	// allow_matching_domains_autojoin field predicates
+	AllowMatchingDomainsAutojoin       *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
+	AllowMatchingDomainsAutojoinNeq    *bool `json:"allowMatchingDomainsAutojoinNEQ,omitempty"`
+	AllowMatchingDomainsAutojoinIsNil  *bool `json:"allowMatchingDomainsAutojoinIsNil,omitempty"`
+	AllowMatchingDomainsAutojoinNotNil *bool `json:"allowMatchingDomainsAutojoinNotNil,omitempty"`
 	// identity_provider field predicates
 	IdentityProvider       *enums.SSOProvider  `json:"identityProvider,omitempty"`
 	IdentityProviderNeq    *enums.SSOProvider  `json:"identityProviderNEQ,omitempty"`
@@ -19471,9 +19506,62 @@ type OrganizationSettingHistoryWhereInput struct {
 	OidcDiscoveryEndpointNotNil       *bool    `json:"oidcDiscoveryEndpointNotNil,omitempty"`
 	OidcDiscoveryEndpointEqualFold    *string  `json:"oidcDiscoveryEndpointEqualFold,omitempty"`
 	OidcDiscoveryEndpointContainsFold *string  `json:"oidcDiscoveryEndpointContainsFold,omitempty"`
+	// saml_signin_url field predicates
+	SamlSigninURL             *string  `json:"samlSigninURL,omitempty"`
+	SamlSigninURLNeq          *string  `json:"samlSigninURLNEQ,omitempty"`
+	SamlSigninURLIn           []string `json:"samlSigninURLIn,omitempty"`
+	SamlSigninURLNotIn        []string `json:"samlSigninURLNotIn,omitempty"`
+	SamlSigninURLGt           *string  `json:"samlSigninURLGT,omitempty"`
+	SamlSigninURLGte          *string  `json:"samlSigninURLGTE,omitempty"`
+	SamlSigninURLLt           *string  `json:"samlSigninURLLT,omitempty"`
+	SamlSigninURLLte          *string  `json:"samlSigninURLLTE,omitempty"`
+	SamlSigninURLContains     *string  `json:"samlSigninURLContains,omitempty"`
+	SamlSigninURLHasPrefix    *string  `json:"samlSigninURLHasPrefix,omitempty"`
+	SamlSigninURLHasSuffix    *string  `json:"samlSigninURLHasSuffix,omitempty"`
+	SamlSigninURLIsNil        *bool    `json:"samlSigninURLIsNil,omitempty"`
+	SamlSigninURLNotNil       *bool    `json:"samlSigninURLNotNil,omitempty"`
+	SamlSigninURLEqualFold    *string  `json:"samlSigninURLEqualFold,omitempty"`
+	SamlSigninURLContainsFold *string  `json:"samlSigninURLContainsFold,omitempty"`
+	// saml_issuer field predicates
+	SamlIssuer             *string  `json:"samlIssuer,omitempty"`
+	SamlIssuerNeq          *string  `json:"samlIssuerNEQ,omitempty"`
+	SamlIssuerIn           []string `json:"samlIssuerIn,omitempty"`
+	SamlIssuerNotIn        []string `json:"samlIssuerNotIn,omitempty"`
+	SamlIssuerGt           *string  `json:"samlIssuerGT,omitempty"`
+	SamlIssuerGte          *string  `json:"samlIssuerGTE,omitempty"`
+	SamlIssuerLt           *string  `json:"samlIssuerLT,omitempty"`
+	SamlIssuerLte          *string  `json:"samlIssuerLTE,omitempty"`
+	SamlIssuerContains     *string  `json:"samlIssuerContains,omitempty"`
+	SamlIssuerHasPrefix    *string  `json:"samlIssuerHasPrefix,omitempty"`
+	SamlIssuerHasSuffix    *string  `json:"samlIssuerHasSuffix,omitempty"`
+	SamlIssuerIsNil        *bool    `json:"samlIssuerIsNil,omitempty"`
+	SamlIssuerNotNil       *bool    `json:"samlIssuerNotNil,omitempty"`
+	SamlIssuerEqualFold    *string  `json:"samlIssuerEqualFold,omitempty"`
+	SamlIssuerContainsFold *string  `json:"samlIssuerContainsFold,omitempty"`
+	// saml_cert field predicates
+	SamlCert             *string  `json:"samlCert,omitempty"`
+	SamlCertNeq          *string  `json:"samlCertNEQ,omitempty"`
+	SamlCertIn           []string `json:"samlCertIn,omitempty"`
+	SamlCertNotIn        []string `json:"samlCertNotIn,omitempty"`
+	SamlCertGt           *string  `json:"samlCertGT,omitempty"`
+	SamlCertGte          *string  `json:"samlCertGTE,omitempty"`
+	SamlCertLt           *string  `json:"samlCertLT,omitempty"`
+	SamlCertLte          *string  `json:"samlCertLTE,omitempty"`
+	SamlCertContains     *string  `json:"samlCertContains,omitempty"`
+	SamlCertHasPrefix    *string  `json:"samlCertHasPrefix,omitempty"`
+	SamlCertHasSuffix    *string  `json:"samlCertHasSuffix,omitempty"`
+	SamlCertIsNil        *bool    `json:"samlCertIsNil,omitempty"`
+	SamlCertNotNil       *bool    `json:"samlCertNotNil,omitempty"`
+	SamlCertEqualFold    *string  `json:"samlCertEqualFold,omitempty"`
+	SamlCertContainsFold *string  `json:"samlCertContainsFold,omitempty"`
 	// identity_provider_login_enforced field predicates
 	IdentityProviderLoginEnforced    *bool `json:"identityProviderLoginEnforced,omitempty"`
 	IdentityProviderLoginEnforcedNeq *bool `json:"identityProviderLoginEnforcedNEQ,omitempty"`
+	// multifactor_auth_enforced field predicates
+	MultifactorAuthEnforced       *bool `json:"multifactorAuthEnforced,omitempty"`
+	MultifactorAuthEnforcedNeq    *bool `json:"multifactorAuthEnforcedNEQ,omitempty"`
+	MultifactorAuthEnforcedIsNil  *bool `json:"multifactorAuthEnforcedIsNil,omitempty"`
+	MultifactorAuthEnforcedNotNil *bool `json:"multifactorAuthEnforcedNotNil,omitempty"`
 	// compliance_webhook_token field predicates
 	ComplianceWebhookToken             *string  `json:"complianceWebhookToken,omitempty"`
 	ComplianceWebhookTokenNeq          *string  `json:"complianceWebhookTokenNEQ,omitempty"`
@@ -19667,6 +19755,11 @@ type OrganizationSettingWhereInput struct {
 	// billing_notifications_enabled field predicates
 	BillingNotificationsEnabled    *bool `json:"billingNotificationsEnabled,omitempty"`
 	BillingNotificationsEnabledNeq *bool `json:"billingNotificationsEnabledNEQ,omitempty"`
+	// allow_matching_domains_autojoin field predicates
+	AllowMatchingDomainsAutojoin       *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
+	AllowMatchingDomainsAutojoinNeq    *bool `json:"allowMatchingDomainsAutojoinNEQ,omitempty"`
+	AllowMatchingDomainsAutojoinIsNil  *bool `json:"allowMatchingDomainsAutojoinIsNil,omitempty"`
+	AllowMatchingDomainsAutojoinNotNil *bool `json:"allowMatchingDomainsAutojoinNotNil,omitempty"`
 	// identity_provider field predicates
 	IdentityProvider       *enums.SSOProvider  `json:"identityProvider,omitempty"`
 	IdentityProviderNeq    *enums.SSOProvider  `json:"identityProviderNEQ,omitempty"`
@@ -19757,9 +19850,62 @@ type OrganizationSettingWhereInput struct {
 	OidcDiscoveryEndpointNotNil       *bool    `json:"oidcDiscoveryEndpointNotNil,omitempty"`
 	OidcDiscoveryEndpointEqualFold    *string  `json:"oidcDiscoveryEndpointEqualFold,omitempty"`
 	OidcDiscoveryEndpointContainsFold *string  `json:"oidcDiscoveryEndpointContainsFold,omitempty"`
+	// saml_signin_url field predicates
+	SamlSigninURL             *string  `json:"samlSigninURL,omitempty"`
+	SamlSigninURLNeq          *string  `json:"samlSigninURLNEQ,omitempty"`
+	SamlSigninURLIn           []string `json:"samlSigninURLIn,omitempty"`
+	SamlSigninURLNotIn        []string `json:"samlSigninURLNotIn,omitempty"`
+	SamlSigninURLGt           *string  `json:"samlSigninURLGT,omitempty"`
+	SamlSigninURLGte          *string  `json:"samlSigninURLGTE,omitempty"`
+	SamlSigninURLLt           *string  `json:"samlSigninURLLT,omitempty"`
+	SamlSigninURLLte          *string  `json:"samlSigninURLLTE,omitempty"`
+	SamlSigninURLContains     *string  `json:"samlSigninURLContains,omitempty"`
+	SamlSigninURLHasPrefix    *string  `json:"samlSigninURLHasPrefix,omitempty"`
+	SamlSigninURLHasSuffix    *string  `json:"samlSigninURLHasSuffix,omitempty"`
+	SamlSigninURLIsNil        *bool    `json:"samlSigninURLIsNil,omitempty"`
+	SamlSigninURLNotNil       *bool    `json:"samlSigninURLNotNil,omitempty"`
+	SamlSigninURLEqualFold    *string  `json:"samlSigninURLEqualFold,omitempty"`
+	SamlSigninURLContainsFold *string  `json:"samlSigninURLContainsFold,omitempty"`
+	// saml_issuer field predicates
+	SamlIssuer             *string  `json:"samlIssuer,omitempty"`
+	SamlIssuerNeq          *string  `json:"samlIssuerNEQ,omitempty"`
+	SamlIssuerIn           []string `json:"samlIssuerIn,omitempty"`
+	SamlIssuerNotIn        []string `json:"samlIssuerNotIn,omitempty"`
+	SamlIssuerGt           *string  `json:"samlIssuerGT,omitempty"`
+	SamlIssuerGte          *string  `json:"samlIssuerGTE,omitempty"`
+	SamlIssuerLt           *string  `json:"samlIssuerLT,omitempty"`
+	SamlIssuerLte          *string  `json:"samlIssuerLTE,omitempty"`
+	SamlIssuerContains     *string  `json:"samlIssuerContains,omitempty"`
+	SamlIssuerHasPrefix    *string  `json:"samlIssuerHasPrefix,omitempty"`
+	SamlIssuerHasSuffix    *string  `json:"samlIssuerHasSuffix,omitempty"`
+	SamlIssuerIsNil        *bool    `json:"samlIssuerIsNil,omitempty"`
+	SamlIssuerNotNil       *bool    `json:"samlIssuerNotNil,omitempty"`
+	SamlIssuerEqualFold    *string  `json:"samlIssuerEqualFold,omitempty"`
+	SamlIssuerContainsFold *string  `json:"samlIssuerContainsFold,omitempty"`
+	// saml_cert field predicates
+	SamlCert             *string  `json:"samlCert,omitempty"`
+	SamlCertNeq          *string  `json:"samlCertNEQ,omitempty"`
+	SamlCertIn           []string `json:"samlCertIn,omitempty"`
+	SamlCertNotIn        []string `json:"samlCertNotIn,omitempty"`
+	SamlCertGt           *string  `json:"samlCertGT,omitempty"`
+	SamlCertGte          *string  `json:"samlCertGTE,omitempty"`
+	SamlCertLt           *string  `json:"samlCertLT,omitempty"`
+	SamlCertLte          *string  `json:"samlCertLTE,omitempty"`
+	SamlCertContains     *string  `json:"samlCertContains,omitempty"`
+	SamlCertHasPrefix    *string  `json:"samlCertHasPrefix,omitempty"`
+	SamlCertHasSuffix    *string  `json:"samlCertHasSuffix,omitempty"`
+	SamlCertIsNil        *bool    `json:"samlCertIsNil,omitempty"`
+	SamlCertNotNil       *bool    `json:"samlCertNotNil,omitempty"`
+	SamlCertEqualFold    *string  `json:"samlCertEqualFold,omitempty"`
+	SamlCertContainsFold *string  `json:"samlCertContainsFold,omitempty"`
 	// identity_provider_login_enforced field predicates
 	IdentityProviderLoginEnforced    *bool `json:"identityProviderLoginEnforced,omitempty"`
 	IdentityProviderLoginEnforcedNeq *bool `json:"identityProviderLoginEnforcedNEQ,omitempty"`
+	// multifactor_auth_enforced field predicates
+	MultifactorAuthEnforced       *bool `json:"multifactorAuthEnforced,omitempty"`
+	MultifactorAuthEnforcedNeq    *bool `json:"multifactorAuthEnforcedNEQ,omitempty"`
+	MultifactorAuthEnforcedIsNil  *bool `json:"multifactorAuthEnforcedIsNil,omitempty"`
+	MultifactorAuthEnforcedNotNil *bool `json:"multifactorAuthEnforcedNotNil,omitempty"`
 	// compliance_webhook_token field predicates
 	ComplianceWebhookToken             *string  `json:"complianceWebhookToken,omitempty"`
 	ComplianceWebhookTokenNeq          *string  `json:"complianceWebhookTokenNEQ,omitempty"`
@@ -32234,6 +32380,9 @@ type UpdateOrganizationSettingInput struct {
 	AllowedEmailDomains       []string `json:"allowedEmailDomains,omitempty"`
 	AppendAllowedEmailDomains []string `json:"appendAllowedEmailDomains,omitempty"`
 	ClearAllowedEmailDomains  *bool    `json:"clearAllowedEmailDomains,omitempty"`
+	// allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+	AllowMatchingDomainsAutojoin      *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
+	ClearAllowMatchingDomainsAutojoin *bool `json:"clearAllowMatchingDomainsAutojoin,omitempty"`
 	// SSO provider type for the organization
 	IdentityProvider      *enums.SSOProvider `json:"identityProvider,omitempty"`
 	ClearIdentityProvider *bool              `json:"clearIdentityProvider,omitempty"`
@@ -32252,8 +32401,20 @@ type UpdateOrganizationSettingInput struct {
 	// OIDC discovery URL for the SSO provider
 	OidcDiscoveryEndpoint      *string `json:"oidcDiscoveryEndpoint,omitempty"`
 	ClearOidcDiscoveryEndpoint *bool   `json:"clearOidcDiscoveryEndpoint,omitempty"`
+	// the sign in URL to be used for SAML-based authentication
+	SamlSigninURL      *string `json:"samlSigninURL,omitempty"`
+	ClearSamlSigninURL *bool   `json:"clearSamlSigninURL,omitempty"`
+	// the SAML issuer
+	SamlIssuer      *string `json:"samlIssuer,omitempty"`
+	ClearSamlIssuer *bool   `json:"clearSamlIssuer,omitempty"`
+	// the x509 certificate used to validate SAML responses
+	SamlCert      *string `json:"samlCert,omitempty"`
+	ClearSamlCert *bool   `json:"clearSamlCert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced *bool `json:"identityProviderLoginEnforced,omitempty"`
+	// enforce 2fa / multifactor authentication for organization members
+	MultifactorAuthEnforced      *bool `json:"multifactorAuthEnforced,omitempty"`
+	ClearMultifactorAuthEnforced *bool `json:"clearMultifactorAuthEnforced,omitempty"`
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken      *string  `json:"complianceWebhookToken,omitempty"`
 	ClearComplianceWebhookToken *bool    `json:"clearComplianceWebhookToken,omitempty"`

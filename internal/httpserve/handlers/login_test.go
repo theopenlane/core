@@ -6,7 +6,6 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang-jwt/jwt/v5"
@@ -46,31 +45,38 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	// create users in the database
 	validPassword := "sup3rs3cu7e!"
 
+	tfaTrue := true
+	tfaFalse := false
 	validConfirmedUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      validPassword,
 		confirmedUser: true,
+		tfaEnabled:    tfaTrue,
 	})
 
 	validConfirmedUserRestrictedOrg := suite.userBuilderWithInput(ctx, &userInput{
 		email:         "meow@example.com",
 		password:      validPassword,
 		confirmedUser: true,
+		tfaEnabled:    tfaTrue,
 	})
 
 	invalidConfirmedUserRestrictedOrg := suite.userBuilderWithInput(ctx, &userInput{
 		email:         "meow@foobar.com",
 		password:      validPassword,
 		confirmedUser: true,
+		tfaEnabled:    tfaTrue,
 	})
 
 	validUnconfirmedUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      validPassword,
 		confirmedUser: false,
+		tfaEnabled:    tfaFalse,
 	})
 
 	userWithInactiveDefaultOrg := suite.userBuilderWithInput(ctx, &userInput{
 		password:      validPassword,
 		confirmedUser: true,
+		tfaEnabled:    tfaFalse,
 	})
 
 	orgSetting := suite.db.OrganizationSetting.Create().SetInput(
@@ -87,12 +93,12 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	).SaveX(ctx)
 
 	input := generated.CreateOrganizationInput{
-		Name:      gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun() + time.Now().Format("20060102150405"),
+		Name:      ulids.New().String(),
 		SettingID: &orgSetting.ID,
 	}
 
 	ssoOrg := generated.CreateOrganizationInput{
-		Name:      gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun() + time.Now().Format("20060102150405"),
+		Name:      ulids.New().String(),
 		SettingID: &ssoorgSetting.ID,
 	}
 
@@ -100,6 +106,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		email:         gofakeit.Username() + "@examples.com", // ensure the email is allowed by the org setting
 		password:      validPassword,
 		confirmedUser: true,
+		tfaEnabled:    tfaTrue,
 	})
 	// setup allow context with the client in the context which is required for hooks that run
 	allowCtx := privacy.DecisionContext(validConfirmedUserRestrictedOrg.UserCtx, privacy.Allow)
@@ -240,7 +247,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 			if tc.expectedStatus == http.StatusOK {
 				assert.True(t, out.Success)
-				assert.True(t, out.TFAEnabled) // we set the user to have TFA enabled in the tests
+				assert.True(t, out.TFAEnabled)
 				require.NotNil(t, out.AccessToken)
 
 				// check the claims to ensure the user is in the correct org
@@ -286,7 +293,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	}).SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
-		Name:      "ssoorg" + time.Now().Format("20060102150405"),
+		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).SaveX(ownerCtx)
 
@@ -362,4 +369,106 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	var out apimodels.LoginReply
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
+}
+
+func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
+	t := suite.T()
+
+	// Register test handler with OpenAPI context
+	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// Create user without TFA enabled
+	testUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "T3stP@ssw0rd",
+		confirmedUser: true,
+		tfaEnabled:    false, // User does not have TFA enabled
+	})
+	testCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
+	testCtx = ent.NewContext(testCtx, suite.db)
+
+	// Create organization setting with TFA enforced
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		MultifactorAuthEnforced: func(b bool) *bool { return &b }(true),
+	}).SaveX(testCtx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(testCtx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetOrganizationID(org.ID).
+		ExecX(testCtx)
+
+	// Set user's default org to the TFA-enforced org
+	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testCtx)
+
+	// Attempt login
+	body, _ := json.Marshal(apimodels.LoginRequest{Username: testUser.UserInfo.Email, Password: "T3stP@ssw0rd"})
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	// Should succeed but indicate TFA is required
+	require.Equal(t, http.StatusOK, rec.Code)
+	var out apimodels.LoginReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
+	assert.False(t, out.TFAEnabled)      // User doesn't have TFA enabled
+	assert.True(t, out.TFASetupRequired) // But org requires TFA
+}
+
+func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {
+	t := suite.T()
+
+	// Register test handler with OpenAPI context
+	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// Create user with TFA enabled
+	testUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "T3stP@ssw0rd",
+		confirmedUser: true,
+		tfaEnabled:    true, // User has TFA enabled
+	})
+	testCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
+	testCtx = ent.NewContext(testCtx, suite.db)
+
+	// Create organization setting with TFA enforced
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		MultifactorAuthEnforced: func(b bool) *bool { return &b }(true),
+	}).SaveX(testCtx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(testCtx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetOrganizationID(org.ID).
+		ExecX(testCtx)
+
+	// Set user's default org to the TFA-enforced org
+	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testCtx)
+
+	// Attempt login
+	body, _ := json.Marshal(apimodels.LoginRequest{Username: testUser.UserInfo.Email, Password: "T3stP@ssw0rd"})
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	// Should succeed without requiring TFA setup since user already has it
+	require.Equal(t, http.StatusOK, rec.Code)
+	var out apimodels.LoginReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
+	assert.True(t, out.TFAEnabled)        // User has TFA enabled
+	assert.False(t, out.TFASetupRequired) // No additional TFA setup needed
 }

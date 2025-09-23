@@ -91,6 +91,10 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Comment("domains allowed to access the organization, if empty all domains are allowed").
 			Validate(validator.ValidateDomains()).
 			Optional(),
+		field.Bool("allow_matching_domains_autojoin").
+			Comment("allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization").
+			Default(false).
+			Optional(),
 		field.Enum("identity_provider").
 			Comment("SSO provider type for the organization").
 			GoType(enums.SSOProvider("")).
@@ -119,8 +123,22 @@ func (OrganizationSetting) Fields() []ent.Field {
 		field.String("oidc_discovery_endpoint").
 			Comment("OIDC discovery URL for the SSO provider").
 			Optional(),
+		field.String("saml_signin_url").
+			Comment("the sign in URL to be used for SAML-based authentication").
+			Validate(validator.ValidateURL()).
+			Optional(),
+		field.String("saml_issuer").
+			Comment("the SAML issuer").
+			Optional(),
+		field.Text("saml_cert").
+			Comment("the x509 certificate used to validate SAML responses").
+			Optional(),
 		field.Bool("identity_provider_login_enforced").
 			Comment("enforce SSO authentication for organization members").
+			Default(false),
+		field.Bool("multifactor_auth_enforced").
+			Comment("enforce 2fa / multifactor authentication for organization members").
+			Optional().
 			Default(false),
 		field.String("compliance_webhook_token").
 			Comment("unique token used to receive compliance webhook events").

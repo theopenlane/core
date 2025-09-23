@@ -650,6 +650,9 @@ query AdminSearch($query: String!) {
           identityProviderMetadataEndpoint
           identityProviderEntityID
           oidcDiscoveryEndpoint
+          samlSigninURL
+          samlIssuer
+          samlCert
           complianceWebhookToken
         }
       }

@@ -2377,6 +2377,9 @@ func (_m *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) [
 	if !reflect.DeepEqual(_m.AllowedEmailDomains, new.AllowedEmailDomains) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldAllowedEmailDomains, _m.AllowedEmailDomains, new.AllowedEmailDomains))
 	}
+	if !reflect.DeepEqual(_m.AllowMatchingDomainsAutojoin, new.AllowMatchingDomainsAutojoin) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, _m.AllowMatchingDomainsAutojoin, new.AllowMatchingDomainsAutojoin))
+	}
 	if !reflect.DeepEqual(_m.IdentityProvider, new.IdentityProvider) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProvider, _m.IdentityProvider, new.IdentityProvider))
 	}
@@ -2398,8 +2401,20 @@ func (_m *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) [
 	if !reflect.DeepEqual(_m.OidcDiscoveryEndpoint, new.OidcDiscoveryEndpoint) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldOidcDiscoveryEndpoint, _m.OidcDiscoveryEndpoint, new.OidcDiscoveryEndpoint))
 	}
+	if !reflect.DeepEqual(_m.SamlSigninURL, new.SamlSigninURL) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldSamlSigninURL, _m.SamlSigninURL, new.SamlSigninURL))
+	}
+	if !reflect.DeepEqual(_m.SamlIssuer, new.SamlIssuer) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldSamlIssuer, _m.SamlIssuer, new.SamlIssuer))
+	}
+	if !reflect.DeepEqual(_m.SamlCert, new.SamlCert) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldSamlCert, _m.SamlCert, new.SamlCert))
+	}
 	if !reflect.DeepEqual(_m.IdentityProviderLoginEnforced, new.IdentityProviderLoginEnforced) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderLoginEnforced, _m.IdentityProviderLoginEnforced, new.IdentityProviderLoginEnforced))
+	}
+	if !reflect.DeepEqual(_m.MultifactorAuthEnforced, new.MultifactorAuthEnforced) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldMultifactorAuthEnforced, _m.MultifactorAuthEnforced, new.MultifactorAuthEnforced))
 	}
 	if !reflect.DeepEqual(_m.ComplianceWebhookToken, new.ComplianceWebhookToken) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldComplianceWebhookToken, _m.ComplianceWebhookToken, new.ComplianceWebhookToken))
