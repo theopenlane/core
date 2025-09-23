@@ -1829,7 +1829,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 },
-}, "user": {"personal_access_tokens": {
+}, "trust_center_watermark_config": {}, "user": {"personal_access_tokens": {
 	ObjectType:      "personal_access_token",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,

@@ -12459,6 +12459,40 @@ func (c *TrustCenterSubprocessorUpdateOne) SetInput(i UpdateTrustCenterSubproces
 	return c
 }
 
+// CreateTrustCenterWatermarkConfigInput represents a mutation input for creating trustcenterwatermarkconfigs.
+type CreateTrustCenterWatermarkConfigInput struct {
+}
+
+// Mutate applies the CreateTrustCenterWatermarkConfigInput on the TrustCenterWatermarkConfigMutation builder.
+func (i *CreateTrustCenterWatermarkConfigInput) Mutate(m *TrustCenterWatermarkConfigMutation) {
+}
+
+// SetInput applies the change-set in the CreateTrustCenterWatermarkConfigInput on the TrustCenterWatermarkConfigCreate builder.
+func (c *TrustCenterWatermarkConfigCreate) SetInput(i CreateTrustCenterWatermarkConfigInput) *TrustCenterWatermarkConfigCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterWatermarkConfigInput represents a mutation input for updating trustcenterwatermarkconfigs.
+type UpdateTrustCenterWatermarkConfigInput struct {
+}
+
+// Mutate applies the UpdateTrustCenterWatermarkConfigInput on the TrustCenterWatermarkConfigMutation builder.
+func (i *UpdateTrustCenterWatermarkConfigInput) Mutate(m *TrustCenterWatermarkConfigMutation) {
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterWatermarkConfigInput on the TrustCenterWatermarkConfigUpdate builder.
+func (c *TrustCenterWatermarkConfigUpdate) SetInput(i UpdateTrustCenterWatermarkConfigInput) *TrustCenterWatermarkConfigUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterWatermarkConfigInput on the TrustCenterWatermarkConfigUpdateOne builder.
+func (c *TrustCenterWatermarkConfigUpdateOne) SetInput(i UpdateTrustCenterWatermarkConfigInput) *TrustCenterWatermarkConfigUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateUserInput represents a mutation input for creating users.
 type CreateUserInput struct {
 	Tags                   []string

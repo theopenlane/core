@@ -324,6 +324,12 @@ type TrustCenterSubprocessor func(*sql.Selector)
 // TrustCenterSubprocessorHistory is the predicate function for trustcentersubprocessorhistory builders.
 type TrustCenterSubprocessorHistory func(*sql.Selector)
 
+// TrustCenterWatermarkConfig is the predicate function for trustcenterwatermarkconfig builders.
+type TrustCenterWatermarkConfig func(*sql.Selector)
+
+// TrustCenterWatermarkConfigHistory is the predicate function for trustcenterwatermarkconfighistory builders.
+type TrustCenterWatermarkConfigHistory func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
 

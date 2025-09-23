@@ -115,6 +115,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -3040,6 +3042,60 @@ func (f TraverseTrustCenterSubprocessorHistory) Traverse(ctx context.Context, q 
 	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterSubprocessorHistoryQuery", q)
 }
 
+// The TrustCenterWatermarkConfigFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TrustCenterWatermarkConfigFunc func(context.Context, *generated.TrustCenterWatermarkConfigQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TrustCenterWatermarkConfigFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TrustCenterWatermarkConfigQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterWatermarkConfigQuery", q)
+}
+
+// The TraverseTrustCenterWatermarkConfig type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTrustCenterWatermarkConfig func(context.Context, *generated.TrustCenterWatermarkConfigQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTrustCenterWatermarkConfig) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTrustCenterWatermarkConfig) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterWatermarkConfigQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterWatermarkConfigQuery", q)
+}
+
+// The TrustCenterWatermarkConfigHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TrustCenterWatermarkConfigHistoryFunc func(context.Context, *generated.TrustCenterWatermarkConfigHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TrustCenterWatermarkConfigHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TrustCenterWatermarkConfigHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterWatermarkConfigHistoryQuery", q)
+}
+
+// The TraverseTrustCenterWatermarkConfigHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTrustCenterWatermarkConfigHistory func(context.Context, *generated.TrustCenterWatermarkConfigHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTrustCenterWatermarkConfigHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTrustCenterWatermarkConfigHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterWatermarkConfigHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterWatermarkConfigHistoryQuery", q)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary function as a Querier.
 type UserFunc func(context.Context, *generated.UserQuery) (generated.Value, error)
 
@@ -3390,6 +3446,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.TrustCenterSubprocessorQuery, predicate.TrustCenterSubprocessor, trustcentersubprocessor.OrderOption]{typ: generated.TypeTrustCenterSubprocessor, tq: q}, nil
 	case *generated.TrustCenterSubprocessorHistoryQuery:
 		return &query[*generated.TrustCenterSubprocessorHistoryQuery, predicate.TrustCenterSubprocessorHistory, trustcentersubprocessorhistory.OrderOption]{typ: generated.TypeTrustCenterSubprocessorHistory, tq: q}, nil
+	case *generated.TrustCenterWatermarkConfigQuery:
+		return &query[*generated.TrustCenterWatermarkConfigQuery, predicate.TrustCenterWatermarkConfig, trustcenterwatermarkconfig.OrderOption]{typ: generated.TypeTrustCenterWatermarkConfig, tq: q}, nil
+	case *generated.TrustCenterWatermarkConfigHistoryQuery:
+		return &query[*generated.TrustCenterWatermarkConfigHistoryQuery, predicate.TrustCenterWatermarkConfigHistory, trustcenterwatermarkconfighistory.OrderOption]{typ: generated.TypeTrustCenterWatermarkConfigHistory, tq: q}, nil
 	case *generated.UserQuery:
 		return &query[*generated.UserQuery, predicate.User, user.OrderOption]{typ: generated.TypeUser, tq: q}, nil
 	case *generated.UserHistoryQuery:

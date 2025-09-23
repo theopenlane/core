@@ -125,6 +125,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -366,6 +368,10 @@ type Client struct {
 	TrustCenterSubprocessor *TrustCenterSubprocessorClient
 	// TrustCenterSubprocessorHistory is the client for interacting with the TrustCenterSubprocessorHistory builders.
 	TrustCenterSubprocessorHistory *TrustCenterSubprocessorHistoryClient
+	// TrustCenterWatermarkConfig is the client for interacting with the TrustCenterWatermarkConfig builders.
+	TrustCenterWatermarkConfig *TrustCenterWatermarkConfigClient
+	// TrustCenterWatermarkConfigHistory is the client for interacting with the TrustCenterWatermarkConfigHistory builders.
+	TrustCenterWatermarkConfigHistory *TrustCenterWatermarkConfigHistoryClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 	// UserHistory is the client for interacting with the UserHistory builders.
@@ -502,6 +508,8 @@ func (c *Client) init() {
 	c.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(c.config)
 	c.TrustCenterSubprocessor = NewTrustCenterSubprocessorClient(c.config)
 	c.TrustCenterSubprocessorHistory = NewTrustCenterSubprocessorHistoryClient(c.config)
+	c.TrustCenterWatermarkConfig = NewTrustCenterWatermarkConfigClient(c.config)
+	c.TrustCenterWatermarkConfigHistory = NewTrustCenterWatermarkConfigHistoryClient(c.config)
 	c.User = NewUserClient(c.config)
 	c.UserHistory = NewUserHistoryClient(c.config)
 	c.UserSetting = NewUserSettingClient(c.config)
@@ -698,119 +706,121 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                            ctx,
-		config:                         cfg,
-		APIToken:                       NewAPITokenClient(cfg),
-		ActionPlan:                     NewActionPlanClient(cfg),
-		ActionPlanHistory:              NewActionPlanHistoryClient(cfg),
-		Asset:                          NewAssetClient(cfg),
-		AssetHistory:                   NewAssetHistoryClient(cfg),
-		Contact:                        NewContactClient(cfg),
-		ContactHistory:                 NewContactHistoryClient(cfg),
-		Control:                        NewControlClient(cfg),
-		ControlHistory:                 NewControlHistoryClient(cfg),
-		ControlImplementation:          NewControlImplementationClient(cfg),
-		ControlImplementationHistory:   NewControlImplementationHistoryClient(cfg),
-		ControlObjective:               NewControlObjectiveClient(cfg),
-		ControlObjectiveHistory:        NewControlObjectiveHistoryClient(cfg),
-		CustomDomain:                   NewCustomDomainClient(cfg),
-		CustomDomainHistory:            NewCustomDomainHistoryClient(cfg),
-		DNSVerification:                NewDNSVerificationClient(cfg),
-		DNSVerificationHistory:         NewDNSVerificationHistoryClient(cfg),
-		DocumentData:                   NewDocumentDataClient(cfg),
-		DocumentDataHistory:            NewDocumentDataHistoryClient(cfg),
-		EmailVerificationToken:         NewEmailVerificationTokenClient(cfg),
-		Entity:                         NewEntityClient(cfg),
-		EntityHistory:                  NewEntityHistoryClient(cfg),
-		EntityType:                     NewEntityTypeClient(cfg),
-		EntityTypeHistory:              NewEntityTypeHistoryClient(cfg),
-		Event:                          NewEventClient(cfg),
-		Evidence:                       NewEvidenceClient(cfg),
-		EvidenceHistory:                NewEvidenceHistoryClient(cfg),
-		Export:                         NewExportClient(cfg),
-		File:                           NewFileClient(cfg),
-		FileHistory:                    NewFileHistoryClient(cfg),
-		Group:                          NewGroupClient(cfg),
-		GroupHistory:                   NewGroupHistoryClient(cfg),
-		GroupMembership:                NewGroupMembershipClient(cfg),
-		GroupMembershipHistory:         NewGroupMembershipHistoryClient(cfg),
-		GroupSetting:                   NewGroupSettingClient(cfg),
-		GroupSettingHistory:            NewGroupSettingHistoryClient(cfg),
-		Hush:                           NewHushClient(cfg),
-		HushHistory:                    NewHushHistoryClient(cfg),
-		Integration:                    NewIntegrationClient(cfg),
-		IntegrationHistory:             NewIntegrationHistoryClient(cfg),
-		InternalPolicy:                 NewInternalPolicyClient(cfg),
-		InternalPolicyHistory:          NewInternalPolicyHistoryClient(cfg),
-		Invite:                         NewInviteClient(cfg),
-		JobResult:                      NewJobResultClient(cfg),
-		JobRunner:                      NewJobRunnerClient(cfg),
-		JobRunnerRegistrationToken:     NewJobRunnerRegistrationTokenClient(cfg),
-		JobRunnerToken:                 NewJobRunnerTokenClient(cfg),
-		JobTemplate:                    NewJobTemplateClient(cfg),
-		JobTemplateHistory:             NewJobTemplateHistoryClient(cfg),
-		MappableDomain:                 NewMappableDomainClient(cfg),
-		MappableDomainHistory:          NewMappableDomainHistoryClient(cfg),
-		MappedControl:                  NewMappedControlClient(cfg),
-		MappedControlHistory:           NewMappedControlHistoryClient(cfg),
-		Narrative:                      NewNarrativeClient(cfg),
-		NarrativeHistory:               NewNarrativeHistoryClient(cfg),
-		Note:                           NewNoteClient(cfg),
-		NoteHistory:                    NewNoteHistoryClient(cfg),
-		Onboarding:                     NewOnboardingClient(cfg),
-		OrgMembership:                  NewOrgMembershipClient(cfg),
-		OrgMembershipHistory:           NewOrgMembershipHistoryClient(cfg),
-		OrgModule:                      NewOrgModuleClient(cfg),
-		OrgPrice:                       NewOrgPriceClient(cfg),
-		OrgProduct:                     NewOrgProductClient(cfg),
-		OrgSubscription:                NewOrgSubscriptionClient(cfg),
-		OrgSubscriptionHistory:         NewOrgSubscriptionHistoryClient(cfg),
-		Organization:                   NewOrganizationClient(cfg),
-		OrganizationHistory:            NewOrganizationHistoryClient(cfg),
-		OrganizationSetting:            NewOrganizationSettingClient(cfg),
-		OrganizationSettingHistory:     NewOrganizationSettingHistoryClient(cfg),
-		PasswordResetToken:             NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:            NewPersonalAccessTokenClient(cfg),
-		Procedure:                      NewProcedureClient(cfg),
-		ProcedureHistory:               NewProcedureHistoryClient(cfg),
-		Program:                        NewProgramClient(cfg),
-		ProgramHistory:                 NewProgramHistoryClient(cfg),
-		ProgramMembership:              NewProgramMembershipClient(cfg),
-		ProgramMembershipHistory:       NewProgramMembershipHistoryClient(cfg),
-		Risk:                           NewRiskClient(cfg),
-		RiskHistory:                    NewRiskHistoryClient(cfg),
-		Scan:                           NewScanClient(cfg),
-		ScanHistory:                    NewScanHistoryClient(cfg),
-		ScheduledJob:                   NewScheduledJobClient(cfg),
-		ScheduledJobHistory:            NewScheduledJobHistoryClient(cfg),
-		ScheduledJobRun:                NewScheduledJobRunClient(cfg),
-		Standard:                       NewStandardClient(cfg),
-		StandardHistory:                NewStandardHistoryClient(cfg),
-		Subcontrol:                     NewSubcontrolClient(cfg),
-		SubcontrolHistory:              NewSubcontrolHistoryClient(cfg),
-		Subprocessor:                   NewSubprocessorClient(cfg),
-		SubprocessorHistory:            NewSubprocessorHistoryClient(cfg),
-		Subscriber:                     NewSubscriberClient(cfg),
-		TFASetting:                     NewTFASettingClient(cfg),
-		Task:                           NewTaskClient(cfg),
-		TaskHistory:                    NewTaskHistoryClient(cfg),
-		Template:                       NewTemplateClient(cfg),
-		TemplateHistory:                NewTemplateHistoryClient(cfg),
-		TrustCenter:                    NewTrustCenterClient(cfg),
-		TrustCenterCompliance:          NewTrustCenterComplianceClient(cfg),
-		TrustCenterComplianceHistory:   NewTrustCenterComplianceHistoryClient(cfg),
-		TrustCenterDoc:                 NewTrustCenterDocClient(cfg),
-		TrustCenterDocHistory:          NewTrustCenterDocHistoryClient(cfg),
-		TrustCenterHistory:             NewTrustCenterHistoryClient(cfg),
-		TrustCenterSetting:             NewTrustCenterSettingClient(cfg),
-		TrustCenterSettingHistory:      NewTrustCenterSettingHistoryClient(cfg),
-		TrustCenterSubprocessor:        NewTrustCenterSubprocessorClient(cfg),
-		TrustCenterSubprocessorHistory: NewTrustCenterSubprocessorHistoryClient(cfg),
-		User:                           NewUserClient(cfg),
-		UserHistory:                    NewUserHistoryClient(cfg),
-		UserSetting:                    NewUserSettingClient(cfg),
-		UserSettingHistory:             NewUserSettingHistoryClient(cfg),
-		Webauthn:                       NewWebauthnClient(cfg),
+		ctx:                               ctx,
+		config:                            cfg,
+		APIToken:                          NewAPITokenClient(cfg),
+		ActionPlan:                        NewActionPlanClient(cfg),
+		ActionPlanHistory:                 NewActionPlanHistoryClient(cfg),
+		Asset:                             NewAssetClient(cfg),
+		AssetHistory:                      NewAssetHistoryClient(cfg),
+		Contact:                           NewContactClient(cfg),
+		ContactHistory:                    NewContactHistoryClient(cfg),
+		Control:                           NewControlClient(cfg),
+		ControlHistory:                    NewControlHistoryClient(cfg),
+		ControlImplementation:             NewControlImplementationClient(cfg),
+		ControlImplementationHistory:      NewControlImplementationHistoryClient(cfg),
+		ControlObjective:                  NewControlObjectiveClient(cfg),
+		ControlObjectiveHistory:           NewControlObjectiveHistoryClient(cfg),
+		CustomDomain:                      NewCustomDomainClient(cfg),
+		CustomDomainHistory:               NewCustomDomainHistoryClient(cfg),
+		DNSVerification:                   NewDNSVerificationClient(cfg),
+		DNSVerificationHistory:            NewDNSVerificationHistoryClient(cfg),
+		DocumentData:                      NewDocumentDataClient(cfg),
+		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
+		EmailVerificationToken:            NewEmailVerificationTokenClient(cfg),
+		Entity:                            NewEntityClient(cfg),
+		EntityHistory:                     NewEntityHistoryClient(cfg),
+		EntityType:                        NewEntityTypeClient(cfg),
+		EntityTypeHistory:                 NewEntityTypeHistoryClient(cfg),
+		Event:                             NewEventClient(cfg),
+		Evidence:                          NewEvidenceClient(cfg),
+		EvidenceHistory:                   NewEvidenceHistoryClient(cfg),
+		Export:                            NewExportClient(cfg),
+		File:                              NewFileClient(cfg),
+		FileHistory:                       NewFileHistoryClient(cfg),
+		Group:                             NewGroupClient(cfg),
+		GroupHistory:                      NewGroupHistoryClient(cfg),
+		GroupMembership:                   NewGroupMembershipClient(cfg),
+		GroupMembershipHistory:            NewGroupMembershipHistoryClient(cfg),
+		GroupSetting:                      NewGroupSettingClient(cfg),
+		GroupSettingHistory:               NewGroupSettingHistoryClient(cfg),
+		Hush:                              NewHushClient(cfg),
+		HushHistory:                       NewHushHistoryClient(cfg),
+		Integration:                       NewIntegrationClient(cfg),
+		IntegrationHistory:                NewIntegrationHistoryClient(cfg),
+		InternalPolicy:                    NewInternalPolicyClient(cfg),
+		InternalPolicyHistory:             NewInternalPolicyHistoryClient(cfg),
+		Invite:                            NewInviteClient(cfg),
+		JobResult:                         NewJobResultClient(cfg),
+		JobRunner:                         NewJobRunnerClient(cfg),
+		JobRunnerRegistrationToken:        NewJobRunnerRegistrationTokenClient(cfg),
+		JobRunnerToken:                    NewJobRunnerTokenClient(cfg),
+		JobTemplate:                       NewJobTemplateClient(cfg),
+		JobTemplateHistory:                NewJobTemplateHistoryClient(cfg),
+		MappableDomain:                    NewMappableDomainClient(cfg),
+		MappableDomainHistory:             NewMappableDomainHistoryClient(cfg),
+		MappedControl:                     NewMappedControlClient(cfg),
+		MappedControlHistory:              NewMappedControlHistoryClient(cfg),
+		Narrative:                         NewNarrativeClient(cfg),
+		NarrativeHistory:                  NewNarrativeHistoryClient(cfg),
+		Note:                              NewNoteClient(cfg),
+		NoteHistory:                       NewNoteHistoryClient(cfg),
+		Onboarding:                        NewOnboardingClient(cfg),
+		OrgMembership:                     NewOrgMembershipClient(cfg),
+		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
+		OrgModule:                         NewOrgModuleClient(cfg),
+		OrgPrice:                          NewOrgPriceClient(cfg),
+		OrgProduct:                        NewOrgProductClient(cfg),
+		OrgSubscription:                   NewOrgSubscriptionClient(cfg),
+		OrgSubscriptionHistory:            NewOrgSubscriptionHistoryClient(cfg),
+		Organization:                      NewOrganizationClient(cfg),
+		OrganizationHistory:               NewOrganizationHistoryClient(cfg),
+		OrganizationSetting:               NewOrganizationSettingClient(cfg),
+		OrganizationSettingHistory:        NewOrganizationSettingHistoryClient(cfg),
+		PasswordResetToken:                NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:               NewPersonalAccessTokenClient(cfg),
+		Procedure:                         NewProcedureClient(cfg),
+		ProcedureHistory:                  NewProcedureHistoryClient(cfg),
+		Program:                           NewProgramClient(cfg),
+		ProgramHistory:                    NewProgramHistoryClient(cfg),
+		ProgramMembership:                 NewProgramMembershipClient(cfg),
+		ProgramMembershipHistory:          NewProgramMembershipHistoryClient(cfg),
+		Risk:                              NewRiskClient(cfg),
+		RiskHistory:                       NewRiskHistoryClient(cfg),
+		Scan:                              NewScanClient(cfg),
+		ScanHistory:                       NewScanHistoryClient(cfg),
+		ScheduledJob:                      NewScheduledJobClient(cfg),
+		ScheduledJobHistory:               NewScheduledJobHistoryClient(cfg),
+		ScheduledJobRun:                   NewScheduledJobRunClient(cfg),
+		Standard:                          NewStandardClient(cfg),
+		StandardHistory:                   NewStandardHistoryClient(cfg),
+		Subcontrol:                        NewSubcontrolClient(cfg),
+		SubcontrolHistory:                 NewSubcontrolHistoryClient(cfg),
+		Subprocessor:                      NewSubprocessorClient(cfg),
+		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
+		Subscriber:                        NewSubscriberClient(cfg),
+		TFASetting:                        NewTFASettingClient(cfg),
+		Task:                              NewTaskClient(cfg),
+		TaskHistory:                       NewTaskHistoryClient(cfg),
+		Template:                          NewTemplateClient(cfg),
+		TemplateHistory:                   NewTemplateHistoryClient(cfg),
+		TrustCenter:                       NewTrustCenterClient(cfg),
+		TrustCenterCompliance:             NewTrustCenterComplianceClient(cfg),
+		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
+		TrustCenterDoc:                    NewTrustCenterDocClient(cfg),
+		TrustCenterDocHistory:             NewTrustCenterDocHistoryClient(cfg),
+		TrustCenterHistory:                NewTrustCenterHistoryClient(cfg),
+		TrustCenterSetting:                NewTrustCenterSettingClient(cfg),
+		TrustCenterSettingHistory:         NewTrustCenterSettingHistoryClient(cfg),
+		TrustCenterSubprocessor:           NewTrustCenterSubprocessorClient(cfg),
+		TrustCenterSubprocessorHistory:    NewTrustCenterSubprocessorHistoryClient(cfg),
+		TrustCenterWatermarkConfig:        NewTrustCenterWatermarkConfigClient(cfg),
+		TrustCenterWatermarkConfigHistory: NewTrustCenterWatermarkConfigHistoryClient(cfg),
+		User:                              NewUserClient(cfg),
+		UserHistory:                       NewUserHistoryClient(cfg),
+		UserSetting:                       NewUserSettingClient(cfg),
+		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
+		Webauthn:                          NewWebauthnClient(cfg),
 	}, nil
 }
 
@@ -828,119 +838,121 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                            ctx,
-		config:                         cfg,
-		APIToken:                       NewAPITokenClient(cfg),
-		ActionPlan:                     NewActionPlanClient(cfg),
-		ActionPlanHistory:              NewActionPlanHistoryClient(cfg),
-		Asset:                          NewAssetClient(cfg),
-		AssetHistory:                   NewAssetHistoryClient(cfg),
-		Contact:                        NewContactClient(cfg),
-		ContactHistory:                 NewContactHistoryClient(cfg),
-		Control:                        NewControlClient(cfg),
-		ControlHistory:                 NewControlHistoryClient(cfg),
-		ControlImplementation:          NewControlImplementationClient(cfg),
-		ControlImplementationHistory:   NewControlImplementationHistoryClient(cfg),
-		ControlObjective:               NewControlObjectiveClient(cfg),
-		ControlObjectiveHistory:        NewControlObjectiveHistoryClient(cfg),
-		CustomDomain:                   NewCustomDomainClient(cfg),
-		CustomDomainHistory:            NewCustomDomainHistoryClient(cfg),
-		DNSVerification:                NewDNSVerificationClient(cfg),
-		DNSVerificationHistory:         NewDNSVerificationHistoryClient(cfg),
-		DocumentData:                   NewDocumentDataClient(cfg),
-		DocumentDataHistory:            NewDocumentDataHistoryClient(cfg),
-		EmailVerificationToken:         NewEmailVerificationTokenClient(cfg),
-		Entity:                         NewEntityClient(cfg),
-		EntityHistory:                  NewEntityHistoryClient(cfg),
-		EntityType:                     NewEntityTypeClient(cfg),
-		EntityTypeHistory:              NewEntityTypeHistoryClient(cfg),
-		Event:                          NewEventClient(cfg),
-		Evidence:                       NewEvidenceClient(cfg),
-		EvidenceHistory:                NewEvidenceHistoryClient(cfg),
-		Export:                         NewExportClient(cfg),
-		File:                           NewFileClient(cfg),
-		FileHistory:                    NewFileHistoryClient(cfg),
-		Group:                          NewGroupClient(cfg),
-		GroupHistory:                   NewGroupHistoryClient(cfg),
-		GroupMembership:                NewGroupMembershipClient(cfg),
-		GroupMembershipHistory:         NewGroupMembershipHistoryClient(cfg),
-		GroupSetting:                   NewGroupSettingClient(cfg),
-		GroupSettingHistory:            NewGroupSettingHistoryClient(cfg),
-		Hush:                           NewHushClient(cfg),
-		HushHistory:                    NewHushHistoryClient(cfg),
-		Integration:                    NewIntegrationClient(cfg),
-		IntegrationHistory:             NewIntegrationHistoryClient(cfg),
-		InternalPolicy:                 NewInternalPolicyClient(cfg),
-		InternalPolicyHistory:          NewInternalPolicyHistoryClient(cfg),
-		Invite:                         NewInviteClient(cfg),
-		JobResult:                      NewJobResultClient(cfg),
-		JobRunner:                      NewJobRunnerClient(cfg),
-		JobRunnerRegistrationToken:     NewJobRunnerRegistrationTokenClient(cfg),
-		JobRunnerToken:                 NewJobRunnerTokenClient(cfg),
-		JobTemplate:                    NewJobTemplateClient(cfg),
-		JobTemplateHistory:             NewJobTemplateHistoryClient(cfg),
-		MappableDomain:                 NewMappableDomainClient(cfg),
-		MappableDomainHistory:          NewMappableDomainHistoryClient(cfg),
-		MappedControl:                  NewMappedControlClient(cfg),
-		MappedControlHistory:           NewMappedControlHistoryClient(cfg),
-		Narrative:                      NewNarrativeClient(cfg),
-		NarrativeHistory:               NewNarrativeHistoryClient(cfg),
-		Note:                           NewNoteClient(cfg),
-		NoteHistory:                    NewNoteHistoryClient(cfg),
-		Onboarding:                     NewOnboardingClient(cfg),
-		OrgMembership:                  NewOrgMembershipClient(cfg),
-		OrgMembershipHistory:           NewOrgMembershipHistoryClient(cfg),
-		OrgModule:                      NewOrgModuleClient(cfg),
-		OrgPrice:                       NewOrgPriceClient(cfg),
-		OrgProduct:                     NewOrgProductClient(cfg),
-		OrgSubscription:                NewOrgSubscriptionClient(cfg),
-		OrgSubscriptionHistory:         NewOrgSubscriptionHistoryClient(cfg),
-		Organization:                   NewOrganizationClient(cfg),
-		OrganizationHistory:            NewOrganizationHistoryClient(cfg),
-		OrganizationSetting:            NewOrganizationSettingClient(cfg),
-		OrganizationSettingHistory:     NewOrganizationSettingHistoryClient(cfg),
-		PasswordResetToken:             NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:            NewPersonalAccessTokenClient(cfg),
-		Procedure:                      NewProcedureClient(cfg),
-		ProcedureHistory:               NewProcedureHistoryClient(cfg),
-		Program:                        NewProgramClient(cfg),
-		ProgramHistory:                 NewProgramHistoryClient(cfg),
-		ProgramMembership:              NewProgramMembershipClient(cfg),
-		ProgramMembershipHistory:       NewProgramMembershipHistoryClient(cfg),
-		Risk:                           NewRiskClient(cfg),
-		RiskHistory:                    NewRiskHistoryClient(cfg),
-		Scan:                           NewScanClient(cfg),
-		ScanHistory:                    NewScanHistoryClient(cfg),
-		ScheduledJob:                   NewScheduledJobClient(cfg),
-		ScheduledJobHistory:            NewScheduledJobHistoryClient(cfg),
-		ScheduledJobRun:                NewScheduledJobRunClient(cfg),
-		Standard:                       NewStandardClient(cfg),
-		StandardHistory:                NewStandardHistoryClient(cfg),
-		Subcontrol:                     NewSubcontrolClient(cfg),
-		SubcontrolHistory:              NewSubcontrolHistoryClient(cfg),
-		Subprocessor:                   NewSubprocessorClient(cfg),
-		SubprocessorHistory:            NewSubprocessorHistoryClient(cfg),
-		Subscriber:                     NewSubscriberClient(cfg),
-		TFASetting:                     NewTFASettingClient(cfg),
-		Task:                           NewTaskClient(cfg),
-		TaskHistory:                    NewTaskHistoryClient(cfg),
-		Template:                       NewTemplateClient(cfg),
-		TemplateHistory:                NewTemplateHistoryClient(cfg),
-		TrustCenter:                    NewTrustCenterClient(cfg),
-		TrustCenterCompliance:          NewTrustCenterComplianceClient(cfg),
-		TrustCenterComplianceHistory:   NewTrustCenterComplianceHistoryClient(cfg),
-		TrustCenterDoc:                 NewTrustCenterDocClient(cfg),
-		TrustCenterDocHistory:          NewTrustCenterDocHistoryClient(cfg),
-		TrustCenterHistory:             NewTrustCenterHistoryClient(cfg),
-		TrustCenterSetting:             NewTrustCenterSettingClient(cfg),
-		TrustCenterSettingHistory:      NewTrustCenterSettingHistoryClient(cfg),
-		TrustCenterSubprocessor:        NewTrustCenterSubprocessorClient(cfg),
-		TrustCenterSubprocessorHistory: NewTrustCenterSubprocessorHistoryClient(cfg),
-		User:                           NewUserClient(cfg),
-		UserHistory:                    NewUserHistoryClient(cfg),
-		UserSetting:                    NewUserSettingClient(cfg),
-		UserSettingHistory:             NewUserSettingHistoryClient(cfg),
-		Webauthn:                       NewWebauthnClient(cfg),
+		ctx:                               ctx,
+		config:                            cfg,
+		APIToken:                          NewAPITokenClient(cfg),
+		ActionPlan:                        NewActionPlanClient(cfg),
+		ActionPlanHistory:                 NewActionPlanHistoryClient(cfg),
+		Asset:                             NewAssetClient(cfg),
+		AssetHistory:                      NewAssetHistoryClient(cfg),
+		Contact:                           NewContactClient(cfg),
+		ContactHistory:                    NewContactHistoryClient(cfg),
+		Control:                           NewControlClient(cfg),
+		ControlHistory:                    NewControlHistoryClient(cfg),
+		ControlImplementation:             NewControlImplementationClient(cfg),
+		ControlImplementationHistory:      NewControlImplementationHistoryClient(cfg),
+		ControlObjective:                  NewControlObjectiveClient(cfg),
+		ControlObjectiveHistory:           NewControlObjectiveHistoryClient(cfg),
+		CustomDomain:                      NewCustomDomainClient(cfg),
+		CustomDomainHistory:               NewCustomDomainHistoryClient(cfg),
+		DNSVerification:                   NewDNSVerificationClient(cfg),
+		DNSVerificationHistory:            NewDNSVerificationHistoryClient(cfg),
+		DocumentData:                      NewDocumentDataClient(cfg),
+		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
+		EmailVerificationToken:            NewEmailVerificationTokenClient(cfg),
+		Entity:                            NewEntityClient(cfg),
+		EntityHistory:                     NewEntityHistoryClient(cfg),
+		EntityType:                        NewEntityTypeClient(cfg),
+		EntityTypeHistory:                 NewEntityTypeHistoryClient(cfg),
+		Event:                             NewEventClient(cfg),
+		Evidence:                          NewEvidenceClient(cfg),
+		EvidenceHistory:                   NewEvidenceHistoryClient(cfg),
+		Export:                            NewExportClient(cfg),
+		File:                              NewFileClient(cfg),
+		FileHistory:                       NewFileHistoryClient(cfg),
+		Group:                             NewGroupClient(cfg),
+		GroupHistory:                      NewGroupHistoryClient(cfg),
+		GroupMembership:                   NewGroupMembershipClient(cfg),
+		GroupMembershipHistory:            NewGroupMembershipHistoryClient(cfg),
+		GroupSetting:                      NewGroupSettingClient(cfg),
+		GroupSettingHistory:               NewGroupSettingHistoryClient(cfg),
+		Hush:                              NewHushClient(cfg),
+		HushHistory:                       NewHushHistoryClient(cfg),
+		Integration:                       NewIntegrationClient(cfg),
+		IntegrationHistory:                NewIntegrationHistoryClient(cfg),
+		InternalPolicy:                    NewInternalPolicyClient(cfg),
+		InternalPolicyHistory:             NewInternalPolicyHistoryClient(cfg),
+		Invite:                            NewInviteClient(cfg),
+		JobResult:                         NewJobResultClient(cfg),
+		JobRunner:                         NewJobRunnerClient(cfg),
+		JobRunnerRegistrationToken:        NewJobRunnerRegistrationTokenClient(cfg),
+		JobRunnerToken:                    NewJobRunnerTokenClient(cfg),
+		JobTemplate:                       NewJobTemplateClient(cfg),
+		JobTemplateHistory:                NewJobTemplateHistoryClient(cfg),
+		MappableDomain:                    NewMappableDomainClient(cfg),
+		MappableDomainHistory:             NewMappableDomainHistoryClient(cfg),
+		MappedControl:                     NewMappedControlClient(cfg),
+		MappedControlHistory:              NewMappedControlHistoryClient(cfg),
+		Narrative:                         NewNarrativeClient(cfg),
+		NarrativeHistory:                  NewNarrativeHistoryClient(cfg),
+		Note:                              NewNoteClient(cfg),
+		NoteHistory:                       NewNoteHistoryClient(cfg),
+		Onboarding:                        NewOnboardingClient(cfg),
+		OrgMembership:                     NewOrgMembershipClient(cfg),
+		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
+		OrgModule:                         NewOrgModuleClient(cfg),
+		OrgPrice:                          NewOrgPriceClient(cfg),
+		OrgProduct:                        NewOrgProductClient(cfg),
+		OrgSubscription:                   NewOrgSubscriptionClient(cfg),
+		OrgSubscriptionHistory:            NewOrgSubscriptionHistoryClient(cfg),
+		Organization:                      NewOrganizationClient(cfg),
+		OrganizationHistory:               NewOrganizationHistoryClient(cfg),
+		OrganizationSetting:               NewOrganizationSettingClient(cfg),
+		OrganizationSettingHistory:        NewOrganizationSettingHistoryClient(cfg),
+		PasswordResetToken:                NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:               NewPersonalAccessTokenClient(cfg),
+		Procedure:                         NewProcedureClient(cfg),
+		ProcedureHistory:                  NewProcedureHistoryClient(cfg),
+		Program:                           NewProgramClient(cfg),
+		ProgramHistory:                    NewProgramHistoryClient(cfg),
+		ProgramMembership:                 NewProgramMembershipClient(cfg),
+		ProgramMembershipHistory:          NewProgramMembershipHistoryClient(cfg),
+		Risk:                              NewRiskClient(cfg),
+		RiskHistory:                       NewRiskHistoryClient(cfg),
+		Scan:                              NewScanClient(cfg),
+		ScanHistory:                       NewScanHistoryClient(cfg),
+		ScheduledJob:                      NewScheduledJobClient(cfg),
+		ScheduledJobHistory:               NewScheduledJobHistoryClient(cfg),
+		ScheduledJobRun:                   NewScheduledJobRunClient(cfg),
+		Standard:                          NewStandardClient(cfg),
+		StandardHistory:                   NewStandardHistoryClient(cfg),
+		Subcontrol:                        NewSubcontrolClient(cfg),
+		SubcontrolHistory:                 NewSubcontrolHistoryClient(cfg),
+		Subprocessor:                      NewSubprocessorClient(cfg),
+		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
+		Subscriber:                        NewSubscriberClient(cfg),
+		TFASetting:                        NewTFASettingClient(cfg),
+		Task:                              NewTaskClient(cfg),
+		TaskHistory:                       NewTaskHistoryClient(cfg),
+		Template:                          NewTemplateClient(cfg),
+		TemplateHistory:                   NewTemplateHistoryClient(cfg),
+		TrustCenter:                       NewTrustCenterClient(cfg),
+		TrustCenterCompliance:             NewTrustCenterComplianceClient(cfg),
+		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
+		TrustCenterDoc:                    NewTrustCenterDocClient(cfg),
+		TrustCenterDocHistory:             NewTrustCenterDocHistoryClient(cfg),
+		TrustCenterHistory:                NewTrustCenterHistoryClient(cfg),
+		TrustCenterSetting:                NewTrustCenterSettingClient(cfg),
+		TrustCenterSettingHistory:         NewTrustCenterSettingHistoryClient(cfg),
+		TrustCenterSubprocessor:           NewTrustCenterSubprocessorClient(cfg),
+		TrustCenterSubprocessorHistory:    NewTrustCenterSubprocessorHistoryClient(cfg),
+		TrustCenterWatermarkConfig:        NewTrustCenterWatermarkConfigClient(cfg),
+		TrustCenterWatermarkConfigHistory: NewTrustCenterWatermarkConfigHistoryClient(cfg),
+		User:                              NewUserClient(cfg),
+		UserHistory:                       NewUserHistoryClient(cfg),
+		UserSetting:                       NewUserSettingClient(cfg),
+		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
+		Webauthn:                          NewWebauthnClient(cfg),
 	}, nil
 }
 
@@ -997,7 +1009,8 @@ func (c *Client) Use(hooks ...Hook) {
 		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterComplianceHistory,
 		c.TrustCenterDoc, c.TrustCenterDocHistory, c.TrustCenterHistory,
 		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
-		c.TrustCenterSubprocessorHistory, c.User, c.UserHistory, c.UserSetting,
+		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfig,
+		c.TrustCenterWatermarkConfigHistory, c.User, c.UserHistory, c.UserSetting,
 		c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
@@ -1035,7 +1048,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterComplianceHistory,
 		c.TrustCenterDoc, c.TrustCenterDocHistory, c.TrustCenterHistory,
 		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
-		c.TrustCenterSubprocessorHistory, c.User, c.UserHistory, c.UserSetting,
+		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfig,
+		c.TrustCenterWatermarkConfigHistory, c.User, c.UserHistory, c.UserSetting,
 		c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
@@ -1329,6 +1343,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TrustCenterSubprocessor.mutate(ctx, m)
 	case *TrustCenterSubprocessorHistoryMutation:
 		return c.TrustCenterSubprocessorHistory.mutate(ctx, m)
+	case *TrustCenterWatermarkConfigMutation:
+		return c.TrustCenterWatermarkConfig.mutate(ctx, m)
+	case *TrustCenterWatermarkConfigHistoryMutation:
+		return c.TrustCenterWatermarkConfigHistory.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	case *UserHistoryMutation:
@@ -23992,6 +24010,276 @@ func (c *TrustCenterSubprocessorHistoryClient) mutate(ctx context.Context, m *Tr
 	}
 }
 
+// TrustCenterWatermarkConfigClient is a client for the TrustCenterWatermarkConfig schema.
+type TrustCenterWatermarkConfigClient struct {
+	config
+}
+
+// NewTrustCenterWatermarkConfigClient returns a client for the TrustCenterWatermarkConfig from the given config.
+func NewTrustCenterWatermarkConfigClient(c config) *TrustCenterWatermarkConfigClient {
+	return &TrustCenterWatermarkConfigClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcenterwatermarkconfig.Hooks(f(g(h())))`.
+func (c *TrustCenterWatermarkConfigClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterWatermarkConfig = append(c.hooks.TrustCenterWatermarkConfig, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcenterwatermarkconfig.Intercept(f(g(h())))`.
+func (c *TrustCenterWatermarkConfigClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterWatermarkConfig = append(c.inters.TrustCenterWatermarkConfig, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterWatermarkConfig entity.
+func (c *TrustCenterWatermarkConfigClient) Create() *TrustCenterWatermarkConfigCreate {
+	mutation := newTrustCenterWatermarkConfigMutation(c.config, OpCreate)
+	return &TrustCenterWatermarkConfigCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterWatermarkConfig entities.
+func (c *TrustCenterWatermarkConfigClient) CreateBulk(builders ...*TrustCenterWatermarkConfigCreate) *TrustCenterWatermarkConfigCreateBulk {
+	return &TrustCenterWatermarkConfigCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterWatermarkConfigClient) MapCreateBulk(slice any, setFunc func(*TrustCenterWatermarkConfigCreate, int)) *TrustCenterWatermarkConfigCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterWatermarkConfigCreateBulk{err: fmt.Errorf("calling to TrustCenterWatermarkConfigClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterWatermarkConfigCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterWatermarkConfigCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterWatermarkConfig.
+func (c *TrustCenterWatermarkConfigClient) Update() *TrustCenterWatermarkConfigUpdate {
+	mutation := newTrustCenterWatermarkConfigMutation(c.config, OpUpdate)
+	return &TrustCenterWatermarkConfigUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterWatermarkConfigClient) UpdateOne(_m *TrustCenterWatermarkConfig) *TrustCenterWatermarkConfigUpdateOne {
+	mutation := newTrustCenterWatermarkConfigMutation(c.config, OpUpdateOne, withTrustCenterWatermarkConfig(_m))
+	return &TrustCenterWatermarkConfigUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterWatermarkConfigClient) UpdateOneID(id string) *TrustCenterWatermarkConfigUpdateOne {
+	mutation := newTrustCenterWatermarkConfigMutation(c.config, OpUpdateOne, withTrustCenterWatermarkConfigID(id))
+	return &TrustCenterWatermarkConfigUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterWatermarkConfig.
+func (c *TrustCenterWatermarkConfigClient) Delete() *TrustCenterWatermarkConfigDelete {
+	mutation := newTrustCenterWatermarkConfigMutation(c.config, OpDelete)
+	return &TrustCenterWatermarkConfigDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterWatermarkConfigClient) DeleteOne(_m *TrustCenterWatermarkConfig) *TrustCenterWatermarkConfigDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterWatermarkConfigClient) DeleteOneID(id string) *TrustCenterWatermarkConfigDeleteOne {
+	builder := c.Delete().Where(trustcenterwatermarkconfig.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterWatermarkConfigDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterWatermarkConfig.
+func (c *TrustCenterWatermarkConfigClient) Query() *TrustCenterWatermarkConfigQuery {
+	return &TrustCenterWatermarkConfigQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterWatermarkConfig},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterWatermarkConfig entity by its id.
+func (c *TrustCenterWatermarkConfigClient) Get(ctx context.Context, id string) (*TrustCenterWatermarkConfig, error) {
+	return c.Query().Where(trustcenterwatermarkconfig.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterWatermarkConfigClient) GetX(ctx context.Context, id string) *TrustCenterWatermarkConfig {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterWatermarkConfigClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterWatermarkConfig
+	return append(hooks[:len(hooks):len(hooks)], trustcenterwatermarkconfig.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterWatermarkConfigClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterWatermarkConfig
+	return append(inters[:len(inters):len(inters)], trustcenterwatermarkconfig.Interceptors[:]...)
+}
+
+func (c *TrustCenterWatermarkConfigClient) mutate(ctx context.Context, m *TrustCenterWatermarkConfigMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterWatermarkConfigCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterWatermarkConfigUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterWatermarkConfigUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterWatermarkConfigDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenterWatermarkConfig mutation op: %q", m.Op())
+	}
+}
+
+// TrustCenterWatermarkConfigHistoryClient is a client for the TrustCenterWatermarkConfigHistory schema.
+type TrustCenterWatermarkConfigHistoryClient struct {
+	config
+}
+
+// NewTrustCenterWatermarkConfigHistoryClient returns a client for the TrustCenterWatermarkConfigHistory from the given config.
+func NewTrustCenterWatermarkConfigHistoryClient(c config) *TrustCenterWatermarkConfigHistoryClient {
+	return &TrustCenterWatermarkConfigHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcenterwatermarkconfighistory.Hooks(f(g(h())))`.
+func (c *TrustCenterWatermarkConfigHistoryClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterWatermarkConfigHistory = append(c.hooks.TrustCenterWatermarkConfigHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcenterwatermarkconfighistory.Intercept(f(g(h())))`.
+func (c *TrustCenterWatermarkConfigHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterWatermarkConfigHistory = append(c.inters.TrustCenterWatermarkConfigHistory, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterWatermarkConfigHistory entity.
+func (c *TrustCenterWatermarkConfigHistoryClient) Create() *TrustCenterWatermarkConfigHistoryCreate {
+	mutation := newTrustCenterWatermarkConfigHistoryMutation(c.config, OpCreate)
+	return &TrustCenterWatermarkConfigHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterWatermarkConfigHistory entities.
+func (c *TrustCenterWatermarkConfigHistoryClient) CreateBulk(builders ...*TrustCenterWatermarkConfigHistoryCreate) *TrustCenterWatermarkConfigHistoryCreateBulk {
+	return &TrustCenterWatermarkConfigHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterWatermarkConfigHistoryClient) MapCreateBulk(slice any, setFunc func(*TrustCenterWatermarkConfigHistoryCreate, int)) *TrustCenterWatermarkConfigHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterWatermarkConfigHistoryCreateBulk{err: fmt.Errorf("calling to TrustCenterWatermarkConfigHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterWatermarkConfigHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterWatermarkConfigHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterWatermarkConfigHistory.
+func (c *TrustCenterWatermarkConfigHistoryClient) Update() *TrustCenterWatermarkConfigHistoryUpdate {
+	mutation := newTrustCenterWatermarkConfigHistoryMutation(c.config, OpUpdate)
+	return &TrustCenterWatermarkConfigHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterWatermarkConfigHistoryClient) UpdateOne(_m *TrustCenterWatermarkConfigHistory) *TrustCenterWatermarkConfigHistoryUpdateOne {
+	mutation := newTrustCenterWatermarkConfigHistoryMutation(c.config, OpUpdateOne, withTrustCenterWatermarkConfigHistory(_m))
+	return &TrustCenterWatermarkConfigHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterWatermarkConfigHistoryClient) UpdateOneID(id string) *TrustCenterWatermarkConfigHistoryUpdateOne {
+	mutation := newTrustCenterWatermarkConfigHistoryMutation(c.config, OpUpdateOne, withTrustCenterWatermarkConfigHistoryID(id))
+	return &TrustCenterWatermarkConfigHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterWatermarkConfigHistory.
+func (c *TrustCenterWatermarkConfigHistoryClient) Delete() *TrustCenterWatermarkConfigHistoryDelete {
+	mutation := newTrustCenterWatermarkConfigHistoryMutation(c.config, OpDelete)
+	return &TrustCenterWatermarkConfigHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterWatermarkConfigHistoryClient) DeleteOne(_m *TrustCenterWatermarkConfigHistory) *TrustCenterWatermarkConfigHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterWatermarkConfigHistoryClient) DeleteOneID(id string) *TrustCenterWatermarkConfigHistoryDeleteOne {
+	builder := c.Delete().Where(trustcenterwatermarkconfighistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterWatermarkConfigHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterWatermarkConfigHistory.
+func (c *TrustCenterWatermarkConfigHistoryClient) Query() *TrustCenterWatermarkConfigHistoryQuery {
+	return &TrustCenterWatermarkConfigHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterWatermarkConfigHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterWatermarkConfigHistory entity by its id.
+func (c *TrustCenterWatermarkConfigHistoryClient) Get(ctx context.Context, id string) (*TrustCenterWatermarkConfigHistory, error) {
+	return c.Query().Where(trustcenterwatermarkconfighistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterWatermarkConfigHistoryClient) GetX(ctx context.Context, id string) *TrustCenterWatermarkConfigHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterWatermarkConfigHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterWatermarkConfigHistory
+	return append(hooks[:len(hooks):len(hooks)], trustcenterwatermarkconfighistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterWatermarkConfigHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterWatermarkConfigHistory
+	return append(inters[:len(inters):len(inters)], trustcenterwatermarkconfighistory.Interceptors[:]...)
+}
+
+func (c *TrustCenterWatermarkConfigHistoryClient) mutate(ctx context.Context, m *TrustCenterWatermarkConfigHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterWatermarkConfigHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterWatermarkConfigHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterWatermarkConfigHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterWatermarkConfigHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenterWatermarkConfigHistory mutation op: %q", m.Op())
+	}
+}
+
 // UserClient is a client for the User schema.
 type UserClient struct {
 	config
@@ -25130,8 +25418,9 @@ type (
 		TemplateHistory, TrustCenter, TrustCenterCompliance,
 		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
 		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
-		TrustCenterSubprocessor, TrustCenterSubprocessorHistory, User, UserHistory,
-		UserSetting, UserSettingHistory, Webauthn []ent.Hook
+		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Asset, AssetHistory, Contact,
@@ -25157,8 +25446,9 @@ type (
 		TemplateHistory, TrustCenter, TrustCenterCompliance,
 		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
 		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
-		TrustCenterSubprocessor, TrustCenterSubprocessorHistory, User, UserHistory,
-		UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
+		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 
