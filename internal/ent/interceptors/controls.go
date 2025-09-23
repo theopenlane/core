@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/models"
@@ -27,7 +26,6 @@ func InterceptorControlFieldSort() ent.Interceptor {
 			// determine if the type is Control or Subcontrol
 			c := getControlType(v)
 			if c != nil {
-				log.Warn().Msg("sorting control fields")
 				// sort the the fields to ensure consistent order
 				for i, ctrl := range c {
 					c[i].ImplementationGuidance = models.Sort(ctrl.ImplementationGuidance)
@@ -42,7 +40,6 @@ func InterceptorControlFieldSort() ent.Interceptor {
 
 			sc := getSubControlType(v)
 			if sc != nil {
-				log.Warn().Msg("sorting subcontrol fields")
 				// sort the the fields to ensure consistent order
 				for i, subctrl := range sc {
 					sc[i].ImplementationGuidance = models.Sort(subctrl.ImplementationGuidance)
@@ -54,8 +51,6 @@ func InterceptorControlFieldSort() ent.Interceptor {
 
 				return sc, nil
 			}
-
-			log.Warn().Msg("skipping control field sort, unknown type")
 
 			return v, nil
 		})
