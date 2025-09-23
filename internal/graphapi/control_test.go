@@ -94,6 +94,22 @@ func TestQueryControl(t *testing.T) {
 					testclient.CreateControlInput{
 						RefCode:    "CTL-" + ulids.New().String(), // ensure unique ref code
 						ProgramIDs: []string{program.ID},
+						ImplementationGuidance: []*models.ImplementationGuidance{
+							{
+								ReferenceID: "ref-id-2",
+								Guidance: []string{
+									"guidance 1",
+									"guidance 2",
+								},
+							},
+							{
+								ReferenceID: "ref-id-1",
+								Guidance: []string{
+									"guidance 3",
+									"guidance 4",
+								},
+							},
+						},
 					})
 
 				assert.NilError(t, err)
@@ -115,6 +131,10 @@ func TestQueryControl(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.queryID, resp.Control.ID))
 			assert.Check(t, len(resp.Control.RefCode) != 0)
+
+			// ensure the implementation guidance is sorted
+			assert.Check(t, resp.Control.ImplementationGuidance[0].ReferenceID == "ref-id-1")
+			assert.Check(t, resp.Control.ImplementationGuidance[1].ReferenceID == "ref-id-2")
 
 			if tc.programAccess {
 				assert.Assert(t, resp.Control.Programs.Edges != nil)
@@ -377,7 +397,14 @@ func TestMutationCreateControl(t *testing.T) {
 				},
 				ImplementationGuidance: []*models.ImplementationGuidance{
 					{
-						ReferenceID: "ref-id",
+						ReferenceID: "ref-id-2",
+						Guidance: []string{
+							"guidance 1",
+							"guidance 2",
+						},
+					},
+					{
+						ReferenceID: "ref-id-1",
 						Guidance: []string{
 							"guidance 1",
 							"guidance 2",

@@ -42,14 +42,14 @@ func TestSort(t *testing.T) {
 		{
 			name: "Sort ExampleEvidence",
 			items: []models.Sortable{
-				&models.ExampleEvidence{Description: "description of the example evidence"},
-				&models.ExampleEvidence{Description: "description of the example evidence x"},
-				&models.ExampleEvidence{Description: "another description of the example evidence"},
+				&models.ExampleEvidence{DocumentationType: "Policy", Description: "description of the example evidence"},
+				&models.ExampleEvidence{DocumentationType: "A Policy", Description: "description of the example evidence"},
+				&models.ExampleEvidence{DocumentationType: "Policy", Description: "another description of the example evidence"},
 			},
 			expected: []models.Sortable{
-				&models.ExampleEvidence{Description: "another description of the example evidence"},
-				&models.ExampleEvidence{Description: "description of the example evidence"},
-				&models.ExampleEvidence{Description: "description of the example evidence x"},
+				&models.ExampleEvidence{DocumentationType: "A Policy", Description: "description of the example evidence"},
+				&models.ExampleEvidence{DocumentationType: "Policy", Description: "another description of the example evidence"},
+				&models.ExampleEvidence{DocumentationType: "Policy", Description: "description of the example evidence"},
 			},
 		},
 		{
