@@ -151,9 +151,9 @@ type group
 # user:* and service:* are used for public files (e.g. trust center logos/favicons) that are available to all users
 type file
   relations
-    define can_view: [user:*, service:*, user, service, organization#member] or parent_viewer
-    define can_edit: [user, service] or parent_editor
-    define can_delete: [user, service] or parent_deleter
+    define can_view: [user:*, service:*, user, service, organization#member] or parent_viewer or tc_doc_viewer
+    define can_edit: [user, service] or parent_editor or tc_doc_editor
+    define can_delete: [user, service] or parent_deleter or tc_doc_deleter
 
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
 
@@ -161,8 +161,13 @@ type file
     define parent_viewer: can_delete or can_edit or can_view from parent
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
+    # special handling for trust center documents - only NDA signed users can view files
+    define tc_doc_viewer: nda_signed from tc_doc_parent or member from tc_doc_parent
+    define tc_doc_editor: can_edit from tc_doc_parent
+    define tc_doc_deleter: can_delete from tc_doc_parent
+    define tc_doc_parent: [trust_center_doc]
 
-    define parent: [user, program, organization, control, procedure, template, document_data, contact, internal_policy, narrative, evidence, note, trust_center_setting, subprocessor, export, trust_center_doc]
+    define parent: [user, program, organization, control, procedure, template, document_data, contact, internal_policy, narrative, evidence, note, trust_center_setting, subprocessor, export]
 # programs are associated with an organization but do not inherit access from the organization with
 # the exception of the owner of the organization who will have access to all programs
 # the program creator will be made the admin of the program and all other access with be assigned directly
@@ -503,6 +508,8 @@ type trust_center
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
     define parent: [organization]
+    define nda_signed: [user]
+    define member: member from parent
 
 type trust_center_setting
   relations
@@ -543,6 +550,8 @@ type trust_center_doc
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
     define parent: [trust_center, user, service]
+    define nda_signed: nda_signed from parent
+    define member: member from parent
 
 type export
   relations

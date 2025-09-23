@@ -6589,6 +6589,7 @@ func init() {
 	trustcenterdoc.Interceptors[1] = trustcenterdocMixinInters2[0]
 	trustcenterdoc.Interceptors[2] = trustcenterdocMixinInters6[0]
 	trustcenterdoc.Interceptors[3] = trustcenterdocInters[0]
+	trustcenterdoc.Interceptors[4] = trustcenterdocInters[1]
 	trustcenterdocMixinFields0 := trustcenterdocMixin[0].Fields()
 	_ = trustcenterdocMixinFields0
 	trustcenterdocMixinFields3 := trustcenterdocMixin[3].Fields()

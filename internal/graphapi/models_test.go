@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -2077,15 +2078,20 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 		tcdb.Tags = []string{"test", "document"}
 	}
 
+	var fileID string
+	if tcdb.FileID != "" {
+		fileID = tcdb.FileID
+	} else {
+		file := (&FileBuilder{client: tcdb.client, Name: tcdb.Title}).MustNew(ctx, t)
+		fileID = file.ID
+	}
+
 	mutation := tcdb.client.db.TrustCenterDoc.Create().
 		SetTitle(tcdb.Title).
 		SetCategory(tcdb.Category).
 		SetTrustCenterID(tcdb.TrustCenterID).
-		SetTags(tcdb.Tags)
-
-	if tcdb.FileID != "" {
-		mutation.SetFileID(tcdb.FileID)
-	}
+		SetTags(tcdb.Tags).
+		SetFileID(fileID)
 
 	if tcdb.Visibility != "" {
 		mutation.SetVisibility(tcdb.Visibility)
@@ -2093,6 +2099,20 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 
 	trustCenterDoc, err := mutation.Save(ctx)
 	requireNoError(err)
+
+	// Create the tc_doc_parent tuple to allow access to the file through the trust center document
+	req := fgax.TupleRequest{
+		SubjectID:   trustCenterDoc.ID,
+		SubjectType: "trust_center_doc",
+		ObjectID:    fileID,
+		ObjectType:  "file",
+		Relation:    "tc_doc_parent",
+	}
+
+	tuple := fgax.GetTupleKey(req)
+	if _, err := tcdb.client.db.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
+		requireNoError(err)
+	}
 
 	return trustCenterDoc
 }

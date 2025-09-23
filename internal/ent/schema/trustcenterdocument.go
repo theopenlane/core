@@ -136,5 +136,6 @@ func (TrustCenterDoc) Annotations() []schema.Annotation {
 func (TrustCenterDoc) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorTrustCenterChild(),
+		interceptors.InterceptorTrustCenterDoc(),
 	}
 }
