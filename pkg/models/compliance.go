@@ -2,6 +2,19 @@ package models
 
 import (
 	"io"
+	"slices"
+)
+
+type Sortable interface {
+	GetSortField() string
+}
+
+// ensure the types implement the Sortable interface
+var (
+	_ Sortable = (*ImplementationGuidance)(nil)
+	_ Sortable = (*AssessmentMethod)(nil)
+	_ Sortable = (*ExampleEvidence)(nil)
+	_ Sortable = (*AssessmentObjective)(nil)
 )
 
 // AssessmentObjective are objectives that are validated during the audit to ensure the control is implemented
@@ -99,4 +112,39 @@ func (r Reference) MarshalGQL(w io.Writer) {
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen
 func (r *Reference) UnmarshalGQL(v any) error {
 	return unmarshalGQLJSON(v, r)
+}
+
+// GetSortField returns the field to sort on for the Sortable interface
+func (i ImplementationGuidance) GetSortField() string {
+	return i.ReferenceID
+}
+
+// GetSortField returns the field to sort on for the Sortable interface
+func (a AssessmentMethod) GetSortField() string {
+	return a.ID
+}
+
+// GetSortField returns the field to sort on for the Sortable interface
+func (e ExampleEvidence) GetSortField() string {
+	return e.Description
+}
+
+// GetSortField returns the field to sort on for the Sortable interface
+func (a AssessmentObjective) GetSortField() string {
+	return a.ID
+}
+
+// Sort a slice of Sortable items by their sort field
+func Sort[T Sortable](items []T) []T {
+	slices.SortFunc(items, func(a, b T) int {
+		if a.GetSortField() < b.GetSortField() {
+			return -1
+		}
+		if a.GetSortField() > b.GetSortField() {
+			return 1
+		}
+		return 0
+	})
+
+	return items
 }
