@@ -139,7 +139,7 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
-const DefaultStatus enums.EvidenceStatus = "READY"
+const DefaultStatus enums.EvidenceStatus = "SUBMITTED"
 
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.EvidenceStatus) error {
