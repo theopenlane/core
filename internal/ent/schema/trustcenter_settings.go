@@ -111,6 +111,11 @@ func (TrustCenterSetting) Fields() []ent.Field {
 func (t TrustCenterSetting) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
+		additionalMixins: []ent.Mixin{
+			newObjectOwnedMixin[generated.TrustCenterSetting](t,
+				withParents(TrustCenter{}),
+			),
+		},
 	}.getMixins(t)
 }
 
@@ -150,7 +155,6 @@ func (t TrustCenterSetting) Interceptors() []ent.Interceptor {
 func (TrustCenterSetting) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTrustCenterSetting(),
-		hooks.HookTrustCenterSettingAuthz(),
 	}
 }
 

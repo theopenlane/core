@@ -54014,10 +54014,6 @@ type OrganizationWhereInput struct {
 	HasExports     *bool               `json:"hasExports,omitempty"`
 	HasExportsWith []*ExportWhereInput `json:"hasExportsWith,omitempty"`
 
-	// "trust_center_docs" edge predicates.
-	HasTrustCenterDocs     *bool                       `json:"hasTrustCenterDocs,omitempty"`
-	HasTrustCenterDocsWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocsWith,omitempty"`
-
 	// "members" edge predicates.
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -55624,24 +55620,6 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasExportsWith(with...))
-	}
-	if i.HasTrustCenterDocs != nil {
-		p := organization.HasTrustCenterDocs()
-		if !*i.HasTrustCenterDocs {
-			p = organization.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTrustCenterDocsWith) > 0 {
-		with := make([]predicate.TrustCenterDoc, 0, len(i.HasTrustCenterDocsWith))
-		for _, w := range i.HasTrustCenterDocsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustCenterDocsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organization.HasTrustCenterDocsWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := organization.HasMembers()
@@ -86414,23 +86392,6 @@ type TrustCenterDocWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "owner_id" field predicates.
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-
 	// "trust_center_id" field predicates.
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -86502,10 +86463,6 @@ type TrustCenterDocWhereInput struct {
 	VisibilityNotIn  []enums.TrustCenterDocumentVisibility `json:"visibilityNotIn,omitempty"`
 	VisibilityIsNil  bool                                  `json:"visibilityIsNil,omitempty"`
 	VisibilityNotNil bool                                  `json:"visibilityNotNil,omitempty"`
-
-	// "owner" edge predicates.
-	HasOwner     *bool                     `json:"hasOwner,omitempty"`
-	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -86767,51 +86724,6 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcenterdoc.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.OwnerID != nil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDEQ(*i.OwnerID))
-	}
-	if i.OwnerIDNEQ != nil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDNEQ(*i.OwnerIDNEQ))
-	}
-	if len(i.OwnerIDIn) > 0 {
-		predicates = append(predicates, trustcenterdoc.OwnerIDIn(i.OwnerIDIn...))
-	}
-	if len(i.OwnerIDNotIn) > 0 {
-		predicates = append(predicates, trustcenterdoc.OwnerIDNotIn(i.OwnerIDNotIn...))
-	}
-	if i.OwnerIDGT != nil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDGT(*i.OwnerIDGT))
-	}
-	if i.OwnerIDGTE != nil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDGTE(*i.OwnerIDGTE))
-	}
-	if i.OwnerIDLT != nil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDLT(*i.OwnerIDLT))
-	}
-	if i.OwnerIDLTE != nil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDLTE(*i.OwnerIDLTE))
-	}
-	if i.OwnerIDContains != nil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDContains(*i.OwnerIDContains))
-	}
-	if i.OwnerIDHasPrefix != nil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
-	}
-	if i.OwnerIDHasSuffix != nil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
-	}
-	if i.OwnerIDIsNil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDIsNil())
-	}
-	if i.OwnerIDNotNil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDNotNil())
-	}
-	if i.OwnerIDEqualFold != nil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDEqualFold(*i.OwnerIDEqualFold))
-	}
-	if i.OwnerIDContainsFold != nil {
-		predicates = append(predicates, trustcenterdoc.OwnerIDContainsFold(*i.OwnerIDContainsFold))
-	}
 	if i.TrustCenterID != nil {
 		predicates = append(predicates, trustcenterdoc.TrustCenterIDEQ(*i.TrustCenterID))
 	}
@@ -86999,24 +86911,6 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 		predicates = append(predicates, trustcenterdoc.VisibilityNotNil())
 	}
 
-	if i.HasOwner != nil {
-		p := trustcenterdoc.HasOwner()
-		if !*i.HasOwner {
-			p = trustcenterdoc.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasOwnerWith) > 0 {
-		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
-		for _, w := range i.HasOwnerWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, trustcenterdoc.HasOwnerWith(with...))
-	}
 	if i.HasTrustCenter != nil {
 		p := trustcenterdoc.HasTrustCenter()
 		if !*i.HasTrustCenter {
@@ -87172,23 +87066,6 @@ type TrustCenterDocHistoryWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-
-	// "owner_id" field predicates.
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
 	// "trust_center_id" field predicates.
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
@@ -87594,51 +87471,6 @@ func (i *TrustCenterDocHistoryWhereInput) P() (predicate.TrustCenterDocHistory, 
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcenterdochistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
-	}
-	if i.OwnerID != nil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDEQ(*i.OwnerID))
-	}
-	if i.OwnerIDNEQ != nil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDNEQ(*i.OwnerIDNEQ))
-	}
-	if len(i.OwnerIDIn) > 0 {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDIn(i.OwnerIDIn...))
-	}
-	if len(i.OwnerIDNotIn) > 0 {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDNotIn(i.OwnerIDNotIn...))
-	}
-	if i.OwnerIDGT != nil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDGT(*i.OwnerIDGT))
-	}
-	if i.OwnerIDGTE != nil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDGTE(*i.OwnerIDGTE))
-	}
-	if i.OwnerIDLT != nil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDLT(*i.OwnerIDLT))
-	}
-	if i.OwnerIDLTE != nil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDLTE(*i.OwnerIDLTE))
-	}
-	if i.OwnerIDContains != nil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDContains(*i.OwnerIDContains))
-	}
-	if i.OwnerIDHasPrefix != nil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
-	}
-	if i.OwnerIDHasSuffix != nil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
-	}
-	if i.OwnerIDIsNil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDIsNil())
-	}
-	if i.OwnerIDNotNil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDNotNil())
-	}
-	if i.OwnerIDEqualFold != nil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
-	}
-	if i.OwnerIDContainsFold != nil {
-		predicates = append(predicates, trustcenterdochistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 	if i.TrustCenterID != nil {
 		predicates = append(predicates, trustcenterdochistory.TrustCenterIDEQ(*i.TrustCenterID))

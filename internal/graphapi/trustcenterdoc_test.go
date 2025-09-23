@@ -54,13 +54,10 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 			errorMsg: notFoundErrorMsg,
 		},
 		{
-			// Intentionally not implementing anonymous access to trust center docs at the moment.
-			// TODO(acookin): configure correct trust center document access
-			name:     "anonymous user cannot query trust center doc (yet)",
-			queryID:  trustCenterDoc.ID,
-			client:   suite.client.api,
-			ctx:      createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
-			errorMsg: couldNotFindUser,
+			name:    "anonymous user can query trust center doc",
+			queryID: trustCenterDoc.ID,
+			client:  suite.client.api,
+			ctx:     createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
 		},
 	}
 
@@ -373,13 +370,13 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 			expectedResults: 0,
 		},
 		{
-			name:   "anonymous user cannot query trust center docs (yet)",
+			name:   "anonymous user can query trust center docs",
 			client: suite.client.api,
 			ctx:    createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID),
 			where: &testclient.TrustCenterDocWhereInput{
 				Title: &trustCenterDoc1.Title,
 			},
-			errorMsg: couldNotFindUser,
+			expectedResults: 1,
 		},
 	}
 
@@ -490,7 +487,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:             "trust center doc not found",
@@ -570,7 +567,7 @@ func TestMutationDeleteTrustCenterDoc(t *testing.T) {
 			idToDelete:  trustCenterDoc2.ID,
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "trust center doc not found",

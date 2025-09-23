@@ -40,8 +40,6 @@ type TrustCenterDocHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the ID of the organization owner of the object
-	OwnerID string `json:"owner_id,omitempty"`
 	// ID of the trust center
 	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// title of the document
@@ -64,7 +62,7 @@ func (*TrustCenterDocHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case trustcenterdochistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldDeletedBy, trustcenterdochistory.FieldOwnerID, trustcenterdochistory.FieldTrustCenterID, trustcenterdochistory.FieldTitle, trustcenterdochistory.FieldCategory, trustcenterdochistory.FieldFileID, trustcenterdochistory.FieldVisibility:
+		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldDeletedBy, trustcenterdochistory.FieldTrustCenterID, trustcenterdochistory.FieldTitle, trustcenterdochistory.FieldCategory, trustcenterdochistory.FieldFileID, trustcenterdochistory.FieldVisibility:
 			values[i] = new(sql.NullString)
 		case trustcenterdochistory.FieldHistoryTime, trustcenterdochistory.FieldCreatedAt, trustcenterdochistory.FieldUpdatedAt, trustcenterdochistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -150,12 +148,6 @@ func (_m *TrustCenterDocHistory) assignValues(columns []string, values []any) er
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
-			}
-		case trustcenterdochistory.FieldOwnerID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
-			} else if value.Valid {
-				_m.OwnerID = value.String
 			}
 		case trustcenterdochistory.FieldTrustCenterID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -253,9 +245,6 @@ func (_m *TrustCenterDocHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
-	builder.WriteString(", ")
-	builder.WriteString("owner_id=")
-	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)

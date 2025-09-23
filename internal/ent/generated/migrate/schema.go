@@ -4886,7 +4886,6 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "category", Type: field.TypeString},
 		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
 	}
@@ -4897,32 +4896,16 @@ var (
 		PrimaryKey: []*schema.Column{TrustCenterDocsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "trust_center_docs_organizations_trust_center_docs",
-				Columns:    []*schema.Column{TrustCenterDocsColumns[11]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "trust_center_docs_trust_centers_trust_center_docs",
-				Columns:    []*schema.Column{TrustCenterDocsColumns[12]},
+				Columns:    []*schema.Column{TrustCenterDocsColumns[11]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_docs_files_file",
-				Columns:    []*schema.Column{TrustCenterDocsColumns[13]},
+				Columns:    []*schema.Column{TrustCenterDocsColumns[12]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "trustcenterdoc_owner_id",
-				Unique:  false,
-				Columns: []*schema.Column{TrustCenterDocsColumns[11]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -4939,7 +4922,6 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "category", Type: field.TypeString},
@@ -8659,9 +8641,8 @@ func init() {
 	TrustCenterComplianceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_compliance_history",
 	}
-	TrustCenterDocsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	TrustCenterDocsTable.ForeignKeys[1].RefTable = TrustCentersTable
-	TrustCenterDocsTable.ForeignKeys[2].RefTable = FilesTable
+	TrustCenterDocsTable.ForeignKeys[0].RefTable = TrustCentersTable
+	TrustCenterDocsTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterDocHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_doc_history",
 	}

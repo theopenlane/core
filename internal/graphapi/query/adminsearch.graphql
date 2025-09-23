@@ -974,7 +974,6 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
-          ownerID
           trustCenterID
           title
           category
