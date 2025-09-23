@@ -18,6 +18,18 @@ mutation CreateExport($input: CreateExportInput!) {
   }
 }
 
+mutation DeleteBulkExport($ids: [ID!]!) {
+  deleteBulkExport(ids: $ids) {
+    deletedIDs
+  }
+}
+
+mutation DeleteExport($deleteExportId: ID!) {
+  deleteExport(id: $deleteExportId) {
+    deletedID
+  }
+}
+
 query GetAllExports {
   exports {
     totalCount
@@ -46,6 +58,7 @@ query GetAllExports {
     }
   }
 }
+
 query GetExportByID($exportId: ID!) {
   export(id: $exportId) {
     createdAt
@@ -132,15 +145,3 @@ mutation UpdateExport($id: ID!, $input: UpdateExportInput!, $exportFiles: [Uploa
     }
   }
 }
-
-mutation DeleteExport($deleteExportId: ID!) {
-  deleteExport(id: $deleteExportId) {
-    deletedID
-  }
-}
-
-mutation DeleteBulkExport($ids: [ID!]!) {
-  deleteBulkExport(ids: $ids) {
-    deletedIDs
-  }
-} 

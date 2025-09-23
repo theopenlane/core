@@ -9,7 +9,7 @@
 - user: user:ulid-system-admin
   relation: system_admin
   object: system:openlane_core
- 
+
 - user: service:ulid-export-service
   relation: _self
   object: service:ulid-export-service

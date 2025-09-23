@@ -96305,7 +96305,7 @@ type ExportBulkDeletePayload {
     Deleted export IDs
     """
     deletedIDs: [ID!]!
-} 
+}
 `, BuiltIn: false},
 	{Name: "../schema/file.graphql", Input: `extend type Query {
     """

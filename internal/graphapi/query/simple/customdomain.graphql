@@ -92,6 +92,7 @@ query GetAllCustomDomains {
     }
   }
 }
+
 query GetCustomDomainByID($customDomainId: ID!) {
   customDomain(id: $customDomainId) {
     cnameRecord
@@ -144,6 +145,7 @@ query GetCustomDomains($first: Int, $last: Int, $where: CustomDomainWhereInput) 
     }
   }
 }
+
 mutation UpdateCustomDomain($updateCustomDomainId: ID!, $input: UpdateCustomDomainInput!) {
   updateCustomDomain(id: $updateCustomDomainId, input: $input) {
     customDomain {

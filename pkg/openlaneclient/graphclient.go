@@ -122,8 +122,8 @@ type OpenlaneGraphClient interface {
 	CreateEntity(ctx context.Context, input CreateEntityInput, interceptors ...clientv2.RequestInterceptor) (*CreateEntity, error)
 	DeleteEntity(ctx context.Context, deleteEntityID string, interceptors ...clientv2.RequestInterceptor) (*DeleteEntity, error)
 	GetAllEntities(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEntities, error)
-	GetEntityByID(ctx context.Context, entityID string, interceptors ...clientv2.RequestInterceptor) (*GetEntityByID, error)
 	GetEntities(ctx context.Context, first *int64, last *int64, where *EntityWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEntities, error)
+	GetEntityByID(ctx context.Context, entityID string, interceptors ...clientv2.RequestInterceptor) (*GetEntityByID, error)
 	UpdateEntity(ctx context.Context, updateEntityID string, input UpdateEntityInput, interceptors ...clientv2.RequestInterceptor) (*UpdateEntity, error)
 	GetAllEntityHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEntityHistories, error)
 	GetEntityHistories(ctx context.Context, first *int64, last *int64, where *EntityHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEntityHistories, error)
@@ -16457,101 +16457,6 @@ func (t *GetAllEntities_Entities) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type GetEntityByID_Entity struct {
-	CreatedAt    *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string    "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName  *string    "json:\"displayName,omitempty\" graphql:\"displayName\""
-	Domains      []string   "json:\"domains,omitempty\" graphql:\"domains\""
-	EntityTypeID *string    "json:\"entityTypeID,omitempty\" graphql:\"entityTypeID\""
-	ID           string     "json:\"id\" graphql:\"id\""
-	Name         *string    "json:\"name,omitempty\" graphql:\"name\""
-	OwnerID      *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Status       *string    "json:\"status,omitempty\" graphql:\"status\""
-	Tags         []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt    *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *GetEntityByID_Entity) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.CreatedAt
-}
-func (t *GetEntityByID_Entity) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.CreatedBy
-}
-func (t *GetEntityByID_Entity) GetDescription() *string {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.Description
-}
-func (t *GetEntityByID_Entity) GetDisplayName() *string {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.DisplayName
-}
-func (t *GetEntityByID_Entity) GetDomains() []string {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.Domains
-}
-func (t *GetEntityByID_Entity) GetEntityTypeID() *string {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.EntityTypeID
-}
-func (t *GetEntityByID_Entity) GetID() string {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.ID
-}
-func (t *GetEntityByID_Entity) GetName() *string {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.Name
-}
-func (t *GetEntityByID_Entity) GetOwnerID() *string {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.OwnerID
-}
-func (t *GetEntityByID_Entity) GetStatus() *string {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.Status
-}
-func (t *GetEntityByID_Entity) GetTags() []string {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.Tags
-}
-func (t *GetEntityByID_Entity) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetEntityByID_Entity) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetEntityByID_Entity{}
-	}
-	return t.UpdatedBy
-}
-
 type GetEntities_Entities_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -16713,6 +16618,101 @@ func (t *GetEntities_Entities) GetTotalCount() int64 {
 		t = &GetEntities_Entities{}
 	}
 	return t.TotalCount
+}
+
+type GetEntityByID_Entity struct {
+	CreatedAt    *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName  *string    "json:\"displayName,omitempty\" graphql:\"displayName\""
+	Domains      []string   "json:\"domains,omitempty\" graphql:\"domains\""
+	EntityTypeID *string    "json:\"entityTypeID,omitempty\" graphql:\"entityTypeID\""
+	ID           string     "json:\"id\" graphql:\"id\""
+	Name         *string    "json:\"name,omitempty\" graphql:\"name\""
+	OwnerID      *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status       *string    "json:\"status,omitempty\" graphql:\"status\""
+	Tags         []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt    *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetEntityByID_Entity) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.CreatedAt
+}
+func (t *GetEntityByID_Entity) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.CreatedBy
+}
+func (t *GetEntityByID_Entity) GetDescription() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.Description
+}
+func (t *GetEntityByID_Entity) GetDisplayName() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.DisplayName
+}
+func (t *GetEntityByID_Entity) GetDomains() []string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.Domains
+}
+func (t *GetEntityByID_Entity) GetEntityTypeID() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.EntityTypeID
+}
+func (t *GetEntityByID_Entity) GetID() string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.ID
+}
+func (t *GetEntityByID_Entity) GetName() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.Name
+}
+func (t *GetEntityByID_Entity) GetOwnerID() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.OwnerID
+}
+func (t *GetEntityByID_Entity) GetStatus() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.Status
+}
+func (t *GetEntityByID_Entity) GetTags() []string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.Tags
+}
+func (t *GetEntityByID_Entity) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetEntityByID_Entity) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.UpdatedBy
 }
 
 type UpdateEntity_UpdateEntity_Entity struct {
@@ -78163,17 +78163,6 @@ func (t *GetAllEntities) GetEntities() *GetAllEntities_Entities {
 	return &t.Entities
 }
 
-type GetEntityByID struct {
-	Entity GetEntityByID_Entity "json:\"entity\" graphql:\"entity\""
-}
-
-func (t *GetEntityByID) GetEntity() *GetEntityByID_Entity {
-	if t == nil {
-		t = &GetEntityByID{}
-	}
-	return &t.Entity
-}
-
 type GetEntities struct {
 	Entities GetEntities_Entities "json:\"entities\" graphql:\"entities\""
 }
@@ -78183,6 +78172,17 @@ func (t *GetEntities) GetEntities() *GetEntities_Entities {
 		t = &GetEntities{}
 	}
 	return &t.Entities
+}
+
+type GetEntityByID struct {
+	Entity GetEntityByID_Entity "json:\"entity\" graphql:\"entity\""
+}
+
+func (t *GetEntityByID) GetEntity() *GetEntityByID_Entity {
+	if t == nil {
+		t = &GetEntityByID{}
+	}
+	return &t.Entity
 }
 
 type UpdateEntity struct {
@@ -87420,42 +87420,6 @@ func (c *Client) GetAllEntities(ctx context.Context, interceptors ...clientv2.Re
 	return &res, nil
 }
 
-const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
-	entity(id: $entityId) {
-		createdAt
-		createdBy
-		description
-		displayName
-		domains
-		entityTypeID
-		id
-		name
-		ownerID
-		status
-		tags
-		updatedAt
-		updatedBy
-	}
-}
-`
-
-func (c *Client) GetEntityByID(ctx context.Context, entityID string, interceptors ...clientv2.RequestInterceptor) (*GetEntityByID, error) {
-	vars := map[string]any{
-		"entityId": entityID,
-	}
-
-	var res GetEntityByID
-	if err := c.Client.Post(ctx, "GetEntityByID", GetEntityByIDDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const GetEntitiesDocument = `query GetEntities ($first: Int, $last: Int, $where: EntityWhereInput) {
 	entities(first: $first, last: $last, where: $where) {
 		totalCount
@@ -87495,6 +87459,42 @@ func (c *Client) GetEntities(ctx context.Context, first *int64, last *int64, whe
 
 	var res GetEntities
 	if err := c.Client.Post(ctx, "GetEntities", GetEntitiesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
+	entity(id: $entityId) {
+		createdAt
+		createdBy
+		description
+		displayName
+		domains
+		entityTypeID
+		id
+		name
+		ownerID
+		status
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetEntityByID(ctx context.Context, entityID string, interceptors ...clientv2.RequestInterceptor) (*GetEntityByID, error) {
+	vars := map[string]any{
+		"entityId": entityID,
+	}
+
+	var res GetEntityByID
+	if err := c.Client.Post(ctx, "GetEntityByID", GetEntityByIDDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -105756,8 +105756,8 @@ var DocumentOperationNames = map[string]string{
 	CreateEntityDocument:                           "CreateEntity",
 	DeleteEntityDocument:                           "DeleteEntity",
 	GetAllEntitiesDocument:                         "GetAllEntities",
-	GetEntityByIDDocument:                          "GetEntityByID",
 	GetEntitiesDocument:                            "GetEntities",
+	GetEntityByIDDocument:                          "GetEntityByID",
 	UpdateEntityDocument:                           "UpdateEntity",
 	GetAllEntityHistoriesDocument:                  "GetAllEntityHistories",
 	GetEntityHistoriesDocument:                     "GetEntityHistories",

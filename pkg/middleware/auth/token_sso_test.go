@@ -91,9 +91,9 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 	assert.Equal(t, []string{org.ID}, au.OrganizationIDs)
 	assert.Empty(t, au.OrganizationID)
 
-	userDefaulOrg := org.ID
+	userDefaultOrg := org.ID
 
-	au, id, err = isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, userDefaulOrg)
+	au, id, err = isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, userDefaultOrg)
 	assert.NoError(t, err)
 	assert.Equal(t, org.ID, au.OrganizationID)
 }
