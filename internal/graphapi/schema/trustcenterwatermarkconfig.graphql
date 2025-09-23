@@ -19,25 +19,8 @@ extend type Mutation{
         values of the trustCenterWatermarkConfig
         """
         input: CreateTrustCenterWatermarkConfigInput!
+        logoFile: Upload
     ): TrustCenterWatermarkConfigCreatePayload!
-    """
-    Create multiple new trustCenterWatermarkConfigs
-    """
-    createBulkTrustCenterWatermarkConfig(
-        """
-        values of the trustCenterWatermarkConfig
-        """
-        input: [CreateTrustCenterWatermarkConfigInput!]
-    ): TrustCenterWatermarkConfigBulkCreatePayload!
-    """
-    Create multiple new trustCenterWatermarkConfigs via file upload
-    """
-    createBulkCSVTrustCenterWatermarkConfig(
-        """
-        csv file containing values of the trustCenterWatermarkConfig
-        """
-        input: Upload!
-    ): TrustCenterWatermarkConfigBulkCreatePayload!
     """
     Update an existing trustCenterWatermarkConfig
     """
@@ -50,6 +33,7 @@ extend type Mutation{
         New values for the trustCenterWatermarkConfig
         """
         input: UpdateTrustCenterWatermarkConfigInput!
+        logoFile: Upload
     ): TrustCenterWatermarkConfigUpdatePayload!
     """
     Delete an existing trustCenterWatermarkConfig
