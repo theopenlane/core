@@ -75,7 +75,6 @@ func (t TrustCenterDoc) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterDoc](t,
 				withParents(TrustCenter{}),
-				withOrganizationOwner(true),
 			),
 		},
 	}.getMixins(t)

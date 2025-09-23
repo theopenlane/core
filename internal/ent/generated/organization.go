@@ -194,15 +194,13 @@ type OrganizationEdges struct {
 	Subprocessors []*Subprocessor `json:"subprocessors,omitempty"`
 	// Exports holds the value of the exports edge.
 	Exports []*Export `json:"exports,omitempty"`
-	// TrustCenterDocs holds the value of the trust_center_docs edge.
-	TrustCenterDocs []*TrustCenterDoc `json:"trust_center_docs,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [68]bool
+	loadedTypes [67]bool
 	// totalCount holds the count of the edges above.
-	totalCount [65]map[string]int
+	totalCount [64]map[string]int
 
 	namedControlCreators               map[string][]*Group
 	namedControlImplementationCreators map[string][]*Group
@@ -267,7 +265,6 @@ type OrganizationEdges struct {
 	namedScans                         map[string][]*Scan
 	namedSubprocessors                 map[string][]*Subprocessor
 	namedExports                       map[string][]*Export
-	namedTrustCenterDocs               map[string][]*TrustCenterDoc
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -871,19 +868,10 @@ func (e OrganizationEdges) ExportsOrErr() ([]*Export, error) {
 	return nil, &NotLoadedError{edge: "exports"}
 }
 
-// TrustCenterDocsOrErr returns the TrustCenterDocs value or an error if the edge
-// was not loaded in eager-loading.
-func (e OrganizationEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[66] {
-		return e.TrustCenterDocs, nil
-	}
-	return nil, &NotLoadedError{edge: "trust_center_docs"}
-}
-
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[67] {
+	if e.loadedTypes[66] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1372,11 +1360,6 @@ func (_m *Organization) QuerySubprocessors() *SubprocessorQuery {
 // QueryExports queries the "exports" edge of the Organization entity.
 func (_m *Organization) QueryExports() *ExportQuery {
 	return NewOrganizationClient(_m.config).QueryExports(_m)
-}
-
-// QueryTrustCenterDocs queries the "trust_center_docs" edge of the Organization entity.
-func (_m *Organization) QueryTrustCenterDocs() *TrustCenterDocQuery {
-	return NewOrganizationClient(_m.config).QueryTrustCenterDocs(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -2978,30 +2961,6 @@ func (_m *Organization) appendNamedExports(name string, edges ...*Export) {
 		_m.Edges.namedExports[name] = []*Export{}
 	} else {
 		_m.Edges.namedExports[name] = append(_m.Edges.namedExports[name], edges...)
-	}
-}
-
-// NamedTrustCenterDocs returns the TrustCenterDocs named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Organization) NamedTrustCenterDocs(name string) ([]*TrustCenterDoc, error) {
-	if _m.Edges.namedTrustCenterDocs == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedTrustCenterDocs[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Organization) appendNamedTrustCenterDocs(name string, edges ...*TrustCenterDoc) {
-	if _m.Edges.namedTrustCenterDocs == nil {
-		_m.Edges.namedTrustCenterDocs = make(map[string][]*TrustCenterDoc)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedTrustCenterDocs[name] = []*TrustCenterDoc{}
-	} else {
-		_m.Edges.namedTrustCenterDocs[name] = append(_m.Edges.namedTrustCenterDocs[name], edges...)
 	}
 }
 
