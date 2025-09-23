@@ -26,6 +26,7 @@ func init() {
 	command.AddCommand(createCmd)
 
 	// command line flags for the create command
+	createCmd.Flags().StringP("trust-center-id", "i", "", "trust center id for the watermark config")
 	createCmd.Flags().StringP("text", "t", "", "watermark text")
 	createCmd.Flags().StringP("logo-file", "f", "", "logo file to upload")
 	createCmd.Flags().Float64P("font-size", "s", 48.0, "font size of the watermark text")
@@ -38,6 +39,12 @@ func init() {
 // createValidation validates the required fields for the command
 func createValidation() (*openlaneclient.CreateTrustCenterWatermarkConfigInput, *graphql.Upload, error) {
 	input := &openlaneclient.CreateTrustCenterWatermarkConfigInput{}
+	trustCenterID := cmd.Config.String("trust-center-id")
+	if trustCenterID == "" {
+		return nil, nil, cmd.NewRequiredFieldMissingError("trust center id")
+	}
+	input.TrustCenterID = &trustCenterID
+
 	text := cmd.Config.String("text")
 	if text != "" {
 		input.Text = &text
