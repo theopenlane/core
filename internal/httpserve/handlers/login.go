@@ -84,21 +84,22 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 		return h.InternalServerError(ctx, err, openapi)
 	}
 
-	// Check if TFA is enforced for the user's organization using already-fetched status
-	tfaRequired := false
+	// check if orgStatus is enforced, but user has not yet configured
+	// if not yet configured we want to direct to the setup first
+	tfaSetupRequired := false
 	if orgStatus != nil && orgStatus.OrgTFAEnforced {
 		// Check if user has TFA enabled
 		if user.Edges.Setting == nil || !user.Edges.Setting.IsTfaEnabled {
-			tfaRequired = true
+			tfaSetupRequired = true
 		}
 	}
 
 	out := models.LoginReply{
-		Reply:       rout.Reply{Success: true},
-		TFAEnabled:  user.Edges.Setting.IsTfaEnabled,
-		TFARequired: tfaRequired,
-		Message:     "success",
-		AuthData:    *auth,
+		Reply:            rout.Reply{Success: true},
+		TFAEnabled:       user.Edges.Setting.IsTfaEnabled,
+		TFASetupRequired: tfaSetupRequired,
+		Message:          "success",
+		AuthData:         *auth,
 	}
 
 	metrics.RecordLogin(true)

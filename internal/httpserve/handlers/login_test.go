@@ -418,8 +418,8 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
 	var out apimodels.LoginReply
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
-	assert.False(t, out.TFAEnabled) // User doesn't have TFA enabled
-	assert.True(t, out.TFARequired) // But org requires TFA
+	assert.False(t, out.TFAEnabled)      // User doesn't have TFA enabled
+	assert.True(t, out.TFASetupRequired) // But org requires TFA
 }
 
 func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {
@@ -469,6 +469,6 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {
 	var out apimodels.LoginReply
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
-	assert.True(t, out.TFAEnabled)   // User has TFA enabled
-	assert.False(t, out.TFARequired) // No additional TFA setup needed
+	assert.True(t, out.TFAEnabled)        // User has TFA enabled
+	assert.False(t, out.TFASetupRequired) // No additional TFA setup needed
 }

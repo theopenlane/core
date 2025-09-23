@@ -724,6 +724,11 @@ func (_u *OrganizationSettingUpdate) check() error {
 			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.identity_provider": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SamlSigninURL(); ok {
+		if err := organizationsetting.SamlSigninURLValidator(v); err != nil {
+			return &ValidationError{Name: "saml_signin_url", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.saml_signin_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1730,6 +1735,11 @@ func (_u *OrganizationSettingUpdateOne) check() error {
 	if v, ok := _u.mutation.IdentityProvider(); ok {
 		if err := organizationsetting.IdentityProviderValidator(v); err != nil {
 			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.identity_provider": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.SamlSigninURL(); ok {
+		if err := organizationsetting.SamlSigninURLValidator(v); err != nil {
+			return &ValidationError{Name: "saml_signin_url", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.saml_signin_url": %w`, err)}
 		}
 	}
 	return nil

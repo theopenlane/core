@@ -186,6 +186,8 @@ var (
 	DefaultAllowMatchingDomainsAutojoin bool
 	// DefaultIdentityProviderAuthTested holds the default value on creation for the "identity_provider_auth_tested" field.
 	DefaultIdentityProviderAuthTested bool
+	// SamlSigninURLValidator is a validator for the "saml_signin_url" field. It is called by the builders before save.
+	SamlSigninURLValidator func(string) error
 	// DefaultIdentityProviderLoginEnforced holds the default value on creation for the "identity_provider_login_enforced" field.
 	DefaultIdentityProviderLoginEnforced bool
 	// DefaultMultifactorAuthEnforced holds the default value on creation for the "multifactor_auth_enforced" field.

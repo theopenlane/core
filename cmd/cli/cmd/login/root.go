@@ -111,7 +111,7 @@ func passwordAuth(ctx context.Context, client *openlaneclient.OpenlaneClient, us
 	}
 
 	// Check if 2FA is required but user hasn't enabled it
-	if resp.TFARequired && !resp.TFAEnabled {
+	if resp.TFASetupRequired && !resp.TFAEnabled {
 		fmt.Println("\nTwo-factor authentication is required by your organization.")
 		fmt.Println("Please login to the Openlane console and enable 2FA on your profile page before using the CLI.")
 		return nil, fmt.Errorf("2FA required but not enabled on user account")

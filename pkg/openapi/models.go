@@ -57,9 +57,9 @@ type LoginRequest struct {
 type LoginReply struct {
 	rout.Reply
 	AuthData
-	TFAEnabled  bool   `json:"tfa_enabled,omitempty"`
-	TFARequired bool   `json:"tfa_required,omitempty"`
-	Message     string `json:"message"`
+	TFAEnabled       bool   `json:"tfa_enabled,omitempty"`
+	TFASetupRequired bool   `json:"tfa_required,omitempty"`
+	Message          string `json:"message"`
 }
 
 // ExampleResponse returns an example LoginReply for OpenAPI documentation

@@ -125,11 +125,12 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Optional(),
 		field.String("saml_signin_url").
 			Comment("the sign in URL to be used for SAML-based authentication").
+			Validate(validator.ValidateURL()).
 			Optional(),
 		field.String("saml_issuer").
 			Comment("the SAML issuer").
 			Optional(),
-		field.String("saml_cert").
+		field.Text("saml_cert").
 			Comment("the x509 certificate used to validate SAML responses").
 			Optional(),
 		field.Bool("identity_provider_login_enforced").

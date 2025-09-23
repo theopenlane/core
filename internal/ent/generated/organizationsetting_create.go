@@ -624,6 +624,11 @@ func (_c *OrganizationSettingCreate) check() error {
 	if _, ok := _c.mutation.IdentityProviderAuthTested(); !ok {
 		return &ValidationError{Name: "identity_provider_auth_tested", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_auth_tested"`)}
 	}
+	if v, ok := _c.mutation.SamlSigninURL(); ok {
+		if err := organizationsetting.SamlSigninURLValidator(v); err != nil {
+			return &ValidationError{Name: "saml_signin_url", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.saml_signin_url": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_login_enforced"`)}
 	}

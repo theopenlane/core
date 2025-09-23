@@ -4472,6 +4472,10 @@ func init() {
 	organizationsettingDescIdentityProviderAuthTested := organizationsettingFields[15].Descriptor()
 	// organizationsetting.DefaultIdentityProviderAuthTested holds the default value on creation for the identity_provider_auth_tested field.
 	organizationsetting.DefaultIdentityProviderAuthTested = organizationsettingDescIdentityProviderAuthTested.Default.(bool)
+	// organizationsettingDescSamlSigninURL is the schema descriptor for saml_signin_url field.
+	organizationsettingDescSamlSigninURL := organizationsettingFields[18].Descriptor()
+	// organizationsetting.SamlSigninURLValidator is a validator for the "saml_signin_url" field. It is called by the builders before save.
+	organizationsetting.SamlSigninURLValidator = organizationsettingDescSamlSigninURL.Validators[0].(func(string) error)
 	// organizationsettingDescIdentityProviderLoginEnforced is the schema descriptor for identity_provider_login_enforced field.
 	organizationsettingDescIdentityProviderLoginEnforced := organizationsettingFields[21].Descriptor()
 	// organizationsetting.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
