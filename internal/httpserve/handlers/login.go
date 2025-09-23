@@ -44,7 +44,7 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 
-	orgStatus := h.ssoOrgForUser(allowCtx, req.Username)
+	orgStatus := h.orgEnforcementsForUser(allowCtx, req.Username)
 	if orgStatus != nil && orgStatus.Enforced {
 		metrics.RecordLogin(false)
 		return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgStatus.OrganizationID))

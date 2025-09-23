@@ -113,7 +113,7 @@ The credential handler is implemented in `internal/httpserve/handlers/login.go`:
 
 - `LoginHandler` parses a `LoginRequest` and calls `getUserByEmail` to fetch the account.
 - If the account does not exist, `RegisterHandler` creates the user and `sendVerificationEmail` dispatches the confirmation email.
-- `ssoOrgForUser` determines if the organization enforces SSO for the email and
+- `orgEnforcementsForUser` determines if the organization enforces SSO for the email and
   redirects non-owner users to `SSOLoginHandler` when required.
 - Unverified users can request a new token via `ResendEmail`, which invokes `storeAndSendEmailVerificationToken`.
 - When the password is validated with `passwd.VerifyDerivedKey`, `AuthManager.GenerateUserAuthSession` issues the access and refresh tokens and `updateUserLastSeen` records the login.
@@ -143,7 +143,7 @@ The OAuth handlers are defined in `internal/httpserve/handlers/oauth_login.go` a
 
 - `GetGoogleLoginHandlers` and `GetGitHubLoginHandlers` redirect users to the provider.
 - After the provider callback, `issueGoogleSession` or `issueGitHubSession` call `CheckAndCreateUser` to create or update the user record.
-- `ssoOrgForUser` checks the email's organization and redirects to
+- `orgEnforcementsForUser` checks the email's organization and redirects to
   `SSOLoginHandler` when SSO is enforced for non-owner members.
 - New accounts are verified by `sendVerificationEmail` inside `storeAndSendEmailVerificationToken`.
 - A session is created via `AuthManager.GenerateOauthAuthSession` and the last login is stored with `updateUserLastSeen`.

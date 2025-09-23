@@ -305,9 +305,9 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 // ssoCallbackURL builds the callback URL for OIDC flows, ensuring a single path segment is appended
 func (h *Handler) ssoCallbackURL() string { return h.OauthProvider.RedirectURL }
 
-// ssoOrgForUser checks the user's default org SSO and TFA requirements
+// orgEnforcementsForUser checks the user's default org SSO and TFA requirements
 // Returns the org settings status which includes both SSO and TFA enforcement
-func (h *Handler) ssoOrgForUser(ctx context.Context, email string) *apimodels.SSOStatusReply {
+func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *apimodels.SSOStatusReply {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	user, err := h.getUserByEmail(allowCtx, email)
