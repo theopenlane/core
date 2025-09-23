@@ -238,6 +238,20 @@ func (_c *OrganizationSettingCreate) SetAllowedEmailDomains(v []string) *Organiz
 	return _c
 }
 
+// SetAllowMatchingDomainsAutojoin sets the "allow_matching_domains_autojoin" field.
+func (_c *OrganizationSettingCreate) SetAllowMatchingDomainsAutojoin(v bool) *OrganizationSettingCreate {
+	_c.mutation.SetAllowMatchingDomainsAutojoin(v)
+	return _c
+}
+
+// SetNillableAllowMatchingDomainsAutojoin sets the "allow_matching_domains_autojoin" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableAllowMatchingDomainsAutojoin(v *bool) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetAllowMatchingDomainsAutojoin(*v)
+	}
+	return _c
+}
+
 // SetIdentityProvider sets the "identity_provider" field.
 func (_c *OrganizationSettingCreate) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingCreate {
 	_c.mutation.SetIdentityProvider(v)
@@ -336,6 +350,48 @@ func (_c *OrganizationSettingCreate) SetNillableOidcDiscoveryEndpoint(v *string)
 	return _c
 }
 
+// SetSamlSigninURL sets the "saml_signin_url" field.
+func (_c *OrganizationSettingCreate) SetSamlSigninURL(v string) *OrganizationSettingCreate {
+	_c.mutation.SetSamlSigninURL(v)
+	return _c
+}
+
+// SetNillableSamlSigninURL sets the "saml_signin_url" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableSamlSigninURL(v *string) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetSamlSigninURL(*v)
+	}
+	return _c
+}
+
+// SetSamlIssuer sets the "saml_issuer" field.
+func (_c *OrganizationSettingCreate) SetSamlIssuer(v string) *OrganizationSettingCreate {
+	_c.mutation.SetSamlIssuer(v)
+	return _c
+}
+
+// SetNillableSamlIssuer sets the "saml_issuer" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableSamlIssuer(v *string) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetSamlIssuer(*v)
+	}
+	return _c
+}
+
+// SetSamlCert sets the "saml_cert" field.
+func (_c *OrganizationSettingCreate) SetSamlCert(v string) *OrganizationSettingCreate {
+	_c.mutation.SetSamlCert(v)
+	return _c
+}
+
+// SetNillableSamlCert sets the "saml_cert" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableSamlCert(v *string) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetSamlCert(*v)
+	}
+	return _c
+}
+
 // SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
 func (_c *OrganizationSettingCreate) SetIdentityProviderLoginEnforced(v bool) *OrganizationSettingCreate {
 	_c.mutation.SetIdentityProviderLoginEnforced(v)
@@ -346,6 +402,20 @@ func (_c *OrganizationSettingCreate) SetIdentityProviderLoginEnforced(v bool) *O
 func (_c *OrganizationSettingCreate) SetNillableIdentityProviderLoginEnforced(v *bool) *OrganizationSettingCreate {
 	if v != nil {
 		_c.SetIdentityProviderLoginEnforced(*v)
+	}
+	return _c
+}
+
+// SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
+func (_c *OrganizationSettingCreate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingCreate {
+	_c.mutation.SetMultifactorAuthEnforced(v)
+	return _c
+}
+
+// SetNillableMultifactorAuthEnforced sets the "multifactor_auth_enforced" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableMultifactorAuthEnforced(v *bool) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetMultifactorAuthEnforced(*v)
 	}
 	return _c
 }
@@ -475,6 +545,10 @@ func (_c *OrganizationSettingCreate) defaults() error {
 		v := organizationsetting.DefaultBillingNotificationsEnabled
 		_c.mutation.SetBillingNotificationsEnabled(v)
 	}
+	if _, ok := _c.mutation.AllowMatchingDomainsAutojoin(); !ok {
+		v := organizationsetting.DefaultAllowMatchingDomainsAutojoin
+		_c.mutation.SetAllowMatchingDomainsAutojoin(v)
+	}
 	if _, ok := _c.mutation.IdentityProvider(); !ok {
 		v := organizationsetting.DefaultIdentityProvider
 		_c.mutation.SetIdentityProvider(v)
@@ -486,6 +560,10 @@ func (_c *OrganizationSettingCreate) defaults() error {
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		v := organizationsetting.DefaultIdentityProviderLoginEnforced
 		_c.mutation.SetIdentityProviderLoginEnforced(v)
+	}
+	if _, ok := _c.mutation.MultifactorAuthEnforced(); !ok {
+		v := organizationsetting.DefaultMultifactorAuthEnforced
+		_c.mutation.SetMultifactorAuthEnforced(v)
 	}
 	if _, ok := _c.mutation.ComplianceWebhookToken(); !ok {
 		if organizationsetting.DefaultComplianceWebhookToken == nil {
@@ -652,6 +730,10 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 		_spec.SetField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON, value)
 		_node.AllowedEmailDomains = value
 	}
+	if value, ok := _c.mutation.AllowMatchingDomainsAutojoin(); ok {
+		_spec.SetField(organizationsetting.FieldAllowMatchingDomainsAutojoin, field.TypeBool, value)
+		_node.AllowMatchingDomainsAutojoin = value
+	}
 	if value, ok := _c.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProvider, field.TypeEnum, value)
 		_node.IdentityProvider = value
@@ -680,9 +762,25 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 		_spec.SetField(organizationsetting.FieldOidcDiscoveryEndpoint, field.TypeString, value)
 		_node.OidcDiscoveryEndpoint = value
 	}
+	if value, ok := _c.mutation.SamlSigninURL(); ok {
+		_spec.SetField(organizationsetting.FieldSamlSigninURL, field.TypeString, value)
+		_node.SamlSigninURL = value
+	}
+	if value, ok := _c.mutation.SamlIssuer(); ok {
+		_spec.SetField(organizationsetting.FieldSamlIssuer, field.TypeString, value)
+		_node.SamlIssuer = value
+	}
+	if value, ok := _c.mutation.SamlCert(); ok {
+		_spec.SetField(organizationsetting.FieldSamlCert, field.TypeString, value)
+		_node.SamlCert = value
+	}
 	if value, ok := _c.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 		_node.IdentityProviderLoginEnforced = value
+	}
+	if value, ok := _c.mutation.MultifactorAuthEnforced(); ok {
+		_spec.SetField(organizationsetting.FieldMultifactorAuthEnforced, field.TypeBool, value)
+		_node.MultifactorAuthEnforced = value
 	}
 	if value, ok := _c.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)

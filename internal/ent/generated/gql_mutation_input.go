@@ -8093,13 +8093,18 @@ type CreateOrganizationSettingInput struct {
 	GeoLocation                      *enums.Region
 	BillingNotificationsEnabled      *bool
 	AllowedEmailDomains              []string
+	AllowMatchingDomainsAutojoin     *bool
 	IdentityProvider                 *enums.SSOProvider
 	IdentityProviderClientID         *string
 	IdentityProviderClientSecret     *string
 	IdentityProviderMetadataEndpoint *string
 	IdentityProviderEntityID         *string
 	OidcDiscoveryEndpoint            *string
+	SamlSigninURL                    *string
+	SamlIssuer                       *string
+	SamlCert                         *string
 	IdentityProviderLoginEnforced    *bool
+	MultifactorAuthEnforced          *bool
 	ComplianceWebhookToken           *string
 	OrganizationID                   *string
 	FileIDs                          []string
@@ -8137,6 +8142,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.AllowedEmailDomains; v != nil {
 		m.SetAllowedEmailDomains(v)
 	}
+	if v := i.AllowMatchingDomainsAutojoin; v != nil {
+		m.SetAllowMatchingDomainsAutojoin(*v)
+	}
 	if v := i.IdentityProvider; v != nil {
 		m.SetIdentityProvider(*v)
 	}
@@ -8155,8 +8163,20 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.OidcDiscoveryEndpoint; v != nil {
 		m.SetOidcDiscoveryEndpoint(*v)
 	}
+	if v := i.SamlSigninURL; v != nil {
+		m.SetSamlSigninURL(*v)
+	}
+	if v := i.SamlIssuer; v != nil {
+		m.SetSamlIssuer(*v)
+	}
+	if v := i.SamlCert; v != nil {
+		m.SetSamlCert(*v)
+	}
 	if v := i.IdentityProviderLoginEnforced; v != nil {
 		m.SetIdentityProviderLoginEnforced(*v)
+	}
+	if v := i.MultifactorAuthEnforced; v != nil {
+		m.SetMultifactorAuthEnforced(*v)
 	}
 	if v := i.ComplianceWebhookToken; v != nil {
 		m.SetComplianceWebhookToken(*v)
@@ -8199,6 +8219,8 @@ type UpdateOrganizationSettingInput struct {
 	ClearAllowedEmailDomains              bool
 	AllowedEmailDomains                   []string
 	AppendAllowedEmailDomains             []string
+	ClearAllowMatchingDomainsAutojoin     bool
+	AllowMatchingDomainsAutojoin          *bool
 	ClearIdentityProvider                 bool
 	IdentityProvider                      *enums.SSOProvider
 	ClearIdentityProviderClientID         bool
@@ -8211,7 +8233,15 @@ type UpdateOrganizationSettingInput struct {
 	IdentityProviderEntityID              *string
 	ClearOidcDiscoveryEndpoint            bool
 	OidcDiscoveryEndpoint                 *string
+	ClearSamlSigninURL                    bool
+	SamlSigninURL                         *string
+	ClearSamlIssuer                       bool
+	SamlIssuer                            *string
+	ClearSamlCert                         bool
+	SamlCert                              *string
 	IdentityProviderLoginEnforced         *bool
+	ClearMultifactorAuthEnforced          bool
+	MultifactorAuthEnforced               *bool
 	ClearComplianceWebhookToken           bool
 	ComplianceWebhookToken                *string
 	ClearOrganization                     bool
@@ -8289,6 +8319,12 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if i.AppendAllowedEmailDomains != nil {
 		m.AppendAllowedEmailDomains(i.AllowedEmailDomains)
 	}
+	if i.ClearAllowMatchingDomainsAutojoin {
+		m.ClearAllowMatchingDomainsAutojoin()
+	}
+	if v := i.AllowMatchingDomainsAutojoin; v != nil {
+		m.SetAllowMatchingDomainsAutojoin(*v)
+	}
 	if i.ClearIdentityProvider {
 		m.ClearIdentityProvider()
 	}
@@ -8325,8 +8361,32 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.OidcDiscoveryEndpoint; v != nil {
 		m.SetOidcDiscoveryEndpoint(*v)
 	}
+	if i.ClearSamlSigninURL {
+		m.ClearSamlSigninURL()
+	}
+	if v := i.SamlSigninURL; v != nil {
+		m.SetSamlSigninURL(*v)
+	}
+	if i.ClearSamlIssuer {
+		m.ClearSamlIssuer()
+	}
+	if v := i.SamlIssuer; v != nil {
+		m.SetSamlIssuer(*v)
+	}
+	if i.ClearSamlCert {
+		m.ClearSamlCert()
+	}
+	if v := i.SamlCert; v != nil {
+		m.SetSamlCert(*v)
+	}
 	if v := i.IdentityProviderLoginEnforced; v != nil {
 		m.SetIdentityProviderLoginEnforced(*v)
+	}
+	if i.ClearMultifactorAuthEnforced {
+		m.ClearMultifactorAuthEnforced()
+	}
+	if v := i.MultifactorAuthEnforced; v != nil {
+		m.SetMultifactorAuthEnforced(*v)
 	}
 	if i.ClearComplianceWebhookToken {
 		m.ClearComplianceWebhookToken()

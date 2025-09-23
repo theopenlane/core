@@ -3132,6 +3132,7 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSetting struct {
+		AllowMatchingDomainsAutojoin     func(childComplexity int) int
 		AllowedEmailDomains              func(childComplexity int) int
 		BillingAddress                   func(childComplexity int) int
 		BillingContact                   func(childComplexity int) int
@@ -3152,10 +3153,14 @@ type ComplexityRoot struct {
 		IdentityProviderEntityID         func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
+		MultifactorAuthEnforced          func(childComplexity int) int
 		OidcDiscoveryEndpoint            func(childComplexity int) int
 		Organization                     func(childComplexity int) int
 		OrganizationID                   func(childComplexity int) int
 		PaymentMethodAdded               func(childComplexity int) int
+		SamlCert                         func(childComplexity int) int
+		SamlIssuer                       func(childComplexity int) int
+		SamlSigninURL                    func(childComplexity int) int
 		Tags                             func(childComplexity int) int
 		TaxIdentifier                    func(childComplexity int) int
 		UpdatedAt                        func(childComplexity int) int
@@ -3186,6 +3191,7 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSettingHistory struct {
+		AllowMatchingDomainsAutojoin     func(childComplexity int) int
 		AllowedEmailDomains              func(childComplexity int) int
 		BillingAddress                   func(childComplexity int) int
 		BillingContact                   func(childComplexity int) int
@@ -3206,11 +3212,15 @@ type ComplexityRoot struct {
 		IdentityProviderEntityID         func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
+		MultifactorAuthEnforced          func(childComplexity int) int
 		OidcDiscoveryEndpoint            func(childComplexity int) int
 		Operation                        func(childComplexity int) int
 		OrganizationID                   func(childComplexity int) int
 		PaymentMethodAdded               func(childComplexity int) int
 		Ref                              func(childComplexity int) int
+		SamlCert                         func(childComplexity int) int
+		SamlIssuer                       func(childComplexity int) int
+		SamlSigninURL                    func(childComplexity int) int
 		Tags                             func(childComplexity int) int
 		TaxIdentifier                    func(childComplexity int) int
 		UpdatedAt                        func(childComplexity int) int
@@ -22390,6 +22400,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationHistoryEdge.Node(childComplexity), true
 
+	case "OrganizationSetting.allowMatchingDomainsAutojoin":
+		if e.complexity.OrganizationSetting.AllowMatchingDomainsAutojoin == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.AllowMatchingDomainsAutojoin(childComplexity), true
+
 	case "OrganizationSetting.allowedEmailDomains":
 		if e.complexity.OrganizationSetting.AllowedEmailDomains == nil {
 			break
@@ -22535,6 +22552,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSetting.IdentityProviderMetadataEndpoint(childComplexity), true
 
+	case "OrganizationSetting.multifactorAuthEnforced":
+		if e.complexity.OrganizationSetting.MultifactorAuthEnforced == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.MultifactorAuthEnforced(childComplexity), true
+
 	case "OrganizationSetting.oidcDiscoveryEndpoint":
 		if e.complexity.OrganizationSetting.OidcDiscoveryEndpoint == nil {
 			break
@@ -22562,6 +22586,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSetting.PaymentMethodAdded(childComplexity), true
+
+	case "OrganizationSetting.samlCert":
+		if e.complexity.OrganizationSetting.SamlCert == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.SamlCert(childComplexity), true
+
+	case "OrganizationSetting.samlIssuer":
+		if e.complexity.OrganizationSetting.SamlIssuer == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.SamlIssuer(childComplexity), true
+
+	case "OrganizationSetting.samlSigninURL":
+		if e.complexity.OrganizationSetting.SamlSigninURL == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.SamlSigninURL(childComplexity), true
 
 	case "OrganizationSetting.tags":
 		if e.complexity.OrganizationSetting.Tags == nil {
@@ -22646,6 +22691,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingEdge.Node(childComplexity), true
+
+	case "OrganizationSettingHistory.allowMatchingDomainsAutojoin":
+		if e.complexity.OrganizationSettingHistory.AllowMatchingDomainsAutojoin == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.AllowMatchingDomainsAutojoin(childComplexity), true
 
 	case "OrganizationSettingHistory.allowedEmailDomains":
 		if e.complexity.OrganizationSettingHistory.AllowedEmailDomains == nil {
@@ -22787,6 +22839,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSettingHistory.IdentityProviderMetadataEndpoint(childComplexity), true
 
+	case "OrganizationSettingHistory.multifactorAuthEnforced":
+		if e.complexity.OrganizationSettingHistory.MultifactorAuthEnforced == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.MultifactorAuthEnforced(childComplexity), true
+
 	case "OrganizationSettingHistory.oidcDiscoveryEndpoint":
 		if e.complexity.OrganizationSettingHistory.OidcDiscoveryEndpoint == nil {
 			break
@@ -22821,6 +22880,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingHistory.Ref(childComplexity), true
+
+	case "OrganizationSettingHistory.samlCert":
+		if e.complexity.OrganizationSettingHistory.SamlCert == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.SamlCert(childComplexity), true
+
+	case "OrganizationSettingHistory.samlIssuer":
+		if e.complexity.OrganizationSettingHistory.SamlIssuer == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.SamlIssuer(childComplexity), true
+
+	case "OrganizationSettingHistory.samlSigninURL":
+		if e.complexity.OrganizationSettingHistory.SamlSigninURL == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.SamlSigninURL(childComplexity), true
 
 	case "OrganizationSettingHistory.tags":
 		if e.complexity.OrganizationSettingHistory.Tags == nil {
@@ -46837,6 +46917,10 @@ input CreateOrganizationSettingInput {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -46861,9 +46945,25 @@ input CreateOrganizationSettingInput {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -69291,6 +69391,10 @@ type OrganizationSetting implements Node {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -69319,9 +69423,25 @@ type OrganizationSetting implements Node {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean!
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -69447,6 +69567,10 @@ type OrganizationSettingHistory implements Node {
   """
   allowedEmailDomains: [String!]
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingHistorySSOProvider
@@ -69475,9 +69599,25 @@ type OrganizationSettingHistory implements Node {
   """
   oidcDiscoveryEndpoint: String
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean!
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -69789,6 +69929,13 @@ input OrganizationSettingHistoryWhereInput {
   billingNotificationsEnabled: Boolean
   billingNotificationsEnabledNEQ: Boolean
   """
+  allow_matching_domains_autojoin field predicates
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  allowMatchingDomainsAutojoinNEQ: Boolean
+  allowMatchingDomainsAutojoinIsNil: Boolean
+  allowMatchingDomainsAutojoinNotNil: Boolean
+  """
   identity_provider field predicates
   """
   identityProvider: OrganizationSettingHistorySSOProvider
@@ -69893,10 +70040,71 @@ input OrganizationSettingHistoryWhereInput {
   oidcDiscoveryEndpointEqualFold: String
   oidcDiscoveryEndpointContainsFold: String
   """
+  saml_signin_url field predicates
+  """
+  samlSigninURL: String
+  samlSigninURLNEQ: String
+  samlSigninURLIn: [String!]
+  samlSigninURLNotIn: [String!]
+  samlSigninURLGT: String
+  samlSigninURLGTE: String
+  samlSigninURLLT: String
+  samlSigninURLLTE: String
+  samlSigninURLContains: String
+  samlSigninURLHasPrefix: String
+  samlSigninURLHasSuffix: String
+  samlSigninURLIsNil: Boolean
+  samlSigninURLNotNil: Boolean
+  samlSigninURLEqualFold: String
+  samlSigninURLContainsFold: String
+  """
+  saml_issuer field predicates
+  """
+  samlIssuer: String
+  samlIssuerNEQ: String
+  samlIssuerIn: [String!]
+  samlIssuerNotIn: [String!]
+  samlIssuerGT: String
+  samlIssuerGTE: String
+  samlIssuerLT: String
+  samlIssuerLTE: String
+  samlIssuerContains: String
+  samlIssuerHasPrefix: String
+  samlIssuerHasSuffix: String
+  samlIssuerIsNil: Boolean
+  samlIssuerNotNil: Boolean
+  samlIssuerEqualFold: String
+  samlIssuerContainsFold: String
+  """
+  saml_cert field predicates
+  """
+  samlCert: String
+  samlCertNEQ: String
+  samlCertIn: [String!]
+  samlCertNotIn: [String!]
+  samlCertGT: String
+  samlCertGTE: String
+  samlCertLT: String
+  samlCertLTE: String
+  samlCertContains: String
+  samlCertHasPrefix: String
+  samlCertHasSuffix: String
+  samlCertIsNil: Boolean
+  samlCertNotNil: Boolean
+  samlCertEqualFold: String
+  samlCertContainsFold: String
+  """
   identity_provider_login_enforced field predicates
   """
   identityProviderLoginEnforced: Boolean
   identityProviderLoginEnforcedNEQ: Boolean
+  """
+  multifactor_auth_enforced field predicates
+  """
+  multifactorAuthEnforced: Boolean
+  multifactorAuthEnforcedNEQ: Boolean
+  multifactorAuthEnforcedIsNil: Boolean
+  multifactorAuthEnforcedNotNil: Boolean
   """
   compliance_webhook_token field predicates
   """
@@ -70143,6 +70351,13 @@ input OrganizationSettingWhereInput {
   billingNotificationsEnabled: Boolean
   billingNotificationsEnabledNEQ: Boolean
   """
+  allow_matching_domains_autojoin field predicates
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  allowMatchingDomainsAutojoinNEQ: Boolean
+  allowMatchingDomainsAutojoinIsNil: Boolean
+  allowMatchingDomainsAutojoinNotNil: Boolean
+  """
   identity_provider field predicates
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -70247,10 +70462,71 @@ input OrganizationSettingWhereInput {
   oidcDiscoveryEndpointEqualFold: String
   oidcDiscoveryEndpointContainsFold: String
   """
+  saml_signin_url field predicates
+  """
+  samlSigninURL: String
+  samlSigninURLNEQ: String
+  samlSigninURLIn: [String!]
+  samlSigninURLNotIn: [String!]
+  samlSigninURLGT: String
+  samlSigninURLGTE: String
+  samlSigninURLLT: String
+  samlSigninURLLTE: String
+  samlSigninURLContains: String
+  samlSigninURLHasPrefix: String
+  samlSigninURLHasSuffix: String
+  samlSigninURLIsNil: Boolean
+  samlSigninURLNotNil: Boolean
+  samlSigninURLEqualFold: String
+  samlSigninURLContainsFold: String
+  """
+  saml_issuer field predicates
+  """
+  samlIssuer: String
+  samlIssuerNEQ: String
+  samlIssuerIn: [String!]
+  samlIssuerNotIn: [String!]
+  samlIssuerGT: String
+  samlIssuerGTE: String
+  samlIssuerLT: String
+  samlIssuerLTE: String
+  samlIssuerContains: String
+  samlIssuerHasPrefix: String
+  samlIssuerHasSuffix: String
+  samlIssuerIsNil: Boolean
+  samlIssuerNotNil: Boolean
+  samlIssuerEqualFold: String
+  samlIssuerContainsFold: String
+  """
+  saml_cert field predicates
+  """
+  samlCert: String
+  samlCertNEQ: String
+  samlCertIn: [String!]
+  samlCertNotIn: [String!]
+  samlCertGT: String
+  samlCertGTE: String
+  samlCertLT: String
+  samlCertLTE: String
+  samlCertContains: String
+  samlCertHasPrefix: String
+  samlCertHasSuffix: String
+  samlCertIsNil: Boolean
+  samlCertNotNil: Boolean
+  samlCertEqualFold: String
+  samlCertContainsFold: String
+  """
   identity_provider_login_enforced field predicates
   """
   identityProviderLoginEnforced: Boolean
   identityProviderLoginEnforcedNEQ: Boolean
+  """
+  multifactor_auth_enforced field predicates
+  """
+  multifactorAuthEnforced: Boolean
+  multifactorAuthEnforcedNEQ: Boolean
+  multifactorAuthEnforcedIsNil: Boolean
+  multifactorAuthEnforcedNotNil: Boolean
   """
   compliance_webhook_token field predicates
   """
@@ -92011,6 +92287,11 @@ input UpdateOrganizationSettingInput {
   appendAllowedEmailDomains: [String!]
   clearAllowedEmailDomains: Boolean
   """
+  allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
+  """
+  allowMatchingDomainsAutojoin: Boolean
+  clearAllowMatchingDomainsAutojoin: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -92041,9 +92322,29 @@ input UpdateOrganizationSettingInput {
   oidcDiscoveryEndpoint: String
   clearOidcDiscoveryEndpoint: Boolean
   """
+  the sign in URL to be used for SAML-based authentication
+  """
+  samlSigninURL: String
+  clearSamlSigninURL: Boolean
+  """
+  the SAML issuer
+  """
+  samlIssuer: String
+  clearSamlIssuer: Boolean
+  """
+  the x509 certificate used to validate SAML responses
+  """
+  samlCert: String
+  clearSamlCert: Boolean
+  """
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean
+  """
+  enforce 2fa / multifactor authentication for organization members
+  """
+  multifactorAuthEnforced: Boolean
+  clearMultifactorAuthEnforced: Boolean
   """
   unique token used to receive compliance webhook events
   """

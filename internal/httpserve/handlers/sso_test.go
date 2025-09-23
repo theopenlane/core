@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func (suite *HandlerTestSuite) TestWebfingerHandler() {
@@ -45,6 +46,7 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 		IdentityProviderLoginEnforced: lo.ToPtr(true),
 		IdentityProvider:              lo.ToPtr(enums.SSOProviderOkta),
 		OidcDiscoveryEndpoint:         lo.ToPtr("http://example.com"),
+		MultifactorAuthEnforced:       lo.ToPtr(true),
 	}).SaveX(ctx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
@@ -64,6 +66,7 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	assert.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	log.Error().Err(errors.New("output")).Interface("out", out).Msg("WebfingerHandler output")
 	assert.True(t, out.Enforced)
+	assert.True(t, out.OrgTFAEnforced)
 	assert.Equal(t, org.ID, out.OrganizationID)
 
 	emailReq := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+testUser1.UserInfo.Email, nil)
@@ -73,7 +76,43 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	var emailOut models.SSOStatusReply
 	assert.NoError(t, json.NewDecoder(emailRec.Body).Decode(&emailOut))
 	assert.True(t, emailOut.Enforced)
+	assert.True(t, emailOut.OrgTFAEnforced)
 	assert.Equal(t, org.ID, emailOut.OrganizationID)
+}
+
+func (suite *HandlerTestSuite) TestWebfingerHandlerTFAOnly() {
+	t := suite.T()
+
+	// Create operation for WebfingerHandler
+	webfingerOp := suite.createImpersonationOperation("WebfingerHandler", "Webfinger handler")
+	suite.registerTestHandler("GET", ".well-known/webfinger", webfingerOp, suite.h.WebfingerHandler)
+
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
+
+	// Create organization setting with only TFA enforced, not SSO
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		MultifactorAuthEnforced: lo.ToPtr(true),
+	}).SaveX(ctx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ctx)
+
+	suite.db.UserSetting.Update().Where(usersetting.UserID(testUser1.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
+
+	req := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=org:"+org.ID, nil)
+	rec := httptest.NewRecorder()
+
+	suite.e.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+	var out models.SSOStatusReply
+	assert.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.False(t, out.Enforced)      // SSO not enforced
+	assert.True(t, out.OrgTFAEnforced) // TFA enforced
+	assert.Equal(t, org.ID, out.OrganizationID)
 }
 
 func (suite *HandlerTestSuite) TestWebfingerHandlerNotFound() {

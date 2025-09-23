@@ -7585,6 +7585,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetAllowedEmailDomains(allowedEmailDomains)
 	}
 
+	if allowMatchingDomainsAutojoin, exists := m.AllowMatchingDomainsAutojoin(); exists {
+		create = create.SetAllowMatchingDomainsAutojoin(allowMatchingDomainsAutojoin)
+	}
+
 	if identityProvider, exists := m.IdentityProvider(); exists {
 		create = create.SetIdentityProvider(identityProvider)
 	}
@@ -7613,8 +7617,24 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetOidcDiscoveryEndpoint(oidcDiscoveryEndpoint)
 	}
 
+	if samlSigninURL, exists := m.SamlSigninURL(); exists {
+		create = create.SetSamlSigninURL(samlSigninURL)
+	}
+
+	if samlIssuer, exists := m.SamlIssuer(); exists {
+		create = create.SetSamlIssuer(samlIssuer)
+	}
+
+	if samlCert, exists := m.SamlCert(); exists {
+		create = create.SetSamlCert(samlCert)
+	}
+
 	if identityProviderLoginEnforced, exists := m.IdentityProviderLoginEnforced(); exists {
 		create = create.SetIdentityProviderLoginEnforced(identityProviderLoginEnforced)
+	}
+
+	if multifactorAuthEnforced, exists := m.MultifactorAuthEnforced(); exists {
+		create = create.SetMultifactorAuthEnforced(multifactorAuthEnforced)
 	}
 
 	if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
@@ -7758,6 +7778,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetAllowedEmailDomains(organizationsetting.AllowedEmailDomains)
 		}
 
+		if allowMatchingDomainsAutojoin, exists := m.AllowMatchingDomainsAutojoin(); exists {
+			create = create.SetAllowMatchingDomainsAutojoin(allowMatchingDomainsAutojoin)
+		} else {
+			create = create.SetAllowMatchingDomainsAutojoin(organizationsetting.AllowMatchingDomainsAutojoin)
+		}
+
 		if identityProvider, exists := m.IdentityProvider(); exists {
 			create = create.SetIdentityProvider(identityProvider)
 		} else {
@@ -7800,10 +7826,34 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetOidcDiscoveryEndpoint(organizationsetting.OidcDiscoveryEndpoint)
 		}
 
+		if samlSigninURL, exists := m.SamlSigninURL(); exists {
+			create = create.SetSamlSigninURL(samlSigninURL)
+		} else {
+			create = create.SetSamlSigninURL(organizationsetting.SamlSigninURL)
+		}
+
+		if samlIssuer, exists := m.SamlIssuer(); exists {
+			create = create.SetSamlIssuer(samlIssuer)
+		} else {
+			create = create.SetSamlIssuer(organizationsetting.SamlIssuer)
+		}
+
+		if samlCert, exists := m.SamlCert(); exists {
+			create = create.SetSamlCert(samlCert)
+		} else {
+			create = create.SetSamlCert(organizationsetting.SamlCert)
+		}
+
 		if identityProviderLoginEnforced, exists := m.IdentityProviderLoginEnforced(); exists {
 			create = create.SetIdentityProviderLoginEnforced(identityProviderLoginEnforced)
 		} else {
 			create = create.SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced)
+		}
+
+		if multifactorAuthEnforced, exists := m.MultifactorAuthEnforced(); exists {
+			create = create.SetMultifactorAuthEnforced(multifactorAuthEnforced)
+		} else {
+			create = create.SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced)
 		}
 
 		if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
@@ -7870,6 +7920,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetOrganizationID(organizationsetting.OrganizationID).
 			SetBillingNotificationsEnabled(organizationsetting.BillingNotificationsEnabled).
 			SetAllowedEmailDomains(organizationsetting.AllowedEmailDomains).
+			SetAllowMatchingDomainsAutojoin(organizationsetting.AllowMatchingDomainsAutojoin).
 			SetIdentityProvider(organizationsetting.IdentityProvider).
 			SetNillableIdentityProviderClientID(organizationsetting.IdentityProviderClientID).
 			SetNillableIdentityProviderClientSecret(organizationsetting.IdentityProviderClientSecret).
@@ -7877,7 +7928,11 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetIdentityProviderAuthTested(organizationsetting.IdentityProviderAuthTested).
 			SetIdentityProviderEntityID(organizationsetting.IdentityProviderEntityID).
 			SetOidcDiscoveryEndpoint(organizationsetting.OidcDiscoveryEndpoint).
+			SetSamlSigninURL(organizationsetting.SamlSigninURL).
+			SetSamlIssuer(organizationsetting.SamlIssuer).
+			SetSamlCert(organizationsetting.SamlCert).
 			SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced).
+			SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced).
 			SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
 			SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded).
 			Save(ctx)

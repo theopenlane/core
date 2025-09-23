@@ -52,6 +52,8 @@ const (
 	FieldBillingNotificationsEnabled = "billing_notifications_enabled"
 	// FieldAllowedEmailDomains holds the string denoting the allowed_email_domains field in the database.
 	FieldAllowedEmailDomains = "allowed_email_domains"
+	// FieldAllowMatchingDomainsAutojoin holds the string denoting the allow_matching_domains_autojoin field in the database.
+	FieldAllowMatchingDomainsAutojoin = "allow_matching_domains_autojoin"
 	// FieldIdentityProvider holds the string denoting the identity_provider field in the database.
 	FieldIdentityProvider = "identity_provider"
 	// FieldIdentityProviderClientID holds the string denoting the identity_provider_client_id field in the database.
@@ -66,8 +68,16 @@ const (
 	FieldIdentityProviderEntityID = "identity_provider_entity_id"
 	// FieldOidcDiscoveryEndpoint holds the string denoting the oidc_discovery_endpoint field in the database.
 	FieldOidcDiscoveryEndpoint = "oidc_discovery_endpoint"
+	// FieldSamlSigninURL holds the string denoting the saml_signin_url field in the database.
+	FieldSamlSigninURL = "saml_signin_url"
+	// FieldSamlIssuer holds the string denoting the saml_issuer field in the database.
+	FieldSamlIssuer = "saml_issuer"
+	// FieldSamlCert holds the string denoting the saml_cert field in the database.
+	FieldSamlCert = "saml_cert"
 	// FieldIdentityProviderLoginEnforced holds the string denoting the identity_provider_login_enforced field in the database.
 	FieldIdentityProviderLoginEnforced = "identity_provider_login_enforced"
+	// FieldMultifactorAuthEnforced holds the string denoting the multifactor_auth_enforced field in the database.
+	FieldMultifactorAuthEnforced = "multifactor_auth_enforced"
 	// FieldComplianceWebhookToken holds the string denoting the compliance_webhook_token field in the database.
 	FieldComplianceWebhookToken = "compliance_webhook_token"
 	// FieldPaymentMethodAdded holds the string denoting the payment_method_added field in the database.
@@ -112,6 +122,7 @@ var Columns = []string{
 	FieldOrganizationID,
 	FieldBillingNotificationsEnabled,
 	FieldAllowedEmailDomains,
+	FieldAllowMatchingDomainsAutojoin,
 	FieldIdentityProvider,
 	FieldIdentityProviderClientID,
 	FieldIdentityProviderClientSecret,
@@ -119,7 +130,11 @@ var Columns = []string{
 	FieldIdentityProviderAuthTested,
 	FieldIdentityProviderEntityID,
 	FieldOidcDiscoveryEndpoint,
+	FieldSamlSigninURL,
+	FieldSamlIssuer,
+	FieldSamlCert,
 	FieldIdentityProviderLoginEnforced,
+	FieldMultifactorAuthEnforced,
 	FieldComplianceWebhookToken,
 	FieldPaymentMethodAdded,
 }
@@ -167,10 +182,14 @@ var (
 	DefaultBillingNotificationsEnabled bool
 	// AllowedEmailDomainsValidator is a validator for the "allowed_email_domains" field. It is called by the builders before save.
 	AllowedEmailDomainsValidator func([]string) error
+	// DefaultAllowMatchingDomainsAutojoin holds the default value on creation for the "allow_matching_domains_autojoin" field.
+	DefaultAllowMatchingDomainsAutojoin bool
 	// DefaultIdentityProviderAuthTested holds the default value on creation for the "identity_provider_auth_tested" field.
 	DefaultIdentityProviderAuthTested bool
 	// DefaultIdentityProviderLoginEnforced holds the default value on creation for the "identity_provider_login_enforced" field.
 	DefaultIdentityProviderLoginEnforced bool
+	// DefaultMultifactorAuthEnforced holds the default value on creation for the "multifactor_auth_enforced" field.
+	DefaultMultifactorAuthEnforced bool
 	// DefaultComplianceWebhookToken holds the default value on creation for the "compliance_webhook_token" field.
 	DefaultComplianceWebhookToken func() string
 	// DefaultPaymentMethodAdded holds the default value on creation for the "payment_method_added" field.
@@ -276,6 +295,11 @@ func ByBillingNotificationsEnabled(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBillingNotificationsEnabled, opts...).ToFunc()
 }
 
+// ByAllowMatchingDomainsAutojoin orders the results by the allow_matching_domains_autojoin field.
+func ByAllowMatchingDomainsAutojoin(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAllowMatchingDomainsAutojoin, opts...).ToFunc()
+}
+
 // ByIdentityProvider orders the results by the identity_provider field.
 func ByIdentityProvider(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIdentityProvider, opts...).ToFunc()
@@ -311,9 +335,29 @@ func ByOidcDiscoveryEndpoint(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOidcDiscoveryEndpoint, opts...).ToFunc()
 }
 
+// BySamlSigninURL orders the results by the saml_signin_url field.
+func BySamlSigninURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSamlSigninURL, opts...).ToFunc()
+}
+
+// BySamlIssuer orders the results by the saml_issuer field.
+func BySamlIssuer(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSamlIssuer, opts...).ToFunc()
+}
+
+// BySamlCert orders the results by the saml_cert field.
+func BySamlCert(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSamlCert, opts...).ToFunc()
+}
+
 // ByIdentityProviderLoginEnforced orders the results by the identity_provider_login_enforced field.
 func ByIdentityProviderLoginEnforced(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIdentityProviderLoginEnforced, opts...).ToFunc()
+}
+
+// ByMultifactorAuthEnforced orders the results by the multifactor_auth_enforced field.
+func ByMultifactorAuthEnforced(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMultifactorAuthEnforced, opts...).ToFunc()
 }
 
 // ByComplianceWebhookToken orders the results by the compliance_webhook_token field.

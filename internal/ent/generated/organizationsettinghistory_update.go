@@ -314,6 +314,26 @@ func (_u *OrganizationSettingHistoryUpdate) ClearAllowedEmailDomains() *Organiza
 	return _u
 }
 
+// SetAllowMatchingDomainsAutojoin sets the "allow_matching_domains_autojoin" field.
+func (_u *OrganizationSettingHistoryUpdate) SetAllowMatchingDomainsAutojoin(v bool) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetAllowMatchingDomainsAutojoin(v)
+	return _u
+}
+
+// SetNillableAllowMatchingDomainsAutojoin sets the "allow_matching_domains_autojoin" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableAllowMatchingDomainsAutojoin(v *bool) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetAllowMatchingDomainsAutojoin(*v)
+	}
+	return _u
+}
+
+// ClearAllowMatchingDomainsAutojoin clears the value of the "allow_matching_domains_autojoin" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearAllowMatchingDomainsAutojoin() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearAllowMatchingDomainsAutojoin()
+	return _u
+}
+
 // SetIdentityProvider sets the "identity_provider" field.
 func (_u *OrganizationSettingHistoryUpdate) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingHistoryUpdate {
 	_u.mutation.SetIdentityProvider(v)
@@ -448,6 +468,66 @@ func (_u *OrganizationSettingHistoryUpdate) ClearOidcDiscoveryEndpoint() *Organi
 	return _u
 }
 
+// SetSamlSigninURL sets the "saml_signin_url" field.
+func (_u *OrganizationSettingHistoryUpdate) SetSamlSigninURL(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetSamlSigninURL(v)
+	return _u
+}
+
+// SetNillableSamlSigninURL sets the "saml_signin_url" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableSamlSigninURL(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetSamlSigninURL(*v)
+	}
+	return _u
+}
+
+// ClearSamlSigninURL clears the value of the "saml_signin_url" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearSamlSigninURL() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearSamlSigninURL()
+	return _u
+}
+
+// SetSamlIssuer sets the "saml_issuer" field.
+func (_u *OrganizationSettingHistoryUpdate) SetSamlIssuer(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetSamlIssuer(v)
+	return _u
+}
+
+// SetNillableSamlIssuer sets the "saml_issuer" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableSamlIssuer(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetSamlIssuer(*v)
+	}
+	return _u
+}
+
+// ClearSamlIssuer clears the value of the "saml_issuer" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearSamlIssuer() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearSamlIssuer()
+	return _u
+}
+
+// SetSamlCert sets the "saml_cert" field.
+func (_u *OrganizationSettingHistoryUpdate) SetSamlCert(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetSamlCert(v)
+	return _u
+}
+
+// SetNillableSamlCert sets the "saml_cert" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableSamlCert(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetSamlCert(*v)
+	}
+	return _u
+}
+
+// ClearSamlCert clears the value of the "saml_cert" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearSamlCert() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearSamlCert()
+	return _u
+}
+
 // SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
 func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderLoginEnforced(v bool) *OrganizationSettingHistoryUpdate {
 	_u.mutation.SetIdentityProviderLoginEnforced(v)
@@ -459,6 +539,26 @@ func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderLoginEnfo
 	if v != nil {
 		_u.SetIdentityProviderLoginEnforced(*v)
 	}
+	return _u
+}
+
+// SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
+func (_u *OrganizationSettingHistoryUpdate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetMultifactorAuthEnforced(v)
+	return _u
+}
+
+// SetNillableMultifactorAuthEnforced sets the "multifactor_auth_enforced" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableMultifactorAuthEnforced(v *bool) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetMultifactorAuthEnforced(*v)
+	}
+	return _u
+}
+
+// ClearMultifactorAuthEnforced clears the value of the "multifactor_auth_enforced" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearMultifactorAuthEnforced() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearMultifactorAuthEnforced()
 	return _u
 }
 
@@ -687,6 +787,12 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.AllowMatchingDomainsAutojoin(); ok {
+		_spec.SetField(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, field.TypeBool, value)
+	}
+	if _u.mutation.AllowMatchingDomainsAutojoinCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, field.TypeBool)
+	}
 	if value, ok := _u.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum, value)
 	}
@@ -726,8 +832,32 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.OidcDiscoveryEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString)
 	}
+	if value, ok := _u.mutation.SamlSigninURL(); ok {
+		_spec.SetField(organizationsettinghistory.FieldSamlSigninURL, field.TypeString, value)
+	}
+	if _u.mutation.SamlSigninURLCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldSamlSigninURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.SamlIssuer(); ok {
+		_spec.SetField(organizationsettinghistory.FieldSamlIssuer, field.TypeString, value)
+	}
+	if _u.mutation.SamlIssuerCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldSamlIssuer, field.TypeString)
+	}
+	if value, ok := _u.mutation.SamlCert(); ok {
+		_spec.SetField(organizationsettinghistory.FieldSamlCert, field.TypeString, value)
+	}
+	if _u.mutation.SamlCertCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldSamlCert, field.TypeString)
+	}
 	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
+		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.MultifactorAuthEnforcedCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
@@ -1042,6 +1172,26 @@ func (_u *OrganizationSettingHistoryUpdateOne) ClearAllowedEmailDomains() *Organ
 	return _u
 }
 
+// SetAllowMatchingDomainsAutojoin sets the "allow_matching_domains_autojoin" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetAllowMatchingDomainsAutojoin(v bool) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetAllowMatchingDomainsAutojoin(v)
+	return _u
+}
+
+// SetNillableAllowMatchingDomainsAutojoin sets the "allow_matching_domains_autojoin" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableAllowMatchingDomainsAutojoin(v *bool) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetAllowMatchingDomainsAutojoin(*v)
+	}
+	return _u
+}
+
+// ClearAllowMatchingDomainsAutojoin clears the value of the "allow_matching_domains_autojoin" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearAllowMatchingDomainsAutojoin() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearAllowMatchingDomainsAutojoin()
+	return _u
+}
+
 // SetIdentityProvider sets the "identity_provider" field.
 func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingHistoryUpdateOne {
 	_u.mutation.SetIdentityProvider(v)
@@ -1176,6 +1326,66 @@ func (_u *OrganizationSettingHistoryUpdateOne) ClearOidcDiscoveryEndpoint() *Org
 	return _u
 }
 
+// SetSamlSigninURL sets the "saml_signin_url" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetSamlSigninURL(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetSamlSigninURL(v)
+	return _u
+}
+
+// SetNillableSamlSigninURL sets the "saml_signin_url" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableSamlSigninURL(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetSamlSigninURL(*v)
+	}
+	return _u
+}
+
+// ClearSamlSigninURL clears the value of the "saml_signin_url" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearSamlSigninURL() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearSamlSigninURL()
+	return _u
+}
+
+// SetSamlIssuer sets the "saml_issuer" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetSamlIssuer(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetSamlIssuer(v)
+	return _u
+}
+
+// SetNillableSamlIssuer sets the "saml_issuer" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableSamlIssuer(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetSamlIssuer(*v)
+	}
+	return _u
+}
+
+// ClearSamlIssuer clears the value of the "saml_issuer" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearSamlIssuer() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearSamlIssuer()
+	return _u
+}
+
+// SetSamlCert sets the "saml_cert" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetSamlCert(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetSamlCert(v)
+	return _u
+}
+
+// SetNillableSamlCert sets the "saml_cert" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableSamlCert(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetSamlCert(*v)
+	}
+	return _u
+}
+
+// ClearSamlCert clears the value of the "saml_cert" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearSamlCert() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearSamlCert()
+	return _u
+}
+
 // SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
 func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderLoginEnforced(v bool) *OrganizationSettingHistoryUpdateOne {
 	_u.mutation.SetIdentityProviderLoginEnforced(v)
@@ -1187,6 +1397,26 @@ func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderLoginE
 	if v != nil {
 		_u.SetIdentityProviderLoginEnforced(*v)
 	}
+	return _u
+}
+
+// SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetMultifactorAuthEnforced(v)
+	return _u
+}
+
+// SetNillableMultifactorAuthEnforced sets the "multifactor_auth_enforced" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableMultifactorAuthEnforced(v *bool) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetMultifactorAuthEnforced(*v)
+	}
+	return _u
+}
+
+// ClearMultifactorAuthEnforced clears the value of the "multifactor_auth_enforced" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearMultifactorAuthEnforced() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearMultifactorAuthEnforced()
 	return _u
 }
 
@@ -1445,6 +1675,12 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if _u.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.AllowMatchingDomainsAutojoin(); ok {
+		_spec.SetField(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, field.TypeBool, value)
+	}
+	if _u.mutation.AllowMatchingDomainsAutojoinCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, field.TypeBool)
+	}
 	if value, ok := _u.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum, value)
 	}
@@ -1484,8 +1720,32 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if _u.mutation.OidcDiscoveryEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString)
 	}
+	if value, ok := _u.mutation.SamlSigninURL(); ok {
+		_spec.SetField(organizationsettinghistory.FieldSamlSigninURL, field.TypeString, value)
+	}
+	if _u.mutation.SamlSigninURLCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldSamlSigninURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.SamlIssuer(); ok {
+		_spec.SetField(organizationsettinghistory.FieldSamlIssuer, field.TypeString, value)
+	}
+	if _u.mutation.SamlIssuerCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldSamlIssuer, field.TypeString)
+	}
+	if value, ok := _u.mutation.SamlCert(); ok {
+		_spec.SetField(organizationsettinghistory.FieldSamlCert, field.TypeString, value)
+	}
+	if _u.mutation.SamlCertCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldSamlCert, field.TypeString)
+	}
 	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
+		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.MultifactorAuthEnforcedCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)

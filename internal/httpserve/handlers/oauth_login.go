@@ -92,8 +92,10 @@ func (h *Handler) GetGoogleLoginHandlers() (http.Handler, http.Handler) {
 	loginHandler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		email := req.URL.Query().Get("email")
 		if email != "" {
-			if orgID, ok := h.ssoOrgForUser(req.Context(), email); ok {
-				http.Redirect(w, req, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID), http.StatusFound)
+			orgStatus := h.ssoOrgForUser(req.Context(), email)
+			if orgStatus != nil && orgStatus.Enforced {
+				http.Redirect(w, req, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgStatus.OrganizationID), http.StatusFound)
+
 				return
 			}
 		}
@@ -166,8 +168,10 @@ func (h *Handler) GetGitHubLoginHandlers() (http.Handler, http.Handler) {
 	loginHandler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		email := req.URL.Query().Get("email")
 		if email != "" {
-			if orgID, ok := h.ssoOrgForUser(req.Context(), email); ok {
-				http.Redirect(w, req, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID), http.StatusFound)
+			orgStatus := h.ssoOrgForUser(req.Context(), email)
+			if orgStatus != nil && orgStatus.Enforced {
+				http.Redirect(w, req, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgStatus.OrganizationID), http.StatusFound)
+
 				return
 			}
 		}

@@ -1339,6 +1339,9 @@ func adminSearchOrganizationSettings(ctx context.Context, query string, after *e
 				organizationsetting.IdentityProviderMetadataEndpointContainsFold(query), // search by IdentityProviderMetadataEndpoint
 				organizationsetting.IdentityProviderEntityIDContainsFold(query),         // search by IdentityProviderEntityID
 				organizationsetting.OidcDiscoveryEndpointContainsFold(query),            // search by OidcDiscoveryEndpoint
+				organizationsetting.SamlSigninURLContainsFold(query),                    // search by SamlSigninURL
+				organizationsetting.SamlIssuerContainsFold(query),                       // search by SamlIssuer
+				organizationsetting.SamlCertContainsFold(query),                         // search by SamlCert
 				organizationsetting.ComplianceWebhookTokenContainsFold(query),           // search by ComplianceWebhookToken
 			),
 		)

@@ -2197,6 +2197,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldOrganizationID:                   {Type: field.TypeString, Column: organizationsetting.FieldOrganizationID},
 			organizationsetting.FieldBillingNotificationsEnabled:      {Type: field.TypeBool, Column: organizationsetting.FieldBillingNotificationsEnabled},
 			organizationsetting.FieldAllowedEmailDomains:              {Type: field.TypeJSON, Column: organizationsetting.FieldAllowedEmailDomains},
+			organizationsetting.FieldAllowMatchingDomainsAutojoin:     {Type: field.TypeBool, Column: organizationsetting.FieldAllowMatchingDomainsAutojoin},
 			organizationsetting.FieldIdentityProvider:                 {Type: field.TypeEnum, Column: organizationsetting.FieldIdentityProvider},
 			organizationsetting.FieldIdentityProviderClientID:         {Type: field.TypeString, Column: organizationsetting.FieldIdentityProviderClientID},
 			organizationsetting.FieldIdentityProviderClientSecret:     {Type: field.TypeString, Column: organizationsetting.FieldIdentityProviderClientSecret},
@@ -2204,7 +2205,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldIdentityProviderAuthTested:       {Type: field.TypeBool, Column: organizationsetting.FieldIdentityProviderAuthTested},
 			organizationsetting.FieldIdentityProviderEntityID:         {Type: field.TypeString, Column: organizationsetting.FieldIdentityProviderEntityID},
 			organizationsetting.FieldOidcDiscoveryEndpoint:            {Type: field.TypeString, Column: organizationsetting.FieldOidcDiscoveryEndpoint},
+			organizationsetting.FieldSamlSigninURL:                    {Type: field.TypeString, Column: organizationsetting.FieldSamlSigninURL},
+			organizationsetting.FieldSamlIssuer:                       {Type: field.TypeString, Column: organizationsetting.FieldSamlIssuer},
+			organizationsetting.FieldSamlCert:                         {Type: field.TypeString, Column: organizationsetting.FieldSamlCert},
 			organizationsetting.FieldIdentityProviderLoginEnforced:    {Type: field.TypeBool, Column: organizationsetting.FieldIdentityProviderLoginEnforced},
+			organizationsetting.FieldMultifactorAuthEnforced:          {Type: field.TypeBool, Column: organizationsetting.FieldMultifactorAuthEnforced},
 			organizationsetting.FieldComplianceWebhookToken:           {Type: field.TypeString, Column: organizationsetting.FieldComplianceWebhookToken},
 			organizationsetting.FieldPaymentMethodAdded:               {Type: field.TypeBool, Column: organizationsetting.FieldPaymentMethodAdded},
 		},
@@ -2240,6 +2245,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldOrganizationID:                   {Type: field.TypeString, Column: organizationsettinghistory.FieldOrganizationID},
 			organizationsettinghistory.FieldBillingNotificationsEnabled:      {Type: field.TypeBool, Column: organizationsettinghistory.FieldBillingNotificationsEnabled},
 			organizationsettinghistory.FieldAllowedEmailDomains:              {Type: field.TypeJSON, Column: organizationsettinghistory.FieldAllowedEmailDomains},
+			organizationsettinghistory.FieldAllowMatchingDomainsAutojoin:     {Type: field.TypeBool, Column: organizationsettinghistory.FieldAllowMatchingDomainsAutojoin},
 			organizationsettinghistory.FieldIdentityProvider:                 {Type: field.TypeEnum, Column: organizationsettinghistory.FieldIdentityProvider},
 			organizationsettinghistory.FieldIdentityProviderClientID:         {Type: field.TypeString, Column: organizationsettinghistory.FieldIdentityProviderClientID},
 			organizationsettinghistory.FieldIdentityProviderClientSecret:     {Type: field.TypeString, Column: organizationsettinghistory.FieldIdentityProviderClientSecret},
@@ -2247,7 +2253,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldIdentityProviderAuthTested:       {Type: field.TypeBool, Column: organizationsettinghistory.FieldIdentityProviderAuthTested},
 			organizationsettinghistory.FieldIdentityProviderEntityID:         {Type: field.TypeString, Column: organizationsettinghistory.FieldIdentityProviderEntityID},
 			organizationsettinghistory.FieldOidcDiscoveryEndpoint:            {Type: field.TypeString, Column: organizationsettinghistory.FieldOidcDiscoveryEndpoint},
+			organizationsettinghistory.FieldSamlSigninURL:                    {Type: field.TypeString, Column: organizationsettinghistory.FieldSamlSigninURL},
+			organizationsettinghistory.FieldSamlIssuer:                       {Type: field.TypeString, Column: organizationsettinghistory.FieldSamlIssuer},
+			organizationsettinghistory.FieldSamlCert:                         {Type: field.TypeString, Column: organizationsettinghistory.FieldSamlCert},
 			organizationsettinghistory.FieldIdentityProviderLoginEnforced:    {Type: field.TypeBool, Column: organizationsettinghistory.FieldIdentityProviderLoginEnforced},
+			organizationsettinghistory.FieldMultifactorAuthEnforced:          {Type: field.TypeBool, Column: organizationsettinghistory.FieldMultifactorAuthEnforced},
 			organizationsettinghistory.FieldComplianceWebhookToken:           {Type: field.TypeString, Column: organizationsettinghistory.FieldComplianceWebhookToken},
 			organizationsettinghistory.FieldPaymentMethodAdded:               {Type: field.TypeBool, Column: organizationsettinghistory.FieldPaymentMethodAdded},
 		},
@@ -22138,6 +22148,11 @@ func (f *OrganizationSettingFilter) WhereAllowedEmailDomains(p entql.BytesP) {
 	f.Where(p.Field(organizationsetting.FieldAllowedEmailDomains))
 }
 
+// WhereAllowMatchingDomainsAutojoin applies the entql bool predicate on the allow_matching_domains_autojoin field.
+func (f *OrganizationSettingFilter) WhereAllowMatchingDomainsAutojoin(p entql.BoolP) {
+	f.Where(p.Field(organizationsetting.FieldAllowMatchingDomainsAutojoin))
+}
+
 // WhereIdentityProvider applies the entql string predicate on the identity_provider field.
 func (f *OrganizationSettingFilter) WhereIdentityProvider(p entql.StringP) {
 	f.Where(p.Field(organizationsetting.FieldIdentityProvider))
@@ -22173,9 +22188,29 @@ func (f *OrganizationSettingFilter) WhereOidcDiscoveryEndpoint(p entql.StringP) 
 	f.Where(p.Field(organizationsetting.FieldOidcDiscoveryEndpoint))
 }
 
+// WhereSamlSigninURL applies the entql string predicate on the saml_signin_url field.
+func (f *OrganizationSettingFilter) WhereSamlSigninURL(p entql.StringP) {
+	f.Where(p.Field(organizationsetting.FieldSamlSigninURL))
+}
+
+// WhereSamlIssuer applies the entql string predicate on the saml_issuer field.
+func (f *OrganizationSettingFilter) WhereSamlIssuer(p entql.StringP) {
+	f.Where(p.Field(organizationsetting.FieldSamlIssuer))
+}
+
+// WhereSamlCert applies the entql string predicate on the saml_cert field.
+func (f *OrganizationSettingFilter) WhereSamlCert(p entql.StringP) {
+	f.Where(p.Field(organizationsetting.FieldSamlCert))
+}
+
 // WhereIdentityProviderLoginEnforced applies the entql bool predicate on the identity_provider_login_enforced field.
 func (f *OrganizationSettingFilter) WhereIdentityProviderLoginEnforced(p entql.BoolP) {
 	f.Where(p.Field(organizationsetting.FieldIdentityProviderLoginEnforced))
+}
+
+// WhereMultifactorAuthEnforced applies the entql bool predicate on the multifactor_auth_enforced field.
+func (f *OrganizationSettingFilter) WhereMultifactorAuthEnforced(p entql.BoolP) {
+	f.Where(p.Field(organizationsetting.FieldMultifactorAuthEnforced))
 }
 
 // WhereComplianceWebhookToken applies the entql string predicate on the compliance_webhook_token field.
@@ -22356,6 +22391,11 @@ func (f *OrganizationSettingHistoryFilter) WhereAllowedEmailDomains(p entql.Byte
 	f.Where(p.Field(organizationsettinghistory.FieldAllowedEmailDomains))
 }
 
+// WhereAllowMatchingDomainsAutojoin applies the entql bool predicate on the allow_matching_domains_autojoin field.
+func (f *OrganizationSettingHistoryFilter) WhereAllowMatchingDomainsAutojoin(p entql.BoolP) {
+	f.Where(p.Field(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin))
+}
+
 // WhereIdentityProvider applies the entql string predicate on the identity_provider field.
 func (f *OrganizationSettingHistoryFilter) WhereIdentityProvider(p entql.StringP) {
 	f.Where(p.Field(organizationsettinghistory.FieldIdentityProvider))
@@ -22391,9 +22431,29 @@ func (f *OrganizationSettingHistoryFilter) WhereOidcDiscoveryEndpoint(p entql.St
 	f.Where(p.Field(organizationsettinghistory.FieldOidcDiscoveryEndpoint))
 }
 
+// WhereSamlSigninURL applies the entql string predicate on the saml_signin_url field.
+func (f *OrganizationSettingHistoryFilter) WhereSamlSigninURL(p entql.StringP) {
+	f.Where(p.Field(organizationsettinghistory.FieldSamlSigninURL))
+}
+
+// WhereSamlIssuer applies the entql string predicate on the saml_issuer field.
+func (f *OrganizationSettingHistoryFilter) WhereSamlIssuer(p entql.StringP) {
+	f.Where(p.Field(organizationsettinghistory.FieldSamlIssuer))
+}
+
+// WhereSamlCert applies the entql string predicate on the saml_cert field.
+func (f *OrganizationSettingHistoryFilter) WhereSamlCert(p entql.StringP) {
+	f.Where(p.Field(organizationsettinghistory.FieldSamlCert))
+}
+
 // WhereIdentityProviderLoginEnforced applies the entql bool predicate on the identity_provider_login_enforced field.
 func (f *OrganizationSettingHistoryFilter) WhereIdentityProviderLoginEnforced(p entql.BoolP) {
 	f.Where(p.Field(organizationsettinghistory.FieldIdentityProviderLoginEnforced))
+}
+
+// WhereMultifactorAuthEnforced applies the entql bool predicate on the multifactor_auth_enforced field.
+func (f *OrganizationSettingHistoryFilter) WhereMultifactorAuthEnforced(p entql.BoolP) {
+	f.Where(p.Field(organizationsettinghistory.FieldMultifactorAuthEnforced))
 }
 
 // WhereComplianceWebhookToken applies the entql string predicate on the compliance_webhook_token field.

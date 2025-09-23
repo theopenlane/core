@@ -325,9 +325,10 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	if orgID, enforced := h.ssoOrgForUser(reqCtx, entUser.Email); enforced {
+	orgStatus := h.ssoOrgForUser(reqCtx, entUser.Email)
+	if orgStatus != nil && orgStatus.Enforced {
 		if !h.HasValidSSOSession(ctx, entUser.ID) {
-			return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgID))
+			return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgStatus.OrganizationID))
 		}
 	}
 

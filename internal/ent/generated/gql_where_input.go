@@ -56599,6 +56599,12 @@ type OrganizationSettingWhereInput struct {
 	BillingNotificationsEnabled    *bool `json:"billingNotificationsEnabled,omitempty"`
 	BillingNotificationsEnabledNEQ *bool `json:"billingNotificationsEnabledNEQ,omitempty"`
 
+	// "allow_matching_domains_autojoin" field predicates.
+	AllowMatchingDomainsAutojoin       *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
+	AllowMatchingDomainsAutojoinNEQ    *bool `json:"allowMatchingDomainsAutojoinNEQ,omitempty"`
+	AllowMatchingDomainsAutojoinIsNil  bool  `json:"allowMatchingDomainsAutojoinIsNil,omitempty"`
+	AllowMatchingDomainsAutojoinNotNil bool  `json:"allowMatchingDomainsAutojoinNotNil,omitempty"`
+
 	// "identity_provider" field predicates.
 	IdentityProvider       *enums.SSOProvider  `json:"identityProvider,omitempty"`
 	IdentityProviderNEQ    *enums.SSOProvider  `json:"identityProviderNEQ,omitempty"`
@@ -56696,9 +56702,66 @@ type OrganizationSettingWhereInput struct {
 	OidcDiscoveryEndpointEqualFold    *string  `json:"oidcDiscoveryEndpointEqualFold,omitempty"`
 	OidcDiscoveryEndpointContainsFold *string  `json:"oidcDiscoveryEndpointContainsFold,omitempty"`
 
+	// "saml_signin_url" field predicates.
+	SamlSigninURL             *string  `json:"samlSigninURL,omitempty"`
+	SamlSigninURLNEQ          *string  `json:"samlSigninURLNEQ,omitempty"`
+	SamlSigninURLIn           []string `json:"samlSigninURLIn,omitempty"`
+	SamlSigninURLNotIn        []string `json:"samlSigninURLNotIn,omitempty"`
+	SamlSigninURLGT           *string  `json:"samlSigninURLGT,omitempty"`
+	SamlSigninURLGTE          *string  `json:"samlSigninURLGTE,omitempty"`
+	SamlSigninURLLT           *string  `json:"samlSigninURLLT,omitempty"`
+	SamlSigninURLLTE          *string  `json:"samlSigninURLLTE,omitempty"`
+	SamlSigninURLContains     *string  `json:"samlSigninURLContains,omitempty"`
+	SamlSigninURLHasPrefix    *string  `json:"samlSigninURLHasPrefix,omitempty"`
+	SamlSigninURLHasSuffix    *string  `json:"samlSigninURLHasSuffix,omitempty"`
+	SamlSigninURLIsNil        bool     `json:"samlSigninURLIsNil,omitempty"`
+	SamlSigninURLNotNil       bool     `json:"samlSigninURLNotNil,omitempty"`
+	SamlSigninURLEqualFold    *string  `json:"samlSigninURLEqualFold,omitempty"`
+	SamlSigninURLContainsFold *string  `json:"samlSigninURLContainsFold,omitempty"`
+
+	// "saml_issuer" field predicates.
+	SamlIssuer             *string  `json:"samlIssuer,omitempty"`
+	SamlIssuerNEQ          *string  `json:"samlIssuerNEQ,omitempty"`
+	SamlIssuerIn           []string `json:"samlIssuerIn,omitempty"`
+	SamlIssuerNotIn        []string `json:"samlIssuerNotIn,omitempty"`
+	SamlIssuerGT           *string  `json:"samlIssuerGT,omitempty"`
+	SamlIssuerGTE          *string  `json:"samlIssuerGTE,omitempty"`
+	SamlIssuerLT           *string  `json:"samlIssuerLT,omitempty"`
+	SamlIssuerLTE          *string  `json:"samlIssuerLTE,omitempty"`
+	SamlIssuerContains     *string  `json:"samlIssuerContains,omitempty"`
+	SamlIssuerHasPrefix    *string  `json:"samlIssuerHasPrefix,omitempty"`
+	SamlIssuerHasSuffix    *string  `json:"samlIssuerHasSuffix,omitempty"`
+	SamlIssuerIsNil        bool     `json:"samlIssuerIsNil,omitempty"`
+	SamlIssuerNotNil       bool     `json:"samlIssuerNotNil,omitempty"`
+	SamlIssuerEqualFold    *string  `json:"samlIssuerEqualFold,omitempty"`
+	SamlIssuerContainsFold *string  `json:"samlIssuerContainsFold,omitempty"`
+
+	// "saml_cert" field predicates.
+	SamlCert             *string  `json:"samlCert,omitempty"`
+	SamlCertNEQ          *string  `json:"samlCertNEQ,omitempty"`
+	SamlCertIn           []string `json:"samlCertIn,omitempty"`
+	SamlCertNotIn        []string `json:"samlCertNotIn,omitempty"`
+	SamlCertGT           *string  `json:"samlCertGT,omitempty"`
+	SamlCertGTE          *string  `json:"samlCertGTE,omitempty"`
+	SamlCertLT           *string  `json:"samlCertLT,omitempty"`
+	SamlCertLTE          *string  `json:"samlCertLTE,omitempty"`
+	SamlCertContains     *string  `json:"samlCertContains,omitempty"`
+	SamlCertHasPrefix    *string  `json:"samlCertHasPrefix,omitempty"`
+	SamlCertHasSuffix    *string  `json:"samlCertHasSuffix,omitempty"`
+	SamlCertIsNil        bool     `json:"samlCertIsNil,omitempty"`
+	SamlCertNotNil       bool     `json:"samlCertNotNil,omitempty"`
+	SamlCertEqualFold    *string  `json:"samlCertEqualFold,omitempty"`
+	SamlCertContainsFold *string  `json:"samlCertContainsFold,omitempty"`
+
 	// "identity_provider_login_enforced" field predicates.
 	IdentityProviderLoginEnforced    *bool `json:"identityProviderLoginEnforced,omitempty"`
 	IdentityProviderLoginEnforcedNEQ *bool `json:"identityProviderLoginEnforcedNEQ,omitempty"`
+
+	// "multifactor_auth_enforced" field predicates.
+	MultifactorAuthEnforced       *bool `json:"multifactorAuthEnforced,omitempty"`
+	MultifactorAuthEnforcedNEQ    *bool `json:"multifactorAuthEnforcedNEQ,omitempty"`
+	MultifactorAuthEnforcedIsNil  bool  `json:"multifactorAuthEnforcedIsNil,omitempty"`
+	MultifactorAuthEnforcedNotNil bool  `json:"multifactorAuthEnforcedNotNil,omitempty"`
 
 	// "compliance_webhook_token" field predicates.
 	ComplianceWebhookToken             *string  `json:"complianceWebhookToken,omitempty"`
@@ -57226,6 +57289,18 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	if i.BillingNotificationsEnabledNEQ != nil {
 		predicates = append(predicates, organizationsetting.BillingNotificationsEnabledNEQ(*i.BillingNotificationsEnabledNEQ))
 	}
+	if i.AllowMatchingDomainsAutojoin != nil {
+		predicates = append(predicates, organizationsetting.AllowMatchingDomainsAutojoinEQ(*i.AllowMatchingDomainsAutojoin))
+	}
+	if i.AllowMatchingDomainsAutojoinNEQ != nil {
+		predicates = append(predicates, organizationsetting.AllowMatchingDomainsAutojoinNEQ(*i.AllowMatchingDomainsAutojoinNEQ))
+	}
+	if i.AllowMatchingDomainsAutojoinIsNil {
+		predicates = append(predicates, organizationsetting.AllowMatchingDomainsAutojoinIsNil())
+	}
+	if i.AllowMatchingDomainsAutojoinNotNil {
+		predicates = append(predicates, organizationsetting.AllowMatchingDomainsAutojoinNotNil())
+	}
 	if i.IdentityProvider != nil {
 		predicates = append(predicates, organizationsetting.IdentityProviderEQ(*i.IdentityProvider))
 	}
@@ -57475,11 +57550,158 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	if i.OidcDiscoveryEndpointContainsFold != nil {
 		predicates = append(predicates, organizationsetting.OidcDiscoveryEndpointContainsFold(*i.OidcDiscoveryEndpointContainsFold))
 	}
+	if i.SamlSigninURL != nil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLEQ(*i.SamlSigninURL))
+	}
+	if i.SamlSigninURLNEQ != nil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLNEQ(*i.SamlSigninURLNEQ))
+	}
+	if len(i.SamlSigninURLIn) > 0 {
+		predicates = append(predicates, organizationsetting.SamlSigninURLIn(i.SamlSigninURLIn...))
+	}
+	if len(i.SamlSigninURLNotIn) > 0 {
+		predicates = append(predicates, organizationsetting.SamlSigninURLNotIn(i.SamlSigninURLNotIn...))
+	}
+	if i.SamlSigninURLGT != nil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLGT(*i.SamlSigninURLGT))
+	}
+	if i.SamlSigninURLGTE != nil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLGTE(*i.SamlSigninURLGTE))
+	}
+	if i.SamlSigninURLLT != nil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLLT(*i.SamlSigninURLLT))
+	}
+	if i.SamlSigninURLLTE != nil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLLTE(*i.SamlSigninURLLTE))
+	}
+	if i.SamlSigninURLContains != nil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLContains(*i.SamlSigninURLContains))
+	}
+	if i.SamlSigninURLHasPrefix != nil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLHasPrefix(*i.SamlSigninURLHasPrefix))
+	}
+	if i.SamlSigninURLHasSuffix != nil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLHasSuffix(*i.SamlSigninURLHasSuffix))
+	}
+	if i.SamlSigninURLIsNil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLIsNil())
+	}
+	if i.SamlSigninURLNotNil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLNotNil())
+	}
+	if i.SamlSigninURLEqualFold != nil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLEqualFold(*i.SamlSigninURLEqualFold))
+	}
+	if i.SamlSigninURLContainsFold != nil {
+		predicates = append(predicates, organizationsetting.SamlSigninURLContainsFold(*i.SamlSigninURLContainsFold))
+	}
+	if i.SamlIssuer != nil {
+		predicates = append(predicates, organizationsetting.SamlIssuerEQ(*i.SamlIssuer))
+	}
+	if i.SamlIssuerNEQ != nil {
+		predicates = append(predicates, organizationsetting.SamlIssuerNEQ(*i.SamlIssuerNEQ))
+	}
+	if len(i.SamlIssuerIn) > 0 {
+		predicates = append(predicates, organizationsetting.SamlIssuerIn(i.SamlIssuerIn...))
+	}
+	if len(i.SamlIssuerNotIn) > 0 {
+		predicates = append(predicates, organizationsetting.SamlIssuerNotIn(i.SamlIssuerNotIn...))
+	}
+	if i.SamlIssuerGT != nil {
+		predicates = append(predicates, organizationsetting.SamlIssuerGT(*i.SamlIssuerGT))
+	}
+	if i.SamlIssuerGTE != nil {
+		predicates = append(predicates, organizationsetting.SamlIssuerGTE(*i.SamlIssuerGTE))
+	}
+	if i.SamlIssuerLT != nil {
+		predicates = append(predicates, organizationsetting.SamlIssuerLT(*i.SamlIssuerLT))
+	}
+	if i.SamlIssuerLTE != nil {
+		predicates = append(predicates, organizationsetting.SamlIssuerLTE(*i.SamlIssuerLTE))
+	}
+	if i.SamlIssuerContains != nil {
+		predicates = append(predicates, organizationsetting.SamlIssuerContains(*i.SamlIssuerContains))
+	}
+	if i.SamlIssuerHasPrefix != nil {
+		predicates = append(predicates, organizationsetting.SamlIssuerHasPrefix(*i.SamlIssuerHasPrefix))
+	}
+	if i.SamlIssuerHasSuffix != nil {
+		predicates = append(predicates, organizationsetting.SamlIssuerHasSuffix(*i.SamlIssuerHasSuffix))
+	}
+	if i.SamlIssuerIsNil {
+		predicates = append(predicates, organizationsetting.SamlIssuerIsNil())
+	}
+	if i.SamlIssuerNotNil {
+		predicates = append(predicates, organizationsetting.SamlIssuerNotNil())
+	}
+	if i.SamlIssuerEqualFold != nil {
+		predicates = append(predicates, organizationsetting.SamlIssuerEqualFold(*i.SamlIssuerEqualFold))
+	}
+	if i.SamlIssuerContainsFold != nil {
+		predicates = append(predicates, organizationsetting.SamlIssuerContainsFold(*i.SamlIssuerContainsFold))
+	}
+	if i.SamlCert != nil {
+		predicates = append(predicates, organizationsetting.SamlCertEQ(*i.SamlCert))
+	}
+	if i.SamlCertNEQ != nil {
+		predicates = append(predicates, organizationsetting.SamlCertNEQ(*i.SamlCertNEQ))
+	}
+	if len(i.SamlCertIn) > 0 {
+		predicates = append(predicates, organizationsetting.SamlCertIn(i.SamlCertIn...))
+	}
+	if len(i.SamlCertNotIn) > 0 {
+		predicates = append(predicates, organizationsetting.SamlCertNotIn(i.SamlCertNotIn...))
+	}
+	if i.SamlCertGT != nil {
+		predicates = append(predicates, organizationsetting.SamlCertGT(*i.SamlCertGT))
+	}
+	if i.SamlCertGTE != nil {
+		predicates = append(predicates, organizationsetting.SamlCertGTE(*i.SamlCertGTE))
+	}
+	if i.SamlCertLT != nil {
+		predicates = append(predicates, organizationsetting.SamlCertLT(*i.SamlCertLT))
+	}
+	if i.SamlCertLTE != nil {
+		predicates = append(predicates, organizationsetting.SamlCertLTE(*i.SamlCertLTE))
+	}
+	if i.SamlCertContains != nil {
+		predicates = append(predicates, organizationsetting.SamlCertContains(*i.SamlCertContains))
+	}
+	if i.SamlCertHasPrefix != nil {
+		predicates = append(predicates, organizationsetting.SamlCertHasPrefix(*i.SamlCertHasPrefix))
+	}
+	if i.SamlCertHasSuffix != nil {
+		predicates = append(predicates, organizationsetting.SamlCertHasSuffix(*i.SamlCertHasSuffix))
+	}
+	if i.SamlCertIsNil {
+		predicates = append(predicates, organizationsetting.SamlCertIsNil())
+	}
+	if i.SamlCertNotNil {
+		predicates = append(predicates, organizationsetting.SamlCertNotNil())
+	}
+	if i.SamlCertEqualFold != nil {
+		predicates = append(predicates, organizationsetting.SamlCertEqualFold(*i.SamlCertEqualFold))
+	}
+	if i.SamlCertContainsFold != nil {
+		predicates = append(predicates, organizationsetting.SamlCertContainsFold(*i.SamlCertContainsFold))
+	}
 	if i.IdentityProviderLoginEnforced != nil {
 		predicates = append(predicates, organizationsetting.IdentityProviderLoginEnforcedEQ(*i.IdentityProviderLoginEnforced))
 	}
 	if i.IdentityProviderLoginEnforcedNEQ != nil {
 		predicates = append(predicates, organizationsetting.IdentityProviderLoginEnforcedNEQ(*i.IdentityProviderLoginEnforcedNEQ))
+	}
+	if i.MultifactorAuthEnforced != nil {
+		predicates = append(predicates, organizationsetting.MultifactorAuthEnforcedEQ(*i.MultifactorAuthEnforced))
+	}
+	if i.MultifactorAuthEnforcedNEQ != nil {
+		predicates = append(predicates, organizationsetting.MultifactorAuthEnforcedNEQ(*i.MultifactorAuthEnforcedNEQ))
+	}
+	if i.MultifactorAuthEnforcedIsNil {
+		predicates = append(predicates, organizationsetting.MultifactorAuthEnforcedIsNil())
+	}
+	if i.MultifactorAuthEnforcedNotNil {
+		predicates = append(predicates, organizationsetting.MultifactorAuthEnforcedNotNil())
 	}
 	if i.ComplianceWebhookToken != nil {
 		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenEQ(*i.ComplianceWebhookToken))
@@ -57780,6 +58002,12 @@ type OrganizationSettingHistoryWhereInput struct {
 	BillingNotificationsEnabled    *bool `json:"billingNotificationsEnabled,omitempty"`
 	BillingNotificationsEnabledNEQ *bool `json:"billingNotificationsEnabledNEQ,omitempty"`
 
+	// "allow_matching_domains_autojoin" field predicates.
+	AllowMatchingDomainsAutojoin       *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
+	AllowMatchingDomainsAutojoinNEQ    *bool `json:"allowMatchingDomainsAutojoinNEQ,omitempty"`
+	AllowMatchingDomainsAutojoinIsNil  bool  `json:"allowMatchingDomainsAutojoinIsNil,omitempty"`
+	AllowMatchingDomainsAutojoinNotNil bool  `json:"allowMatchingDomainsAutojoinNotNil,omitempty"`
+
 	// "identity_provider" field predicates.
 	IdentityProvider       *enums.SSOProvider  `json:"identityProvider,omitempty"`
 	IdentityProviderNEQ    *enums.SSOProvider  `json:"identityProviderNEQ,omitempty"`
@@ -57877,9 +58105,66 @@ type OrganizationSettingHistoryWhereInput struct {
 	OidcDiscoveryEndpointEqualFold    *string  `json:"oidcDiscoveryEndpointEqualFold,omitempty"`
 	OidcDiscoveryEndpointContainsFold *string  `json:"oidcDiscoveryEndpointContainsFold,omitempty"`
 
+	// "saml_signin_url" field predicates.
+	SamlSigninURL             *string  `json:"samlSigninURL,omitempty"`
+	SamlSigninURLNEQ          *string  `json:"samlSigninURLNEQ,omitempty"`
+	SamlSigninURLIn           []string `json:"samlSigninURLIn,omitempty"`
+	SamlSigninURLNotIn        []string `json:"samlSigninURLNotIn,omitempty"`
+	SamlSigninURLGT           *string  `json:"samlSigninURLGT,omitempty"`
+	SamlSigninURLGTE          *string  `json:"samlSigninURLGTE,omitempty"`
+	SamlSigninURLLT           *string  `json:"samlSigninURLLT,omitempty"`
+	SamlSigninURLLTE          *string  `json:"samlSigninURLLTE,omitempty"`
+	SamlSigninURLContains     *string  `json:"samlSigninURLContains,omitempty"`
+	SamlSigninURLHasPrefix    *string  `json:"samlSigninURLHasPrefix,omitempty"`
+	SamlSigninURLHasSuffix    *string  `json:"samlSigninURLHasSuffix,omitempty"`
+	SamlSigninURLIsNil        bool     `json:"samlSigninURLIsNil,omitempty"`
+	SamlSigninURLNotNil       bool     `json:"samlSigninURLNotNil,omitempty"`
+	SamlSigninURLEqualFold    *string  `json:"samlSigninURLEqualFold,omitempty"`
+	SamlSigninURLContainsFold *string  `json:"samlSigninURLContainsFold,omitempty"`
+
+	// "saml_issuer" field predicates.
+	SamlIssuer             *string  `json:"samlIssuer,omitempty"`
+	SamlIssuerNEQ          *string  `json:"samlIssuerNEQ,omitempty"`
+	SamlIssuerIn           []string `json:"samlIssuerIn,omitempty"`
+	SamlIssuerNotIn        []string `json:"samlIssuerNotIn,omitempty"`
+	SamlIssuerGT           *string  `json:"samlIssuerGT,omitempty"`
+	SamlIssuerGTE          *string  `json:"samlIssuerGTE,omitempty"`
+	SamlIssuerLT           *string  `json:"samlIssuerLT,omitempty"`
+	SamlIssuerLTE          *string  `json:"samlIssuerLTE,omitempty"`
+	SamlIssuerContains     *string  `json:"samlIssuerContains,omitempty"`
+	SamlIssuerHasPrefix    *string  `json:"samlIssuerHasPrefix,omitempty"`
+	SamlIssuerHasSuffix    *string  `json:"samlIssuerHasSuffix,omitempty"`
+	SamlIssuerIsNil        bool     `json:"samlIssuerIsNil,omitempty"`
+	SamlIssuerNotNil       bool     `json:"samlIssuerNotNil,omitempty"`
+	SamlIssuerEqualFold    *string  `json:"samlIssuerEqualFold,omitempty"`
+	SamlIssuerContainsFold *string  `json:"samlIssuerContainsFold,omitempty"`
+
+	// "saml_cert" field predicates.
+	SamlCert             *string  `json:"samlCert,omitempty"`
+	SamlCertNEQ          *string  `json:"samlCertNEQ,omitempty"`
+	SamlCertIn           []string `json:"samlCertIn,omitempty"`
+	SamlCertNotIn        []string `json:"samlCertNotIn,omitempty"`
+	SamlCertGT           *string  `json:"samlCertGT,omitempty"`
+	SamlCertGTE          *string  `json:"samlCertGTE,omitempty"`
+	SamlCertLT           *string  `json:"samlCertLT,omitempty"`
+	SamlCertLTE          *string  `json:"samlCertLTE,omitempty"`
+	SamlCertContains     *string  `json:"samlCertContains,omitempty"`
+	SamlCertHasPrefix    *string  `json:"samlCertHasPrefix,omitempty"`
+	SamlCertHasSuffix    *string  `json:"samlCertHasSuffix,omitempty"`
+	SamlCertIsNil        bool     `json:"samlCertIsNil,omitempty"`
+	SamlCertNotNil       bool     `json:"samlCertNotNil,omitempty"`
+	SamlCertEqualFold    *string  `json:"samlCertEqualFold,omitempty"`
+	SamlCertContainsFold *string  `json:"samlCertContainsFold,omitempty"`
+
 	// "identity_provider_login_enforced" field predicates.
 	IdentityProviderLoginEnforced    *bool `json:"identityProviderLoginEnforced,omitempty"`
 	IdentityProviderLoginEnforcedNEQ *bool `json:"identityProviderLoginEnforcedNEQ,omitempty"`
+
+	// "multifactor_auth_enforced" field predicates.
+	MultifactorAuthEnforced       *bool `json:"multifactorAuthEnforced,omitempty"`
+	MultifactorAuthEnforcedNEQ    *bool `json:"multifactorAuthEnforcedNEQ,omitempty"`
+	MultifactorAuthEnforcedIsNil  bool  `json:"multifactorAuthEnforcedIsNil,omitempty"`
+	MultifactorAuthEnforcedNotNil bool  `json:"multifactorAuthEnforcedNotNil,omitempty"`
 
 	// "compliance_webhook_token" field predicates.
 	ComplianceWebhookToken             *string  `json:"complianceWebhookToken,omitempty"`
@@ -58480,6 +58765,18 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	if i.BillingNotificationsEnabledNEQ != nil {
 		predicates = append(predicates, organizationsettinghistory.BillingNotificationsEnabledNEQ(*i.BillingNotificationsEnabledNEQ))
 	}
+	if i.AllowMatchingDomainsAutojoin != nil {
+		predicates = append(predicates, organizationsettinghistory.AllowMatchingDomainsAutojoinEQ(*i.AllowMatchingDomainsAutojoin))
+	}
+	if i.AllowMatchingDomainsAutojoinNEQ != nil {
+		predicates = append(predicates, organizationsettinghistory.AllowMatchingDomainsAutojoinNEQ(*i.AllowMatchingDomainsAutojoinNEQ))
+	}
+	if i.AllowMatchingDomainsAutojoinIsNil {
+		predicates = append(predicates, organizationsettinghistory.AllowMatchingDomainsAutojoinIsNil())
+	}
+	if i.AllowMatchingDomainsAutojoinNotNil {
+		predicates = append(predicates, organizationsettinghistory.AllowMatchingDomainsAutojoinNotNil())
+	}
 	if i.IdentityProvider != nil {
 		predicates = append(predicates, organizationsettinghistory.IdentityProviderEQ(*i.IdentityProvider))
 	}
@@ -58729,11 +59026,158 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	if i.OidcDiscoveryEndpointContainsFold != nil {
 		predicates = append(predicates, organizationsettinghistory.OidcDiscoveryEndpointContainsFold(*i.OidcDiscoveryEndpointContainsFold))
 	}
+	if i.SamlSigninURL != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLEQ(*i.SamlSigninURL))
+	}
+	if i.SamlSigninURLNEQ != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLNEQ(*i.SamlSigninURLNEQ))
+	}
+	if len(i.SamlSigninURLIn) > 0 {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLIn(i.SamlSigninURLIn...))
+	}
+	if len(i.SamlSigninURLNotIn) > 0 {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLNotIn(i.SamlSigninURLNotIn...))
+	}
+	if i.SamlSigninURLGT != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLGT(*i.SamlSigninURLGT))
+	}
+	if i.SamlSigninURLGTE != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLGTE(*i.SamlSigninURLGTE))
+	}
+	if i.SamlSigninURLLT != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLLT(*i.SamlSigninURLLT))
+	}
+	if i.SamlSigninURLLTE != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLLTE(*i.SamlSigninURLLTE))
+	}
+	if i.SamlSigninURLContains != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLContains(*i.SamlSigninURLContains))
+	}
+	if i.SamlSigninURLHasPrefix != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLHasPrefix(*i.SamlSigninURLHasPrefix))
+	}
+	if i.SamlSigninURLHasSuffix != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLHasSuffix(*i.SamlSigninURLHasSuffix))
+	}
+	if i.SamlSigninURLIsNil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLIsNil())
+	}
+	if i.SamlSigninURLNotNil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLNotNil())
+	}
+	if i.SamlSigninURLEqualFold != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLEqualFold(*i.SamlSigninURLEqualFold))
+	}
+	if i.SamlSigninURLContainsFold != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlSigninURLContainsFold(*i.SamlSigninURLContainsFold))
+	}
+	if i.SamlIssuer != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerEQ(*i.SamlIssuer))
+	}
+	if i.SamlIssuerNEQ != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerNEQ(*i.SamlIssuerNEQ))
+	}
+	if len(i.SamlIssuerIn) > 0 {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerIn(i.SamlIssuerIn...))
+	}
+	if len(i.SamlIssuerNotIn) > 0 {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerNotIn(i.SamlIssuerNotIn...))
+	}
+	if i.SamlIssuerGT != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerGT(*i.SamlIssuerGT))
+	}
+	if i.SamlIssuerGTE != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerGTE(*i.SamlIssuerGTE))
+	}
+	if i.SamlIssuerLT != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerLT(*i.SamlIssuerLT))
+	}
+	if i.SamlIssuerLTE != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerLTE(*i.SamlIssuerLTE))
+	}
+	if i.SamlIssuerContains != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerContains(*i.SamlIssuerContains))
+	}
+	if i.SamlIssuerHasPrefix != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerHasPrefix(*i.SamlIssuerHasPrefix))
+	}
+	if i.SamlIssuerHasSuffix != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerHasSuffix(*i.SamlIssuerHasSuffix))
+	}
+	if i.SamlIssuerIsNil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerIsNil())
+	}
+	if i.SamlIssuerNotNil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerNotNil())
+	}
+	if i.SamlIssuerEqualFold != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerEqualFold(*i.SamlIssuerEqualFold))
+	}
+	if i.SamlIssuerContainsFold != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlIssuerContainsFold(*i.SamlIssuerContainsFold))
+	}
+	if i.SamlCert != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertEQ(*i.SamlCert))
+	}
+	if i.SamlCertNEQ != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertNEQ(*i.SamlCertNEQ))
+	}
+	if len(i.SamlCertIn) > 0 {
+		predicates = append(predicates, organizationsettinghistory.SamlCertIn(i.SamlCertIn...))
+	}
+	if len(i.SamlCertNotIn) > 0 {
+		predicates = append(predicates, organizationsettinghistory.SamlCertNotIn(i.SamlCertNotIn...))
+	}
+	if i.SamlCertGT != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertGT(*i.SamlCertGT))
+	}
+	if i.SamlCertGTE != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertGTE(*i.SamlCertGTE))
+	}
+	if i.SamlCertLT != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertLT(*i.SamlCertLT))
+	}
+	if i.SamlCertLTE != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertLTE(*i.SamlCertLTE))
+	}
+	if i.SamlCertContains != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertContains(*i.SamlCertContains))
+	}
+	if i.SamlCertHasPrefix != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertHasPrefix(*i.SamlCertHasPrefix))
+	}
+	if i.SamlCertHasSuffix != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertHasSuffix(*i.SamlCertHasSuffix))
+	}
+	if i.SamlCertIsNil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertIsNil())
+	}
+	if i.SamlCertNotNil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertNotNil())
+	}
+	if i.SamlCertEqualFold != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertEqualFold(*i.SamlCertEqualFold))
+	}
+	if i.SamlCertContainsFold != nil {
+		predicates = append(predicates, organizationsettinghistory.SamlCertContainsFold(*i.SamlCertContainsFold))
+	}
 	if i.IdentityProviderLoginEnforced != nil {
 		predicates = append(predicates, organizationsettinghistory.IdentityProviderLoginEnforcedEQ(*i.IdentityProviderLoginEnforced))
 	}
 	if i.IdentityProviderLoginEnforcedNEQ != nil {
 		predicates = append(predicates, organizationsettinghistory.IdentityProviderLoginEnforcedNEQ(*i.IdentityProviderLoginEnforcedNEQ))
+	}
+	if i.MultifactorAuthEnforced != nil {
+		predicates = append(predicates, organizationsettinghistory.MultifactorAuthEnforcedEQ(*i.MultifactorAuthEnforced))
+	}
+	if i.MultifactorAuthEnforcedNEQ != nil {
+		predicates = append(predicates, organizationsettinghistory.MultifactorAuthEnforcedNEQ(*i.MultifactorAuthEnforcedNEQ))
+	}
+	if i.MultifactorAuthEnforcedIsNil {
+		predicates = append(predicates, organizationsettinghistory.MultifactorAuthEnforcedIsNil())
+	}
+	if i.MultifactorAuthEnforcedNotNil {
+		predicates = append(predicates, organizationsettinghistory.MultifactorAuthEnforcedNotNil())
 	}
 	if i.ComplianceWebhookToken != nil {
 		predicates = append(predicates, organizationsettinghistory.ComplianceWebhookTokenEQ(*i.ComplianceWebhookToken))

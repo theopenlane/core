@@ -305,33 +305,37 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 // ssoCallbackURL builds the callback URL for OIDC flows, ensuring a single path segment is appended
 func (h *Handler) ssoCallbackURL() string { return h.OauthProvider.RedirectURL }
 
-// ssoOrgForUser checks if the user's default org requires SSO login and the user is not an owner
-// Returns the org ID and true if SSO is enforced and the user must use SSO, otherwise false
-func (h *Handler) ssoOrgForUser(ctx context.Context, email string) (string, bool) {
+// ssoOrgForUser checks the user's default org SSO and TFA requirements
+// Returns the org settings status which includes both SSO and TFA enforcement
+func (h *Handler) ssoOrgForUser(ctx context.Context, email string) *apimodels.SSOStatusReply {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	user, err := h.getUserByEmail(allowCtx, email)
 	if err != nil {
-		return "", false
+		return nil
 	}
 
 	orgID, err := h.getUserDefaultOrgID(allowCtx, user.ID)
 	if err != nil {
-		return "", false
+		return nil
 	}
 
 	status, err := h.fetchSSOStatus(allowCtx, orgID)
-	if err != nil || !status.Enforced {
-		return "", false
+	if err != nil {
+		return nil
 	}
 
-	member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().
-		Where(orgmembership.UserID(user.ID), orgmembership.OrganizationID(orgID)).Only(allowCtx)
-	if mErr != nil || member.Role == enums.RoleOwner {
-		return "", false
+	// For SSO, check if user is an owner (owners bypass SSO)
+	if status.Enforced {
+		member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().
+			Where(orgmembership.UserID(user.ID), orgmembership.OrganizationID(orgID)).Only(allowCtx)
+		if mErr == nil && member.Role == enums.RoleOwner {
+			// Owner bypasses SSO requirement
+			status.Enforced = false
+		}
 	}
 
-	return orgID, true
+	return &status
 }
 
 // authorizeTokenSSO updates the SSO authorization timestamp for a token type (API or Personal Access Token)
