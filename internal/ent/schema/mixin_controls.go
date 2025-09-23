@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
@@ -76,6 +77,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 	}
 }
 
+// Hooks of the ControlMixin
 func (ControlMixin) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hook.On(
@@ -90,6 +92,13 @@ func (ControlMixin) Hooks() []ent.Hook {
 			}, "delegate"),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
+	}
+}
+
+// Interceptors of the ControlMixin
+func (ControlMixin) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorControlFieldSort(),
 	}
 }
 
