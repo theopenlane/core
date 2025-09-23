@@ -1,11 +1,15 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // TrustCenterWatermarkConfig holds the schema definition for the TrustCenterWatermarkConfig entity
@@ -36,18 +40,43 @@ func (TrustCenterWatermarkConfig) PluralName() string {
 // Fields of the TrustCenterWatermarkConfig
 func (TrustCenterWatermarkConfig) Fields() []ent.Field {
 	return []ent.Field{
-		// field.String("trust_center_id").
-		// 	Comment("ID of the trust center").
-		// 	NotEmpty().
-		// 	Optional(),
-		// field.String("logo_id").
-		// 	Comment("ID of the file containing the document").
-		// 	Annotations(
-		// 		// this field is not exposed to the graphql schema, it is set by the file upload handler
-		// 		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
-		// 	).
-		// 	Optional().
-		// 	Nillable(),
+		field.String("trust_center_id").
+			Comment("ID of the trust center").
+			NotEmpty().
+			Optional(),
+		field.String("logo_id").
+			Comment("ID of the file containing the document").
+			Annotations(
+				// this field is not exposed to the graphql schema, it is set by the file upload handler
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Optional().
+			Nillable(),
+		field.String("text").
+			Comment("text to watermark the document with").
+			Optional(),
+		field.Float("font_size").
+			Comment("font size of the watermark text").
+			Default(48.0).
+			Optional(),
+		field.Float("opacity").
+			Comment("opacity of the watermark text").
+			Default(0.3).
+			Min(0.0).
+			Max(1.0).
+			Optional(),
+		field.Float("rotation").
+			Comment("rotation of the watermark text").
+			Default(45.0).
+			Min(-360.0).
+			Max(360.0).
+			Optional(),
+		field.String("color").
+			Comment("color of the watermark text").
+			Optional(),
+		field.String("font").
+			Comment("font of the watermark text").
+			Optional(),
 	}
 }
 
@@ -55,29 +84,28 @@ func (TrustCenterWatermarkConfig) Fields() []ent.Field {
 func (t TrustCenterWatermarkConfig) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
-		// additionalMixins: []ent.Mixin{
-		// 	newObjectOwnedMixin[generated.TrustCenterWatermarkConfig](t,
-		// 		withParents(TrustCenter{}),
-		// 		withOrganizationOwner(true),
-		// 	),
-		// },
+		additionalMixins: []ent.Mixin{
+			newObjectOwnedMixin[generated.TrustCenterWatermarkConfig](t,
+				withParents(TrustCenter{}),
+			),
+		},
 	}.getMixins(t)
 }
 
 // Edges of the TrustCenterWatermarkConfig
 func (t TrustCenterWatermarkConfig) Edges() []ent.Edge {
 	return []ent.Edge{
-		// uniqueEdgeFrom(&edgeDefinition{
-		// 	fromSchema: t,
-		// 	edgeSchema: TrustCenter{},
-		// 	field:      "trust_center_id",
-		// }),
-		// uniqueEdgeTo(&edgeDefinition{
-		// 	fromSchema: t,
-		// 	edgeSchema: File{},
-		// 	field:      "file_id",
-		// 	comment:    "the file containing the document content",
-		// }),
+		nonUniqueEdgeFrom(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: TrustCenter{},
+			ref:        "watermark_config",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: File{},
+			field:      "logo_id",
+			comment:    "the file containing the image for watermarking, if applicable",
+		}),
 	}
 }
 
@@ -110,7 +138,7 @@ func (TrustCenterWatermarkConfig) Indexes() []ent.Index {
 func (TrustCenterWatermarkConfig) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		// entfga.SettingsChecks("trust_center"),
-		// entfga.SelfAccessChecks(),
+		entfga.SelfAccessChecks(),
 	}
 }
 

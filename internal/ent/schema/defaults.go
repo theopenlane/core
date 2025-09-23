@@ -271,6 +271,14 @@ func uniqueEdgeFrom(e *edgeDefinition) ent.Edge {
 	return basicEdgeFrom(e, true)
 }
 
+// nonUniqueEdgeFrom uses the provided edge definition to create the inverse edge without unique constraint
+// This is useful when you want to define your own unique constraint with soft delete support
+func nonUniqueEdgeFrom(e *edgeDefinition) ent.Edge {
+	e.getEdgeDetails(false)
+
+	return basicEdgeFrom(e, false)
+}
+
 // basicEdgeTo uses the provided edge definition to create an edge with all the properties
 // this is used by the above functions, and is not intended to be called directly
 func basicEdgeTo(e *edgeDefinition, unique bool) ent.Edge {
