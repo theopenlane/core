@@ -6,7 +6,6 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang-jwt/jwt/v5"
@@ -294,7 +293,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	}).SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
-		Name:      "ssoorg" + time.Now().Format("20060102150405"),
+		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).SaveX(ownerCtx)
 
@@ -382,11 +381,10 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	// Create user without TFA enabled
-	tfa := false
 	testUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "T3stP@ssw0rd",
 		confirmedUser: true,
-		tfaEnabled:    tfa, // User does not have TFA enabled
+		tfaEnabled:    false, // User does not have TFA enabled
 	})
 	testCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
 	testCtx = ent.NewContext(testCtx, suite.db)
@@ -397,7 +395,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
 	}).SaveX(testCtx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
-		Name:      "tfaorg" + time.Now().Format("20060102150405") + gofakeit.UUID(),
+		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).SaveX(testCtx)
 
@@ -434,11 +432,10 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	// Create user with TFA enabled
-	tfa := true
 	testUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "T3stP@ssw0rd",
 		confirmedUser: true,
-		tfaEnabled:    tfa, // User has TFA enabled
+		tfaEnabled:    true, // User has TFA enabled
 	})
 	testCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
 	testCtx = ent.NewContext(testCtx, suite.db)
@@ -449,7 +446,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {
 	}).SaveX(testCtx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
-		Name:      "tfaorg" + time.Now().Format("20060102150405") + gofakeit.UUID(),
+		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).SaveX(testCtx)
 

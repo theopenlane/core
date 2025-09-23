@@ -3,9 +3,7 @@ package handlers_test
 import (
 	"net/http"
 	"net/http/httptest"
-	"time"
 
-	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -14,6 +12,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func ptr[T any](v T) *T { return &v }
@@ -40,7 +39,7 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 	assert.NoError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
-		Name:      gofakeit.Name() + time.Now().Format("20060102150405"),
+		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ownerCtx)
 	assert.NoError(t, err)
@@ -95,7 +94,7 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforcedOwnerBypass() {
 	assert.NoError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
-		Name:      gofakeit.Name() + time.Now().Format("20060102150405"),
+		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ownerCtx)
 	assert.NoError(t, err)
@@ -139,7 +138,7 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerTFAEnforced() {
 	assert.NoError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
-		Name:      gofakeit.Name() + time.Now().Format("20060102150405"),
+		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ownerCtx)
 	assert.NoError(t, err)
@@ -201,7 +200,7 @@ func (suite *HandlerTestSuite) TestGithubLoginHandlerTFAEnforced() {
 	assert.NoError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
-		Name:      gofakeit.Name() + time.Now().Format("20060102150405"),
+		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ownerCtx)
 	assert.NoError(t, err)

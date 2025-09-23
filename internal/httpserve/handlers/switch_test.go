@@ -5,9 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
-	"time"
 
-	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -100,7 +98,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
 	}).SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(ent.CreateOrganizationInput{
-		Name:      gofakeit.Name() + time.Now().Format("20060102150405"),
+		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).SaveX(ownerCtx)
 
@@ -164,7 +162,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforcedUserHasTFA() {
 	}).SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(ent.CreateOrganizationInput{
-		Name:      gofakeit.Name() + time.Now().Format("20060102150405"),
+		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).SaveX(ownerCtx)
 

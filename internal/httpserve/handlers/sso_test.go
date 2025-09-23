@@ -326,7 +326,7 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 	}).SaveX(ctx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
-		Name:      gofakeit.Name() + time.Now().Format("20060102150405"),
+		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).SaveX(ctx)
 
