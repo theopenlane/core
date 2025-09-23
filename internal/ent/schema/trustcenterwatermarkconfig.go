@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
@@ -113,7 +114,9 @@ func (t TrustCenterWatermarkConfig) Edges() []ent.Edge {
 
 // Hooks of the TrustCenterWatermarkConfig
 func (TrustCenterWatermarkConfig) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookTrustCenterWatermarkConfig(),
+	}
 }
 
 // Policy of the TrustCenterWatermarkConfig
