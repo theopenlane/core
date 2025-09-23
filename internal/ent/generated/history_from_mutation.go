@@ -12454,6 +12454,38 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromCreate(ctx context
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
+	if logoID, exists := m.LogoID(); exists {
+		create = create.SetNillableLogoID(&logoID)
+	}
+
+	if text, exists := m.Text(); exists {
+		create = create.SetText(text)
+	}
+
+	if fontSize, exists := m.FontSize(); exists {
+		create = create.SetFontSize(fontSize)
+	}
+
+	if opacity, exists := m.Opacity(); exists {
+		create = create.SetOpacity(opacity)
+	}
+
+	if rotation, exists := m.Rotation(); exists {
+		create = create.SetRotation(rotation)
+	}
+
+	if color, exists := m.Color(); exists {
+		create = create.SetColor(color)
+	}
+
+	if font, exists := m.Font(); exists {
+		create = create.SetFont(font)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -12521,6 +12553,54 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromUpdate(ctx context
 			create = create.SetDeletedBy(trustcenterwatermarkconfig.DeletedBy)
 		}
 
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(trustcenterwatermarkconfig.TrustCenterID)
+		}
+
+		if logoID, exists := m.LogoID(); exists {
+			create = create.SetNillableLogoID(&logoID)
+		} else {
+			create = create.SetNillableLogoID(trustcenterwatermarkconfig.LogoID)
+		}
+
+		if text, exists := m.Text(); exists {
+			create = create.SetText(text)
+		} else {
+			create = create.SetText(trustcenterwatermarkconfig.Text)
+		}
+
+		if fontSize, exists := m.FontSize(); exists {
+			create = create.SetFontSize(fontSize)
+		} else {
+			create = create.SetFontSize(trustcenterwatermarkconfig.FontSize)
+		}
+
+		if opacity, exists := m.Opacity(); exists {
+			create = create.SetOpacity(opacity)
+		} else {
+			create = create.SetOpacity(trustcenterwatermarkconfig.Opacity)
+		}
+
+		if rotation, exists := m.Rotation(); exists {
+			create = create.SetRotation(rotation)
+		} else {
+			create = create.SetRotation(trustcenterwatermarkconfig.Rotation)
+		}
+
+		if color, exists := m.Color(); exists {
+			create = create.SetColor(color)
+		} else {
+			create = create.SetColor(trustcenterwatermarkconfig.Color)
+		}
+
+		if font, exists := m.Font(); exists {
+			create = create.SetFont(font)
+		} else {
+			create = create.SetFont(trustcenterwatermarkconfig.Font)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -12562,6 +12642,14 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context
 			SetUpdatedBy(trustcenterwatermarkconfig.UpdatedBy).
 			SetDeletedAt(trustcenterwatermarkconfig.DeletedAt).
 			SetDeletedBy(trustcenterwatermarkconfig.DeletedBy).
+			SetTrustCenterID(trustcenterwatermarkconfig.TrustCenterID).
+			SetNillableLogoID(trustcenterwatermarkconfig.LogoID).
+			SetText(trustcenterwatermarkconfig.Text).
+			SetFontSize(trustcenterwatermarkconfig.FontSize).
+			SetOpacity(trustcenterwatermarkconfig.Opacity).
+			SetRotation(trustcenterwatermarkconfig.Rotation).
+			SetColor(trustcenterwatermarkconfig.Color).
+			SetFont(trustcenterwatermarkconfig.Font).
 			Save(ctx)
 		if err != nil {
 			return err

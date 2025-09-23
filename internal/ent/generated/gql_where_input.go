@@ -84707,6 +84707,10 @@ type TrustCenterWhereInput struct {
 	HasSetting     *bool                           `json:"hasSetting,omitempty"`
 	HasSettingWith []*TrustCenterSettingWhereInput `json:"hasSettingWith,omitempty"`
 
+	// "watermark_config" edge predicates.
+	HasWatermarkConfig     *bool                                   `json:"hasWatermarkConfig,omitempty"`
+	HasWatermarkConfigWith []*TrustCenterWatermarkConfigWhereInput `json:"hasWatermarkConfigWith,omitempty"`
+
 	// "trust_center_subprocessors" edge predicates.
 	HasTrustCenterSubprocessors     *bool                                `json:"hasTrustCenterSubprocessors,omitempty"`
 	HasTrustCenterSubprocessorsWith []*TrustCenterSubprocessorWhereInput `json:"hasTrustCenterSubprocessorsWith,omitempty"`
@@ -85164,6 +85168,24 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, trustcenter.HasSettingWith(with...))
+	}
+	if i.HasWatermarkConfig != nil {
+		p := trustcenter.HasWatermarkConfig()
+		if !*i.HasWatermarkConfig {
+			p = trustcenter.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasWatermarkConfigWith) > 0 {
+		with := make([]predicate.TrustCenterWatermarkConfig, 0, len(i.HasWatermarkConfigWith))
+		for _, w := range i.HasWatermarkConfigWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasWatermarkConfigWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenter.HasWatermarkConfigWith(with...))
 	}
 	if i.HasTrustCenterSubprocessors != nil {
 		p := trustcenter.HasTrustCenterSubprocessors()
@@ -91987,6 +92009,135 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "logo_id" field predicates.
+	LogoID             *string  `json:"logoID,omitempty"`
+	LogoIDNEQ          *string  `json:"logoIDNEQ,omitempty"`
+	LogoIDIn           []string `json:"logoIDIn,omitempty"`
+	LogoIDNotIn        []string `json:"logoIDNotIn,omitempty"`
+	LogoIDGT           *string  `json:"logoIDGT,omitempty"`
+	LogoIDGTE          *string  `json:"logoIDGTE,omitempty"`
+	LogoIDLT           *string  `json:"logoIDLT,omitempty"`
+	LogoIDLTE          *string  `json:"logoIDLTE,omitempty"`
+	LogoIDContains     *string  `json:"logoIDContains,omitempty"`
+	LogoIDHasPrefix    *string  `json:"logoIDHasPrefix,omitempty"`
+	LogoIDHasSuffix    *string  `json:"logoIDHasSuffix,omitempty"`
+	LogoIDIsNil        bool     `json:"logoIDIsNil,omitempty"`
+	LogoIDNotNil       bool     `json:"logoIDNotNil,omitempty"`
+	LogoIDEqualFold    *string  `json:"logoIDEqualFold,omitempty"`
+	LogoIDContainsFold *string  `json:"logoIDContainsFold,omitempty"`
+
+	// "text" field predicates.
+	Text             *string  `json:"text,omitempty"`
+	TextNEQ          *string  `json:"textNEQ,omitempty"`
+	TextIn           []string `json:"textIn,omitempty"`
+	TextNotIn        []string `json:"textNotIn,omitempty"`
+	TextGT           *string  `json:"textGT,omitempty"`
+	TextGTE          *string  `json:"textGTE,omitempty"`
+	TextLT           *string  `json:"textLT,omitempty"`
+	TextLTE          *string  `json:"textLTE,omitempty"`
+	TextContains     *string  `json:"textContains,omitempty"`
+	TextHasPrefix    *string  `json:"textHasPrefix,omitempty"`
+	TextHasSuffix    *string  `json:"textHasSuffix,omitempty"`
+	TextIsNil        bool     `json:"textIsNil,omitempty"`
+	TextNotNil       bool     `json:"textNotNil,omitempty"`
+	TextEqualFold    *string  `json:"textEqualFold,omitempty"`
+	TextContainsFold *string  `json:"textContainsFold,omitempty"`
+
+	// "font_size" field predicates.
+	FontSize       *float64  `json:"fontSize,omitempty"`
+	FontSizeNEQ    *float64  `json:"fontSizeNEQ,omitempty"`
+	FontSizeIn     []float64 `json:"fontSizeIn,omitempty"`
+	FontSizeNotIn  []float64 `json:"fontSizeNotIn,omitempty"`
+	FontSizeGT     *float64  `json:"fontSizeGT,omitempty"`
+	FontSizeGTE    *float64  `json:"fontSizeGTE,omitempty"`
+	FontSizeLT     *float64  `json:"fontSizeLT,omitempty"`
+	FontSizeLTE    *float64  `json:"fontSizeLTE,omitempty"`
+	FontSizeIsNil  bool      `json:"fontSizeIsNil,omitempty"`
+	FontSizeNotNil bool      `json:"fontSizeNotNil,omitempty"`
+
+	// "opacity" field predicates.
+	Opacity       *float64  `json:"opacity,omitempty"`
+	OpacityNEQ    *float64  `json:"opacityNEQ,omitempty"`
+	OpacityIn     []float64 `json:"opacityIn,omitempty"`
+	OpacityNotIn  []float64 `json:"opacityNotIn,omitempty"`
+	OpacityGT     *float64  `json:"opacityGT,omitempty"`
+	OpacityGTE    *float64  `json:"opacityGTE,omitempty"`
+	OpacityLT     *float64  `json:"opacityLT,omitempty"`
+	OpacityLTE    *float64  `json:"opacityLTE,omitempty"`
+	OpacityIsNil  bool      `json:"opacityIsNil,omitempty"`
+	OpacityNotNil bool      `json:"opacityNotNil,omitempty"`
+
+	// "rotation" field predicates.
+	Rotation       *float64  `json:"rotation,omitempty"`
+	RotationNEQ    *float64  `json:"rotationNEQ,omitempty"`
+	RotationIn     []float64 `json:"rotationIn,omitempty"`
+	RotationNotIn  []float64 `json:"rotationNotIn,omitempty"`
+	RotationGT     *float64  `json:"rotationGT,omitempty"`
+	RotationGTE    *float64  `json:"rotationGTE,omitempty"`
+	RotationLT     *float64  `json:"rotationLT,omitempty"`
+	RotationLTE    *float64  `json:"rotationLTE,omitempty"`
+	RotationIsNil  bool      `json:"rotationIsNil,omitempty"`
+	RotationNotNil bool      `json:"rotationNotNil,omitempty"`
+
+	// "color" field predicates.
+	Color             *string  `json:"color,omitempty"`
+	ColorNEQ          *string  `json:"colorNEQ,omitempty"`
+	ColorIn           []string `json:"colorIn,omitempty"`
+	ColorNotIn        []string `json:"colorNotIn,omitempty"`
+	ColorGT           *string  `json:"colorGT,omitempty"`
+	ColorGTE          *string  `json:"colorGTE,omitempty"`
+	ColorLT           *string  `json:"colorLT,omitempty"`
+	ColorLTE          *string  `json:"colorLTE,omitempty"`
+	ColorContains     *string  `json:"colorContains,omitempty"`
+	ColorHasPrefix    *string  `json:"colorHasPrefix,omitempty"`
+	ColorHasSuffix    *string  `json:"colorHasSuffix,omitempty"`
+	ColorIsNil        bool     `json:"colorIsNil,omitempty"`
+	ColorNotNil       bool     `json:"colorNotNil,omitempty"`
+	ColorEqualFold    *string  `json:"colorEqualFold,omitempty"`
+	ColorContainsFold *string  `json:"colorContainsFold,omitempty"`
+
+	// "font" field predicates.
+	Font             *string  `json:"font,omitempty"`
+	FontNEQ          *string  `json:"fontNEQ,omitempty"`
+	FontIn           []string `json:"fontIn,omitempty"`
+	FontNotIn        []string `json:"fontNotIn,omitempty"`
+	FontGT           *string  `json:"fontGT,omitempty"`
+	FontGTE          *string  `json:"fontGTE,omitempty"`
+	FontLT           *string  `json:"fontLT,omitempty"`
+	FontLTE          *string  `json:"fontLTE,omitempty"`
+	FontContains     *string  `json:"fontContains,omitempty"`
+	FontHasPrefix    *string  `json:"fontHasPrefix,omitempty"`
+	FontHasSuffix    *string  `json:"fontHasSuffix,omitempty"`
+	FontIsNil        bool     `json:"fontIsNil,omitempty"`
+	FontNotNil       bool     `json:"fontNotNil,omitempty"`
+	FontEqualFold    *string  `json:"fontEqualFold,omitempty"`
+	FontContainsFold *string  `json:"fontContainsFold,omitempty"`
+
+	// "trust_center" edge predicates.
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+
+	// "file" edge predicates.
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -92240,7 +92391,358 @@ func (i *TrustCenterWatermarkConfigWhereInput) P() (predicate.TrustCenterWaterma
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcenterwatermarkconfig.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
+	if i.LogoID != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDEQ(*i.LogoID))
+	}
+	if i.LogoIDNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDNEQ(*i.LogoIDNEQ))
+	}
+	if len(i.LogoIDIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDIn(i.LogoIDIn...))
+	}
+	if len(i.LogoIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDNotIn(i.LogoIDNotIn...))
+	}
+	if i.LogoIDGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDGT(*i.LogoIDGT))
+	}
+	if i.LogoIDGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDGTE(*i.LogoIDGTE))
+	}
+	if i.LogoIDLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDLT(*i.LogoIDLT))
+	}
+	if i.LogoIDLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDLTE(*i.LogoIDLTE))
+	}
+	if i.LogoIDContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDContains(*i.LogoIDContains))
+	}
+	if i.LogoIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDHasPrefix(*i.LogoIDHasPrefix))
+	}
+	if i.LogoIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDHasSuffix(*i.LogoIDHasSuffix))
+	}
+	if i.LogoIDIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDIsNil())
+	}
+	if i.LogoIDNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDNotNil())
+	}
+	if i.LogoIDEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDEqualFold(*i.LogoIDEqualFold))
+	}
+	if i.LogoIDContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.LogoIDContainsFold(*i.LogoIDContainsFold))
+	}
+	if i.Text != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextEQ(*i.Text))
+	}
+	if i.TextNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextNEQ(*i.TextNEQ))
+	}
+	if len(i.TextIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextIn(i.TextIn...))
+	}
+	if len(i.TextNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextNotIn(i.TextNotIn...))
+	}
+	if i.TextGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextGT(*i.TextGT))
+	}
+	if i.TextGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextGTE(*i.TextGTE))
+	}
+	if i.TextLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextLT(*i.TextLT))
+	}
+	if i.TextLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextLTE(*i.TextLTE))
+	}
+	if i.TextContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextContains(*i.TextContains))
+	}
+	if i.TextHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextHasPrefix(*i.TextHasPrefix))
+	}
+	if i.TextHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextHasSuffix(*i.TextHasSuffix))
+	}
+	if i.TextIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextIsNil())
+	}
+	if i.TextNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextNotNil())
+	}
+	if i.TextEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextEqualFold(*i.TextEqualFold))
+	}
+	if i.TextContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.TextContainsFold(*i.TextContainsFold))
+	}
+	if i.FontSize != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontSizeEQ(*i.FontSize))
+	}
+	if i.FontSizeNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontSizeNEQ(*i.FontSizeNEQ))
+	}
+	if len(i.FontSizeIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontSizeIn(i.FontSizeIn...))
+	}
+	if len(i.FontSizeNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontSizeNotIn(i.FontSizeNotIn...))
+	}
+	if i.FontSizeGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontSizeGT(*i.FontSizeGT))
+	}
+	if i.FontSizeGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontSizeGTE(*i.FontSizeGTE))
+	}
+	if i.FontSizeLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontSizeLT(*i.FontSizeLT))
+	}
+	if i.FontSizeLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontSizeLTE(*i.FontSizeLTE))
+	}
+	if i.FontSizeIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontSizeIsNil())
+	}
+	if i.FontSizeNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontSizeNotNil())
+	}
+	if i.Opacity != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OpacityEQ(*i.Opacity))
+	}
+	if i.OpacityNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OpacityNEQ(*i.OpacityNEQ))
+	}
+	if len(i.OpacityIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.OpacityIn(i.OpacityIn...))
+	}
+	if len(i.OpacityNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.OpacityNotIn(i.OpacityNotIn...))
+	}
+	if i.OpacityGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OpacityGT(*i.OpacityGT))
+	}
+	if i.OpacityGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OpacityGTE(*i.OpacityGTE))
+	}
+	if i.OpacityLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OpacityLT(*i.OpacityLT))
+	}
+	if i.OpacityLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OpacityLTE(*i.OpacityLTE))
+	}
+	if i.OpacityIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OpacityIsNil())
+	}
+	if i.OpacityNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.OpacityNotNil())
+	}
+	if i.Rotation != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.RotationEQ(*i.Rotation))
+	}
+	if i.RotationNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.RotationNEQ(*i.RotationNEQ))
+	}
+	if len(i.RotationIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.RotationIn(i.RotationIn...))
+	}
+	if len(i.RotationNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.RotationNotIn(i.RotationNotIn...))
+	}
+	if i.RotationGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.RotationGT(*i.RotationGT))
+	}
+	if i.RotationGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.RotationGTE(*i.RotationGTE))
+	}
+	if i.RotationLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.RotationLT(*i.RotationLT))
+	}
+	if i.RotationLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.RotationLTE(*i.RotationLTE))
+	}
+	if i.RotationIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.RotationIsNil())
+	}
+	if i.RotationNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.RotationNotNil())
+	}
+	if i.Color != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorEQ(*i.Color))
+	}
+	if i.ColorNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorNEQ(*i.ColorNEQ))
+	}
+	if len(i.ColorIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorIn(i.ColorIn...))
+	}
+	if len(i.ColorNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorNotIn(i.ColorNotIn...))
+	}
+	if i.ColorGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorGT(*i.ColorGT))
+	}
+	if i.ColorGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorGTE(*i.ColorGTE))
+	}
+	if i.ColorLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorLT(*i.ColorLT))
+	}
+	if i.ColorLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorLTE(*i.ColorLTE))
+	}
+	if i.ColorContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorContains(*i.ColorContains))
+	}
+	if i.ColorHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorHasPrefix(*i.ColorHasPrefix))
+	}
+	if i.ColorHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorHasSuffix(*i.ColorHasSuffix))
+	}
+	if i.ColorIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorIsNil())
+	}
+	if i.ColorNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorNotNil())
+	}
+	if i.ColorEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorEqualFold(*i.ColorEqualFold))
+	}
+	if i.ColorContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.ColorContainsFold(*i.ColorContainsFold))
+	}
+	if i.Font != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontEQ(*i.Font))
+	}
+	if i.FontNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontNEQ(*i.FontNEQ))
+	}
+	if len(i.FontIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontIn(i.FontIn...))
+	}
+	if len(i.FontNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontNotIn(i.FontNotIn...))
+	}
+	if i.FontGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontGT(*i.FontGT))
+	}
+	if i.FontGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontGTE(*i.FontGTE))
+	}
+	if i.FontLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontLT(*i.FontLT))
+	}
+	if i.FontLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontLTE(*i.FontLTE))
+	}
+	if i.FontContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontContains(*i.FontContains))
+	}
+	if i.FontHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontHasPrefix(*i.FontHasPrefix))
+	}
+	if i.FontHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontHasSuffix(*i.FontHasSuffix))
+	}
+	if i.FontIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontIsNil())
+	}
+	if i.FontNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontNotNil())
+	}
+	if i.FontEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontEqualFold(*i.FontEqualFold))
+	}
+	if i.FontContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfig.FontContainsFold(*i.FontContainsFold))
+	}
 
+	if i.HasTrustCenter != nil {
+		p := trustcenterwatermarkconfig.HasTrustCenter()
+		if !*i.HasTrustCenter {
+			p = trustcenterwatermarkconfig.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterWith) > 0 {
+		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		for _, w := range i.HasTrustCenterWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterwatermarkconfig.HasTrustCenterWith(with...))
+	}
+	if i.HasFile != nil {
+		p := trustcenterwatermarkconfig.HasFile()
+		if !*i.HasFile {
+			p = trustcenterwatermarkconfig.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFileWith))
+		for _, w := range i.HasFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterwatermarkconfig.HasFileWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTrustCenterWatermarkConfigWhereInput
@@ -92360,6 +92862,127 @@ type TrustCenterWatermarkConfigHistoryWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "logo_id" field predicates.
+	LogoID             *string  `json:"logoID,omitempty"`
+	LogoIDNEQ          *string  `json:"logoIDNEQ,omitempty"`
+	LogoIDIn           []string `json:"logoIDIn,omitempty"`
+	LogoIDNotIn        []string `json:"logoIDNotIn,omitempty"`
+	LogoIDGT           *string  `json:"logoIDGT,omitempty"`
+	LogoIDGTE          *string  `json:"logoIDGTE,omitempty"`
+	LogoIDLT           *string  `json:"logoIDLT,omitempty"`
+	LogoIDLTE          *string  `json:"logoIDLTE,omitempty"`
+	LogoIDContains     *string  `json:"logoIDContains,omitempty"`
+	LogoIDHasPrefix    *string  `json:"logoIDHasPrefix,omitempty"`
+	LogoIDHasSuffix    *string  `json:"logoIDHasSuffix,omitempty"`
+	LogoIDIsNil        bool     `json:"logoIDIsNil,omitempty"`
+	LogoIDNotNil       bool     `json:"logoIDNotNil,omitempty"`
+	LogoIDEqualFold    *string  `json:"logoIDEqualFold,omitempty"`
+	LogoIDContainsFold *string  `json:"logoIDContainsFold,omitempty"`
+
+	// "text" field predicates.
+	Text             *string  `json:"text,omitempty"`
+	TextNEQ          *string  `json:"textNEQ,omitempty"`
+	TextIn           []string `json:"textIn,omitempty"`
+	TextNotIn        []string `json:"textNotIn,omitempty"`
+	TextGT           *string  `json:"textGT,omitempty"`
+	TextGTE          *string  `json:"textGTE,omitempty"`
+	TextLT           *string  `json:"textLT,omitempty"`
+	TextLTE          *string  `json:"textLTE,omitempty"`
+	TextContains     *string  `json:"textContains,omitempty"`
+	TextHasPrefix    *string  `json:"textHasPrefix,omitempty"`
+	TextHasSuffix    *string  `json:"textHasSuffix,omitempty"`
+	TextIsNil        bool     `json:"textIsNil,omitempty"`
+	TextNotNil       bool     `json:"textNotNil,omitempty"`
+	TextEqualFold    *string  `json:"textEqualFold,omitempty"`
+	TextContainsFold *string  `json:"textContainsFold,omitempty"`
+
+	// "font_size" field predicates.
+	FontSize       *float64  `json:"fontSize,omitempty"`
+	FontSizeNEQ    *float64  `json:"fontSizeNEQ,omitempty"`
+	FontSizeIn     []float64 `json:"fontSizeIn,omitempty"`
+	FontSizeNotIn  []float64 `json:"fontSizeNotIn,omitempty"`
+	FontSizeGT     *float64  `json:"fontSizeGT,omitempty"`
+	FontSizeGTE    *float64  `json:"fontSizeGTE,omitempty"`
+	FontSizeLT     *float64  `json:"fontSizeLT,omitempty"`
+	FontSizeLTE    *float64  `json:"fontSizeLTE,omitempty"`
+	FontSizeIsNil  bool      `json:"fontSizeIsNil,omitempty"`
+	FontSizeNotNil bool      `json:"fontSizeNotNil,omitempty"`
+
+	// "opacity" field predicates.
+	Opacity       *float64  `json:"opacity,omitempty"`
+	OpacityNEQ    *float64  `json:"opacityNEQ,omitempty"`
+	OpacityIn     []float64 `json:"opacityIn,omitempty"`
+	OpacityNotIn  []float64 `json:"opacityNotIn,omitempty"`
+	OpacityGT     *float64  `json:"opacityGT,omitempty"`
+	OpacityGTE    *float64  `json:"opacityGTE,omitempty"`
+	OpacityLT     *float64  `json:"opacityLT,omitempty"`
+	OpacityLTE    *float64  `json:"opacityLTE,omitempty"`
+	OpacityIsNil  bool      `json:"opacityIsNil,omitempty"`
+	OpacityNotNil bool      `json:"opacityNotNil,omitempty"`
+
+	// "rotation" field predicates.
+	Rotation       *float64  `json:"rotation,omitempty"`
+	RotationNEQ    *float64  `json:"rotationNEQ,omitempty"`
+	RotationIn     []float64 `json:"rotationIn,omitempty"`
+	RotationNotIn  []float64 `json:"rotationNotIn,omitempty"`
+	RotationGT     *float64  `json:"rotationGT,omitempty"`
+	RotationGTE    *float64  `json:"rotationGTE,omitempty"`
+	RotationLT     *float64  `json:"rotationLT,omitempty"`
+	RotationLTE    *float64  `json:"rotationLTE,omitempty"`
+	RotationIsNil  bool      `json:"rotationIsNil,omitempty"`
+	RotationNotNil bool      `json:"rotationNotNil,omitempty"`
+
+	// "color" field predicates.
+	Color             *string  `json:"color,omitempty"`
+	ColorNEQ          *string  `json:"colorNEQ,omitempty"`
+	ColorIn           []string `json:"colorIn,omitempty"`
+	ColorNotIn        []string `json:"colorNotIn,omitempty"`
+	ColorGT           *string  `json:"colorGT,omitempty"`
+	ColorGTE          *string  `json:"colorGTE,omitempty"`
+	ColorLT           *string  `json:"colorLT,omitempty"`
+	ColorLTE          *string  `json:"colorLTE,omitempty"`
+	ColorContains     *string  `json:"colorContains,omitempty"`
+	ColorHasPrefix    *string  `json:"colorHasPrefix,omitempty"`
+	ColorHasSuffix    *string  `json:"colorHasSuffix,omitempty"`
+	ColorIsNil        bool     `json:"colorIsNil,omitempty"`
+	ColorNotNil       bool     `json:"colorNotNil,omitempty"`
+	ColorEqualFold    *string  `json:"colorEqualFold,omitempty"`
+	ColorContainsFold *string  `json:"colorContainsFold,omitempty"`
+
+	// "font" field predicates.
+	Font             *string  `json:"font,omitempty"`
+	FontNEQ          *string  `json:"fontNEQ,omitempty"`
+	FontIn           []string `json:"fontIn,omitempty"`
+	FontNotIn        []string `json:"fontNotIn,omitempty"`
+	FontGT           *string  `json:"fontGT,omitempty"`
+	FontGTE          *string  `json:"fontGTE,omitempty"`
+	FontLT           *string  `json:"fontLT,omitempty"`
+	FontLTE          *string  `json:"fontLTE,omitempty"`
+	FontContains     *string  `json:"fontContains,omitempty"`
+	FontHasPrefix    *string  `json:"fontHasPrefix,omitempty"`
+	FontHasSuffix    *string  `json:"fontHasSuffix,omitempty"`
+	FontIsNil        bool     `json:"fontIsNil,omitempty"`
+	FontNotNil       bool     `json:"fontNotNil,omitempty"`
+	FontEqualFold    *string  `json:"fontEqualFold,omitempty"`
+	FontContainsFold *string  `json:"fontContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -92693,6 +93316,321 @@ func (i *TrustCenterWatermarkConfigHistoryWhereInput) P() (predicate.TrustCenter
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
+	if i.LogoID != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDEQ(*i.LogoID))
+	}
+	if i.LogoIDNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDNEQ(*i.LogoIDNEQ))
+	}
+	if len(i.LogoIDIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDIn(i.LogoIDIn...))
+	}
+	if len(i.LogoIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDNotIn(i.LogoIDNotIn...))
+	}
+	if i.LogoIDGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDGT(*i.LogoIDGT))
+	}
+	if i.LogoIDGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDGTE(*i.LogoIDGTE))
+	}
+	if i.LogoIDLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDLT(*i.LogoIDLT))
+	}
+	if i.LogoIDLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDLTE(*i.LogoIDLTE))
+	}
+	if i.LogoIDContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDContains(*i.LogoIDContains))
+	}
+	if i.LogoIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDHasPrefix(*i.LogoIDHasPrefix))
+	}
+	if i.LogoIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDHasSuffix(*i.LogoIDHasSuffix))
+	}
+	if i.LogoIDIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDIsNil())
+	}
+	if i.LogoIDNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDNotNil())
+	}
+	if i.LogoIDEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDEqualFold(*i.LogoIDEqualFold))
+	}
+	if i.LogoIDContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.LogoIDContainsFold(*i.LogoIDContainsFold))
+	}
+	if i.Text != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextEQ(*i.Text))
+	}
+	if i.TextNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextNEQ(*i.TextNEQ))
+	}
+	if len(i.TextIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextIn(i.TextIn...))
+	}
+	if len(i.TextNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextNotIn(i.TextNotIn...))
+	}
+	if i.TextGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextGT(*i.TextGT))
+	}
+	if i.TextGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextGTE(*i.TextGTE))
+	}
+	if i.TextLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextLT(*i.TextLT))
+	}
+	if i.TextLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextLTE(*i.TextLTE))
+	}
+	if i.TextContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextContains(*i.TextContains))
+	}
+	if i.TextHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextHasPrefix(*i.TextHasPrefix))
+	}
+	if i.TextHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextHasSuffix(*i.TextHasSuffix))
+	}
+	if i.TextIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextIsNil())
+	}
+	if i.TextNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextNotNil())
+	}
+	if i.TextEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextEqualFold(*i.TextEqualFold))
+	}
+	if i.TextContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.TextContainsFold(*i.TextContainsFold))
+	}
+	if i.FontSize != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontSizeEQ(*i.FontSize))
+	}
+	if i.FontSizeNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontSizeNEQ(*i.FontSizeNEQ))
+	}
+	if len(i.FontSizeIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontSizeIn(i.FontSizeIn...))
+	}
+	if len(i.FontSizeNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontSizeNotIn(i.FontSizeNotIn...))
+	}
+	if i.FontSizeGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontSizeGT(*i.FontSizeGT))
+	}
+	if i.FontSizeGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontSizeGTE(*i.FontSizeGTE))
+	}
+	if i.FontSizeLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontSizeLT(*i.FontSizeLT))
+	}
+	if i.FontSizeLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontSizeLTE(*i.FontSizeLTE))
+	}
+	if i.FontSizeIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontSizeIsNil())
+	}
+	if i.FontSizeNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontSizeNotNil())
+	}
+	if i.Opacity != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OpacityEQ(*i.Opacity))
+	}
+	if i.OpacityNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OpacityNEQ(*i.OpacityNEQ))
+	}
+	if len(i.OpacityIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OpacityIn(i.OpacityIn...))
+	}
+	if len(i.OpacityNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OpacityNotIn(i.OpacityNotIn...))
+	}
+	if i.OpacityGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OpacityGT(*i.OpacityGT))
+	}
+	if i.OpacityGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OpacityGTE(*i.OpacityGTE))
+	}
+	if i.OpacityLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OpacityLT(*i.OpacityLT))
+	}
+	if i.OpacityLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OpacityLTE(*i.OpacityLTE))
+	}
+	if i.OpacityIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OpacityIsNil())
+	}
+	if i.OpacityNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OpacityNotNil())
+	}
+	if i.Rotation != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.RotationEQ(*i.Rotation))
+	}
+	if i.RotationNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.RotationNEQ(*i.RotationNEQ))
+	}
+	if len(i.RotationIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.RotationIn(i.RotationIn...))
+	}
+	if len(i.RotationNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.RotationNotIn(i.RotationNotIn...))
+	}
+	if i.RotationGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.RotationGT(*i.RotationGT))
+	}
+	if i.RotationGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.RotationGTE(*i.RotationGTE))
+	}
+	if i.RotationLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.RotationLT(*i.RotationLT))
+	}
+	if i.RotationLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.RotationLTE(*i.RotationLTE))
+	}
+	if i.RotationIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.RotationIsNil())
+	}
+	if i.RotationNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.RotationNotNil())
+	}
+	if i.Color != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorEQ(*i.Color))
+	}
+	if i.ColorNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorNEQ(*i.ColorNEQ))
+	}
+	if len(i.ColorIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorIn(i.ColorIn...))
+	}
+	if len(i.ColorNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorNotIn(i.ColorNotIn...))
+	}
+	if i.ColorGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorGT(*i.ColorGT))
+	}
+	if i.ColorGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorGTE(*i.ColorGTE))
+	}
+	if i.ColorLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorLT(*i.ColorLT))
+	}
+	if i.ColorLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorLTE(*i.ColorLTE))
+	}
+	if i.ColorContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorContains(*i.ColorContains))
+	}
+	if i.ColorHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorHasPrefix(*i.ColorHasPrefix))
+	}
+	if i.ColorHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorHasSuffix(*i.ColorHasSuffix))
+	}
+	if i.ColorIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorIsNil())
+	}
+	if i.ColorNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorNotNil())
+	}
+	if i.ColorEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorEqualFold(*i.ColorEqualFold))
+	}
+	if i.ColorContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.ColorContainsFold(*i.ColorContainsFold))
+	}
+	if i.Font != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontEQ(*i.Font))
+	}
+	if i.FontNEQ != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontNEQ(*i.FontNEQ))
+	}
+	if len(i.FontIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontIn(i.FontIn...))
+	}
+	if len(i.FontNotIn) > 0 {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontNotIn(i.FontNotIn...))
+	}
+	if i.FontGT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontGT(*i.FontGT))
+	}
+	if i.FontGTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontGTE(*i.FontGTE))
+	}
+	if i.FontLT != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontLT(*i.FontLT))
+	}
+	if i.FontLTE != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontLTE(*i.FontLTE))
+	}
+	if i.FontContains != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontContains(*i.FontContains))
+	}
+	if i.FontHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontHasPrefix(*i.FontHasPrefix))
+	}
+	if i.FontHasSuffix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontHasSuffix(*i.FontHasSuffix))
+	}
+	if i.FontIsNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontIsNil())
+	}
+	if i.FontNotNil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontNotNil())
+	}
+	if i.FontEqualFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontEqualFold(*i.FontEqualFold))
+	}
+	if i.FontContainsFold != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.FontContainsFold(*i.FontContainsFold))
 	}
 
 	switch len(predicates) {

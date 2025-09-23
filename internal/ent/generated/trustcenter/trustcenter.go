@@ -41,6 +41,8 @@ const (
 	EdgeCustomDomain = "custom_domain"
 	// EdgeSetting holds the string denoting the setting edge name in mutations.
 	EdgeSetting = "setting"
+	// EdgeWatermarkConfig holds the string denoting the watermark_config edge name in mutations.
+	EdgeWatermarkConfig = "watermark_config"
 	// EdgeTrustCenterSubprocessors holds the string denoting the trust_center_subprocessors edge name in mutations.
 	EdgeTrustCenterSubprocessors = "trust_center_subprocessors"
 	// EdgeTrustCenterDocs holds the string denoting the trust_center_docs edge name in mutations.
@@ -72,6 +74,13 @@ const (
 	SettingInverseTable = "trust_center_settings"
 	// SettingColumn is the table column denoting the setting relation/edge.
 	SettingColumn = "trust_center_id"
+	// WatermarkConfigTable is the table that holds the watermark_config relation/edge.
+	WatermarkConfigTable = "trust_centers"
+	// WatermarkConfigInverseTable is the table name for the TrustCenterWatermarkConfig entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterwatermarkconfig" package.
+	WatermarkConfigInverseTable = "trust_center_watermark_configs"
+	// WatermarkConfigColumn is the table column denoting the watermark_config relation/edge.
+	WatermarkConfigColumn = "trust_center_watermark_config"
 	// TrustCenterSubprocessorsTable is the table that holds the trust_center_subprocessors relation/edge.
 	TrustCenterSubprocessorsTable = "trust_center_subprocessors"
 	// TrustCenterSubprocessorsInverseTable is the table name for the TrustCenterSubprocessor entity.
@@ -117,10 +126,21 @@ var Columns = []string{
 	FieldCustomDomainID,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "trust_centers"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"trust_center_watermark_config",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -224,6 +244,13 @@ func BySettingField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByWatermarkConfigField orders the results by watermark_config field.
+func ByWatermarkConfigField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWatermarkConfigStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByTrustCenterSubprocessorsCount orders the results by trust_center_subprocessors count.
 func ByTrustCenterSubprocessorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -298,6 +325,13 @@ func newSettingStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SettingInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2O, false, SettingTable, SettingColumn),
+	)
+}
+func newWatermarkConfigStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WatermarkConfigInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, WatermarkConfigTable, WatermarkConfigColumn),
 	)
 }
 func newTrustCenterSubprocessorsStep() *sqlgraph.Step {

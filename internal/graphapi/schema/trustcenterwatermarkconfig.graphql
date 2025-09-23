@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up trustCenterWatermarkConfig by ID
+    """
+     trustCenterWatermarkConfig(
+        """
+        ID of the trustCenterWatermarkConfig
+        """
+        id: ID!
+    ):  TrustCenterWatermarkConfig!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterWatermarkConfig
+    """
+    createTrustCenterWatermarkConfig(
+        """
+        values of the trustCenterWatermarkConfig
+        """
+        input: CreateTrustCenterWatermarkConfigInput!
+    ): TrustCenterWatermarkConfigCreatePayload!
+    """
+    Create multiple new trustCenterWatermarkConfigs
+    """
+    createBulkTrustCenterWatermarkConfig(
+        """
+        values of the trustCenterWatermarkConfig
+        """
+        input: [CreateTrustCenterWatermarkConfigInput!]
+    ): TrustCenterWatermarkConfigBulkCreatePayload!
+    """
+    Create multiple new trustCenterWatermarkConfigs via file upload
+    """
+    createBulkCSVTrustCenterWatermarkConfig(
+        """
+        csv file containing values of the trustCenterWatermarkConfig
+        """
+        input: Upload!
+    ): TrustCenterWatermarkConfigBulkCreatePayload!
+    """
+    Update an existing trustCenterWatermarkConfig
+    """
+    updateTrustCenterWatermarkConfig(
+        """
+        ID of the trustCenterWatermarkConfig
+        """
+        id: ID!
+        """
+        New values for the trustCenterWatermarkConfig
+        """
+        input: UpdateTrustCenterWatermarkConfigInput!
+    ): TrustCenterWatermarkConfigUpdatePayload!
+    """
+    Delete an existing trustCenterWatermarkConfig
+    """
+    deleteTrustCenterWatermarkConfig(
+        """
+        ID of the trustCenterWatermarkConfig
+        """
+        id: ID!
+    ): TrustCenterWatermarkConfigDeletePayload!
+}
+
+"""
+Return response for createTrustCenterWatermarkConfig mutation
+"""
+type TrustCenterWatermarkConfigCreatePayload {
+    """
+    Created trustCenterWatermarkConfig
+    """
+    trustCenterWatermarkConfig: TrustCenterWatermarkConfig!
+}
+
+"""
+Return response for updateTrustCenterWatermarkConfig mutation
+"""
+type TrustCenterWatermarkConfigUpdatePayload {
+    """
+    Updated trustCenterWatermarkConfig
+    """
+    trustCenterWatermarkConfig: TrustCenterWatermarkConfig!
+}
+
+"""
+Return response for deleteTrustCenterWatermarkConfig mutation
+"""
+type TrustCenterWatermarkConfigDeletePayload {
+    """
+    Deleted trustCenterWatermarkConfig ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterWatermarkConfig mutation
+"""
+type TrustCenterWatermarkConfigBulkCreatePayload {
+    """
+    Created trustCenterWatermarkConfigs
+    """
+    trustCenterWatermarkConfigs: [TrustCenterWatermarkConfig!]
+}

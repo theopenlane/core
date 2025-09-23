@@ -66,6 +66,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
@@ -1047,6 +1048,13 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).TrustCenterSetting.Query().Where((trustcentersetting.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcentersettingCount, err := FromContext(ctx).TrustCenterSetting.Delete().Where(trustcentersetting.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", trustcentersettingCount).Msg("deleting trustcentersetting")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where((trustcenterwatermarkconfig.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcenterwatermarkconfigCount, err := FromContext(ctx).TrustCenterWatermarkConfig.Delete().Where(trustcenterwatermarkconfig.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", trustcenterwatermarkconfigCount).Msg("deleting trustcenterwatermarkconfig")
 			return err
 		}
 	}

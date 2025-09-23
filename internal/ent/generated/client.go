@@ -22502,6 +22502,25 @@ func (c *TrustCenterClient) QuerySetting(_m *TrustCenter) *TrustCenterSettingQue
 	return query
 }
 
+// QueryWatermarkConfig queries the watermark_config edge of a TrustCenter.
+func (c *TrustCenterClient) QueryWatermarkConfig(_m *TrustCenter) *TrustCenterWatermarkConfigQuery {
+	query := (&TrustCenterWatermarkConfigClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(trustcenterwatermarkconfig.Table, trustcenterwatermarkconfig.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.WatermarkConfigTable, trustcenter.WatermarkConfigColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterWatermarkConfig
+		step.Edge.Schema = schemaConfig.TrustCenter
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryTrustCenterSubprocessors queries the trust_center_subprocessors edge of a TrustCenter.
 func (c *TrustCenterClient) QueryTrustCenterSubprocessors(_m *TrustCenter) *TrustCenterSubprocessorQuery {
 	query := (&TrustCenterSubprocessorClient{config: c.config}).Query()
@@ -24116,6 +24135,44 @@ func (c *TrustCenterWatermarkConfigClient) GetX(ctx context.Context, id string) 
 		panic(err)
 	}
 	return obj
+}
+
+// QueryTrustCenter queries the trust_center edge of a TrustCenterWatermarkConfig.
+func (c *TrustCenterWatermarkConfigClient) QueryTrustCenter(_m *TrustCenterWatermarkConfig) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterwatermarkconfig.Table, trustcenterwatermarkconfig.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, trustcenterwatermarkconfig.TrustCenterTable, trustcenterwatermarkconfig.TrustCenterColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenter
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFile queries the file edge of a TrustCenterWatermarkConfig.
+func (c *TrustCenterWatermarkConfigClient) QueryFile(_m *TrustCenterWatermarkConfig) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterwatermarkconfig.Table, trustcenterwatermarkconfig.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterwatermarkconfig.FileTable, trustcenterwatermarkconfig.FileColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

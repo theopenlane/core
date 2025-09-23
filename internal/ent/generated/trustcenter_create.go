@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 )
 
 // TrustCenterCreate is the builder for creating a TrustCenter entity.
@@ -199,6 +200,25 @@ func (_c *TrustCenterCreate) SetNillableSettingID(id *string) *TrustCenterCreate
 // SetSetting sets the "setting" edge to the TrustCenterSetting entity.
 func (_c *TrustCenterCreate) SetSetting(v *TrustCenterSetting) *TrustCenterCreate {
 	return _c.SetSettingID(v.ID)
+}
+
+// SetWatermarkConfigID sets the "watermark_config" edge to the TrustCenterWatermarkConfig entity by ID.
+func (_c *TrustCenterCreate) SetWatermarkConfigID(id string) *TrustCenterCreate {
+	_c.mutation.SetWatermarkConfigID(id)
+	return _c
+}
+
+// SetNillableWatermarkConfigID sets the "watermark_config" edge to the TrustCenterWatermarkConfig entity by ID if the given value is not nil.
+func (_c *TrustCenterCreate) SetNillableWatermarkConfigID(id *string) *TrustCenterCreate {
+	if id != nil {
+		_c = _c.SetWatermarkConfigID(*id)
+	}
+	return _c
+}
+
+// SetWatermarkConfig sets the "watermark_config" edge to the TrustCenterWatermarkConfig entity.
+func (_c *TrustCenterCreate) SetWatermarkConfig(v *TrustCenterWatermarkConfig) *TrustCenterCreate {
+	return _c.SetWatermarkConfigID(v.ID)
 }
 
 // AddTrustCenterSubprocessorIDs adds the "trust_center_subprocessors" edge to the TrustCenterSubprocessor entity by IDs.
@@ -452,6 +472,24 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WatermarkConfigIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.WatermarkConfigTable,
+			Columns: []string{trustcenter.WatermarkConfigColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.trust_center_watermark_config = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {

@@ -3722,6 +3722,30 @@ func (_m *TrustCenterWatermarkConfigHistory) changes(new *TrustCenterWatermarkCo
 	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
 		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
+	if !reflect.DeepEqual(_m.TrustCenterID, new.TrustCenterID) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldTrustCenterID, _m.TrustCenterID, new.TrustCenterID))
+	}
+	if !reflect.DeepEqual(_m.LogoID, new.LogoID) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldLogoID, _m.LogoID, new.LogoID))
+	}
+	if !reflect.DeepEqual(_m.Text, new.Text) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldText, _m.Text, new.Text))
+	}
+	if !reflect.DeepEqual(_m.FontSize, new.FontSize) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldFontSize, _m.FontSize, new.FontSize))
+	}
+	if !reflect.DeepEqual(_m.Opacity, new.Opacity) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldOpacity, _m.Opacity, new.Opacity))
+	}
+	if !reflect.DeepEqual(_m.Rotation, new.Rotation) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldRotation, _m.Rotation, new.Rotation))
+	}
+	if !reflect.DeepEqual(_m.Color, new.Color) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldColor, _m.Color, new.Color))
+	}
+	if !reflect.DeepEqual(_m.Font, new.Font) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldFont, _m.Font, new.Font))
+	}
 	return changes
 }
 
