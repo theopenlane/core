@@ -3,8 +3,10 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -131,7 +133,10 @@ func (TrustCenterWatermarkConfig) Modules() []models.OrgModule {
 
 // Indexes of the TrustCenterWatermarkConfig
 func (TrustCenterWatermarkConfig) Indexes() []ent.Index {
-	return []ent.Index{}
+	return []ent.Index{
+		index.Fields("trust_center_id").
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+	}
 }
 
 // Annotations of the TrustCenterWatermarkConfig
