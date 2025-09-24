@@ -1,4 +1,4 @@
-h1:Tk6VbVlp8xd4SAJm0OkH5Gqr9Ygw9UMo+EtPTFOK66o=
+h1:6li7aWguqMhYnIqEjcoJHfi+AYF4Mrnna8fqDSIXs8A=
 20250414203514_init.sql h1:NmCV8ML7NQDnzWVgI8QwOPofl3cp1WGzZWzPQhilEbY=
 20250418204249_control_objective.sql h1:NVX8qKq77/54YdYSQZMyI+HS5RXNahqyyDtNHf9oMnQ=
 20250421141003_aauid_not_unique_per_machine.sql h1:/ZFOjmdeEiPZl23+/MIjK1sxFWSi8PrMvV3kJ4iqbW4=
@@ -57,3 +57,4 @@ h1:Tk6VbVlp8xd4SAJm0OkH5Gqr9Ygw9UMo+EtPTFOK66o=
 20250923144750_evidence_default.sql h1:vnT2OpfvC39GcjXK8wxa0Wp2pejbo2yrAsylHHmgXXg=
 20250923202810_organizationenforced2fa.sql h1:93RN8Cva+gIFjfRdEGUD3rX6S2KWrr0wShWBR0aut2o=
 20250923220614_normalize_trustcenter_ownership.sql h1:lhjOLxoh+8wfc1mAeoH5qVRvPyTK+f5LcNFdhJ7JR6k=
+20250924152714_trustcenter_watermark_config.sql h1:TIgwKPzFiK0ZqIatXodyax8B74PSB9kcmrrcpNOuYHk=
