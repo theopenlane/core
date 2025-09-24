@@ -8,8 +8,10 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx"
 )
 
 // HookOrgModule adds the feature tuples to fga as needed
@@ -60,16 +62,20 @@ func HookOrgModuleUpdate() ent.Hook {
 				return handleOrgModuleUpdate(ctx, omm, next)
 			case ent.OpDeleteOne:
 				return handleOrgModuleDelete(ctx, omm, next)
+			case ent.OpUpdate:
+				return handleOrgModuleBulkDelete(ctx, omm, next)
 			default:
 				return next.Mutate(ctx, omm)
 			}
 		})
-	}, ent.OpUpdateOne|ent.OpDeleteOne)
+	}, ent.OpUpdateOne|ent.OpDeleteOne|ent.OpUpdate)
 }
 
 func handleOrgModuleUpdate(ctx context.Context, omm *generated.OrgModuleMutation, next ent.Mutator) (generated.Value, error) {
 	newActive, newActiveExists := omm.Active()
-	if !newActiveExists {
+	isRecentlyRestored := omm.DeletedAtCleared()
+
+	if !newActiveExists && !isRecentlyRestored {
 		return next.Mutate(ctx, omm)
 	}
 
@@ -78,24 +84,30 @@ func handleOrgModuleUpdate(ctx context.Context, omm *generated.OrgModuleMutation
 		return next.Mutate(ctx, omm)
 	}
 
-	oldActive, err := omm.OldActive(ctx)
-	if err != nil {
-		return nil, err
-	}
-
 	v, err := next.Mutate(ctx, omm)
 	if err != nil {
 		return nil, err
 	}
 
-	switch {
-	case !oldActive && newActive:
+	if isRecentlyRestored {
 		return handleActivation(ctx, omm, v)
-	case oldActive && !newActive:
-		return handleDeactivation(ctx, omm, id)
-	default:
-		return v, nil
 	}
+
+	if newActiveExists {
+		oldActive, err := omm.OldActive(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		switch {
+		case !oldActive && newActive:
+			return handleActivation(ctx, omm, v)
+		case oldActive && !newActive:
+			return handleDeactivation(ctx, omm, id)
+		}
+	}
+
+	return v, nil
 }
 
 func handleActivation(ctx context.Context, omm *generated.OrgModuleMutation, v generated.Value) (generated.Value, error) {
@@ -145,6 +157,39 @@ func handleOrgModuleDelete(ctx context.Context, omm *generated.OrgModuleMutation
 
 	if err := entitlements.DeleteModuleTuple(ctx, &omm.Authz, moduleToDelete.OwnerID, string(moduleToDelete.Module.String())); err != nil {
 		return nil, err
+	}
+
+	return v, nil
+}
+
+func handleOrgModuleBulkDelete(ctx context.Context, omm *generated.OrgModuleMutation, next ent.Mutator) (generated.Value, error) {
+	ids, err := omm.IDs(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if !entx.CheckIsSoftDelete(ctx) {
+		return next.Mutate(ctx, omm)
+	}
+
+	queryCtx := context.WithValue(ctx, entx.SoftDeleteSkipKey{}, true)
+
+	modulesToDelete, err := omm.Client().OrgModule.Query().
+		Where(orgmodule.IDIn(ids...)).
+		All(queryCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	v, err := next.Mutate(ctx, omm)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, module := range modulesToDelete {
+		if err := entitlements.DeleteModuleTuple(ctx, &omm.Authz, module.OwnerID, string(module.Module.String())); err != nil {
+			return nil, err
+		}
 	}
 
 	return v, nil

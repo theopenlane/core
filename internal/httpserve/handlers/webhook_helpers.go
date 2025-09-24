@@ -6,6 +6,7 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/stripe/stripe-go/v82"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
@@ -27,6 +28,8 @@ func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, subscript
 	if err != nil {
 		return err
 	}
+
+	var existingModules []models.OrgModule
 
 	for _, item := range items {
 		if item.Price == nil || item.Price.Product == nil {
@@ -52,7 +55,12 @@ func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, subscript
 			return err
 		}
 
-		zerolog.Ctx(ctx).Info().Str("module_name", mod.Module.String()).Msg("org module created")
+		existingModules = append(existingModules, mod.Module)
+	}
+
+	err = dropObsoleteModules(ctx, orgSub, existingModules)
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -131,12 +139,17 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 	productMetadata := em.GetProductMetadata(ctx, item.Price.Product, client)
 	moduleKey := strings.TrimSpace(productMetadata["module"])
 
+	// include softdeleted modules in the query
+	// if the module was previously marked as deleted, bring it back
+	// instead of making a new record/row
+	queryCtx := context.WithValue(allowCtx, entx.SoftDeleteSkipKey{}, true)
+
 	existing, err := tx.OrgModule.Query().Where(
 		orgmodule.And(
 			orgmodule.ModuleEQ(models.OrgModule(moduleKey)),
 			orgmodule.OwnerID(orgSub.OwnerID),
 		),
-		orgmodule.SubscriptionID(orgSub.ID)).Only(allowCtx)
+		orgmodule.SubscriptionID(orgSub.ID)).Only(queryCtx)
 	if err != nil && !ent.IsNotFound(err) {
 		return nil, err
 	}
@@ -158,5 +171,23 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 
 	builder.SetPriceID(price.ID)
 
+	if !existing.DeletedAt.IsZero() {
+		builder.ClearDeletedAt().ClearDeletedBy()
+	}
+
 	return builder.Save(allowCtx)
+}
+
+func dropObsoleteModules(ctx context.Context, orgSub *ent.OrgSubscription, currentModules []models.OrgModule) error {
+	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+	tx := transaction.FromContext(ctx)
+
+	_, err := tx.OrgModule.Delete().Where(
+		orgmodule.And(
+			orgmodule.OwnerID(orgSub.OwnerID),
+			orgmodule.SubscriptionID(orgSub.ID),
+			orgmodule.ModuleNotIn(currentModules...),
+		),
+	).Exec(allowCtx)
+	return err
 }
