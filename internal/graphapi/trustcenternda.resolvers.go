@@ -33,13 +33,12 @@ func (r *mutationResolver) UpdateTrustCenterNda(ctx context.Context, id string, 
 	return updateTrustCenterNDA(ctx, id)
 }
 
-<<<<<<< HEAD
 // SendTrustCenterNDAEmail is the resolver for the sendTrustCenterNDAEmail field.
 func (r *mutationResolver) SendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDAInput) (*model.SendTrustCenterNDAEmailPayload, error) {
 	return sendTrustCenterNDAEmail(ctx, input, r)
-=======
+}
+
 // SubmitTrustCenterNDAResponse is the resolver for the submitTrustCenterNDAResponse field.
 func (r *mutationResolver) SubmitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCenterNDAResponseInput) (*model.SubmitTrustCenterNDAResponsePayload, error) {
 	return submitTrustCenterNDAResponse(ctx, input)
->>>>>>> 1772634b (trust center NDA submissions)
 }
