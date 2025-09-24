@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/metrics"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -64,6 +65,8 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 		Message:    "success",
 		AuthData:   *auth,
 	}
+
+	metrics.RecordRegistration()
 
 	// Return the access token
 	return h.Success(ctx, out, openapi)

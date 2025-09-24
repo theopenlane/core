@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
 	apimodels "github.com/theopenlane/core/pkg/openapi"
@@ -50,6 +51,8 @@ func (h *Handler) createUser(ctx context.Context, input ent.CreateUserInput) (*e
 
 		return nil, err
 	}
+
+	metrics.RecordRegistration()
 
 	return meowuser, nil
 }
