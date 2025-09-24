@@ -384,7 +384,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"trust_center_id": trustCenter.ID,
 				},
 			},
-			errorMsg: notFoundErrorMsg,
+			errorMsg: "NDA submission does not match authenticated user",
 		},
 		{
 			name: "wrong trust center ID",

@@ -342,7 +342,7 @@ func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objec
 
 // defaultSkipCreateUserPermissionsFunc is the default function to skip creating user permissions
 var defaultSkipCreateUserPermissionsFunc = func(ctx context.Context, m ent.Mutation) bool {
-	if m.Op() == ent.OpCreate {
+	if m.Op() != ent.OpCreate {
 		return true
 	}
 

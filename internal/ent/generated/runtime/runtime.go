@@ -1346,6 +1346,7 @@ func init() {
 	documentdataMixinHooks1 := documentdataMixin[1].Hooks()
 	documentdataMixinHooks2 := documentdataMixin[2].Hooks()
 	documentdataMixinHooks6 := documentdataMixin[6].Hooks()
+	documentdataHooks := schema.DocumentData{}.Hooks()
 
 	documentdata.Hooks[1] = documentdataMixinHooks0[0]
 
@@ -1356,6 +1357,8 @@ func init() {
 	documentdata.Hooks[4] = documentdataMixinHooks6[0]
 
 	documentdata.Hooks[5] = documentdataMixinHooks6[1]
+
+	documentdata.Hooks[6] = documentdataHooks[0]
 	documentdataMixinInters1 := documentdataMixin[1].Interceptors()
 	documentdataMixinInters2 := documentdataMixin[2].Interceptors()
 	documentdataMixinInters6 := documentdataMixin[6].Interceptors()

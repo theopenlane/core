@@ -205,13 +205,15 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		}
 
-		if o.AllowAnonymousTrustCenterAccess {
-			if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
-				if anon.TrustCenterID != "" && anon.OrganizationID != "" {
-					o.PWithField(q, ownerFieldName, []string{anon.OrganizationID})
-					return nil
-				}
+		anon, hasAnonUser := auth.AnonymousTrustCenterUserFromContext(ctx)
+
+		if o.AllowAnonymousTrustCenterAccess && hasAnonUser {
+			if anon.TrustCenterID != "" && anon.OrganizationID != "" {
+				o.PWithField(q, ownerFieldName, []string{anon.OrganizationID})
+				return nil
 			}
+		} else if !o.AllowAnonymousTrustCenterAccess && hasAnonUser {
+			return privacy.Deny
 		}
 
 		// add owner id(s) to the query

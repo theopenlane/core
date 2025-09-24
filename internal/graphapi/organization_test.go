@@ -85,7 +85,7 @@ func TestQueryOrganization(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      anonymousContext,
 			queryID:  orgUser.OrganizationID,
-			errorMsg: "id not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
