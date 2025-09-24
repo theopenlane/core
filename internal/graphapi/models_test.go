@@ -2043,6 +2043,21 @@ func (tb *TemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Templ
 	return template
 }
 
+// TrustCenterWatermarkConfigBuilder is used to create trust center watermark configs
+type TrustCenterWatermarkConfigBuilder struct {
+	client *client
+
+	// Fields
+	TrustCenterID string
+	LogoID        *string
+	Text          string
+	FontSize      float64
+	Opacity       float64
+	Rotation      float64
+	Color         string
+	Font          string
+}
+
 // TrustCenterDocBuilder is used to create trust center documents
 type TrustCenterDocBuilder struct {
 	client *client
@@ -2115,4 +2130,58 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 	}
 
 	return trustCenterDoc
+}
+
+// MustNew trust center watermark config builder is used to create, without authz checks, trust center watermark configs in the database
+func (tcwcb *TrustCenterWatermarkConfigBuilder) MustNew(ctx context.Context, t *testing.T, trustCenterID string) *ent.TrustCenterWatermarkConfig {
+	ctx = setContext(ctx, tcwcb.client.db)
+
+	// Set the trust center ID from the parameter
+	tcwcb.TrustCenterID = trustCenterID
+
+	// Set default values if not provided
+	if tcwcb.Text == "" && tcwcb.LogoID == nil {
+		tcwcb.Text = "Test Watermark"
+	}
+
+	if tcwcb.FontSize == 0 {
+		tcwcb.FontSize = 48.0
+	}
+
+	if tcwcb.Opacity == 0 {
+		tcwcb.Opacity = 0.3
+	}
+
+	if tcwcb.Rotation == 0 {
+		tcwcb.Rotation = 45.0
+	}
+
+	if tcwcb.Color == "" {
+		tcwcb.Color = "gray"
+	}
+
+	if tcwcb.Font == "" {
+		tcwcb.Font = "Arial"
+	}
+
+	mutation := tcwcb.client.db.TrustCenterWatermarkConfig.Create().
+		SetTrustCenterID(tcwcb.TrustCenterID).
+		SetFontSize(tcwcb.FontSize).
+		SetOpacity(tcwcb.Opacity).
+		SetRotation(tcwcb.Rotation).
+		SetColor(tcwcb.Color).
+		SetFont(tcwcb.Font)
+
+	if tcwcb.Text != "" {
+		mutation.SetText(tcwcb.Text)
+	}
+
+	if tcwcb.LogoID != nil {
+		mutation.SetLogoID(*tcwcb.LogoID)
+	}
+
+	watermarkConfig, err := mutation.Save(ctx)
+	requireNoError(err)
+
+	return watermarkConfig
 }

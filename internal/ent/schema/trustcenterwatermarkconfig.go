@@ -15,6 +15,14 @@ import (
 	"github.com/theopenlane/iam/entfga"
 )
 
+const (
+	// Default watermark configuration values
+	defaultWatermarkFontSize = 48.0
+	defaultWatermarkOpacity  = 0.3
+	defaultWatermarkRotation = 45.0
+	maxWatermarkRotation     = 360.0
+)
+
 // TrustCenterWatermarkConfig holds the schema definition for the TrustCenterWatermarkConfig entity
 type TrustCenterWatermarkConfig struct {
 	SchemaFuncs
@@ -60,19 +68,19 @@ func (TrustCenterWatermarkConfig) Fields() []ent.Field {
 			Optional(),
 		field.Float("font_size").
 			Comment("font size of the watermark text").
-			Default(48.0).
+			Default(defaultWatermarkFontSize).
 			Optional(),
 		field.Float("opacity").
 			Comment("opacity of the watermark text").
-			Default(0.3).
+			Default(defaultWatermarkOpacity).
 			Min(0.0).
 			Max(1.0).
 			Optional(),
 		field.Float("rotation").
 			Comment("rotation of the watermark text").
-			Default(45.0).
-			Min(-360.0).
-			Max(360.0).
+			Default(defaultWatermarkRotation).
+			Min(-maxWatermarkRotation).
+			Max(maxWatermarkRotation).
 			Optional(),
 		field.String("color").
 			Comment("color of the watermark text").

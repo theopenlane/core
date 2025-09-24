@@ -60,7 +60,6 @@ query GetAllTrustCenterWatermarkConfigs {
     }
   }
 }
-
 query GetTrustCenterWatermarkConfigByID($trustCenterWatermarkConfigId: ID!) {
   trustCenterWatermarkConfig(id: $trustCenterWatermarkConfigId) {
     createdAt
@@ -115,13 +114,8 @@ query GetTrustCenterWatermarkConfigs($first: Int, $last: Int, $where: TrustCente
     }
   }
 }
-
 mutation UpdateTrustCenterWatermarkConfig($updateTrustCenterWatermarkConfigId: ID!, $input: UpdateTrustCenterWatermarkConfigInput!, $logoFile: Upload) {
-  updateTrustCenterWatermarkConfig(
-    id: $updateTrustCenterWatermarkConfigId
-    input: $input
-    logoFile: $logoFile
-  ) {
+  updateTrustCenterWatermarkConfig(id: $updateTrustCenterWatermarkConfigId, input: $input, logoFile: $logoFile) {
     trustCenterWatermarkConfig {
       createdAt
       createdBy
